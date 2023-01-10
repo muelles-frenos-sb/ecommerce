@@ -1,3 +1,64 @@
+<div class="block block-slideshow">
+        <div class="block-slideshow__carousel">
+            <div class="owl-carousel">
+                <a class="block-slideshow__item" href="">
+                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-3.jpg')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-3-mobile.jpg')"></span>
+                    <span class="block-slideshow__item-offer">
+                        30% OFF
+                    </span>
+                    <span class="block-slideshow__item-title">
+                        When Buying Parts <br>
+                        With Installation
+                    </span>
+                    <span class="block-slideshow__item-details">
+                        Installation of parts in the services of<br>
+                        our partners.
+                    </span>
+                    <span class="block-slideshow__item-button">
+                        Shop Now
+                    </span>
+                </a>
+                <a class="block-slideshow__item" href="">
+                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-2.jpg')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-2-mobile.jpg')"></span>
+                    <span class="block-slideshow__item-title">
+                        Not enough<br>
+                        spare parts?
+                    </span>
+                    <span class="block-slideshow__item-details">
+                        We have everything you need – replacement parts,<br>
+                        performance parts, accessories, oil & fluids,<br>
+                        tools and much more...
+                    </span>
+                    <span class="block-slideshow__item-button">
+                        Shop Now
+                    </span>
+                </a>
+                <a class="block-slideshow__item" href="">
+                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-1.jpg')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-1-mobile.jpg')"></span>
+                    <span class="block-slideshow__item-offer">
+                        30% OFF
+                    </span>
+                    <span class="block-slideshow__item-title">
+                        Big Choice Of<br>
+                        Wheel Tires
+                    </span>
+                    <span class="block-slideshow__item-details">
+                        Any size and diameter, with or without spikes,<br>
+                        summer or winter, rain or snow.
+                    </span>
+                    <span class="block-slideshow__item-button">
+                        Shop Now
+                    </span>
+                </a>
+            </div>
+    </div>
+</div>
+
+<!-- <div class="block-space block-space--layout--divider-xs"></div> -->
+
 <div class="block-finder block">
     <div class="decor block-finder__decor decor--type--bottom">
         <div class="decor__body">
@@ -8,7 +69,7 @@
     </div>
     <div class="block-finder__image" style="background-image: url('<?php echo base_url(); ?>images/finder-1903x500.jpg');"></div>
     <div class="block-finder__body container container--max--xl">
-        <div class="block-finder__title">Find Parts For Your Vehicle</div>
+        <div class="block-finder__title">Busque un repuesto para su vehículo</div>
         <div class="block-finder__subtitle">Over hundreds of brands and tens of thousands of parts</div>
         <form class="block-finder__form">
             <div class="block-finder__form-control block-finder__form-control--select">

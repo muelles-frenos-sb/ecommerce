@@ -37,8 +37,8 @@ c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-2.5v-1.7H28c0.4,0,0.8-0.3,0.8-0.8s-0.3-
                     </svg>
                 </div>
                 <div class="block-features__item-info">
-                    <div class="block-features__item-title">Free Shipping</div>
-                    <div class="block-features__item-subtitle">For orders from $50</div>
+                    <div class="block-features__item-title">Envíos gratis</div>
+                    <div class="block-features__item-subtitle">Tus órdenes gratis en todo el Valle de Aburrá</div>
                 </div>
             </li>
             <li class="block-features__item">
@@ -92,8 +92,8 @@ c0.865,1.414,0.61,3.243-0.524,4.383L10.586,4.788C12.12,4.295,13.864,4.903,14.728
                     </svg>
                 </div>
                 <div class="block-features__item-info">
-                    <div class="block-features__item-title">Support 24/7</div>
-                    <div class="block-features__item-subtitle">Call us anytime</div>
+                    <div class="block-features__item-title">Envíos a Colombia y Venezuela</div>
+                    <div class="block-features__item-subtitle">Tus pedidos se envían sin problemas entre ciudades y países</div>
                 </div>
             </li>
             <li class="block-features__item">
@@ -123,8 +123,8 @@ S40.1,35.1,40.3,35.1z" />
                     </svg>
                 </div>
                 <div class="block-features__item-info">
-                    <div class="block-features__item-title">100% Safety</div>
-                    <div class="block-features__item-subtitle">Only secure payments</div>
+                    <div class="block-features__item-title">Pago seguro</div>
+                    <div class="block-features__item-subtitle">Tus pagos están seguros con nuestra red de seguridad</div>
                 </div>
             </li>
             <li class="block-features__item">
@@ -151,8 +151,8 @@ s0.4-0.1,0.5-0.2l1.8-1.8l5.3,5.3c0.2,0.2,0.4,0.2,0.5,0.2c0.2,0,0.4-0.1,0.5-0.2c0
                     </svg>
                 </div>
                 <div class="block-features__item-info">
-                    <div class="block-features__item-title">Hot Offers</div>
-                    <div class="block-features__item-subtitle">Discounts up to 90%</div>
+                    <div class="block-features__item-title">Garantía</div>
+                    <div class="block-features__item-subtitle">Cada marca tiene un plazo de garantía diferente. Pregúntale a tu asesor por la garantía de tu producto</div>
                 </div>
             </li>
         </ul>
