@@ -28,7 +28,7 @@ C-0.1,9.8-0.1,10.4,0.3,10.7z" />
                         <div class="departments__item-menu">
                             <div class="megamenu departments__megamenu departments__megamenu--size--xl">
                                 <div class="megamenu__image">
-                                    <img src="<?php echo base_url(); ?>images/departments/departments-2.jpg" alt="">
+                                    <img src="<?php echo base_url(); ?>images/departments/filtro1.jpg" alt="">
                                 </div>
                                 <div class="row">
                                     <div class="col-1of5">
