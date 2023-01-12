@@ -56,7 +56,9 @@
         <div class="view-options__select">
             <label for="view-option-limit">Ver:</label>
             <select id="view-option-limit" class="form-control form-control-sm" name="">
-                <option value="">16</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
             </select>
         </div>
     </div>

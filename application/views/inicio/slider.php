@@ -1,7 +1,7 @@
 <div class="block block-slideshow">
         <div class="block-slideshow__carousel">
             <div class="owl-carousel">
-                <a class="block-slideshow__item" href="">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-3.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-3-mobile.jpg')"></span>
                     <span class="block-slideshow__item-offer">
@@ -19,7 +19,7 @@
                         Shop Now
                     </span>
                 </a>
-                <a class="block-slideshow__item" href="">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-2.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-2-mobile.jpg')"></span>
                     <span class="block-slideshow__item-title">
@@ -35,7 +35,7 @@
                         Shop Now
                     </span>
                 </a>
-                <a class="block-slideshow__item" href="">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-1.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-1-mobile.jpg')"></span>
                     <span class="block-slideshow__item-offer">

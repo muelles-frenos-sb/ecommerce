@@ -1216,6 +1216,9 @@
             const owlCarousel = $(this).find('.owl-carousel');
 
             owlCarousel.owlCarousel({
+                autoplay: true,
+                autoplayTimeout: 5000,
+		        autoplayHoverPause: true,
                 items: 1,
                 dots: true,
                 loop: true,
