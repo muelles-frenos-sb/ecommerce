@@ -1,3 +1,7 @@
+<?php
+$productos = $this->productos_model->obtener('detalle', $datos);
+?>
+
 <div class="products-view__list products-list products-list--grid--4" data-layout="list" data-with-features="false">
     <div class="products-list__head">
         <div class="products-list__column products-list__column--image">Foto</div>
@@ -7,7 +11,7 @@
         <div class="products-list__column products-list__column--price">Precio</div>
     </div>
     <div class="products-list__content">
-        <?php foreach($this->productos_model->obtener('detalle') as $producto) { ?>
+        <?php foreach($productos as $producto) { ?>
             <div class="products-list__item">
                 <div class="product-card">
                     <!-- Opciones de cuadrícula -->

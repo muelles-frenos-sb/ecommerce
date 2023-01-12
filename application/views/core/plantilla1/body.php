@@ -5,6 +5,8 @@
     </head>
 
     <body>
+        <input type="hidden" id="site_url" value="<?php echo site_url(); ?>">
+        
         <div class="site">
             <!-- Menú superior -->
             <?php $this->load->view('core/plantilla1/menu_superior/index'); ?>

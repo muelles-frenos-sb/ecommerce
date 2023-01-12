@@ -1,7 +1,14 @@
 <?php 
 Class Productos_model extends CI_Model{
-    public function obtener() {
+    public function obtener($tipo, $datos) {
+        $limite =  '';
+
+        if(isset($datos['items_por_pagina'])) {
+            $limite = "LIMIT {$datos['desde']}, {$datos['items_por_pagina']}";
+        }
+
         $sql = "SELECT
+            p.id,
             p.referencia,
             p.descripcion_corta,
             p.notas AS nombre,
@@ -16,7 +23,8 @@ Class Productos_model extends CI_Model{
             LEFT JOIN marcas AS m ON p.marca_id = m.id
             LEFT JOIN grupos AS g ON p.grupo_id = g.id
             LEFT JOIN lineas AS l ON p.linea_id = l.id 
-            LIMIT 0, 100";
+        $limite
+            ";
 
         return $this->db
             ->query($sql)

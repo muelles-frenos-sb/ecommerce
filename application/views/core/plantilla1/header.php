@@ -23,3 +23,4 @@
 
 <!-- Scripts -->
 <script src="<?php echo base_url(); ?>vendor/jquery/jquery.min.js"></script>
+<script src="<?php echo base_url(); ?>js/index.js?<?php echo date('Ymdhis'); ?>"></script>

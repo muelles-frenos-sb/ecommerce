@@ -26,6 +26,32 @@ class Productos extends CI_Controller {
         $this->data['contenido_principal'] = 'productos/index';
         $this->load->view('core/plantilla1/body', $this->data);
     }
+
+    function cargar_vista() {
+        $datos = $this->input->post('datos');
+        $this->data['datos'] = $datos;
+        $this->load->view('productos/contenedor/datos', $this->data);
+    }
+
+    function obtener() {
+        $datos = json_decode($this->input->post('datos'), true);
+        $tipo = $datos['tipo'];
+        unset($datos['tipo']);
+
+        switch ($tipo) {
+            case 'detalle':
+                $resultado = $this->productos_model->obtener($tipo, $datos);
+            break;
+        }
+
+        print json_encode($resultado);
+    }
+
+    function paginar() {
+        $datos = $this->input->post('datos');
+        $this->data['datos'] = $datos;
+        $this->load->view('productos/contenedor/paginacion', $this->data);
+    }
 }
 /* Fin del archivo Productos.php */
 /* Ubicación: ./application/controllers/Productos.php */
