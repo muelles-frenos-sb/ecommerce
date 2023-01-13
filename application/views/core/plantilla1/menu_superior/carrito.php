@@ -10,7 +10,7 @@ c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,
             </svg>
             <span class="indicator__counter">3</span>
         </span>
-        <span class="indicator__title">Shopping Cart</span>
+        <span class="indicator__title">Carrito de compras</span>
         <span class="indicator__value">$250.00</span>
     </a>
     <div class="indicator__content">

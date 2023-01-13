@@ -9,7 +9,7 @@
                         <path d="M6.6,2c2,0,4.8,0,6.8,0c1,0,2.9,0.8,3.6,2.2C17.7,5.7,17.9,7,18.4,7C20,7,20,8,20,8v1h-1v7.5c0,0.8-0.7,1.5-1.5,1.5h-1 c-0.8,0-1.5-0.7-1.5-1.5V16H5v0.5C5,17.3,4.3,18,3.5,18h-1C1.7,18,1,17.3,1,16.5V16V9H0V8c0,0,0.1-1,1.6-1C2.1,7,2.3,5.7,3,4.2 C3.7,2.8,5.6,2,6.6,2z M13.3,4H6.7c-0.8,0-1.4,0-2,0.7c-0.5,0.6-0.8,1.5-1,2C3.6,7.1,3.5,7.9,3.7,8C4.5,8.4,6.1,9,10,9 c4,0,5.4-0.6,6.3-1c0.2-0.1,0.2-0.8,0-1.2c-0.2-0.4-0.5-1.5-1-2C14.7,4,14.1,4,13.3,4z M4,10c-0.4-0.3-1.5-0.5-2,0 c-0.4,0.4-0.4,1.6,0,2c0.5,0.5,4,0.4,4,0C6,11.2,4.5,10.3,4,10z M14,12c0,0.4,3.5,0.5,4,0c0.4-0.4,0.4-1.6,0-2c-0.5-0.5-1.3-0.3-2,0 C15.5,10.2,14,11.3,14,12z" />
                     </svg>
                 </span>
-                <span class="search__button-title">Select Vehicle</span>
+                <span class="search__button-title">Seleccione un vehículo</span>
             </button>
             <button class="search__button search__button--end" type="submit">
                 <span class="search__button-icon"><svg width="20" height="20">
@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Brandix Brake Kit BDX-750Z370-S</div>
+                                <div class="suggestions__product-name">Producto 1</div>
                                 <div class="suggestions__product-rating">
                                     <div class="suggestions__product-rating-stars">
                                         <div class="rating">
@@ -60,7 +60,7 @@
                                 </div>
                             </div>
                             <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Left Headlight Of Brandix Z54</div>
+                                <div class="suggestions__product-name">Producto 2</div>
                                 <div class="suggestions__product-rating">
                                     <div class="suggestions__product-rating-stars">
                                         <div class="rating">
@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Glossy Gray 19" Aluminium Wheel AR-19</div>
+                                <div class="suggestions__product-name">Producto 3</div>
                                 <div class="suggestions__product-rating">
                                     <div class="suggestions__product-rating-stars">
                                         <div class="rating">
@@ -108,10 +108,10 @@
                 <div class="suggestions__group">
                     <div class="suggestions__group-title">Categorías</div>
                     <div class="suggestions__group-content">
-                        <a class="suggestions__item suggestions__category" href="">Headlights & Lighting</a>
-                        <a class="suggestions__item suggestions__category" href="">Fuel System & Filters</a>
-                        <a class="suggestions__item suggestions__category" href="">Body Parts & Mirrors</a>
-                        <a class="suggestions__item suggestions__category" href="">Interior Accessories</a>
+                        <a class="suggestions__item suggestions__category" href="">Categoría 1</a>
+                        <a class="suggestions__item suggestions__category" href="">Categoría 2</a>
+                        <a class="suggestions__item suggestions__category" href="">Categoría 3</a>
+                        <a class="suggestions__item suggestions__category" href="">Categoría 4</a>
                     </div>
                 </div>
             </div>
@@ -120,7 +120,7 @@
                 <div class="vehicle-picker__panel vehicle-picker__panel--list vehicle-picker__panel--active" data-panel="list">
                     <div class="vehicle-picker__panel-body">
                         <div class="vehicle-picker__text">
-                            Select a vehicle to find exact fit parts
+                            Selecccione un vehículo para buscar los repuestos disponibles
                         </div>
                         <div class="vehicles-list">
                             <div class="vehicles-list__body">
@@ -170,7 +170,7 @@
                         <div class="vehicle-form vehicle-form--layout--search">
                             <div class="vehicle-form__item vehicle-form__item--select">
                                 <select class="form-control form-control-select2" aria-label="Year">
-                                    <option value="none">Select Year</option>
+                                    <option value="none">Modelo</option>
                                     <option>2010</option>
                                     <option>2011</option>
                                     <option>2012</option>
@@ -186,7 +186,7 @@
                             </div>
                             <div class="vehicle-form__item vehicle-form__item--select">
                                 <select class="form-control form-control-select2" aria-label="Brand" disabled>
-                                    <option value="none">Select Brand</option>
+                                    <option value="none">Marca</option>
                                     <option>Audi</option>
                                     <option>BMW</option>
                                     <option>Ferrari</option>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="vehicle-form__item vehicle-form__item--select">
                                 <select class="form-control form-control-select2" aria-label="Model" disabled>
-                                    <option value="none">Select Model</option>
+                                    <option value="none">Línea</option>
                                     <option>Explorer</option>
                                     <option>Focus S</option>
                                     <option>Fusion SE</option>
@@ -208,7 +208,7 @@
                             </div>
                             <div class="vehicle-form__item vehicle-form__item--select">
                                 <select class="form-control form-control-select2" aria-label="Engine" disabled>
-                                    <option value="none">Select Engine</option>
+                                    <option value="none">Motor</option>
                                     <option>Gas 1.6L 125 hp AT/L4</option>
                                     <option>Diesel 2.5L 200 hp AT/L5</option>
                                     <option>Diesel 3.0L 250 hp MT/L5</option>
@@ -216,14 +216,14 @@
                             </div>
                             <div class="vehicle-form__divider">Or</div>
                             <div class="vehicle-form__item">
-                                <input type="text" class="form-control" placeholder="Enter VIN number" aria-label="VIN number">
+                                <input type="text" class="form-control" placeholder="Número VIN" aria-label="Número VIN">
                             </div>
                         </div>
                         <div class="vehicle-picker__actions">
                             <div class="search__car-selector-link">
-                                <a href="" data-to-panel="list">Back to vehicles list</a>
+                                <a href="" data-to-panel="list">Volver a la lista de vehículos</a>
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm" disabled>Add A Vehicle</button>
+                            <button type="button" class="btn btn-primary btn-sm" disabled>Añadir</button>
                         </div>
                     </div>
                 </div>

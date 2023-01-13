@@ -1,56 +1,56 @@
 <div class="block block-slideshow">
         <div class="block-slideshow__carousel">
             <div class="owl-carousel">
-                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos'); ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-3.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-3-mobile.jpg')"></span>
                     <span class="block-slideshow__item-offer">
-                        30% OFF
+                        30% de descuento
                     </span>
                     <span class="block-slideshow__item-title">
-                        When Buying Parts <br>
-                        With Installation
+                        Cuando adquieres respuestos <br>
+                        con instalación
                     </span>
                     <span class="block-slideshow__item-details">
-                        Installation of parts in the services of<br>
-                        our partners.
+                        Instalación de repuestos<br>
+                        de nuestros aliados
                     </span>
                     <span class="block-slideshow__item-button">
-                        Shop Now
+                        Comprar ahora
                     </span>
                 </a>
-                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos'); ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-2.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-2-mobile.jpg')"></span>
                     <span class="block-slideshow__item-title">
-                        Not enough<br>
-                        spare parts?
+                        ¿No encuentras<br>
+                        lo que necesitas?
                     </span>
                     <span class="block-slideshow__item-details">
-                        We have everything you need – replacement parts,<br>
-                        performance parts, accessories, oil & fluids,<br>
-                        tools and much more...
+                        Tenemos todo lo que necesita: repuestos,<br>
+                        Piezas de rendimiento accesorios, aceites,<br>
+                        herramientas y mucho más
                     </span>
                     <span class="block-slideshow__item-button">
-                        Shop Now
+                        Comprar
                     </span>
                 </a>
-                <a class="block-slideshow__item" href="<?php echo site_url('productos') ?>">
+                <a class="block-slideshow__item" href="<?php echo site_url('productos'); ?>">
                     <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/slide-1.jpg')"></span>
                     <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/slide-1-mobile.jpg')"></span>
                     <span class="block-slideshow__item-offer">
-                        30% OFF
+                        30% de descuento
                     </span>
                     <span class="block-slideshow__item-title">
-                        Big Choice Of<br>
-                        Wheel Tires
+                        Gran variedad de<br>
+                        neumáticos para llantas
                     </span>
                     <span class="block-slideshow__item-details">
-                        Any size and diameter, with or without spikes,<br>
-                        summer or winter, rain or snow.
+                        Cualquier tamaño y diámetro,<br>
+                        marca y rendimiento
                     </span>
                     <span class="block-slideshow__item-button">
-                        Shop Now
+                        Comprar
                     </span>
                 </a>
             </div>
