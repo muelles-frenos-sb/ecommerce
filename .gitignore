@@ -1,5 +1,7 @@
 # Directorios
 application/config/development/
+application/config/production/
+application/logs/
 plantilla/
 
 # Archivos
