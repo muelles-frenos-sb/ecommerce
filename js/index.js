@@ -1,3 +1,41 @@
+cargarFiltros = async(tipo, elemento, datos) => {
+    switch(tipo) {
+        case 'grupos':
+            $(`#${elemento}`).html('')
+
+            grupos = await consulta('configuracion/obtener', {
+                tipo: 'grupos',
+                marca_id: datos.marca_id
+            })
+
+            $.each(grupos, function(key, grupo){
+                $(`#${elemento}`).append(`
+                    <li class='megamenu-links__item'>
+                        <a class='megamenu-links__item-link' href='#'>${grupo.nombre}</a>
+                    </li>
+                `)
+            })
+        break
+
+        case 'lineas':
+            $(`#${elemento}`).html('')
+
+            lineas = await consulta('configuracion/obtener', {
+                tipo: 'lineas',
+                marca_id: datos.marca_id
+            })
+
+            $.each(lineas, function(key, linea){
+                $(`#${elemento}`).append(`
+                    <li class='megamenu-links__item'>
+                        <a class='megamenu-links__item-link' href='#'>${linea.nombre}</a>
+                    </li>
+                `)
+            })
+        break
+    }
+}
+
 cargarInterfaz = async(url = '', contenedor = '', datos = null, tipo = null) => {
     // // Se muestra la carga
     // $('#cargando').show()
@@ -12,6 +50,19 @@ cargarInterfaz = async(url = '', contenedor = '', datos = null, tipo = null) => 
         // // Si fue exitoso, se oculta la carga
         // if(estado == 'success') $("#cargando").hide()
     })
+}
+
+consulta = (tipo, datos, notificacion = true) => {
+    let respuesta = obtenerPromesa(`${$('#site_url').val()}/${tipo}`, datos)
+        .then(resultado => {
+            switch (tipo) {
+                default:
+                    return resultado
+                break;
+            }
+        }).catch(error => console.error(error))
+
+    return respuesta
 }
 
 const obtenerPromesa = (url, opciones) => {

@@ -18,13 +18,37 @@
                     <li class="departments__list-padding" role="presentation"></li>
                     <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
                         <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu">
-                            <a href="#" class="departments__item-link">
+                            <a href="#" class="departments__item-link" id="filtro_marca_<?php echo $marca->id; ?>" data-marca-id="<?php echo $marca->id; ?>">
                                 <?php echo $marca->nombre; ?>
                                 <span class="departments__item-arrow"><svg width="7" height="11">
                                         <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9C-0.1,9.8-0.1,10.4,0.3,10.7z" />
                                     </svg>
                                 </span>
                             </a>
+                            <div class="departments__item-menu">
+                                <div class="megamenu departments__megamenu departments__megamenu--size--xl">
+                                    <div class="row">
+                                        <div class="col-1of5">
+                                            <ul class="megamenu__links megamenu-links megamenu-links--root">
+                                                <li class="megamenu-links__item megamenu-links__item--has-submenu">
+                                                    <a class="megamenu-links__item-link" href="">Grupos</a>
+                                                    <ul class="megamenu-links" id="filtros_grupos_<?php echo $marca->id; ?>">
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-1of5">
+                                            <ul class="megamenu__links megamenu-links megamenu-links--root">
+                                                <li class="megamenu-links__item megamenu-links__item--has-submenu">
+                                                    <a class="megamenu-links__item-link" href="">Líneas</a>
+                                                    <ul class="megamenu-links" id="filtros_lineas_<?php echo $marca->id; ?>">
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </li>
                     <?php } ?>
                     <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu">
@@ -482,3 +506,13 @@ C-0.1,9.8-0.1,10.4,0.3,10.7z" />
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $().ready(() => {
+        $("[id^='filtro_marca']").mouseover((evento) => {
+            let marcaId = $(evento.currentTarget).data("marca-id")
+            cargarFiltros("grupos", `filtros_grupos_${marcaId}`, {marca_id: marcaId})
+            cargarFiltros("lineas", `filtros_lineas_${marcaId}`, {marca_id: marcaId})
+        })
+    })
+</script>
