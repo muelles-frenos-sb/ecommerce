@@ -11,7 +11,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
             $.each(grupos, function(key, grupo){
                 $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
-                        <a class='megamenu-links__item-link' href='#'>${grupo.nombre}</a>
+                        <a class='megamenu-links__item-link' href='productos?grupo=${grupo.nombre}'>${grupo.nombre}</a>
                     </li>
                 `)
             })
@@ -28,7 +28,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
             $.each(lineas, function(key, linea){
                 $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
-                        <a class='megamenu-links__item-link' href='#'>${linea.nombre}</a>
+                        <a class='megamenu-links__item-link' href='productos?grupo=${linea.nombre}'>${linea.nombre}</a>
                     </li>
                 `)
             })
