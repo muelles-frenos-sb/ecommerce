@@ -65,6 +65,88 @@ consulta = (tipo, datos, notificacion = true) => {
     return respuesta
 }
 
+const iniciarSesion = async(evento) => {
+    evento.preventDefault()
+
+    let nombreUsuario = $('#usuario')
+    let clave = $('#clave')
+
+    let campos = [
+        nombreUsuario,
+        clave,
+    ]
+
+    // Validación de campos obligatorios
+    if (!validarCamposObligatorios(campos)) {
+        mostrarNotificacion('alerta', 'Hay campos obligatorios por diligenciar')
+        return false
+    }
+
+    let datos = {
+        tipo: 'usuario',
+        login: $.trim(nombreUsuario.val()),
+        clave: $.trim(clave.val()),
+    }
+
+    let usuario = await obtenerPromesa(`${$('#site_url').val()}sesion/obtener_datos`, datos)
+    
+    // Si no se encontró el usuario
+    if(!usuario) {
+        mostrarNotificacion('alerta', 'El usuario y clave que ha digitado no existen en la base de datos. Por favor verifique nuevamente.')
+        return false
+    }
+
+    // Si el usuario está desactivado
+    if(usuario.estado == 0) {
+        mostrarNotificacion('error', `El usuario ${nombreUsuario.val()} se encuentra desactivado.`)
+        return false
+    }
+
+    // Se genera el inicio de sesión
+    let sesion = await obtenerPromesa(`${$('#site_url').val()}sesion/iniciar`, {id: usuario.id})
+
+    // Si tuvo éxito, se redirecciona
+    if(sesion) location.href = `${$('#site_url').val()}inicio`
+}
+
+mostrarNotificacion = (tipo, mensaje, tiempo = 2000) => {
+    switch (tipo) {
+        case 'exito':
+            titulo = 'Éxito'
+            icono = 'success'
+        break;
+
+        case 'error':
+            titulo = 'Error'
+            icono = 'error'
+        break;
+
+        case 'alerta':
+            titulo = 'Alerta'
+            icono = 'warning'
+        break;
+
+        case 'info':
+            titulo = 'Información'
+            icono = 'info'
+        break;
+
+        case 'pregunta':
+            titulo = 'Pregunta'
+            icono = 'question'
+        break;
+    }
+
+    Swal.fire({
+        confirmButtonText: 'Aceptar',
+        icon: icono,
+        // position: 'top-end',
+        html: mensaje,
+        timer: tiempo,
+        title: titulo,
+    })
+}
+
 const obtenerPromesa = (url, opciones) => {
     return new Promise((resolve, reject) => {
         // Datos a enviar                
@@ -124,4 +206,28 @@ const paginar = (cantidadItems, numeroPagina, itemsPorPagina) => {
     }
 
     return respuesta
+}
+
+const validarCamposObligatorios = campos => {
+    // Para iniciar, el resultado es exitoso
+    let exito = true
+
+    //Recorrido para validar cada campo
+    for (var i = 0; i < campos.length; i++){
+        // Se remueve la validación a todos los campos
+        $(`.invalid-feedback`).remove()
+        campos[i].removeClass(`is-invalid`)
+
+        // Si el campo está vacío
+        if($.trim(campos[i].val()) == "") {
+            // El resultado cambia a falso
+            exito = false
+            
+            // Se marcan los campos en rojo con un mensaje
+            campos[i].addClass(`is-invalid`)
+            // campos[i].after(`<div class="invalid-feedback">Este campo no puede estar vacío</div>`)
+        }
+    }
+
+    return exito
 }

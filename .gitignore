@@ -2,7 +2,24 @@
 application/config/development/
 application/config/production/
 application/logs/
-plantilla/
+application/vendor/
+frontend/
+
+# Directorios de imágenes
+images/avatars/
+images/banners/
+images/brands/
+images/categories/
+images/departments/
+images/icons/
+images/languages/
+images/posts/
+images/products/
+images/slides/
+images/teammates/
+images/testimonials/
 
 # Archivos
+.vscode/settings.json
 /index.php
+application/composer.lock
