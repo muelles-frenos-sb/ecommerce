@@ -24,7 +24,7 @@ class Inicio extends CI_Controller {
 
     function index() {
         $this->data['contenido_principal'] = 'inicio/index';
-        $this->load->view('core/plantilla1/body', $this->data);
+        $this->load->view('core/body', $this->data);
     }
 }
 /* Fin del archivo Inicio.php */

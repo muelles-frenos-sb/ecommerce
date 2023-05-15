@@ -1,5 +1,5 @@
 <!-- Botón del menú para móviles -->
-<?php $this->load->view('core/plantilla1/menu_superior/movil'); ?>
+<?php $this->load->view('core/menu_superior/movil'); ?>
 
 <!-- site__header -->
 <header class="site__header">
@@ -8,19 +8,19 @@
         <div class="header__topbar-start-bg"></div>
         
         <!-- Sección superior izquierda -->
-        <?php $this->load->view('core/plantilla1/menu_superior/izquierda'); ?>
+        <?php $this->load->view('core/menu_superior/izquierda'); ?>
 
         <div class="header__topbar-end-bg"></div>
         
         <!-- Sección superior derecha -->
-        <?php $this->load->view('core/plantilla1/menu_superior/derecha'); ?>
+        <?php $this->load->view('core/menu_superior/derecha'); ?>
         
         <div class="header__navbar">
             <!-- Filtros de categorías -->
-            <?php $this->load->view('core/plantilla1/menu_superior/filtros'); ?>
+            <?php $this->load->view('core/menu_superior/filtros'); ?>
             
             <!-- Menú de opciones -->
-            <?php $this->load->view('core/plantilla1/menu_superior/menu') ?>
+            <?php $this->load->view('core/menu_superior/menu') ?>
         </div>
         <div class="header__logo">
             <a href="<?php echo site_url(); ?>" class="logo">
@@ -35,7 +35,7 @@
         </div>
         
         <!-- Búsqueda dinámica -->
-        <?php $this->load->view('core/plantilla1/menu_superior/busqueda'); ?>
+        <?php $this->load->view('core/menu_superior/busqueda'); ?>
 
         <div class="header__indicators">
             <div class="indicator">
@@ -51,10 +51,10 @@ z" />
             </div>
             
             <!-- Datos del perfil del usuario -->
-            <?php $this->load->view('core/plantilla1/menu_superior/perfil'); ?>
+            <?php $this->load->view('core/menu_superior/perfil'); ?>
 
             <!-- Carrito de compras -->
-            <?php $this->load->view('core/plantilla1/menu_superior/carrito'); ?>
+            <?php $this->load->view('core/menu_superior/carrito'); ?>
         </div>
     </div>
 </header>

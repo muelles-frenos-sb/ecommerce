@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
     <head>
-        <?php $this->load->view('core/plantilla1/header'); ?>
+        <?php $this->load->view('core/header'); ?>
     </head>
 
     <body>
@@ -9,7 +9,7 @@
         
         <div class="site">
             <!-- Menú superior -->
-            <?php $this->load->view('core/plantilla1/menu_superior/index'); ?>
+            <?php $this->load->view('core/menu_superior/index'); ?>
 
             <!-- Contenido principal de cada sitio -->
             <div class="site__body">
@@ -17,14 +17,14 @@
             </div>
 
             <!-- Footer -->
-            <?php $this->load->view('core/plantilla1/footer'); ?>
+            <?php $this->load->view('core/footer'); ?>
         </div>
 
         <!-- Menú móvil -->
-        <?php $this->load->view('core/plantilla1/menu_movil/index'); ?>
+        <?php $this->load->view('core/menu_movil/index'); ?>
         
         <!-- Modals -->
-        <?php $this->load->view('core/plantilla1/modals'); ?>
+        <?php $this->load->view('core/modals'); ?>
         
         <!-- scripts -->
         <script src="<?php echo base_url(); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
