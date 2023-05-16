@@ -1,0 +1,20 @@
+<?php
+date_default_timezone_set('America/Bogota');
+
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Perfil extends CI_Controller {
+    function __construct() {
+        parent::__construct();
+
+        $this->load->model(['sesion_model']);
+    }
+
+    function index() {
+        $this->data['contenido_principal'] = 'perfil/index';
+        $this->data['vista'] = $this->uri->segment(3);
+        $this->load->view('core/body', $this->data);
+    }
+}
+/* Fin del archivo Perfil.php */
+/* Ubicación: ./application/controllers/Perfil.php */

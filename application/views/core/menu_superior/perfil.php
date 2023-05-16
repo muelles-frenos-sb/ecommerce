@@ -60,11 +60,11 @@
                 </a>
                 <div class="account-menu__divider"></div>
                 <ul class="account-menu__links">
-                    <li><a href="account-dashboard.html">Dashboard</a></li>
-                    <li><a href="account-dashboard.html">Garage</a></li>
-                    <li><a href="account-profile.html">Editar perfil</a></li>
-                    <li><a href="account-orders.html">Mis pedidos</a></li>
-                    <li><a href="account-addresses.html">Mis direcciones</a></li>
+                    <li><a href="<?php echo site_url('perfil/index/dashboard'); ?>">Dashboard</a></li>
+                    <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>
+                    <li><a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a></li>
+                    <li><a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis pedidos</a></li>
+                    <li><a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a></li>
                 </ul>
                 <div class="account-menu__divider"></div>
                 <ul class="account-menu__links">
