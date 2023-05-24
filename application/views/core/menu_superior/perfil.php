@@ -54,8 +54,8 @@
                         <img src="<?php echo base_url(); ?>images/avatars/avatar-4.jpg" alt="">
                     </div>
                     <div class="account-menu__user-info">
-                        <div class="account-menu__user-name">John Arley Cano</div>
-                        <div class="account-menu__user-email">contacto@johnarleycano.com</div>
+                        <div class="account-menu__user-name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('apellidos')}"; ?></div>
+                        <div class="account-menu__user-email"><?php echo $this->session->userdata('email'); ?></div>
                     </div>
                 </a>
                 <div class="account-menu__divider"></div>

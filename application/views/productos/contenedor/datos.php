@@ -1,5 +1,8 @@
 <?php
-$productos = $this->productos_model->obtener('detalle', $datos);
+// print_r($datos);
+// print_r(json_decode(obtener_datos_api('')));
+// $productos = $this->productos_model->obtener('detalle', $datos);
+$productos = json_decode(obtener_datos_api(''))->detalle->Table;
 ?>
 
 <div class="products-view__list products-list products-list--grid--4" data-layout="list" data-with-features="false">
@@ -37,7 +40,7 @@ $productos = $this->productos_model->obtener('detalle', $datos);
                     <div class="product-card__image">
                         <div class="image image--type--product">
                             <a href="product-full.html" class="image__body">
-                                <img class="image__tag" src="images/products/product-2-245x245.jpg">
+                                <img class="image__tag" src="https://repuestossimonbolivar-my.sharepoint.com/personal/marketing_repuestossimonbolivar_com/Documents/fotograf%C3%ADa%20productos%20marcas/CUMMINS/01-23728-000-CUMMINS.png">
                             </a>
                         </div>
                         <div class="status-badge status-badge--style--success product-card__fit status-badge--has-icon status-badge--has-text">
@@ -52,7 +55,7 @@ $productos = $this->productos_model->obtener('detalle', $datos);
                         </div>
                     </div>
                     <div class="product-card__info">
-                        <div class="product-card__meta"><span class="product-card__meta-title">Referencia:</span> <?php echo $producto->referencia; ?></div>
+                        <div class="product-card__meta"><span class="product-card__meta-title">Referencia:</span> <?php echo $producto->Referencia; ?></div>
                         <div class="product-card__name">
                             <div>
                                 <div class="product-card__badges">
@@ -60,7 +63,7 @@ $productos = $this->productos_model->obtener('detalle', $datos);
                                     <div class="tag-badge tag-badge--new">new</div>
                                     <div class="tag-badge tag-badge--hot">hot</div>
                                 </div>
-                                <a href="product-full.html"><?php echo substr($producto->nombre, 0, 40); ?></a>
+                                <a href="product-full.html"><?php echo substr($producto->Descripcion_Corta, 0, 40); ?></a>
                             </div>
                         </div>
                         <div class="product-card__rating">
@@ -77,10 +80,10 @@ $productos = $this->productos_model->obtener('detalle', $datos);
                         </div>
                         <div class="product-card__features">
                             <ul>
-                                <li>Marca: <?php echo $producto->marca; ?></li>
-                                <li>Grupo: <?php echo $producto->grupo; ?></li>
-                                <li>Línea: <?php echo $producto->linea; ?></li>
-                                <li><?php echo $producto->descripcion_larga; ?></li>
+                                <li>Marca: <?php echo $producto->Marca; ?></li>
+                                <li>Grupo: <?php echo $producto->Grupo; ?></li>
+                                <li>Línea: <?php echo $producto->Linea; ?></li>
+                                <li><?php echo $producto->Notas; ?></li>
                             </ul>
                         </div>
                     </div>

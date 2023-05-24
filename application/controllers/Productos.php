@@ -24,7 +24,8 @@ class Productos extends CI_Controller {
 
     function index() {
         $this->data['contenido_principal'] = 'productos/index';
-        $this->load->view('core/plantilla1/body', $this->data);
+        $this->load->view('core/body', $this->data);
+        // print_r(valores_url($this));
     }
 
     function cargar_vista() {

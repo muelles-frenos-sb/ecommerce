@@ -52,12 +52,12 @@ cargarInterfaz = async(url = '', contenedor = '', datos = null, tipo = null) => 
     })
 }
 
-consulta = (tipo, datos, notificacion = true) => {
+consulta = (tipo, datos) => {
     let respuesta = obtenerPromesa(`${$('#site_url').val()}/${tipo}`, datos)
         .then(resultado => {
             switch (tipo) {
                 default:
-                    return resultado
+                    return resultado;
                 break;
             }
         }).catch(error => console.error(error))

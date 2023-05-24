@@ -31,6 +31,8 @@ class Sesion extends CI_Controller {
 			'estado' => $usuario->id,
 			'nombres' => $usuario->nombres,
 			'apellidos' => $usuario->apellidos,
+			'email' => $usuario->email,
+			'documento_numero' => $usuario->documento_numero,
 		];
 
         // Se inicia la sesión
