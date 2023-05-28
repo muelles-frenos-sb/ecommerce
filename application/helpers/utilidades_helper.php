@@ -13,3 +13,7 @@ function valores_url($objeto) {
         echo utf8_decode($valor[1]);
     }
 }
+
+function generar_token($valor) {
+    return substr(md5($valor), 0, 10);
+}

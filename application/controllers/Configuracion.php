@@ -14,6 +14,10 @@ class Configuracion extends CI_Controller {
         unset($datos['tipo']);
 
         switch ($tipo) {
+            default:
+                $resultado = $this->configuracion_model->obtener($tipo, $datos);
+            break;
+
             case 'grupos':
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
             break;
@@ -24,6 +28,34 @@ class Configuracion extends CI_Controller {
         }
 
         print json_encode($resultado);
+    }
+
+    function terceros() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+        switch ($this->uri->segment(3)) {
+            default:
+                $this->data['contenido_principal'] = 'configuracion/terceros/index';
+                $this->data['vista'] = $this->uri->segment(3);
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'lista':
+                $this->data['datos'] = $this->input->post('datos');
+                $this->load->view('configuracion/terceros/lista', $this->data);
+            break;
+
+            case 'ver':
+                $this->data['contenido_principal'] = 'configuracion/terceros/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'id':
+                $this->data['token'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'configuracion/terceros/detalle/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
     }
 }
 /* Fin del archivo Configuracion.php */

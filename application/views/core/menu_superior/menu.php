@@ -39,6 +39,12 @@
                                 </div>
                             </li>
                         <?php } ?>
+
+                        <li class="menu__item">
+                            <a href="<?php echo site_url('configuracion/terceros/ver'); ?>" class="menu__link">
+                                Terceros
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li><!-- Configuración -->

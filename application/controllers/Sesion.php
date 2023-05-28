@@ -30,7 +30,9 @@ class Sesion extends CI_Controller {
 			'usuario_id' => $usuario->id,
 			'estado' => $usuario->id,
 			'nombres' => $usuario->nombres,
-			'apellidos' => $usuario->apellidos,
+			'primer_apellido' => $usuario->primer_apellido,
+			'segundo_apellido' => $usuario->segundo_apellido,
+			'razon_social' => $usuario->razon_social,
 			'email' => $usuario->email,
 			'documento_numero' => $usuario->documento_numero,
 		];

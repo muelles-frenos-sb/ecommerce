@@ -52,14 +52,60 @@ cargarInterfaz = async(url = '', contenedor = '', datos = null, tipo = null) => 
     })
 }
 
-consulta = (tipo, datos) => {
-    let respuesta = obtenerPromesa(`${$('#site_url').val()}/${tipo}`, datos)
+cargarMasDatos = tipo => {
+    // Se aumenta el contador
+    localStorage.simonBolivar_contador = (localStorage.simonBolivar_contador)
+    ? parseInt(localStorage.simonBolivar_contador) + parseInt($('#cantidad_datos').val())
+    : 0
+
+    var datos = {
+        tipo: tipo,
+        contador: parseInt(localStorage.simonBolivar_contador),
+        busqueda: $("#buscar").val(),
+    }
+
+    $.ajax({
+        url: `${$('#site_url').val()}interfaces/cargar_mas_datos`,
+        data: {datos: datos},
+        type: 'POST',
+        // beforeSend: () => $('#cargando').show()
+    })
+    .done(data => {
+        $("#datos").append(data)
+
+        // $('#cargando').hide()
+    })
+    .fail((jqXHR, ajaxOptions, thrownError) => console.error('El servidor no responde.'))
+}
+
+consulta = (tipo, datos, notificacion = true) => {
+    let respuesta = obtenerPromesa(`${$('#site_url').val()}interfaces/${tipo}`, datos)
         .then(resultado => {
             switch (tipo) {
+                case "actualizar":
+                    if (notificacion) mostrarNotificacion('exito', 'Se actualizaron los datos')
+                    return resultado
+                break;
+
+                case "crear":
+                    if (notificacion) mostrarNotificacion('exito', 'Se almacenaron los datos')
+                    return resultado
+                break;
+
+                case "eliminar":
+                    if (notificacion) mostrarNotificacion('exito', 'Se eliminaron los datos')
+                    return resultado
+                break;
+
+                case "obtener":
+                    return resultado
+                break;
+
                 default:
-                    return resultado;
+                    return resultado
                 break;
             }
+
         }).catch(error => console.error(error))
 
     return respuesta
@@ -209,7 +255,7 @@ const paginar = (cantidadItems, numeroPagina, itemsPorPagina) => {
 }
 
 const validarCamposObligatorios = campos => {
-    // Para iniciar, el resultado es exitoso
+    let validacionesExitosas = campos.length
     let exito = true
 
     //Recorrido para validar cada campo
@@ -220,14 +266,22 @@ const validarCamposObligatorios = campos => {
 
         // Si el campo está vacío
         if($.trim(campos[i].val()) == "") {
-            // El resultado cambia a falso
-            exito = false
-            
+            // Se resta el campo al total de validaciones exitosas
+            validacionesExitosas--
+
             // Se marcan los campos en rojo con un mensaje
             campos[i].addClass(`is-invalid`)
             // campos[i].after(`<div class="invalid-feedback">Este campo no puede estar vacío</div>`)
         }
     }
 
+    // Si los exitosos son todos
+    if(validacionesExitosas != campos.length) {
+        mostrarNotificacion('alerta', 'Hay campos obligatorios por diligenciar')
+
+        // No es exitoso
+        exito = false
+    }
+    
     return exito
 }

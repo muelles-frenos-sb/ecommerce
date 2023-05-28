@@ -1,17 +1,33 @@
 <?php 
 Class Configuracion_model extends CI_Model {
+    function actualizar($tabla, $id, $datos){
+        return $this->db->where('id', $id)->update($tabla, $datos);
+    }
 
+    function crear($tipo, $datos){
+        switch ($tipo) {
+            default:
+                $this->db->insert($tipo, $datos);
+                return $this->db->insert_id();
+            break;
+
+            case 'terceros':
+                $this->db->insert('usuarios', $datos);
+                return $this->db->insert_id();
+            break;
+        }
+    }
+    
     /**
 	 * Permite obtener registros de la base de datos
 	 * los cuales se retornar a las vistas
 	 * 
 	 * @param  [string] $tabla Tabla a la que se realizara la consulta
-	 * 
 	 * @return [array]  Arreglo de datos con el resultado de la consulta
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-			case "grupos":
+			case 'grupos':
                 $this->db
                     ->select(["g.*"])
                     ->from("productos p")
@@ -25,13 +41,13 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->get()->result();
             break;
 
-			case "lineas":
+			case 'lineas':
                 $this->db
                     ->select(["l.*"])
                     ->from("productos p")
                     ->join("lineas l", "p.linea_id = l.id")
                     ->group_by("l.id")
-                    ->order_by("l.nombre ASC")
+                    ->order_by("l.nombre")
                 ;
 
                 if (isset($datos['marca_id'])) $this->db->where("p.marca_id", $datos["marca_id"]);
@@ -39,9 +55,87 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->get()->result();
             break;
 
-            case "marcas":
+            case 'marcas':
                 return $this->db
-					->order_by("nombre ASC")
+					->order_by("nombre")
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'sliders':
+                return $this->db
+                    ->where('modulo_id', $datos['modulo_id'])
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'usuarios':
+                // Filtro contador
+				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+                $having = "";
+                $where = "WHERE u.id";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+        
+                    $having = "HAVING";
+        
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " codigo LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.nombres LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.primer_apellido LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.segundo_apellido LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.razon_social LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.telefono LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.celular LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR estado_nombre LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR u.celular LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR documento_numero LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR email LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR nombre_establecimiento LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR nombre_contacto LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+        
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
+
+                if(isset($datos['id'])) $where .= " AND u.id = {$datos['id']} ";
+                if(isset($datos['token'])) $where .= " AND u.token = '{$datos['token']}'";
+                if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
+
+                $sql =
+                "SELECT
+                    *,
+                    CASE u.estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre
+                FROM
+                    usuarios AS u
+                $where
+                $having
+                ORDER BY
+	                u.razon_social
+                $contador";
+
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
+            break;
+
+            case 'usuarios_identificacion_tipos':
+                return $this->db
+					->order_by("nombre")
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'usuarios_tipos':
+                return $this->db
                     ->get($tabla)
                     ->result()
                 ;
