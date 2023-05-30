@@ -42,6 +42,10 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch($tipo) {
+            default:
+                $resultado = $this->configuracion_model->actualizar($tipo, $id, $datos);
+            break;
+
             case 'terceros':
                 $resultado = $this->configuracion_model->actualizar('usuarios', $id, $datos);
             break;
@@ -58,6 +62,14 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch ($tipo) {
+            case 'perfiles':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
+                $datos['token'] = generar_token($datos['fecha_creacion']);
+                
+                print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
+            break;
+
             case 'terceros':
                 // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');

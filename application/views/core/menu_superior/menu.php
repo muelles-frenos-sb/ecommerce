@@ -45,6 +45,12 @@
                                 Terceros
                             </a>
                         </li>
+
+                        <li class="menu__item">
+                            <a href="<?php echo site_url('configuracion/perfiles/ver'); ?>" class="menu__link">
+                                Perfiles
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li><!-- Configuración -->

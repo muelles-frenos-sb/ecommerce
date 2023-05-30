@@ -63,6 +63,29 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'perfiles':
+                $where = "WHERE p.id";
+                
+                if(isset($datos['nombre'])) $where .= " AND p.nombre = '{$datos['nombre']}'";
+                
+                $sql =
+                "SELECT
+                    *,
+                    CASE p.activo WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre,
+                    CASE p.es_administrador WHEN 1 THEN 'Sí' ELSE 'No' END administrador_nombre
+                FROM
+                    perfiles AS p
+                $where
+                ORDER BY
+                    p.nombre";
+
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
+            break;
+
             case 'sliders':
                 return $this->db
                     ->where('modulo_id', $datos['modulo_id'])

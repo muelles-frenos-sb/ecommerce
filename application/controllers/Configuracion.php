@@ -30,6 +30,28 @@ class Configuracion extends CI_Controller {
         print json_encode($resultado);
     }
 
+    function perfiles() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+        switch ($this->uri->segment(3)) {
+            case 'lista':
+                $this->data['datos'] = $this->input->post('datos');
+                $this->load->view('configuracion/perfiles/lista', $this->data);
+            break;
+
+            case 'ver':
+                $this->data['contenido_principal'] = 'configuracion/perfiles/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'id':
+                $this->data['token'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'configuracion/perfiles/detalle/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function terceros() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
