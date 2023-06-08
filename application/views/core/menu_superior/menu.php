@@ -8,7 +8,7 @@
                 </a>
             </li><!-- Inicio -->
 
-            <?php if(in_array(['configuracion' => 'configuracion_ver'], $permisos)) { ?>
+            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_ver'], $permisos)) { ?>
                 <!-- Configuración -->
                 <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
                     <a href="<?php echo site_url(); ?>" class="main-menu__link">
@@ -20,7 +20,7 @@
                     <div class="main-menu__submenu">
                         <ul class="menu">
                             <?php if(ENVIRONMENT == 'development') { ?>
-                                <?php if(in_array(['configuracion' => 'configuracion_sliders_ver'], $permisos)) { ?>
+                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_sliders_ver'], $permisos)) { ?>
                                     <li class="menu__item menu__item--has-submenu">
                                         <a href="#" class="menu__link">
                                             Sliders
@@ -43,7 +43,7 @@
                                 <?php } ?>
                             <?php } ?>
                             
-                            <?php if(in_array(['configuracion' => 'configuracion_terceros_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_terceros_ver'], $permisos)) { ?>
                                 <li class="menu__item">
                                     <a href="<?php echo site_url('configuracion/terceros/ver'); ?>" class="menu__link">
                                         Terceros
@@ -52,7 +52,7 @@
                             <?php } ?>
 
                             <li class="menu__item">
-                                <?php if(in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
+                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
                                     <a href="<?php echo site_url('configuracion/perfiles/ver'); ?>" class="menu__link">
                                         Perfiles
                                     </a>
