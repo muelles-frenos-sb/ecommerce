@@ -1,6 +1,3 @@
-
-
-
 <div class="block-space block-space--layout--after-header"></div>
 <div class="block">
     <div class="container container--max--xl">

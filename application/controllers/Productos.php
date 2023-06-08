@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
  *            	Gestión de productos del sistema
  * Email: 		johnarleycano@hotmail.com
  */
-class Productos extends CI_Controller {
+class Productos extends MY_Controller {
     /**
      * Función constructora de la clase. Se hereda el mismo constructor 
      * de la clase para evitar sobreescribirlo y de esa manera 

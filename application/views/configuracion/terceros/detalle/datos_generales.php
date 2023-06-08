@@ -140,7 +140,8 @@ if($this->uri->segment(4)) {
                     </div>
                 </div>
                 <div class="form-group mb-0 pt-3 mt-3">
-                    <button class="btn btn-primary btn-block" onClick="javascript:guardarTercero()">Guardar datos</button>
+                    <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
+                    <button class="btn btn-success" onClick="javascript:guardarTercero()">Guardar datos</button>
                 </div>
             </div>
         </div>

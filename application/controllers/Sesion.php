@@ -3,7 +3,7 @@ date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sesion extends CI_Controller {
+class Sesion extends MY_Controller {
     function __construct() {
         parent::__construct();
 

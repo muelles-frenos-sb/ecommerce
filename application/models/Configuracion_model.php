@@ -79,6 +79,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'perfil_rol':
+                return $this->db
+                    ->where($datos)
+                    ->get('perfiles_roles')
+                    ->row()
+                ;
+            break;
+
             case 'perfiles':
                 $where = "WHERE p.id";
                 
@@ -103,12 +111,29 @@ Class Configuracion_model extends CI_Model {
                 }
             break;
 
-            case 'perfil_rol':
-                return $this->db
-                    ->where($datos)
-                    ->get('perfiles_roles')
-                    ->row()
-                ;
+            case 'permisos':
+                $permisos = [];
+
+                $sql = 
+                "SELECT
+                    r.id,
+                    m.nombre AS modulo,
+                    r.nombre AS rol 
+                FROM
+                    roles AS r
+                    INNER JOIN modulos AS m ON r.modulo_id = m.id
+                    INNER JOIN perfiles_roles ON perfiles_roles.rol_id = r.id
+                    INNER JOIN perfiles ON perfiles_roles.perfil_id = perfiles.id
+                    INNER JOIN usuarios AS u ON u.perfil_id = perfiles.id 
+                WHERE
+                    u.id = {$this->session->userdata('usuario_id')}";
+
+                $resultado = $this->db->query($sql)->result();
+
+				// Se recorren los resultados y se agregan al arreglo de permisos
+				foreach ($resultado as $permiso) array_push($permisos, [$permiso->modulo => $permiso->rol]);
+
+				return $permisos;
             break;
 
             case 'roles':

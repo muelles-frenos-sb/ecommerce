@@ -3,11 +3,20 @@ date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido');
 
-class Configuracion extends CI_Controller {
+/**
+ * @author: 	John Arley Cano Salinas
+ * Fecha: 		10 de enero de 2023
+ * Programa:  	E-Commerce | Módulo de Configuración
+ *            	Gestión de configuración del sistema
+ * Email: 		johnarleycano@hotmail.com
+ */
+class Configuracion extends MY_Controller {
     function __construct() {
         parent::__construct();
-    }
 
+        $this->data['permisos'] = $this->verificar_permisos();
+    }
+    
     function obtener() {
         $datos = json_decode($this->input->post('datos'), true);
         $tipo = $datos['tipo'];
@@ -32,6 +41,7 @@ class Configuracion extends CI_Controller {
 
     function perfiles() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_perfiles_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             case 'lista':
@@ -54,6 +64,7 @@ class Configuracion extends CI_Controller {
 
     function terceros() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_terceros_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             default:

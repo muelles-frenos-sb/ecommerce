@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
  *            	Gestión de pedidos del sistema
  * Email: 		johnarleycano@hotmail.com
  */
-class Pedidos extends CI_Controller {
+class Pedidos extends MY_Controller {
     /**
      * Función constructora de la clase. Se hereda el mismo constructor 
      * de la clase para evitar sobreescribirlo y de esa manera 
