@@ -36,19 +36,19 @@ cargarFiltros = async(tipo, elemento, datos) => {
     }
 }
 
-cargarInterfaz = async(url = '', contenedor = '', datos = null, tipo = null) => {
-    // // Se muestra la carga
-    // $('#cargando').show()
+cargarInterfaz = async(vista = 'index', contenedor = 'contenedor_principal', datos = null, tipo = null) => {
+    // Se muestra la carga
+    $('#cargando').show()
 
     $(`#${contenedor}`).html('')
 
     // Carga de la interfaz
-    $(`#${contenedor}`).load(`${$("#site_url").val()}${url}`, {tipo: tipo, datos: datos}, (respuesta, estado, xhr) => {
+    $(`#${contenedor}`).load(`${$("#site_url").val()}interfaces`, {tipo: tipo, vista: vista, datos: datos}, (respuesta, estado, xhr) => {
         // Si hay error
         if(estado == 'error') console.error(xhr)
 
-        // // Si fue exitoso, se oculta la carga
-        // if(estado == 'success') $("#cargando").hide()
+        // Si fue exitoso, se oculta la carga
+        if(estado == 'success') $("#cargando").hide()
     })
 }
 
@@ -78,7 +78,7 @@ cargarMasDatos = tipo => {
     .fail((jqXHR, ajaxOptions, thrownError) => console.error('El servidor no responde.'))
 }
 
-consulta = (tipo, datos, notificacion = true) => {
+consulta = (tipo, datos, notificacion = true, mensaje = '') => {
     let respuesta = obtenerPromesa(`${$('#site_url').val()}interfaces/${tipo}`, datos)
         .then(resultado => {
             switch (tipo) {

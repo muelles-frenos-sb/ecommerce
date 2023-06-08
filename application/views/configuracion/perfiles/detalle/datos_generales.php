@@ -1,6 +1,6 @@
 <?php
-if($this->uri->segment(4)) {
-    $perfil = $this->configuracion_model->obtener('perfiles', ['token' => $this->uri->segment(4)]);
+if(isset($datos['token'])) {
+    $perfil = $this->configuracion_model->obtener('perfiles', ['token' => $datos['token']]);
     echo "<input type='hidden' id='perfil_id' value='$perfil->id' />";
 }
 ?>
@@ -47,6 +47,8 @@ if($this->uri->segment(4)) {
 <?php } ?>
 
 <script>
+    $(`.perfil_datos_generales`).addClass('account-nav__item--active')
+    
     guardarPerfil = async() => {
         let camposObligatorios = [
             $('#perfil_nombre'),

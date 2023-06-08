@@ -17,6 +17,15 @@ Class Configuracion_model extends CI_Model {
             break;
         }
     }
+
+    function eliminar($tipo, $datos)
+    {
+        switch ($tipo) {
+            default:
+                return $this->db->delete($tipo, $datos);
+            break;
+        }
+    }
     
     /**
 	 * Permite obtener registros de la base de datos
@@ -63,10 +72,18 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'modulos':
+                return $this->db
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'perfiles':
                 $where = "WHERE p.id";
                 
                 if(isset($datos['nombre'])) $where .= " AND p.nombre = '{$datos['nombre']}'";
+                if(isset($datos['token'])) $where .= " AND p.token = '{$datos['token']}'";
                 
                 $sql =
                 "SELECT
@@ -84,6 +101,22 @@ Class Configuracion_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'perfil_rol':
+                return $this->db
+                    ->where($datos)
+                    ->get('perfiles_roles')
+                    ->row()
+                ;
+            break;
+
+            case 'roles':
+                return $this->db
+                    ->where('modulo_id', $datos)
+                    ->get('roles')
+                    ->result()
+                ;
             break;
 
             case 'sliders':
