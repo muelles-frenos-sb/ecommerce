@@ -69,7 +69,7 @@ if($codigo == 0) {
                                     <div class="tag-badge tag-badge--new">new</div>
                                     <div class="tag-badge tag-badge--hot">hot</div>
                                 </div>
-                                <a href="product-full.html"><?php echo substr($producto->Descripcion_Corta, 0, 40); ?></a>
+                                <a href="product-full.html"><?php echo substr($producto->Notas, 0, 50); ?></a>
                             </div>
                         </div>
                         <div class="product-card__rating">

@@ -25,6 +25,11 @@ cargarFiltros = async(tipo, elemento, datos) => {
         case 'lineas':
             $(`#${elemento}`).html('')
 
+            marca = await consulta('obtener', {
+                tipo: 'marca',
+                id: datos.marca_id
+            })
+
             lineas = await consulta('obtener', {
                 tipo: 'lineas',
                 marca_id: datos.marca_id

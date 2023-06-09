@@ -1,5 +1,3 @@
-<?php print_r($datos); ?>
-
 <div class="products-view__pagination">
     <nav aria-label="Page navigation example">
         <ul class="pagination">

@@ -1,6 +1,7 @@
 <div class="block-split__item block-split__item-content col-auto">
     <div class="block">
         <div class="products-view">
+            <?php  $this->load->view('productos/contenedor/filtros'); ?>
             <div id="contenedor_datos"></div>
             <div id="contenedor_paginacion"></div>
         </div>
