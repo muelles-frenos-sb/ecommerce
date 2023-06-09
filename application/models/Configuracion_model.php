@@ -64,6 +64,14 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->get()->result();
             break;
 
+            case 'marca':
+                return $this->db
+                    ->where('id', $datos['id'])
+                    ->get('marcas')
+                    ->row()
+                ;
+            break;
+
             case 'marcas':
                 return $this->db
 					->order_by("nombre")

@@ -71,8 +71,8 @@
     $().ready(() => {
         $("[id^='filtro_marca']").mouseover((evento) => {
             let marcaId = $(evento.currentTarget).data("marca-id")
-            cargarFiltros("grupos", `filtros_grupos_${marcaId}`, {marca_id: marcaId})
-            cargarFiltros("lineas", `filtros_lineas_${marcaId}`, {marca_id: marcaId})
+            cargarFiltros('grupos', `filtros_grupos_${marcaId}`, {marca_id: marcaId})
+            cargarFiltros('lineas', `filtros_lineas_${marcaId}`, {marca_id: marcaId})
         })
     })
 </script>

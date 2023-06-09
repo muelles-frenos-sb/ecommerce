@@ -127,10 +127,6 @@ class Interfaces extends CI_Controller {
             default:
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
             break;
-
-            case 'usuarios':
-                $resultado = $this->configuracion_model->obtener($tipo, $datos);
-            break;
         }
 
         print json_encode($resultado);

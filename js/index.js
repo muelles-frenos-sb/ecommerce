@@ -3,7 +3,12 @@ cargarFiltros = async(tipo, elemento, datos) => {
         case 'grupos':
             $(`#${elemento}`).html('')
 
-            grupos = await consulta('configuracion/obtener', {
+            marca = await consulta('obtener', {
+                tipo: 'marca',
+                id: datos.marca_id
+            })
+
+            grupos = await consulta('obtener', {
                 tipo: 'grupos',
                 marca_id: datos.marca_id
             })
@@ -11,7 +16,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
             $.each(grupos, function(key, grupo){
                 $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
-                        <a class='megamenu-links__item-link' href='productos?grupo=${grupo.nombre}'>${grupo.nombre}</a>
+                        <a class='megamenu-links__item-link' href='productos?marca=${marca.nombre}&grupo=${grupo.nombre}'>${grupo.nombre}</a>
                     </li>
                 `)
             })
@@ -20,7 +25,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
         case 'lineas':
             $(`#${elemento}`).html('')
 
-            lineas = await consulta('configuracion/obtener', {
+            lineas = await consulta('obtener', {
                 tipo: 'lineas',
                 marca_id: datos.marca_id
             })
@@ -28,7 +33,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
             $.each(lineas, function(key, linea){
                 $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
-                        <a class='megamenu-links__item-link' href='productos?grupo=${linea.nombre}'>${linea.nombre}</a>
+                        <a class='megamenu-links__item-link' href='productos?marca=${marca.nombre}&linea=${linea.nombre}'>${linea.nombre}</a>
                     </li>
                 `)
             })
@@ -84,25 +89,25 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
             switch (tipo) {
                 case "actualizar":
                     if (notificacion) mostrarNotificacion('exito', 'Se actualizaron los datos')
-                    return resultado
+                    return resultado;
                 break;
 
                 case "crear":
                     if (notificacion) mostrarNotificacion('exito', 'Se almacenaron los datos')
-                    return resultado
+                    return resultado;
                 break;
 
                 case "eliminar":
                     if (notificacion) mostrarNotificacion('exito', 'Se eliminaron los datos')
-                    return resultado
+                    return resultado;
                 break;
 
                 case "obtener":
-                    return resultado
+                    return resultado;
                 break;
 
                 default:
-                    return resultado
+                    return resultado;
                 break;
             }
 

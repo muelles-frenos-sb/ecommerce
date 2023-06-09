@@ -23,15 +23,10 @@ class Productos extends MY_Controller {
     }
 
     function index() {
+        $this->data['parametros'] = $this->input->get();
         $this->data['contenido_principal'] = 'productos/index';
         $this->load->view('core/body', $this->data);
-        // print_r(valores_url($this));
-    }
-
-    function cargar_vista() {
-        $datos = $this->input->post('datos');
-        $this->data['datos'] = $datos;
-        $this->load->view('productos/contenedor/datos', $this->data);
+        
     }
 
     function obtener() {
@@ -46,12 +41,6 @@ class Productos extends MY_Controller {
         }
 
         print json_encode($resultado);
-    }
-
-    function paginar() {
-        $datos = $this->input->post('datos');
-        $this->data['datos'] = $datos;
-        $this->load->view('productos/contenedor/paginacion', $this->data);
     }
 }
 /* Fin del archivo Productos.php */

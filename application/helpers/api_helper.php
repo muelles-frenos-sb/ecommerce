@@ -1,25 +1,36 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-function obtener_datos_api($tipo) {
+function obtener_productos_api($datos) {
+
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
 
-    $client = new \GuzzleHttp\Client();
+    $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
+    $filtro_marca = (isset($datos['marca'])) ? trim($datos['marca']) : '-1' ;
+    $filtro_grupo = (isset($datos['grupo'])) ? trim($datos['grupo']) : '-1' ;
+    $filtro_linea = (isset($datos['linea'])) ? trim($datos['linea']) : '-1' ;
 
-    $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
-        'headers' => [
-            'accept' => 'application/json',
-            'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-            'conniToken' => $CI->config->item('api_siesa')['conniToken'],
-        ],
-        'query' => [
-            'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-            'descripcion' => 'Productos',
-        ]
-    ]);
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'Productos_V2',
+                'parametros' => "Id_item='$filtro_id'|Marca='$filtro_marca'|Grupo='$filtro_grupo'|Linea='$filtro_linea'",
+            ]
+        ]);
+    }
+    catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
     
-    return $response->getBody();
+    return $response->getBody()->getContents();;
 }
 
 function obtener_pedidos_api() {

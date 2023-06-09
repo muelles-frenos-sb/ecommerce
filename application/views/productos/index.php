@@ -11,12 +11,12 @@
                         <a href="<?php echo site_url('productos'); ?>" class="breadcrumb__item-link">Productos</a>
                     </li>
                     <li class="breadcrumb__item breadcrumb__item--current breadcrumb__item--last" aria-current="page">
-                        <span class="breadcrumb__item-link">Current Page</span>
+                        <span class="breadcrumb__item-link">Página actual</span>
                     </li>
                     <li class="breadcrumb__title-safe-area" role="presentation"></li>
                 </ol>
             </nav>
-            <h1 class="block-header__title">Título principal</h1>
+            <h1 class="block-header__title">Productos</h1>
         </div>
     </div>
 </div>

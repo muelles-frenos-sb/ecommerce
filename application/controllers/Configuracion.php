@@ -26,14 +26,6 @@ class Configuracion extends MY_Controller {
             default:
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
             break;
-
-            case 'grupos':
-                $resultado = $this->configuracion_model->obtener($tipo, $datos);
-            break;
-
-            case 'lineas':
-                $resultado = $this->configuracion_model->obtener($tipo, $datos);
-            break;
         }
 
         print json_encode($resultado);

@@ -1,8 +1,6 @@
 <div class="block-split__item block-split__item-content col-auto">
     <div class="block">
         <div class="products-view">
-            <?php $this->load->view('productos/contenedor/filtros'); ?>
-            <?php // $this->load->view('productos/contenedor/datos'); ?>
             <div id="contenedor_datos"></div>
             <div id="contenedor_paginacion"></div>
         </div>
@@ -11,6 +9,10 @@
 
 <?php
 if(isset($_GET['pagina'])) echo "<input type='hidden' id='filtro_pagina' value='{$_GET['pagina']}'>";
+
+if(isset($parametros['marca'])) echo "<input type='hidden' id='filtro_marca' value='{$parametros['marca']}'>";
+if(isset($parametros['grupo'])) echo "<input type='hidden' id='filtro_grupo' value='{$parametros['grupo']}'>";
+if(isset($parametros['linea'])) echo "<input type='hidden' id='filtro_linea' value='{$parametros['linea']}'>";
 ?>
 
 <script>
@@ -22,8 +24,12 @@ if(isset($_GET['pagina'])) echo "<input type='hidden' id='filtro_pagina' value='
 
         const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
 
-        cargarInterfaz('productos/cargar_vista', 'contenedor_datos', datosPaginacion)
-        cargarInterfaz('productos/paginar', 'contenedor_paginacion', datosPaginacion)
+        if($('#filtro_marca')) datosPaginacion.marca = $('#filtro_marca').val()
+        if($('#filtro_grupo')) datosPaginacion.grupo = $('#filtro_grupo').val()
+        if($('#filtro_linea')) datosPaginacion.linea = $('#filtro_linea').val()
+
+        cargarInterfaz('productos/contenedor/datos', 'contenedor_datos', datosPaginacion)
+        cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)
     }
 
     $().ready(() => {

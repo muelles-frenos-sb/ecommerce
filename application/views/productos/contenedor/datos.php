@@ -1,8 +1,10 @@
 <?php
-// print_r($datos);
-// print_r(json_decode(obtener_datos_api('')));
-// $productos = $this->productos_model->obtener('detalle', $datos);
-$productos = json_decode(obtener_datos_api(''))->detalle->Table;
+$codigo = json_decode(obtener_productos_api($datos))->codigo;
+if($codigo == 0) {
+    $productos = json_decode(obtener_productos_api($datos))->detalle->Table;
+} else {
+    $productos = [];
+}
 ?>
 
 <div class="products-view__list products-list products-list--grid--4" data-layout="list" data-with-features="false">
@@ -14,7 +16,11 @@ $productos = json_decode(obtener_datos_api(''))->detalle->Table;
         <div class="products-list__column products-list__column--price">Precio</div>
     </div>
     <div class="products-list__content">
-        <?php foreach($productos as $producto) { ?>
+        
+        <?php
+        if($codigo == 1) echo 'No se encontraron productos con los filtros seleccionados';
+
+        foreach($productos as $producto) { ?>
             <div class="products-list__item">
                 <div class="product-card">
                     <!-- Opciones de cuadrícula -->
@@ -40,7 +46,7 @@ $productos = json_decode(obtener_datos_api(''))->detalle->Table;
                     <div class="product-card__image">
                         <div class="image image--type--product">
                             <a href="product-full.html" class="image__body">
-                                <img class="image__tag" src="https://repuestossimonbolivar-my.sharepoint.com/personal/marketing_repuestossimonbolivar_com/Documents/fotograf%C3%ADa%20productos%20marcas/CUMMINS/01-23728-000-CUMMINS.png">
+                                <img class="image__tag" src="https://repuestossimonbolivar-my.sharepoint.com/personal/marketing_repuestossimonbolivar_com/Documents/Repuestos%20Sim%C3%B3n%20Bol%C3%ADvar/E-commerce/<?php echo $producto->Marca; ?>/<?php echo $producto->Referencia; ?>.jpg">
                             </a>
                         </div>
                         <div class="status-badge status-badge--style--success product-card__fit status-badge--has-icon status-badge--has-text">
