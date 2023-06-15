@@ -42,6 +42,12 @@ class Productos extends MY_Controller {
 
         print json_encode($resultado);
     }
+
+    function ver() {
+        $this->data['id'] = $this->uri->segment(3);
+        $this->data['contenido_principal'] = 'productos/detalle';
+        $this->load->view('core/body', $this->data);
+    }
 }
 /* Fin del archivo Productos.php */
 /* Ubicación: ./application/controllers/Productos.php */

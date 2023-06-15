@@ -5,7 +5,7 @@
                 <ol class="breadcrumb__list">
                     <li class="breadcrumb__spaceship-safe-area" role="presentation"></li>
                     <li class="breadcrumb__item breadcrumb__item--parent breadcrumb__item--first">
-                        <a href="<?php echo site_url(); ?>" class="breadcrumb__item-link">Inicio</a>
+                        <a href="<?php echo site_url('inicio'); ?>" class="breadcrumb__item-link">Inicio</a>
                     </li>
                     <li class="breadcrumb__item breadcrumb__item--parent">
                         <a href="<?php echo site_url('productos'); ?>" class="breadcrumb__item-link">Productos</a>
