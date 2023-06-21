@@ -14,6 +14,7 @@ if(isset($_GET['pagina'])) echo "<input type='hidden' id='filtro_pagina' value='
 if(isset($parametros['marca'])) echo "<input type='hidden' id='filtro_marca' value='{$parametros['marca']}'>";
 if(isset($parametros['grupo'])) echo "<input type='hidden' id='filtro_grupo' value='{$parametros['grupo']}'>";
 if(isset($parametros['linea'])) echo "<input type='hidden' id='filtro_linea' value='{$parametros['linea']}'>";
+if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqueda' value='{$parametros['busqueda']}'>";
 ?>
 
 <script>
@@ -24,11 +25,14 @@ if(isset($parametros['linea'])) echo "<input type='hidden' id='filtro_linea' val
         // let itemsPorPagina = parseInt($('#view-option-limit').val())
         // let cantidadProductos = productos.length
 
+        if($('#buscar').val() == "" && localStorage.simonBolivar_buscarProducto) $('#buscar').val(localStorage.simonBolivar_buscarProducto)
+
         // const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
         let datos = {}
         if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
         if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
         if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
+        if($('#filtro_busqueda')) datos.busqueda = $('#filtro_busqueda').val()
 
         cargarInterfaz('productos/contenedor/datos', 'contenedor_datos', datos)
         // cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)

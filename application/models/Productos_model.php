@@ -51,8 +51,12 @@ Class Productos_model extends CI_Model{
 
                     for ($i=0; $i < count($palabras); $i++) {
                         $having .= " (";
-                        $having .= " p.notas LIKE '%{$palabras[$i]}%'";
+                        $having .= " p.referencia LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR p.descripcion_corta LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR p.notas LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.linea LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR p.marca LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR p.grupo LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
                         if(($i + 1) < count($palabras)) $having .= " AND ";
                     }
@@ -69,7 +73,7 @@ Class Productos_model extends CI_Model{
                 FROM
                     productos AS p
                 $where
-                -- $having
+                $having
                 ORDER BY
                     notas
                 $limite
