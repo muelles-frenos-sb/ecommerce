@@ -1,35 +1,87 @@
 <?php 
 Class Productos_model extends CI_Model{
-    public function obtener($tipo, $datos) {
-        $limite =  '';
+    function crear($tipo, $datos){
+        switch ($tipo) {
+            default:
+                $this->db->insert($tipo, $datos);
+                return $this->db->insert_id();
+            break;
 
-        if(isset($datos['items_por_pagina'])) {
-            $limite = "LIMIT {$datos['desde']}, {$datos['items_por_pagina']}";
+            case 'productos':
+                return $this->db->insert_batch('productos', $datos);
+            break;
+
+            case 'productos_inventario':
+                return $this->db->insert_batch('productos_inventario', $datos);
+            break;
+
+            case 'productos_precios':
+                return $this->db->insert_batch('productos_precios', $datos);
+            break;
         }
+    }
 
-        $sql = "SELECT
-            p.id,
-            p.referencia,
-            p.descripcion_corta,
-            p.notas AS nombre,
-            p.descripcion_larga,
-            m.nombre AS marca,
-            g.nombre AS grupo,
-            l.nombre AS linea,
-            p.disponible,
-            p.id 
-        FROM
-            productos AS p
-            LEFT JOIN marcas AS m ON p.marca_id = m.id
-            LEFT JOIN grupos AS g ON p.grupo_id = g.id
-            LEFT JOIN lineas AS l ON p.linea_id = l.id 
-        $limite
-            ";
+    function eliminar($tipo, $datos = []){
+        switch ($tipo) {
+            case 'productos':
+                return $this->db->delete('productos', $datos);
+            break;
 
-        return $this->db
-            ->query($sql)
-            ->result()
-        ;
+            case 'productos_inventario':
+                return $this->db->delete('productos_inventario', $datos);
+            break;
+
+            case 'productos_precios':
+                return $this->db->delete('productos_precios', $datos);
+            break;
+        }
+    }
+    
+    public function obtener($tipo, $datos) {
+        switch ($tipo) {
+            case 'productos':
+                $limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, 20" : '' ;
+                $where = "WHERE p.id";
+                $having = "";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+
+                    $having = "HAVING";
+
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " p.notas LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR p.linea LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
+
+                if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
+                if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
+                if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
+                if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
+
+                $sql = 
+                "SELECT
+                    *
+                FROM
+                    productos AS p
+                $where
+                -- $having
+                ORDER BY
+                    notas
+                $limite
+                ";
+
+                if (isset($datos['id'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
+            break;
+        }
     }
 }
 /* Fin del archivo Productos_model.php */

@@ -18,19 +18,20 @@ if(isset($parametros['linea'])) echo "<input type='hidden' id='filtro_linea' val
 
 <script>
     listarProductos = async() => {
-        let productos = await obtenerPromesa(`${$("#site_url").val()}/productos/obtener`, {tipo: 'detalle'})
-        let numeroPagina = parseInt($('#filtro_pagina').val())
-        let itemsPorPagina = parseInt($('#view-option-limit').val())
-        let cantidadProductos = productos.length
+        console.log('listando productos...')
+        // let productos = await obtenerPromesa(`${$("#site_url").val()}/productos/obtener`, {tipo: 'detalle'})
+        // let numeroPagina = parseInt($('#filtro_pagina').val())
+        // let itemsPorPagina = parseInt($('#view-option-limit').val())
+        // let cantidadProductos = productos.length
 
-        const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
+        // const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
+        let datos = {}
+        if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
+        if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
+        if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
 
-        if($('#filtro_marca')) datosPaginacion.marca = $('#filtro_marca').val()
-        if($('#filtro_grupo')) datosPaginacion.grupo = $('#filtro_grupo').val()
-        if($('#filtro_linea')) datosPaginacion.linea = $('#filtro_linea').val()
-
-        cargarInterfaz('productos/contenedor/datos', 'contenedor_datos', datosPaginacion)
-        cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)
+        cargarInterfaz('productos/contenedor/datos', 'contenedor_datos', datos)
+        // cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)
     }
 
     $().ready(() => {

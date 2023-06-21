@@ -19,8 +19,8 @@
                     <!-- Marcas -->
                     <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
                         <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu">
-                            <a href="<?php echo site_url("productos?marca=$marca->nombre"); ?>" class="departments__item-link" id="filtro_marca_<?php echo $marca->id; ?>" data-marca-id="<?php echo $marca->id; ?>">
-                                <?php echo $marca->nombre; ?>
+                            <a href="<?php echo site_url("productos?marca=$marca->nombre"); ?>" class="departments__item-link" id="filtro_marca_<?php echo $marca->id; ?>" data-marca-nombre="<?php echo $marca->nombre; ?>" data-marca-id="<?php echo $marca->id; ?>">
+                                <?php echo $marca->nombre; ?> 
                                 <span class="departments__item-arrow">
                                     <svg width="7" height="11">
                                         <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9C-0.1,9.8-0.1,10.4,0.3,10.7z" />
@@ -70,9 +70,10 @@
 <script type="text/javascript">
     $().ready(() => {
         $("[id^='filtro_marca']").mouseover((evento) => {
+            let marcaNombre = $(evento.currentTarget).data("marca-nombre")
             let marcaId = $(evento.currentTarget).data("marca-id")
-            cargarFiltros('grupos', `filtros_grupos_${marcaId}`, {marca_id: marcaId})
-            cargarFiltros('lineas', `filtros_lineas_${marcaId}`, {marca_id: marcaId})
+            cargarFiltros('grupos', `filtros_grupos_${marcaId}`, {marcaNombre: marcaNombre, marcaId: marcaId})
+            cargarFiltros('lineas', `filtros_lineas_${marcaId}`, {marcaNombre: marcaNombre, marca_id: marcaId})
         })
     })
 </script>

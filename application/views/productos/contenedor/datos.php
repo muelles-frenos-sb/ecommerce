@@ -1,8 +1,12 @@
 <?php
+echo "<hr>";
+$datos['contador'] = 0;
 // Productos
-$resultado_productos = json_decode(obtener_productos_api($datos));
-$codigo_producto = $resultado_productos->codigo;
-$productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 ;
+$productos = $this->productos_model->obtener('productos', $datos);
+
+// $resultado_productos = json_decode(obtener_productos_api($datos));
+// $codigo_producto = $resultado_productos->codigo;
+// $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 ;
 ?>
 
 <div class="products-view__list products-list products-list--grid--4" data-layout="list" data-with-features="false">
@@ -15,20 +19,20 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
     </div>
     <div class="products-list__content">
         <?php
-        if($codigo_producto == 1) echo 'No se encontraron productos con los filtros seleccionados';
+        if(empty($productos)) echo 'No se encontraron productos con los filtros seleccionados';
 
         foreach($productos as $producto) {
             // Precio
-            $resultado_precios = json_decode(obtener_precios_api(['id' => $producto->IdItem]));
-            $codigo_precio = $resultado_precios->codigo;
-            $precio = ($codigo_precio == 0) ? $resultado_precios->detalle->Table[0] : 0 ;
+            // $resultado_precios = json_decode(obtener_precios_api(['id' => $producto->id]));
+            // $codigo_precio = $resultado_precios->codigo;
+            // $precio = ($codigo_precio == 0) ? $resultado_precios->detalle->Table[0] : 0 ;
 
-            // Inventario
-            $resultado_inventario = json_decode(obtener_inventario_api(['id' => $producto->IdItem]));
-            $codigo_inventario = $resultado_inventario->codigo;
-            $inventario = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table[0] : 0 ;
+            // // Inventario
+            // $resultado_inventario = json_decode(obtener_inventario_api(['id' => $producto->id]));
+            // $codigo_inventario = $resultado_inventario->codigo;
+            // $inventario = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table[0] : 0 ;
 
-            if($codigo_inventario == 0 && $inventario->Disponible != 0) {
+            // if($codigo_inventario == 0 && $inventario->Disponible != 0) {
                 ?>
                 <div class="products-list__item">
                     <div class="product-card">
@@ -54,8 +58,8 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
                         </div>
                         <div class="product-card__image">
                             <div class="image image--type--product">
-                                <a href="<?php echo site_url("productos/ver/$producto->IdItem"); ?>" class="image__body">
-                                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').$producto->Marca; ?>/<?php echo $producto->Referencia; ?>.jpg">
+                                <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body">
+                                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').$producto->marca; ?>/<?php echo $producto->referencia; ?>.jpg">
                                 </a>
                             </div>
                             <div class="status-badge status-badge--style--success product-card__fit status-badge--has-icon status-badge--has-text">
@@ -64,13 +68,13 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
                                             <path d="M12,4.4L5.5,11L1,6.5l1.4-1.4l3.1,3.1L10.6,3L12,4.4z" />
                                         </svg>
                                     </div>
-                                    <div class="status-badge__text"><?php echo "$inventario->Disponible unidades disponibles"; ?></div>
+                                    <div class="status-badge__text"><?php // echo "$inventario->Disponible unidades disponibles"; ?></div>
                                     <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="Part&#x20;Fit&#x20;for&#x20;2011&#x20;Ford&#x20;Focus&#x20;S"></div>
                                 </div>
                             </div>
                         </div>
                         <div class="product-card__info">
-                            <div class="product-card__meta"><span class="product-card__meta-title">Referencia:</span> <?php echo $producto->Referencia; ?></div>
+                            <div class="product-card__meta"><span class="product-card__meta-title">Referencia:</span> <?php echo $producto->referencia; ?></div>
                             <div class="product-card__name">
                                 <div>
                                     <div class="product-card__badges">
@@ -78,7 +82,7 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
                                         <div class="tag-badge tag-badge--new">new</div>
                                         <div class="tag-badge tag-badge--hot">hot</div>
                                     </div>
-                                    <a href="<?php echo site_url("productos/ver/$producto->IdItem"); ?>"><?php echo substr($producto->Notas, 0, 50); ?></a>
+                                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo substr($producto->notas, 0, 50); ?></a>
                                 </div>
                             </div>
                             <div class="product-card__rating">
@@ -95,17 +99,17 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
                             </div>
                             <div class="product-card__features">
                                 <ul>
-                                    <li>Marca: <?php echo $producto->Marca; ?></li>
-                                    <li>Grupo: <?php echo $producto->Grupo; ?></li>
-                                    <li>Línea: <?php echo $producto->Linea; ?></li>
-                                    <li><?php echo $producto->Notas; ?></li>
+                                    <li>Marca: <?php echo $producto->marca; ?></li>
+                                    <li>Grupo: <?php echo $producto->grupo; ?></li>
+                                    <li>Línea: <?php echo $producto->linea; ?></li>
+                                    <li><?php echo $producto->notas; ?></li>
                                 </ul>
                             </div>
                         </div>
                         <div class="product-card__footer">
                             <div class="product-card__prices">
                                 <div class="product-card__price product-card__price--current">
-                                    <?php echo '$ '.number_format($precio->PrecioSugerido, 0, ',', '.'); ?>
+                                    <?php // echo '$ '.number_format($precio->PrecioSugerido, 0, ',', '.'); ?>
                                 </div>
                             </div>
                             <button class="product-card__addtocart-icon" type="button" aria-label="Agregar al carrito">
@@ -136,6 +140,6 @@ $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 
                     </div>
                 </div>
             <?php } ?>
-        <?php } ?>
+        <?php // } ?>
     </div>
 </div>

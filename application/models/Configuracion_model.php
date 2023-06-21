@@ -37,36 +37,42 @@ Class Configuracion_model extends CI_Model {
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
 			case 'grupos':
-                $this->db
-                    ->select(["g.*"])
-                    ->from("productos p")
-                    ->join("grupos g", "p.grupo_id = g.id")
-                    ->group_by("g.id")
-                    ->order_by("g.nombre ASC")
-                ;
+                $sql = 
+                "SELECT
+                    id,
+                    p.grupo nombre
+                FROM
+                    productos AS p 
+                WHERE
+                    p.marca = '{$datos['marca']}'
+                GROUP BY
+                    p.grupo
+                ORDER BY nombre";
 
-                if (isset($datos['marca_id'])) $this->db->where("p.marca_id", $datos["marca_id"]);
-
-                return $this->db->get()->result();
+                return $this->db->query($sql)->result();
             break;
 
 			case 'lineas':
-                $this->db
-                    ->select(["l.*"])
-                    ->from("productos p")
-                    ->join("lineas l", "p.linea_id = l.id")
-                    ->group_by("l.id")
-                    ->order_by("l.nombre")
-                ;
+                $sql = 
+                "SELECT
+                    id,
+                    p.linea nombre
+                FROM
+                    productos AS p 
+                WHERE
+                    p.marca = '{$datos['marca']}'
+                GROUP BY
+                    p.linea
+                ORDER BY nombre";
 
-                if (isset($datos['marca_id'])) $this->db->where("p.marca_id", $datos["marca_id"]);
-
-                return $this->db->get()->result();
+                return $this->db->query($sql)->result();
             break;
 
             case 'marca':
+                unset($datos['tipo']);
+
                 return $this->db
-                    ->where('id', $datos['id'])
+                    ->where($datos)
                     ->get('marcas')
                     ->row()
                 ;

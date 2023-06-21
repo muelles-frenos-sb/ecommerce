@@ -5,34 +5,34 @@ cargarFiltros = async(tipo, elemento, datos) => {
 
             marca = await consulta('obtener', {
                 tipo: 'marca',
-                id: datos.marca_id
+                nombre: datos.marcaNombre
             })
 
             grupos = await consulta('obtener', {
                 tipo: 'grupos',
-                marca_id: datos.marca_id
+                marca: datos.marcaNombre
             })
 
             $.each(grupos, function(key, grupo){
-                $(`#${elemento}`).append(`
+            $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
                         <a class='megamenu-links__item-link' href='productos?marca=${marca.nombre}&grupo=${grupo.nombre}'>${grupo.nombre}</a>
                     </li>
                 `)
             })
-        break
+        break;
 
         case 'lineas':
             $(`#${elemento}`).html('')
 
             marca = await consulta('obtener', {
                 tipo: 'marca',
-                id: datos.marca_id
+                nombre: datos.marcaNombre
             })
 
             lineas = await consulta('obtener', {
                 tipo: 'lineas',
-                marca_id: datos.marca_id
+                marca: datos.marcaNombre
             })
 
             $.each(lineas, function(key, linea){
@@ -42,7 +42,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
                     </li>
                 `)
             })
-        break
+        break;
     }
 }
 

@@ -20,8 +20,7 @@ class Interfaces extends CI_Controller {
         parent::__construct();
     }
 
-    public function index()
-	{
+    public function index() {
 		// Si no es una petición Ajax, redirecciona al inicio
         if(!$this->input->is_ajax_request()) redirect('inicio');
         
@@ -37,8 +36,7 @@ class Interfaces extends CI_Controller {
         }
 	}
 
-    function cargar_mas_datos()
-    {
+    function cargar_mas_datos() {
         // Si no es una petición Ajax, redirecciona al inicio
         if(!$this->input->is_ajax_request()) redirect('');
 
@@ -47,8 +45,7 @@ class Interfaces extends CI_Controller {
         $this->load->view("{$datos['tipo']}/datos", $this->data);
     }
 
-    function actualizar()
-    {
+    function actualizar() {
         // Se obtienen los datos que llegan por POST
         $datos = json_decode($this->input->post('datos'), true);
         
@@ -71,8 +68,7 @@ class Interfaces extends CI_Controller {
         print json_encode($resultado);
     }
 
-    function crear()
-    {
+    function crear() {
         $datos = json_decode($this->input->post('datos'), true);
         $tipo = $datos['tipo'];
         unset($datos['tipo']);
@@ -105,8 +101,7 @@ class Interfaces extends CI_Controller {
         }
     }
 
-    function eliminar()
-    {
+    function eliminar() {
         $datos = json_decode($this->input->post('datos'), true);
         $tipo = $datos['tipo'];
         unset($datos['tipo']);
