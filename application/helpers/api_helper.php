@@ -34,9 +34,7 @@ function obtener_precios_api($datos) {
     $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
-    $filtro_lista_precio = ($CI->session->userdata('lista_precio')) ? $CI->session->userdata('lista_precio') : '001' ;
-    // $filtro_grupo = (isset($datos['grupo'])) ? trim($datos['grupo']) : '-1' ;
-    // $filtro_linea = (isset($datos['linea'])) ? trim($datos['linea']) : '-1' ;
+    $filtro_lista_precio = ($CI->session->userdata('lista_precio')) ? $CI->session->userdata('lista_precio') : '-1' ;
 
     $client = new \GuzzleHttp\Client();
     try {
