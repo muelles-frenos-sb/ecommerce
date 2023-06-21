@@ -1,6 +1,7 @@
 <?php
 echo "<hr>";
 $datos['contador'] = 0;
+
 // Productos
 $productos = $this->productos_model->obtener('productos', $datos);
 
@@ -34,6 +35,9 @@ $productos = $this->productos_model->obtener('productos', $datos);
 
             // if($codigo_inventario == 0 && $inventario->Disponible != 0) {
                 ?>
+     
+
+
                 <div class="products-list__item">
                     <div class="product-card">
                         <!-- Opciones de cuadrícula -->
@@ -59,7 +63,7 @@ $productos = $this->productos_model->obtener('productos', $datos);
                         <div class="product-card__image">
                             <div class="image image--type--product">
                                 <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body">
-                                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').$producto->marca; ?>/<?php echo $producto->referencia; ?>.jpg">
+                                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>">
                                 </a>
                             </div>
                             <div class="status-badge status-badge--style--success product-card__fit status-badge--has-icon status-badge--has-text">
