@@ -80,7 +80,8 @@ Class Configuracion_model extends CI_Model {
 
             case 'marcas':
                 return $this->db
-					->order_by("nombre")
+					->where('activo', 1)
+					->order_by('orden')
                     ->get($tabla)
                     ->result()
                 ;
