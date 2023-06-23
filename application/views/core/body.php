@@ -36,5 +36,9 @@
         <script src="<?php echo base_url(); ?>vendor/select2/js/select2.min.js"></script>
         <script src="<?php echo base_url(); ?>js/number.js"></script>
         <script src="<?php echo base_url(); ?>js/main.js?<?php echo date('Ymdhis'); ?>"></script>
+
+        <script>
+            $().ready(() => actualizarCarrito())
+        </script>
     </body>
 </html>

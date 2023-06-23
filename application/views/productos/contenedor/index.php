@@ -24,7 +24,6 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
     listarProductos = async() => {
         localStorage.simonBolivar_contador = 0
 
-
         // let productos = await obtenerPromesa(`${$("#site_url").val()}/productos/obtener`, {tipo: 'detalle'})
         // let numeroPagina = parseInt($('#filtro_pagina').val())
         // let itemsPorPagina = parseInt($('#view-option-limit').val())

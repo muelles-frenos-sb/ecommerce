@@ -22,7 +22,7 @@ class MY_Controller extends CI_Controller {
 
         // Se obtienen los permisos
         if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
-
+        
         $this->load->model('productos_model');
     }
     

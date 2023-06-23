@@ -26,7 +26,6 @@ class Productos extends MY_Controller {
         $this->data['parametros'] = $this->input->get();
         $this->data['contenido_principal'] = 'productos/index';
         $this->load->view('core/body', $this->data);
-        
     }
 
     function obtener() {

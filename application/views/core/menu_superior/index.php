@@ -49,7 +49,7 @@
             
             <!-- Datos del perfil del usuario -->
             <?php $this->load->view('core/menu_superior/perfil'); ?>
-
+            
             <!-- Carrito de compras -->
             <?php $this->load->view('core/menu_superior/carrito'); ?>
         </div>
