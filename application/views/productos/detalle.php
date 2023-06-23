@@ -362,18 +362,11 @@ s0.4-0.1,0.5-0.2l1.8-1.8l5.3,5.3c0.2,0.2,0.4,0.2,0.5,0.2c0.2,0,0.4-0.1,0.5-0.2c0
                             </div>
                             <div class="product__tabs product-tabs product-tabs--layout--full">
                                 <ul class="product-tabs__list">
-                                    <li class="product-tabs__item product-tabs__item--active"><a href="#product-tab-description">Descripción</a></li>
-                                    <li class="product-tabs__item"><a href="#product-tab-specification">Especificaciones</a></li>
+                                    <li class="product-tabs__item product-tabs__item--active"><a href="#product-tab-specification">Especificaciones</a></li>
+                                    <li class="product-tabs__item"><a href="#product-tab-description">Descripción</a></li>
                                 </ul>
                                 <div class="product-tabs__content">
-                                    <div class="product-tabs__pane product-tabs__pane--active" id="product-tab-description">
-                                        <div class="typography">
-                                            <p>
-                                                <?php echo "$producto->descripcion_corta - $producto->notas"; ?>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="product-tabs__pane" id="product-tab-specification">
+                                    <div class="product-tabs__pane product-tabs__pane--active" id="product-tab-specification">
                                         <div class="spec">
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">General</h4>
@@ -408,6 +401,13 @@ s0.4-0.1,0.5-0.2l1.8-1.8l5.3,5.3c0.2,0.2,0.4,0.2,0.5,0.2c0.2,0,0.4-0.1,0.5-0.2c0
                                             <div class="spec__disclaimer">
                                                 * La información aquí contenida puede variar al momento de la compra
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-tabs__pane" id="product-tab-description">
+                                        <div class="typography">
+                                            <p>
+                                                <?php echo "$producto->descripcion_corta - $producto->notas"; ?>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

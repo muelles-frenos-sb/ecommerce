@@ -24,4 +24,5 @@
 <!-- Scripts -->
 <script src="<?php echo base_url(); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>vendor/sweetalert2/sweetalert2.min.js"></script>
+<script src="<?php echo base_url(); ?>js/carrito.js?<?php echo date('Ymdhis'); ?>"></script>
 <script src="<?php echo base_url(); ?>js/index.js?<?php echo date('Ymdhis'); ?>"></script>

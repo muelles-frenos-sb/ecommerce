@@ -22,7 +22,7 @@
             <?php $this->load->view('core/menu_superior/menu') ?>
         </div>
         <div class="header__logo">
-            <a href="<?php echo site_url(); ?>" class="logo">
+            <a href="<?php echo site_url('inicio'); ?>" class="logo">
                 <!-- <div class="logo__slogan">
                     TODO PARA VEHÍCULOS PESADOS
                 </div> -->

@@ -23,34 +23,47 @@ class Carrito extends MY_Controller {
     }
 
     function index() {
-        print_r();
+        redirect('inicio');
     }
 
     function agregar($id, $precio, $nombre) {
-        $data = array(
+        print json_encode(['resultado' => $this->cart->insert(array(
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
             'name'    => $nombre,
             'options' => array('Size' => 'L', 'Color' => 'Red')
+        ))]);
+    }
+
+    function eliminar($row_id) {
+        print json_encode(['resultado' => $this->cart->remove($row_id)]);
+    }
+
+    function modificar_item($tipo, $row_id) {
+        $item = $this->cart->get_item($row_id);
+
+        $datos = array(
+            'rowid' => $row_id,
+            'qty'   => ($tipo == 'agregar') ? $item['qty'] + 1 : $item['qty'] - 1,
         );
         
-        print json_encode(['resultado' => $this->cart->insert($data)]);
+        print json_encode(['resultado' => $this->cart->update($datos)]);
     }
 
     function ver() {
-        $this->load->helper('form');
-        $this->load->view('productos/carrito');
+        $this->data['contenido_principal'] = 'carrito/index';
+        $this->load->view('core/body', $this->data);
     }
 
     function vaciar() {
-        echo $this->cart->destroy();
+        print json_encode(['resultado' => $this->cart->destroy()]);
     }
 
     function resumen() {
         print json_encode([
-            'total_items' => '$ '.number_format($this->cart->total_items(), 0, ',', '.'),
-            'total' => number_format($this->cart->total(), 0, ',', '.'),
+            'total_items' => number_format($this->cart->total_items(), 0, ',', '.'),
+            'total' => '$ '.number_format($this->cart->total(), 0, ',', '.'),
         ]);
     }
 }

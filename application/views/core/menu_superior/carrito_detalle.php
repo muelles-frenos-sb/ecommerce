@@ -1,6 +1,5 @@
 <ul class="dropcart__list">
-    <?php
-    foreach ($this->cart->contents() as $item) {
+    <?php foreach ($this->cart->contents() as $item) {
         $datos = ['id' => $item['id']];
         $producto = $this->productos_model->obtener('productos', $datos);
     ?>
@@ -41,6 +40,6 @@
     </table>
 </div>
 <div class="dropcart__actions">
-    <a href="cart.html" class="btn btn-secondary">View Cart</a>
-    <a href="checkout.html" class="btn btn-primary">Checkout</a>
+    <a href="<?php echo site_url('carrito/ver'); ?>" class="btn btn-secondary">Ver carrito</a>
+    <a href="checkout.html" class="btn btn-primary">Ir a pagar</a>
 </div>
