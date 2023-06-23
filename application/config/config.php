@@ -20,7 +20,7 @@ $config['index_page'] = '';
 |
 */
 $config['nombre_aplicacion'] = 'Simón Bolívar';
-$config['cantidad_datos'] = 20;
+$config['cantidad_datos'] = 30;
 $config['url_fotos'] = 'https://repuestossimonbolivar-my.sharepoint.com/personal/marketing_repuestossimonbolivar_com/Documents/Repuestos%20Sim%C3%B3n%20Bol%C3%ADvar/E-commerce/';
 
 

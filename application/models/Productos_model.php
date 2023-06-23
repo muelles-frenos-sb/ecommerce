@@ -41,6 +41,7 @@ Class Productos_model extends CI_Model{
         switch ($tipo) {
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+                $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;
                 
                 $where = "WHERE p.id";
                 $having = "";
@@ -82,15 +83,21 @@ Class Productos_model extends CI_Model{
 
                 $sql = 
                 "SELECT
-                    *
+                    p.*,
+                    i.existencia,
+                    i.disponible,
+                    ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p
+                    INNER JOIN productos_inventario AS i ON p.id = i.producto_id
                 $where
                 $having
                 ORDER BY
                     notas
                 $limite
                 ";
+                
+                // return $sql;
 
                 if (isset($datos['id'])) {
                     return $this->db->query($sql)->row();
