@@ -1,15 +1,6 @@
 <?php
 $datos = ['id' => $id];
-
-// Precio
-$resultado_precios = json_decode(obtener_precios_api(['id' => $id]));
-$codigo_precio = $resultado_precios->codigo;
-$precio = ($codigo_precio == 0) ? $resultado_precios->detalle->Table[0] : 0 ;
-
-// Productos
-$resultado_productos = json_decode(obtener_productos_api($datos));
-$codigo_producto = $resultado_productos->codigo;
-$producto = ($codigo_producto == 0) ? $resultado_productos->detalle->Table[0] : 0 ;
+$producto = $this->productos_model->obtener('productos', $datos);
 ?>
 
 <div class="site__body">
@@ -45,9 +36,7 @@ $producto = ($codigo_producto == 0) ? $resultado_productos->detalle->Table[0] : 
                                 <div class="product-gallery__featured">
                                     <button type="button" class="product-gallery__zoom">
                                         <svg width="24" height="24">
-                                            <path d="M15,18c-2,0-3.8-0.6-5.2-1.7c-1,1.3-2.1,2.8-3.5,4.6c-2.2,2.8-3.4,1.9-3.4,1.9s-0.6-0.3-1.1-0.7
-c-0.4-0.4-0.7-1-0.7-1s-0.9-1.2,1.9-3.3c1.8-1.4,3.3-2.5,4.6-3.5C6.6,12.8,6,11,6,9c0-5,4-9,9-9s9,4,9,9S20,18,15,18z M15,2
-c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2h-3V13z" />
+                                            <path d="M15,18c-2,0-3.8-0.6-5.2-1.7c-1,1.3-2.1,2.8-3.5,4.6c-2.2,2.8-3.4,1.9-3.4,1.9s-0.6-0.3-1.1-0.7 c-0.4-0.4-0.7-1-0.7-1s-0.9-1.2,1.9-3.3c1.8-1.4,3.3-2.5,4.6-3.5C6.6,12.8,6,11,6,9c0-5,4-9,9-9s9,4,9,9S20,18,15,18z M15,2 c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2h-3V13z" />
                                         </svg>
                                     </button>
                                     <div class="owl-carousel">
@@ -59,48 +48,9 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                                         attribute, in which case the width and height will be obtained from the naturalWidth
                                         and naturalHeight property of img.image__tag.
                                         -->
-                                        <a class="image image--type--product" href="images/products/product-2-700x700.jpg" target="_blank" data-width="700" data-height="700">
+                                        <a class="image image--type--product" href="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" target="_blank" data-width="700" data-height="700">
                                             <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-2-500x500.jpg" alt="">
-                                            </div>
-                                        </a>
-                                        <!--
-                                        The data-width and data-height attributes must contain the size of a larger version
-                                        of the product image.
-
-                                        If you do not know the image size, you can remove the data-width and data-height
-                                        attribute, in which case the width and height will be obtained from the naturalWidth
-                                        and naturalHeight property of img.image__tag.
-                                        -->
-                                        <a class="image image--type--product" href="images/products/product-1-700x700.jpg" target="_blank" data-width="700" data-height="700">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-1-500x500.jpg" alt="">
-                                            </div>
-                                        </a>
-                                        <!--
-                                        The data-width and data-height attributes must contain the size of a larger version
-                                        of the product image.
-
-                                        If you do not know the image size, you can remove the data-width and data-height
-                                        attribute, in which case the width and height will be obtained from the naturalWidth
-                                        and naturalHeight property of img.image__tag.
-                                        -->
-                                        <a class="image image--type--product" href="images/products/product-3-700x700.jpg" target="_blank" data-width="700" data-height="700">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-3-500x500.jpg" alt="">
-                                            </div>
-                                        </a>
-                                        <!--
-                                        The data-width and data-height attributes must contain the size of a larger version
-                                        of the product image.
-
-                                        If you do not know the image size, you can remove the data-width and data-height
-                                        attribute, in which case the width and height will be obtained from the naturalWidth
-                                        and naturalHeight property of img.image__tag.
-                                        -->
-                                        <a class="image image--type--product" href="images/products/product-4-700x700.jpg" target="_blank" data-width="700" data-height="700">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-4-500x500.jpg" alt="">
+                                                <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" alt="">
                                             </div>
                                         </a>
                                     </div>
@@ -109,29 +59,14 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                                     <div class="owl-carousel">
                                         <div class="product-gallery__thumbnails-item image image--type--product">
                                             <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-2-70x70.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="product-gallery__thumbnails-item image image--type--product">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-1-70x70.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="product-gallery__thumbnails-item image image--type--product">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-3-70x70.jpg" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="product-gallery__thumbnails-item image image--type--product">
-                                            <div class="image__body">
-                                                <img class="image__tag" src="images/products/product-4-70x70.jpg" alt="">
+                                                <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" alt="">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="product__header">
-                                <h1 class="product__title"><?php echo $producto->Notas; ?></h1>
+                                <h1 class="product__title"><?php echo $producto->notas; ?></h1>
                                 <div class="product__subtitle">
                                     <!-- <div class="product__rating">
                                         <div class="product__rating-stars">
@@ -147,13 +82,13 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                                         </div>
                                         <div class="product__rating-label"><a href="">3.5 on 7 reviews</a></div>
                                     </div> -->
-                                    <div class="status-badge status-badge--style--success product__fit status-badge--has-icon status-badge--has-text">
+                                    <div class="status-badge status-badge--style--<?php echo ($producto->disponible > 0) ? "success" : "failure"; ?> product__fit status-badge--has-icon status-badge--has-text">
                                         <div class="status-badge__body">
                                             <div class="status-badge__icon"><svg width="13" height="13">
                                                     <path d="M12,4.4L5.5,11L1,6.5l1.4-1.4l3.1,3.1L10.6,3L12,4.4z" />
                                                 </svg>
                                             </div>
-                                            <div class="status-badge__text">Disponible</div>
+                                            <div class="status-badge__text"><?php echo ($producto->disponible > 0) ? "$producto->disponible unidades disponibles" : "Agotado"; ?></div>
                                             <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="Part&#x20;Fit&#x20;for&#x20;2011&#x20;Ford&#x20;Focus&#x20;S"></div>
                                         </div>
                                     </div>
@@ -161,15 +96,15 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                             </div>
                             <div class="product__main">
                                 <div class="product__excerpt">
-                                    <?php echo "$producto->Descripcion_Corta - $producto->Notas"; ?>
+                                    <?php echo "$producto->descripcion_corta - $producto->notas"; ?>
                                 </div>
                                 <div class="product__features">
                                     <div class="product__features-title">Características:</div>
                                     <ul>
-                                        <li>Referencia: <span><?php echo $producto->Referencia; ?></span></li>
-                                        <li>Marca: <span><?php echo $producto->Marca; ?></span></li>
-                                        <li>Grupo: <span><?php echo $producto->Grupo; ?></span></li>
-                                        <li>Línea: <span><?php echo $producto->Linea; ?></span></li>
+                                        <li>Referencia: <span><?php echo $producto->referencia; ?></span></li>
+                                        <li>Marca: <span><?php echo $producto->marca; ?></span></li>
+                                        <li>Grupo: <span><?php echo $producto->grupo; ?></span></li>
+                                        <li>Línea: <span><?php echo $producto->linea; ?></span></li>
                                     </ul>
                                     <!-- <div class="product__features-link">
                                         <a href="">See Full Specification</a>
@@ -181,12 +116,15 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                                     <div class="product__info-body">
                                         <div class="product__badge tag-badge tag-badge--sale">Valor</div>
                                         <div class="product__prices-stock">
-                                            <div class="product__prices">
-                                                <div class="product__price product__price--current"><?php echo '$ '.number_format($precio->PrecioSugerido, 0, ',', '.'); ?></div>
-                                            </div>
-                                            <div class="status-badge status-badge--style--success product__stock status-badge--has-text">
+                                            <?php if ($producto->disponible > 0) { ?>
+                                                <div class="product__prices">
+                                                    <div class="product__price product__price--current"><?php echo '$ '.number_format($producto->precio, 0, ',', '.'); ?></div>
+                                                </div>
+                                            <?php } ?>
+                                            
+                                            <div class="status-badge status-badge--style--<?php echo ($producto->disponible > 0) ? "success" : "failure"; ?> product__stock status-badge--has-text">
                                                 <div class="status-badge__body">
-                                                    <div class="status-badge__text">Disponible</div>
+                                                    <div class="status-badge__text"><?php echo ($producto->disponible > 0) ? "Disponible" : "Agotado"; ?></div>
                                                     <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="In&#x20;Stock"></div>
                                                 </div>
                                             </div>
@@ -195,46 +133,49 @@ c-3.9,0-7,3.1-7,7s3.1,7,7,7s7-3.1,7-7S18.9,2,15,2z M16,13h-2v-3h-3V8h3V5h2v3h3v2
                                             <table>
                                                 <tr>
                                                     <th>Marca</th>
-                                                    <td><?php echo $producto->Marca; ?></td>
+                                                    <td><?php echo $producto->marca; ?></td>
                                                 </tr>
                                                 <tr>
                                                     <th>Grupo</th>
-                                                    <td><a href="#"><?php echo $producto->Grupo; ?></a></td>
+                                                    <td><a href="#"><?php echo $producto->grupo; ?></a></td>
                                                 </tr>
                                                 <tr>
                                                     <th>Línea</th>
-                                                    <td><?php echo $producto->Linea; ?></td>
+                                                    <td><?php echo $producto->linea; ?></td>
                                                 </tr>
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="product__actions">
-                                        <div class="product__actions-item product__actions-item--quantity">
-                                            <div class="input-number">
-                                                <input class="input-number__input form-control form-control-lg" type="number" min="1" value="1">
-                                                <div class="input-number__add"></div>
-                                                <div class="input-number__sub"></div>
+                                    <?php if ($producto->disponible > 0) { ?>
+                                        <div class="product__actions">
+                                            <div class="product__actions-item product__actions-item--quantity">
+                                                <div class="input-number">
+                                                    <input class="input-number__input form-control form-control-lg" type="number" min="1" value="1">
+                                                    <div class="input-number__add"></div>
+                                                    <div class="input-number__sub"></div>
+                                                </div>
                                             </div>
+                                            <div class="product__actions-item product__actions-item--addtocart">
+                                                <button class="btn btn-primary btn-lg btn-block">Añadir</button>
+                                            </div>
+                                            <div class="product__actions-divider"></div>
+                                            <!-- <button class="product__actions-item product__actions-item--wishlist" type="button">
+                                                <svg width="16" height="16">
+                                                    <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7 l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z" />
+                                                </svg>
+                                                <span>Añadir a la lista de deseos</span>
+                                            </button>
+                                            <button class="product__actions-item product__actions-item--compare" type="button">
+                                                <svg width="16" height="16">
+                                                    <path d="M9,15H7c-0.6,0-1-0.4-1-1V2c0-0.6,0.4-1,1-1h2c0.6,0,1,0.4,1,1v12C10,14.6,9.6,15,9,15z" />
+                                                    <path d="M1,9h2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1v-4C0,9.4,0.4,9,1,9z" />
+                                                    <path d="M15,5h-2c-0.6,0-1,0.4-1,1v8c0,0.6,0.4,1,1,1h2c0.6,0,1-0.4,1-1V6C16,5.4,15.6,5,15,5z" />
+                                                </svg>
+                                                <span>Add to compare</span>
+                                            </button> -->
                                         </div>
-                                        <div class="product__actions-item product__actions-item--addtocart">
-                                            <button class="btn btn-primary btn-lg btn-block">Añadir</button>
-                                        </div>
-                                        <div class="product__actions-divider"></div>
-                                        <!-- <button class="product__actions-item product__actions-item--wishlist" type="button">
-                                            <svg width="16" height="16">
-                                                <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7 l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z" />
-                                            </svg>
-                                            <span>Añadir a la lista de deseos</span>
-                                        </button>
-                                        <button class="product__actions-item product__actions-item--compare" type="button">
-                                            <svg width="16" height="16">
-                                                <path d="M9,15H7c-0.6,0-1-0.4-1-1V2c0-0.6,0.4-1,1-1h2c0.6,0,1,0.4,1,1v12C10,14.6,9.6,15,9,15z" />
-                                                <path d="M1,9h2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1v-4C0,9.4,0.4,9,1,9z" />
-                                                <path d="M15,5h-2c-0.6,0-1,0.4-1,1v8c0,0.6,0.4,1,1,1h2c0.6,0,1-0.4,1-1V6C16,5.4,15.6,5,15,5z" />
-                                            </svg>
-                                            <span>Add to compare</span>
-                                        </button> -->
-                                    </div>
+                                    <?php } ?>
+                                    
                                     <!-- <div class="product__tags-and-share-links">
                                         <div class="product__tags tags tags--sm">
                                             <div class="tags__list">
@@ -428,7 +369,7 @@ s0.4-0.1,0.5-0.2l1.8-1.8l5.3,5.3c0.2,0.2,0.4,0.2,0.5,0.2c0.2,0,0.4-0.1,0.5-0.2c0
                                     <div class="product-tabs__pane product-tabs__pane--active" id="product-tab-description">
                                         <div class="typography">
                                             <p>
-                                                <?php echo "$producto->Descripcion_Corta - $producto->Notas"; ?>
+                                                <?php echo "$producto->descripcion_corta - $producto->notas"; ?>
                                             </p>
                                         </div>
                                     </div>
@@ -438,30 +379,30 @@ s0.4-0.1,0.5-0.2l1.8-1.8l5.3,5.3c0.2,0.2,0.4,0.2,0.5,0.2c0.2,0,0.4-0.1,0.5-0.2c0
                                                 <h4 class="spec__section-title">General</h4>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Referencia</div>
-                                                    <div class="spec__value"><?php echo $producto->Referencia; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->referencia; ?></div>
                                                 </div>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Marca</div>
-                                                    <div class="spec__value"><?php echo $producto->Marca; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->marca; ?></div>
                                                 </div>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Grupo</div>
-                                                    <div class="spec__value"><?php echo $producto->Grupo; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->grupo; ?></div>
                                                 </div>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Línea</div>
-                                                    <div class="spec__value"><?php echo $producto->Linea; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->linea; ?></div>
                                                 </div>
                                             </div>
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">Detalles técnicos</h4>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Tipo de inventario</div>
-                                                    <div class="spec__value"><?php echo $producto->Tipo_Inventario; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->tipo_inventario; ?></div>
                                                 </div>
                                                 <div class="spec__row">
                                                     <div class="spec__name">Unidad de inventario</div>
-                                                    <div class="spec__value"><?php echo $producto->Unidad_Inventario; ?></div>
+                                                    <div class="spec__value"><?php echo $producto->unidad_inventario; ?></div>
                                                 </div>
                                             </div>
                                             <div class="spec__disclaimer">
