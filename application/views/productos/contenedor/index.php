@@ -2,8 +2,11 @@
     <div class="block">
         <div class="products-view">
             <?php  $this->load->view('productos/contenedor/filtros'); ?>
-            <div id="contenedor_datos"></div>
+            <div id="contenedor_productos"></div>
             <div id="contenedor_paginacion"></div>
+            <br>
+
+            <button type="button" class="btn btn-primary btn-lg btn-block" onClick="javascript:cargarMasDatos('productos/contenedor')" id="btn_mostrar_mas">Mostrar más resultados</button>
         </div>
     </div>
 </div>
@@ -19,22 +22,29 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
 
 <script>
     listarProductos = async() => {
-        console.log('listando productos...')
+        localStorage.simonBolivar_contador = 0
+
+
         // let productos = await obtenerPromesa(`${$("#site_url").val()}/productos/obtener`, {tipo: 'detalle'})
         // let numeroPagina = parseInt($('#filtro_pagina').val())
         // let itemsPorPagina = parseInt($('#view-option-limit').val())
         // let cantidadProductos = productos.length
 
-        if($('#buscar').val() == "" && localStorage.simonBolivar_buscarProducto) $('#buscar').val(localStorage.simonBolivar_buscarProducto)
+        if(localStorage.simonBolivar_buscarProducto) $('#buscar').val(localStorage.simonBolivar_buscarProducto)
 
         // const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
-        let datos = {}
+        
+        let datos = {
+            contador: localStorage.simonBolivar_contador,
+            busqueda: $("#buscar").val(),
+        }
+
         if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
         if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
         if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
         if($('#filtro_busqueda')) datos.busqueda = $('#filtro_busqueda').val()
 
-        cargarInterfaz('productos/contenedor/datos', 'contenedor_datos', datos)
+        cargarInterfaz('productos/contenedor/lista', 'contenedor_productos', datos)
         // cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)
     }
 

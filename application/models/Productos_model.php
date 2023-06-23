@@ -40,7 +40,8 @@ Class Productos_model extends CI_Model{
     public function obtener($tipo, $datos) {
         switch ($tipo) {
             case 'productos':
-                $limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, 20" : '' ;
+				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+                
                 $where = "WHERE p.id";
                 $having = "";
 
@@ -56,7 +57,7 @@ Class Productos_model extends CI_Model{
                 }
                 $where .= ") ";
 
-                if (isset($datos['busqueda'])) {
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
 
                     $having = "HAVING";
