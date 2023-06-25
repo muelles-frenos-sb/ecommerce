@@ -8,7 +8,7 @@ print_r($factura);
         amountInCents: parseFloat(<?php echo $factura->valor; ?>) * 100,
         reference: '<?php echo $factura->token; ?>',
         publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2',
-        redirectUrl: 'http://localhost/proyectos/simon-bolivar/carrito/respuesta?referencia=<?php echo $factura->token; ?>', // Opcional
+        redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $factura->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
         // taxInCents: { // Opcional
         //     vat: 1900,

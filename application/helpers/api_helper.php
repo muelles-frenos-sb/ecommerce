@@ -1,6 +1,20 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+function obtener_transaccion_wompi($id) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_wompi')['url'];
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/transactions/$id");
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 function obtener_inventario_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
