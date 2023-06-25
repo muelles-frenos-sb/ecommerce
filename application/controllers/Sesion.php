@@ -10,6 +10,12 @@ class Sesion extends MY_Controller {
         $this->load->model(['sesion_model']);
     }
 
+    function index() {
+        $this->data['url'] = $this->input->get('url');
+        $this->data['contenido_principal'] = 'sesion/index';
+        $this->load->view('core/body', $this->data);
+    }
+
     function cerrar()
 	{
         $this->session->sess_destroy();
