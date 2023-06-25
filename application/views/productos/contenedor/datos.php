@@ -1,6 +1,5 @@
 <?php
 $productos = $this->productos_model->obtener('productos', $datos);
-// print_r($datos);
 
 if(empty($productos)) echo 'No se encontraron resultados con los filtros seleccionados';
 
@@ -60,9 +59,10 @@ foreach($productos as $producto) {
                 <div class="product-card__name">
                     <div>
                         <div class="product-card__badges">
-                            <div class="tag-badge tag-badge--sale">sale</div>
-                            <div class="tag-badge tag-badge--new">new</div>
-                            <div class="tag-badge tag-badge--hot">hot</div>
+                            <?php if($producto->disponible > 0 & $producto->disponible <= 5) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?> 
+                            
+                            <!-- <div class="tag-badge tag-badge--new">new</div>
+                            <div class="tag-badge tag-badge--hot">hot</div> -->
                         </div>
                         <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo substr($producto->notas, 0, 50); ?></a>
                     </div>
@@ -96,7 +96,7 @@ foreach($productos as $producto) {
                         </div>
                     </div>
                 
-                    <button class="product-card__addtocart-icon" type="button" aria-label="Agregar al carrito">
+                    <button class="product-card__addtocart-icon" type="button" aria-label="Agregar al carrito" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, '<?php echo $producto->referencia; ?>')">
                         <svg width="20" height="20">
                             <circle cx="7" cy="17" r="2" />
                             <circle cx="15" cy="17" r="2" />

@@ -21,10 +21,9 @@
     </div>
 </div>
 
-<div class="block-split block-split--has-sidebar">
+<div class="block-split">
     <div class="container">
         <div class="block-split__row row no-gutters">
-            <?php $this->load->view('productos/menu_lateral/index'); ?>
             <?php $this->load->view('productos/contenedor/index'); ?>
         </div>
         <div class="block-space block-space--layout--before-footer"></div>

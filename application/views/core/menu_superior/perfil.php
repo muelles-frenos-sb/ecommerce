@@ -7,12 +7,14 @@
         </span>
         
         <?php if(!$this->session->userdata('usuario_id')) { ?>
-            <span class="indicator__title">Hola, inicia sesión</span>
+            <span class="indicator__title">Hola, bienvenido</span>
+            <span class="indicator__value">Inicia sesión</span>
         <?php } else { ?>
             <span class="indicator__title">Hola, bienvenido</span>
+            <span class="indicator__value">
+                <?php echo $this->session->userdata('nombres'); ?>
+            </span>
         <?php } ?>
-        
-        <span class="indicator__value">Mi cuenta</span>
     </a>
     <div class="indicator__content">
         <div class="account-menu">
@@ -54,7 +56,7 @@
                         <img src="<?php echo base_url(); ?>images/avatars/avatar-4.jpg" alt="">
                     </div>
                     <div class="account-menu__user-info">
-                        <div class="account-menu__user-name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('apellidos')}"; ?></div>
+                        <div class="account-menu__user-name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('primer_apellido')}"; ?></div>
                         <div class="account-menu__user-email"><?php echo $this->session->userdata('email'); ?></div>
                     </div>
                 </a>
