@@ -1,7 +1,5 @@
-<?php
-$factura = $this->productos_model->obtener('factura', ['id' => $datos['id']]);
-print_r($factura);
-?>
+<?php $factura = $this->productos_model->obtener('factura', ['id' => $datos['id']]); ?>
+
 <script>
     var checkout = new WidgetCheckout({
         currency: 'COP',
