@@ -15,6 +15,10 @@ function valores_url() {
     // }
 }
 
+function formato_precio($valor) {
+    return "$".number_format($valor, 0, ',', '.');
+}
+
 function generar_token($valor) {
     return substr(md5($valor), 0, 10);
 }

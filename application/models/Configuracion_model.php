@@ -36,6 +36,22 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'ciudades':
+                return $this->db
+					->order_by('nombre')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'departamentos':
+                return $this->db
+					->order_by('nombre')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
 			case 'grupos':
                 $sql = 
                 "SELECT
@@ -89,6 +105,14 @@ Class Configuracion_model extends CI_Model {
 
             case 'modulos':
                 return $this->db
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'paises':
+                return $this->db
+					->order_by('nombre')
                     ->get($tabla)
                     ->result()
                 ;
@@ -205,7 +229,7 @@ Class Configuracion_model extends CI_Model {
 
                 $sql =
                 "SELECT
-                    *,
+                    u.*,
                     CASE u.estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre
                 FROM
                     usuarios AS u

@@ -114,7 +114,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
                             <div class="product__info">
                                 <div class="product__info-card">
                                     <div class="product__info-body">
-                                        <div class="product__badge tag-badge tag-badge--sale">Valor</div>
+                                        <?php if($producto->disponible > 0 & $producto->disponible <= 5) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
                                         <div class="product__prices-stock">
                                             <?php if ($producto->disponible > 0) { ?>
                                                 <div class="product__prices">
@@ -156,7 +156,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                                 </div>
                                             </div>
                                             <div class="product__actions-item product__actions-item--addtocart">
-                                                <button class="btn btn-primary btn-lg btn-block">Añadir</button>
+                                                <button class="btn btn-primary btn-lg btn-block" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, '<?php echo $producto->referencia; ?>')">Añadir</button>
                                             </div>
                                             <div class="product__actions-divider"></div>
                                             <!-- <button class="product__actions-item product__actions-item--wishlist" type="button">

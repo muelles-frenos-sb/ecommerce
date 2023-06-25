@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th>Subtotal</th>
-                <td>$ <?php echo $this->cart->format_number($this->cart->total()); ?></td>
+                <td><?php echo formato_precio($this->cart->total()); ?></td>
             </tr>
         </thead>
         <tbody>
@@ -21,11 +21,11 @@
         <tfoot>
             <tr>
                 <th>Total</th>
-                <td>$ <?php echo $this->cart->format_number($this->cart->total()); ?></td>
+                <td><?php echo formato_precio($this->cart->total()); ?></td>
             </tr>
         </tfoot>
     </table>
-    <a class="btn btn-primary btn-xl btn-block" href="">
+    <a class="btn btn-primary btn-xl btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
         Ir a pagar
     </a>
 </div>

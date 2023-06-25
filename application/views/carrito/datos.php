@@ -19,7 +19,7 @@
             </ul>
         </td>
         <td class="cart-table__column cart-table__column--price" data-title="Price">
-            $ <?php echo $this->cart->format_number($item['price']); ?>
+            <?php echo formato_precio($item['price']); ?>
         </td>
         <td class="cart-table__column cart-table__column--quantity" data-title="Quantity">
             <div class="cart-table__quantity input-number">
@@ -28,7 +28,7 @@
                 <div class="input-number__sub" onClick="javascript:modificarItem('eliminar', '<?php echo $item['rowid']; ?>')"></div>
             </div>
         </td>
-        <td class="cart-table__column cart-table__column--total" data-title="Total">$ <?php echo $this->cart->format_number($item['subtotal']); ?></td>
+        <td class="cart-table__column cart-table__column--total" data-title="Total"><?php echo formato_precio($item['subtotal']); ?></td>
         <td class="cart-table__column cart-table__column--remove">
             <button type="button" class="cart-table__remove btn btn-sm btn-icon btn-muted" onClick="javascript:eliminarProducto('<?php echo $item['rowid']; ?>')">
                 <svg width="12" height="12">

@@ -77,6 +77,13 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch ($tipo) {
+            case 'facturas':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
+                
+                print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
+            break;
+
             case 'perfiles':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');
@@ -123,6 +130,10 @@ class Interfaces extends CI_Controller {
         switch ($tipo) {
             default:
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
+            break;
+
+            case 'factura':
+                $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             break;
         }
 

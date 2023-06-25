@@ -39,6 +39,16 @@ Class Productos_model extends CI_Model{
     
     public function obtener($tipo, $datos) {
         switch ($tipo) {
+            case 'factura':
+                unset($datos['tipo']);
+
+                return $this->db
+                    ->where($datos)
+                    ->get('facturas')
+                    ->row()
+                ;
+            break;
+
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;

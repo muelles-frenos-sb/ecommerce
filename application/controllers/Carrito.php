@@ -40,6 +40,11 @@ class Carrito extends MY_Controller {
         print json_encode(['resultado' => $this->cart->remove($row_id)]);
     }
 
+    function finalizar() {
+        $this->data['contenido_principal'] = 'carrito/finalizar';
+        $this->load->view('core/body', $this->data);
+    }
+
     function modificar_item($tipo, $row_id) {
         $item = $this->cart->get_item($row_id);
 
@@ -65,6 +70,11 @@ class Carrito extends MY_Controller {
             'total_items' => number_format($this->cart->total_items(), 0, ',', '.'),
             'total' => '$ '.number_format($this->cart->total(), 0, ',', '.'),
         ]);
+    }
+
+    function respuesta() {
+        $this->data['contenido_principal'] = 'carrito/respuesta';
+        $this->load->view('core/body', $this->data);
     }
 }
 /* Fin del archivo Carrito.php */
