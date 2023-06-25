@@ -121,7 +121,7 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
     return respuesta
 }
 
-const iniciarSesion = async(evento) => {
+const iniciarSesion = async(evento, url = null) => {
     evento.preventDefault()
 
     let nombreUsuario = $('#usuario')
@@ -162,7 +162,13 @@ const iniciarSesion = async(evento) => {
     let sesion = await obtenerPromesa(`${$('#site_url').val()}sesion/iniciar`, {id: usuario.id})
 
     // Si tuvo éxito, se redirecciona
-    if(sesion) location.href = `${$('#site_url').val()}inicio`
+    if(sesion) {
+        if(url) {
+            location.href = url
+        } else {
+            location.href = `${$('#site_url').val()}inicio`
+        }
+    }
 }
 
 mostrarNotificacion = (tipo, mensaje, tiempo = 2000) => {
