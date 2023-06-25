@@ -26,6 +26,21 @@ class Carrito extends MY_Controller {
         redirect('inicio');
     }
 
+    /**
+    *
+    * Función que captura el objeto JSON con los datos de la transacción de Wompi
+    * Y almacena el id de la transacción, para futuras consultas
+    * 
+    **/
+    function eventos() {
+        $post = file_get_contents('php://input');
+        $datos = json_decode($post, true)['data'];
+
+        $this->productos_model->actualizar('facturas', ['token' => $datos['transaction']['reference']], ['wompi_transaccion_id' => $datos['transaction']['id']]);
+
+        return http_response_code(200);
+    }
+
     function agregar($id, $precio, $nombre) {
         print json_encode(['resultado' => $this->cart->insert(array(
             'id'      => $id,

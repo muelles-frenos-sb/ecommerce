@@ -1,5 +1,9 @@
 <?php 
 Class Productos_model extends CI_Model{
+    function actualizar($tabla, $condiciones, $datos){
+        return $this->db->where($condiciones)->update($tabla, $datos);
+    }
+
     function crear($tipo, $datos){
         switch ($tipo) {
             default:
