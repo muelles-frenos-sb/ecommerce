@@ -10,7 +10,7 @@
     <div class="container container--max--xl">
         <div class="form-row">
             <div class="form-group col-md-12">
-                <input type="text" class="form-control" id="buscar" placeholder="Buscar por alguna palabra clave">
+                <input type="text" class="form-control" id="buscar_tercero" placeholder="Buscar por alguna palabra clave">
             </div>
         </div>
 
@@ -23,13 +23,13 @@
 <script>
     listarTerceros = () => {
         // Si no hay valor en la búsqueda, pero si en loca storage, lo pone
-        if($("#buscar").val() == "" && localStorage.simonBolivar_busquedaTercero) $("#buscar").val(localStorage.simonBolivar_busquedaTercero)
+        if($("#buscar_tercero").val() == "" && localStorage.simonBolivar_busquedaTercero) $("#buscar_tercero").val(localStorage.simonBolivar_busquedaTercero)
 
         localStorage.simonBolivar_contador = 0
 
         let datos = {
             contador: localStorage.simonBolivar_contador,
-            busqueda: $("#buscar").val(),
+            busqueda: $("#buscar_tercero").val(),
         }
 
         cargarInterfaz('configuracion/terceros/lista', 'contenedor_terceros', datos)
@@ -38,9 +38,9 @@
     $().ready(() => {
         listarTerceros()
 
-        $("#buscar").keyup(() => {
+        $("#buscar_tercero").keyup(() => {
             // Se almacena el valor de búsqueda en local storage
-            localStorage.simonBolivar_busquedaTercero = $("#buscar").val()
+            localStorage.simonBolivar_busquedaTercero = $("#buscar_tercero").val()
 
             // Recarga de la vista
             listarTerceros()
