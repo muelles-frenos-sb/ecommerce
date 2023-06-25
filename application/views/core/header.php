@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/fontawesome/css/all.min.css">
 
 <!-- Scripts -->
+<script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>
 <script src="<?php echo base_url(); ?>vendor/jquery/jquery.min.js"></script>
 <script src="<?php echo base_url(); ?>vendor/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?php echo base_url(); ?>js/carrito.js?<?php echo date('Ymdhis'); ?>"></script>
