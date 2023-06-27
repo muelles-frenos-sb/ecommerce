@@ -40,7 +40,6 @@ const eliminarProducto = async(rowId) => {
 const modificarItem = async(tipo, rowId) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item/${tipo}/${rowId}`)
     .then(resultado => {
-        console.log(resultado)
         actualizarCarrito()
         listarCarrito()
     })

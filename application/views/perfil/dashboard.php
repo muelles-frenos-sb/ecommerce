@@ -70,8 +70,6 @@
         productos.forEach(producto => {
             totalItems++
             valor = valor + (parseFloat(producto.Valor_Bruto) - parseFloat(producto.Descuento))
-            console.log(producto)
-            console.log(valor)
 
             if(pedidoId != producto.Nro_Documento) {
                 $('tbody').append(`

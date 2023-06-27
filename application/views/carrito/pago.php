@@ -30,9 +30,8 @@
     })
 
     checkout.open(function (resultado) {
-        console.log(resultado)
         var transaction = resultado.transaction
-        console.log('Transaction ID: ', transaction.id)
-        console.log('Transaction object: ', transaction)
+        // console.log('Transaction ID: ', transaction.id)
+        // console.log('Transaction object: ', transaction)
     })
 </script>

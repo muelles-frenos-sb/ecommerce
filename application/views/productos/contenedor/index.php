@@ -41,7 +41,7 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
         if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
         if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
         if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
-        if($('#filtro_busqueda')) datos.busqueda = $('#filtro_busqueda').val()
+        if($('#filtro_busqueda') != '') datos.busqueda = $('#filtro_busqueda').val()
 
         cargarInterfaz('productos/contenedor/lista', 'contenedor_productos', datos)
         // cargarInterfaz('productos/contenedor/paginacion', 'contenedor_paginacion', datosPaginacion)

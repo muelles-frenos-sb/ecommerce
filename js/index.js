@@ -14,7 +14,7 @@ cargarFiltros = async(tipo, elemento, datos) => {
             })
 
             $.each(grupos, function(key, grupo){
-            $(`#${elemento}`).append(`
+                $(`#${elemento}`).append(`
                     <li class='megamenu-links__item'>
                         <a class='megamenu-links__item-link' href='${$('#site_url').val()}productos?marca=${marca.nombre}&grupo=${grupo.nombre}'>${grupo.nombre}</a>
                     </li>
