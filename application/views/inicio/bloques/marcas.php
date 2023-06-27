@@ -9,19 +9,13 @@
         <div class="category-card__content">
             <div class="category-card__info">
                 <div class="category-card__name">
-                    <a href="category-4-columns-sidebar.html">Wheels & Tires</a>
+                    <a href="category-4-columns-sidebar.html">Marcas</a>
                 </div>
                 <ul class="category-card__children">
-                    <li><a href="category-4-columns-sidebar.html">Wheel Covers</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Brake Kits</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Tire Chains</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Wheel disks</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Tires</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Sensors</a></li>
-                    <li><a href="category-4-columns-sidebar.html">Accessories</a></li>
+                    <?php foreach($this->configuracion_model->obtener('marcas') as $marca) echo "<li><a href='".site_url('productos')."?marca=$marca->nombre'>$marca->nombre</a></li>"; ?>
                 </ul>
                 <div class="category-card__actions">
-                    <a href="shop-grid-4-columns-sidebar.html" class="btn btn-primary btn-sm">Shop All</a>
+                    <a href="<?php echo site_url('productos'); ?>" class="btn btn-primary btn-sm">Ver todos</a>
                 </div>
             </div>
         </div>

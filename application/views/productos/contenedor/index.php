@@ -50,6 +50,6 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
     $().ready(() => {
         listarProductos()
 
-        $('#view-option-limit').change(() => listarProductos)
+        // $('#view-option-limit').change(() => listarProductos)
     })
 </script>

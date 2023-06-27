@@ -13,8 +13,7 @@
         </div>
         <div class="arrow block-zone__arrow block-zone__arrow--next arrow--next">
             <button class="arrow__button" type="button"><svg width="7" height="11">
-                    <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9
-C-0.1,9.8-0.1,10.4,0.3,10.7z" />
+                    <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9 C-0.1,9.8-0.1,10.4,0.3,10.7z" />
                 </svg>
             </button>
         </div>
@@ -28,14 +27,12 @@ C-0.1,9.8-0.1,10.4,0.3,10.7z" />
                         <div class="product-card__actions-list">
                             <button class="product-card__action product-card__action--quickview" type="button" aria-label="Quick view">
                                 <svg width="16" height="16">
-                                    <path d="M14,15h-4v-2h3v-3h2v4C15,14.6,14.6,15,14,15z M13,3h-3V1h4c0.6,0,1,0.4,1,1v4h-2V3z M6,3H3v3H1V2c0-0.6,0.4-1,1-1h4V3z
-M3,13h3v2H2c-0.6,0-1-0.4-1-1v-4h2V13z" />
+                                    <path d="M14,15h-4v-2h3v-3h2v4C15,14.6,14.6,15,14,15z M13,3h-3V1h4c0.6,0,1,0.4,1,1v4h-2V3z M6,3H3v3H1V2c0-0.6,0.4-1,1-1h4V3z M3,13h3v2H2c-0.6,0-1-0.4-1-1v-4h2V13z" />
                                 </svg>
                             </button>
                             <button class="product-card__action product-card__action--wishlist" type="button" aria-label="Add to wish list">
                                 <svg width="16" height="16">
-                                    <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7
-l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z" />
+                                    <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7 l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z" />
                                 </svg>
                             </button>
                             <button class="product-card__action product-card__action--compare" type="button" aria-label="Add to compare">

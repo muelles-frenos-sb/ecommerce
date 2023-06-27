@@ -1,5 +1,4 @@
 <?php $this->load->view('inicio/slider'); ?>
-
 <?php $this->load->view('inicio/buscar_repuestos'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
@@ -9,14 +8,14 @@
 <?php $this->load->view('inicio/productos_destacados'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
-<?php $this->load->view('inicio/ofertas'); ?>
-<div class="block-space block-space--layout--divider-lg"></div>
+<?php //$this->load->view('inicio/ofertas'); ?>
+<!-- <div class="block-space block-space--layout--divider-lg"></div> -->
 
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
-            <?php $this->load->view('inicio/bloques/uno'); ?>
-            <?php $this->load->view('inicio/bloques/uno_detalles'); ?>
+            <?php $this->load->view('inicio/bloques/marcas'); ?>
+            <?php $this->load->view('inicio/bloques/marcas_detalles'); ?>
         </div>
     </div>
 </div>
@@ -25,8 +24,8 @@
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
-            <?php $this->load->view('inicio/bloques/dos'); ?>
-            <?php $this->load->view('inicio/bloques/dos_detalles'); ?>
+            <?php $this->load->view('inicio/bloques/grupos'); ?>
+            <?php $this->load->view('inicio/bloques/grupos_detalles'); ?>
         </div>
     </div>
 </div>

@@ -9,7 +9,7 @@
         <div class="category-card__content">
             <div class="category-card__info">
                 <div class="category-card__name">
-                    <a href="category-4-columns-sidebar.html">Interior Parts</a>
+                    <a href="category-4-columns-sidebar.html">Grupos</a>
                 </div>
                 <ul class="category-card__children">
                     <li><a href="category-4-columns-sidebar.html">Dashboards</a></li>
