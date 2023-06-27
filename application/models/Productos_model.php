@@ -65,7 +65,7 @@ Class Productos_model extends CI_Model{
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;
                 
-                $where = "WHERE p.id";
+                $where = "WHERE i.disponible > 0";
                 $having = "";
 
                 /**
