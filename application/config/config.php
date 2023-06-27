@@ -20,7 +20,7 @@ $config['index_page'] = '';
 |
 */
 $config['nombre_aplicacion'] = 'Simón Bolívar';
-$config['cantidad_datos'] = 30;
+$config['cantidad_datos'] = 20;
 $config['url_fotos'] = 'https://tienda.repuestossimonbolivar.com/archivos/fotos/';
 
 
