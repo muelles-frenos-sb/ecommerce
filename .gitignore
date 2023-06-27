@@ -22,3 +22,4 @@ images/testimonials/
 # Archivos
 .vscode/settings.json
 application/composer.lock
+index.php

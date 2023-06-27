@@ -102,6 +102,43 @@ class Migracion extends CI_Controller {
             echo $this->productos_model->crear('productos_precios', $datos);
         }
     }
+
+    function productos_pedidos($fecha = null) {
+        $resultado_pedidos = json_decode(obtener_pedidos_api($fecha));
+        $codigo_resultado = $resultado_pedidos->codigo;
+        $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
+        $fecha_creacion = date('Y-m-d H:i:s');
+        $datos = [];
+
+        // Primero, eliminamos todos los ítems
+        if($this->productos_model->eliminar('productos_pedidos', ["DATE(fecha_documento)" => $fecha])) {
+            if($codigo_resultado != 1) {
+                foreach($pedidos as $item) {
+                    $nuevo_item = [
+                        'centro_operaciones' => $item->Centro_Operaciones,
+                        'documento_tipo' => $item->Tipo_Documento,
+                        'documento_numero' => $item->Nro_Documento,
+                        'tercero_id' => $item->Id_Tercero,
+                        'tercero_razon_social' => $item->Razon_Social,
+                        'sucursal_descripcion' => $item->Descripcion_Sucursal,
+                        'fecha_documento' => $item->Fecha_Documento,
+                        'producto_id' => $item->Item,
+                        'referencia' => $item->Referencia,
+                        'descripcion' => $item->Descripcion,
+                        'precio_unitario' => $item->Precio_Unitario,
+                        'cantidad' => $item->Cantidad_Pedida,
+                        'valor' => $item->Valor_Bruto,
+                        'descuento' => $item->Descuento,
+                        'fecha_creacion' => $fecha_creacion,
+                    ];
+                    
+                    array_push($datos, $nuevo_item);
+                }
+            
+                echo $this->productos_model->crear('productos_pedidos', $datos);
+            }
+        }
+    }
 }
 /* Fin del archivo Migracion.php */
 /* Ubicación: ./application/controllers/Migracion.php */
