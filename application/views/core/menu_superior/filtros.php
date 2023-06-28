@@ -15,7 +15,11 @@
             <div class="departments__arrow"></div>
             <div class="departments__body">
                 <ul class="departments__list">
-                    <li class="departments__list-padding" role="presentation"></li>
+                    <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu" role="presentation"></li>
+                    <a href="<?php echo site_url("productos"); ?>" class="departments__item-link">
+                        TODAS LAS MARCAS
+                    </a>
+
                     <!-- Marcas -->
                     <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
                         <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu">
