@@ -1,8 +1,9 @@
 <?php $this->load->view('inicio/slider'); ?>
-<?php $this->load->view('inicio/buscar_repuestos'); ?>
-<div class="block-space block-space--layout--divider-nl"></div>
 
 <?php $this->load->view('inicio/caracteristicas'); ?>
+<!-- <div class="block-space block-space--layout--divider-nl"></div> -->
+
+<?php $this->load->view('inicio/buscar_repuestos'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
 <?php $this->load->view('inicio/productos_destacados'); ?>
