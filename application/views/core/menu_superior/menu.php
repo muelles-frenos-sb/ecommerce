@@ -62,6 +62,13 @@
                     </div>
                 </li><!-- Configuración -->
             <?php } ?>
+
+            <!-- Nosotros -->
+            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                <a href="<?php echo site_url('nosotros'); ?>" class="main-menu__link">
+                    Nosotros
+                </a>
+            </li><!-- Nosotros -->
         </ul>
     </div>
 </div>
