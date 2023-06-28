@@ -59,7 +59,7 @@ foreach($productos as $producto) {
                 <div class="product-card__name">
                     <div>
                         <div class="product-card__badges">
-                            <?php if($producto->disponible > 0 & $producto->disponible <= 5) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?> 
+                            <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?> 
                             
                             <!-- <div class="tag-badge tag-badge--new">new</div>
                             <div class="tag-badge tag-badge--hot">hot</div> -->

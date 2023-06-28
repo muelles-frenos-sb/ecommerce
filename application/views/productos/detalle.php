@@ -114,7 +114,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
                             <div class="product__info">
                                 <div class="product__info-card">
                                     <div class="product__info-body">
-                                        <?php if($producto->disponible > 0 & $producto->disponible <= 5) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
+                                        <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
                                         <div class="product__prices-stock">
                                             <?php if ($producto->disponible > 0) { ?>
                                                 <div class="product__prices">
