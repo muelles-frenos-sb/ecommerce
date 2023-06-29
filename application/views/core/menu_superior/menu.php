@@ -69,6 +69,13 @@
                     Nosotros
                 </a>
             </li><!-- Nosotros -->
+
+            <!-- Contacto -->
+            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                <a href="<?php echo site_url('contacto'); ?>" class="main-menu__link">
+                    Contacto
+                </a>
+            </li><!-- Contacto -->
         </ul>
     </div>
 </div>
