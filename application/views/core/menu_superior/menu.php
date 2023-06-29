@@ -3,7 +3,7 @@
         <ul class="main-menu__list">
             <!-- Inicio -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url(); ?>" class="main-menu__link">
+                <a href="<?php echo site_url('inicio'); ?>" class="main-menu__link">
                     Inicio
                 </a>
             </li><!-- Inicio -->
