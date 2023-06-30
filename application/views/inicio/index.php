@@ -57,8 +57,8 @@
 <?php $this->load->view('inicio/nuevos_productos'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
-<?php $this->load->view('inicio/ultimas_noticias'); ?>
-<div class="block-space block-space--layout--divider-nl"></div>
+<?php // $this->load->view('inicio/ultimas_noticias'); ?>
+<!-- <div class="block-space block-space--layout--divider-nl"></div> -->
 
 <?php $this->load->view('inicio/marcas'); ?>
 <div class="block-space block-space--layout--divider-nl d-xl-block d-none"></div>
@@ -66,9 +66,14 @@
 <div class="block block-products-columns">
     <div class="container">
         <div class="row">
-            <?php $this->load->view('inicio/footer_productos_destacados'); ?>
-            <?php $this->load->view('inicio/footer_ofertas'); ?>
-            <?php $this->load->view('inicio/footer_mas_vendidos'); ?>
+            <?php
+            $this->data['titulo'] = 'Para tí';
+            $this->load->view('inicio/footer_productos_destacados', $this->data);
+            $this->data['titulo'] = 'Destacados';
+            $this->load->view('inicio/footer_productos_destacados', $this->data);
+            $this->data['titulo'] = 'Ofertas';
+            $this->load->view('inicio/footer_productos_destacados', $this->data);
+            ?>
         </div>
     </div>
 </div>

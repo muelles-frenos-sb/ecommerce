@@ -129,6 +129,8 @@ Class Productos_model extends CI_Model{
             break;
 
             case 'productos_destacados':
+                $limite = (isset($datos['limite'])) ? "LIMIT {$datos['limite']}" : " LIMIT 50 ";
+                
                 $sql = 
                 "SELECT
                     pd.producto_id,
@@ -138,7 +140,7 @@ Class Productos_model extends CI_Model{
                     productos_destacados pd 
                 ORDER BY
                     RAND() 
-                    LIMIT 50";
+                $limite";
                 
                 return $this->db->query($sql)->result();
             break;

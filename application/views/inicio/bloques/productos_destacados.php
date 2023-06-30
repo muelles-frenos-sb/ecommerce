@@ -29,7 +29,7 @@
                     $producto = $this->productos_model->obtener('productos', ['id' => $item->producto_id]);
 
                     if(isset($producto)) {
-                ?>
+                    ?>
                         <div class="block-zone__carousel-item">
                             <div class="product-card">
                                 <!-- <div class="product-card__actions-list">
@@ -87,7 +87,7 @@
                                                 $valor = $producto->linea;
                                             break;
                                         }
-                                        ?> 
+                                        ?>
                                         
                                         <span class="product-card__meta-title"><?php echo $titulo; ?>:</span> <?php echo $valor; ?>
                                     </div>
