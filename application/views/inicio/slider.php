@@ -10,8 +10,8 @@ $registros = $this->configuracion_model->obtener('sliders', $opciones);
         <div class="owl-carousel">
             <?php foreach ($registros as $slider) { ?>
                 <a class="block-slideshow__item" href="<?php echo site_url('productos'); ?>">
-                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/<?php echo $slider->id; ?>.jpg?12345')"></span>
-                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/<?php echo $slider->id; ?>-mobile.jpg?12345')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/<?php echo $slider->id; ?>.jpg?')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/<?php echo $slider->id; ?>-mobile.jpg?')"></span>
                     
                     <?php if($slider->titulo_enfasis_activo == 1) { ?>
                         <span class="block-slideshow__item-offer">

@@ -6,7 +6,7 @@
             <div class="decor__center"></div>
         </div>
     </div>
-    <div class="block-finder__image" style="background-image: url('<?php echo base_url(); ?>images/buscar_respuestos.jpg');"></div>
+    <div class="block-finder__image" style="background-image: url('<?php echo base_url(); ?>images/buscar_respuestos.jpg?');"></div>
     <div class="block-finder__body container container--max--xl">
         <div class="block-finder__title">Busque un repuesto para su vehículo</div>
         <div class="block-finder__subtitle">Seleccione una marca, grupo y línea para buscar un repuesto</div>

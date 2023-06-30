@@ -15,8 +15,11 @@
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
-            <?php $this->load->view('inicio/bloques/marcas'); ?>
-            <?php $this->load->view('inicio/bloques/marcas_detalles'); ?>
+            <?php
+            $this->data['tipo'] = 'marca';
+            $this->load->view('inicio/bloques/marcas');
+            $this->load->view('inicio/bloques/productos_destacados', $this->data);
+            ?>
         </div>
     </div>
 </div>
@@ -25,8 +28,11 @@
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
-            <?php $this->load->view('inicio/bloques/grupos'); ?>
-            <?php $this->load->view('inicio/bloques/grupos_detalles'); ?>
+            <?php
+            $this->data['tipo'] = 'grupo';
+            $this->load->view('inicio/bloques/grupos');
+            $this->load->view('inicio/bloques/productos_destacados', $this->data);
+            ?>
         </div>
     </div>
 </div>
@@ -35,8 +41,11 @@
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
-            <?php $this->load->view('inicio/bloques/tres'); ?>
-            <?php $this->load->view('inicio/bloques/tres_detalles'); ?>
+            <?php
+            $this->data['tipo'] = 'linea';
+            $this->load->view('inicio/bloques/lineas');
+            $this->load->view('inicio/bloques/productos_destacados', $this->data);
+            ?>
         </div>
     </div>
 </div>
