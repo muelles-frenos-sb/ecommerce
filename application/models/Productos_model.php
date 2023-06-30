@@ -49,7 +49,7 @@ Class Productos_model extends CI_Model{
         }
     }
     
-    public function obtener($tipo, $datos) {
+    public function obtener($tipo, $datos = null) {
         switch ($tipo) {
             case 'factura':
                 unset($datos['tipo']);
@@ -126,6 +126,21 @@ Class Productos_model extends CI_Model{
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'productos_destacados':
+                $sql = 
+                "SELECT
+                    pd.producto_id,
+                    pd.notas,
+                    pd.cantidad 
+                FROM
+                    productos_destacados pd 
+                ORDER BY
+                    RAND() 
+                    LIMIT 50";
+                
+                return $this->db->query($sql)->result();
             break;
         }
     }

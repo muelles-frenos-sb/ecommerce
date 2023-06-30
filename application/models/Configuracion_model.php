@@ -53,35 +53,83 @@ Class Configuracion_model extends CI_Model {
             break;
 
 			case 'grupos':
-                $sql = 
+                $where = "WHERE p.id";
+
+                /**
+                 * Filtro de marcas activas
+                 */
+                $marcas = $this->configuracion_model->obtener('marcas');
+                if(isset($datos['marcas_activas'])) {
+                    $where .= " AND (";
+                    for ($i=0; $i < count($marcas); $i++) {
+                        $where .= " p.marca = '{$marcas[$i]->nombre}' ";
+                        if(($i + 1) < count($marcas)) $where .= " OR ";
+                    }
+                    $where .= ") ";
+                }
+
+                if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
+                $order_by = (isset($datos['marcas_activas'])) ? " ORDER BY RAND() " : " ORDER BY nombre " ;
+                $limite = (isset($datos['marcas_activas'])) ? "LIMIT 10" : "" ;
+
+                $sql =
                 "SELECT
-                    id,
+                id,
                     p.grupo nombre
                 FROM
                     productos AS p 
-                WHERE
-                    p.marca = '{$datos['marca']}'
+                $where
                 GROUP BY
                     p.grupo
-                ORDER BY nombre";
+                $order_by
+                $limite
+                ";
 
-                return $this->db->query($sql)->result();
+                if (isset($datos['id'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
             break;
 
 			case 'lineas':
-                $sql = 
+                $where = "WHERE p.id";
+                
+                /**
+                 * Filtro de marcas activas
+                 */
+                $marcas = $this->configuracion_model->obtener('marcas');
+                if(isset($datos['marcas_activas'])) {
+                    $where .= " AND (";
+                    for ($i=0; $i < count($marcas); $i++) {
+                        $where .= " p.marca = '{$marcas[$i]->nombre}' ";
+                        if(($i + 1) < count($marcas)) $where .= " OR ";
+                    }
+                    $where .= ") ";
+                }
+
+                if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
+                $order_by = (isset($datos['marcas_activas'])) ? " ORDER BY RAND() " : " ORDER BY nombre " ;
+                $limite = (isset($datos['marcas_activas'])) ? "LIMIT 10" : "" ;
+
+                $sql =
                 "SELECT
-                    id,
+                id,
                     p.linea nombre
                 FROM
                     productos AS p 
-                WHERE
-                    p.marca = '{$datos['marca']}'
+                $where
                 GROUP BY
                     p.linea
-                ORDER BY nombre";
+                $order_by
+                $limite
+                ";
 
-                return $this->db->query($sql)->result();
+                if (isset($datos['id'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
             break;
 
             case 'marca':
