@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </div>
-            <div class="search__dropdown search__dropdown--vehicle-picker vehicle-picker">
+            <!-- <div class="search__dropdown search__dropdown--vehicle-picker vehicle-picker">
                 <div class="search__dropdown-arrow"></div>
                 <div class="vehicle-picker__panel vehicle-picker__panel--list vehicle-picker__panel--active" data-panel="list">
                     <div class="vehicle-picker__panel-body">
@@ -229,7 +229,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </form>
     </div>
 </div>

@@ -37,7 +37,7 @@
         <?php $this->load->view('core/menu_superior/busqueda'); ?>
 
         <div class="header__indicators">
-            <div class="indicator">
+            <!-- <div class="indicator">
                 <a href="wishlist.html" class="indicator__button">
                     <span class="indicator__icon">
                         <svg width="32" height="32">
@@ -45,7 +45,7 @@
                         </svg>
                     </span>
                 </a>
-            </div>
+            </div> -->
             
             <!-- Datos del perfil del usuario -->
             <?php $this->load->view('core/menu_superior/perfil'); ?>

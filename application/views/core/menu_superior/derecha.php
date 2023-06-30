@@ -1,4 +1,4 @@
-<div class="header__topbar-end">
+<!-- <div class="header__topbar-end">
     <div class="topbar topbar--spaceship-end">
         <div class="topbar__item-button">
             <a href="" class="topbar__button">
@@ -33,21 +33,21 @@
             </button>
             <div class="topbar__menu-body">
                 <a class="topbar__menu-item" href="#">
-                    <img src="<?php echo base_url(); ?>images/languages/language-1.png" alt=""><span>English</span>
+                    <img src="<?php // echo base_url(); ?>images/languages/language-1.png" alt=""><span>English</span>
                 </a>
                 <a class="topbar__menu-item" href="#">
-                    <img src="<?php echo base_url(); ?>images/languages/language-2.png" alt=""><span>French</span>
+                    <img src="<?php // echo base_url(); ?>images/languages/language-2.png" alt=""><span>French</span>
                 </a>
                 <a class="topbar__menu-item" href="#">
-                    <img src="<?php echo base_url(); ?>images/languages/language-3.png" alt=""><span>German</span>
+                    <img src="<?php // echo base_url(); ?>images/languages/language-3.png" alt=""><span>German</span>
                 </a>
                 <a class="topbar__menu-item" href="#">
-                    <img src="<?php echo base_url(); ?>images/languages/language-4.png" alt=""><span>Russian</span>
+                    <img src="<?php // echo base_url(); ?>images/languages/language-4.png" alt=""><span>Russian</span>
                 </a>
                 <a class="topbar__menu-item" href="#">
-                    <img src="<?php echo base_url(); ?>images/languages/language-5.png" alt=""><span>Italian</span>
+                    <img src="<?php // echo base_url(); ?>images/languages/language-5.png" alt=""><span>Italian</span>
                 </a>
             </div>
         </div>
     </div>
-</div>
+</div> -->
