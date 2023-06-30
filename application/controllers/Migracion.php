@@ -104,14 +104,17 @@ class Migracion extends CI_Controller {
     }
 
     function productos_pedidos($fecha = null) {
-        $resultado_pedidos = json_decode(obtener_pedidos_api($fecha));
+        // $filtro_fecha = ($fecha) ? $fecha : date("Y-m-d", strtotime(date('Y-m-d')."- 1 days")) ;
+        $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+
+        $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
         $codigo_resultado = $resultado_pedidos->codigo;
         $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
         $fecha_creacion = date('Y-m-d H:i:s');
         $datos = [];
 
         // Primero, eliminamos todos los ítems
-        if($this->productos_model->eliminar('productos_pedidos', ["DATE(fecha_documento)" => $fecha])) {
+        if($this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => "$filtro_fecha"])) {
             if($codigo_resultado != 1) {
                 foreach($pedidos as $item) {
                     $nuevo_item = [
