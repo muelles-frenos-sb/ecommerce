@@ -33,7 +33,7 @@
                                         <div class="tag-badge tag-badge--new">new</div>
                                         <div class="tag-badge tag-badge--hot">hot</div>
                                     </div> -->
-                                    <a href="product-full.html"><?php echo $producto->notas; ?></a>
+                                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo $producto->notas; ?></a>
                                 </div>
                             </div>
                             <!-- <div class="product-card__rating">
