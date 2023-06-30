@@ -38,6 +38,7 @@ class Migracion extends CI_Controller {
                     'linea' => $producto->Linea,
                     'grupo' => $producto->Grupo,
                     'fecha_actualizacion' => $fecha_actualizacion,
+                    'fecha_actualizacion_api' => $producto->Fecha_Actualizacion,
                 ];
 
                 array_push($datos, $nuevo_producto);
