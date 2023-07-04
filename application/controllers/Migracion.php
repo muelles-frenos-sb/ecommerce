@@ -17,6 +17,80 @@ class Migracion extends CI_Controller {
         $this->load->model('productos_model');
     }
 
+    function clientes() {
+        $fecha_actualizacion = date('Y-m-d H:i:s');
+        $codigo = 0;
+        $pagina = 1;
+        $nuevos_clientes = [];
+
+        // Se eliminan todos los clientes
+        $this->configuracion_model->eliminar('clientes', 'id is  NOT NULL');
+        
+        while ($codigo == 0) {
+            $resultado = json_decode(obtener_clientes_api(['pagina' => $pagina]));
+            $codigo = $resultado->codigo;
+
+            if($codigo == 0) {
+                $clientes = $resultado->detalle->Table;
+                
+                foreach($clientes as $cliente) {
+                    $nuevo_cliente = [
+                        'id' => $cliente->f200_id,
+                        'compania_id' => $cliente->f201_id_cia,
+                        'row_id' => $cliente->f200_rowid,
+                        'nit' => $cliente->f200_nit,
+                        'sucursal_id' => $cliente->f201_id_sucursal,
+                        'sucursal_descripcion' => $cliente->f201_descripcion_sucursal,
+                        'ind_estado_bloqueado' => $cliente->f201_ind_estado_bloqueado,
+                        'moneda' => $cliente->f201_id_moneda,
+                        'vendedor_id' => $cliente->f201_id_vendedor,
+                        'calificacion' => $cliente->f201_ind_calificacion,
+                        'condicion_pago_id' => $cliente->f201_id_cond_pago,
+                        'dias_gracia' => $cliente->f201_dias_gracia,
+                        'cupo_credito' => $cliente->f201_cupo_credito,
+                        'cliente_tipo' => $cliente->f201_id_tipo_cli,
+                        'grupo_descuentoi_id' => $cliente->f201_id_grupo_dscto,
+                        'lista_precio_id' => $cliente->f201_id_lista_precio,
+                        'ind_pedido_backorder' => $cliente->f201_ind_pedido_backorder,
+                        'porcentaje_exceso_venta' => $cliente->f201_porc_exceso_venta,
+                        'porcentaje_minimo_margen' => $cliente->f201_porc_min_margen,
+                        'porcentaje_maximo_margen' => $cliente->f201_porc_max_margen,
+                        'ind_bloqueo_cupo' => $cliente->f201_ind_bloqueo_cupo,
+                        'ind_bloqueo_mora' => $cliente->f201_ind_bloqueo_mora,
+                        'ind_factura_unificada' => $cliente->f201_ind_factura_unificada,
+                        'id_co_factura' => $cliente->f201_id_co_factura,
+                        'notas' => $cliente->f201_notas,
+                        'fecha_ingreso' => $cliente->f201_fecha_ingreso,
+                        'ind_estado_activo' => $cliente->f201_ind_estado_activo,
+                        'co_movto_factura_id' => $cliente->f201_id_co_movto_factura,
+                        'un_movto_factura_id' => $cliente->f201_id_un_movto_factura,
+                        'fecha_cupo' => $cliente->f201_fecha_cupo,
+                        'tolerancia_porcentaje' => $cliente->f201_porc_tolerancia,
+                        'dia_maximo_factura' => $cliente->f201_dia_maximo_factura,
+                        'motivo_bloqueo_id' => $cliente->f201_id_motivo_bloqueo,
+                        'cobrador_id' => $cliente->f201_id_cobrador,
+                        'fecha_ts' => $cliente->f201_ts,
+                        'ind_compromiso_um_emp' => $cliente->f201_ind_compromiso_um_emp,
+                        'ind_anticipo_terc_corp' => $cliente->f201_ind_anticipo_terc_corp,
+                        'valida_cupo_despacho' => $cliente->f201_valida_cupo_despacho,
+                        'ind_exceso_venta_adic' => $cliente->f201_ind_exceso_venta_adic,
+                        'ind_valida_cartera_des' => $cliente->f201_ind_valida_cartera_des,
+                        'fecha_actualizacion' => $fecha_actualizacion,
+                    ];
+
+                    array_push($nuevos_clientes, $nuevo_cliente);
+                }
+                
+                $pagina++;
+            } else {
+                $codigo = '-1';
+                break;
+            }
+        }
+        
+        echo $this->configuracion_model->crear('clientes', $nuevos_clientes);
+    }
+
     function productos_detalle() {
         $resultado_productos = json_decode(obtener_productos_api([]));
         $codigo_producto = $resultado_productos->codigo;
