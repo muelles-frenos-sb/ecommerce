@@ -16,43 +16,45 @@
                             <address class="footer-contacts__contacts">
                                 <dl>
                                     <dt>Número telefónico</dt>
-                                    <dd>(+57) 310 4114048</dd>
+                                    <dd><?php echo $this->config->item('telefono'); ?></dd>
                                 </dl>
                                 <dl>
                                     <dt>Correo electrónico</dt>
-                                    <dd>redesmyfsb@gmail.com</dd>
+                                    <dd><?php echo $this->config->item('email'); ?></dd>
                                 </dl>
                                 <dl>
                                     <dt>Nuestra ubicación</dt>
                                     <dd>
-                                        <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.google.com%2Fmaps%2Fdir%2F%3Fapi%3D1%26destination%3D6.1596808701549%252C-75.613596439362%26fbclid%3DIwAR0rW0ToH2ZNu2tnS39XxgDgRT6mT2JTusqbSH90n5Ik6ZjRFb3ojrrcuHQ&h=AT0mwKe-JGPM8kVe5CCGYYm_NW9SWRYIPl5jFikYCXDPEwQ4NXSMCpPEUt345qmkNtFx5cwRUi6AvHMk0e1OIEfCyACZwE5omZObp9wFbXe6DpA9qVQSx30ptNIEreVkgNFUYA" target="_blank">calle 31 #41 15 Parqueadero bodegas del Rio 055413 Itagüí, Colombia</a>
+                                        <a href="<?php echo $this->config->item('url_facebook'); ?>" target="_blank">
+                                            <?php echo $this->config->item('direccion'); ?>
+                                        </a>
                                     </dd>
                                 </dl>
                                 <dl>
                                     <dt>Horarios de atención</dt>
-                                    <dd>Lunes a viernes de 07:30am a 06:00pm</dd>
-                                    <dd>Sábados de 07:30am a 04:00pm</dd>
+                                    <dd><?php echo $this->config->item('horario_semana'); ?></dd>
+                                    <dd><?php echo $this->config->item('horario_fines_semana'); ?></dd>
                                 </dl>
                             </address>
                         </div>
                     </div>
                     <div class="col-6 col-md-3 col-xl-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">Information</h5>
+                            <h5 class="footer-links__title">Información</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="" class="footer-links__link">About Us</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Delivery Information</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Privacy Policy</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Brands</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('nosotros'); ?>" class="footer-links__link">Acerca de nosotros</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('contacto'); ?>" class="footer-links__link">Contacto</a></li>
+                                <li class="footer-links__item"><a href="" class="footer-links__link">Política de tratamiento de datos</a></li>
+                                <!-- <li class="footer-links__item"><a href="" class="footer-links__link">Brands</a></li>
                                 <li class="footer-links__item"><a href="" class="footer-links__link">Contact Us</a></li>
                                 <li class="footer-links__item"><a href="" class="footer-links__link">Returns</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Site Map</a></li>
+                                <li class="footer-links__item"><a href="" class="footer-links__link">Site Map</a></li> -->
                             </ul>
                         </div>
                     </div>
                     <div class="col-6 col-md-3 col-xl-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">My Account</h5>
+                            <h5 class="footer-links__title">Mi cuenta</h5>
                             <ul class="footer-links__list">
                                 <li class="footer-links__item"><a href="" class="footer-links__link">Store Location</a></li>
                                 <li class="footer-links__item"><a href="" class="footer-links__link">Order History</a></li>

@@ -103,7 +103,7 @@ $autoload['helper'] = array('url', 'utilidades', 'api');
 | config files.  Otherwise, leave it blank.
 |
 */
-$autoload['config'] = array();
+$autoload['config'] = array('simon_bolivar');
 
 /*
 | -------------------------------------------------------------------
