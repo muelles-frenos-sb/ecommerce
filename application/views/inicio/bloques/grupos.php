@@ -1,4 +1,4 @@
-<div class="block-zone__card category-card category-card--layout--overlay">
+<div class="block-zone__card category-card category-card--layout--overlay" onClick="javascript:location.href='<?php echo site_url("productos"); ?>'">
     <div class="category-card__body">
         <div class="category-card__overlay-image">
             <img srcset="<?php echo base_url(); ?>images/categories/grupos-mobile.jpg 530w, <?php echo base_url(); ?>images/categories/grupos.jpg 305w" src="<?php echo base_url(); ?>images/categories/category-overlay-2.jpg" sizes="(max-width: 575px) 530px, 305px" alt="">
