@@ -6,8 +6,28 @@ azul_claro_corporativo_secundario = #8D9EBC
 amarillo_corporativo_apoyo = #F8A815
 azul_corporativo_apoyo = #1F2B50
 
+.block-features__item-title
+    color azul_corporativo_primario
+    font-weight 800
+
+// Botón del slider de inicio
+.block-slideshow__item-button
+    background-color amarillo_corporativo_apoyo
+
+.block-slideshow__item-button:hover
+    background-color azul_corporativo_apoyo
+
+.block-slideshow__item-title
+    color azul_corporativo_primario
+
+.block-slideshow__carousel .owl-carousel button.owl-dot.active:before
+    background amarillo_corporativo_apoyo;
+
 .topbar--spaceship-start, .header__topbar-start-bg:before, .departments__button:hover
     background azul_corporativo_primario
+
+.departments__button:hover, .departments--open .departments__button
+  background amarillo_corporativo_apoyo
 
 .topbar--spaceship-end, .header__topbar-end-bg:before
     background amarillo_corporativo_primario

@@ -9,7 +9,7 @@
         <div class="category-card__content">
             <div class="category-card__info">
                 <div class="category-card__name">
-                    <a href="category-4-columns-sidebar.html">Grupos</a>
+                    <a href="<?php echo site_url('productos'); ?>">Grupos</a>
                 </div>
                 <ul class="category-card__children">
                     <?php foreach($this->configuracion_model->obtener('grupos', ['marcas_activas' => true]) as $grupo) echo "<li><a href='".site_url('productos')."?grupo=$grupo->nombre'>$grupo->nombre</a></li>"; ?>

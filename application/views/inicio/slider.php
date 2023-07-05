@@ -1,7 +1,5 @@
 <?php
-$opciones = [
-    'modulo_id' => 1
-];
+$opciones = [ 'modulo_id' => 1 ];
 $registros = $this->configuracion_model->obtener('sliders', $opciones);
 ?>
 
@@ -10,8 +8,8 @@ $registros = $this->configuracion_model->obtener('sliders', $opciones);
         <div class="owl-carousel">
             <?php foreach ($registros as $slider) { ?>
                 <a class="block-slideshow__item" href="<?php echo site_url('productos'); ?>">
-                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/<?php echo $slider->id; ?>.jpg?')"></span>
-                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/<?php echo $slider->id; ?>-mobile.jpg?')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--desktop" style="background-image: url('images/slides/<?php echo $slider->id; ?>.jpg?<?php echo date('YmdHis'); ?>')"></span>
+                    <span class="block-slideshow__item-image block-slideshow__item-image--mobile" style="background-image: url('images/slides/<?php echo $slider->id; ?>-mobile.jpg?<?php echo date('YmdHis'); ?>')"></span>
                     
                     <?php if($slider->titulo_enfasis_activo == 1) { ?>
                         <span class="block-slideshow__item-offer">
@@ -20,10 +18,10 @@ $registros = $this->configuracion_model->obtener('sliders', $opciones);
                     <?php } ?>
 
                     <span class="block-slideshow__item-title">
-                    <?php echo str_replace(["\r\n", "\r", "\n"], '<br>', $slider->titulo_principal); ?>
+                        <?php echo str_replace(["\r\n", "\r", "\n"], '<br>', $slider->titulo_principal); ?>
                     </span>
                     <span class="block-slideshow__item-details">
-                    <?php echo $slider->descripcion; ?>
+                        <?php echo $slider->descripcion; ?>
                     </span>
                     <span class="block-slideshow__item-button">
                         Comprar ahora

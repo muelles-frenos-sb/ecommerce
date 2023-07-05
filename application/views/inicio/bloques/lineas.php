@@ -9,7 +9,7 @@
         <div class="category-card__content">
             <div class="category-card__info">
                 <div class="category-card__name">
-                    <a href="category-4-columns-sidebar.html">Líneas</a>
+                    <a href="<?php echo site_url('productos'); ?>">Líneas</a>
                 </div>
                 <ul class="category-card__children">
                     <?php foreach($this->configuracion_model->obtener('lineas', ['marcas_activas' => true]) as $linea) echo "<li><a href='".site_url('productos')."?linea=$linea->nombre'>$linea->nombre</a></li>"; ?>

@@ -102,9 +102,7 @@ $productos = $this->productos_model->obtener('productos_destacados');
                                         <div class="product-card__name">
                                             <div>
                                                 <div class="product-card__badges">
-                                                    <div class="tag-badge tag-badge--sale">sale</div>
-                                                    <div class="tag-badge tag-badge--new">new</div>
-                                                    <div class="tag-badge tag-badge--hot">hot</div>
+                                                    <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
                                                 </div>
                                                 <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo $producto->notas; ?></a>
                                             </div>

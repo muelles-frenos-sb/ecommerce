@@ -9,9 +9,9 @@
         <div class="category-card__content">
             <div class="category-card__info">
                 <div class="category-card__name">
-                    <a href="category-4-columns-sidebar.html">Marcas</a>
+                    <a href="<?php echo site_url('productos'); ?>">Marcas</a>
                 </div>
-                <ul class="category-card__children">
+                <ul class="category-card__children" style="padding-top: 75px;">
                     <?php foreach($this->configuracion_model->obtener('marcas') as $marca) echo "<li><a href='".site_url('productos')."?marca=$marca->nombre'>$marca->nombre</a></li>"; ?>
                 </ul>
                 <div class="category-card__actions">
