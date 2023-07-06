@@ -24,6 +24,10 @@ const vaciarCarrito = async() => {
 const agregarProducto = async(id, precio, nombre) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/agregar/${id}/${precio}/${nombre}`)
     .then(resultado => {
+        mostrarNotificacion({
+            tipo: 'carrito_nuevo_producto',
+            id: id
+        })
         actualizarCarrito()
         listarCarrito()
     })
@@ -32,6 +36,9 @@ const agregarProducto = async(id, precio, nombre) => {
 const eliminarProducto = async(rowId) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/eliminar/${rowId}`)
     .then(resultado => {
+        mostrarNotificacion({
+            tipo: 'carrito_producto_eliminado',
+        })
         actualizarCarrito()
         listarCarrito()
     })
@@ -40,6 +47,9 @@ const eliminarProducto = async(rowId) => {
 const modificarItem = async(tipo, rowId) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item/${tipo}/${rowId}`)
     .then(resultado => {
+        mostrarNotificacion({
+            tipo: 'carrito_nuevo_producto',
+        })
         actualizarCarrito()
         listarCarrito()
     })

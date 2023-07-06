@@ -209,6 +209,20 @@ const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
     })
 }
 
+const mostrarNotificacion = (datos) => {
+    if(datos.tipo == 'carrito_nuevo_producto') {
+        datos.titulo = 'Nuevo producto agregado al carrito'
+    }
+
+    if(datos.tipo == 'carrito_producto_eliminado') {
+        datos.titulo = 'Nuevo producto agregado al carrito'
+    }
+
+    cargarInterfaz('core/notificacion', 'contenedor_notificacion', datos)
+
+    setTimeout(() => $('.notification').addClass('ocultar'), 3000);
+}
+
 const obtenerPromesa = (url, opciones) => {
     return new Promise((resolve, reject) => {
         // Datos a enviar                

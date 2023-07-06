@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.header-spaceship-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(min-width: 1200px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.mobile-header-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(max-width: 1199px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css?<?php echo date('Ymdhis'); ?>">
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/notificacion.css?<?php echo date('Ymdhis'); ?>">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/estilos.css?<?php echo date('Ymdhis'); ?>">
 
 <!-- font - fontawesome -->
