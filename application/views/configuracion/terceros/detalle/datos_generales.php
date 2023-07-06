@@ -211,7 +211,7 @@ if($this->uri->segment(4)) {
             let terceroExistente = await consulta('obtener', {tipo: 'usuarios', documento_numero: $.trim($('#tercero_numero_documento').val())})
             
             if(terceroExistente) {
-                mostrarNotificacion('alerta', `El tercero con número de documento <b>${$('#tercero_numero_documento').val()}</b> ya existe en la base de datos.`)
+                mostrarAviso('alerta', `El tercero con número de documento <b>${$('#tercero_numero_documento').val()}</b> ya existe en la base de datos.`)
                 return false
             }
 

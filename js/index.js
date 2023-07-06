@@ -93,17 +93,17 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
         .then(resultado => {
             switch (tipo) {
                 case "actualizar":
-                    if (notificacion) mostrarNotificacion('exito', 'Se actualizaron los datos')
+                    if (notificacion) mostrarAviso('exito', 'Se actualizaron los datos')
                     return resultado;
                 break;
 
                 case "crear":
-                    if (notificacion) mostrarNotificacion('exito', 'Se almacenaron los datos')
+                    if (notificacion) mostrarAviso('exito', 'Se almacenaron los datos')
                     return resultado;
                 break;
 
                 case "eliminar":
-                    if (notificacion) mostrarNotificacion('exito', 'Se eliminaron los datos')
+                    if (notificacion) mostrarAviso('exito', 'Se eliminaron los datos')
                     return resultado;
                 break;
 
@@ -134,7 +134,7 @@ const iniciarSesion = async(evento, url = null) => {
 
     // Validación de campos obligatorios
     if (!validarCamposObligatorios(campos)) {
-        mostrarNotificacion('alerta', 'Hay campos obligatorios por diligenciar')
+        mostrarAviso('alerta', 'Hay campos obligatorios por diligenciar')
         return false
     }
 
@@ -148,13 +148,13 @@ const iniciarSesion = async(evento, url = null) => {
     
     // Si no se encontró el usuario
     if(!usuario) {
-        mostrarNotificacion('alerta', 'El usuario y clave que ha digitado no existen en la base de datos. Por favor verifique nuevamente.')
+        mostrarAviso('alerta', 'El usuario y clave que ha digitado no existen en la base de datos. Por favor verifique nuevamente.')
         return false
     }
 
     // Si el usuario está desactivado
     if(usuario.estado == 0) {
-        mostrarNotificacion('error', `El usuario ${nombreUsuario.val()} se encuentra desactivado.`)
+        mostrarAviso('error', `El usuario ${nombreUsuario.val()} se encuentra desactivado.`)
         return false
     }
 
@@ -171,7 +171,7 @@ const iniciarSesion = async(evento, url = null) => {
     }
 }
 
-mostrarNotificacion = (tipo, mensaje, tiempo = 2000) => {
+const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
     switch (tipo) {
         case 'exito':
             titulo = 'Éxito'
@@ -293,7 +293,7 @@ const validarCamposObligatorios = campos => {
 
     // Si los exitosos son todos
     if(validacionesExitosas != campos.length) {
-        mostrarNotificacion('alerta', 'Hay campos obligatorios por diligenciar')
+        mostrarAviso('alerta', 'Hay campos obligatorios por diligenciar')
 
         // No es exitoso
         exito = false

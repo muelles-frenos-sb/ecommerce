@@ -275,7 +275,7 @@ if($this->session->userdata('usuario_id')) {
 <script>
     guardarFactura = async() => {
         if(<?php echo $this->cart->total(); ?> == 0) {
-            mostrarNotificacion('alerta', 'No hay ningún producto en el carrito.')
+            mostrarAviso('alerta', 'No hay ningún producto en el carrito.')
             return false
         }
 

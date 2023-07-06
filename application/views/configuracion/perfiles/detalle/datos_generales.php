@@ -70,7 +70,7 @@ if(isset($datos['token'])) {
             let perfilExistente = await consulta('obtener', {tipo: 'perfiles', nombre: $.trim($('#perfil_nombre').val())})
             
             if(perfilExistente) {
-                mostrarNotificacion('alerta', `El perfil <b>${$('#perfil_nombre').val()}</b> ya existe en la base de datos.`)
+                mostrarAviso('alerta', `El perfil <b>${$('#perfil_nombre').val()}</b> ya existe en la base de datos.`)
                 return false
             }
 
