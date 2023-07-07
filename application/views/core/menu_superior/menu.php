@@ -63,12 +63,12 @@
                 </li><!-- Configuración -->
             <?php } ?>
 
-            <!-- Nosotros -->
+            <!-- Garantía -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url('nosotros'); ?>" class="main-menu__link">
-                    Nosotros
+                <a href="<?php echo $this->config->item('url_whatsapp'); ?>" class="main-menu__link" target="_blank">
+                    Garantía
                 </a>
-            </li><!-- Nosotros -->
+            </li><!-- Garantía -->
 
             <!-- Contacto -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">

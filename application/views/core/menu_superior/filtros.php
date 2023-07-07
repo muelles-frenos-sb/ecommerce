@@ -36,7 +36,7 @@
                             <div class="departments__item-menu">
                                 <div class="megamenu departments__megamenu departments__megamenu--size--md">
                                     <div class="megamenu__image">
-                                        <img src="<?php echo base_url(); ?>images/departments/departments-4.jpg" alt="">
+                                        <img src="<?php echo base_url(); ?>images/departments/<?php echo $marca->nombre; ?>.jpg?<?php echo date('YmdHis'); ?>">
                                     </div>
                                     <div class="row">
                                         <!-- Grupos -->

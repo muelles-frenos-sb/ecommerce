@@ -28,6 +28,6 @@ if(isset($datos['id'])) $descripcion = $producto->notas;
             </p>
             <span class="notification-timer">Ahora</span>
         </div>
-        <span class="notification-status"></span>
+        <!-- <span class="notification-status"></span> -->
     </div>
 </div>
