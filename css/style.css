@@ -4060,7 +4060,7 @@ select.form-control::-ms-expand {
 }
 
 .tag-badge--theme:before {
-  background: #FFD400;
+  background: #e52727;
 }
 
 .tag-badge--sale {
@@ -4068,7 +4068,7 @@ select.form-control::-ms-expand {
 }
 
 .tag-badge--sale:before {
-  background: #ffFFD4003;
+  background: #ff3333;
 }
 
 .tag-badge--new {
