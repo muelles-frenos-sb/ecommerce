@@ -5750,7 +5750,7 @@ select.form-control::-ms-expand {
 */
 .site-footer {
   position: relative;
-  background-color: #1F2B50;
+  background-color: #19287F;
   color: #FFD400;
 }
 
@@ -5776,14 +5776,14 @@ select.form-control::-ms-expand {
 }
 
 .site-footer__bottom {
-  background-color: #FFD400;
+  background-color: #19287F;
   font-size: 14px;
-  color: #19287F;
+  color: white;
   font-weight: 400;
 }
 
 .site-footer__bottom a {
-  color: #fff;
+  color: #FFD400;
   font-weight: 500;
 }
 

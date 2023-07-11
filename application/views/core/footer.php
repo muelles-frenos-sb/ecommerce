@@ -70,6 +70,15 @@
                         <div class="site-footer__widget footer-newsletter">
                             <h5 class="footer-contacts__title">Acerca de nosotros</h5>
                             <div class="footer-contacts__text">
+                                Somos una empresa de repuestos para vehículos de carga pesada.
+                                <hr>
+
+                                Ofrecemos productos de la más alta calidad y un servicio excepcional a nuestros clientes en el Valle de Aburrá y Colombia. Con más de 20 años de experiencia en el mercado, nos hemos ganado la confianza de nuestros clientes gracias a nuestra pasión por lo que hacemos y nuestra dedicación a la excelencia.
+                                <hr>
+
+                                Somos importadores de marcas reconocidas como SKF, Mansons, KTC y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes.
+                                <hr>
+
                                 Somos una empresa líder en el mercado de repuestos con más de 20 años de experiencia. Contamos con excelente respaldo de nuestros proveedores (Cummins, Hércules, Coexito, KTC, Timken, Koyo, Grupo A) entre otros.
                             </div><br>
 
