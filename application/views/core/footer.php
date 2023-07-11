@@ -77,9 +77,6 @@
                                 <hr>
 
                                 Somos importadores de marcas reconocidas como SKF, Mansons, KTC y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes.
-                                <hr>
-
-                                Somos una empresa líder en el mercado de repuestos con más de 20 años de experiencia. Contamos con excelente respaldo de nuestros proveedores (Cummins, Hércules, Coexito, KTC, Timken, Koyo, Grupo A) entre otros.
                             </div><br>
 
                             <!-- <h5 class="footer-newsletter__title">Newsletter</h5>

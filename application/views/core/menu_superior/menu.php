@@ -4,7 +4,7 @@
             <!-- Inicio -->
             <li class="main-menu__item main-menu__item--submenu--menu">
                 <a href="<?php echo site_url('inicio'); ?>" class="main-menu__link">
-                    Inicio
+                    Tienda
                 </a>
             </li><!-- Inicio -->
 
