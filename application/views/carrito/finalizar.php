@@ -33,7 +33,7 @@ if($this->session->userdata('usuario_id')) {
             <div class="row">
                 <?php if(!$this->session->userdata('usuario_id')) { ?>
                     <div class="col-12 mb-3">
-                        <div class="alert alert-lg alert-primary">¿Ya setás registrado? <a href="<?php echo site_url('sesion?url='.current_url()); ?>">Inicia sesión</a></div>
+                        <div class="alert alert-lg alert-primary">¿Ya estás registrado? <a href="<?php echo site_url('sesion?url='.current_url()); ?>">Inicia sesión</a></div>
                     </div>
                 <?php } ?>
 
