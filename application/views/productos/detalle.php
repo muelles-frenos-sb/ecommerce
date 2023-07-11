@@ -48,9 +48,9 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                         attribute, in which case the width and height will be obtained from the naturalWidth
                                         and naturalHeight property of img.image__tag.
                                         -->
-                                        <a class="image image--type--product" href="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" target="_blank" data-width="700" data-height="700">
+                                        <a class="image image--type--product" href="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" target="_blank" data-width="700" data-height="700">
                                             <div class="image__body">
-                                                <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>">
+                                                <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                                             </div>
                                         </a>
                                     </div>
@@ -59,7 +59,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                     <div class="owl-carousel">
                                         <div class="product-gallery__thumbnails-item image image--type--product">
                                             <div class="image__body">
-                                                <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" alt="">
+                                                <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                                             </div>
                                         </div>
                                     </div>

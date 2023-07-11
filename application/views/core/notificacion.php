@@ -5,7 +5,7 @@ $descripcion = '';
 $titulo = 'Notificación';
 $imagen = base_url().'images/logo.png';
 
-if(isset($datos['id'])) $imagen = $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg';
+if(isset($datos['id'])) $imagen = url_fotos($producto->marca, $producto->referencia);
 if(isset($datos['titulo'])) $titulo = $datos['titulo'];
 if(isset($datos['id'])) $descripcion = $producto->notas;
 

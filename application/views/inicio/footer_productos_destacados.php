@@ -21,7 +21,7 @@
                         <div class="product-card__image">
                             <div class="image image--type--product">
                                 <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body">
-                                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>">
+                                    <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                                 </a>
                             </div>
                         </div>

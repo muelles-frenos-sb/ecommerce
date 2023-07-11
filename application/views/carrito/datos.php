@@ -6,7 +6,7 @@
         <td class="cart-table__column cart-table__column--image">
             <div class="image image--type--product">
                 <a href="product-full.html" class="image__body">
-                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" alt="">
+                    <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                 </a>
             </div>
         </td>

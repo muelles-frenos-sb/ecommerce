@@ -6,7 +6,7 @@
         <li class="dropcart__item">
             <div class="dropcart__item-image image image--type--product">
                 <a class="image__body" href="<?php echo site_url("productos/ver/$producto->id"); ?>">
-                    <img class="image__tag" src="<?php echo $this->config->item('url_fotos').trim($producto->marca).'/'.$producto->referencia.'.jpg'; ?>" alt="">
+                    <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                 </a>
             </div>
             <div class="dropcart__item-info">

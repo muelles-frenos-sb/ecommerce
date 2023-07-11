@@ -22,3 +22,12 @@ function formato_precio($valor) {
 function generar_token($valor) {
     return substr(md5($valor), 0, 10);
 }
+
+function url_fotos($marca, $referencia) {
+    $CI =& get_instance();
+
+    $marca_filtrada = trim($marca);
+    $referencia_filtrada = str_replace('/', '_', trim($referencia));
+
+    return "{$CI->config->item('url_fotos')}/$marca_filtrada/$referencia_filtrada.jpg?".date('YmdHis');
+}
