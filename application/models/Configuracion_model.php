@@ -73,12 +73,13 @@ Class Configuracion_model extends CI_Model {
                 }
 
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
+                if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
                 $order_by = (isset($datos['marcas_activas'])) ? " ORDER BY RAND() " : " ORDER BY nombre " ;
                 $limite = (isset($datos['marcas_activas'])) ? "LIMIT 10" : "" ;
 
                 $sql =
                 "SELECT
-                id,
+                    id,
                     p.grupo nombre
                 FROM
                     productos AS p 
@@ -118,7 +119,7 @@ Class Configuracion_model extends CI_Model {
 
                 $sql =
                 "SELECT
-                id,
+                    id,
                     p.linea nombre
                 FROM
                     productos AS p 
@@ -147,12 +148,28 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'marcas':
-                return $this->db
-					->where('activo', 1)
-					->order_by('orden')
-                    ->get($tabla)
-                    ->result()
-                ;
+                $where = "WHERE m.activo = 1";
+
+                if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
+                if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
+                $order_by = (isset($datos['marcas_activas'])) ? " ORDER BY RAND() " : " ORDER BY nombre " ;
+
+                $sql =
+                "SELECT
+                    m.id, 
+                    m.codigo, 
+                    m.nombre
+                FROM
+                    productos AS p
+                    INNER JOIN marcas AS m ON p.marca = m.nombre 
+                $where
+                GROUP BY
+                    p.marca
+                ORDER BY
+                    m.orden ASC
+                ";
+                
+                return $this->db->query($sql)->result();
             break;
 
             case 'modulos':
