@@ -74,6 +74,10 @@ cargarMasDatos = tipo => {
         busqueda: $("#buscar").val(),
     }
 
+    if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
+    if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
+    if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
+
     $.ajax({
         url: `${$('#site_url').val()}interfaces/cargar_mas_datos`,
         data: {datos: datos},
