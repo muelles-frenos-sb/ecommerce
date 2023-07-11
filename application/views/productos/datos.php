@@ -1,14 +1,14 @@
 <?php
 $productos = $this->productos_model->obtener('productos', $datos);
 
-if(empty($productos)) echo 'No se encontraron resultados con los filtros seleccionados';
+if(empty($productos)) echo '<p>No se encontraron resultados con los filtros seleccionados</p>';
 
 foreach($productos as $producto) {
 ?>
     <div class="products-list__item">
         <div class="product-card">
             <!-- Opciones de cuadrícula -->
-            <div class="product-card__actions-list">
+            <!-- <div class="product-card__actions-list">
                 <button class="product-card__action product-card__action--quickview" type="button" aria-label="Vista rápida">
                     <svg width="16" height="16">
                         <path d="M14,15h-4v-2h3v-3h2v4C15,14.6,14.6,15,14,15z M13,3h-3V1h4c0.6,0,1,0.4,1,1v4h-2V3z M6,3H3v3H1V2c0-0.6,0.4-1,1-1h4V3z M3,13h3v2H2c-0.6,0-1-0.4-1-1v-4h2V13z" />
@@ -26,7 +26,7 @@ foreach($productos as $producto) {
                         <path d="M15,5h-2c-0.6,0-1,0.4-1,1v8c0,0.6,0.4,1,1,1h2c0.6,0,1-0.4,1-1V6C16,5.4,15.6,5,15,5z" />
                     </svg>
                 </button>
-            </div>
+            </div> -->
 
             <!-- Detalle del producto -->
             <div class="product-card__image">
@@ -136,6 +136,7 @@ foreach($productos as $producto) {
 <script>
 	$().ready(() => {
 		let totalRegistros = parseInt("<?php echo count($productos); ?>")
+        console.log(totalRegistros)
 
 		// Si no hay más datos o son menos del total configurado, se oculta el botón
 		if(totalRegistros == 0 || totalRegistros < parseInt($('#cantidad_datos').val())) $("#btn_mostrar_mas").hide()

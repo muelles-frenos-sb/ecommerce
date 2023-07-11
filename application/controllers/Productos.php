@@ -23,7 +23,6 @@ class Productos extends MY_Controller {
     }
 
     function index() {
-        $this->data['parametros'] = $this->input->get();
         $this->data['contenido_principal'] = 'productos/index';
         $this->load->view('core/body', $this->data);
     }
