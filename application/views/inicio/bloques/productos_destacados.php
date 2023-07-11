@@ -102,7 +102,7 @@
                                 </div>
                                 <div class="product-card__footer">
                                     <div class="product-card__prices">
-                                        <div class="product-card__price product-card__price--current"><?php echo '$'.number_format($producto->precio, 0, ',', '.'); ?></div>
+                                        <div class="product-card__price product-card__price--current"><?php echo formato_precio($producto->precio); ?></div>
                                     </div>
                                     <button class="product-card__addtocart-icon" type="button" aria-label="Agregar al carrito" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, '<?php echo $producto->referencia; ?>')">
                                         <svg width="20" height="20">

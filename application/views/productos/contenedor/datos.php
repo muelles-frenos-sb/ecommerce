@@ -92,7 +92,7 @@ foreach($productos as $producto) {
                 <?php if ($producto->disponible > 0) { ?>
                     <div class="product-card__prices">
                         <div class="product-card__price product-card__price--current">
-                            <?php echo '$'.number_format($producto->precio, 0, ',', '.'); ?>
+                            <?php echo formato_precio($producto->precio); ?>
                         </div>
                     </div>
                 

@@ -119,7 +119,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                             <?php if ($producto->disponible > 0) { ?>
                                                 <div class="product__prices">
                                                     <div class="product__price product__price--current">
-                                                        <?php echo '$'.number_format($producto->precio, 0, ',', '.'); ?>
+                                                        <?php echo formato_precio($producto->precio); ?>
                                                     </div>
                                                 </div>
                                             <?php } ?>
