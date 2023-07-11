@@ -8,11 +8,11 @@
                 </span>
                 <span class="block-banners__item-title">OUTLET</span>
                 <span class="block-banners__item-details">
-                    Synthetic motor oil with free shipping<br>
-                    Friction free life guaranteed
+                    Outlet de Repuestos Simón Bolívar:<br>
+                    ¡Descuentos imperdibles!<br>
                 </span>
                 <span class="block-banners__item-button btn btn-primary btn-sm">
-                    Comprar
+                    ¡Aprovecha ahora!
                 </span>
             </a>
             <a href="<?php echo site_url('productos'); ?>" class="block-banners__item block-banners__item--style--two">
@@ -22,11 +22,11 @@
                 </span>
                 <span class="block-banners__item-title">Repuestos en promoción</span>
                 <span class="block-banners__item-details">
-                    Luxurious interior part for real aesthetes<br>
-                    Leather, fabric, ivory and more.
+                    Encuentra repuestos de alta calidad a precios increibles.<br>
+                    ¡No te pierdas estas ofertas especiales!<br>
                 </span>
                 <span class="block-banners__item-button btn btn-primary btn-sm">
-                    Comprar
+                    ¡Compra ahora y ahorra!
                 </span>
             </a>
         </div>
