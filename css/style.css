@@ -6572,13 +6572,13 @@ select.form-control::-ms-expand {
 .block-brands__item-link img {
   max-width: 100%;
   max-height: 72px;
-  -webkit-filter: grayscale(1);
+  /* -webkit-filter: grayscale(1);
           filter: grayscale(1);
   opacity: .7;
   -webkit-transition: opacity 0.15s, -webkit-filter 0.15s;
   transition: opacity 0.15s, -webkit-filter 0.15s;
   transition: filter 0.15s, opacity 0.15s;
-  transition: filter 0.15s, opacity 0.15s, -webkit-filter 0.15s;
+  transition: filter 0.15s, opacity 0.15s, -webkit-filter 0.15s; */
 }
 
 .block-brands__item-name {

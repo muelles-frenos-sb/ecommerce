@@ -25,6 +25,9 @@
 </div>
 <div class="block-space block-space--layout--divider-sm"></div>
 
+<?php $this->load->view('inicio/nuevos_productos'); ?>
+<div class="block-space block-space--layout--divider-nl"></div>
+
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
@@ -37,6 +40,9 @@
     </div>
 </div>
 <div class="block-space block-space--layout--divider-sm"></div>
+
+<?php $this->load->view('inicio/marcas'); ?>
+<div class="block-space block-space--layout--divider-nl d-xl-block d-none"></div>
 
 <div class="block block-zone">
     <div class="container">
@@ -54,14 +60,8 @@
 <?php $this->load->view('inicio/bloques_banners'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
-<?php $this->load->view('inicio/nuevos_productos'); ?>
-<div class="block-space block-space--layout--divider-nl"></div>
-
 <?php // $this->load->view('inicio/ultimas_noticias'); ?>
 <!-- <div class="block-space block-space--layout--divider-nl"></div> -->
-
-<?php $this->load->view('inicio/marcas'); ?>
-<div class="block-space block-space--layout--divider-nl d-xl-block d-none"></div>
 
 <div class="block block-products-columns">
     <div class="container">
