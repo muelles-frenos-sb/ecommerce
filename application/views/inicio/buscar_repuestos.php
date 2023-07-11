@@ -45,9 +45,9 @@
             
             let filtros = ''
 
-            if($('#repuesto_marca').val()) filtros += `?marca=${$('#repuesto_marca option:selected').text()}`
+            if($('#repuesto_linea').val()) filtros += `?linea=${$('#repuesto_linea option:selected').text()}`
             if($('#repuesto_grupo').val()) filtros += `&grupo=${$('#repuesto_grupo option:selected').text()}`
-            if($('#repuesto_linea').val()) filtros += `&linea=${$('#repuesto_linea option:selected').text()}`
+            if($('#repuesto_marca').val()) filtros += `&marca=${$('#repuesto_marca option:selected').text()}`
 
             location.href = `${$('#site_url').val()}productos${filtros}`
         })
