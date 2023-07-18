@@ -124,7 +124,6 @@ foreach($productos as $producto) {
 <script>
 	$().ready(() => {
 		let totalRegistros = parseInt("<?php echo count($productos); ?>")
-        console.log(totalRegistros)
 
 		// Si no hay más datos o son menos del total configurado, se oculta el botón
 		if(totalRegistros == 0 || totalRegistros < parseInt($('#cantidad_datos').val())) $("#btn_mostrar_mas").hide()
