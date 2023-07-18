@@ -15,6 +15,23 @@ function valores_url() {
     // }
 }
 
+/**
+ * Verifica que un producto se encuentre
+ * en el carrito de compras
+ */
+function buscar_item_carrito($id) {
+    $CI =& get_instance();
+    $encontrado = [];
+
+    // Se recorre cada ítem
+    foreach ($CI->cart->contents() as $item) {
+        // Si se encuentra, se retorna el ítem
+        if($item['id'] == $id) $encontrado = $item;
+    }
+
+    return $encontrado;
+}
+
 function formato_precio($valor) {
     return "$".number_format($valor, 0, ',', '.');
 }
