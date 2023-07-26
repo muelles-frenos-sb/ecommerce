@@ -1,17 +1,22 @@
 <?php $this->load->view('inicio/slider'); ?>
 
+<!-- Contenedor de información de envíos, pago seguro y garantía -->
 <?php $this->load->view('inicio/caracteristicas'); ?>
-<!-- <div class="block-space block-space--layout--divider-nl"></div> -->
+<div class="block-space block-space--layout--divider-nl"></div>
 
+<!-- Buscador de productos -->
 <?php $this->load->view('inicio/buscar_repuestos'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
+<!-- Productos destacados 1 -->
 <?php $this->load->view('inicio/productos_destacados'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
-<?php //$this->load->view('inicio/ofertas'); ?>
+<!-- Outlet -->
+<?php // $this->load->view('inicio/ofertas'); ?>
 <!-- <div class="block-space block-space--layout--divider-lg"></div> -->
 
+<!-- Bloque de marcas y productos destacados -->
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
@@ -25,9 +30,11 @@
 </div>
 <div class="block-space block-space--layout--divider-sm"></div>
 
+<!-- Productos nuevos -->
 <?php $this->load->view('inicio/nuevos_productos'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
+<!-- Bloque de grupos y productos destacados -->
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
@@ -41,9 +48,11 @@
 </div>
 <div class="block-space block-space--layout--divider-sm"></div>
 
+<!-- Marcas -->
 <?php $this->load->view('inicio/marcas'); ?>
 <div class="block-space block-space--layout--divider-nl d-xl-block d-none"></div>
 
+<!-- Bloque de líneas y productos destacados -->
 <div class="block block-zone">
     <div class="container">
         <div class="block-zone__body">
@@ -57,12 +66,14 @@
 </div>
 <div class="block-space block-space--layout--divider-nl"></div>
 
+<!-- banners de outlet y promociones -->
 <?php $this->load->view('inicio/bloques_banners'); ?>
 <div class="block-space block-space--layout--divider-nl"></div>
 
 <?php // $this->load->view('inicio/ultimas_noticias'); ?>
 <!-- <div class="block-space block-space--layout--divider-nl"></div> -->
 
+<!-- Resumen de productos -->
 <div class="block block-products-columns">
     <div class="container">
         <div class="row">
