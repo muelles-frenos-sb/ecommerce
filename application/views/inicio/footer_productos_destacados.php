@@ -2,9 +2,9 @@
     <div class="block-products-columns__title"><?php echo $titulo; ?></div>
     <div class="block-products-columns__list">
         <?php
-        $productos = $this->productos_model->obtener('productos_destacados', ['limite' => 3]);
-
-        foreach($productos as $item) {
+        for ($i=$desde; $i < $hasta; $i++) {
+            $posicion = array_keys($productos);
+            $item = $productos[$posicion[$i]];
             $producto = $this->productos_model->obtener('productos', ['id' => $item->producto_id]);
 
             if(isset($producto)) {

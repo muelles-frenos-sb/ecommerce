@@ -39,9 +39,12 @@
             <div class="block-products-carousel__carousel-loader"></div>
             <div class="owl-carousel">
                 <?php
-                $productos = $this->productos_model->obtener('productos_destacados');
-
-                foreach($productos as $item) {
+                // Se recorre el arreglo en las posiciones determinadas al inicio
+                for ($i=$desde; $i < $hasta; $i++) {
+                    // Se obtienen los index y el index de esa posición
+                    $posicion = array_keys($productos);
+                    $item = $productos[$posicion[$i]];
+                    
                     $producto = $this->productos_model->obtener('productos', ['id' => $item->producto_id]);
 
                     if(isset($producto)) {

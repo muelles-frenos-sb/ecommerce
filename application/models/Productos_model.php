@@ -129,12 +129,11 @@ Class Productos_model extends CI_Model{
             break;
 
             case 'productos_destacados':
-                $limite = (isset($datos['limite'])) ? "LIMIT {$datos['limite']}" : " LIMIT 50 ";
+                $limite = (isset($datos['limite'])) ? "LIMIT {$datos['limite']}" : " LIMIT 62 ";
                 
                 $sql = 
                 "SELECT
                     pd.producto_id,
-                    pd.notas,
                     pd.cantidad 
                 FROM
                     productos_destacados pd 
