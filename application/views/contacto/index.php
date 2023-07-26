@@ -39,6 +39,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Activación de formulario de Bitrix24 -->
+                    <?php $this->load->view('bitrix/contacto'); ?>
                 </div>
             </div>
         </div>
@@ -63,6 +66,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Activación de formulario de Bitrix24 -->
+                    <?php $this->load->view('bitrix/contacto'); ?>
                 </div>
             </div>
         </div>
@@ -87,6 +93,9 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Activación de formulario de Bitrix24 -->
+                    <?php $this->load->view('bitrix/contacto'); ?>
                 </div>
             </div>
         </div>
