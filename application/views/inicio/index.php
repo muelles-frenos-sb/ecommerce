@@ -6,8 +6,8 @@ $productos_outlet = $this->productos_model->obtener('productos_outlet');
 /****************************************************************************************
  **************************************** Slider ****************************************
  ****************************************************************************************/
-$this->load->view('inicio/slider');
-echo "<div class='block-space block-space--layout--divider-nl'></div>";
+$this->load->view('inicio/smart_slider');
+// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  ******************** Información de envíos, pago seguro y garantía *********************
