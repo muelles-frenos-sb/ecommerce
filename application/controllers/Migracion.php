@@ -92,7 +92,7 @@ class Migracion extends CI_Controller {
     }
 
     function productos_detalle() {
-        $resultado_productos = json_decode(obtener_productos_api([]));
+        $resultado_productos = json_decode(obtener_productos_api());
         $codigo_producto = $resultado_productos->codigo;
         $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 ;
         $fecha_actualizacion = date('Y-m-d H:i:s');
@@ -123,9 +123,19 @@ class Migracion extends CI_Controller {
     }
 
     function productos_inventario() {
-        $resultado_inventario = json_decode(obtener_inventario_api(['id' => '-1', 'bodega' => '-1']));
+        // Inventario de la bodega por defecto
+        $resultado_inventario = json_decode(obtener_inventario_api(['bodega' => '00001']));
         $codigo_inventario = $resultado_inventario->codigo;
-        $inventario = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table : 0 ;
+        $inventario_por_defecto = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table : 0 ;
+
+        // Inventario de bodega outlet
+        $resultado_inventario_outlet = json_decode(obtener_inventario_api(['bodega' => '00008']));
+        $codigo_inventario_outlet = $resultado_inventario_outlet->codigo;
+        $inventario_outlet = ($codigo_inventario_outlet == 0) ? $resultado_inventario_outlet->detalle->Table : 0 ;
+        
+        // Se juntan los arreglos resultantes
+        $inventario = array_merge($inventario_por_defecto, $inventario_outlet);
+        
         $fecha_actualizacion = date('Y-m-d H:i:s');
         $datos = [];
 

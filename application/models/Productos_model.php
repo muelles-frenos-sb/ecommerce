@@ -68,17 +68,20 @@ Class Productos_model extends CI_Model{
                 $where = "WHERE i.disponible > 0";
                 $having = "";
 
-                /**
-                 * Filtro de marcas activas
-                 */
-                $marcas = $this->configuracion_model->obtener('marcas');
+                // Si no trae bodega 8, carga solo marcas activas
+                if(isset($datos['bodega']) && $datos['bodega'] != '00008') {
+                    /**
+                     * Filtro de marcas activas
+                     */
+                    $marcas = $this->configuracion_model->obtener('marcas');
 
-                $where .= " AND (";
-                for ($i=0; $i < count($marcas); $i++) {
-                    $where .= " p.marca = '{$marcas[$i]->nombre}' ";
-                    if(($i + 1) < count($marcas)) $where .= " OR ";
+                    $where .= " AND (";
+                    for ($i=0; $i < count($marcas); $i++) {
+                        $where .= " p.marca = '{$marcas[$i]->nombre}' ";
+                        if(($i + 1) < count($marcas)) $where .= " OR ";
+                    }
+                    $where .= ") ";
                 }
-                $where .= ") ";
 
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
@@ -102,12 +105,14 @@ Class Productos_model extends CI_Model{
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
+                if(isset($datos['bodega'])) $where .= " AND i.bodega = '{$datos['bodega']}' ";
 
                 $sql = 
                 "SELECT
                     p.*,
                     i.existencia,
                     i.disponible,
+                    i.bodega,
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p
@@ -140,6 +145,23 @@ Class Productos_model extends CI_Model{
                 ORDER BY
                     RAND() 
                 $limite";
+                
+                return $this->db->query($sql)->result();
+            break;
+
+            case 'productos_outlet':
+                $sql = 
+                "SELECT
+                    pi.producto_id,
+                    pi.bodega
+                FROM
+                    productos_inventario AS pi
+                    INNER JOIN productos AS p ON pi.producto_id = p.id 
+                WHERE
+                    pi.bodega = '00008' AND disponible > 0 
+                ORDER BY
+                    RAND() ASC 
+                LIMIT 50";
                 
                 return $this->db->query($sql)->result();
             break;

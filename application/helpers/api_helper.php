@@ -48,7 +48,7 @@ function obtener_inventario_api($datos) {
     $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
-    $filtro_bodega = (isset($datos['bodega'])) ? '00001' : '-1' ;
+    $filtro_bodega = (isset($datos['bodega'])) ? $datos['bodega'] : '-1' ;
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -99,7 +99,7 @@ function obtener_precios_api($datos) {
     return $response->getBody()->getContents();
 }
 
-function obtener_productos_api($datos) {
+function obtener_productos_api($datos = []) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
 
