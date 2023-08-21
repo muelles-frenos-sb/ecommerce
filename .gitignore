@@ -4,6 +4,7 @@ application/config/development/
 application/config/production/
 application/logs/
 application/vendor/
+archivos/fotos/
 frontend/
 
 # Directorios de imágenes
@@ -16,7 +17,6 @@ images/icons/
 images/languages/
 images/posts/
 images/products/
-images/slides/
 images/teammates/
 images/testimonials/
 

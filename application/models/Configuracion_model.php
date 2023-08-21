@@ -252,14 +252,6 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
-            case 'sliders':
-                return $this->db
-                    ->where('modulo_id', $datos['modulo_id'])
-                    ->get($tabla)
-                    ->result()
-                ;
-            break;
-
             case 'usuarios':
                 // Filtro contador
 				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
