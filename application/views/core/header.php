@@ -1,6 +1,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="format-detection" content="telephone=no">
+
+<!-- Meta TAG para Google Analytics -->
+<meta name="google-site-verification" content="6YWQqaPE-WcHqYZrqVAiR44E-So6A330C0ZWxMy7dhM"/>
+
 <title>Simón Bolívar - Repuestos y Accesorios</title>
 <link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico">
 
