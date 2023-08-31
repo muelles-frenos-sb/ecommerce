@@ -182,3 +182,32 @@ function importar_pedidos_api($datos) {
     
     return $response->getBody();
 }
+
+function importar_documento_contable_api($datos) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_siesa')['base_url'];
+
+    $client = new \GuzzleHttp\Client();
+
+    try {
+        $response = $client->post("$url/api/v3/conectoresimportar", [
+            'body' => json_encode($datos),
+            'headers' => [
+                'accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'idDocumento' => $CI->config->item('api_siesa')['idDocumentoImportacionDocumentoContable'],
+                'idInterface' => $CI->config->item('api_siesa')['idInterface'],
+                'nombreDocumento' => 'DOCUMENTO_CONTABLE',
+            ],
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    };
+    
+    return $response->getBody();
+}

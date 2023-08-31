@@ -51,7 +51,7 @@ class Webhooks extends MY_Controller {
         ]);
         
 
-        $datos = [
+        $datos_pedido = [
             "Pedidos" => [
                 [
                     "f430_id_co" => "400",  // Valida en maestro, código de centro de operación del documento
@@ -96,12 +96,62 @@ class Webhooks extends MY_Controller {
             ]
         ];
 
-        $resultado = json_decode(importar_pedidos_api($datos));
-        $codigo = $resultado->codigo;
-        $mensaje = $resultado->codigo;
-        $detalle = $resultado->codigo;
+        $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
+        $codigo_resultado_pedido = $resultado_pedido->codigo;
+        $mensaje = $resultado_pedido->codigo;
+        $detalle = $resultado_pedido->codigo;
 
-        print_r($resultado);
+        // Si se ejecutó correctamente
+        if($codigo_resultado_pedido == '0') {
+            print_r($resultado_pedido);
+
+            $datos_documento_contable = [
+                "Documento_contable" => [
+                    [
+                        "F350_CONSEC_DOCTO" => $factura->id,                                // Número de documento
+                        "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",   // El formato debe ser AAAAMMDD
+                        "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
+			            "F350_NOTAS" => "Pedido $factura->id E-Commerce"                    // Observaciones
+                    ]
+                ],
+                "Movimiento_contable" => [
+                    [
+                        "F350_CONSEC_DOCTO" => $factura->id,                                        // Número de documento
+                        "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
+                        // Pendiente
+                        "F351_VALOR_DB" => 100000,                                                  // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                        "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+                        "F351_NOTAS" => "Pedido $factura->id E-Commerce"                            // Observaciones
+                    ],
+                ],
+                "Movimiento_CxC" => [
+                    [
+                        "F350_CONSEC_DOCTO" => $factura->id,                   // Numero de documento
+                        "F351_ID_AUXILIAR" => "11100504",             // Valida en maestro, código de cuenta contable
+                        "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                        "F351_ID_CO_MOV" => "400",                    // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
+                        // Pendiente
+                        "F351_VALOR_CR" => "100000",                  // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+                        "F351_NOTAS" => "Pedido $factura->id E-Commerce",      // Observaciones
+                        // Pendiente
+                        "F353_ID_SUCURSAL" => "001",                  // Valida en maestro, código de sucursal del cliente.
+                        "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",          // Valida en maestro, código de tipo de documento.
+                        "F353_CONSEC_DOCTO_CRUCE" => $factura->id,             // Numero de documento de cruce, es un numero entre 1 y 99999999.
+                        "F353_FECHA_VCTO" => "{$factura->anio}{$factura->mes}{$factura->dia}",              // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
+                        "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$factura->mes}{$factura->dia}"           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+                    ]
+                ]
+            ];
+
+            $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
+            $codigo_resultado_pedido = $resultado_documento_contable->codigo;
+            $mensaje = $resultado_documento_contable->codigo;
+            $detalle = $resultado_documento_contable->codigo;
+            
+            echo "<hr>";
+            print_r($resultado_documento_contable);
+        }
+
         return http_response_code(200);
     }
 }
