@@ -56,6 +56,10 @@ if($this->session->userdata('usuario_id')) {
                                 </div>
                             </div>
                             <div class="form-group">
+                                <label for="checkout_documento_numero">Número de documento *</label>
+                                <input type="text" class="form-control" id="checkout_documento_numero" value="<?php if(!empty($tercero)) echo $tercero->documento_numero; ?>">
+                            </div>
+                            <div class="form-group">
                                 <label for="checkout_razon_social">Razón social <span class="text-muted">(Opcional)</span></label>
                                 <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->razon_social; ?>">
                             </div>
@@ -285,6 +289,7 @@ if($this->session->userdata('usuario_id')) {
             $('#checkout_direccion'),
             $('#checkout_email'),
             $('#checkout_telefono'),
+            $('#checkout_documento_numero'),
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
@@ -295,6 +300,7 @@ if($this->session->userdata('usuario_id')) {
             primer_apellido: $('#checkout_primer_apellido').val(),
             segundo_apellido: $('#checkout_segundo_apellido').val(),
             razon_social: $('#checkout_razon_social').val(),
+            documento_numero: $('#checkout_documento_numero').val(),
             direccion: $('#checkout_direccion').val(),
             pais_id: $('#checkout_pais').val(),
             departamento_id: $('#checkout_departamento').val(),
