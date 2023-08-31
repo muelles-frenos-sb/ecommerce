@@ -16,5 +16,5 @@
 </style>
 
 <div class="embed-container">
-    <iframe frameborder="0" src=<?php echo $this->config->item('url_wordpress').'/slider'; ?>'></iframe>
+    <iframe frameborder="0" src="<?php echo $this->config->item('url_wordpress').'/slider'; ?>" scrolling="no"></iframe>
 </div>
