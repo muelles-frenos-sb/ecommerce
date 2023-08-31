@@ -55,8 +55,14 @@ Class Productos_model extends CI_Model{
                 unset($datos['tipo']);
 
                 return $this->db
+                    ->select([
+                        'f.*',
+                        'YEAR(f.fecha_creacion) anio',
+                        'LPAD(MONTH(f.fecha_creacion), 2, 0) mes',
+                        'LPAD(DAY(f.fecha_creacion), 2, 0) dia',
+                    ])
                     ->where($datos)
-                    ->get('facturas')
+                    ->get('facturas f')
                     ->row()
                 ;
             break;
@@ -118,6 +124,7 @@ Class Productos_model extends CI_Model{
                     productos AS p
                     INNER JOIN productos_inventario AS i ON p.id = i.producto_id
                 $where
+                -- GROUP BY p.id
                 $having
                 ORDER BY
                     notas
