@@ -37,6 +37,12 @@ class Webhooks extends MY_Controller {
     * Y almacena el id de la transacción, para futuras consultas
     **/
     function pedido() {
+        // Se agrega log
+        $this->configuracion_model->crear('logs', [
+            'log_tipo_id' => 14,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+        ]);
+
         // Si no es un entorno de pruebas
         if(ENVIRONMENT != 'development') {
             // Obtenemos los datos desde lo que viene del llamado del Webhook desde Wompi
@@ -50,13 +56,35 @@ class Webhooks extends MY_Controller {
             $wompi_transaction_id =  'ab23seffg1!s'.rand();
         }
 
+        $actualizar_factura = $this->productos_model->actualizar('facturas', ['token' => $wompi_reference], ['wompi_transaccion_id' => $wompi_transaction_id]);
+
         // Se actualiza la factura con el id de la transacción
-        $this->productos_model->actualizar('facturas', ['token' => $wompi_reference], ['wompi_transaccion_id' => $wompi_transaction_id]);
+        if(!$actualizar_factura) {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 16,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
+            ]);
+
+            die();
+        }
 
         $factura = $this->productos_model->obtener('factura', [
             'wompi_transaccion_id' => $wompi_transaction_id
         ]);
-        
+
+        // Si no existe la factura
+        if(empty($factura)) {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 17,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
+            ]);
+
+            die();
+        }
 
         $datos_pedido = [
             "Pedidos" => [
@@ -105,12 +133,28 @@ class Webhooks extends MY_Controller {
 
         $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
         $codigo_resultado_pedido = $resultado_pedido->codigo;
-        $mensaje = $resultado_pedido->codigo;
-        $detalle = $resultado_pedido->codigo;
+        $mensaje_resultado_pedido = $resultado_pedido->mensaje;
+        $detalle_resultado_pedido = $resultado_pedido->detalle['0']->f_detalle;
+
+        // Si no se pudo crear el pedido
+        if($codigo_resultado_pedido == '1') {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 18,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Código: $codigo_resultado_pedido, Mensaje: $mensaje_resultado_pedido, Detalle: $detalle_resultado_pedido"
+            ]);
+
+            die();
+        }
 
         // Si se ejecutó correctamente
         if($codigo_resultado_pedido == '0') {
-            print_r($resultado_pedido);
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 15,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
 
             $datos_documento_contable = [
                 "Documento_contable" => [
@@ -151,12 +195,27 @@ class Webhooks extends MY_Controller {
             ];
 
             $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
-            $codigo_resultado_pedido = $resultado_documento_contable->codigo;
-            $mensaje = $resultado_documento_contable->codigo;
-            $detalle = $resultado_documento_contable->codigo;
-            
-            echo "<hr>";
-            print_r($resultado_documento_contable);
+            $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
+            $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
+            $detalle_resultado_documento_contable = $resultado_documento_contable->detalle['0']->f_detalle;
+
+            // Si no se pudo crear el documento contable
+            if($codigo_resultado_documento_contable == '1') {
+                // Se agrega log
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 19,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => "Código: $codigo_resultado_documento_contable, Mensaje: $mensaje_resultado_documento_contable, Detalle: $detalle_resultado_documento_contable"
+                ]);
+
+                die();
+            }
+
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 20,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
         }
 
         return http_response_code(200);
