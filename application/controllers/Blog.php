@@ -6,10 +6,10 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
 /**
  * @author: 	John Arley Cano Salinas
  * Fecha: 		29 de junio de 2023
- * Programa:  	E-Commerce | Módulo Contacto
+ * Programa:  	E-Commerce | Módulo Blog
  * Email: 		johnarleycano@hotmail.com
  */
-class Contacto extends MY_Controller {
+class Blog extends MY_Controller {
     /**
      * Función constructora de la clase. Se hereda el mismo constructor 
      * de la clase para evitar sobreescribirlo y de esa manera 
@@ -19,8 +19,13 @@ class Contacto extends MY_Controller {
         parent::__construct();
     }
 
-    function index() {
-        $this->data['contenido_principal'] = 'contacto/index';
+    function contacto() {
+        $this->data['contenido_principal'] = 'blog/contacto';
+        $this->load->view('core/body', $this->data);
+    }
+
+    function taller_aliado() {
+        $this->data['contenido_principal'] = 'blog/taller_aliado';
         $this->load->view('core/body', $this->data);
     }
 }

@@ -41,9 +41,16 @@
             
             <?php $this->load->view('bitrix/garantia'); ?>
 
+            <!-- Taller Aliado -->
+            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                    Taller Aliado
+                </a>
+            </li><!-- Taller Aliado -->
+
             <!-- Contacto -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url('contacto'); ?>" class="main-menu__link">
+                <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
                     Contacto
                 </a>
             </li><!-- Contacto -->
