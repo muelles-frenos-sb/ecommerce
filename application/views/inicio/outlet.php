@@ -57,7 +57,7 @@
                     <div class="decor__center"></div>
                 </div>
             </div>
-            <div class="block-sale__image" style="background-image: url('<?php echo base_url(); ?>images/sale-1903x640.jpg');"></div>
+            <div class="block-sale__image" style="background-image: url('<?php echo base_url(); ?>images/banners/outlet.jpg');"></div>
             <div class="container">
                 <div class="block-sale__carousel">
                     <div class="owl-carousel">

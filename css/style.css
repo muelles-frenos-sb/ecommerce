@@ -8928,7 +8928,7 @@ select.form-control::-ms-expand {
   content: '';
   width: 100%;
   height: 100%;
-  background: rgba(38, 38, 38, 0.8);
+  background: rgba(25, 40, 127, 0.3);
 }
 
 .block-sale__carousel .owl-stage-outer {
