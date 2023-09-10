@@ -2,7 +2,7 @@
     <div class="about">
         <div class="about__body">
             <div class="about__image">
-                <div class="about__image-bg" style="background-image: url('images/nosotros.jpg');"></div>
+                <div class="about__image-bg" style="background-image: url('<?php echo base_url(); ?>images/nosotros.jpg');"></div>
                 <div class="decor about__image-decor decor--type--bottom">
                     <div class="decor__body">
                         <div class="decor__start"></div>

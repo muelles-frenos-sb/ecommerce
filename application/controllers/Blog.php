@@ -19,8 +19,17 @@ class Blog extends MY_Controller {
         parent::__construct();
     }
 
+    function index() {
+        redirect(site_url());
+    }
+
     function contacto() {
         $this->data['contenido_principal'] = 'blog/contacto';
+        $this->load->view('core/body', $this->data);
+    }
+
+    function nosotros() {
+        $this->data['contenido_principal'] = 'blog/nosotros';
         $this->load->view('core/body', $this->data);
     }
 
