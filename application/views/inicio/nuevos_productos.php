@@ -4,20 +4,6 @@
             <div class="section-header__body">
                 <h2 class="section-header__title">Lo último:</h2>
                 <div class="section-header__spring"></div>
-                <!-- <ul class="section-header__links">
-                    <li class="section-header__links-item">
-                        <a href="" class="section-header__links-link">Wheel Covers</a>
-                    </li>
-                    <li class="section-header__links-item">
-                        <a href="" class="section-header__links-link">Timing Belts</a>
-                    </li>
-                    <li class="section-header__links-item">
-                        <a href="" class="section-header__links-link">Oil Pans</a>
-                    </li>
-                    <li class="section-header__links-item">
-                        <a href="" class="section-header__links-link">Show All</a>
-                    </li>
-                </ul> -->
                 <div class="section-header__arrows">
                     <div class="arrow section-header__arrow section-header__arrow--prev arrow--prev">
                         <button class="arrow__button" type="button"><svg width="7" height="11">
@@ -88,8 +74,8 @@
                                 </div>
                             </div>
                         </div>
+                    <?php } ?>
                 <?php } ?>
-            <?php } ?>
             </div>
         </div>
     </div>
