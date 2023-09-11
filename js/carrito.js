@@ -1,3 +1,25 @@
+const agregarProducto = async(id, precio, nombre) => {
+    obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, {
+        id: id,
+        precio: precio,
+        nombre: nombre,
+    })
+    .then(resultado => {
+        mostrarNotificacion({
+            tipo: 'carrito_nuevo_producto',
+            id: id
+        })
+
+        actualizarCarrito(id)
+        
+        listarCarrito()
+    })
+}
+
+/**
+ * Actualiza el precio y cantidad de ítems del carrito
+ * en el menú superior
+ */
 const actualizarCarrito = (productoId = null) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/resumen`)
     .then(resultado => {
@@ -8,16 +30,13 @@ const actualizarCarrito = (productoId = null) => {
     })
 
     if(productoId) {
+        cargarBotones('principal', productoId)
         cargarBotones('producto_detalle', productoId)
-        cargarBotones(`producto_lista_general_${productoId}`, productoId)
     }
 }
 
-const cargarBotones = (contenedor, productoId) => {
-    console.log(contenedor)
-
-    cargarInterfaz('productos/botones', contenedor, {
-        tipo: contenedor,
+const cargarBotones = async(tipo, productoId) => {
+    cargarInterfaz(`productos/botones/${tipo}`, `${tipo}_${productoId}`, {
         id: productoId,
     })
 }
@@ -31,18 +50,6 @@ const vaciarCarrito = async() => {
     obtenerPromesa(`${$('#site_url').val()}carrito/vaciar`)
     .then(resultado => {
         actualizarCarrito()
-        listarCarrito()
-    })
-}
-
-const agregarProducto = async(id, precio, nombre) => {
-    obtenerPromesa(`${$('#site_url').val()}carrito/agregar/${id}/${precio}/${nombre}`)
-    .then(resultado => {
-        mostrarNotificacion({
-            tipo: 'carrito_nuevo_producto',
-            id: id
-        })
-        actualizarCarrito(id)
         listarCarrito()
     })
 }

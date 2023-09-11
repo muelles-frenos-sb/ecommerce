@@ -53,10 +53,11 @@
             </div>
         </div>
 
-        <div id="producto_lista_general_<?php echo $producto->id; ?>"></div>
+        <div id="<?php echo "principal_{$producto->id}"; ?>"></div>
 
         <script>
-            cargarBotones('producto_lista_general_<?php echo $producto->id; ?>', <?php echo $producto->id; ?>);
+            // Se cargan los botones para agregar y adicionar el ítem al carrito
+            cargarBotones('principal', <?php echo $producto->id; ?>);
         </script>
     <?php } ?>
 </div>

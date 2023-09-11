@@ -117,14 +117,14 @@ Class Productos_model extends CI_Model{
                 "SELECT
                     p.*,
                     i.existencia,
-                    i.disponible,
-                    i.bodega,
+                    MIN(i.disponible) disponible,
+                    MAX(i.bodega) bodega,
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p
                     INNER JOIN productos_inventario AS i ON p.id = i.producto_id
                 $where
-                -- GROUP BY p.id
+                GROUP BY p.id
                 $having
                 ORDER BY
                     notas

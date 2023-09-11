@@ -68,20 +68,6 @@ $producto = $this->productos_model->obtener('productos', $datos);
                             <div class="product__header">
                                 <h1 class="product__title"><?php echo $producto->notas; ?></h1>
                                 <div class="product__subtitle">
-                                    <!-- <div class="product__rating">
-                                        <div class="product__rating-stars">
-                                            <div class="rating">
-                                                <div class="rating__body">
-                                                    <div class="rating__star rating__star--active"></div>
-                                                    <div class="rating__star rating__star--active"></div>
-                                                    <div class="rating__star rating__star--active"></div>
-                                                    <div class="rating__star rating__star--active"></div>
-                                                    <div class="rating__star"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="product__rating-label"><a href="">3.5 on 7 reviews</a></div>
-                                    </div> -->
                                     <div class="status-badge status-badge--style--<?php echo ($producto->disponible > 0) ? "success" : "failure"; ?> product__fit status-badge--has-icon status-badge--has-text">
                                         <div class="status-badge__body">
                                             <div class="status-badge__icon"><svg width="13" height="13">
@@ -150,48 +136,13 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                     </div>
                                     
                                     <?php if ($producto->disponible > 0) { ?>
-                                        <div id="producto_detalle"></div>
+                                        <div id="producto_detalle_<?php echo $producto->id; ?>"></div>
 
                                         <script>
+                                            // Se cargan los botones para agregar y adicionar el ítem al carrito
                                             cargarBotones('producto_detalle', <?php echo $producto->id; ?>);
                                         </script>
                                     <?php } ?>
-
-                                    <!-- <button class="product__actions-item product__actions-item--wishlist" type="button">
-                                        <svg width="16" height="16">
-                                            <path d="M13.9,8.4l-5.4,5.4c-0.3,0.3-0.7,0.3-1,0L2.1,8.4c-1.5-1.5-1.5-3.8,0-5.3C2.8,2.4,3.8,2,4.8,2s1.9,0.4,2.6,1.1L8,3.7 l0.6-0.6C9.3,2.4,10.3,2,11.3,2c1,0,1.9,0.4,2.6,1.1C15.4,4.6,15.4,6.9,13.9,8.4z" />
-                                        </svg>
-                                        <span>Añadir a la lista de deseos</span>
-                                    </button>
-                                    <button class="product__actions-item product__actions-item--compare" type="button">
-                                        <svg width="16" height="16">
-                                            <path d="M9,15H7c-0.6,0-1-0.4-1-1V2c0-0.6,0.4-1,1-1h2c0.6,0,1,0.4,1,1v12C10,14.6,9.6,15,9,15z" />
-                                            <path d="M1,9h2c0.6,0,1,0.4,1,1v4c0,0.6-0.4,1-1,1H1c-0.6,0-1-0.4-1-1v-4C0,9.4,0.4,9,1,9z" />
-                                            <path d="M15,5h-2c-0.6,0-1,0.4-1,1v8c0,0.6,0.4,1,1,1h2c0.6,0,1-0.4,1-1V6C16,5.4,15.6,5,15,5z" />
-                                        </svg>
-                                        <span>Add to compare</span>
-                                    </button> -->
-                                    
-                                    <!-- <div class="product__tags-and-share-links">
-                                        <div class="product__tags tags tags--sm">
-                                            <div class="tags__list">
-                                                <a href="">Brake Kit</a>
-                                                <a href="">Brandix</a>
-                                                <a href="">Filter</a>
-                                                <a href="">Bumper</a>
-                                                <a href="">Transmission</a>
-                                                <a href="">Hood</a>
-                                            </div>
-                                        </div>
-                                        <div class="product__share-links share-links">
-                                            <ul class="share-links__list">
-                                                <li class="share-links__item share-links__item--type--like"><a href="">Like</a></li>
-                                                <li class="share-links__item share-links__item--type--tweet"><a href="">Tweet</a></li>
-                                                <li class="share-links__item share-links__item--type--pin"><a href="">Pin It</a></li>
-                                                <li class="share-links__item share-links__item--type--counter"><a href="">4K</a></li>
-                                            </ul>
-                                        </div>
-                                    </div> -->
                                 </div>
                                 <div class="product__shop-features shop-features">
                                     <ul class="shop-features__list">

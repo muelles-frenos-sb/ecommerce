@@ -26,13 +26,19 @@ class Carrito extends MY_Controller {
         redirect('inicio');
     }
 
-    function agregar($id, $precio, $nombre) {
+    function agregar() {
+        $datos = json_decode($this->input->post('datos'), true);
+
+        $id = $datos['id'];
+        $precio = $datos['precio'];
+        $nombre = $datos['nombre'];
+
         print json_encode(['resultado' => $this->cart->insert(array(
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
             'name'    => $nombre,
-            'options' => array('Size' => 'L', 'Color' => 'Red')
+            // 'options' => array('Size' => 'L', 'Color' => 'Red')
         ))]);
     }
 
