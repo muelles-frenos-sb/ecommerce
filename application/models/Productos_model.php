@@ -73,21 +73,15 @@ Class Productos_model extends CI_Model{
                 
                 $where = "WHERE i.disponible > 0";
                 $having = "";
+               
+                $marcas = $this->configuracion_model->obtener('marcas');
 
-                // Si no trae bodega 8, carga solo marcas activas
-                if(isset($datos['bodega']) && $datos['bodega'] != '00008') {
-                    /**
-                     * Filtro de marcas activas
-                     */
-                    $marcas = $this->configuracion_model->obtener('marcas');
-
-                    $where .= " AND (";
-                    for ($i=0; $i < count($marcas); $i++) {
-                        $where .= " p.marca = '{$marcas[$i]->nombre}' ";
-                        if(($i + 1) < count($marcas)) $where .= " OR ";
-                    }
-                    $where .= ") ";
+                $where .= " AND (";
+                for ($i=0; $i < count($marcas); $i++) {
+                    $where .= " p.marca = '{$marcas[$i]->nombre}' ";
+                    if(($i + 1) < count($marcas)) $where .= " OR ";
                 }
+                $where .= ") ";
 
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
