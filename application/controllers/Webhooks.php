@@ -338,7 +338,7 @@ class Webhooks extends MY_Controller {
                     $nuevo_producto = [
                         'id' => $producto->IdItem,
                         'descripcion_corta' => $producto->Descripcion_Corta,
-                        'referencia' => $producto->Referencia,
+                        'referencia' => str_replace("*", "x", $producto->Referencia), // Cambia los * por letra x, pues Codeigniter no los permite por defecto
                         'unidad_inventario' => $producto->Unidad_Inventario,
                         'notas' => $producto->Notas,
                         'tipo_inventario' => $producto->Tipo_Inventario,
