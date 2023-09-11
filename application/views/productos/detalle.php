@@ -14,10 +14,10 @@ $producto = $this->productos_model->obtener('productos', $datos);
                             <a href="<?php echo site_url('inicio'); ?>" class="breadcrumb__item-link">Inicio</a>
                         </li>
                         <li class="breadcrumb__item breadcrumb__item--parent">
-                            <a href="" class="breadcrumb__item-link">Productos</a>
+                            <a href="<?php echo site_url('productos'); ?>" class="breadcrumb__item-link">Productos</a>
                         </li>
                         <li class="breadcrumb__item breadcrumb__item--current breadcrumb__item--last" aria-current="page">
-                            <span class="breadcrumb__item-link">Actual</span>
+                            <span class="breadcrumb__item-link"><?php echo $producto->referencia; ?></span>
                         </li>
                     </ol>
                 </nav>
@@ -101,6 +101,8 @@ $producto = $this->productos_model->obtener('productos', $datos);
                                 <div class="product__info-card">
                                     <div class="product__info-body">
                                         <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
+                                        <?php if($producto->disponible > 0 & $producto->bodega == '0008') echo "<div class='tag-badge tag-badge--hot'>Outlet</div>"; ?>
+                                        
                                         <div class="product__prices-stock">
                                             <?php if ($producto->disponible > 0) { ?>
                                                 <div class="product__prices">

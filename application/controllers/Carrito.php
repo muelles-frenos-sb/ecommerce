@@ -33,13 +33,13 @@ class Carrito extends MY_Controller {
         $precio = $datos['precio'];
         $nombre = $datos['nombre'];
 
-        print json_encode(['resultado' => $this->cart->insert(array(
+        print json_encode(['resultado' => $this->cart->insert([
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
             'name'    => $nombre,
-            // 'options' => array('Size' => 'L', 'Color' => 'Red')
-        ))]);
+            // 'options' => ['Size' => 'L', 'Color' => 'Red')
+        ])]);
     }
 
     function eliminar($row_id) {
