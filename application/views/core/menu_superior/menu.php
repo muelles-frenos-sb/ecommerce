@@ -1,15 +1,13 @@
 <div class="header__navbar-menu">
     <div class="main-menu">
         <ul class="main-menu__list">
-            <!-- Inicio -->
             <li class="main-menu__item main-menu__item--submenu--menu">
                 <a href="<?php echo site_url('inicio'); ?>" class="main-menu__link">
                     Tienda
                 </a>
-            </li><!-- Inicio -->
+            </li>
 
             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_ver'], $permisos)) { ?>
-                <!-- Configuración -->
                 <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
                     <a href="<?php echo site_url(); ?>" class="main-menu__link">
                         Configuración
@@ -36,24 +34,22 @@
                             <?php } ?>
                         </ul>
                     </div>
-                </li><!-- Configuración -->
+                </li>
             <?php } ?>
             
             <?php $this->load->view('bitrix/garantia'); ?>
 
-            <!-- Taller Aliado -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
                 <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
                     Taller Aliado
                 </a>
-            </li><!-- Taller Aliado -->
+            </li>
 
-            <!-- Contacto -->
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
                 <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
                     Contacto
                 </a>
-            </li><!-- Contacto -->
+            </li>
         </ul>
     </div>
 </div>

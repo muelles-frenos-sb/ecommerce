@@ -24,7 +24,7 @@ const actualizarCarrito = (productoId = null) => {
     obtenerPromesa(`${$('#site_url').val()}carrito/resumen`)
     .then(resultado => {
         $('#carrito_total').text(resultado.total)
-        $('#carrito_total_items').text(resultado.total_items)
+        $('#carrito_total_items, #carrito_movil_total_items, #carrito_movil2_total_items').text(resultado.total_items)
         
         cargarInterfaz('core/menu_superior/carrito_detalle', 'contenedor_carrito_detalle')
     })

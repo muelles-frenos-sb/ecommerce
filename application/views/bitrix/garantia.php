@@ -5,9 +5,8 @@
     })(window,document,'https://cdn.bitrix24.co/b24455241/crm/form/loader_29.js')
 </script>
 
-<!-- Garantía -->
 <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
     <a href="#" class="main-menu__link">
         Garantía
     </a>
-</li><!-- Garantía -->
+</li>

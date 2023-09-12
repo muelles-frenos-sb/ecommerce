@@ -33,14 +33,14 @@
                                 <div class="mobile-menu__panel-body">
                                     <ul class="mobile-menu__links">
                                         <li data-mobile-menu-item>
-                                            <button type="button" class="" data-mobile-menu-trigger>
+                                            <a href="<?php echo site_url("productos"); ?>" type="button" class="" data-mobile-menu-trigger>
                                                 TODAS
-                                            </button>
+                                            </a>
                                         </li>
 
                                         <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
                                             <li data-mobile-menu-item onClick="javascript:location.href='<?php echo site_url("productos?marca=$marca->nombre"); ?>'">
-                                                <button type="button" class="" data-mobile-menu-trigger>
+                                                <button type="button" data-mobile-menu-trigger>
                                                     <?php echo $marca->nombre; ?>
                                                 </button>
                                             </li>
@@ -53,15 +53,6 @@
                 </div>
                 <div class="mobile-menu__divider"></div>
                 <div class="mobile-menu__indicators">
-                    <!-- <a class="mobile-menu__indicator" href="wishlist.html">
-                        <span class="mobile-menu__indicator-icon">
-                            <svg width="20" height="20">
-                                <path d="M14,3c2.2,0,4,1.8,4,4c0,4-5.2,10-8,10S2,11,2,7c0-2.2,1.8-4,4-4c1,0,1.9,0.4,2.7,1L10,5.2L11.3,4C12.1,3.4,13,3,14,3 M14,1 c-1.5,0-2.9,0.6-4,1.5C8.9,1.6,7.5,1,6,1C2.7,1,0,3.7,0,7c0,5,6,12,10,12s10-7,10-12C20,3.7,17.3,1,14,1L14,1z" />
-                            </svg>
-                        </span>
-                        <span class="mobile-menu__indicator-title">Wishlist</span>
-                    </a> -->
-                    
                     <?php if(!$this->session->userdata('usuario_id')) { ?>
                         <a class="mobile-menu__indicator" href="<?php echo site_url('sesion'); ?>">
                             <span class="mobile-menu__indicator-icon">
@@ -84,31 +75,46 @@
                         </a>
                     <?php } ?>
 
-                    <a class="mobile-menu__indicator" href="cart.html">
+                    <a class="mobile-menu__indicator" href="<?php echo site_url('carrito/ver'); ?>">
                         <span class="mobile-menu__indicator-icon">
                             <svg width="20" height="20">
                                 <circle cx="7" cy="17" r="2" />
                                 <circle cx="15" cy="17" r="2" />
                                 <path d="M20,4.4V5l-1.8,6.3c-0.1,0.4-0.5,0.7-1,0.7H6.7c-0.4,0-0.8-0.3-1-0.7L3.3,3.9C3.1,3.3,2.6,3,2.1,3H0.4C0.2,3,0,2.8,0,2.6 V1.4C0,1.2,0.2,1,0.4,1h2.5c1,0,1.8,0.6,2.1,1.6L5.1,3l2.3,6.8c0,0.1,0.2,0.2,0.3,0.2h8.6c0.1,0,0.3-0.1,0.3-0.2l1.3-4.4 C17.9,5.2,17.7,5,17.5,5H9.4C9.2,5,9,4.8,9,4.6V3.4C9,3.2,9.2,3,9.4,3h9.2C19.4,3,20,3.6,20,4.4z" />
                             </svg>
-                            <span class="mobile-menu__indicator-counter">3</span>
+                            <span class="mobile-menu__indicator-counter" id="carrito_movil_total_items">0</span>
                         </span>
-                        <span class="mobile-menu__indicator-title">Cart</span>
+                        <span class="mobile-menu__indicator-title">Carrito</span>
                     </a>
                 </div>
                 <div class="mobile-menu__divider"></div>
                 <ul class="mobile-menu__links">
-                    <li data-mobile-menu-item>
-                        <a href="<?php echo site_url('inicio'); ?>" data-mobile-menu-trigger>
-                            Inicio
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url(); ?>" class="main-menu__link">
+                            Tienda
                         </a>
                     </li>
 
-                    <li data-mobile-menu-item>
-                        <a href="<?php echo site_url('nosotros'); ?>" data-mobile-menu-trigger>
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                            Taller aliado
+                        </a>
+                    </li>
+
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url('blog/nosotros'); ?>" class="main-menu__link">
                             Nosotros
                         </a>
                     </li>
+                    
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
+                            Contacto
+                        </a>
+                    </li>
+                    
+                    <!-- Garantía -->
+                    <?php $this->load->view('bitrix/garantia'); ?>
 
                     <?php if($this->session->userdata('usuario_id')) { ?>
                         <li data-mobile-menu-item>
@@ -277,7 +283,7 @@
                 </ul>
                 <div class="mobile-menu__spring"></div>
                 <div class="mobile-menu__divider"></div>
-                <a class="mobile-menu__contacts" href="<?php echo site_url('contacto'); ?>">
+                <a class="mobile-menu__contacts" href="<?php echo site_url('blog/contacto'); ?>">
                     <div class="mobile-menu__contacts-subtitle">Llámanos</div>
                     <div class="mobile-menu__contacts-title"><?php echo $this->config->item('telefono'); ?></div>
                 </a>

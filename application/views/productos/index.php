@@ -65,7 +65,7 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
                                         </button>
                                         <button type="button" class="layout-switcher__button" data-layout="table" data-with-features="false">
                                             <svg width="16" height="16">
-                                                <path d="M15.2,16H0.8C0.4,16,0,15.6,0,15.2v-2.4C0,12.4,0.4,12,0.8,12h14.4c0.4,0,0.8,0.4,0.8,0.8v2.4C16,15.6,15.6,16,15.2,16z M15.2,10H0.8C0.4,10,0,9.6,0,9.2V6.8C0,6.4,0.4,6,0.8,6h14.4C15.6,6,16,6.4,16,6.8v2.4C16,9.6,15.6,10,15.2,10z M15.2,4H0. C0.4,4,0,3.6,0,3.2V0.8C0,0.4,0.4,0,0.8,0h14.4C15.6,0,16,0.4,16,0.8v2.4C16,3.6,15.6,4,15.2,4z" />
+                                                <path d="M15.2,16H0.8C0.4,16,0,15.6,0,15.2v-2.4C0,12.4,0.4,12,0.8,12h14.4c0.4,0,0.8,0.4,0.8,0.8v2.4C16,15.6,15.6,16,15.2,16z M15.2,10H0.8C0.4,10,0,9.6,0,9.2V6.8C0,6.4,0.4,6,0.8,6h14.4C15.6,6,16,6.4,16,6.8v2.4C16,9.6,15.6,10,15.2,10z M15.2,4H0.8 C0.4,4,0,3.6,0,3.2V0.8C0,0.4,0.4,0,0.8,0h14.4C15.6,0,16,0.4,16,0.8v2.4C16,3.6,15.6,4,15.2,4z"></path>
                                             </svg>
                                         </button>
                                     </div>
@@ -74,21 +74,24 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
                                     Mostrando productos
                                 </div>
                                 <div class="view-options__spring"></div>
-                                <div class="view-options__select">
-                                    <label for="view-option-sort">Ordenar por:</label>
-                                    <select id="view-option-sort" class="form-control form-control-sm" name="">
-                                        <option value="">Precio</option>
-                                    </select>
-                                </div>
-                                <div class="view-options__select">
-                                    <label for="view-option-limit">Mostrar:</label>
-                                    <select id="view-option-limit" class="form-control form-control-sm" name="">
-                                        <option value="">18</option>
-                                        <option value="">36</option>
-                                    </select>
-                                </div>
+                                
+                                <?php if(ENVIRONMENT == 'development') { ?>
+                                    <div class="view-options__select">
+                                        <label for="view-option-sort">Ordenar por:</label>
+                                        <select id="view-option-sort" class="form-control form-control-sm" name="">
+                                            <option value="">Precio</option>
+                                        </select>
+                                    </div>
+                                    <div class="view-options__select">
+                                        <label for="view-option-limit">Mostrar:</label>
+                                        <select id="view-option-limit" class="form-control form-control-sm" name="">
+                                            <option value="">18</option>
+                                            <option value="">36</option>
+                                        </select>
+                                    </div>
+                                <?php } ?>
                             </div>
-                            <div class="view-options__body view-options__body--filters">
+                            <!-- <div class="view-options__body view-options__body--filters">
                                 <div class="view-options__label">Filtros activos</div>
                                 <div class="applied-filters">
                                     <ul class="applied-filters__list">
@@ -113,7 +116,7 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
                                         </li>
                                     </ul>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         <!-- Lista de productos -->
