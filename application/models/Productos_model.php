@@ -15,6 +15,10 @@ Class Productos_model extends CI_Model{
                 return $this->db->insert_batch('productos', $datos);
             break;
 
+            case 'facturas_detalle':
+                return $this->db->insert_batch('facturas_detalle', $datos);
+            break;
+
             case 'productos_inventario':
                 return $this->db->insert_batch('productos_inventario', $datos);
             break;
