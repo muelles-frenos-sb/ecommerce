@@ -43,20 +43,19 @@ class Webhooks extends MY_Controller {
             'fecha_creacion' => date('Y-m-d H:i:s'),
         ]);
 
-        // Si no es un entorno de pruebas
-        if(ENVIRONMENT != 'development') {
-            // Obtenemos los datos desde lo que viene del llamado del Webhook desde Wompi
-            $post = file_get_contents('php://input');
-            $datos = json_decode($post, true)['data'];
+        $post = file_get_contents('php://input');
+        $datos = json_decode($post, true)['data'];
 
-            $wompi_reference = $datos['transaction']['reference'];
-            $wompi_transaction_id = $datos['transaction']['id'];
-        } else {
-            $wompi_reference = '12345';
-            $wompi_transaction_id =  'ab23seffg1!s'.rand();
-        }
+        $wompi_reference = $datos['reference'];
+        $wompi_transaction_id = $datos['id'];
+        $wompi_status = $datos['status'];
 
-        $actualizar_factura = $this->productos_model->actualizar('facturas', ['token' => $wompi_reference], ['wompi_transaccion_id' => $wompi_transaction_id]);
+        // Tabla, condiciones, datos
+        $actualizar_factura = $this->productos_model->actualizar('facturas', ['token' => $wompi_reference], [
+            'wompi_transaccion_id' => $wompi_transaction_id,
+            'wompi_status' => $wompi_status,
+            'wompi_datos' => json_encode($datos),
+        ]);
 
         // Se actualiza la factura con el id de la transacción
         if(!$actualizar_factura) {
@@ -70,6 +69,7 @@ class Webhooks extends MY_Controller {
             die();
         }
 
+        // Se obtienen todos los datos de la factura
         $factura = $this->productos_model->obtener('factura', [
             'wompi_transaccion_id' => $wompi_transaction_id
         ]);
@@ -87,7 +87,7 @@ class Webhooks extends MY_Controller {
         }
 
         // Si el pago no fue aprobado, se detiene la ejecución
-        if($datos['transaction']['reference'] != 'APPROVED') die;
+        if($wompi_status != 'APPROVED') die;
 
         // Vamos a guardar el detalle de la factura
         $items_factura = [];
@@ -107,7 +107,7 @@ class Webhooks extends MY_Controller {
         }
 
         // Se insertan los ítems a la base de datos
-        $this->productos_model->crear('facturas_detalle', $items_factura);
+        if(!empty($items_factura)) $this->productos_model->crear('facturas_detalle', $items_factura);
 
         // Se agrega log
         $this->configuracion_model->crear('logs', [
@@ -244,7 +244,7 @@ class Webhooks extends MY_Controller {
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
         }
-
+        
         return http_response_code(200);
     }
 
