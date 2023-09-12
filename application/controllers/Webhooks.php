@@ -94,7 +94,7 @@ class Webhooks extends MY_Controller {
 
         // Se recorren los ítems del carrito
         foreach ($this->cart->contents() as $item) {
-            $producto = $this->productos_model->obtener('productos', $datos);
+            $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
             
             $datos_item = [
                 'factura_id' => $factura->id,
@@ -103,7 +103,7 @@ class Webhooks extends MY_Controller {
                 'precio' => $item['price'],
             ];
             
-            array_push($datos_item, $items_factura);
+            array_push($items_factura, $datos_item);
         }
 
         // Se insertan los ítems a la base de datos
