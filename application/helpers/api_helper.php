@@ -5,8 +5,6 @@ function obtener_clientes_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
 
-    $filtro_pagina = $datos['pagina'];
-
     $client = new \GuzzleHttp\Client();
     try {
         $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
@@ -18,8 +16,34 @@ function obtener_clientes_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_Clientes',
-                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
-                // 'parametros' => "IdItem='$filtro_id'|Bodega='$filtro_bodega'",
+                'paginacion' => "numPag=1|tamPag=100",
+                'parametros' => "f200_nit=''{$datos['numero_documento']}''",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+function obtener_terceros_api($datos) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_siesa')['base_url'];
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Terceros',
+                'paginacion' => "numPag=1|tamPag=100",
+                'parametros' => "f200_nit=''{$datos['numero_documento']}''",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

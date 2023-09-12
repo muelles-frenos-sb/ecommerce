@@ -94,11 +94,9 @@ class Webhooks extends MY_Controller {
                     "f430_consec_docto" => $factura->id, // Numero de documento
                     "f430_id_fecha" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD
                     "f430_id_tercero_fact" => $factura->documento_numero, // Valida en maestro, código de tercero cliente
-                    // Pendiente
-                    "f430_id_sucursal_fact" => "001", // Valida en maestro el codigo de la sucursal del cliente a facturar
+                    "f430_id_sucursal_fact" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a facturar
                     "f430_id_tercero_rem" => $factura->documento_numero, // Valida en maestro , codigo del tercero del cliente a despachar
-                    // Pendiente
-                    "f430_id_sucursal_rem" => "001", // Valida en maestro el codigo de la sucursal del cliente a despachar
+                    "f430_id_sucursal_rem" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a despachar
                     "f430_id_tipo_cli_fact" => "C001", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
                     "f430_id_co_fact" => "400", // Valida en maestro, código de centro de operación del documento
                     "f430_fecha_entrega" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD

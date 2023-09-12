@@ -132,6 +132,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
             break;
 
+            case 'clientes':
+                $resultado = json_decode(obtener_clientes_api($datos));
+            break;
+
             case 'factura':
                 $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             break;

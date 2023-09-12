@@ -11,7 +11,7 @@ switch ($transaccion->status) {
     case 'DECLINED':
         $titulo = '¡No se pudo completar el pedido!';
         $subtitulo = '';
-        $subtitulo = 'Ha ocurrido un error con el pago';
+        $subtitulo = 'La entidad bancaria declinó el pago';
         break;
 
     case 'VOIDED':
@@ -22,7 +22,7 @@ switch ($transaccion->status) {
     case 'ERROR':
         $titulo = '¡No se pudo completar el pedido!';
         $subtitulo = 'Ha ocurrido un error con el pago';
-        break;
+    break;
 }
 ?>
 

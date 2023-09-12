@@ -31,92 +31,23 @@ if($this->session->userdata('usuario_id')) {
     <div class="checkout block">
         <div class="container container--max--xl">
             <div class="row">
-                <?php if(!$this->session->userdata('usuario_id')) { ?>
-                    <div class="col-12 mb-3">
-                        <div class="alert alert-lg alert-primary">¿Ya estás registrado? <a href="<?php echo site_url('sesion?url='.current_url()); ?>">Inicia sesión</a></div>
-                    </div>
+                <?php if(ENVIRONMENT == 'development' && !$this->session->userdata('usuario_id')) { ?>
+                    <!-- <div class="col-12 mb-3">
+                        <div class="alert alert-lg alert-primary">¿Ya estás registrado? <a href="<?php // echo site_url('sesion?url='.current_url()); ?>">Inicia sesión</a></div>
+                    </div> -->
                 <?php } ?>
 
                 <div class="col-12 col-lg-6 col-xl-7">
                     <div class="card mb-lg-0">
                         <div class="card-body card-body--padding--2">
                             <h3 class="card-title">Detalles del pago</h3>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="checkout_nombres">Nombres *</label>
-                                    <input type="text" class="form-control" id="checkout_nombres" value="<?php if(!empty($tercero)) echo $tercero->nombres; ?>">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="checkout_primer_apellido">Primer apellido *</label>
-                                    <input type="text" class="form-control" id="checkout_primer_apellido" value="<?php if(!empty($tercero)) echo $tercero->primer_apellido; ?>">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="checkout_segundo_apellido">Segundo apellido</label>
-                                    <input type="text" class="form-control" id="checkout_segundo_apellido" value="<?php if(!empty($tercero)) echo $tercero->segundo_apellido; ?>">
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <label for="checkout_documento_numero">Número de documento *</label>
-                                <input type="text" class="form-control" id="checkout_documento_numero" value="<?php if(!empty($tercero)) echo $tercero->documento_numero; ?>">
+                                <input type="number" class="form-control" id="checkout_documento_numero" value="901060079" autofocus>
                             </div>
-                            <div class="form-group">
-                                <label for="checkout_razon_social">Razón social <span class="text-muted">(Opcional)</span></label>
-                                <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->razon_social; ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="checkout_direccion">Dirección</label>
-                                <input type="text" class="form-control" id="checkout_direccion" value="<?php if(!empty($tercero)) echo $tercero->direccion1; ?>">
-                            </div>
-                            <div class="form-group">
-                                <label for="checkout_pais">País</label>
-                                <select id="checkout_pais" class="form-control form-control-select2">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($this->configuracion_model->obtener('paises') as $pais) echo "<option value='$pais->pais_id'>$pais->nombre</option>"; ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="checkout_departamento">Departamento</label>
-                                <select id="checkout_departamento" class="form-control form-control-select2">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($this->configuracion_model->obtener('departamentos') as $departamento) echo "<option value='$departamento->departamento_id'>$departamento->nombre</option>"; ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="checkout_ciudad">Ciudad</label>
-                                <select id="checkout_ciudad" class="form-control form-control-select2">
-                                    <option value="">Seleccione...</option>
-                                    <?php foreach($this->configuracion_model->obtener('ciudades') as $ciudad) echo "<option value='$ciudad->ciudad_id'>$ciudad->nombre</option>"; ?>
-                                </select>
-                            </div>
-                            <!-- <div class="form-group">
-                                <label for="checkout-postcode">Postcode / ZIP</label>
-                                <input type="text" class="form-control" id="checkout-postcode">
-                            </div> -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="checkout_email">Correo electrónico *</label>
-                                    <input type="email" class="form-control" id="checkout_email" value="<?php if(!empty($tercero)) echo $tercero->email; ?>">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="checkout_telefono">Teléfono</label>
-                                    <input type="text" class="form-control" id="checkout_telefono" value="<?php if(!empty($tercero)) echo $tercero->telefono; ?>">
-                                </div>
-                            </div>
-                            <!-- <div class="form-group">
-                                <div class="form-check">
-                                    <span class="input-check form-check-input">
-                                        <span class="input-check__body">
-                                            <input class="input-check__input" type="checkbox" id="checkout-create-account">
-                                            <span class="input-check__box"></span>
-                                            <span class="input-check__icon"><svg width="9px" height="7px">
-                                                    <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
-                                                </svg>
-                                            </span>
-                                        </span>
-                                    </span>
-                                    <label class="form-check-label" for="checkout-create-account">Create an account?</label>
-                                </div>
-                            </div> -->
+                            <button class="btn btn-primary btn-block" onClick="javascript:cargarDatosCliente(event)">Validar número de documento</button>
+
+                            <div id="contenedor_datos_cliente"></div>
                         </div>
                         <div class="card-divider"></div>
                         <div class="card-body card-body--padding--2">
@@ -167,75 +98,6 @@ if($this->session->userdata('usuario_id')) {
                                     </tr>
                                 </tfoot>
                             </table>
-                            <!-- <div class="checkout__payment-methods payment-methods">
-                                <ul class="payment-methods__list">
-                                    <li class="payment-methods__item payment-methods__item--active">
-                                        <label class="payment-methods__item-header">
-                                            <span class="payment-methods__item-radio input-radio">
-                                                <span class="input-radio__body">
-                                                    <input class="input-radio__input" name="checkout_payment_method" type="radio" checked>
-                                                    <span class="input-radio__circle"></span>
-                                                </span>
-                                            </span>
-                                            <span class="payment-methods__item-title">Direct bank transfer</span>
-                                        </label>
-                                        <div class="payment-methods__item-container">
-                                            <div class="payment-methods__item-details text-muted">
-                                                Make your payment directly into our bank account. Please use your Order ID as the payment
-                                                reference. Your order will not be shipped until the funds have cleared in our account.
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="payment-methods__item">
-                                        <label class="payment-methods__item-header">
-                                            <span class="payment-methods__item-radio input-radio">
-                                                <span class="input-radio__body">
-                                                    <input class="input-radio__input" name="checkout_payment_method" type="radio">
-                                                    <span class="input-radio__circle"></span>
-                                                </span>
-                                            </span>
-                                            <span class="payment-methods__item-title">Check payments</span>
-                                        </label>
-                                        <div class="payment-methods__item-container">
-                                            <div class="payment-methods__item-details text-muted">
-                                                Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="payment-methods__item">
-                                        <label class="payment-methods__item-header">
-                                            <span class="payment-methods__item-radio input-radio">
-                                                <span class="input-radio__body">
-                                                    <input class="input-radio__input" name="checkout_payment_method" type="radio">
-                                                    <span class="input-radio__circle"></span>
-                                                </span>
-                                            </span>
-                                            <span class="payment-methods__item-title">Cash on delivery</span>
-                                        </label>
-                                        <div class="payment-methods__item-container">
-                                            <div class="payment-methods__item-details text-muted">
-                                                Pay with cash upon delivery.
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="payment-methods__item">
-                                        <label class="payment-methods__item-header">
-                                            <span class="payment-methods__item-radio input-radio">
-                                                <span class="input-radio__body">
-                                                    <input class="input-radio__input" name="checkout_payment_method" type="radio">
-                                                    <span class="input-radio__circle"></span>
-                                                </span>
-                                            </span>
-                                            <span class="payment-methods__item-title">PayPal</span>
-                                        </label>
-                                        <div class="payment-methods__item-container">
-                                            <div class="payment-methods__item-details text-muted">
-                                                Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div> -->
                             <div class="checkout__agree form-group">
                                 <div class="form-check">
                                     <span class="input-check form-check-input">
@@ -254,7 +116,7 @@ if($this->session->userdata('usuario_id')) {
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()">Realizar pago seguro</button>
+                            <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>Realizar pago seguro</button>
                         </div>
                     </div>
                 </div>
@@ -266,18 +128,24 @@ if($this->session->userdata('usuario_id')) {
 
 <div id="contenedor_pago"></div>
 
-<?php if(isset($tercero)) { ?>
-    <script>
-        $().ready(() => {
-            $('#checkout_pais').val('<?php echo $tercero->pais_id; ?>')
-            $('#checkout_departamento').val('<?php echo $tercero->departamento_id; ?>')
-            $('#checkout_ciudad').val('<?php echo $tercero->ciudad_id; ?>')
-        })
-    </script>
-<?php } ?>
-
 <script>
+    cargarDatosCliente = async(e) => {
+        $(e.target).addClass('btn-loading').attr('disabled', true)
+
+        // e.target.addClass('btn-loading')
+        if (!validarCamposObligatorios([$('#checkout_documento_numero')])) return false
+
+        cargarInterfaz('carrito/finalizar_datos_cliente', 'contenedor_datos_cliente', {numero_documento: $.trim($('#checkout_documento_numero').val())})
+
+        setTimeout(() => {
+            $(e.target).removeClass('btn-loading').hide()
+            $('#checkout_documento_numero').attr('disabled', true) 
+            $('#btn_pagar').attr('disabled', false) 
+        }, 1000)
+    }
+
     guardarFactura = async() => {
+        // Alerta cuando no hay ítems en el carrito
         if(<?php echo $this->cart->total(); ?> == 0) {
             mostrarAviso('alerta', 'No hay ningún producto en el carrito.')
             return false
@@ -291,6 +159,9 @@ if($this->session->userdata('usuario_id')) {
             $('#checkout_telefono'),
             $('#checkout_documento_numero'),
         ]
+        
+        // Si tiene sucursales, es obligatorio
+        if(parseInt($('#cantidad_sucursales').val()) > 0) camposObligatorios.push($('#checkout_sucursal'))
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
@@ -310,6 +181,9 @@ if($this->session->userdata('usuario_id')) {
             comentarios: $('#checkout_comentarios').val(),
             valor: <?php echo $this->cart->total(); ?>,
         }
+
+        // Si trae sucursales, se agrega a los datos
+        if(parseInt($('#cantidad_sucursales').val()) > 0) datosFactura.sucursal_id = $('#checkout_sucursal').val()
 
         let factura = await consulta('crear', datosFactura, false)
         
