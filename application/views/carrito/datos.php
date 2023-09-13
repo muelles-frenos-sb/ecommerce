@@ -18,17 +18,17 @@
                 <li>Línea: <?php echo $producto->linea; ?></li>
             </ul>
         </td>
-        <td class="cart-table__column cart-table__column--price" data-title="Price">
+        <td class="cart-table__column cart-table__column--price" data-title="Precio">
             <?php echo formato_precio($item['price']); ?>
         </td>
-        <td class="cart-table__column cart-table__column--quantity" data-title="Quantity">
+        <td class="cart-table__column cart-table__column--quantity" data-title="Cantidad">
             <div class="cart-table__quantity input-number">
                 <input class="form-control input-number__input" type="number" min="1" value="<?php echo $item['qty']; ?>" disabled>
                 <div class="input-number__add" onClick="javascript:modificarItem('agregar', '<?php echo $item['rowid']; ?>')"></div>
                 <div class="input-number__sub" onClick="javascript:modificarItem('eliminar', '<?php echo $item['rowid']; ?>')"></div>
             </div>
         </td>
-        <td class="cart-table__column cart-table__column--total" data-title="Total"><?php echo formato_precio($item['subtotal']); ?></td>
+        <td class="cart-table__column cart-table__column--total" data-title="Subtotal"><?php echo formato_precio($item['subtotal']); ?></td>
         <td class="cart-table__column cart-table__column--remove">
             <button type="button" class="cart-table__remove btn btn-sm btn-icon btn-muted" onClick="javascript:eliminarProducto('<?php echo $item['rowid']; ?>')">
                 <svg width="12" height="12">

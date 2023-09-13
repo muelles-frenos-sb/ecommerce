@@ -189,7 +189,10 @@ class Webhooks extends MY_Controller {
                         "F350_CONSEC_DOCTO" => $factura->id,                                // Número de documento
                         "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",   // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
-			            "F350_NOTAS" => "Pedido $factura->id E-Commerce"                    // Observaciones
+			            "F350_NOTAS" => 
+                            "- Pedido $factura->id E-Commerce
+                            - Referencia Wompi: $wompi_reference
+                            - ID de Transacción Wompi: $wompi_transaction_id"                    // Observaciones
                     ]
                 ],
                 "Movimiento_contable" => [
