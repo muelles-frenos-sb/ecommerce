@@ -31,6 +31,10 @@
 
     checkout.open(function (resultado) {
         var transaction = resultado.transaction
+        
+        // Se redirecciona a la página de resultados
+        location.href = transaction.redirectUrl
+
         // console.log('Transaction ID: ', transaction.id)
         // console.log('Transaction object: ', transaction)
     })

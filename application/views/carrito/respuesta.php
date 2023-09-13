@@ -1,5 +1,6 @@
-<?php 
-$transaccion = json_decode(obtener_transaccion_wompi($this->input->get('id')))->data;
+<?php
+$factura = $this->productos_model->obtener('factura', ['token' => $this->input->get('referencia')]);
+$transaccion = json_decode($factura->wompi_datos, true);
 
 // Dependiendo del estado de la transacción
 switch ($transaccion->status) {
