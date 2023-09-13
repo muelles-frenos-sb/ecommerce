@@ -15,7 +15,7 @@ Class Email_model extends CI_Model {
 
         // Preparando el mensaje
         $this->email->initialize($configuracion);
-        $this->email->from('tienda@repuestossimonbolivar.com', "Tienda - Simón Bolívar");
+        $this->email->from($configuracion['smtp_user'], "Tienda - Simón Bolívar");
         $this->email->bcc(array('johnarleycano@hotmail.com'));
         $this->email->to($destinatarios);
         $this->email->subject($asunto);
