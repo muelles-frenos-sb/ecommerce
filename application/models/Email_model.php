@@ -9,7 +9,7 @@ Class Email_model extends CI_Model {
         parent::__construct();
     }
 
-    function enviar($asunto, $cuerpo, $destinatarios) {
+    function enviar($datos) {
         $configuracion = $this->config->item('datos_email');
         if(ENVIRONMENT == 'development') $destinatarios = 'johnarleycano@hotmail.com';
 
@@ -18,11 +18,15 @@ Class Email_model extends CI_Model {
         $this->email->from($configuracion['smtp_user'], "Tienda - Simón Bolívar");
         $this->email->bcc(array('johnarleycano@hotmail.com'));
         $this->email->to($destinatarios);
-        $this->email->subject($asunto);
+        $this->email->subject($datos['asunto']);
         $this->email->set_newline("\r\n");
-       
-		$this->email->message($cuerpo);
 
+        // Se organiza la plantilla
+	    $mensaje = file_get_contents("application/views/email/plantilla.php");
+        $mensaje = str_replace('{TITULO}', $datos['cuerpo']['titulo'], $mensaje);
+        $mensaje = str_replace('{SUBTITULO}', $datos['cuerpo']['subtitulo'], $mensaje);
+		$this->email->message($mensaje);
+       
         // Envío del mensaje
         $this->email->send();
 

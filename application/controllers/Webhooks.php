@@ -74,6 +74,8 @@ class Webhooks extends MY_Controller {
             'wompi_transaccion_id' => $wompi_transaction_id
         ]);
 
+        enviar_email_pedido($factura);
+
         // Si no existe la factura
         if(empty($factura)) {
             // Se agrega log
