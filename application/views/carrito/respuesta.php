@@ -3,7 +3,7 @@ $factura = $this->productos_model->obtener('factura', ['token' => $this->input->
 $transaccion = json_decode($factura->wompi_datos, true);
 
 // Dependiendo del estado de la transacción
-switch ($transaccion->status) {
+switch ($transaccion['status']) {
     case 'APPROVED':
         $titulo = '¡Muchas gracias!';
         $subtitulo = 'El pago del pedido se ha completado exitosamente';

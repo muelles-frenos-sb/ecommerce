@@ -3,8 +3,11 @@ date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido');
 
-ini_set('MAX_EXECUTION_TIME', '-1');
-ini_set('memory_limit', '-1');
+// ini_set('MAX_EXECUTION_TIME', '-1');
+// ini_set('memory_limit', '-1');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 /**
  * @author: 	John Arley Cano Salinas
@@ -44,7 +47,7 @@ class Webhooks extends MY_Controller {
         ]);
 
         $post = file_get_contents('php://input');
-        $datos = json_decode($post, true)['data'];
+        $datos = json_decode($post, true)['data']['transaction'];
 
         $wompi_reference = $datos['reference'];
         $wompi_transaction_id = $datos['id'];
@@ -91,31 +94,31 @@ class Webhooks extends MY_Controller {
         // Si el pago no fue aprobado, se detiene la ejecución
         if($wompi_status != 'APPROVED') die;
 
-        // Vamos a guardar el detalle de la factura
-        $items_factura = [];
+        // // // Vamos a guardar el detalle de la factura
+        // // $items_factura = [];
 
-        // Se recorren los ítems del carrito
-        foreach ($this->cart->contents() as $item) {
-            $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
+        // // // Se recorren los ítems del carrito
+        // // foreach ($this->cart->contents() as $item) {
+        // //     $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
             
-            $datos_item = [
-                'factura_id' => $factura->id,
-                'producto_id' => $producto->id,
-                'cantidad' => $item['qty'],
-                'precio' => $item['price'],
-            ];
+        // //     $datos_item = [
+        // //         'factura_id' => $factura->id,
+        // //         'producto_id' => $producto->id,
+        // //         'cantidad' => $item['qty'],
+        // //         'precio' => $item['price'],
+        // //     ];
             
-            array_push($items_factura, $datos_item);
-        }
+        // //     array_push($items_factura, $datos_item);
+        // // }
 
-        // Se insertan los ítems a la base de datos
-        if(!empty($items_factura)) $this->productos_model->crear('facturas_detalle', $items_factura);
+        // // // Se insertan los ítems a la base de datos
+        // // if(!empty($items_factura)) $this->productos_model->crear('facturas_detalle', $items_factura);
 
-        // Se agrega log
-        $this->configuracion_model->crear('logs', [
-            'log_tipo_id' => 21,
-            'fecha_creacion' => date('Y-m-d H:i:s'),
-        ]);
+        // // Se agrega log
+        // $this->configuracion_model->crear('logs', [
+        //     'log_tipo_id' => 21,
+        //     'fecha_creacion' => date('Y-m-d H:i:s'),
+        // ]);
         
         $datos_pedido = [
             "Pedidos" => [
@@ -125,9 +128,11 @@ class Webhooks extends MY_Controller {
                     "f430_consec_docto" => $factura->id, // Numero de documento
                     "f430_id_fecha" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD
                     "f430_id_tercero_fact" => $factura->documento_numero, // Valida en maestro, código de tercero cliente
-                    "f430_id_sucursal_fact" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a facturar
+                    "f430_id_sucursal_fact" => "001", // Valida en maestro el codigo de la sucursal del cliente a facturar
+                    // "f430_id_sucursal_fact" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a facturar
                     "f430_id_tercero_rem" => $factura->documento_numero, // Valida en maestro , codigo del tercero del cliente a despachar
-                    "f430_id_sucursal_rem" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a despachar
+                    "f430_id_sucursal_rem" => "001", // Valida en maestro el codigo de la sucursal del cliente a despachar
+                    // "f430_id_sucursal_rem" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a despachar
                     "f430_id_tipo_cli_fact" => "C001", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
                     "f430_id_co_fact" => "400", // Valida en maestro, código de centro de operación del documento
                     "f430_fecha_entrega" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD
@@ -191,10 +196,7 @@ class Webhooks extends MY_Controller {
                         "F350_CONSEC_DOCTO" => $factura->id,                                // Número de documento
                         "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",   // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
-			            "F350_NOTAS" => 
-                            "- Pedido $factura->id E-Commerce
-                            - Referencia Wompi: $wompi_reference
-                            - ID de Transacción Wompi: $wompi_transaction_id"                    // Observaciones
+			            "F350_NOTAS" => "- Pedido $factura->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id"                    // Observaciones
                     ]
                 ],
                 "Movimiento_contable" => [
@@ -211,7 +213,7 @@ class Webhooks extends MY_Controller {
                     [
                         "F350_CONSEC_DOCTO" => $factura->id,                   // Numero de documento
                         "F351_ID_AUXILIAR" => "11100504",             // Valida en maestro, código de cuenta contable
-                        "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                        // "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
                         "F351_ID_CO_MOV" => "400",                    // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
                         // Pendiente
                         "F351_VALOR_CR" => "100000",                  // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
@@ -229,7 +231,7 @@ class Webhooks extends MY_Controller {
             $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
             $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
             $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
-            $detalle_resultado_documento_contable = $resultado_documento_contable->detalle['0']->f_detalle;
+            // $detalle_resultado_documento_contable = ($codigo_resultado_documento_contable == '1') ? $resultado_documento_contable->detalle['0']->f_detalle : $resultado_documento_contable->detalle;
 
             // Si no se pudo crear el documento contable
             if($codigo_resultado_documento_contable == '1') {
@@ -237,7 +239,7 @@ class Webhooks extends MY_Controller {
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 19,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "Código: $codigo_resultado_documento_contable, Mensaje: $mensaje_resultado_documento_contable, Detalle: $detalle_resultado_documento_contable"
+                    // 'observacion' => "Código: $codigo_resultado_documento_contable, Mensaje: $mensaje_resultado_documento_contable, Detalle: $detalle_resultado_documento_contable"
                 ]);
 
                 die();
@@ -249,7 +251,11 @@ class Webhooks extends MY_Controller {
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
         }
-        
+
+        print json_encode([
+            'exito' => true
+        ]);
+
         return http_response_code(200);
     }
 
@@ -338,6 +344,8 @@ class Webhooks extends MY_Controller {
 
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', $respuesta);
+
+            $this->db->close();
             
             print json_encode($respuesta);
 
@@ -398,7 +406,10 @@ class Webhooks extends MY_Controller {
                 print json_encode($respuesta);
 
                 return http_response_code(200);
+            
             }
+
+            $this->db->close();
         } catch (\Throwable $th) {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
@@ -461,6 +472,8 @@ class Webhooks extends MY_Controller {
                 return http_response_code(200);
             }
 
+            $this->db->close();
+
             return http_response_code(200);
         } catch (\Throwable $th) {
             // Se agrega el registro en los logs
@@ -518,6 +531,8 @@ class Webhooks extends MY_Controller {
 
                 return http_response_code(200);
             }
+
+            $this->db->close();
 
             return http_response_code(200);
         } catch (\Throwable $th) {
@@ -584,6 +599,8 @@ class Webhooks extends MY_Controller {
 
                     return http_response_code(200);
                 }
+
+                $this->db->close();
 
                 return http_response_code(200);
             }
