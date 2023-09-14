@@ -25,7 +25,14 @@ Class Email_model extends CI_Model {
 	    $mensaje = file_get_contents("application/views/email/plantilla.php");
         $mensaje = str_replace('{TITULO}', $datos['cuerpo']['titulo'], $mensaje);
         $mensaje = str_replace('{SUBTITULO}', $datos['cuerpo']['subtitulo'], $mensaje);
-		$this->email->message($mensaje);
+        
+        if($datos['pedido_completo']) {
+            $mensaje = str_replace('{DETALLE_PEDIDO}', file_get_contents(site_url("interfaces/carrito/{$datos['id']}")), $mensaje);
+        } else {
+            $mensaje = str_replace('{DETALLE_PEDIDO}', '', $mensaje);
+        }
+
+        $this->email->message($mensaje);
        
         // Envío del mensaje
         $this->email->send();

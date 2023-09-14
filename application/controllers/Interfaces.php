@@ -70,6 +70,11 @@ class Interfaces extends CI_Controller {
         print json_encode($resultado);
     }
 
+    function carrito() {
+        $this->data['id'] = $this->uri->segment(3);
+        $this->load->view('email/pedido_detalle', $this->data);
+    }
+
     function crear() {
         $datos = json_decode($this->input->post('datos'), true);
         $tipo = $datos['tipo'];

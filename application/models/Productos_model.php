@@ -71,6 +71,21 @@ Class Productos_model extends CI_Model{
                 ;
             break;
 
+            case 'factura_detalle':
+                unset($datos['tipo']);
+
+                $this->db
+                    ->select([
+                        "fd.*",
+                    ])
+                    ->from("facturas_detalle fd")
+                    ->join("facturas f", "fd.factura_id = f.id", "left")
+                    ->where($datos)
+                ;
+
+                return $this->db->get()->result();
+            break;
+
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;
@@ -78,15 +93,17 @@ Class Productos_model extends CI_Model{
                 $where = "WHERE i.disponible > 0";
                 $having = "";
                
-                $marcas = $this->configuracion_model->obtener('marcas');
+                if(!isset($datos['id'])) {
+                    $marcas = $this->configuracion_model->obtener('marcas');
 
-                $where .= " AND (";
-                for ($i=0; $i < count($marcas); $i++) {
-                    $where .= " p.marca = '{$marcas[$i]->nombre}' ";
-                    if(($i + 1) < count($marcas)) $where .= " OR ";
+                    $where .= " AND (";
+                    for ($i=0; $i < count($marcas); $i++) {
+                        $where .= " p.marca = '{$marcas[$i]->nombre}' ";
+                        if(($i + 1) < count($marcas)) $where .= " OR ";
+                    }
+                    $where .= ") ";
                 }
-                $where .= ") ";
-
+                
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
 
@@ -134,6 +151,7 @@ Class Productos_model extends CI_Model{
                 // return $sql;
 
                 if (isset($datos['id'])) {
+                    // return $sql;
                     return $this->db->query($sql)->row();
                 } else {
                     return $this->db->query($sql)->result();

@@ -8,10 +8,11 @@ function enviar_email_pedido($factura) {
     $CI->load->model(['email_model']);
 
     $wompi = json_decode($factura->wompi_datos, true);
+    $pedido_completo = false;
 
     switch ($wompi['status']) {
         case 'APPROVED':
-            $exito = true;
+            $pedido_completo = true;
             $asunto = 'Pedido completado';
             $titulo = 'El pedido fue recibido exitosamente';
             $subtitulo = '¡Muchas gracias por comprar en la tienda de Repuestos Simón Bolívar! Acabamos de recibir tu pago';
@@ -39,6 +40,8 @@ function enviar_email_pedido($factura) {
     print_r($wompi);
 
     $datos = [
+        'pedido_completo' => $pedido_completo,
+        'id' => $factura->id,
         'asunto' => $asunto,
         'cuerpo' => [
             'titulo' => $titulo,
