@@ -179,6 +179,8 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
         // let itemsPorPagina = parseInt($('#view-option-limit').val())
         // let cantidadProductos = productos.length
 
+        if($('#filtro_busqueda').val()) localStorage.simonBolivar_buscarProducto = $('#filtro_busqueda').val()
+
         if(localStorage.simonBolivar_buscarProducto) $('#buscar').val(localStorage.simonBolivar_buscarProducto)
 
         // const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)

@@ -177,7 +177,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-																	<p style="margin: 0; word-break: break-word;"><strong><span>Where It's Going:</span></strong></p>
+																	<p style="margin: 0; word-break: break-word;"><strong><span>Aquí está el detalle del pedido:</span></strong></p>
 																</div>
 															</td>
 														</tr>
@@ -200,7 +200,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-																	<p style="margin: 0; word-break: break-word;"><strong><span>Payment:</span></strong></p>
+																	<p style="margin: 0; word-break: break-word;"><strong><span>Pago:</span></strong></p>
 																</div>
 															</td>
 														</tr>
@@ -732,7 +732,7 @@
 													<table class="image_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
 														<tr>
 															<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
-																<div class="alignment" align="center" style="line-height:10px"><img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1951/Coin.png" style="display: block; height: auto; border: 0; max-width: 238px; width: 100%;" width="238" alt="Coins Falling" title="Coins Falling"></div>
+																<div class="alignment" align="center" style="line-height:10px"><a href="https://repuestossimonbolivar.com/productos?busqueda=outlet" target="_blank" style="outline:none" tabindex="-1"><img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1951/Coin.png" style="display: block; height: auto; border: 0; max-width: 238px; width: 100%;" width="238" alt="Outlet" title="Outlet"></a></div>
 															</td>
 														</tr>
 													</table>
@@ -740,7 +740,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:30px;padding-top:15px;">
 																<div style="color:#ffffff;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:24px;line-height:150%;text-align:center;mso-line-height-alt:36px;">
-																	<p style="margin: 0; word-break: break-word;"><strong>No te pierdas los descuentos disponibles en nuestro Outlet</strong></p>
+																	<p style="margin: 0; word-break: break-word;"><a href="https://repuestossimonbolivar.com/productos?busqueda=outlet" target="_blank" style="text-decoration: none; color: #0068A5;" rel="noopener">No te pierdas los descuentos disponibles en nuestro Outlet</a></p>
 																</div>
 															</td>
 														</tr>
@@ -799,7 +799,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0; word-break: break-word;"><strong><span>Nuestras redes</span></strong></p>
+																	<p style="margin: 0; word-break: break-word;"><strong><span>Síguenos en nuestras redes sociales</span></strong><span></span></p>
 																</div>
 															</td>
 														</tr>
@@ -808,7 +808,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:12px;line-height:150%;text-align:left;mso-line-height-alt:18px;">
-																	<p style="margin: 0; word-break: break-word;"><span>Stay up-to-date with current activities and future events by following us on your favorite social media channels.</span></p>
+																	<p style="margin: 0; word-break: break-word;"><span>Somos importadores de marcas reconocidas como SKF, Mansons, KTC y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes</span></p>
 																</div>
 															</td>
 														</tr>
@@ -817,11 +817,13 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;text-align:left;padding-right:0px;">
 																<div class="alignment" align="left">
-																	<table class="social-table" width="141px" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block;">
+																	<table class="social-table" width="260px" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; display: inline-block;">
 																		<tr>
-																			<td style="padding:0 15px 0 0;"><a href="https://www.facebook.com" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-dark-gray/facebook@2x.png" width="32" height="32" alt="Facebook" title="Facebook" style="display: block; height: auto; border: 0;"></a></td>
-																			<td style="padding:0 15px 0 0;"><a href="https://www.twitter.com" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-dark-gray/twitter@2x.png" width="32" height="32" alt="Twitter" title="Twitter" style="display: block; height: auto; border: 0;"></a></td>
-																			<td style="padding:0 15px 0 0;"><a href="https://www.instagram.com" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/t-only-logo-dark-gray/instagram@2x.png" width="32" height="32" alt="Instagram" title="Instagram" style="display: block; height: auto; border: 0;"></a></td>
+																			<td style="padding:0 20px 0 0;"><a href="https://www.facebook.com/RepuestosSimonBolivar" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/facebook@2x.png" width="32" height="32" alt="Facebook" title="Facebook" style="display: block; height: auto; border: 0;"></a></td>
+																			<td style="padding:0 20px 0 0;"><a href="https://x.com/myfsimonbolivar" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/twitter@2x.png" width="32" height="32" alt="Twitter" title="Twitter" style="display: block; height: auto; border: 0;"></a></td>
+																			<td style="padding:0 20px 0 0;"><a href="https://www.youtube.com/@repuestossimonbolivar2617" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/youtube@2x.png" width="32" height="32" alt="YouTube" title="YouTube" style="display: block; height: auto; border: 0;"></a></td>
+																			<td style="padding:0 20px 0 0;"><a href="https://www.instagram.com/repuestossimonbolivar/" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/instagram@2x.png" width="32" height="32" alt="Instagram" title="Instagram" style="display: block; height: auto; border: 0;"></a></td>
+																			<td style="padding:0 20px 0 0;"><a href="https://www.linkedin.com/company/sim%C3%B3n-bol%C3%ADvar" target="_blank"><img src="https://app-rsrc.getbee.io/public/resources/social-networks-icon-sets/circle-color/linkedin@2x.png" width="32" height="32" alt="LinkedIn" title="LinkedIn" style="display: block; height: auto; border: 0;"></a></td>
 																		</tr>
 																	</table>
 																</div>
@@ -834,7 +836,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-																	<p style="margin: 0; word-break: break-word;"><strong><span>Where To Find Us</span></strong></p>
+																	<p style="margin: 0; word-break: break-word;"><strong><span>Somos una empresa de repuestos para vehículos de carga pesada</span></strong></p>
 																</div>
 															</td>
 														</tr>
@@ -843,7 +845,9 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:12px;line-height:150%;text-align:left;mso-line-height-alt:18px;">
-																	<p style="margin: 0; word-break: break-word;"><span><a style="text-decoration: underline; color: #33563c;" href="http://www.example.com" target="_blank" rel="noopener">www.company.com</a></span><span>Company address here<br>+1 123 123 123</span></p>
+																	<p style="margin: 0; word-break: break-word;"><a href="https://repuestossimonbolivar.com/" target="_blank" style="text-decoration: underline; color: #33563c;" rel="noopener">www.repuestossimonbolivar.com</a></p>
+																	<p style="margin: 0; word-break: break-word;"><span>Calle 40 # 30 - 139<br></span></p>
+																	<p style="margin: 0; word-break: break-word;">310 411 4048</p>
 																</div>
 															</td>
 														</tr>
@@ -852,7 +856,7 @@
 														<tr>
 															<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:12px;line-height:120%;text-align:left;mso-line-height-alt:14.399999999999999px;">
-																	<p style="margin: 0; word-break: break-word;"><span>Changed your mind? </span><span style="color:#C0C0C0;"><a style="text-decoration: underline; color: #33563c;" href="http://www.example.com" target="_blank" rel="noopener">Unsubscribe</a></span></p>
+																	<p style="margin: 0; word-break: break-word;"><span>¿No quieres recibir más correos? </span><span style="color: #c0c0c0;"><a style="text-decoration: underline; color: #33563c;" href="http://www.example.com" target="_blank" rel="noopener">Cancelar suscripción</a></span></p>
 																</div>
 															</td>
 														</tr>

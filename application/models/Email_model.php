@@ -11,7 +11,7 @@ Class Email_model extends CI_Model {
 
     function enviar($datos) {
         $configuracion = $this->config->item('datos_email');
-        if(ENVIRONMENT == 'development') $destinatarios = 'johnarleycano@hotmail.com';
+        if(ENVIRONMENT == 'development') $datos['destinatarios'] = 'johnarleycano@hotmail.com';
 
         // Preparando el mensaje
         $this->email->initialize($configuracion);
