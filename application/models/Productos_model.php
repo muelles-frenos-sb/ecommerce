@@ -100,6 +100,7 @@ Class Productos_model extends CI_Model{
                         $having .= " OR p.linea LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.marca LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.grupo LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR bodega_nombre LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
                         if(($i + 1) < count($palabras)) $having .= " AND ";
                     }
@@ -117,6 +118,7 @@ Class Productos_model extends CI_Model{
                     i.existencia,
                     MIN(i.disponible) disponible,
                     MAX(i.bodega) bodega,
+                    IF(MAX(i.bodega) = '00008', 'outlet', '') bodega_nombre,
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p

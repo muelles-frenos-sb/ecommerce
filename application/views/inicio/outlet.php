@@ -33,7 +33,7 @@
                         </svg>
                     </button>
                 </div>
-                <div class="block-sale__link"><a href="">Ver todas las ofertas</a></div>
+                <div class="block-sale__link"><a href="<?php echo site_url('productos?busqueda=outlet'); ?>">Ver todas las ofertas</a></div>
                 <div class="arrow block-sale__arrow block-sale__arrow--next arrow--next">
                     <button class="arrow__button" type="button"><svg width="7" height="11">
                             <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9 C-0.1,9.8-0.1,10.4,0.3,10.7z" />
