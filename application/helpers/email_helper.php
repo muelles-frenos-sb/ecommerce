@@ -8,48 +8,20 @@ function enviar_email_pedido($factura) {
     $CI->load->model(['email_model']);
 
     $wompi = json_decode($factura->wompi_datos, true);
-    $pedido_completo = false;
 
-    switch ($wompi['status']) {
-        case 'APPROVED':
-            $pedido_completo = true;
-            $asunto = 'Pedido completado';
-            $titulo = 'El pedido fue recibido exitosamente';
-            $subtitulo = '¡Muchas gracias por comprar en la tienda de Repuestos Simón Bolívar! Acabamos de recibir tu pago';
-        break;
+    // Dependiendo del estado de la transacción, trae los mensajes
+    $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
     
-        case 'DECLINED':
-            $asunto = 'Pedido no completado';
-            $titulo = 'No recibimos tu pago';
-            $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
-        break;
-    
-        case 'VOIDED':
-            $asunto = 'Pedido no completado';
-            $titulo = 'No recibimos tu pago';
-            $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
-        break;
-    
-        case 'ERROR':
-            $asunto = 'Pedido no completado';
-            $titulo = 'No recibimos tu pago';
-            $subtitulo = '¡Lo sentimos! Ocurrió un error al procesar el pago';
-        break;
-    }
-    
-    print_r($wompi);
-
     $datos = [
-        'pedido_completo' => $pedido_completo,
+        'pedido_completo' => $mensajes_estado_wompi['pedido_completo'],
         'id' => $factura->id,
-        'asunto' => $asunto,
+        'asunto' => $mensajes_estado_wompi['asunto'],
         'cuerpo' => [
-            'titulo' => $titulo,
-            'subtitulo' => $subtitulo,
+            'titulo' => $mensajes_estado_wompi['titulo'],
+            'subtitulo' => $mensajes_estado_wompi['subtitulo'],
         ],
         'destinatarios' => $factura->email,
     ];
 
-    $enviar = $CI->email_model->enviar($datos);
-    print_r($enviar);
+    $CI->email_model->enviar($datos);
 }

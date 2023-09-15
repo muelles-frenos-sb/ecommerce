@@ -40,6 +40,44 @@ function generar_token($valor) {
     return substr(md5($valor), 0, 10);
 }
 
+function mostrar_mensajes_estados_wompi($estado) {
+    $pedido_completo = false;
+    
+    switch ($estado) {
+        case 'APPROVED':
+            $pedido_completo = true;
+            $asunto = 'Pedido completado';
+            $titulo = 'El pedido fue recibido exitosamente';
+            $subtitulo = '¡Muchas gracias por comprar en la tienda de Repuestos Simón Bolívar! Acabamos de recibir tu pago';
+        break;
+    
+        case 'DECLINED':
+            $asunto = 'Pedido no completado';
+            $titulo = 'No recibimos tu pago';
+            $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
+        break;
+    
+        case 'VOIDED':
+            $asunto = 'Pedido no completado';
+            $titulo = 'No recibimos tu pago';
+            $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
+        break;
+    
+        case 'ERROR':
+            $asunto = 'Pedido no completado';
+            $titulo = 'No recibimos tu pago';
+            $subtitulo = '¡Lo sentimos! Ocurrió un error al procesar el pago';
+        break;
+    }
+
+    return [
+        'pedido_completo' => $pedido_completo,
+        'asunto' => $asunto,
+        'titulo' => $titulo,
+        'subtitulo' => $subtitulo,
+    ];
+}
+
 function url_fotos($marca, $referencia) {
     $CI =& get_instance();
 
