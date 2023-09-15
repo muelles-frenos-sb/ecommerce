@@ -45,7 +45,7 @@ if($this->session->userdata('usuario_id')) {
                                 <label for="checkout_documento_numero">Número de documento *</label>
                                 <input type="number" class="form-control" id="checkout_documento_numero" value="901060079" autofocus>
                             </div>
-                            <button class="btn btn-primary btn-block" onClick="javascript:cargarDatosCliente(event)">Validar número de documento</button>
+                            <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar número de documento</button>
 
                             <div id="contenedor_datos_cliente"></div>
                         </div>
@@ -129,19 +129,14 @@ if($this->session->userdata('usuario_id')) {
 <div id="contenedor_pago"></div>
 
 <script>
-    cargarDatosCliente = async(e) => {
-        $(e.target).addClass('btn-loading').attr('disabled', true)
+    cargarDatosCliente = async() => {
+        // Se activa el spinner
+        $('#btn_validar_documento').addClass('btn-loading').attr('disabled', true)
 
         // e.target.addClass('btn-loading')
         if (!validarCamposObligatorios([$('#checkout_documento_numero')])) return false
 
         cargarInterfaz('carrito/finalizar_datos_cliente', 'contenedor_datos_cliente', {numero_documento: $.trim($('#checkout_documento_numero').val())})
-
-        setTimeout(() => {
-            $(e.target).removeClass('btn-loading').hide()
-            $('#checkout_documento_numero').attr('disabled', true) 
-            $('#btn_pagar').attr('disabled', false) 
-        }, 1000)
     }
 
     guardarFactura = async() => {
@@ -191,4 +186,8 @@ if($this->session->userdata('usuario_id')) {
             cargarInterfaz('carrito/pago', 'contenedor_pago', {id: factura.resultado})
         }
     }
+
+    $().ready(() => {
+        $('#btn_validar_documento').click(() => cargarDatosCliente())
+    })
 </script>
