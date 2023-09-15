@@ -74,6 +74,7 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
         <input type="text" class="form-control" id="checkout_telefono" value="<?php // if(!empty($tercero)) echo $tercero->telefono; ?>">
     </div>
 </div>
+
 <!-- <div class="form-group">
     <div class="form-check">
         <span class="input-check form-check-input">
@@ -96,6 +97,10 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
             $('#btn_validar_documento').removeClass('btn-loading').hide()
             $('#checkout_documento_numero').attr('disabled', true)
             $('#btn_pagar').attr('disabled', false)
+
+            // $('#checkout_pais').val('<?php // echo $tercero->pais_id; ?>')
+            // $('#checkout_departamento').val('<?php // echo $tercero->departamento_id; ?>')
+            // $('#checkout_ciudad').val('<?php // echo $tercero->ciudad_id; ?>')
         })
     </script>
 <?php } ?>

@@ -12,16 +12,16 @@
         //     vat: 1900,
         //     consumption: 800
         // }
-        // customerData: { // Opcional
-        //     email: factura.email,
-        //     fullName: `${factura.nombres} ${factura.primer_apellido} ${factura.segundo_apellido}`,
-        //     phoneNumber: factura.telefono,
-        //     phoneNumberPrefix: '+57',
+        customerData: { // Opcional
+            email: '<?php echo $factura->email; ?>',
+            fullName: `<?php echo $factura->razon_social; ?>`,
+            phoneNumber: `<?php echo $factura->telefono; ?>`,
+            phoneNumberPrefix: '+57',
         //     // legalId: '123456789',
         //     // legalIdType: 'CC'
-        // },
+        },
         // shippingAddress: { // Opcional
-        //     addressLine1: factura.direccion,
+            // addressLine1: '',
         //     city: "Medellín",
         //     phoneNumber: factura.telefono,
         //     region: "Antioquia",
@@ -31,9 +31,12 @@
 
     checkout.open(function (resultado) {
         var transaction = resultado.transaction
-        
+
         // Se redirecciona a la página de resultados
         location.href = transaction.redirectUrl
+        
+        // Si se aprobó la transacción, se vacea el carrito
+        if(transaction.status == 'APPROVED') vaciarCarrito()
 
         // console.log('Transaction ID: ', transaction.id)
         // console.log('Transaction object: ', transaction)
