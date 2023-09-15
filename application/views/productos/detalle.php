@@ -252,3 +252,36 @@ $producto = $this->productos_model->obtener('productos', $datos);
     </div>
     <div class="block-space block-space--layout--before-footer"></div>
 </div>
+
+<script>
+    $().ready(() => {
+        // localStorage.removeItem('simonBolivar_productosRecientes')
+        var productosRecientes = []
+        
+        // Si ya existen productos recientes
+        if(localStorage.simonBolivar_productosRecientes) {
+            // Se almacenan en localStorage
+            productosRecientes = JSON.parse(localStorage.getItem('simonBolivar_productosRecientes'))
+        }
+
+        // Se almacena en Local Storage los productos recientes
+        localStorage.setItem('simonBolivar_productosRecientes', JSON.stringify(productosRecientes))
+
+        var items = JSON.parse(localStorage.getItem('simonBolivar_productosRecientes'))
+        
+        // Si no existe el ítem dentro del arreglo
+        if (items.indexOf(<?php echo $id; ?>) === -1) {
+            // Elimina el primer ítem de la lista
+            if(items.length == 5) items.shift()
+
+            // Se agrega el ítem al arreglo
+            items.push(<?php echo $id; ?>)
+        }
+        
+        localStorage.setItem('simonBolivar_productosRecientes', JSON.stringify(items))
+
+        cargarInterfaz('core/menu_superior/busqueda_reciente', 'contenedor_busqueda_reciente', {
+            productos: JSON.parse(localStorage.simonBolivar_productosRecientes)
+        })
+    })
+</script>

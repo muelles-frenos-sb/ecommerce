@@ -6,7 +6,7 @@
             <!-- Búsqueda por palabra clave -->
             <input class="search__input" id="buscar" type="text" placeholder="Buscar por una palabra clave">
 
-            <button class="search__button search__button--start" type="button" onClick="javascript:location.href='<?php echo site_url("contacto"); ?>'">
+            <button class="search__button search__button--start" type="button" onClick="javascript:location.href='<?php echo site_url('blog/contacto'); ?>'">
                 <span class="search__button-icon">
                     <img src="<?php echo base_url(); ?>images/icons/camion.svg" width='25'>
                 </span>
@@ -25,96 +25,24 @@
                 <div class="search__decor-start"></div>
                 <div class="search__decor-end"></div>
             </div>
+
+            <!-- Productos recientes -->
             <div class="search__dropdown search__dropdown--suggestions suggestions">
                 <div class="suggestions__group">
-                    <div class="suggestions__group-title">Productos</div>
+                    <div class="suggestions__group-title">Productos recientes</div>
                     <div class="suggestions__group-content">
-                        <a class="suggestions__item suggestions__product" href="">
-                            <div class="suggestions__product-image image image--type--product">
-                                <div class="image__body">
-                                    <img class="image__tag" src="<?php echo base_url(); ?>images/products/product-2-40x40.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Producto 1</div>
-                                <div class="suggestions__product-rating">
-                                    <div class="suggestions__product-rating-stars">
-                                        <div class="rating">
-                                            <div class="rating__body">
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="suggestions__product-rating-label">5 on 22 reviews</div>
-                                </div>
-                            </div>
-                            <div class="suggestions__product-price">$224.00</div>
-                        </a>
-                        <a class="suggestions__item suggestions__product" href="">
-                            <div class="suggestions__product-image image image--type--product">
-                                <div class="image__body">
-                                    <img class="image__tag" src="<?php echo base_url(); ?>images/products/product-3-40x40.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Producto 2</div>
-                                <div class="suggestions__product-rating">
-                                    <div class="suggestions__product-rating-stars">
-                                        <div class="rating">
-                                            <div class="rating__body">
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star"></div>
-                                                <div class="rating__star"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="suggestions__product-rating-label">3 on 14 reviews</div>
-                                </div>
-                            </div>
-                            <div class="suggestions__product-price">$349.00</div>
-                        </a>
-                        <a class="suggestions__item suggestions__product" href="">
-                            <div class="suggestions__product-image image image--type--product">
-                                <div class="image__body">
-                                    <img class="image__tag" src="<?php echo base_url(); ?>images/products/product-4-40x40.jpg" alt="">
-                                </div>
-                            </div>
-                            <div class="suggestions__product-info">
-                                <div class="suggestions__product-name">Producto 3</div>
-                                <div class="suggestions__product-rating">
-                                    <div class="suggestions__product-rating-stars">
-                                        <div class="rating">
-                                            <div class="rating__body">
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star rating__star--active"></div>
-                                                <div class="rating__star"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="suggestions__product-rating-label">4 on 26 reviews</div>
-                                </div>
-                            </div>
-                            <div class="suggestions__product-price">$589.00</div>
-                        </a>
+                        <div id="contenedor_busqueda_reciente"></div>
                     </div>
                 </div>
-                <div class="suggestions__group">
-                    <div class="suggestions__group-title">Categorías</div>
+                <!-- <div class="suggestions__group">
+                    <div class="suggestions__group-title">Marcas</div>
                     <div class="suggestions__group-content">
                         <a class="suggestions__item suggestions__category" href="">Categoría 1</a>
                         <a class="suggestions__item suggestions__category" href="">Categoría 2</a>
                         <a class="suggestions__item suggestions__category" href="">Categoría 3</a>
                         <a class="suggestions__item suggestions__category" href="">Categoría 4</a>
                     </div>
-                </div>
+                </div> -->
             </div>
             <!-- <div class="search__dropdown search__dropdown--vehicle-picker vehicle-picker">
                 <div class="search__dropdown-arrow"></div>
@@ -240,5 +168,11 @@
         localStorage.simonBolivar_buscarProducto = $('#buscar').val()
 
         location.href = '<?php echo site_url("productos?busqueda="); ?>' + $('#buscar').val()
+    })
+
+    $().ready(async () => {
+        if(localStorage.simonBolivar_productosRecientes) {
+            cargarInterfaz('core/menu_superior/busqueda_reciente', 'contenedor_busqueda_reciente', {productos: JSON.parse(localStorage.simonBolivar_productosRecientes)})
+        }
     })
 </script>
