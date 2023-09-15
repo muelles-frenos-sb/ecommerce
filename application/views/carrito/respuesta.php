@@ -13,11 +13,13 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
         <div class="container">
             <div class="order-success__body">
                 <div class="order-success__header">
-                    <div class="order-__icon">
-                        <svg width="100" height="100">
-                            <path d="M50,100C22.4,100,0,77.6,0,50S22.4,0,50,0s50,22.4,50,50S77.6,100,50,100z M50,2C23.5,2,2,23.5,2,50 s21.5,48,48,48s48-21.5,48-48S76.5,2,50,2z M44.2,71L22.3,49.1l1.4-1.4l21.2,21.2l34.4-34.4l1.4,1.4L45.6,71 C45.2,71.4,44.6,71.4,44.2,71z" />
-                        </svg>
-                    </div>
+                    <?php if($mensajes_estado_wompi['pedido_completo']) { ?>
+                        <div class="order-success__icon">
+                            <svg width="100" height="100">
+                                <path d="M50,100C22.4,100,0,77.6,0,50S22.4,0,50,0s50,22.4,50,50S77.6,100,50,100z M50,2C23.5,2,2,23.5,2,50 s21.5,48,48,48s48-21.5,48-48S76.5,2,50,2z M44.2,71L22.3,49.1l1.4-1.4l21.2,21.2l34.4-34.4l1.4,1.4L45.6,71 C45.2,71.4,44.6,71.4,44.2,71z" />
+                            </svg>
+                        </div>
+                    <?php } ?>
                     <h1 class="order-success__title"><?php echo $mensajes_estado_wompi['titulo']; ?></h1>
                     <div class="order-success__subtitle"><?php echo $mensajes_estado_wompi['subtitulo']; ?></div>
                     <div class="order-success__actions">
