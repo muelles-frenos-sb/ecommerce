@@ -89,6 +89,34 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;
 
+            case 'facturas_detalle':
+                // Vamos a guardar el detalle de la factura
+                $items_factura = [];
+
+                // Se recorren los ítems del carrito
+                foreach ($this->cart->contents() as $item) {
+                    $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
+                    
+                    $datos_item = [
+                        'factura_id' => $datos['factura_id'],
+                        'producto_id' => $producto->id,
+                        'cantidad' => $item['qty'],
+                        'precio' => $item['price'],
+                        'subtotal' => $item['subtotal'],
+                    ];
+                    
+                    array_push($items_factura, $datos_item);
+                }
+
+                // Se agrega log
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 21,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                ]);
+                
+                if(!empty($items_factura)) print json_encode(['resultado' => $this->productos_model->crear('facturas_detalle', $items_factura)]);
+            break;
+
             case 'perfiles':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');

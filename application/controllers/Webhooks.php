@@ -102,32 +102,6 @@ class Webhooks extends MY_Controller {
 
         // Si el pago no fue aprobado, se detiene la ejecución
         if($wompi_status != 'APPROVED') die;
-
-        // // // Vamos a guardar el detalle de la factura
-        // // $items_factura = [];
-
-        // // // Se recorren los ítems del carrito
-        // // foreach ($this->cart->contents() as $item) {
-        // //     $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
-            
-        // //     $datos_item = [
-        // //         'factura_id' => $factura->id,
-        // //         'producto_id' => $producto->id,
-        // //         'cantidad' => $item['qty'],
-        // //         'precio' => $item['price'],
-        // //     ];
-            
-        // //     array_push($items_factura, $datos_item);
-        // // }
-
-        // // // Se insertan los ítems a la base de datos
-        // // if(!empty($items_factura)) $this->productos_model->crear('facturas_detalle', $items_factura);
-
-        // // Se agrega log
-        // $this->configuracion_model->crear('logs', [
-        //     'log_tipo_id' => 21,
-        //     'fecha_creacion' => date('Y-m-d H:i:s'),
-        // ]);
         
         $datos_pedido = [
             "Pedidos" => [

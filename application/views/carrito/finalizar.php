@@ -182,8 +182,12 @@ if($this->session->userdata('usuario_id')) {
 
         let factura = await consulta('crear', datosFactura, false)
         
+        // Una vez creada la factura
         if (factura.resultado) {
-            cargarInterfaz('carrito/pago', 'contenedor_pago', {id: factura.resultado})
+            // Se crean los ítems de la factura
+            let facturaItems = await consulta('crear', {tipo: 'facturas_detalle', 'factura_id': factura.resultado}, false)
+
+            if (facturaItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: factura.resultado})
         }
     }
 
