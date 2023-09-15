@@ -219,7 +219,7 @@ const mostrarNotificacion = (datos) => {
     }
 
     if(datos.tipo == 'carrito_producto_eliminado') {
-        datos.titulo = 'Nuevo producto agregado al carrito'
+        datos.titulo = 'Producto eliminado del carrito'
     }
 
     cargarInterfaz('core/notificacion', 'contenedor_notificacion', datos)
