@@ -35,6 +35,15 @@ class Webhooks extends MY_Controller {
         redirect('inicio');
     }
 
+    function email_test($id) {
+        // Se obtienen todos los datos de la factura
+        $factura = $this->productos_model->obtener('factura', [
+            'wompi_transaccion_id' => $id
+        ]);
+
+        enviar_email_pedido($factura);
+    }
+
     /**
     * Función que captura el objeto JSON con los datos de la transacción de Wompi
     * Y almacena el id de la transacción, para futuras consultas
