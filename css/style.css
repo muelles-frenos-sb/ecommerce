@@ -5403,7 +5403,7 @@ select.form-control::-ms-expand {
     margin: 24px -15px 0;
   }
   .footer-contacts__contacts dl {
-    width: calc(100% / 2 - 30px - 1px);
+    width: calc(100% / 1 - 30px - 1px);
     margin: 0 15px;
   }
   .footer-contacts__contacts dl:nth-child(n + 3) {
@@ -5416,7 +5416,7 @@ select.form-control::-ms-expand {
     margin: -6px -6px;
   }
   .footer-contacts__contacts dl {
-    width: calc(100% / 4 - 12px);
+    width: calc(100% / 3 - 12px);
     margin: 6px 6px;
   }
   .footer-contacts {
@@ -5452,7 +5452,8 @@ select.form-control::-ms-expand {
     margin: -6px -6px;
   }
   .footer-contacts__contacts dl {
-    width: calc(100% / 2 - 12px);
+    width: calc(100% / 1 - 12px);
+    /* width: calc(100% / 2 - 12px); */
     margin: 6px 6px;
   }
   .footer-contacts__contacts dl {

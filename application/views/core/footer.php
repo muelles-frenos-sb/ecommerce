@@ -10,25 +10,36 @@
         <div class="site-footer__widgets">
             <div class="container">
                 <div class="row">
-                    <div class="col-12 col-xl-4">
+                    <div class="col-12 col-xl-2">
+                        <div class="site-footer__widget footer-contacts">
+                            <h5 class="footer-contacts__title">Nuestra Ubicación</h5>
+                            <address class="footer-contacts__contacts">
+                                <dl>
+                                    <dt>Sede Girardota</dt>
+                                    <dd><?php echo $this->config->item('direccion_girardota'); ?></dd>
+                                </dl><br>
+                                <dl>
+                                    <dt>Sede Itagüí</dt>
+                                    <dd><?php echo $this->config->item('direccion_itagui'); ?></dd>
+                                </dl>
+                                <dl>
+                                    <dt>Sede Marinilla</dt>
+                                    <dd><?php echo $this->config->item('direccion_marinilla'); ?></dd>
+                                </dl>
+                            </address>
+                        </div>
+                    </div>
+                    <div class="col-12 col-xl-2">
                         <div class="site-footer__widget footer-contacts">
                             <h5 class="footer-contacts__title">Contáctanos</h5>
                             <address class="footer-contacts__contacts">
                                 <dl>
                                     <dt>Número telefónico</dt>
                                     <dd><?php echo $this->config->item('telefono'); ?></dd>
-                                </dl>
+                                </dl><br>
                                 <dl>
                                     <dt>Correo electrónico</dt>
                                     <dd><?php echo $this->config->item('email'); ?></dd>
-                                </dl>
-                                <dl>
-                                    <dt>Nuestra ubicación</dt>
-                                    <dd>
-                                        <a href="<?php echo $this->config->item('url_facebook'); ?>" target="_blank">
-                                            <?php echo $this->config->item('direccion'); ?>
-                                        </a>
-                                    </dd>
                                 </dl>
                                 <dl>
                                     <dt>Horarios de atención</dt>
@@ -42,13 +53,11 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Información</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="<?php echo site_url('nosotros'); ?>" class="footer-links__link">Acerca de nosotros</a></li>
-                                <li class="footer-links__item"><a href="<?php echo site_url('contacto'); ?>" class="footer-links__link">Contacto</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Política de tratamiento de datos</a></li>
-                                <!-- <li class="footer-links__item"><a href="" class="footer-links__link">Brands</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Contact Us</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Returns</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Site Map</a></li> -->
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/nosotros'); ?>" class="footer-links__link">Acerca de nosotros</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/contacto'); ?>" class="footer-links__link">Contacto</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/taller_aliado'); ?>" class="footer-links__link">Taller aliado</a></li>
+                                <li class="footer-links__item"><a href="#" class="footer-links__link">Política de tratamiento de datos</a></li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -56,13 +65,7 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Mi cuenta</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Store Location</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Order History</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Wish List</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Newsletter</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Specials</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Gift Certificates</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Affiliate</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="footer-links__link">Outlet</a></li>
                             </ul>
                         </div>
                     </div>
@@ -71,9 +74,6 @@
                             <h5 class="footer-contacts__title">Acerca de nosotros</h5>
                             <div class="footer-contacts__text">
                                 Somos una empresa de repuestos para vehículos de carga pesada.
-                                <hr>
-
-                                Ofrecemos productos de la más alta calidad y un servicio excepcional a nuestros clientes en el Valle de Aburrá y Colombia. Con más de 20 años de experiencia en el mercado, nos hemos ganado la confianza de nuestros clientes gracias a nuestra pasión por lo que hacemos y nuestra dedicación a la excelencia.
                                 <hr>
 
                                 Somos importadores de marcas reconocidas como SKF, Mansons, KTC y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes.
