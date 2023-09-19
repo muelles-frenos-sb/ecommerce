@@ -102,6 +102,8 @@ class Webhooks extends MY_Controller {
 
         // Si el pago no fue aprobado, se detiene la ejecución
         if($wompi_status != 'APPROVED') die;
+
+        $notas_pedido = "- Pedido $factura->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
         
         $datos_pedido = [
             "Pedidos" => [
@@ -111,11 +113,9 @@ class Webhooks extends MY_Controller {
                     "f430_consec_docto" => $factura->id, // Numero de documento
                     "f430_id_fecha" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD
                     "f430_id_tercero_fact" => $factura->documento_numero, // Valida en maestro, código de tercero cliente
-                    "f430_id_sucursal_fact" => "001", // Valida en maestro el codigo de la sucursal del cliente a facturar
-                    // "f430_id_sucursal_fact" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a facturar
+                    "f430_id_sucursal_fact" => str_pad($factura->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a facturar
                     "f430_id_tercero_rem" => $factura->documento_numero, // Valida en maestro , codigo del tercero del cliente a despachar
-                    "f430_id_sucursal_rem" => "001", // Valida en maestro el codigo de la sucursal del cliente a despachar
-                    // "f430_id_sucursal_rem" => $factura->sucursal_id, // Valida en maestro el codigo de la sucursal del cliente a despachar
+                    "f430_id_sucursal_rem" => str_pad($factura->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a despachar
                     "f430_id_tipo_cli_fact" => "C001", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
                     "f430_id_co_fact" => "400", // Valida en maestro, código de centro de operación del documento
                     "f430_fecha_entrega" => "{$factura->anio}{$factura->mes}{$factura->dia}", // El formato debe ser AAAAMMDD
@@ -143,7 +143,7 @@ class Webhooks extends MY_Controller {
                     "f431_id_unidad_medida" => "UNID", // Valida en maestro, código de unidad de medida del movimiento
                     // Pendiente
                     "f431_cant_pedida_base" => "1",
-                    "f431_notas" => "Pedido Realizado desde el Ecommerce", // Notas del movimiento
+                    "f431_notas" => $notas_pedido, // Notas del movimiento
                 ]
             ]
         ];
@@ -179,7 +179,7 @@ class Webhooks extends MY_Controller {
                         "F350_CONSEC_DOCTO" => $factura->id,                                // Número de documento
                         "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",   // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
-			            "F350_NOTAS" => "- Pedido $factura->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id"                    // Observaciones
+			            "F350_NOTAS" => $notas_pedido                    // Observaciones
                     ]
                 ],
                 "Movimiento_contable" => [
