@@ -16,11 +16,11 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
 
 <div class="form-row">
     <div class="form-group col-md-12">
-        <label for="checkout_nombres">Nombres *</label>
+        <label for="checkout_nombres">Nombres</label>
         <input type="text" class="form-control" id="checkout_nombres" value="<?php if(!empty($tercero)) echo $tercero->f200_nombres; ?>">
     </div>
     <div class="form-group col-md-6">
-        <label for="checkout_primer_apellido">Primer apellido *</label>
+        <label for="checkout_primer_apellido">Primer apellido</label>
         <input type="text" class="form-control" id="checkout_primer_apellido" value="<?php if(!empty($tercero)) echo $tercero->f200_apellido1; ?>">
     </div>
     <div class="form-group col-md-6">
@@ -29,33 +29,12 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
     </div>
 </div>
 <div class="form-group">
-    <label for="checkout_razon_social">Razón social <span class="text-muted">(Opcional)</span></label>
-    <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->f200_razon_social; ?>">
+    <label for="checkout_razon_social">Razón social *<span class="text-muted">(Opcional)</span></label>
+    <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->f200_razon_social; ?>" placeholder="Nombre de la empresa o nombre completo">
 </div>
 <div class="form-group">
-    <label for="checkout_direccion">Dirección</label>
+    <label for="checkout_direccion">Dirección *</label>
     <input type="text" class="form-control" id="checkout_direccion" value="<?php // if(!empty($tercero)) echo $tercero->direccion1; ?>">
-</div>
-<div class="form-group">
-    <label for="checkout_pais">País</label>
-    <select id="checkout_pais" class="form-control form-control-select2">
-        <option value="">Seleccione...</option>
-        <?php foreach($this->configuracion_model->obtener('paises') as $pais) echo "<option value='$pais->pais_id'>$pais->nombre</option>"; ?>
-    </select>
-</div>
-<div class="form-group">
-    <label for="checkout_departamento">Departamento</label>
-    <select id="checkout_departamento" class="form-control form-control-select2">
-        <option value="">Seleccione...</option>
-        <?php foreach($this->configuracion_model->obtener('departamentos') as $departamento) echo "<option value='$departamento->departamento_id'>$departamento->nombre</option>"; ?>
-    </select>
-</div>
-<div class="form-group">
-    <label for="checkout_ciudad">Ciudad</label>
-    <select id="checkout_ciudad" class="form-control form-control-select2">
-        <option value="">Seleccione...</option>
-        <?php foreach($this->configuracion_model->obtener('ciudades') as $ciudad) echo "<option value='$ciudad->ciudad_id'>$ciudad->nombre</option>"; ?>
-    </select>
 </div>
 <div class="form-group">
     <label for="checkout_sucursal">Elija la sucursal o placa a la que desea asociar el pedido</label>
@@ -70,7 +49,7 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
         <input type="email" class="form-control" id="checkout_email" value="<?php // if(!empty($tercero)) echo $tercero->email; ?>">
     </div>
     <div class="form-group col-md-6">
-        <label for="checkout_telefono">Teléfono</label>
+        <label for="checkout_telefono">Teléfono *</label>
         <input type="text" class="form-control" id="checkout_telefono" value="<?php // if(!empty($tercero)) echo $tercero->telefono; ?>">
     </div>
 </div>

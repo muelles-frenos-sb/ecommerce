@@ -147,12 +147,10 @@ if($this->session->userdata('usuario_id')) {
         }
 
         let camposObligatorios = [
-            $('#checkout_nombres'),
-            $('#checkout_primer_apellido'),
+            $('#checkout_razon_social'),
             $('#checkout_direccion'),
             $('#checkout_email'),
             $('#checkout_telefono'),
-            $('#checkout_documento_numero'),
         ]
         
         // Si tiene sucursales, es obligatorio
@@ -168,9 +166,6 @@ if($this->session->userdata('usuario_id')) {
             razon_social: $('#checkout_razon_social').val(),
             documento_numero: $('#checkout_documento_numero').val(),
             direccion: $('#checkout_direccion').val(),
-            pais_id: $('#checkout_pais').val(),
-            departamento_id: $('#checkout_departamento').val(),
-            ciudad_id: $('#checkout_ciudad').val(),
             email: $('#checkout_email').val(),
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
