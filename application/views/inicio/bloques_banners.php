@@ -1,7 +1,7 @@
 <div class="block-banners block">
     <div class="container">
         <div class="block-banners__list">
-            <a href="<?php echo site_url('productos'); ?>" class="block-banners__item block-banners__item--style--one">
+            <a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="block-banners__item block-banners__item--style--one">
                 <span class="block-banners__item-image"><img src="<?php echo base_url(); ?>images/banners/banner1.jpg?<?php echo date('YmdHis'); ?>"></span>
                 <span class="block-banners__item-image block-banners__item-image--blur">
                     <img src="<?php echo base_url(); ?>images/banners/banner1.jpg?<?php echo date('YmdHis'); ?>">
@@ -15,7 +15,7 @@
                     ¡Aprovecha ahora!
                 </span>
             </a>
-            <a href="<?php echo site_url('productos'); ?>" class="block-banners__item block-banners__item--style--two">
+            <a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="block-banners__item block-banners__item--style--two">
                 <span class="block-banners__item-image"><img src="<?php echo base_url(); ?>images/banners/banner2.jpg?<?php echo date('YmdHis'); ?>"></span>
                 <span class="block-banners__item-image block-banners__item-image--blur">
                     <img src="<?php echo base_url(); ?>images/banners/banner2.jpg?<?php echo date('YmdHis'); ?>">
