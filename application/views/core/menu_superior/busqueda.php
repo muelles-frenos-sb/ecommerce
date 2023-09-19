@@ -1,6 +1,6 @@
 <div class="header__search">
     <div class="search">
-        <form class="search__body">
+        <form class="search__body" id="formulario_buscar">
             <div class="search__shadow"></div>
             
             <!-- Búsqueda por palabra clave -->
@@ -162,7 +162,7 @@
 </div>
 
 <script>
-    $('form').submit(e => {
+    $('#formulario_buscar').submit(e => {
         e.preventDefault()
 
         localStorage.simonBolivar_buscarProducto = $('#buscar').val()
