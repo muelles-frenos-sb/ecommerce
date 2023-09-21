@@ -74,23 +74,22 @@ if(empty($facturas)) {
 </table>
 
 <script>
-    new DataTable('#tabla_facturas', {
-        info: true,
-        ordering: true,
-        paging: true,
-        order: [[
-            100, 'desc'
-        ]],
-        stateSave: true,
-        scrollY: '600px',
-        searching: false,
-        language: {
-            decimal: ',',
-            thousands: '.'
-        },
-        language: {
-            url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
-        },
-        scrollX: true,
+    $().ready(() => {
+        new DataTable('#tabla_facturas', {
+            info: true,
+            ordering: true,
+            paging: true,
+            stateSave: true,
+            scrollY: '600px',
+            searching: false,
+            language: {
+                decimal: ',',
+                thousands: '.'
+            },
+            language: {
+                url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
+            },
+            scrollX: true,
+        });
     });
 </script>
