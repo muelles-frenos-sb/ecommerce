@@ -1,19 +1,17 @@
 <!-- <div class="card-divider"></div> -->
 <div class="card-table">
-    <div class="table-responsive">
-        <form class="form-group" id="formulario_buscar_factura">
-            <div class="row">
-                <div class="col-10">
-                    <input type="text" class="form-control" id="estado_cuenta_buscar" placeholder="Buscar una factura por número, placa, fecha, valor, etc.">
-                </div>
-                <div class="col-2">
-                    <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-                </div>
+    <form class="form-group" id="formulario_buscar_factura">
+        <div class="row">
+            <div class="col-lg-10 col-sm-12">
+                <input type="text" class="form-control" id="estado_cuenta_buscar" placeholder="Buscar una factura por número, placa, fecha, valor, etc.">
             </div>
-        </form>
-        
-        <div id="contenedor_lista_facturas"></div>
-    </div>
+            <div class="col-lg-2 col-sm-12">
+                <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+            </div>
+        </div>
+    </form>
+    
+    <div id="contenedor_lista_facturas"></div>
 </div>
 
 <div class="card-divider"></div>

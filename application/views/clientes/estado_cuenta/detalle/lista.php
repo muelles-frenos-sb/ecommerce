@@ -22,7 +22,7 @@ if(empty($facturas)) {
     ?>
 </div>
 
-<table class="table-striped">
+<table class="table-striped" id="tabla_facturas">
     <thead>
         <tr>
             <th class="text-center">Número</th>
@@ -72,3 +72,25 @@ if(empty($facturas)) {
         <?php } ?>
     </tbody>
 </table>
+
+<script>
+    new DataTable('#tabla_facturas', {
+        info: true,
+        ordering: true,
+        paging: true,
+        order: [[
+            100, 'desc'
+        ]],
+        stateSave: true,
+        scrollY: '600px',
+        searching: false,
+        language: {
+            decimal: ',',
+            thousands: '.'
+        },
+        language: {
+            url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
+        },
+        scrollX: true,
+    });
+</script>
