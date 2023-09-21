@@ -4,6 +4,11 @@ $opciones = [
     'pendientes' => true,
 ];
 
+$resultado_tercero = json_decode(obtener_terceros_api($datos));
+$codigo_resultado_tercero = $resultado_tercero->codigo;
+$mensaje_resultado_tercero = $resultado_tercero->mensaje;
+$tercero = $resultado_tercero->detalle->Table[0];
+
 if($datos['busqueda'] != '') $opciones['busqueda'] = $datos['busqueda'];
 
 // Obtenemos las facturas del cliente pendientes por pagar
@@ -22,7 +27,7 @@ if(empty($facturas)) {
 
 <div class="alert alert-success alert-lg alert-dismissible fade show">
     <?php
-    echo "Encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
+    echo "¡Bienvenido, <b>$tercero->f200_razon_social</b>! encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
     if(isset($opciones['busqueda'])) echo " con la búsqueda <b>{$opciones['busqueda']}</b>";
     ?>
 </div>
@@ -58,7 +63,16 @@ if(empty($facturas)) {
             <tr>
                 <td><?php echo $factura->centro_operativo; ?></td>
                 <td class="text-right">
-                    <a href="account-order-details.html"><?php echo $factura->Nro_Doc_cruce; ?></a>
+                    <button type="button" class="btn btn-sm btn-primary" style="text-decoration:none;" onClick="javascript:cargarProductos({
+                        documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                        numero_documento: '<?php echo $datos['numero_documento']; ?>'
+                    });">Ver (<?php echo $factura->Nro_Doc_cruce; ?>)</button>
+                    <!-- <a onClick="javascript:cargarProductos({
+                        documento_cruce: '<?php // echo $factura->Nro_Doc_cruce; ?>',
+                        numero_documento: '<?php // echo $datos['numero_documento']; ?>'
+                    });">
+                        <?php echo $factura->Nro_Doc_cruce; ?>
+                    </a> -->
                 </td>
                 <td><?php echo $factura->Fecha_doc_cruce; ?></td>
                 <td><?php echo $factura->Fecha_venc; ?></td>
@@ -111,7 +125,7 @@ if(empty($facturas)) {
             ordering: true,
             paging: true,
             stateSave: true,
-            scrollY: '600px',
+            // scrollY: '600px',
             searching: false,
             language: {
                 decimal: ',',

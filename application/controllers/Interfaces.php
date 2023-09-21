@@ -87,6 +87,11 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
 
+            // Datos obtenidos del API de Siesa - Factura desde pedido
+            case 'clientes_productos':
+                print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
@@ -187,6 +192,10 @@ class Interfaces extends CI_Controller {
 
             case 'factura':
                 $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
+            break;
+
+            case 'facturas_desde_pedido':
+                $resultado = json_decode(obtener_facturas_desde_pedido_api($datos));
             break;
 
             case 'producto':

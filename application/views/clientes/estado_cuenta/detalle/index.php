@@ -16,7 +16,43 @@
 
 <div class="card-divider"></div>
 
+<div id="contenedor_modal"></div>
+
 <script>
+    cargarProductos = (datos) => {
+        datos.tipo = 'facturas_desde_pedido'
+
+        // Se consulta en el API de Siesa el estado de cuenta del cliente
+        consulta('obtener', datos, false)
+        .then(resultado => {
+            if(resultado.codigo && resultado.codigo == 1) {
+                mostrarAviso('alerta', 'No se encontraron resultados con el número de pedido. Intenta de nuevo más tarde.', 30000)
+
+                agregarLog(27, JSON.stringify(datos))
+
+                return false
+            }
+
+            let datosPedido = {
+                tipo: 'clientes_productos',
+                valores: resultado.detalle.Table,
+            }
+
+            // Se insertan en la base de datos todos los registros obtenidos del cliente
+            consulta('crear', datosPedido, false)
+            .then(resultado => {
+                agregarLog(28, JSON.stringify(datos))
+
+                cargarInterfaz('clientes/estado_cuenta/pedidos/index', 'contenedor_modal', datos)
+            })
+            .catch(error => {
+                agregarLog(29, JSON.stringify(datos))
+                mostrarAviso('error', 'Ocurrió un error consultando los productos. Intenta de nuevo más tarde.', 30000)
+                return false
+            })
+        })
+    }
+
     listarFacturas = async() => {
         if($('#estado_cuenta_buscar').val() == '' && localStorage.simonBolivar_buscarFacturaEstadoCuenta) $('#estado_cuenta_buscar').val(localStorage.simonBolivar_buscarFacturaEstadoCuenta)
         

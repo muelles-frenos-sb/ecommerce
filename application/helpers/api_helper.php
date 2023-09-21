@@ -52,6 +52,32 @@ function obtener_estado_cuenta_cliente_api($datos) {
     return $response->getBody()->getContents();
 }
 
+function obtener_facturas_desde_pedido_api($datos) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_siesa')['base_url'];
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Ventas_Facturas_DesdePedido',
+                'paginacion' => 'numPag=1|tamPag=100',
+                'parametros' => "f200_nit_fact=''{$datos['numero_documento']}'' and f350_consec_docto=''{$datos['documento_cruce']}''",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 function obtener_terceros_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];

@@ -90,7 +90,7 @@ Class Productos_model extends CI_Model{
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;
                 
-                $where = "WHERE i.disponible > 0";
+                $where = "WHERE p.id ";
                 $having = "";
                
                 if(!isset($datos['id'])) {
@@ -128,6 +128,7 @@ Class Productos_model extends CI_Model{
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
                 if(isset($datos['bodega'])) $where .= " AND i.bodega = '{$datos['bodega']}' ";
+                if(!isset($datos['id'])) $where .= " AND i.disponible > 0 ";
 
                 $sql = 
                 "SELECT
@@ -139,7 +140,7 @@ Class Productos_model extends CI_Model{
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p
-                    INNER JOIN productos_inventario AS i ON p.id = i.producto_id
+                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
                 $where
                 GROUP BY p.id
                 $having

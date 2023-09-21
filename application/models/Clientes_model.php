@@ -8,8 +8,11 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_facturas':
-                // Primero, eliminamos todas las facturas del cliente
                 if($this->db->delete($tipo, ['Cliente' => $datos[0]['Cliente']])) return $this->db->insert_batch($tipo, $datos);
+            break;
+
+            case 'clientes_productos':
+                if($this->db->delete($tipo, ['f350_consec_docto' => $datos[0]['f350_consec_docto']])) return $this->db->insert_batch($tipo, $datos);
             break;
         }
     }
@@ -77,6 +80,16 @@ Class Clientes_model extends CI_Model {
                     // return $sql;
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'clientes_productos':
+                unset($datos['tipo']);
+                
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->result()
+                ;
             break;
         }
 	}
