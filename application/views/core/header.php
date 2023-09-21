@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.mobile-header-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(max-width: 1199px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css?<?php echo date('Ymdhis'); ?>">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/notificacion.css?<?php echo date('Ymdhis'); ?>">
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/datatables.min.css" rel="stylesheet">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/estilos.css?<?php echo date('Ymdhis'); ?>">
 
 <!-- font - fontawesome -->
@@ -29,6 +30,7 @@
 <!-- Scripts -->
 <script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>
 <script src="<?php echo base_url(); ?>vendor/jquery/jquery.min.js"></script>
+<script src="<?php echo base_url(); ?>js/datatables.js"></script>
 <script src="<?php echo base_url(); ?>vendor/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?php echo base_url(); ?>js/carrito.js?<?php echo date('Ymdhis'); ?>"></script>
 <script src="<?php echo base_url(); ?>js/index.js?<?php echo date('Ymdhis'); ?>"></script>
