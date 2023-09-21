@@ -24,7 +24,7 @@ Class Clientes_model extends CI_Model {
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
             case 'clientes_facturas':
-                $where = "WHERE cf.id";
+                $where = "WHERE a.mostrar_estado_cuenta = 1";
                 $having = "";
 
                 if (isset($datos['busqueda'])) {
@@ -38,7 +38,7 @@ Class Clientes_model extends CI_Model {
                         $having .= " OR cf.RazonSocial LIKE '%{$palabras[$i]}%'";
                         $having .= " OR cf.RazonSocial_Sucursal LIKE '%{$palabras[$i]}%'";
                         $having .= " OR centro_operativo LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.Desc_auxiliar LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR a.nombre_homologado LIKE '%{$palabras[$i]}%'";
                         $having .= " OR cf.Fecha_doc_cruce LIKE '%{$palabras[$i]}%'";
                         $having .= " OR cf.Fecha_venc LIKE '%{$palabras[$i]}%'";
                         $having .= " OR cf.ValorAplicado LIKE '%{$palabras[$i]}%'";
@@ -60,10 +60,12 @@ Class Clientes_model extends CI_Model {
                     cf.*,
                     date(cf.Fecha_doc_cruce) Fecha_doc_cruce,
                     date(cf.Fecha_venc) Fecha_venc,
-                    co.nombre centro_operativo
+                    co.nombre centro_operativo,
+                    a.nombre_homologado
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
+                LEFT JOIN auxiliares AS a ON cf.Desc_auxiliar = a.nombre
                 $where
                 $having
                 ORDER BY diasvencidos DESC

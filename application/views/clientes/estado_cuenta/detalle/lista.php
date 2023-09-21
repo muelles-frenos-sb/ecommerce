@@ -55,7 +55,7 @@ if(empty($facturas)) {
                 </td>
                 <td><?php echo substr($factura->RazonSocial_Sucursal, 0, 10); ?></td>
                 <td><?php echo $factura->centro_operativo; ?></td>
-                <td><?php echo $factura->Desc_auxiliar; ?></td>
+                <td><?php echo $factura->nombre_homologado; ?></td>
                 <td><?php echo $factura->Fecha_doc_cruce; ?></td>
                 <td><?php echo $factura->Fecha_venc; ?></td>
                 <td>
