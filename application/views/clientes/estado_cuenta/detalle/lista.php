@@ -18,7 +18,7 @@ if(empty($facturas)) {
 <div class="alert alert-success alert-lg alert-dismissible fade show">
     <?php
     echo "Encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
-    if(isset($opciones['busqueda'])) echo "con la búsqueda <b>{$opciones['busqueda']}</b>";
+    if(isset($opciones['busqueda'])) echo " con la búsqueda <b>{$opciones['busqueda']}</b>";
     ?>
 </div>
 
