@@ -7,9 +7,9 @@
 </div>
 
 <div class="block">
-    <div class="container container--max--xl">
+    <div class="container">
         <div class="card mb-lg-0">
-            <div class="card-body card-body--padding--2">
+            <div class="card-body card-body--padding--1">
                 <form>
                     <div class="form-group">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>

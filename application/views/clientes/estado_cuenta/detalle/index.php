@@ -1,77 +1,23 @@
-<?php
-// Obtenemos las facturas del cliente pendientes por pagar
-$facturas = $this->clientes_model->obtener('clientes_facturas', [
-    'numero_documento' => $datos['numero_documento'],
-    'pendientes' => true,
-]);
-
-if(empty($facturas)) {
-    echo '<div class="alert alert-success alert-lg alert-dismissible fade show">No tienes ninguna factura pendiente por pagar. ¡Gracias por consultar!</div>';
-    exit;
-}
-?>
-
 <!-- <div class="card-divider"></div> -->
 <div class="card-table">
-    <div class="alert alert-success alert-lg alert-dismissible fade show">
-        <?php echo "Encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar:" ?>
-    </div>
-    <div class="table-responsive-sm">
-        <table class="table-striped">
-            <thead>
-                <tr>
-                    <th class="text-center">Número</th>
-                    <th class="text-center">Sucursal</th>
-                    <th class="text-center">Fechas</th>
-                    <th class="text-center">Factura</th>
-                    <th class="text-center">Pagado</th>
-                    <th class="text-center">Saldo</th>
-                    <th class="text-center">Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach($facturas as $factura) { ?>
-                    <tr>
-                        <td class="text-right">
-                            <a href="account-order-details.html"><?php echo $factura->Nro_Doc_cruce; ?></a>
-                        </td>
-                        <td>
-                            <?php echo $factura->RazonSocial_Sucursal; ?>
-                            <div class="vehicles-list__item-details">
-                                <?php echo "<b>C. Operativo:</b> $factura->CentroOperaciones"; ?><br>
-                                <?php echo "<b>Auxiliar:</b> $factura->Desc_auxiliar"; ?>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="vehicles-list__item-details">
-                                <?php echo "<b>Creación:</b> $factura->Fecha_doc_cruce"; ?><br>
-                                <?php echo "<b>Vencimiento:</b> $factura->Fecha_venc"; ?><br>
-                                <?php
-                                if($factura->diasvencidos > 0) {
-                                    echo "
-                                    <div class='status-badge status-badge--style--failure status-badge--has-text'>
-                                        <div class='status-badge__body'>
-                                            <div class='status-badge__text'>$factura->diasvencidos días vencida</div>
-                                        </div>
-                                    </div>
-                                    ";
-                                }
-                                ?>
-                            </div>
-                        </td>
-                        <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td>
-                        <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
-                        <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td>
-                        <td>
-                            <a type="button" class="btn btn-sm btn-primary" style="text-decoration:none;" href="#">Pagar</a>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+    <div class="table-responsive">
+        <form class="form-group" id="formulario_buscar_factura">
+            <div class="row">
+                <div class="col-10">
+                    <input type="text" class="form-control" id="estado_cuenta_buscar" placeholder="Buscar una factura por número, placa, fecha, valor, etc.">
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-primary btn-block">Buscar</button>
+                </div>
+            </div>
+        </form>
+        
+        <div id="contenedor_lista_facturas"></div>
     </div>
 </div>
+
 <div class="card-divider"></div>
+
 <div class="card-footer">
     <!-- <ul class="pagination">
         <li class="page-item disabled">
@@ -105,3 +51,32 @@ if(empty($facturas)) {
         </li>
     </ul> -->
 </div>
+
+<script>
+    listarFacturas = async() => {
+        if($('#estado_cuenta_buscar').val() == '' && localStorage.simonBolivar_buscarFacturaEstadoCuenta) $('#estado_cuenta_buscar').val(localStorage.simonBolivar_buscarFacturaEstadoCuenta)
+        
+        if(localStorage.simonBolivar_buscarFacturaEstadoCuenta) $('#estado_cuenta_buscar').val(localStorage.simonBolivar_buscarFacturaEstadoCuenta)
+
+        let datos = {
+            numero_documento: '<?php echo $datos['numero_documento']; ?>',
+            busqueda: $("#estado_cuenta_buscar").val(),
+        }
+        console.log(datos)
+
+        cargarInterfaz('clientes/estado_cuenta/detalle/lista', 'contenedor_lista_facturas', datos)
+    }
+
+    $().ready(() => {
+        listarFacturas()
+
+        $('#formulario_buscar_factura').submit(evento => {
+            evento.preventDefault()
+
+            // Se almacena el valor de búsqueda en local storage
+            localStorage.simonBolivar_buscarFacturaEstadoCuenta = $('#estado_cuenta_buscar').val()
+
+            listarFacturas()
+        })
+    })
+</script>

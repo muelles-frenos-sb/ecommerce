@@ -25,6 +25,30 @@ Class Clientes_model extends CI_Model {
 		switch ($tabla) {
             case 'clientes_facturas':
                 $where = "WHERE cf.id";
+                $having = "";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+
+                    $having = "HAVING";
+
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " cf.Nro_Doc_cruce LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.RazonSocial LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.RazonSocial_Sucursal LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR centro_operativo LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.Desc_auxiliar LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.Fecha_doc_cruce LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.Fecha_venc LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.ValorAplicado LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.totalCop LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cf.valorDoc LIKE '%{$palabras[$i]}%'";
+
+                        $having .= ") ";
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
 
                 if(isset($datos['numero_documento'])) $where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
                 if(isset($datos['pendientes'])) $where .= " AND cf.valorDoc <> 0 ";
@@ -35,10 +59,13 @@ Class Clientes_model extends CI_Model {
                 "SELECT
                     cf.*,
                     date(cf.Fecha_doc_cruce) Fecha_doc_cruce,
-                    date(cf.Fecha_venc) Fecha_venc
+                    date(cf.Fecha_venc) Fecha_venc,
+                    co.nombre centro_operativo
                 FROM
                     clientes_facturas AS cf
+                LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
                 $where
+                $having
                 ORDER BY diasvencidos DESC
                 ";
 
