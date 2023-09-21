@@ -54,7 +54,7 @@
             .then(resultado => {
                 $('#btn_estado_cuenta_cliente').removeClass('btn-loading').attr('disabled', false)
                 
-                if(resultado.codigo == 1) {
+                if(resultado.codigo && resultado.codigo == 1) {
                     mostrarAviso('alerta', 'No se encontraron resultados con el número de documento que nos indicas. Por favor, asegúrate de que el número sea correcto o no tenga dígito de verificación.', 30000)
 
                     agregarLog(23, `Número de documento ${numeroDocumento.val()}`)
@@ -74,10 +74,19 @@
 
                     cargarInterfaz('clientes/estado_cuenta/detalle/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val()})
                 })
-                .catch(error => console.error(error))
+                .catch(error => {
+                    agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
+                    mostrarAviso('error', 'Ocurrió un error consultando las facturas del cliente. Intenta de nuevo más tarde.', 30000)
+                    return false
+                })
 
                 $('#btn_estado_cuenta_cliente').hide()
                 numeroDocumento.attr('disabled', true)
+            })
+            .catch(error => {
+                agregarLog(25, `Número de documento ${numeroDocumento.val()}`)
+                mostrarAviso('error', 'Ocurrió un error consultando los datos del cliente. Por favor, intenta más tarde.', 30000)
+                return false
             })
         })
 
