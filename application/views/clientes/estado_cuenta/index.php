@@ -10,7 +10,7 @@
     <div class="container">
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--1">
-                <form>
+                <form id="formulario_buscar_cliente">
                     <div class="form-group">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
                         <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="15258814" autofocus>
@@ -30,7 +30,7 @@
     var numeroDocumento = $('#estado_cuenta_numero_documento')
     
     $().ready(() => {
-        $('form').submit(evento => {
+        $('#formulario_buscar_cliente').submit(evento => {
             evento.preventDefault()
 
             let camposObligatorios = [
