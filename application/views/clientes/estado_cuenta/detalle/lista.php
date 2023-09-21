@@ -49,6 +49,8 @@ if(empty($facturas)) {
         $total_saldo = 0;
 
         foreach($facturas as $factura) {
+            $sucursal = explode(' ', $factura->RazonSocial_Sucursal);
+
             $total_facturas += $factura->ValorAplicado;
             $total_pagado += $factura->totalCop;
             $total_saldo += $factura->valorDoc;
@@ -76,7 +78,9 @@ if(empty($facturas)) {
                 <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td>
                 <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
                 <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td>
-                <td><?php echo substr($factura->RazonSocial_Sucursal, 0, 10); ?></td>
+                <td>
+                    <?php echo substr($sucursal[0], 0, 10); ?>
+                </td>
                 <td><?php echo $factura->nombre_homologado; ?></td>
                 <!-- <td>
                     <a type="button" class="btn btn-sm btn-primary" style="text-decoration:none;" href="#">Pagar</a>
