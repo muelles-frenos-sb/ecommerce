@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model('productos_model');
+        $this->load->model(['productos_model', 'clientes_model']);
     }
 
     public function index() {
@@ -82,6 +82,11 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch ($tipo) {
+            // Datos obtenidos del API de Siesa - Estado de cuenta
+            case 'clientes_facturas':
+                print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
@@ -115,6 +120,13 @@ class Interfaces extends CI_Controller {
                 ]);
                 
                 if(!empty($items_factura)) print json_encode(['resultado' => $this->productos_model->crear('facturas_detalle', $items_factura)]);
+            break;
+
+            case 'logs':
+                // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                
+                print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
 
             case 'perfiles':
@@ -163,6 +175,10 @@ class Interfaces extends CI_Controller {
         switch ($tipo) {
             default:
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
+            break;
+
+            case 'estado_cuenta_cliente':
+                $resultado = json_decode(obtener_estado_cuenta_cliente_api($datos));
             break;
 
             case 'clientes':

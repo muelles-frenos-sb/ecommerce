@@ -1,3 +1,14 @@
+const agregarLog = async (tipoId, observacion = null) => {
+    let datos = {
+        tipo: 'logs',
+        log_tipo_id: tipoId,
+    }
+
+    if(observacion) datos.observacion = observacion
+
+    await consulta('crear', datos, false)
+}
+
 cargarFiltros = async(tipo, elemento, datos) => {
     switch(tipo) {
         case 'grupos':
@@ -174,6 +185,11 @@ const iniciarSesion = async(evento, url = null) => {
         }
     }
 }
+
+/**
+ * Toma una cadena de texto y le elimina valores alfabéticos
+ */
+const limpiarCadena = valor => valor.replace(/[\a-z\&\/\\#,+()$~%.'":*?<>{}/ /_|¿?\-\°!=¡]/g, '')
 
 const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
     switch (tipo) {
