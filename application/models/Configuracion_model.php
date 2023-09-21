@@ -20,6 +20,8 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_id();
             break;
         }
+
+        $this->db->close;
     }
 
     function eliminar($tipo, $datos)
@@ -29,6 +31,8 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->delete($tipo, $datos);
             break;
         }
+
+        $this->db->close;
     }
     
     /**
@@ -322,6 +326,8 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
         }
+
+        $this->db->close;
 	}
 }
 /* Fin del archivo Configuracion_model.php */

@@ -31,6 +31,8 @@ Class Productos_model extends CI_Model{
                 return $this->db->insert_batch('productos_pedidos', $datos);
             break;
         }
+
+        $this->db->close;
     }
 
     function eliminar($tipo, $datos = []){
@@ -51,6 +53,8 @@ Class Productos_model extends CI_Model{
                 return $this->db->delete('productos_pedidos', $datos);
             break;
         }
+
+        $this->db->close;
     }
     
     public function obtener($tipo, $datos = null) {
@@ -192,6 +196,8 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
         }
+
+        $this->db->close;
     }
 }
 /* Fin del archivo Productos_model.php */

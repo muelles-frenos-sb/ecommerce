@@ -11,6 +11,8 @@ Class Sesion_model extends CI_Model{
                 ;
             break;
         }
+
+        $this->db->close;
     }
 }
 /* Fin del archivo Sesion_model.php */
