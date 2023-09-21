@@ -34,7 +34,7 @@ if(empty($facturas)) {
             <th class="text-center">Doc</th>
             <th class="text-center">Fecha fact</th>
             <th class="text-center">Fecha vcto</th>
-            <th class="text-center">Días vencidos</th>
+            <th class="text-center">Días venc</th>
             <th class="text-center">Valor Doc</th>
             <th class="text-center">Abonos</th>
             <th class="text-center">Saldo</th>
