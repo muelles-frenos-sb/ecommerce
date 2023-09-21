@@ -39,7 +39,16 @@ if(empty($facturas)) {
         </tr>
     </thead>
     <tbody>
-        <?php foreach($facturas as $factura) { ?>
+        <?php
+        $total_facturas = 0;
+        $total_pagado = 0;
+        $total_saldo = 0;
+
+        foreach($facturas as $factura) {
+            $total_facturas += $factura->ValorAplicado;
+            $total_pagado += $factura->totalCop;
+            $total_saldo += $factura->valorDoc;
+        ?>
             <tr>
                 <td class="text-right">
                     <a href="account-order-details.html"><?php echo $factura->Nro_Doc_cruce; ?></a>
@@ -71,6 +80,21 @@ if(empty($facturas)) {
             </tr>
         <?php } ?>
     </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th class="text-right"><?php echo formato_precio($total_facturas); ?></th>
+            <th class="text-right"><?php echo formato_precio($total_pagado); ?></th>
+            <th class="text-right"><?php echo formato_precio($total_saldo); ?></th>
+            <th></th>
+        </tr>
+    </tfoot>
 </table>
 
 <script>
@@ -89,7 +113,7 @@ if(empty($facturas)) {
             language: {
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
-            scrollX: true,
+            scrollX: false,
         });
     });
 </script>
