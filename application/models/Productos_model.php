@@ -138,7 +138,7 @@ Class Productos_model extends CI_Model{
                 "SELECT
                     p.*,
                     i.existencia,
-                    MIN(i.disponible) disponible,
+                    IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MAX(i.bodega) bodega,
                     IF(MAX(i.bodega) = '00008', 'outlet', '') bodega_nombre,
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
