@@ -78,7 +78,7 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
             ]);
 
-            die();
+            exit();
         }
 
         // Se obtienen todos los datos de la factura
@@ -97,7 +97,7 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
             ]);
 
-            die();
+            exit();
         }
 
         // Si el pago no fue aprobado, se detiene la ejecución
@@ -151,7 +151,7 @@ class Webhooks extends MY_Controller {
         $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
         $codigo_resultado_pedido = $resultado_pedido->codigo;
         $mensaje_resultado_pedido = $resultado_pedido->mensaje;
-        $detalle_resultado_pedido = $resultado_pedido->detalle['0']->f_detalle;
+        $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
 
         // Si no se pudo crear el pedido
         if($codigo_resultado_pedido == '1') {
@@ -159,10 +159,10 @@ class Webhooks extends MY_Controller {
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 18,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "Código: $codigo_resultado_pedido, Mensaje: $mensaje_resultado_pedido, Detalle: $detalle_resultado_pedido"
+                'observacion' => $detalle_resultado_pedido
             ]);
 
-            die();
+            exit();
         }
 
         // Si se ejecutó correctamente
@@ -187,22 +187,22 @@ class Webhooks extends MY_Controller {
                         "F350_CONSEC_DOCTO" => $factura->id,                                        // Número de documento
                         "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
                         // Pendiente
-                        "F351_VALOR_DB" => 100000,                                                  // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                        "F351_VALOR_DB" => $factura->valor,                                                  // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
                         "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-                        "F351_NOTAS" => "Pedido $factura->id E-Commerce"                            // Observaciones
+                        "F351_NOTAS" => $notas_pedido                            // Observaciones
                     ],
                 ],
                 "Movimiento_CxC" => [
                     [
                         "F350_CONSEC_DOCTO" => $factura->id,                   // Numero de documento
                         "F351_ID_AUXILIAR" => "11100504",             // Valida en maestro, código de cuenta contable
-                        // "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                        "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
                         "F351_ID_CO_MOV" => "400",                    // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
                         // Pendiente
                         "F351_VALOR_CR" => "100000",                  // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
                         "F351_NOTAS" => "Pedido $factura->id E-Commerce",      // Observaciones
                         // Pendiente
-                        "F353_ID_SUCURSAL" => "001",                  // Valida en maestro, código de sucursal del cliente.
+                        "F353_ID_SUCURSAL" => str_pad($factura->sucursal_id, 3, '0', STR_PAD_LEFT),                  // Valida en maestro, código de sucursal del cliente.
                         "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",          // Valida en maestro, código de tipo de documento.
                         "F353_CONSEC_DOCTO_CRUCE" => $factura->id,             // Numero de documento de cruce, es un numero entre 1 y 99999999.
                         "F353_FECHA_VCTO" => "{$factura->anio}{$factura->mes}{$factura->dia}",              // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
@@ -214,7 +214,7 @@ class Webhooks extends MY_Controller {
             $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
             $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
             $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
-            // $detalle_resultado_documento_contable = ($codigo_resultado_documento_contable == '1') ? $resultado_documento_contable->detalle['0']->f_detalle : $resultado_documento_contable->detalle;
+            $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
             // Si no se pudo crear el documento contable
             if($codigo_resultado_documento_contable == '1') {
@@ -222,10 +222,10 @@ class Webhooks extends MY_Controller {
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 19,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
-                    // 'observacion' => "Código: $codigo_resultado_documento_contable, Mensaje: $mensaje_resultado_documento_contable, Detalle: $detalle_resultado_documento_contable"
+                    'observacion' => $detalle_resultado_documento_contable
                 ]);
 
-                die();
+                exit();
             }
 
             // Se agrega log
