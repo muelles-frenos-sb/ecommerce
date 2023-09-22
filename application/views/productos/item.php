@@ -17,7 +17,7 @@
             </div>
             
             <div class="status-badge__text"><?php echo ($producto->disponible > 0) ? "$producto->disponible unidades disponibles" : "Agotado"; ?></div>
-            <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="Part&#x20;Fit&#x20;for&#x20;2011&#x20;Ford&#x20;Focus&#x20;S"></div>
+            <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="<?php echo $producto->descripcion_corta; ?>"></div>
         </div>
     </div>
 </div>
