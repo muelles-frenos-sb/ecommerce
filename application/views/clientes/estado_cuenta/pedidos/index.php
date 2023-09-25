@@ -1,5 +1,5 @@
 <?php
-$productos = $this->clientes_model->obtener('clientes_productos', [
+$productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
     'f350_consec_docto' => $datos['documento_cruce'],
     'f200_nit_fact' => $datos['numero_documento'],
 ]);

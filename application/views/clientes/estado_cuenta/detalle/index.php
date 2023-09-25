@@ -34,7 +34,7 @@
             }
 
             let datosPedido = {
-                tipo: 'clientes_productos',
+                tipo: 'clientes_facturas_detalle',
                 valores: resultado.detalle.Table,
             }
 

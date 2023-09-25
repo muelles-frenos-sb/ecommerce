@@ -88,7 +88,7 @@ class Interfaces extends CI_Controller {
             break;
 
             // Datos obtenidos del API de Siesa - Factura desde pedido
-            case 'clientes_productos':
+            case 'clientes_facturas_detalle':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
 
