@@ -44,22 +44,6 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-            case 'ciudades':
-                return $this->db
-					->order_by('nombre')
-                    ->get($tabla)
-                    ->result()
-                ;
-            break;
-
-            case 'departamentos':
-                return $this->db
-					->order_by('nombre')
-                    ->get($tabla)
-                    ->result()
-                ;
-            break;
-
 			case 'grupos':
                 $where = "WHERE p.id";
 
@@ -178,14 +162,6 @@ Class Configuracion_model extends CI_Model {
 
             case 'modulos':
                 return $this->db
-                    ->get($tabla)
-                    ->result()
-                ;
-            break;
-
-            case 'paises':
-                return $this->db
-					->order_by('nombre')
                     ->get($tabla)
                     ->result()
                 ;

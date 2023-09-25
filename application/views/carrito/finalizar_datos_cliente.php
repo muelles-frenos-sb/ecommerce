@@ -76,10 +76,6 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
             $('#btn_validar_documento').removeClass('btn-loading').hide()
             $('#checkout_documento_numero').attr('disabled', true)
             $('#btn_pagar').attr('disabled', false)
-
-            // $('#checkout_pais').val('<?php // echo $tercero->pais_id; ?>')
-            // $('#checkout_departamento').val('<?php // echo $tercero->departamento_id; ?>')
-            // $('#checkout_ciudad').val('<?php // echo $tercero->ciudad_id; ?>')
         })
     </script>
 <?php } ?>

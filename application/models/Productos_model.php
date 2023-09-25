@@ -27,9 +27,9 @@ Class Productos_model extends CI_Model{
                 return $this->db->insert_batch('productos_precios', $datos);
             break;
 
-            case 'productos_pedidos':
-                return $this->db->insert_batch('productos_pedidos', $datos);
-            break;
+            // case 'productos_pedidos':
+            //     return $this->db->insert_batch('productos_pedidos', $datos);
+            // break;
         }
 
         $this->db->close;
@@ -49,9 +49,9 @@ Class Productos_model extends CI_Model{
                 return $this->db->delete('productos_precios', $datos);
             break;
 
-            case 'productos_pedidos':
-                return $this->db->delete('productos_pedidos', $datos);
-            break;
+            // case 'productos_pedidos':
+            //     return $this->db->delete('productos_pedidos', $datos);
+            // break;
         }
 
         $this->db->close;
