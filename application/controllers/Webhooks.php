@@ -176,10 +176,10 @@ class Webhooks extends MY_Controller {
             $datos_documento_contable = [
                 "Documento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => $factura->id,                                // Número de documento
-                        "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",   // El formato debe ser AAAAMMDD
-                        "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
-			            "F350_NOTAS" => $notas_pedido                    // Observaciones
+                        "F350_CONSEC_DOCTO" => $factura->id,                                        // Número de documento
+                        "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",           // El formato debe ser AAAAMMDD
+                        "F350_ID_TERCERO" => $factura->documento_numero,                            // Valida en maestro, código de tercero
+			            "F350_NOTAS" => $notas_pedido                                               // Observaciones
                     ]
                 ],
                 "Movimiento_contable" => [
@@ -187,26 +187,26 @@ class Webhooks extends MY_Controller {
                         "F350_CONSEC_DOCTO" => $factura->id,                                        // Número de documento
                         "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
                         // Pendiente
-                        "F351_VALOR_DB" => $factura->valor,                                                  // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                        "F351_VALOR_DB" => $factura->valor,                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
                         "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-                        "F351_NOTAS" => $notas_pedido                            // Observaciones
+                        "F351_NOTAS" => $notas_pedido                                               // Observaciones
                     ],
                 ],
                 "Movimiento_CxC" => [
                     [
-                        "F350_CONSEC_DOCTO" => $factura->id,                   // Numero de documento
-                        "F351_ID_AUXILIAR" => "11100504",             // Valida en maestro, código de cuenta contable
-                        "F351_ID_TERCERO" => $factura->documento_numero,            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
-                        "F351_ID_CO_MOV" => "400",                    // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
+                        "F350_CONSEC_DOCTO" => $factura->id,                                        // Numero de documento
+                        "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
+                        "F351_ID_TERCERO" => $factura->documento_numero,                            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                        "F351_ID_CO_MOV" => "400",                                                  // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
                         // Pendiente
-                        "F351_VALOR_CR" => "100000",                  // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
-                        "F351_NOTAS" => "Pedido $factura->id E-Commerce",      // Observaciones
+                        "F351_VALOR_CR" => "100000",                                                // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+                        "F351_NOTAS" => "Pedido $factura->id E-Commerce",                           // Observaciones
                         // Pendiente
-                        "F353_ID_SUCURSAL" => str_pad($factura->sucursal_id, 3, '0', STR_PAD_LEFT),                  // Valida en maestro, código de sucursal del cliente.
-                        "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",          // Valida en maestro, código de tipo de documento.
-                        "F353_CONSEC_DOCTO_CRUCE" => $factura->id,             // Numero de documento de cruce, es un numero entre 1 y 99999999.
-                        "F353_FECHA_VCTO" => "{$factura->anio}{$factura->mes}{$factura->dia}",              // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-                        "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$factura->mes}{$factura->dia}"           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+                        "F353_ID_SUCURSAL" => str_pad($factura->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro, código de sucursal del cliente.
+                        "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",                                        // Valida en maestro, código de tipo de documento.
+                        "F353_CONSEC_DOCTO_CRUCE" => $factura->id,                                  // Numero de documento de cruce, es un numero entre 1 y 99999999.
+                        "F353_FECHA_VCTO" => "{$factura->anio}{$factura->mes}{$factura->dia}",      // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
+                        "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$factura->mes}{$factura->dia}"   // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
                     ]
                 ]
             ];
@@ -532,71 +532,74 @@ class Webhooks extends MY_Controller {
     /**
      * Importa de Siesa los detalles de pedidos del día anterior
      * o del día seleccionado
+     * 
+     * 
+     * INHABILITADO TEMPORALMENTE
      */
-    function importar_productos_pedidos($fecha = null) {
-        try {
-            $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
-            $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
-            $codigo_resultado = $resultado_pedidos->codigo;
-            $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
-            $fecha_creacion = date('Y-m-d H:i:s');
-            $datos = [];
+    // function importar_productos_pedidos($fecha = null) {
+    //     try {
+    //         $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+    //         $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
+    //         $codigo_resultado = $resultado_pedidos->codigo;
+    //         $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
+    //         $fecha_creacion = date('Y-m-d H:i:s');
+    //         $datos = [];
 
-            // Primero, eliminamos todos los ítems
-            if($this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha])) {
-                if($codigo_resultado != 1) {
-                    foreach($pedidos as $item) {
-                        $nuevo_item = [
-                            'centro_operaciones' => $item->Centro_Operaciones,
-                            'documento_tipo' => $item->Tipo_Documento,
-                            'documento_numero' => $item->Nro_Documento,
-                            'tercero_id' => $item->Id_Tercero,
-                            'tercero_razon_social' => $item->Razon_Social,
-                            'sucursal_descripcion' => $item->Descripcion_Sucursal,
-                            'fecha_documento' => $item->Fecha_Documento,
-                            'producto_id' => $item->Item,
-                            'referencia' => $item->Referencia,
-                            'descripcion' => $item->Descripcion,
-                            'precio_unitario' => $item->Precio_Unitario,
-                            'cantidad' => $item->Cantidad_Pedida,
-                            'valor' => $item->Valor_Bruto,
-                            'descuento' => $item->Descuento,
-                            'fecha_creacion' => $fecha_creacion,
-                        ];
+    //         // Primero, eliminamos todos los ítems
+    //         if($this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha])) {
+    //             if($codigo_resultado != 1) {
+    //                 foreach($pedidos as $item) {
+    //                     $nuevo_item = [
+    //                         'centro_operaciones' => $item->Centro_Operaciones,
+    //                         'documento_tipo' => $item->Tipo_Documento,
+    //                         'documento_numero' => $item->Nro_Documento,
+    //                         'tercero_id' => $item->Id_Tercero,
+    //                         'tercero_razon_social' => $item->Razon_Social,
+    //                         'sucursal_descripcion' => $item->Descripcion_Sucursal,
+    //                         'fecha_documento' => $item->Fecha_Documento,
+    //                         'producto_id' => $item->Item,
+    //                         'referencia' => $item->Referencia,
+    //                         'descripcion' => $item->Descripcion,
+    //                         'precio_unitario' => $item->Precio_Unitario,
+    //                         'cantidad' => $item->Cantidad_Pedida,
+    //                         'valor' => $item->Valor_Bruto,
+    //                         'descuento' => $item->Descuento,
+    //                         'fecha_creacion' => $fecha_creacion,
+    //                     ];
                         
-                        array_push($datos, $nuevo_item);
-                    }
+    //                     array_push($datos, $nuevo_item);
+    //                 }
                 
-                    $total_items = $this->productos_model->crear('productos_pedidos', $datos);
+    //                 $total_items = $this->productos_model->crear('productos_pedidos', $datos);
 
-                    $respuesta = [
-                        'log_tipo_id' => 10,
-                        'fecha_creacion' => date('Y-m-d H:i:s'),
-                        'observacion' => "$total_items registros actualizados"
-                    ];
+    //                 $respuesta = [
+    //                     'log_tipo_id' => 10,
+    //                     'fecha_creacion' => date('Y-m-d H:i:s'),
+    //                     'observacion' => "$total_items registros actualizados"
+    //                 ];
 
-                    // Se agrega el registro en los logs
-                    $this->configuracion_model->crear('logs', $respuesta);
+    //                 // Se agrega el registro en los logs
+    //                 $this->configuracion_model->crear('logs', $respuesta);
 
-                    print json_encode($respuesta);
+    //                 print json_encode($respuesta);
 
-                    return http_response_code(200);
-                }
+    //                 return http_response_code(200);
+    //             }
 
-                $this->db->close();
+    //             $this->db->close();
 
-                return http_response_code(200);
-            }
-        } catch (\Throwable $th) {
-            // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 11,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-            ]);
+    //             return http_response_code(200);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         // Se agrega el registro en los logs
+    //         $this->configuracion_model->crear('logs', [
+    //             'log_tipo_id' => 11,
+    //             'fecha_creacion' => date('Y-m-d H:i:s'),
+    //         ]);
 
-            return http_response_code(200);
-        }
-    }
+    //         return http_response_code(200);
+    //     }
+    // }
 }
 /* Fin del archivo Webhooks.php */
 /* Ubicación: ./application/controllers/Webhooks.php */
