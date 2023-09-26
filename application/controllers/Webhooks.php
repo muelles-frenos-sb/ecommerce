@@ -531,75 +531,73 @@ class Webhooks extends MY_Controller {
 
     /**
      * Importa de Siesa los detalles de pedidos del día anterior
-     * o del día seleccionado
-     * 
-     * 
-     * INHABILITADO TEMPORALMENTE
+     * o del día seleccionado, con el fin de mostrar en la tienda
+     * Los productos destacados y/o más vendidos
      */
-    // function importar_productos_pedidos($fecha = null) {
-    //     try {
-    //         $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
-    //         $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
-    //         $codigo_resultado = $resultado_pedidos->codigo;
-    //         $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
-    //         $fecha_creacion = date('Y-m-d H:i:s');
-    //         $datos = [];
+    function importar_productos_pedidos($fecha = null) {
+        try {
+            $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+            $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
+            $codigo_resultado = $resultado_pedidos->codigo;
+            $pedidos = ($codigo_resultado == 0) ? $resultado_pedidos->detalle->Table : 0 ;
+            $fecha_creacion = date('Y-m-d H:i:s');
+            $datos = [];
 
-    //         // Primero, eliminamos todos los ítems
-    //         if($this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha])) {
-    //             if($codigo_resultado != 1) {
-    //                 foreach($pedidos as $item) {
-    //                     $nuevo_item = [
-    //                         'centro_operaciones' => $item->Centro_Operaciones,
-    //                         'documento_tipo' => $item->Tipo_Documento,
-    //                         'documento_numero' => $item->Nro_Documento,
-    //                         'tercero_id' => $item->Id_Tercero,
-    //                         'tercero_razon_social' => $item->Razon_Social,
-    //                         'sucursal_descripcion' => $item->Descripcion_Sucursal,
-    //                         'fecha_documento' => $item->Fecha_Documento,
-    //                         'producto_id' => $item->Item,
-    //                         'referencia' => $item->Referencia,
-    //                         'descripcion' => $item->Descripcion,
-    //                         'precio_unitario' => $item->Precio_Unitario,
-    //                         'cantidad' => $item->Cantidad_Pedida,
-    //                         'valor' => $item->Valor_Bruto,
-    //                         'descuento' => $item->Descuento,
-    //                         'fecha_creacion' => $fecha_creacion,
-    //                     ];
+            // Primero, eliminamos todos los ítems
+            if($this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha])) {
+                if($codigo_resultado != 1) {
+                    foreach($pedidos as $item) {
+                        $nuevo_item = [
+                            'centro_operaciones' => $item->Centro_Operaciones,
+                            'documento_tipo' => $item->Tipo_Documento,
+                            'documento_numero' => $item->Nro_Documento,
+                            'tercero_id' => $item->Id_Tercero,
+                            'tercero_razon_social' => $item->Razon_Social,
+                            'sucursal_descripcion' => $item->Descripcion_Sucursal,
+                            'fecha_documento' => $item->Fecha_Documento,
+                            'producto_id' => $item->Item,
+                            'referencia' => $item->Referencia,
+                            'descripcion' => $item->Descripcion,
+                            'precio_unitario' => $item->Precio_Unitario,
+                            'cantidad' => $item->Cantidad_Pedida,
+                            'valor' => $item->Valor_Bruto,
+                            'descuento' => $item->Descuento,
+                            'fecha_creacion' => $fecha_creacion,
+                        ];
                         
-    //                     array_push($datos, $nuevo_item);
-    //                 }
+                        array_push($datos, $nuevo_item);
+                    }
                 
-    //                 $total_items = $this->productos_model->crear('productos_pedidos', $datos);
+                    $total_items = $this->productos_model->crear('productos_pedidos', $datos);
 
-    //                 $respuesta = [
-    //                     'log_tipo_id' => 10,
-    //                     'fecha_creacion' => date('Y-m-d H:i:s'),
-    //                     'observacion' => "$total_items registros actualizados"
-    //                 ];
+                    $respuesta = [
+                        'log_tipo_id' => 10,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$total_items registros actualizados"
+                    ];
 
-    //                 // Se agrega el registro en los logs
-    //                 $this->configuracion_model->crear('logs', $respuesta);
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
 
-    //                 print json_encode($respuesta);
+                    print json_encode($respuesta);
 
-    //                 return http_response_code(200);
-    //             }
+                    return http_response_code(200);
+                }
 
-    //             $this->db->close();
+                $this->db->close();
 
-    //             return http_response_code(200);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         // Se agrega el registro en los logs
-    //         $this->configuracion_model->crear('logs', [
-    //             'log_tipo_id' => 11,
-    //             'fecha_creacion' => date('Y-m-d H:i:s'),
-    //         ]);
+                return http_response_code(200);
+            }
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 11,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
 
-    //         return http_response_code(200);
-    //     }
-    // }
+            return http_response_code(200);
+        }
+    }
 }
 /* Fin del archivo Webhooks.php */
 /* Ubicación: ./application/controllers/Webhooks.php */

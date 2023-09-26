@@ -230,31 +230,30 @@ function obtener_productos_api($datos = []) {
     return $response->getBody()->getContents();
 }
 
-// INHABILITADO TEMPORALMENTE
-// function obtener_pedidos_api($fecha = null) {
-//     $CI =& get_instance();
-//     $url = $CI->config->item('api_siesa')['base_url'];
+function obtener_pedidos_api($fecha = null) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_siesa')['base_url'];
 
-//     $client = new \GuzzleHttp\Client();
-//     try {
-//         $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
-//             'headers' => [
-//                 'accept' => 'application/json',
-//                 'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-//                 'conniToken' => $CI->config->item('api_siesa')['conniToken'],
-//             ],
-//             'query' => [
-//                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-//                 'descripcion' => 'Pedidos_V2',
-//                 'parametros' => "Fechaini='$fecha'|Fechafin='$fecha'|Nro_documento='-1'|Id_Tercero='-1'",
-//             ]
-//         ]);
-//     } catch (GuzzleHttp\Exception\ClientException $e) {
-//         $response = $e->getResponse();
-//     }
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'Pedidos_V2',
+                'parametros' => "Fechaini='$fecha'|Fechafin='$fecha'|Nro_documento='-1'|Id_Tercero='-1'",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
     
-//     return $response->getBody()->getContents();
-// }
+    return $response->getBody()->getContents();
+}
 
 /**
  * Crea un pedido en Siesa
