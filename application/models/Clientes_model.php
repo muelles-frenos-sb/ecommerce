@@ -68,7 +68,8 @@ Class Clientes_model extends CI_Model {
                     date(cf.Fecha_doc_cruce) Fecha_doc_cruce,
                     date(cf.Fecha_venc) Fecha_venc,
                     co.nombre centro_operativo,
-                    a.nombre_homologado
+                    a.nombre_homologado,
+                    DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
