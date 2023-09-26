@@ -29,7 +29,7 @@
         let movimientosFactura = await consulta('obtener', datos, false)
 
         Promise.all([detalleFactura, movimientosFactura])
-        .then(() => {
+        .then(async() => {
             /**
              * Detalle de la factura
              */
@@ -40,13 +40,13 @@
             }
 
             // Se insertan en la base de datos todos los registros obtenidos del cliente
-            consulta('crear', {tipo: 'clientes_facturas_detalle', valores: detalleFactura.detalle.Table}, false)
+            await consulta('crear', {tipo: 'clientes_facturas_detalle', valores: detalleFactura.detalle.Table}, false)
 
             /**
              * Movimientos de la factura
              */
             // Se insertan en la base de datos todos los movimientos obtenidos de la factura
-            consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
+            await consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
             
             agregarLog(28, JSON.stringify(datos))
 
