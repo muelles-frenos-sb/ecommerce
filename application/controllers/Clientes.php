@@ -17,7 +17,12 @@ class Clientes extends MY_Controller {
     }
 
     function index() {
-        $this->estado_cuenta();
+        $this->consultar();
+    }
+
+    function consultar() {
+        $this->data['contenido_principal'] = 'clientes/estado_cuenta/index';
+        $this->load->view('core/body', $this->data);
     }
 
     function estado_cuenta() {

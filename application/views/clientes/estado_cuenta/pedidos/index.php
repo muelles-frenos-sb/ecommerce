@@ -11,7 +11,7 @@ $movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
 ?>
 
 <div class="modal fade" id="modal_productos" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">Detalle de los productos en el pedido</h4>

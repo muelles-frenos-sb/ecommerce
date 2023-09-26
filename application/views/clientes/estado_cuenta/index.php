@@ -1,7 +1,7 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Estado de cuenta</h1>
+            <h1 class="block-header__title">Consultar estado de cuenta</h1>
         </div>
     </div>
 </div>
