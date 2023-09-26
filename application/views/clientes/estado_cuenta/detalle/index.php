@@ -19,37 +19,43 @@
 <div id="contenedor_modal"></div>
 
 <script>
-    cargarProductos = (datos) => {
+    cargarProductos = async(datos) => {
+        
+        // Se consulta en el API de Siesa el detalle de la factura (detalle de productos)
         datos.tipo = 'facturas_desde_pedido'
+        let detalleFactura = await consulta('obtener', datos, false)
 
-        // Se consulta en el API de Siesa el estado de cuenta del cliente
-        consulta('obtener', datos, false)
-        .then(resultado => {
-            if(resultado.codigo && resultado.codigo == 1) {
+        datos.tipo = 'movimientos_contables'
+        let movimientosFactura = await consulta('obtener', datos, false)
+
+        Promise.all([detalleFactura, movimientosFactura])
+        .then(() => {
+            /**
+             * Detalle de la factura
+             */
+            if(detalleFactura.codigo && detalleFactura.codigo == 1) {
                 mostrarAviso('alerta', 'No se encontraron resultados con el número de pedido. Intenta de nuevo más tarde.', 30000)
-
                 agregarLog(27, JSON.stringify(datos))
-
                 return false
-            }
-
-            let datosPedido = {
-                tipo: 'clientes_facturas_detalle',
-                valores: resultado.detalle.Table,
             }
 
             // Se insertan en la base de datos todos los registros obtenidos del cliente
-            consulta('crear', datosPedido, false)
-            .then(resultado => {
-                agregarLog(28, JSON.stringify(datos))
+            consulta('crear', {tipo: 'clientes_facturas_detalle', valores: detalleFactura.detalle.Table}, false)
 
-                cargarInterfaz('clientes/estado_cuenta/pedidos/index', 'contenedor_modal', datos)
-            })
-            .catch(error => {
-                agregarLog(29, JSON.stringify(datos))
-                mostrarAviso('error', 'Ocurrió un error consultando los productos. Intenta de nuevo más tarde.', 30000)
-                return false
-            })
+            /**
+             * Movimientos de la factura
+             */
+            // Se insertan en la base de datos todos los movimientos obtenidos de la factura
+            consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
+            
+            agregarLog(28, JSON.stringify(datos))
+
+            cargarInterfaz('clientes/estado_cuenta/pedidos/index', 'contenedor_modal', datos)
+        })
+        .catch(error => {
+            agregarLog(29, JSON.stringify(datos))
+            mostrarAviso('error', 'Ocurrió un error consultando los productos. Intenta de nuevo más tarde.', 30000)
+            return false
         })
     }
 

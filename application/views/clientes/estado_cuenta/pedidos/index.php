@@ -3,6 +3,11 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
     'f350_consec_docto' => $datos['documento_cruce'],
     'f200_nit_fact' => $datos['numero_documento'],
 ]);
+
+$movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
+    'f350_consec_docto' => $datos['documento_cruce'],
+    'f200_nit' => $datos['numero_documento'],
+]);
 ?>
 
 <div class="modal fade" id="modal_productos" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
@@ -71,7 +76,7 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
                                                 <?php echo formato_precio($detalle->f470_vlr_neto); ?>
                                             </td>
                                         </tr>
-                                    <?php } ?>                                       
+                                    <?php } ?>
                                 </tbody>
                                 <tfoot>
                                     <table class="cart__totals-table">
@@ -97,6 +102,35 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
                                 </tfoot>
                             </table>
                         </div>
+                    </div>
+                </div>
+
+                <div class="block">
+                    <h4 class="modal-title">Retenciones</h4>
+                    <div class="container container--max--xl">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col" class="text-center">Código</th>
+                                    <th scope="col" class="text-center">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $contador_movimientos = 1;
+
+                                foreach ($movimientos as $movimiento) {
+
+                                ?>
+                                    <tr>
+                                        <th scope="row" class="text-right"><?php echo $contador_movimientos++; ?></th>
+                                        <td><?php echo $movimiento->f253_id; ?></td>
+                                        <td><?php echo $movimiento->nombre_homologado; ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

@@ -92,6 +92,11 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
 
+            // Datos obtenidos del API de Siesa - Movimientos contables General
+            case 'clientes_facturas_movimientos':
+                print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
@@ -196,6 +201,10 @@ class Interfaces extends CI_Controller {
 
             case 'facturas_desde_pedido':
                 $resultado = json_decode(obtener_facturas_desde_pedido_api($datos));
+            break;
+
+            case 'movimientos_contables':
+                $resultado = json_decode(obtener_movimientos_contables_api($datos));
             break;
 
             case 'producto':

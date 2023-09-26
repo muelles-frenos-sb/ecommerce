@@ -14,6 +14,10 @@ Class Clientes_model extends CI_Model {
             case 'clientes_facturas_detalle':
                 if($this->db->delete($tipo, ['f350_consec_docto' => $datos[0]['f350_consec_docto']])) return $this->db->insert_batch($tipo, $datos);
             break;
+
+            case 'clientes_facturas_movimientos':
+                if($this->db->delete($tipo, ['f350_consec_docto' => $datos[0]['f350_consec_docto']])) return $this->db->insert_batch($tipo, $datos);
+            break;
         }
     }
 
@@ -90,6 +94,29 @@ Class Clientes_model extends CI_Model {
                     ->get($tabla)
                     ->result()
                 ;
+            break;
+
+            
+            case 'clientes_facturas_movimientos':
+                $sql =
+                "SELECT
+                    cfm.f253_id,
+                    cfm.f253_descripcion,
+                    r.nombre_homologado
+                FROM
+                    clientes_facturas_movimientos AS cfm
+                    LEFT JOIN retenciones AS r ON cfm.f253_id = r.codigo 
+                WHERE
+                    r.mostrar_estado_cuenta = 1
+                    AND f350_consec_docto = '{$datos['f350_consec_docto']}' 
+                    AND f200_nit = '{$datos['f200_nit']}' 
+                ";
+
+                if (isset($datos['id'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
             break;
         }
 	}
