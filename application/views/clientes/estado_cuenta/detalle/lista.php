@@ -57,8 +57,8 @@ if(empty($facturas)) {
             $sucursal = explode(' ', $factura->RazonSocial_Sucursal);
 
             $total_facturas += $factura->ValorAplicado;
-            $total_pagado += $factura->totalCop;
-            $total_saldo += $factura->valorDoc;
+            $total_pagado += $factura->valorDoc;
+            $total_saldo += $factura->totalCop;
         ?>
             <tr>
                 <td><?php echo $factura->centro_operativo; ?></td>
@@ -91,8 +91,8 @@ if(empty($facturas)) {
                     ?>
                 </td>
                 <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td>
-                <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
                 <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td>
+                <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
                 <td>
                     <?php echo substr($sucursal[0], 0, 10); ?>
                 </td>

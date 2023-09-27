@@ -84,7 +84,7 @@ Class Clientes_model extends CI_Model {
                 }
 
                 if(isset($datos['numero_documento'])) $where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
-                if(isset($datos['pendientes'])) $where .= " AND cf.valorDoc <> 0 ";
+                if(isset($datos['pendientes'])) $where .= " AND cf.totalCop <> 0 ";
 
                 // if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
 
