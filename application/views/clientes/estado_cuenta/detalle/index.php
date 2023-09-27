@@ -20,7 +20,6 @@
 
 <script>
     cargarProductos = async(datos) => {
-        
         // Se consulta en el API de Siesa el detalle de la factura (detalle de productos)
         datos.tipo = 'facturas_desde_pedido'
         let detalleFactura = await consulta('obtener', datos, false)

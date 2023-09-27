@@ -57,6 +57,7 @@ function obtener_estado_cuenta_cliente_api($datos) {
 function obtener_facturas_desde_pedido_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
+
     $sucursal = str_pad($datos['id_sucursal'], 3, '0', STR_PAD_LEFT);
 
     $client = new \GuzzleHttp\Client();

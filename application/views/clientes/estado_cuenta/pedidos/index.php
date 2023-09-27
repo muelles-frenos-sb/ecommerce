@@ -59,11 +59,6 @@ $movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
                                                 <div class="wishlist__product-name">
                                                     <a href="<?php echo site_url("productos/ver/$producto->id"); ?>">
                                                         <?php echo $detalle->f120_descripcion; ?>
-                                                        <ul class="cart-table__options">
-                                                            <li>Marca: <?php echo $producto->marca; ?></li>
-                                                            <li>Línea: <?php echo $producto->linea; ?></li>
-                                                            <li>Grupo: <?php echo $producto->grupo; ?></li>
-                                                        </ul>
                                                     </a>
                                                 </div>
                                             </td>
