@@ -65,7 +65,8 @@ if(empty($facturas)) {
                 <td class="text-right">
                     <button type="button" class="btn btn-sm btn-primary" style="text-decoration:none;" onClick="javascript:cargarProductos({
                         documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
-                        numero_documento: '<?php echo $datos['numero_documento']; ?>'
+                        numero_documento: '<?php echo $factura->Cliente; ?>',
+                        id_sucursal: '<?php echo $factura->sucursal_id; ?>',
                     });">Ver (<?php echo $factura->Nro_Doc_cruce; ?>)</button>
                     <!-- <a onClick="javascript:cargarProductos({
                         documento_cruce: '<?php // echo $factura->Nro_Doc_cruce; ?>',
@@ -82,7 +83,7 @@ if(empty($facturas)) {
                         echo "
                         <div class='status-badge status-badge--style--failure status-badge--has-text'>
                             <div class='status-badge__body'>
-                                <div class='status-badge__text'>$factura->diasvencidos</div>
+                                <div class='status-badge__text'>$factura->dias_vencido</div>
                             </div>
                         </div>
                         ";
@@ -135,6 +136,8 @@ if(empty($facturas)) {
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
             scrollX: false,
-        });
-    });
+        })
+       
+        $('#contenedor_mensaje_carga').html('')
+    })
 </script>

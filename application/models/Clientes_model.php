@@ -18,6 +18,22 @@ Class Clientes_model extends CI_Model {
             case 'clientes_facturas_movimientos':
                 if($this->db->delete($tipo, ['f350_consec_docto' => $datos[0]['f350_consec_docto']])) return $this->db->insert_batch($tipo, $datos);
             break;
+
+            case 'clientes_sucursales':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
+
+            case 'terceros':
+                if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
+            break;
+        }
+    }
+
+    function eliminar($tipo, $datos){
+        switch ($tipo) {
+            case 'clientes_sucursales':
+                return $this->db->delete($tipo, $datos);
+            break;
         }
     }
 
@@ -30,6 +46,16 @@ Class Clientes_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'cliente_factura':
+                unset($datos['tipo']);
+                
+                return $this->db
+                    ->where($datos)
+                    ->get('clientes_facturas')
+                    ->row()
+                ;
+            break;
+
             case 'clientes_facturas':
                 $where = "WHERE a.mostrar_estado_cuenta = 1";
                 $having = "";
@@ -69,7 +95,8 @@ Class Clientes_model extends CI_Model {
                     date(cf.Fecha_venc) Fecha_venc,
                     co.nombre centro_operativo,
                     a.nombre_homologado,
-                    DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido
+                    DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido,
+                    ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
@@ -96,7 +123,6 @@ Class Clientes_model extends CI_Model {
                     ->result()
                 ;
             break;
-
             
             case 'clientes_facturas_movimientos':
                 $sql =

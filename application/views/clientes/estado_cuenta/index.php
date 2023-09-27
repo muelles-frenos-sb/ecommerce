@@ -13,9 +13,11 @@
                 <form id="formulario_buscar_cliente">
                     <div class="form-group">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="15258814" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="800246302" autofocus>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mi estado de cuenta</button>
+
+                    <div class="mt-2" id="contenedor_mensaje_carga"></div>
                 </form>
 
                 <div id="contenedor_estado_cuenta"></div>
@@ -33,55 +35,58 @@
         $('#formulario_buscar_cliente').submit(evento => {
             evento.preventDefault()
 
-            let camposObligatorios = [
-                numeroDocumento,
-            ]
-            
-            if (!validarCamposObligatorios(camposObligatorios)) return false
+            // Validación de campos obligatorios
+            if (!validarCamposObligatorios([numeroDocumento])) return false
 
             // Se activa el spinner
             $('#btn_estado_cuenta_cliente').addClass('btn-loading').attr('disabled', true)
-            
-            let datosCliente = {
-                tipo: 'estado_cuenta_cliente',
-                numero_documento: numeroDocumento.val(),
-            }
 
             agregarLog(22, `Número de documento ${numeroDocumento.val()}`)
 
-            // Se consulta en el API de Siesa el estado de cuenta del cliente
-            consulta('obtener', datosCliente, false)
-            .then(resultado => {
-                $('#btn_estado_cuenta_cliente').removeClass('btn-loading').attr('disabled', false)
-                
-                if(resultado.codigo && resultado.codigo == 1) {
+            // Mensaje mientras se consultan los datos
+            $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Consultando los datos del cliente...`)
+            
+            let consultaTercero = consulta('obtener', {tipo: 'terceros', numero_documento: numeroDocumento.val()}, false)
+            let consultaEstadoCuentaCliente = consulta('obtener', {tipo: 'estado_cuenta_cliente', numero_documento: numeroDocumento.val()}, false)
+            
+            Promise.all([consultaTercero, consultaEstadoCuentaCliente])
+            .then(async(resultado) => {
+                // Obtenemos e insertamos las sucursales por aparte, para recorrer la paginación
+                await gestionarSucursales(numeroDocumento.val())
+
+                $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Preparando la visualización de los datos...`)
+
+                let tercero = resultado[0]
+                let facturas = resultado[1]
+
+                // Si no se encuentra el estado de cuenta
+                if(facturas.codigo && facturas.codigo == 1) {
+                    $('#btn_estado_cuenta_cliente').removeClass('btn-loading').attr('disabled', false)
+                    $('#contenedor_mensaje_carga').html('')
                     mostrarAviso('alerta', 'No se encontraron resultados con el número de documento que nos indicas. Por favor, asegúrate de que el número sea correcto o no tenga dígito de verificación.', 30000)
-
                     agregarLog(23, `Número de documento ${numeroDocumento.val()}`)
-
                     return false
                 }
 
-                let datosFacturas = {
-                    tipo: 'clientes_facturas',
-                    valores: resultado.detalle.Table,
-                }
+                let creacionTercero = consulta('crear', {tipo: 'tercero', valores: tercero.detalle.Table}, false)
+                let creacionFacturas = consulta('crear', {tipo: 'clientes_facturas', valores: facturas.detalle.Table}, false)
                 
-                // Se insertan en la base de datos todos los registros obtenidos del cliente
-                consulta('crear', datosFacturas, false)
-                .then(resultado => {
+                Promise.all([creacionTercero, creacionFacturas])
+                .then(async(resultado) => {                    
                     agregarLog(24, `Número de documento ${numeroDocumento.val()}`)
-
+                    
+                    // location.href = `${$('#site_url').val()}clientes/estado_cuenta/${numeroDocumento.val()}`
                     cargarInterfaz('clientes/estado_cuenta/detalle/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val()})
+
+                    $('#btn_estado_cuenta_cliente').hide()
+                    numeroDocumento.attr('disabled', true)
                 })
                 .catch(error => {
                     agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
                     mostrarAviso('error', 'Ocurrió un error consultando las facturas del cliente. Intenta de nuevo más tarde.', 30000)
+                    $('#contenedor_mensaje_carga').html('')
                     return false
                 })
-
-                $('#btn_estado_cuenta_cliente').hide()
-                numeroDocumento.attr('disabled', true)
             })
             .catch(error => {
                 agregarLog(25, `Número de documento ${numeroDocumento.val()}`)

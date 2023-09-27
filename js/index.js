@@ -136,6 +136,38 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
     return respuesta
 }
 
+/**
+ * Obtiene las sucursales del API de Siesa y las almacena en la base de datos
+ */
+gestionarSucursales = async(numeroDocumento) => {
+    // Mensaje mientras se consultan los datos
+    $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Consultando las sucursales del cliente...`)
+
+    // Se eliminan todas las sucursales del tercero
+    await consulta('eliminar', {tipo: 'clientes_sucursales', f200_nit: numeroDocumento}, false)
+
+    var paginas = 100
+    var exito = true
+
+    // Se recorren las páginas
+    for (let pagina = 1; pagina <= paginas; pagina++) {
+        // Se obtienen los registros en esa página
+        await consulta('obtener', {tipo: 'clientes_sucursales', numero_documento: numeroDocumento, pagina: pagina}, false)
+        .then(sucursales => {
+            // Si se obtuvieron registros, se insertan en la base de datos
+            if(sucursales.codigo == 0) consulta('crear', {tipo: 'clientes_sucursales', valores: sucursales.detalle.Table}, false)
+
+            // Si no hay más registros, se cambia la variable
+            if(sucursales.codigo == 1) exito = false
+            
+            return exito
+        })
+        
+        // Se detiene el ciclo si no hay más registros
+        if(!exito) break
+    }
+}
+
 const iniciarSesion = async(evento, url = null) => {
     evento.preventDefault()
 

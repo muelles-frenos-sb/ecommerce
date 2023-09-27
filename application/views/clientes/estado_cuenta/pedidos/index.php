@@ -2,6 +2,7 @@
 $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
     'f350_consec_docto' => $datos['documento_cruce'],
     'f200_nit_fact' => $datos['numero_documento'],
+    'f461_id_sucursal_fact' => str_pad($datos['id_sucursal'], 3, '0', STR_PAD_LEFT),
 ]);
 
 $movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
@@ -14,7 +15,7 @@ $movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Detalle de los productos en el pedido</h4>
+                <h4 class="modal-title"><?php echo "Detalle de los productos en la factura {$datos['documento_cruce']}"; ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

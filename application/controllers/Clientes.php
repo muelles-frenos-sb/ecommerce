@@ -14,6 +14,8 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
 class Clientes extends MY_Controller {
     function __construct() {
         parent::__construct();
+
+        $this->load->model(['productos_model', 'clientes_model']);
     }
 
     function index() {

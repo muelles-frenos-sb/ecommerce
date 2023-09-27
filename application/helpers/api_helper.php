@@ -5,6 +5,8 @@ function obtener_clientes_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
 
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
     $client = new \GuzzleHttp\Client();
     try {
         $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
@@ -16,7 +18,7 @@ function obtener_clientes_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_Clientes',
-                'paginacion' => "numPag=1|tamPag=100",
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
                 'parametros' => "f200_nit=''{$datos['numero_documento']}''",
             ]
         ]);
@@ -55,6 +57,7 @@ function obtener_estado_cuenta_cliente_api($datos) {
 function obtener_facturas_desde_pedido_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('api_siesa')['base_url'];
+    $sucursal = str_pad($datos['id_sucursal'], 3, '0', STR_PAD_LEFT);
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -68,7 +71,7 @@ function obtener_facturas_desde_pedido_api($datos) {
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_Ventas_Facturas_DesdePedido',
                 'paginacion' => 'numPag=1|tamPag=100',
-                'parametros' => "f200_nit_fact=''{$datos['numero_documento']}'' and f350_consec_docto=''{$datos['documento_cruce']}''",
+                'parametros' => "f200_nit_fact=''{$datos['numero_documento']}'' and f350_consec_docto=''{$datos['documento_cruce']}'' and f461_id_sucursal_fact=''$sucursal''",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {
@@ -119,7 +122,7 @@ function obtener_terceros_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_Terceros',
-                'paginacion' => "numPag=1|tamPag=100",
+                'paginacion' => 'numPag=1|tamPag=100',
                 'parametros' => "f200_nit=''{$datos['numero_documento']}''",
             ]
         ]);

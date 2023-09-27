@@ -97,6 +97,11 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
 
+            // Datos obtenidos del API de Siesa - Clientes
+            case 'clientes_sucursales':
+                print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
@@ -154,6 +159,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
 
+            case 'tercero':
+                print json_encode(['resultado' => $this->clientes_model->crear('terceros', $datos['valores'])]);
+            break;
+
             case 'terceros':
                 // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
@@ -171,6 +180,10 @@ class Interfaces extends CI_Controller {
         unset($datos['tipo']);
 
         switch ($tipo) {
+            case 'clientes_sucursales':
+                print json_encode(['resultado' => $this->clientes_model->eliminar($tipo, $datos)]);
+            break;
+
             case 'perfiles_roles':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;
@@ -191,7 +204,7 @@ class Interfaces extends CI_Controller {
                 $resultado = json_decode(obtener_estado_cuenta_cliente_api($datos));
             break;
 
-            case 'clientes':
+            case 'clientes_sucursales':
                 $resultado = json_decode(obtener_clientes_api($datos));
             break;
 
@@ -209,6 +222,10 @@ class Interfaces extends CI_Controller {
 
             case 'producto':
                 $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
+            break;
+
+            case 'terceros':
+                $resultado = json_decode(obtener_terceros_api($datos));
             break;
         }
 
