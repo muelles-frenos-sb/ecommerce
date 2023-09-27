@@ -127,14 +127,15 @@ Class Clientes_model extends CI_Model {
                 "SELECT
                     cfm.f253_id,
                     cfm.f253_descripcion,
-                    r.nombre_homologado
+                    r.nombre_homologado,
+                    cfm.f351_valor_db
                 FROM
                     clientes_facturas_movimientos AS cfm
                     LEFT JOIN retenciones AS r ON cfm.f253_id = r.codigo 
                 WHERE
                     r.mostrar_estado_cuenta = 1
+                    AND f200_nit = '{$datos['f200_nit']}'
                     AND f350_consec_docto = '{$datos['f350_consec_docto']}' 
-                    AND f200_nit = '{$datos['f200_nit']}' 
                 ";
 
                 if (isset($datos['id'])) {

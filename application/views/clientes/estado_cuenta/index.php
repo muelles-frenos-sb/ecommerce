@@ -76,7 +76,7 @@
                     agregarLog(24, `Número de documento ${numeroDocumento.val()}`)
                     
                     // location.href = `${$('#site_url').val()}clientes/estado_cuenta/${numeroDocumento.val()}`
-                    cargarInterfaz('clientes/estado_cuenta/detalle/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val()})
+                    cargarInterfaz('clientes/estado_cuenta/facturas/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val()})
 
                     $('#btn_estado_cuenta_cliente').hide()
                     numeroDocumento.attr('disabled', true)
