@@ -127,6 +127,7 @@ if(empty($facturas)) {
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th class="text-right"><?php echo formato_precio($total_facturas); ?></th>
                 <th class="text-right"><?php echo formato_precio($total_pagado); ?></th>
                 <th class="text-right"><?php echo formato_precio($total_saldo); ?></th>
