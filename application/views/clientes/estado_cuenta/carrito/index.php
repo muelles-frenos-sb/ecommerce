@@ -1,6 +1,8 @@
 <div class="vehicles-list">
     <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
-        Aquí van a aparecer las facturas que selecciones para pagar. Haz clic en el ícono <button type="button" class="btn btn-success"><i class="fa fa-plus"></i></button> para seleccionarla
+        <div class="alert alert-primary mb-3">
+            Aquí van a aparecer las facturas que selecciones para pagar. Haz clic en el ícono <i class="fa fa-plus"></i> para seleccionarla
+        </div>
     </div>
 
     <div class="vehicles-list__body mt2" id="contenedor_lista_carrito"></div>
