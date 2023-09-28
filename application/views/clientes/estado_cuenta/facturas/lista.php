@@ -11,6 +11,10 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', $opciones);
 
 if(empty($facturas)) {
     ?>
+    <script>
+        $('#contenedor_mensaje_carga').html('')
+        $('#contenedor_carrito_facturas').hide('')
+    </script>
     <div class="alert alert-success alert-lg alert-dismissible fade show">
         <?php
         echo 'No tienes ninguna factura pendiente por pagar';
