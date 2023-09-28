@@ -34,12 +34,14 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
                                     $total = 0;
                                     $subtotal = 0;
                                     $impuestos = 0;
+                                    $retenciones = 0;
 
                                     foreach ($productos as $detalle) {
                                         $producto = $this->productos_model->obtener('productos', ['id' => $detalle->f120_id]);
 
                                         $subtotal += $detalle->f470_vlr_bruto;
                                         $impuestos += $detalle->f470_vlr_imp;
+                                        $retenciones += $detalle->f461_vlr_ret;
                                         $total += $detalle->f470_vlr_neto;
                                         ?>
                                         <tr class="wishlist__row wishlist__row--body">
@@ -81,6 +83,10 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
                                             <tr>
                                                 <th>Impuestos</th>
                                                 <td><?php echo formato_precio($impuestos); ?></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Retenciones</th>
+                                                <td><?php echo formato_precio($retenciones); ?></td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
