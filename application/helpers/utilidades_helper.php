@@ -47,24 +47,28 @@ function mostrar_mensajes_estados_wompi($estado) {
         case 'APPROVED':
             $pedido_completo = true;
             $asunto = 'Pedido completado';
+            $asunto_factura = 'Pago completado';
             $titulo = 'El pedido fue recibido exitosamente';
             $subtitulo = '¡Muchas gracias por comprar en la tienda de Repuestos Simón Bolívar! Acabamos de recibir tu pago';
         break;
     
         case 'DECLINED':
             $asunto = 'Pedido no completado';
+            $asunto_factura = 'Pago no completado';
             $titulo = 'No recibimos tu pago';
             $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
         break;
     
         case 'VOIDED':
             $asunto = 'Pedido no completado';
+            $asunto_factura = 'Pago no completado';
             $titulo = 'No recibimos tu pago';
             $subtitulo = '¡Lo sentimos! La entidad bancaria rechazó tu pago';
         break;
     
         case 'ERROR':
             $asunto = 'Pedido no completado';
+            $asunto_factura = 'Pago no completado';
             $titulo = 'No recibimos tu pago';
             $subtitulo = '¡Lo sentimos! Ocurrió un error al procesar el pago';
         break;
@@ -73,6 +77,7 @@ function mostrar_mensajes_estados_wompi($estado) {
     return [
         'pedido_completo' => $pedido_completo,
         'asunto' => $asunto,
+        'asunto_factura' => $asunto_factura,
         'titulo' => $titulo,
         'subtitulo' => $subtitulo,
     ];

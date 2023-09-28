@@ -104,7 +104,8 @@ class Interfaces extends CI_Controller {
 
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                $datos['token'] = generar_token($datos['nombres'].$datos['fecha_creacion']);
+                $datos['token'] = "{$datos['abreviatura']}-".generar_token($datos['razon_social'].$datos['fecha_creacion']);
+                unset($datos['abreviatura']);
                 
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;

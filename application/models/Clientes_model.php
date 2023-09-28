@@ -94,7 +94,8 @@ Class Clientes_model extends CI_Model {
                     co.nombre centro_operativo,
                     a.nombre_homologado,
                     DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido,
-                    ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id
+                    ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id,
+                    a.codigo codigo_auxiliar
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
@@ -143,6 +144,16 @@ Class Clientes_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'tercero':
+                unset($datos['tipo']);
+                
+                return $this->db
+                    ->where($datos)
+                    ->get('terceros')
+                    ->row()
+                ;
             break;
         }
 	}

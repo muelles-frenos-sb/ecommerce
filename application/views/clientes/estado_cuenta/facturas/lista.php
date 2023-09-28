@@ -4,11 +4,6 @@ $opciones = [
     'pendientes' => true,
 ];
 
-$resultado_tercero = json_decode(obtener_terceros_api($datos));
-$codigo_resultado_tercero = $resultado_tercero->codigo;
-$mensaje_resultado_tercero = $resultado_tercero->mensaje;
-$tercero = $resultado_tercero->detalle->Table[0];
-
 if($datos['busqueda'] != '') $opciones['busqueda'] = $datos['busqueda'];
 
 // Obtenemos las facturas del cliente pendientes por pagar
@@ -25,17 +20,18 @@ if(empty($facturas)) {
     </div>
 <?php } ?>
 
-<div class="alert alert-success alert-lg alert-dismissible fade show">
+<!-- <div class="alert alert-success alert-lg alert-dismissible fade show"> -->
     <?php
-    echo "¡Bienvenido, <b>$tercero->f200_razon_social</b>! encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
-    if(isset($opciones['busqueda'])) echo " con la búsqueda <b>{$opciones['busqueda']}</b>";
+    // echo "¡Bienvenido, <b>$tercero->f200_razon_social</b>! encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
+    // if(isset($opciones['busqueda'])) echo " con la búsqueda <b>{$opciones['busqueda']}</b>";
     ?>
-</div>
+<!-- </div> -->
 
 <div class="table-responsive">
     <table class="table-striped" id="tabla_facturas">
         <thead>
             <tr>
+                <th class="text-center"></th>
                 <th class="text-center">Sede</th>
                 <th class="text-center">Doc</th>
                 <th class="text-center">Fecha fact</th>
@@ -54,6 +50,7 @@ if(empty($facturas)) {
             $total_facturas = 0;
             $total_pagado = 0;
             $total_saldo = 0;
+            $contador = 1;
 
             foreach($facturas as $factura) {
                 $sucursal = explode(' ', $factura->RazonSocial_Sucursal);
@@ -62,8 +59,21 @@ if(empty($facturas)) {
                 $total_pagado += $factura->valorDoc;
                 $total_saldo += $factura->totalCop;
             ?>
-                <tr>
-                    <td><?php echo $factura->centro_operativo; ?></td>
+                <tr id="factura_<?php echo $contador; ?>">
+                    <td>
+                        <button type="button" class="btn btn-success" onClick="javascript:agregarFactura({
+                            contador: '<?php echo $contador; ?>',
+                            documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                            valor: `<?php echo $factura->totalCop; ?>`,
+                            sede: `<?php echo $factura->centro_operativo; ?>`,
+                            tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
+                        })">
+                            <i class="fa fa-plus"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <?php echo $factura->centro_operativo; ?>
+                    </td>
                     <td class="text-right">
                         <a href="javascript:;" onClick="javascrip:cargarProductos({
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
@@ -101,7 +111,10 @@ if(empty($facturas)) {
                     </td>
                     <td><?php echo $factura->nombre_homologado; ?></td>
                 </tr>
-            <?php } ?>
+            <?php
+                $contador++;
+            }
+            ?>
         </tbody>
         <tfoot>
             <tr>

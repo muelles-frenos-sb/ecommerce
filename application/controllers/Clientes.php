@@ -31,6 +31,11 @@ class Clientes extends MY_Controller {
         $this->data['contenido_principal'] = 'clientes/estado_cuenta/index';
         $this->load->view('core/body', $this->data);
     }
+
+    function respuesta() {
+        $this->data['contenido_principal'] = 'clientes/estado_cuenta/carrito/respuesta';
+        $this->load->view('core/body', $this->data);
+    }
 }
 /* Fin del archivo Clientes.php */
 /* Ubicación: ./application/controllers/Clientes.php */

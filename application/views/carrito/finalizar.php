@@ -160,6 +160,7 @@ if($this->session->userdata('usuario_id')) {
 
         let datosFactura = {
             tipo: 'facturas',
+            abreviatura: 'pe',
             nombres: $('#checkout_nombres').val(),
             primer_apellido: $('#checkout_primer_apellido').val(),
             segundo_apellido: $('#checkout_segundo_apellido').val(),

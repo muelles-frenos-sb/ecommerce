@@ -58,6 +58,153 @@ class Webhooks extends MY_Controller {
         $post = file_get_contents('php://input');
         $datos = json_decode($post, true)['data']['transaction'];
 
+        // Tomamos las iniciales de la referencia para saber qué tipo de documento va a guardar
+        $tipo_documento = explode("-", $datos['reference']);
+
+        // Si es pedido
+        if($tipo_documento[0] == 'pe') {
+            // Se ejecuta la gestión de un pedido
+            $this->gestionar_pedido($datos);
+        }
+
+        // Si es el pago de una factura del estado de cuenta
+        if($tipo_documento[0] == 'ec') {
+            // Se ejecuta la gestión de un pedido
+            $this->gestionar_estado_cuenta($datos);
+        }
+    }
+
+    function gestionar_estado_cuenta($datos) {
+        $wompi_reference = $datos['reference'];
+        $wompi_transaction_id = $datos['id'];
+        $wompi_status = $datos['status'];
+
+        // Tabla, condiciones, datos
+        $actualizar_factura = $this->productos_model->actualizar('facturas', ['token' => $wompi_reference], [
+            'wompi_transaccion_id' => $wompi_transaction_id,
+            'wompi_status' => $wompi_status,
+            'wompi_datos' => json_encode($datos),
+        ]);
+
+        // Se actualiza la factura con el id de la transacción
+        if(!$actualizar_factura) {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 16,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
+            ]);
+
+            exit();
+        }
+
+        // Se obtienen todos los datos de la factura
+        $factura = $this->productos_model->obtener('factura', [
+            'wompi_transaccion_id' => $wompi_transaction_id
+        ]);
+        $wompi = json_decode($factura->wompi_datos, true);
+
+        // Si no existe la factura
+        if(empty($factura)) {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 17,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
+            ]);
+
+            exit();
+        }
+
+        enviar_email_factura($factura);
+
+        // Si el pago no fue aprobado, se detiene la ejecución
+        if($wompi_status != 'APPROVED') die;
+
+        $notas_factura = "- Factura $factura->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
+        
+        $datos_documento_contable = [
+            // Un solo documento contable para toda la transacción
+            "Documento_contable" => [
+                [
+                    "F350_CONSEC_DOCTO" => 1,                                                   // Número de documento (Siesa lo autogenera)
+                    "F350_FECHA" => "{$factura->anio}{$factura->mes}{$factura->dia}",           // El formato debe ser AAAAMMDD
+                    "F350_ID_TERCERO" => $factura->documento_numero,                            // Valida en maestro, código de tercero
+                    "F350_NOTAS" => $notas_factura                                               // Observaciones
+                ]
+            ],
+            "Movimiento_contable" => [
+                // Primer movimiento -> Banco
+                [
+                    "F350_CONSEC_DOCTO" => 1,                                                   // Número de documento (Siesa lo autogenera)
+                    "F351_ID_AUXILIAR" => ($wompi['payment_method_type'] == 'PSE') ? '11100505' : '11100504',// Para PSE, Banco de Bogotá; de resto, Bancolombia 
+                    "F351_VALOR_DB" => $factura->valor,                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                    "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+                    "F351_NOTAS" => $notas_factura                                               // Observaciones
+                ],
+                // Segundo movimiento -> Auxiliar de la factura (Usar para retenciones y descuentos)
+                //             [
+                //                 "F350_CONSEC_DOCTO" => $factura->id,                                        // Número de documento
+                //                 "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
+                //                 // Pendiente
+                //                 "F351_VALOR_DB" => $factura->valor,                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+                //                 "F351_NOTAS" => $notas_pedido                                               // Observaciones
+                //             ],
+            ],
+            // Cruce de la factura (Para todos los valores positivos a pagar)
+            // Este por cada factura que se vaya a pagar
+            "Movimiento_CxC" => [
+                // Factura 1
+                [
+                    "F350_CONSEC_DOCTO" => 1,                                                   // Numero de documento
+                    "F351_ID_AUXILIAR" => "13050512",                                           // Id de la tabla auxiliar
+                    "F351_ID_TERCERO" => $factura->documento_numero,                            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                    "F351_ID_CO_MOV" => "300",                                                  // Código del centro operativo (sede)
+                    // Pendiente
+                    "F351_VALOR_CR" => $factura->valor,                                         // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+                    "F351_NOTAS" => $notas_factura,                           // Observaciones
+                    // Pendiente
+                    "F353_ID_SUCURSAL" => str_pad(1, 3, '0', STR_PAD_LEFT), // Valida en maestro, código de sucursal del cliente.
+                    "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",                                        // (Tipo_Doc_Cruce)
+                    "F353_CONSEC_DOCTO_CRUCE" => 3425,                                  // Numero de documento de cruce, es un numero entre 1 y 99999999.
+                    "F353_FECHA_VCTO" => "{$factura->anio}{$factura->mes}{$factura->dia}",      // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
+                    "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$factura->mes}{$factura->dia}"   // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+                ]
+            ]
+        ];
+
+        $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
+        $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
+        $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
+        $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
+
+        // Si no se pudo crear el documento contable
+        if($codigo_resultado_documento_contable == '1') {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 19,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => $detalle_resultado_documento_contable
+            ]);
+
+            exit();
+        }
+
+        // Se agrega log
+        $this->configuracion_model->crear('logs', [
+            'log_tipo_id' => 20,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+        ]);
+
+        print json_encode([
+            'exito' => $resultado_documento_contable,
+        ]);
+        
+        return http_response_code(200);
+    }
+
+    function gestionar_pedido($datos) {
         $wompi_reference = $datos['reference'];
         $wompi_transaction_id = $datos['id'];
         $wompi_status = $datos['status'];
@@ -236,7 +383,7 @@ class Webhooks extends MY_Controller {
         }
 
         print json_encode([
-            'exito' => true
+            'exito' => true,
         ]);
 
         return http_response_code(200);
