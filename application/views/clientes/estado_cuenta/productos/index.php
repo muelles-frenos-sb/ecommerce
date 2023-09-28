@@ -104,7 +104,6 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary">Pagar</button>
             </div>
         </div>
     </div>

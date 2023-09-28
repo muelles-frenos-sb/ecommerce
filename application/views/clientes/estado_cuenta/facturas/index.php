@@ -90,7 +90,6 @@
     cargarMovimientos = async(datos) => {
         datos.tipo = 'movimientos_contables'
         let movimientosFactura = await consulta('obtener', datos, false)
-        console.log(movimientosFactura.detalle)
 
         Promise.all([movimientosFactura])
         .then(async() => {
