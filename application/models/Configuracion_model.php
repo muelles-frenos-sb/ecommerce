@@ -44,6 +44,29 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'facturas':
+                $where = "WHERE f.id";
+                
+                if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND f.wompi_status IS NOT NULL ";
+                // if(isset($datos['token'])) $where .= " AND p.token = '{$datos['token']}'";
+                
+                $sql =
+                "SELECT
+                    f.*,
+                    CASE f.tipo_id WHEN 1 THEN 'Pedido' WHEN 2 THEN 'Factura' END tipo
+                FROM
+                    facturas AS f
+                $where
+                ORDER BY
+                    f.razon_social";
+
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
+            break;
+
 			case 'grupos':
                 $where = "WHERE p.id";
 

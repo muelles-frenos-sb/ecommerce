@@ -17,16 +17,24 @@
                     </a>
                     <div class="main-menu__submenu">
                         <ul class="menu">
-                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_terceros_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_facturas_ver'], $permisos)) { ?>
                                 <li class="menu__item">
-                                    <a href="<?php echo site_url('configuracion/terceros/ver'); ?>" class="menu__link">
-                                        Terceros
+                                    <a href="<?php echo site_url('configuracion/facturas/ver'); ?>" class="menu__link">
+                                        Facturas
                                     </a>
                                 </li>
                             <?php } ?>
 
-                            <li class="menu__item">
-                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_terceros_ver'], $permisos)) { ?>
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url('configuracion/terceros/ver'); ?>" class="menu__link">
+                                        Usuarios
+                                    </a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
+                                <li class="menu__item">
                                     <a href="<?php echo site_url('configuracion/perfiles/ver'); ?>" class="menu__link">
                                         Perfiles
                                     </a>
