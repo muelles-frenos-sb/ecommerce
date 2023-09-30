@@ -5,10 +5,31 @@
         </div>
     </div>
 
-    <div class="vehicles-list__body mt2" id="contenedor_lista_carrito"></div>
-    Total a pagar: <span id="total_pago">0</span>
+    <div class="form-group mt-2">
+        <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir el comprobante?</label>
+        <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
+            <option>Seleccione...</option>
+            <option value="1">Pagar en línea</option>
+            <option value="2">Subir comprobante</option>
+        </select>
+    </div>
 
-    <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarFacturaEstadoCuenta()">Pagar facturas</button>
+    <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
+
+    <div class="mt-2">
+        Total a pagar: <span id="total_pago">0</span>
+    </div>
+
+    <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
+        <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivo">
+        <button class="btn btn-info"  onClick="javascript:guardarFacturaEstadoCuenta()">Subir comprobante de pago</button>
+    </div>
+
+    <div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
+        <div class="col-12">
+            <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarFacturaEstadoCuenta(true)">Pagar en línea</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -58,11 +79,17 @@
         $('#total_pago').text(total)
     }
 
-    guardarFacturaEstadoCuenta = async() => {
+    guardarFacturaEstadoCuenta = async(pagarEnLinea  = false) => {
         let total = parseFloat($('#total_pago').text())
+        var archivo = $('#estado_cuenta_archivo').prop('files')[0]
 
         if(total == 0) {
-            mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar')
+            mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar. Selecciona una o varias facturas para continuar el proceso.')
+            return false
+        }
+
+        if(!archivo) {
+            mostrarAviso('alerta', 'Por favor selecciona el comprobante de pago que vas a adjuntar al pago')
             return false
         }
 
@@ -86,14 +113,42 @@
             // Se crean los ítems de la factura
             // let facturaItems = await consulta('crear', {tipo: 'facturas_detalle_estado_cuenta', 'factura_id': factura.resultado}, false)
 
-            // if (facturaItems.resultado) 
-            cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: factura.resultado})
+            // if (facturaItems.resultado) {
+                // Si es pago en línea, redirecciona a Wompi
+                if(pagarEnLinea) cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: factura.resultado})
+
+                // Si es para subir comprobante
+                if(!pagarEnLinea) {
+                    let nombre = archivo.name.split('.')[0]
+                    let extension = archivo.name.split('.').pop()
+                    let tamanio = archivo.size / 1000
+                    let nombreArchivo = `${factura.resultado}.${extension}`
+                    
+                    let anexo = new FormData()
+                    anexo.append('name', archivo, nombreArchivo)
+                    
+                    let peticion = new XMLHttpRequest()
+                    peticion.open('POST', $('#site_url').val() + '/interfaces/subir_factura')
+                    peticion.send(anexo)
+                    peticion.onload = evento => {
+                        let respuesta = JSON.parse(evento.target.responseText)
+                        consulta('actualizar', {
+                            tipo: 'facturas',
+                            id: factura.resultado,
+                            nombre_archivo: nombreArchivo
+                        })
+                    }
+                }
+            // }
         }
     }
 
     $().ready(() => {
-        $(`input[type='numer']`).keyup(() => {
-            calcularTotal()
+        $('#estado_cuenta_tipo_pago').change(function() {
+            $(`#contenedor_tipo_pago_wompi, #contenedor_tipo_pago_comprobante`).addClass('d-none')
+            
+            if($(this).val() == '1') $(`#contenedor_tipo_pago_wompi`).removeClass('d-none')
+            if($(this).val() == '2') $(`#contenedor_tipo_pago_comprobante`).removeClass('d-none')
         })
     })
 </script>

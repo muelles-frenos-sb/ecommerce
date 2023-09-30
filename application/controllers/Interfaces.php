@@ -22,6 +22,8 @@ class Interfaces extends CI_Controller {
         $this->load->model(['productos_model', 'clientes_model']);
     }
 
+    var $ruta = './archivos/';
+
     public function index() {
 		// Si no es una petición Ajax, redirecciona al inicio
         if(!$this->input->is_ajax_request()) redirect('inicio');
@@ -73,6 +75,15 @@ class Interfaces extends CI_Controller {
     function carrito() {
         $this->data['id'] = $this->uri->segment(3);
         $this->load->view('email/pedido_detalle', $this->data);
+    }
+
+    function subir_factura() {
+        $directorio = "{$this->ruta}facturas/";
+        $archivo = $_FILES;
+
+        if(move_uploaded_file($archivo['name']['tmp_name'], $directorio.$archivo['name']['name'])) $resultado = true;
+
+        print json_encode(['resultado' => $resultado]);
     }
 
     function crear() {
