@@ -57,7 +57,7 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_facturas':
-                $where = "WHERE a.mostrar_estado_cuenta = 1";
+                $where = "WHERE a.mostrar_estado_cuenta = 1 AND cf.Tipo_Doc_cruce != 'CNE' ";
                 $having = "";
 
                 if (isset($datos['busqueda'])) {
