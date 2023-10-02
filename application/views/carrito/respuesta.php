@@ -71,7 +71,7 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                                         </td>
                                         <td class="order-list__column-product">
                                             <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" target="_blank">
-                                            <?php echo $producto->notas; ?>
+                                                <?php echo $producto->notas; ?>
                                             </a>
                                             <div class="order-list__options">
                                                 <ul class="order-list__options-list">

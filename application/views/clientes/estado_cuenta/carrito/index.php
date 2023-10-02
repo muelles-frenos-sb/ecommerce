@@ -1,10 +1,4 @@
 <div class="vehicles-list">
-    <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
-        <div class="alert alert-primary mb-3">
-            Aquí van a aparecer las facturas que selecciones para pagar. Haz clic en el ícono <i class="fa fa-plus"></i> para seleccionarla
-        </div>
-    </div>
-
     <div class="form-group mt-2">
         <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir el comprobante?</label>
         <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
@@ -12,6 +6,12 @@
             <option value="1">Pagar en línea</option>
             <option value="2">Subir comprobante</option>
         </select>
+    </div>
+
+    <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
+        <div class="alert alert-primary mb-3">
+            Selecciona una o varias facturas a pagar, hacuiendo clic en el ícono <i class="fa fa-plus"></i>
+        </div>
     </div>
 
     <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
@@ -88,7 +88,8 @@
             return false
         }
 
-        if(!archivo) {
+        // Si no es pago en línea y no tiene archivo
+        if(!pagarEnLinea && !archivo) {
             mostrarAviso('alerta', 'Por favor selecciona el comprobante de pago que vas a adjuntar al pago')
             return false
         }
