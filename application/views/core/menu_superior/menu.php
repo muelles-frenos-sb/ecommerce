@@ -6,6 +6,20 @@
                     Tienda
                 </a>
             </li>
+            
+            <?php $this->load->view('bitrix/garantia'); ?>
+
+            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                    Taller Aliado
+                </a>
+            </li>
+
+            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
+                    Contacto
+                </a>
+            </li>
 
             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_ver'], $permisos)) { ?>
                 <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
@@ -44,20 +58,6 @@
                     </div>
                 </li>
             <?php } ?>
-            
-            <?php $this->load->view('bitrix/garantia'); ?>
-
-            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
-                    Taller Aliado
-                </a>
-            </li>
-
-            <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
-                    Contacto
-                </a>
-            </li>
         </ul>
     </div>
 </div>
