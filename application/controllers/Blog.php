@@ -24,7 +24,12 @@ class Blog extends MY_Controller {
     }
 
     function contacto() {
-        $this->data['contenido_principal'] = 'blog/contacto';
+        $this->credito['contenido_principal'] = 'blog/contacto';
+        $this->load->view('core/body', $this->data);
+    }
+
+    function credito() {
+        $this->data['contenido_principal'] = 'blog/credito';
         $this->load->view('core/body', $this->data);
     }
 

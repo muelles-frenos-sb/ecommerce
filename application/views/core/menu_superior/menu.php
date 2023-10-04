@@ -16,8 +16,8 @@
             </li>
 
             <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
-                    Contacto
+                <a href="<?php echo site_url('blog/credito'); ?>" class="main-menu__link">
+                    Crédito
                 </a>
             </li>
 
