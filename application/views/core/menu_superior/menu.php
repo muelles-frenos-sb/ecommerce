@@ -31,10 +31,10 @@
                     </a>
                     <div class="main-menu__submenu">
                         <ul class="menu">
-                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_facturas_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
                                 <li class="menu__item">
-                                    <a href="<?php echo site_url('configuracion/facturas/ver'); ?>" class="menu__link">
-                                        Facturas
+                                    <a href="<?php echo site_url('configuracion/recibos/ver'); ?>" class="menu__link">
+                                        Recibos
                                     </a>
                                 </li>
                             <?php } ?>

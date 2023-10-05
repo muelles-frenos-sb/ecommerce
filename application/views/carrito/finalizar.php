@@ -158,8 +158,8 @@ if($this->session->userdata('usuario_id')) {
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
-        let datosFactura = {
-            tipo: 'facturas',
+        let datosRecibo = {
+            tipo: 'recibos',
             abreviatura: 'pe',
             nombres: $('#checkout_nombres').val(),
             primer_apellido: $('#checkout_primer_apellido').val(),
@@ -171,20 +171,20 @@ if($this->session->userdata('usuario_id')) {
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
             valor: <?php echo $this->cart->total(); ?>,
-            factura_tipo_id: 1,
+            recibo_tipo_id: 1,
         }
 
         // Si trae sucursales, se agrega a los datos
-        if(parseInt($('#cantidad_sucursales').val()) > 0) datosFactura.sucursal_id = $('#checkout_sucursal').val()
+        if(parseInt($('#cantidad_sucursales').val()) > 0) datosRecibo.sucursal_id = $('#checkout_sucursal').val()
 
-        let factura = await consulta('crear', datosFactura, false)
+        let recibo = await consulta('crear', datosRecibo, false)
         
-        // Una vez creada la factura
-        if (factura.resultado) {
+        // Una vez creado el recibo
+        if (recibo.resultado) {
             // Se crean los ítems de la factura
-            let facturaItems = await consulta('crear', {tipo: 'facturas_detalle', 'factura_id': factura.resultado}, false)
+            let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado}, false)
 
-            if (facturaItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: factura.resultado})
+            if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
         }
     }
 

@@ -11,9 +11,9 @@
             </tr>
         </thead>
         <tbody class="wishlist__body" id="datos">
-            <?php $this->load->view("configuracion/facturas/datos"); ?>
+            <?php $this->load->view("configuracion/recibos/datos"); ?>
         </tbody>
     </table>
 </div>
 
-<button class="btn btn-primary btn-block mt-3" onClick="javascript:cargarMasDatos('configuracion/facturas')" id="btn_mostrar_mas">Mostrar más datos</button>
+<button class="btn btn-primary btn-block mt-3" onClick="javascript:cargarMasDatos('configuracion/recibos')" id="btn_mostrar_mas">Mostrar más datos</button>

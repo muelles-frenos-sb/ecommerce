@@ -13,7 +13,7 @@
                 <form id="formulario_buscar_cliente">
                     <div class="form-group" id="contenedor_numero_documento">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="900886934" autofocus>
                     </div>
                     <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mi estado de cuenta</button>
 

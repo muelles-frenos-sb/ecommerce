@@ -3,7 +3,7 @@ $opciones = [
 	'contador' => $datos['contador'],
 ];
 
-$registros = $this->configuracion_model->obtener('facturas', $opciones);
+$registros = $this->configuracion_model->obtener('recibos', $opciones);
 
 if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron registros.</li>';
 
@@ -16,7 +16,7 @@ foreach ($registros as $factura) {
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--product">
             <div class="wishlist__product-name">
-                <a href="<?php echo site_url("configuracion/facturas/id/$factura->token"); ?>"><?php echo $factura->razon_social; ?></a>
+                <a href="<?php echo site_url("configuracion/recibos/id/$factura->token"); ?>"><?php echo $factura->razon_social; ?></a>
             </div>
             <div class="wishlist__product-rating">
                 <div class="wishlist__product-rating-title"><?php echo $factura->documento_numero; ?></div>
@@ -24,7 +24,7 @@ foreach ($registros as $factura) {
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--stock">
             <div class="wishlist__product-name">
-                <a href="<?php echo site_url("configuracion/facturas/id/$factura->token"); ?>"><?php echo $factura->wompi_transaccion_id; ?></a>
+                <a href="<?php echo site_url("configuracion/recibos/id/$factura->token"); ?>"><?php echo $factura->wompi_transaccion_id; ?></a>
             </div>
             <div class="wishlist__product-rating">
                 <div class="wishlist__product-rating-title"><?php echo $factura->token; ?></div>
@@ -41,7 +41,7 @@ foreach ($registros as $factura) {
             <?php echo formato_precio($factura->valor); ?>
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--button">
-            <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/facturas/id/$factura->token"); ?>">Ver</a>
+            <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/recibos/id/$factura->token"); ?>">Ver</a>
         </td>
     </tr>
 <?php } ?>

@@ -74,7 +74,7 @@
             }
 
             // Se insertan en la base de datos todos los registros obtenidos del cliente
-            await consulta('crear', {tipo: 'clientes_facturas_detalle', valores: productosFactura.detalle.Table}, false)
+            await consulta('crear', {tipo: 'clientes_recibos_detalle', valores: productosFactura.detalle.Table}, false)
 
             agregarLog(28, JSON.stringify(datos))
 

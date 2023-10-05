@@ -1,6 +1,6 @@
 <?php
-$factura = $this->productos_model->obtener('factura', ['token' => $this->input->get('referencia')]);
-$factura_detalle = $this->productos_model->obtener('factura_detalle', ['fd.factura_id' => $factura->id]);
+$recibo = $this->productos_model->obtener('recibo', ['token' => $this->input->get('referencia')]);
+$recibo_detalle = $this->productos_model->obtener('factura_detalle', ['rd.recibo_id' => $recibo->id]);
 $wompi = json_decode($factura->wompi_datos, true);
 
 // Dependiendo del estado de la transacción, trae los mensajes
@@ -58,7 +58,7 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                             </thead>
                             <tbody class="order-list__products">
                                 <?php
-                                foreach($factura_detalle as $detalle) {
+                                foreach($recibo_detalle as $detalle) {
                                     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
                                     ?>
                                     <tr>

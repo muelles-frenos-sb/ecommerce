@@ -1,21 +1,21 @@
-<?php $factura = $this->productos_model->obtener('factura', ['id' => $datos['id']]); ?>
+<?php $recibo = $this->productos_model->obtener('recibo', ['id' => $datos['id']]); ?>
 
 <script>
     var checkout = new WidgetCheckout({
         currency: 'COP',
-        amountInCents: parseFloat(<?php echo $factura->valor; ?>) * 100,
-        reference: '<?php echo $factura->token; ?>',
+        amountInCents: parseFloat(<?php echo $recibo->valor; ?>) * 100,
+        reference: '<?php echo $recibo->token; ?>',
         publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2',
-        redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $factura->token; ?>`, // Opcional
+        redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $recibo->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
         // taxInCents: { // Opcional
         //     vat: 1900,
         //     consumption: 800
         // }
         customerData: { // Opcional
-            email: '<?php echo $factura->email; ?>',
-            fullName: `<?php echo $factura->razon_social; ?>`,
-            phoneNumber: `<?php echo $factura->telefono; ?>`,
+            email: '<?php echo $recibo->email; ?>',
+            fullName: `<?php echo $recibo->razon_social; ?>`,
+            phoneNumber: `<?php echo $recibo->telefono; ?>`,
             phoneNumberPrefix: '+57',
         //     // legalId: '123456789',
         //     // legalIdType: 'CC'

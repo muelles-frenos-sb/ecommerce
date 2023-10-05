@@ -103,10 +103,10 @@
             return false
         }
 
-        let datosFactura = {
-            tipo: 'facturas',
+        let datosrecibo = {
+            tipo: 'recibos',
             abreviatura: 'ec',
-            factura_tipo_id: (pagarEnLinea) ? 2 : 3,
+            recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
             razon_social: $('#factura_tercero_razon_social').val(),
             documento_numero: $('#factura_tercero_documento_numero').val(),
             // direccion: $('#checkout_direccion').val(),
@@ -116,16 +116,16 @@
             valor: total,
         }
 
-        let factura = await consulta('crear', datosFactura, false)
+        let recibo = await consulta('crear', datosrecibo, false)
         
         // Una vez creada la factura
-        if (factura.resultado) {
+        if (recibo.resultado) {
             // Se crean los ítems de la factura
-            let facturaItems = await consulta('crear', {tipo: 'facturas_detalle_estado_cuenta', 'factura_id': factura.resultado, items: calcularTotal()}, false)
+            let reciboItems = await consulta('crear', {tipo: 'recibos_detalle_estado_cuenta', 'recibo_id': recibo.resultado, items: calcularTotal()}, false)
 
-            // if (facturaItems.resultado) {
+            // if (reciboItems.resultado) {
                 // Si es pago en línea, redirecciona a Wompi
-                if(pagarEnLinea) cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: factura.resultado})
+                if(pagarEnLinea) cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: recibo.resultado})
 
                 // Si es para subir comprobante
                 if(!pagarEnLinea) {
@@ -138,12 +138,12 @@
                     anexo.append('name', archivo, nombreArchivo)
                     
                     let peticion = new XMLHttpRequest()
-                    peticion.open('POST', $('#site_url').val() + '/interfaces/subir_factura')
+                    peticion.open('POST', $('#site_url').val() + '/interfaces/subir_comprobante')
                     peticion.send(anexo)
                     peticion.onload = evento => {
                         let respuesta = JSON.parse(evento.target.responseText)
                         consulta('actualizar', {
-                            tipo: 'facturas',
+                            tipo: 'recibos',
                             id: factura.resultado,
                             nombre_archivo: nombreArchivo
                         })
@@ -154,6 +154,10 @@
     }
 
     $().ready(() => {
+        $(`input[type='number']`).keyup(() => {
+            calcularTotal()
+        })
+
         $('#estado_cuenta_tipo_pago').change(function() {
             $(`#contenedor_tipo_pago_wompi, #contenedor_tipo_pago_comprobante`).addClass('d-none')
             

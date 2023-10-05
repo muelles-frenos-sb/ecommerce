@@ -44,21 +44,21 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-            case 'facturas':
-                $where = "WHERE f.id";
+            case 'recibos':
+                $where = "WHERE r.id";
                 
-                if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND f.wompi_status IS NOT NULL ";
+                if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 
                 $sql =
                 "SELECT
-                    f.*,
-                    ft.nombre AS tipo
+                    r.*,
+                    rt.nombre AS tipo
                 FROM
-                    facturas AS f
-                    INNER JOIN facturas_tipos AS ft ON f.factura_tipo_id = ft.id
+                    recibos AS r
+                    INNER JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
                 $where
                 ORDER BY
-                    f.razon_social";
+                    r.razon_social";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
                     return $this->db->query($sql)->row();

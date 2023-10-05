@@ -1,7 +1,7 @@
 <?php
-$factura = $this->productos_model->obtener('factura', ['token' => $datos['token']]);
-$factura_detalle = $this->productos_model->obtener('factura_detalle', ['fd.factura_id' => $factura->id]);
-$wompi = json_decode($factura->wompi_datos, true);
+$recibo = $this->productos_model->obtener('recibo', ['token' => $datos['token']]);
+$recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
+$wompi = json_decode($recibo->wompi_datos, true);
 ?>
 
 <div class="block">
@@ -10,11 +10,11 @@ $wompi = json_decode($factura->wompi_datos, true);
             <table class="wishlist__table">
                 <thead class="wishlist__head">
                     <tr class="wishlist__row wishlist__row--head">
-                        <?php if($factura->factura_tipo_id == 1) { ?>
+                        <?php if($recibo->recibo_tipo_id == 1) { ?>
                             <th class="wishlist__column wishlist__column--head wishlist__column--image">Foto</th>
                         <?php } ?>
                         <th class="wishlist__column wishlist__column--head wishlist__column--product">
-                            <?php echo ($factura->factura_tipo_id == 1) ? 'Producto' : 'Factura' ; ?>
+                            <?php echo ($recibo->recibo_tipo_id == 1) ? 'Producto' : 'Recibo' ; ?>
                         </th>
                         <th class="wishlist__column wishlist__column--head wishlist__column--price">Cantidad</th>
                         <th class="wishlist__column wishlist__column--head wishlist__column--price">Subtotal</th>
@@ -22,15 +22,15 @@ $wompi = json_decode($factura->wompi_datos, true);
                 </thead>
                 <tbody class="wishlist__body">
                     <?php
-                    foreach($factura_detalle as $detalle) {
-                        if($factura->factura_tipo_id == 1) {
+                    foreach($recibo_detalle as $detalle) {
+                        if($recibo->recibo_tipo_id == 1) {
                             $item = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
                         } else {
                             $item = $this->clientes_model->obtener('clientes_facturas', ['id' => $detalle->cliente_factura_id]);
                         }
                         ?>
                         <tr class="wishlist__row wishlist__row--body">
-                            <?php if($factura->factura_tipo_id == 1) { ?>
+                            <?php if($recibo->recibo_tipo_id == 1) { ?>
                                 <td class="wishlist__column wishlist__column--body wishlist__column--image">
                                     <div class="image image--type--product">
                                         <a href="<?php echo site_url("productos/ver/$item->id"); ?>" class="image__body">
@@ -62,9 +62,9 @@ $wompi = json_decode($factura->wompi_datos, true);
     </div>
     
     <div class="card-body card-body--padding--2">
-        <a class="btn btn-info" href="<?php echo base_url()."archivos/facturas/$factura->nombre_archivo" ?>" download>Descargar comprobante</a>
+        <a class="btn btn-info" href="<?php echo base_url()."archivos/facturas/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
         <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
-        <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $factura->id; ?>)">Aprobar pago</a>
+        <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
     </div>
 </div>
 <div class="block-space block-space--layout--before-footer"></div>

@@ -5,6 +5,7 @@ application/config/production/
 application/logs/
 application/vendor/
 archivos/fotos/
+archivos/recibos/
 frontend/
 
 # Directorios de imágenes

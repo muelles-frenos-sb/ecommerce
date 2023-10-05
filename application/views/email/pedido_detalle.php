@@ -1,6 +1,6 @@
 <?php
 $factura = $this->productos_model->obtener('factura', ['id' => $id]);
-$factura_detalle = $this->productos_model->obtener('factura_detalle', ['fd.factura_id' => $id]);
+$factura_detalle = $this->productos_model->obtener('factura_detalle', ['rd.recibo_id' => $id]);
 
 $wompi = json_decode($factura->wompi_datos, true);
 

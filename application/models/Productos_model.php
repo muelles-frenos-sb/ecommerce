@@ -15,8 +15,8 @@ Class Productos_model extends CI_Model{
                 return $this->db->insert_batch('productos', $datos);
             break;
 
-            case 'facturas_detalle':
-                return $this->db->insert_batch('facturas_detalle', $datos);
+            case 'recibos_detalle':
+                return $this->db->insert_batch('recibos_detalle', $datos);
             break;
 
             case 'productos_inventario':
@@ -59,31 +59,31 @@ Class Productos_model extends CI_Model{
     
     public function obtener($tipo, $datos = null) {
         switch ($tipo) {
-            case 'factura':
+            case 'recibo':
                 unset($datos['tipo']);
 
                 return $this->db
                     ->select([
-                        'f.*',
-                        'YEAR(f.fecha_creacion) anio',
-                        'LPAD(MONTH(f.fecha_creacion), 2, 0) mes',
-                        'LPAD(DAY(f.fecha_creacion), 2, 0) dia',
+                        'r.*',
+                        'YEAR(r.fecha_creacion) anio',
+                        'LPAD(MONTH(r.fecha_creacion), 2, 0) mes',
+                        'LPAD(DAY(r.fecha_creacion), 2, 0) dia',
                     ])
                     ->where($datos)
-                    ->get('facturas f')
+                    ->get('recibos r')
                     ->row()
                 ;
             break;
 
-            case 'factura_detalle':
+            case 'recibos_detalle':
                 unset($datos['tipo']);
 
                 $this->db
                     ->select([
-                        "fd.*",
+                        "rd.*",
                     ])
-                    ->from("facturas_detalle fd")
-                    ->join("facturas f", "fd.factura_id = f.id", "left")
+                    ->from("recibos_detalle rd")
+                    ->join("recibos r", "rd.recibo_id = r.id", "left")
                     ->where($datos)
                 ;
 

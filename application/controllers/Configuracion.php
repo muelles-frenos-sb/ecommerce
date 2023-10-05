@@ -31,19 +31,19 @@ class Configuracion extends MY_Controller {
         print json_encode($resultado);
     }
 
-    function facturas() {
+    function recibos() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
-        if(!in_array(['configuracion' => 'configuracion_perfiles_ver'], $this->data['permisos'])) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_recibos_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             case 'ver':
-                $this->data['contenido_principal'] = 'configuracion/facturas/index';
+                $this->data['contenido_principal'] = 'configuracion/recibos/index';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'id':
                 $this->data['token'] = $this->uri->segment(4);
-                $this->data['contenido_principal'] = 'configuracion/facturas/detalle/index';
+                $this->data['contenido_principal'] = 'configuracion/recibos/detalle/index';
                 $this->load->view('core/body', $this->data);
             break;
         }

@@ -77,8 +77,8 @@ class Interfaces extends CI_Controller {
         $this->load->view('email/pedido_detalle', $this->data);
     }
 
-    function subir_factura() {
-        $directorio = "{$this->ruta}facturas/";
+    function subir_comprobante() {
+        $directorio = "{$this->ruta}recibos/";
         $archivo = $_FILES;
 
         if(move_uploaded_file($archivo['name']['tmp_name'], $directorio.$archivo['name']['name'])) $resultado = true;
@@ -117,7 +117,7 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => crear_documento_contable($datos['id_factura'])]);
             break;
 
-            case 'facturas':
+            case 'recibos':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['token'] = "{$datos['abreviatura']}-".generar_token($datos['razon_social'].$datos['fecha_creacion']);
                 unset($datos['abreviatura']);
@@ -125,23 +125,23 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;
 
-            case 'facturas_detalle':
+            case 'recibos_detalle':
                 // Vamos a guardar el detalle de la factura
-                $items_factura = [];
+                $items_recibo = [];
 
                 // Se recorren los ítems del carrito
                 foreach ($this->cart->contents() as $item) {
                     $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
                     
                     $datos_item = [
-                        'factura_id' => $datos['factura_id'],
+                        'recibo_id' => $datos['recibo_id'],
                         'producto_id' => $producto->id,
                         'cantidad' => $item['qty'],
                         'precio' => $item['price'],
                         'subtotal' => $item['subtotal'],
                     ];
                     
-                    array_push($items_factura, $datos_item);
+                    array_push($items_recibo, $datos_item);
                 }
 
                 // Se agrega log
@@ -150,22 +150,22 @@ class Interfaces extends CI_Controller {
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                 ]);
                 
-                if(!empty($items_factura)) print json_encode(['resultado' => $this->productos_model->crear('facturas_detalle', $items_factura)]);
+                if(!empty($items_recibo)) print json_encode(['resultado' => $this->productos_model->crear('recibos_detalle', $items_recibo)]);
             break;
 
-            case 'facturas_detalle_estado_cuenta':
+            case 'recibos_detalle_estado_cuenta':
                 // Vamos a guardar el detalle de la factura
-                $items_factura = [];
+                $items_recibo = [];
 
                 // Se recorren los ítems
                 foreach ($datos['items'] as $item) {                    
                     $datos_item = [
-                        'factura_id' => $datos['factura_id'],
+                        'recibo_id' => $datos['recibo_id'],
                         'cliente_factura_id' => $item['cliente_factura_id'],
                         'subtotal' => $item['subtotal'],
                     ];
                     
-                    array_push($items_factura, $datos_item);
+                    array_push($items_recibo, $datos_item);
                 }
 
                 // Se agrega log
@@ -174,7 +174,7 @@ class Interfaces extends CI_Controller {
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                 ]);
                 
-                if(!empty($items_factura)) print json_encode(['resultado' => $this->productos_model->crear('facturas_detalle', $items_factura)]);
+                if(!empty($items_recibo)) print json_encode(['resultado' => $this->productos_model->crear('recibos_detalle', $items_recibo)]);
             break;
 
             case 'logs':
@@ -248,7 +248,7 @@ class Interfaces extends CI_Controller {
                 $resultado = json_decode(obtener_clientes_api($datos));
             break;
 
-            case 'factura':
+            case 'recibos':
                 $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             break;
 

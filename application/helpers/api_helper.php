@@ -5,21 +5,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Consume el endpoint para la creación del
  * documento contable en Siesa
  */
-function crear_documento_contable($id_factura, $datos_pago = null) {
+function crear_documento_contable($id_recibo, $datos_pago = null) {
     $CI =& get_instance();
 
-    $factura = $CI->productos_model->obtener('factura', ['id' => $id_factura]);
+    $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
 
-    $notas_factura = "- Factura $factura->id";
-    // $notas_factura = "- Factura $factura->id E-Commerce - Referencia Wompi: {$datos_pago['reference']} - ID de Transacción Wompi: {$datos_pago['id']}";
-    // enviar_email_factura($factura);
+    $notas_recibo = "- Recibo $recibo->id";
+    // $notas_recibo = "- Recibo $recibo->id E-Commerce - Referencia Wompi: {$datos_pago['reference']} - ID de Transacción Wompi: {$datos_pago['id']}";
+    // enviar_email_recibo($recibo);
 
-    // Se obtienen los ítems de la factura
-    $items = $CI->productos_model->obtener('factura_detalle', ['factura_id' => $factura->id]);
+    // Se obtienen los ítems del recibo
+    $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $documentos = [];
-    $mes_factura = str_pad($factura->mes, 2, '0', STR_PAD_LEFT);
-    $dia_factura = str_pad($factura->dia, 2, '0', STR_PAD_LEFT);
+    $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
+    $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
     // Se recorre cada ítem
     foreach ($items as $item) {
@@ -33,13 +33,13 @@ function crear_documento_contable($id_factura, $datos_pago = null) {
             "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,                                                                            // Id de la tabla auxiliar
             "F351_ID_TERCERO" => $factura_cliente->Cliente,                                                                                     // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
             "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,                                                                      // Código del centro operativo (sede)
-            "F351_VALOR_CR" => $item->subtotal,                                                                                                 // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
-            "F351_NOTAS" => $notas_factura,                                                                                                     // Observaciones
+            "F351_VALOR_CR" => floatval($item->subtotal),                                                                                                 // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+            "F351_NOTAS" => $notas_recibo,                                                                                                     // Observaciones
             "F353_ID_SUCURSAL" => str_pad($factura_cliente->sucursal_id, 3, '0', STR_PAD_LEFT),                                                 // Valida en maestro, código de sucursal del cliente.
             "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,                                                                     // (Tipo_Doc_Cruce)
             "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,                                                                       // Numero de documento de cruce, es un numero entre 1 y 99999999.
             "F353_FECHA_VCTO" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",  // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-            "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$mes_factura}{$dia_factura}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+            "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
         ];
 
         array_push($documentos, $documento);
@@ -50,9 +50,9 @@ function crear_documento_contable($id_factura, $datos_pago = null) {
         "Documento_contable" => [
             [
                 "F350_CONSEC_DOCTO" => 1,                                           // Número de documento (Siesa lo autogenera)
-                "F350_FECHA" => "{$factura->anio}{$mes_factura}{$dia_factura}",   // El formato debe ser AAAAMMDD
-                "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
-                "F350_NOTAS" => $notas_factura                                      // Observaciones
+                "F350_FECHA" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",   // El formato debe ser AAAAMMDD
+                "F350_ID_TERCERO" => $recibo->documento_numero,                    // Valida en maestro, código de tercero
+                "F350_NOTAS" => $notas_recibo                                      // Observaciones
             ]
         ],
         "Movimiento_contable" => [
@@ -60,11 +60,11 @@ function crear_documento_contable($id_factura, $datos_pago = null) {
             [
                 "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
                 "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
-                "F351_VALOR_DB" => $factura->valor,                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-                "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$mes_factura}{$dia_factura}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-                "F351_NOTAS" => $notas_factura                                                              // Observaciones
+                "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+                "F351_NOTAS" => $notas_recibo                                                              // Observaciones
             ],
-            // Segundo movimiento -> Auxiliar de la factura (Usar para retenciones y descuentos)
+            // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
             //             [
             //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
             //                 "F351_ID_AUXILIAR" => "11100504",                                            // Valida en maestro, código de cuenta contable
