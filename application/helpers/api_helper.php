@@ -39,7 +39,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null) {
             "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,                                                                     // (Tipo_Doc_Cruce)
             "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,                                                                       // Numero de documento de cruce, es un numero entre 1 y 99999999.
             "F353_FECHA_VCTO" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",  // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-            "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+            "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_vencimiento}{$dia_vencimiento}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
         ];
 
         array_push($documentos, $documento);

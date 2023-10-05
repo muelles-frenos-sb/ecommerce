@@ -41,7 +41,12 @@
     aprobarPago = async(reciboid) => {
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboid}, false)
         .then(pago => {
-            console.log(pago)
+            console.log(pago.resultado.mensaje)
+
+            if(pago.resultado.error) {
+                mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
+                return false
+            }
         })
         .catch(error => {
             mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')

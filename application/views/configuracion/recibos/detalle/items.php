@@ -62,7 +62,7 @@ $wompi = json_decode($recibo->wompi_datos, true);
     </div>
     
     <div class="card-body card-body--padding--2">
-        <a class="btn btn-info" href="<?php echo base_url()."archivos/facturas/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
+        <a class="btn btn-info" href="<?php echo base_url()."archivos/recibos/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
         <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
         <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
     </div>

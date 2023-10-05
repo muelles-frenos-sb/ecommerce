@@ -22,12 +22,12 @@
 
     <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
         <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivo">
-        <button class="btn btn-info"  onClick="javascript:guardarFacturaEstadoCuenta()">Subir comprobante de pago</button>
+        <button class="btn btn-info"  onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante de pago</button>
     </div>
 
     <div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
         <div class="col-12">
-            <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarFacturaEstadoCuenta(true)">Pagar en línea</button>
+            <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
         </div>
     </div>
 </div>
@@ -88,7 +88,7 @@
         return detalleFactura
     }
 
-    guardarFacturaEstadoCuenta = async(pagarEnLinea  = false) => {
+    guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
         let total = parseFloat($('#total_pago').text())
         var archivo = $('#estado_cuenta_archivo').prop('files')[0]
 
@@ -118,9 +118,9 @@
 
         let recibo = await consulta('crear', datosrecibo, false)
         
-        // Una vez creada la factura
+        // Una vez creado el recibo
         if (recibo.resultado) {
-            // Se crean los ítems de la factura
+            // Se crean los ítems del recibo
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle_estado_cuenta', 'recibo_id': recibo.resultado, items: calcularTotal()}, false)
 
             // if (reciboItems.resultado) {
@@ -132,7 +132,7 @@
                     let nombre = archivo.name.split('.')[0]
                     let extension = archivo.name.split('.').pop()
                     let tamanio = archivo.size / 1000
-                    let nombreArchivo = `${factura.resultado}.${extension}`
+                    let nombreArchivo = `${recibo.resultado}.${extension}`
                     
                     let anexo = new FormData()
                     anexo.append('name', archivo, nombreArchivo)
@@ -144,7 +144,7 @@
                         let respuesta = JSON.parse(evento.target.responseText)
                         consulta('actualizar', {
                             tipo: 'recibos',
-                            id: factura.resultado,
+                            id: recibo.resultado,
                             nombre_archivo: nombreArchivo
                         })
                     }
