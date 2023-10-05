@@ -171,6 +171,7 @@ if($this->session->userdata('usuario_id')) {
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
             valor: <?php echo $this->cart->total(); ?>,
+            factura_tipo_id: 1,
         }
 
         // Si trae sucursales, se agrega a los datos

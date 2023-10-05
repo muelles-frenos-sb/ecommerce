@@ -1,7 +1,6 @@
 <?php
 $opciones = [
 	'contador' => $datos['contador'],
-	'finalizado' => true,
 ];
 
 $registros = $this->configuracion_model->obtener('facturas', $opciones);
@@ -9,7 +8,7 @@ $registros = $this->configuracion_model->obtener('facturas', $opciones);
 if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron registros.</li>';
 
 foreach ($registros as $factura) {
-    $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($factura->wompi_status);
+    $mensajes_estado_wompi = ($factura->wompi_status) ? mostrar_mensajes_estados_wompi($factura->wompi_status) : null;
     ?>
     <tr class="wishlist__row wishlist__row--body">
         <td class="wishlist__column wishlist__column--body wishlist__column--product">
@@ -34,7 +33,7 @@ foreach ($registros as $factura) {
         <td class="wishlist__column wishlist__column--body wishlist__column--stock">
             <div class="status-badge status-badge--style--<?php echo ($factura->wompi_status == 'APPROVED') ? 'success' : 'failure' ; ?> status-badge--has-text">
                 <div class="status-badge__body">
-                    <div class="status-badge__text"><?php echo $mensajes_estado_wompi['asunto']; ?></div>
+                    <div class="status-badge__text"><?php if($mensajes_estado_wompi) echo $mensajes_estado_wompi['asunto']; ?></div>
                 </div>
             </div>
         </td>

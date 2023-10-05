@@ -112,6 +112,10 @@ class Interfaces extends CI_Controller {
             case 'clientes_sucursales':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
+            
+            case 'factura_documento_contable':
+                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'])]);
+            break;
 
             case 'facturas':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
@@ -134,6 +138,30 @@ class Interfaces extends CI_Controller {
                         'producto_id' => $producto->id,
                         'cantidad' => $item['qty'],
                         'precio' => $item['price'],
+                        'subtotal' => $item['subtotal'],
+                    ];
+                    
+                    array_push($items_factura, $datos_item);
+                }
+
+                // Se agrega log
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 21,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                ]);
+                
+                if(!empty($items_factura)) print json_encode(['resultado' => $this->productos_model->crear('facturas_detalle', $items_factura)]);
+            break;
+
+            case 'facturas_detalle_estado_cuenta':
+                // Vamos a guardar el detalle de la factura
+                $items_factura = [];
+
+                // Se recorren los ítems
+                foreach ($datos['items'] as $item) {                    
+                    $datos_item = [
+                        'factura_id' => $datos['factura_id'],
+                        'cliente_factura_id' => $item['cliente_factura_id'],
                         'subtotal' => $item['subtotal'],
                     ];
                     

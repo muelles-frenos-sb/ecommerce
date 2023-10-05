@@ -85,26 +85,30 @@ Class Clientes_model extends CI_Model {
 
                 if(isset($datos['numero_documento'])) $where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
                 if(isset($datos['pendientes'])) $where .= " AND cf.totalCop <> 0 ";
+                if(isset($datos['id'])) $where .= " AND cf.id = {$datos['id']}";
 
                 $sql =
                 "SELECT
                     cf.*,
                     date(cf.Fecha_doc_cruce) Fecha_doc_cruce,
                     date(cf.Fecha_venc) Fecha_venc,
+                    YEAR(cf.Fecha_venc) anio_vencimiento,
+                    MONTH(cf.Fecha_venc) mes_vencimiento,
+                    DAY(cf.Fecha_venc) dia_vencimiento,
                     co.nombre centro_operativo,
                     a.nombre_homologado,
                     DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido,
                     ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id,
-                    a.codigo codigo_auxiliar
+                    a.codigo codigo_auxiliar,
+                    co.codigo centro_operativo_codigo
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
                 LEFT JOIN auxiliares AS a ON cf.Desc_auxiliar = a.nombre
                 $where
                 $having
-                ORDER BY diasvencidos DESC
-                ";
-
+                ORDER BY diasvencidos DESC";
+                
                 if (isset($datos['id'])) {
                     return $this->db->query($sql)->row();
                 } else {

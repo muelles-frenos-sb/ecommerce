@@ -56,7 +56,7 @@
                     <span class="vehicles-list__item-details">SEDE ${datos.sede} - ${datos.tipo_credito}</span>
                 </span>
                 <span class="vehicles-list__item-info">
-                    <input type="number" class="form-control valor_pago_factura" style="text-align: right" max="${datos.valor}" value="${datos.valor}">
+                    <input type="number" data-id="${datos.id}" class="form-control valor_pago_factura" style="text-align: right" max="${datos.valor}" value="${datos.valor}" onChange="javascript:calcularTotal()">
                 </span>
 
                 <button type="button" class="vehicles-list__item-remove">
@@ -72,11 +72,20 @@
 
     calcularTotal = () => {
         var total = 0
+        var detalleFactura = []
+
         $(`.valor_pago_factura`).each(function() {
             total += parseFloat($(this).val())
+
+            detalleFactura.push({
+                cliente_factura_id: $(this).attr('data-id'),
+                subtotal: $(this).val()
+            })
         })
 
         $('#total_pago').text(total)
+
+        return detalleFactura
     }
 
     guardarFacturaEstadoCuenta = async(pagarEnLinea  = false) => {
@@ -97,7 +106,7 @@
         let datosFactura = {
             tipo: 'facturas',
             abreviatura: 'ec',
-            tipo_id: 2,
+            factura_tipo_id: (pagarEnLinea) ? 2 : 3,
             razon_social: $('#factura_tercero_razon_social').val(),
             documento_numero: $('#factura_tercero_documento_numero').val(),
             // direccion: $('#checkout_direccion').val(),
@@ -112,7 +121,7 @@
         // Una vez creada la factura
         if (factura.resultado) {
             // Se crean los ítems de la factura
-            // let facturaItems = await consulta('crear', {tipo: 'facturas_detalle_estado_cuenta', 'factura_id': factura.resultado}, false)
+            let facturaItems = await consulta('crear', {tipo: 'facturas_detalle_estado_cuenta', 'factura_id': factura.resultado, items: calcularTotal()}, false)
 
             // if (facturaItems.resultado) {
                 // Si es pago en línea, redirecciona a Wompi

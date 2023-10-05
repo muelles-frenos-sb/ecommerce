@@ -48,14 +48,14 @@ Class Configuracion_model extends CI_Model {
                 $where = "WHERE f.id";
                 
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND f.wompi_status IS NOT NULL ";
-                // if(isset($datos['token'])) $where .= " AND p.token = '{$datos['token']}'";
                 
                 $sql =
                 "SELECT
                     f.*,
-                    CASE f.tipo_id WHEN 1 THEN 'Pedido' WHEN 2 THEN 'Factura' END tipo
+                    ft.nombre AS tipo
                 FROM
                     facturas AS f
+                    INNER JOIN facturas_tipos AS ft ON f.factura_tipo_id = ft.id
                 $where
                 ORDER BY
                     f.razon_social";

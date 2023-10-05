@@ -1,9 +1,119 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+/**
+ * Consume el endpoint para la creación del
+ * documento contable en Siesa
+ */
+function crear_documento_contable($id_factura, $datos_pago = null) {
+    $CI =& get_instance();
+
+    $factura = $CI->productos_model->obtener('factura', ['id' => $id_factura]);
+
+    $notas_factura = "- Factura $factura->id";
+    // $notas_factura = "- Factura $factura->id E-Commerce - Referencia Wompi: {$datos_pago['reference']} - ID de Transacción Wompi: {$datos_pago['id']}";
+    // enviar_email_factura($factura);
+
+    // Se obtienen los ítems de la factura
+    $items = $CI->productos_model->obtener('factura_detalle', ['factura_id' => $factura->id]);
+
+    $documentos = [];
+    $mes_factura = str_pad($factura->mes, 2, '0', STR_PAD_LEFT);
+    $dia_factura = str_pad($factura->dia, 2, '0', STR_PAD_LEFT);
+
+    // Se recorre cada ítem
+    foreach ($items as $item) {
+        $factura_cliente = $CI->clientes_model->obtener('clientes_facturas', ['id' => $item->cliente_factura_id]);
+
+        $mes_vencimiento = str_pad($factura_cliente->mes_vencimiento, 2, '0', STR_PAD_LEFT);
+        $dia_vencimiento = str_pad($factura_cliente->dia_vencimiento, 2, '0', STR_PAD_LEFT);
+        
+        $documento = [
+            "F350_CONSEC_DOCTO" => 1,                                                                                                           // Numero de documento
+            "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,                                                                            // Id de la tabla auxiliar
+            "F351_ID_TERCERO" => $factura_cliente->Cliente,                                                                                     // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+            "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,                                                                      // Código del centro operativo (sede)
+            "F351_VALOR_CR" => $item->subtotal,                                                                                                 // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+            "F351_NOTAS" => $notas_factura,                                                                                                     // Observaciones
+            "F353_ID_SUCURSAL" => str_pad($factura_cliente->sucursal_id, 3, '0', STR_PAD_LEFT),                                                 // Valida en maestro, código de sucursal del cliente.
+            "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,                                                                     // (Tipo_Doc_Cruce)
+            "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,                                                                       // Numero de documento de cruce, es un numero entre 1 y 99999999.
+            "F353_FECHA_VCTO" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",  // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
+            "F353_FECHA_DSCTO_PP" => "{$factura->anio}{$mes_factura}{$dia_factura}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+        ];
+
+        array_push($documentos, $documento);
+    }
+
+    $datos_documento_contable = [
+        // Un solo documento contable para toda la transacción
+        "Documento_contable" => [
+            [
+                "F350_CONSEC_DOCTO" => 1,                                           // Número de documento (Siesa lo autogenera)
+                "F350_FECHA" => "{$factura->anio}{$mes_factura}{$dia_factura}",   // El formato debe ser AAAAMMDD
+                "F350_ID_TERCERO" => $factura->documento_numero,                    // Valida en maestro, código de tercero
+                "F350_NOTAS" => $notas_factura                                      // Observaciones
+            ]
+        ],
+        "Movimiento_contable" => [
+            // Primer movimiento -> Banco
+            [
+                "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
+                "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
+                "F351_VALOR_DB" => $factura->valor,                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$mes_factura}{$dia_factura}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+                "F351_NOTAS" => $notas_factura                                                              // Observaciones
+            ],
+            // Segundo movimiento -> Auxiliar de la factura (Usar para retenciones y descuentos)
+            //             [
+            //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
+            //                 "F351_ID_AUXILIAR" => "11100504",                                            // Valida en maestro, código de cuenta contable
+            //                 // Pendiente
+            //                 "F351_VALOR_DB" => $factura->valor,                                          // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+            //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+            //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
+            //             ],
+        ],
+        // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
+        "Movimiento_CxC" => $documentos
+    ];
+
+    $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
+    $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
+    $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
+    $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
+
+    // Si no se pudo crear el documento contable
+    if($codigo_resultado_documento_contable == '1') {
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 19,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => $detalle_resultado_documento_contable
+        ]);
+        
+        $error = true;
+        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    } else {
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 20,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+        ]);
+
+        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    }
+
+    return [
+        'error' => $error,
+        'mensaje' => $respuesta,
+    ];
+}
+
 function obtener_clientes_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
 
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
@@ -31,7 +141,8 @@ function obtener_clientes_api($datos) {
 
 function obtener_estado_cuenta_cliente_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -85,7 +196,8 @@ function obtener_facturas_desde_pedido_api($datos) {
 
 function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -111,7 +223,8 @@ function obtener_movimientos_contables_api($datos) {
 
 function obtener_terceros_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
 
     $client = new \GuzzleHttp\Client();
     try {

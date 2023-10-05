@@ -67,6 +67,7 @@ if(empty($facturas)) {
                     <td>
                         <button type="button" class="btn btn-success" onClick="javascript:agregarFactura({
                             contador: '<?php echo $contador; ?>',
+                            id: '<?php echo $factura->id; ?>',
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
                             valor: `<?php echo $factura->totalCop; ?>`,
                             sede: `<?php echo $factura->centro_operativo; ?>`,
