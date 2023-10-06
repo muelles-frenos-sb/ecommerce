@@ -42,6 +42,11 @@ class Blog extends MY_Controller {
         $this->data['contenido_principal'] = 'blog/taller_aliado';
         $this->load->view('core/body', $this->data);
     }
+
+    function tratamiento_datos() {
+        $this->data['contenido_principal'] = 'blog/tratamiento_datos';
+        $this->load->view('core/body', $this->data);
+    }
 }
 /* Fin del archivo Contacto.php */
 /* Ubicación: ./application/controllers/Contacto.php */

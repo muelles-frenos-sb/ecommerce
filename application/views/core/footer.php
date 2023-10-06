@@ -56,7 +56,7 @@
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/nosotros'); ?>" class="footer-links__link">Acerca de nosotros</a></li>
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/contacto'); ?>" class="footer-links__link">Contacto</a></li>
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/taller_aliado'); ?>" class="footer-links__link">Taller aliado</a></li>
-                                <li class="footer-links__item"><a href="#" class="footer-links__link">Política de tratamiento de datos</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/tratamiento_datos'); ?>" class="footer-links__link">Política de tratamiento de datos</a></li>
                                 
                             </ul>
                         </div>
