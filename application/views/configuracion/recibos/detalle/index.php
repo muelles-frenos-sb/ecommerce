@@ -14,7 +14,7 @@
                         </li>
 
                         <!-- Pago -->
-                        <?php if($recibo->recibo_tipo_id != 3) { ?>
+                        <?php if($recibo->wompi_datos) { ?>
                             <li class="recibos_wompi account-nav__item">
                                 <a onClick="cargarInterfaz('configuracion/recibos/detalle/wompi', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})">Pago</a>
                             </li>

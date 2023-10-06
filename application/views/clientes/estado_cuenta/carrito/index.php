@@ -105,6 +105,11 @@
             return false
         }
 
+        if(total < 0) {
+            mostrarAviso('alerta', 'El valor del pago debe ser mayor a cero.')
+            return false
+        }
+
         // Si no es pago en línea y no tiene archivo
         if(!pagarEnLinea && !archivo) {
             mostrarAviso('alerta', 'Por favor selecciona el comprobante de pago que vas a adjuntar al pago')

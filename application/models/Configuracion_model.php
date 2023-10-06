@@ -45,7 +45,7 @@ Class Configuracion_model extends CI_Model {
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
             case 'recibos':
-                $where = "WHERE r.id";
+                $where = "WHERE r.recibo_estado_id";
                 
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 
