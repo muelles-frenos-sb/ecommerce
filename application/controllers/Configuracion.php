@@ -72,30 +72,30 @@ class Configuracion extends MY_Controller {
         }
     }
 
-    function terceros() {
+    function usuarios() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
-        if(!in_array(['configuracion' => 'configuracion_terceros_ver'], $this->data['permisos'])) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_usuarios_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             default:
-                $this->data['contenido_principal'] = 'configuracion/terceros/index';
+                $this->data['contenido_principal'] = 'configuracion/usuarios/index';
                 $this->data['vista'] = $this->uri->segment(3);
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'lista':
                 $this->data['datos'] = $this->input->post('datos');
-                $this->load->view('configuracion/terceros/lista', $this->data);
+                $this->load->view('configuracion/usuarios/lista', $this->data);
             break;
 
             case 'ver':
-                $this->data['contenido_principal'] = 'configuracion/terceros/index';
+                $this->data['contenido_principal'] = 'configuracion/usuarios/index';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'id':
                 $this->data['token'] = $this->uri->segment(4);
-                $this->data['contenido_principal'] = 'configuracion/terceros/detalle/index';
+                $this->data['contenido_principal'] = 'configuracion/usuarios/detalle/index';
                 $this->load->view('core/body', $this->data);
             break;
         }

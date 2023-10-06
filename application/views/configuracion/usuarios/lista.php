@@ -6,13 +6,12 @@
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock">Estado</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--price">----</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--button"></th>
-                <th class="wishlist__column wishlist__column--head wishlist__column--remove"></th>
             </tr>
         </thead>
         <tbody class="wishlist__body" id="datos">
-            <?php $this->load->view("configuracion/terceros/datos"); ?>
+            <?php $this->load->view("configuracion/usuarios/datos"); ?>
         </tbody>
     </table>
 </div>
 
-<button class="btn btn-primary btn-block mt-3" onClick="javascript:cargarMasDatos('configuracion/terceros')" id="btn_mostrar_mas">Mostrar más datos</button>
+<button class="btn btn-primary btn-block mt-3" onClick="javascript:cargarMasDatos('configuracion/usuarios')" id="btn_mostrar_mas">Mostrar más datos</button>

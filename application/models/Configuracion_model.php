@@ -271,8 +271,7 @@ Class Configuracion_model extends CI_Model {
         
                     for ($i=0; $i < count($palabras); $i++) {
                         $having .= " (";
-                        $having .= " codigo LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR u.nombres LIKE '%{$palabras[$i]}%'";
+                        $having .= " u.nombres LIKE '%{$palabras[$i]}%'";
                         $having .= " OR u.primer_apellido LIKE '%{$palabras[$i]}%'";
                         $having .= " OR u.segundo_apellido LIKE '%{$palabras[$i]}%'";
                         $having .= " OR u.razon_social LIKE '%{$palabras[$i]}%'";
@@ -282,7 +281,6 @@ Class Configuracion_model extends CI_Model {
                         $having .= " OR u.celular LIKE '%{$palabras[$i]}%'";
                         $having .= " OR documento_numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR email LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR nombre_establecimiento LIKE '%{$palabras[$i]}%'";
                         $having .= " OR nombre_contacto LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         

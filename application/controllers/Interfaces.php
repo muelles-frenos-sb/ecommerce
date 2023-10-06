@@ -63,10 +63,6 @@ class Interfaces extends CI_Controller {
             default:
                 $resultado = $this->configuracion_model->actualizar($tipo, $id, $datos);
             break;
-
-            case 'terceros':
-                $resultado = $this->configuracion_model->actualizar('usuarios', $id, $datos);
-            break;
         }
 
         print json_encode($resultado);
@@ -204,11 +200,12 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear('terceros', $datos['valores'])]);
             break;
 
-            case 'terceros':
+            case 'usuarios':
                 // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');
                 $datos['token'] = generar_token($datos['fecha_creacion']);
+                $datos['clave'] = sha1($datos['clave']);
                 
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;

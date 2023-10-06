@@ -39,9 +39,9 @@
                                 </li>
                             <?php } ?>
 
-                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_terceros_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_usuarios_ver'], $permisos)) { ?>
                                 <li class="menu__item">
-                                    <a href="<?php echo site_url('configuracion/terceros/ver'); ?>" class="menu__link">
+                                    <a href="<?php echo site_url('configuracion/usuarios/ver'); ?>" class="menu__link">
                                         Usuarios
                                     </a>
                                 </li>

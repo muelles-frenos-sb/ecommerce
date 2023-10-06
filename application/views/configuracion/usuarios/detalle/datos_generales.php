@@ -19,10 +19,6 @@ if($this->uri->segment(4)) {
                         <input type="text" class="form-control" id="tercero_razon_social" value="<?php if(!empty($tercero)) echo $tercero->razon_social; ?>" autofocus>
                     </div>
                     <div class="form-group col-md-12">
-                        <label for="tercero_nombre_establecimiento">Nombre del establecimiento</label>
-                        <input type="text" class="form-control" id="tercero_nombre_establecimiento" value="<?php if(!empty($tercero)) echo $tercero->nombre_establecimiento; ?>">
-                    </div>
-                    <div class="form-group col-md-12">
                         <label for="tercero_nombres">Nombres</label>
                         <input type="text" class="form-control" id="tercero_nombres" value="<?php if(!empty($tercero)) echo $tercero->nombres; ?>">
                     </div>
@@ -33,10 +29,6 @@ if($this->uri->segment(4)) {
                     <div class="form-group col-md-6">
                         <label for="tercero_segundo_apellido">Segundo apellido</label>
                         <input type="text" class="form-control" id="tercero_segundo_apellido" value="<?php if(!empty($tercero)) echo $tercero->segundo_apellido; ?>">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="tercero_codigo">Código *</label>
-                        <input type="text" class="form-control" id="tercero_codigo" value="<?php if(!empty($tercero)) echo $tercero->codigo; ?>">
                     </div>
                     <div class="form-group col-md-6">
                         <label for="tercero_fecha_nacimiento">Fecha de nacimiento</label>
@@ -86,38 +78,6 @@ if($this->uri->segment(4)) {
                 </div>
                 <hr>
                 <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label for="tercero_es_proveedor">¿Es proveedor? *</label>
-                        <select id="tercero_es_proveedor" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="tercero_es_empleado">¿Es empleado? *</label>
-                        <select id="tercero_es_empleado" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="tercero_es_interno">¿Interno? *</label>
-                        <select id="tercero_es_interno" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="tercero_es_cliente">Es cliente? *</label>
-                        <select id="tercero_es_cliente" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
-                        </select>
-                    </div>
                     <div class="form-group col-md-6">
                         <label for="tercero_estado">Estado *</label>
                         <select id="tercero_estado" class="form-control">
@@ -127,21 +87,27 @@ if($this->uri->segment(4)) {
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="tercero_es_regimen_unificado">¿Régimen unificado? *</label>
-                        <select id="tercero_es_regimen_unificado" class="form-control">
+                        <label for="usuario_perfil">Perfil *</label>
+                        <select id="usuario_perfil" class="form-control">
                             <option value="">Seleccione...</option>
-                            <option value="1">Sí</option>
-                            <option value="0">No</option>
+                            <?php foreach($this->configuracion_model->obtener('perfiles') as $perfil) echo "<option value='$perfil->id'>$perfil->nombre</option>"; ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-12 mb-0">
-                        <label for="tercero_ciiu">CIIU</label>
-                        <input type="text" class="form-control" id="tercero_ciiu" value="<?php if(!empty($tercero)) echo $tercero->ciiu; ?>">
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="usuario_login">Nombre de usuario</label>
+                        <input type="text" class="form-control" id="usuario_login" value="<?php if(!empty($tercero)) echo $tercero->login; ?>">
+                    </div>
+                    <div class="form-group col-md-6 mb-2">
+                        <label for="usuario_clave">Contraseña</label>
+                        <input type="password" class="form-control" id="usuario_clave">
                     </div>
                 </div>
                 <div class="form-group mb-0 pt-3 mt-3">
                     <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
-                    <button class="btn btn-success" onClick="javascript:guardarTercero()">Guardar datos</button>
+
+                    <?php if(!isset($tercero)) { ?>
+                        <button class="btn btn-success" onClick="javascript:guardarTercero()">Guardar datos</button>
+                    <?php } ?>
                 </div>
             </div>
         </div>
@@ -152,12 +118,8 @@ if($this->uri->segment(4)) {
     <script>
         $('#tercero_tipo_id').val(<?php echo $tercero->usuario_tipo_id; ?>)
         $('#tercero_tipo_identificacion_id').val(<?php echo $tercero->usuario_identificacion_tipo_id; ?>)
-        $('#tercero_es_proveedor').val(<?php echo $tercero->es_proveedor; ?>)
-        $('#tercero_es_empleado').val(<?php echo $tercero->es_empleado; ?>)
-        $('#tercero_es_interno').val(<?php echo $tercero->es_interno; ?>)
-        $('#tercero_es_cliente').val(<?php echo $tercero->es_cliente; ?>)
         $('#tercero_estado').val(<?php echo $tercero->estado; ?>)
-        $('#tercero_es_regimen_unificado').val(<?php echo $tercero->es_regimen_unificado; ?>)
+        $('#usuario_perfil').val(<?php echo $tercero->perfil_id; ?>)
     </script>
 <?php } ?>
 
@@ -165,29 +127,24 @@ if($this->uri->segment(4)) {
     guardarTercero = async() => {
         let camposObligatorios = [
             $('#tercero_razon_social'),
-            $('#tercero_codigo'),
             $('#tercero_tipo_id'),
             $('#tercero_tipo_identificacion_id'),
             $('#tercero_numero_documento'),
             $('#tercero_email'),
-            $('#tercero_es_proveedor'),
-            $('#tercero_es_empleado'),
-            $('#tercero_es_interno'),
-            $('#tercero_es_cliente'),
             $('#tercero_estado'),
-            $('#tercero_es_regimen_unificado'),
+            $('#usuario_perfil'),
+            $('#usuario_login'),
+            $('#usuario_clave'),
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
         let datosTercero = {
-            tipo: 'terceros',
+            tipo: 'usuarios',
             razon_social: $('#tercero_razon_social').val(),
-            nombre_establecimiento: $('#tercero_nombre_establecimiento').val(),
             nombres: $('#tercero_nombres').val(),
             primer_apellido: $('#tercero_primer_apellido').val(),
             segundo_apellido: $('#tercero_segundo_apellido').val(),
-            codigo: $('#tercero_codigo').val(),
             fecha_nacimiento: $('#tercero_fecha_nacimiento').val(),
             email: $('#tercero_email').val(),
             telefono: $('#tercero_telefono').val(),
@@ -197,13 +154,10 @@ if($this->uri->segment(4)) {
             documento_numero: $('#tercero_numero_documento').val(),
             digito_verificacion: $('#tercero_numero_documento_digito_verificacion').val(),
             nombre_contacto: $('#tercero_nombre_contacto').val(),
-            es_proveedor: $('#tercero_es_proveedor').val(),
-            es_empleado: $('#tercero_es_empleado').val(),
-            es_interno: $('#tercero_es_interno').val(),
-            es_cliente: $('#tercero_es_cliente').val(),
             estado: $('#tercero_estado').val(),
-            es_regimen_unificado: $('#tercero_es_regimen_unificado').val(),
-            ciiu: $('#tercero_ciiu').val(),
+            perfil_id: $('#usuario_perfil').val(),
+            login: $('#usuario_login').val(),
+            clave: $('#usuario_clave').val(),
         }
 
         if(!$('#tercero_id').val()) {

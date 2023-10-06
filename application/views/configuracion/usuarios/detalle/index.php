@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="col-12 col-lg-9 mt-4 mt-lg-0">
-                <?php $this->load->view("configuracion/terceros/detalle/datos_generales"); ?>
+                <?php $this->load->view("configuracion/usuarios/detalle/datos_generales"); ?>
             </div>
         </div>
     </div>
