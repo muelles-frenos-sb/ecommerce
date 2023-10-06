@@ -69,6 +69,7 @@ if(empty($facturas)) {
                             contador: '<?php echo $contador; ?>',
                             id: '<?php echo $factura->id; ?>',
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                            documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
                             valor: `<?php echo $factura->totalCop; ?>`,
                             sede: `<?php echo $factura->centro_operativo; ?>`,
                             tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,

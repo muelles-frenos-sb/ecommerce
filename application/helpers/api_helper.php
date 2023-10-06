@@ -23,7 +23,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null) {
 
     // Se recorre cada ítem
     foreach ($items as $item) {
-        $factura_cliente = $CI->clientes_model->obtener('clientes_facturas', ['id' => $item->cliente_factura_id]);
+        $factura_cliente = $CI->clientes_model->obtener('clientes_facturas', [
+            'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
+            'Nro_Doc_cruce' => $item->documento_cruce_numero,
+        ]);
 
         $mes_vencimiento = str_pad($factura_cliente->mes_vencimiento, 2, '0', STR_PAD_LEFT);
         $dia_vencimiento = str_pad($factura_cliente->dia_vencimiento, 2, '0', STR_PAD_LEFT);

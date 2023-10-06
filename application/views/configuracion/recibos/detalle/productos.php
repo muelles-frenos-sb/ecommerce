@@ -15,11 +15,7 @@
                 <tbody class="wishlist__body">
                     <?php
                     foreach($recibo_detalle as $detalle) {
-                        if($recibo->recibo_tipo_id == 1) {
-                            $item = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
-                        } else {
-                            $item = $this->clientes_model->obtener('clientes_facturas', ['id' => $detalle->cliente_factura_id]);
-                        }
+                        $item = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
                         ?>
                         <tr class="wishlist__row wishlist__row--body">
                             <?php if($recibo->recibo_tipo_id == 1) { ?>

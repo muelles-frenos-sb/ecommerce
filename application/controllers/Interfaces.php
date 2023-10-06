@@ -158,10 +158,11 @@ class Interfaces extends CI_Controller {
                 $items_recibo = [];
 
                 // Se recorren los ítems
-                foreach ($datos['items'] as $item) {                    
+                foreach ($datos['items'] as $item) {
                     $datos_item = [
                         'recibo_id' => $datos['recibo_id'],
-                        'cliente_factura_id' => $item['cliente_factura_id'],
+                        'documento_cruce_numero' => $item['documento_cruce_numero'],
+                        'documento_cruce_tipo' => $item['documento_cruce_tipo'],
                         'subtotal' => $item['subtotal'],
                     ];
                     

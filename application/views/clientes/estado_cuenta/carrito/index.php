@@ -8,7 +8,7 @@
 
 <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
     <div class="alert alert-primary mb-3">
-        Selecciona una o varias facturas a pagar, hacuiendo clic en el ícono <i class="fa fa-plus"></i>
+        Selecciona una o varias facturas a pagar, haciendo clic en el ícono <i class="fa fa-plus"></i>
     </div>
 </div>
 
@@ -53,7 +53,17 @@
                     <span class="vehicles-list__item-details">SEDE ${datos.sede} - ${datos.tipo_credito}</span>
                 </span>
                 <span class="vehicles-list__item-info">
-                    <input type="number" data-id="${datos.id}" class="form-control valor_pago_factura" style="text-align: right" max="${datos.valor}" value="${datos.valor}" onChange="javascript:calcularTotal()">
+                    <input 
+                        type="number"
+                        data-id="${datos.id}"
+                        data-documento_cruce_numero="${datos.documento_cruce}"
+                        data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
+                        class="form-control valor_pago_factura"
+                        style="text-align: right"
+                        max="${datos.valor}"
+                        value="${datos.valor}"
+                        onChange="javascript:calcularTotal()"
+                    >
                 </span>
 
                 <button type="button" class="vehicles-list__item-remove">
@@ -75,7 +85,8 @@
             total += parseFloat($(this).val())
 
             detalleFactura.push({
-                cliente_factura_id: $(this).attr('data-id'),
+                documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
+                documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
                 subtotal: $(this).val()
             })
         })
