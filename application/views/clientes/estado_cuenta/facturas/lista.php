@@ -80,7 +80,7 @@ if(empty($facturas)) {
                         <?php echo $factura->centro_operativo; ?>
                     </td>
                     <td class="text-right">
-                        <a href="javascript:;" onClick="javascrip:cargarProductos({
+                        <a href="javascript:;" onClick="javascript:cargarProductos({
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
                             numero_documento: '<?php echo $factura->Cliente; ?>',
                             id_sucursal: '<?php echo $factura->sucursal_id; ?>',
@@ -107,7 +107,7 @@ if(empty($facturas)) {
                     <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td>
                     <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
                     <td class="text-center">
-                        <a href="javascript:;" onClick="javascrip:cargarMovimientos({
+                        <a href="javascript:;" onClick="javascript:cargarMovimientos({
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
                             numero_documento: '<?php echo $factura->Cliente; ?>',
                             id_sucursal: '<?php echo $factura->sucursal_id; ?>',

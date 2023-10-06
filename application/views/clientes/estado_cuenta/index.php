@@ -1,7 +1,7 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Consultar estado de cuenta</h1>
+            <h1 class="block-header__title">Pagar facturas</h1>
         </div>
     </div>
 </div>
@@ -15,7 +15,7 @@
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
                         <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="900886934" autofocus>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mi estado de cuenta</button>
+                    <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mis facturas</button>
 
                     <div class="mt-2" id="contenedor_mensaje_carga"></div>
                 </form>

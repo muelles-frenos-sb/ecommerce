@@ -25,7 +25,7 @@
                     <div class="address-card__row-title">Dirección</div>
                     <div class="address-card__row-content">-----</div>
                 </div>
-                <a class="btn btn-info mt-2" href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
+                <a class="mt-2" href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
             </div>
         </div>
     </div>
