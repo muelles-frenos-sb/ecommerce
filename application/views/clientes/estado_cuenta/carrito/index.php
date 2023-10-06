@@ -104,6 +104,7 @@
             tipo: 'recibos',
             abreviatura: 'ec',
             recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
+            recibo_estado_id: (!pagarEnLinea) ? 3 : null,
             razon_social: $('#factura_tercero_razon_social').val(),
             documento_numero: $('#factura_tercero_documento_numero').val(),
             // direccion: $('#checkout_direccion').val(),

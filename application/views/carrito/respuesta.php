@@ -1,7 +1,7 @@
 <?php
 $recibo = $this->productos_model->obtener('recibo', ['token' => $this->input->get('referencia')]);
-$recibo_detalle = $this->productos_model->obtener('factura_detalle', ['rd.recibo_id' => $recibo->id]);
-$wompi = json_decode($factura->wompi_datos, true);
+$recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
+$wompi = json_decode($recibo->wompi_datos, true);
 
 // Dependiendo del estado de la transacción, trae los mensajes
 $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);

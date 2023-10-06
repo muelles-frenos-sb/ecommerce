@@ -1,6 +1,6 @@
 <?php
-$factura = $this->productos_model->obtener('factura', ['token' => $datos['token']]);
-$wompi = json_decode($factura->wompi_datos, true);
+$recibo = $this->productos_model->obtener('recibo', ['token' => $datos['token']]);
+$wompi = json_decode($recibo->wompi_datos, true);
 
 // Dependiendo del estado de la transacción, trae los mensajes
 $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
@@ -44,7 +44,7 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                         </li>
                         <li class="order-success__meta-item">
                             <span class="order-success__meta-title">Estado:</span>
-                            <div class="status-badge status-badge--style--<?php echo ($factura->wompi_status == 'APPROVED') ? 'success' : 'failure' ; ?> status-badge--has-text">
+                            <div class="status-badge status-badge--style--<?php echo ($recibo->wompi_status == 'APPROVED') ? 'success' : 'failure' ; ?> status-badge--has-text">
                                 <div class="status-badge__body">
                                     <div class="status-badge__text"><?php echo $mensajes_estado_wompi['asunto']; ?></div>
                                 </div>
@@ -52,7 +52,6 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                         </li>
                     </ul>
                 </div>
-                <a class="btn btn-info" href="<?php echo $wompi['payment_method']['extra']['async_payment_url']; ?>" target="_blank">Ver recibo</a>
             </div>
         </div>
     </div>

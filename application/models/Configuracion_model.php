@@ -52,13 +52,16 @@ Class Configuracion_model extends CI_Model {
                 $sql =
                 "SELECT
                     r.*,
-                    rt.nombre AS tipo
+                    rt.nombre tipo,
+                    re.nombre estado,
+	                re.clase estado_clase
                 FROM
                     recibos AS r
-                    INNER JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
+                    LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
+	                LEFT JOIN recibos_estados AS re ON r.recibo_estado_id = re.id
                 $where
                 ORDER BY
-                    r.razon_social";
+                    r.fecha_creacion DESC";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
                     return $this->db->query($sql)->row();

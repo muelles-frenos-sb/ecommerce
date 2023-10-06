@@ -85,7 +85,7 @@ class Webhooks extends MY_Controller {
             'wompi_transaccion_id' => $datos['id'],
             'wompi_status' => $datos['status'],
             'wompi_datos' => json_encode($datos),
-            'recibo_estado_id' => ($mensajes_estado_wompi['pedido_completo']) ? 1 : 2,
+            'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
         ])) {
             $respuesta['recibo'] = 'Recibo actualizado';
         } else {
@@ -133,6 +133,7 @@ class Webhooks extends MY_Controller {
             'wompi_transaccion_id' => $wompi_transaction_id,
             'wompi_status' => $wompi_status,
             'wompi_datos' => json_encode($datos),
+            'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
         ]);
 
         // Se actualiza el recibo con el id de la transacción

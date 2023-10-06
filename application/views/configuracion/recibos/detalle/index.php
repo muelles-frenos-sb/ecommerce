@@ -8,22 +8,15 @@
                 <div class="account-nav flex-grow-1">
                     <h4 class="account-nav__title">Opciones</h4>
                     <ul class="account-nav__list">
-                        <!-- Ítems -->
+                        <!-- Resumen -->
                         <li class="recibos_items account-nav__item">
-                            <a onClick="cargarInterfaz('configuracion/recibos/detalle/items', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})">Ítems</a>
+                            <a onClick="cargarInterfaz('configuracion/recibos/detalle/resumen', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})">Resumen</a>
                         </li>
 
                         <!-- Pago -->
-                        <?php if($recibo->recibo_tipo_id == 1) { ?>
+                        <?php if($recibo->recibo_tipo_id != 3) { ?>
                             <li class="recibos_wompi account-nav__item">
                                 <a onClick="cargarInterfaz('configuracion/recibos/detalle/wompi', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})">Pago</a>
-                            </li>
-                        <?php } ?>
-
-                        <!-- Comprobante -->
-                        <?php if($recibo->recibo_tipo_id != 1) { ?>
-                            <li class="recibos_comprobante account-nav__item">
-                                <a onClick="cargarInterfaz('configuracion/recibos/detalle/comprobante', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})">Comprobante</a>
                             </li>
                         <?php } ?>
                     </ul>
@@ -41,8 +34,6 @@
     aprobarPago = async(reciboid) => {
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboid}, false)
         .then(pago => {
-            console.log(pago.resultado.mensaje)
-
             if(pago.resultado.error) {
                 mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
                 return false
@@ -55,6 +46,6 @@
     }
 
     $().ready(() => {
-        cargarInterfaz('configuracion/recibos/detalle/items', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})
+        cargarInterfaz('configuracion/recibos/detalle/resumen', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})
     })
 </script>

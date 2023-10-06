@@ -1,9 +1,3 @@
-<?php
-$recibo = $this->productos_model->obtener('recibo', ['token' => $datos['token']]);
-$recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
-$wompi = json_decode($recibo->wompi_datos, true);
-?>
-
 <div class="block">
     <div class="container container--max--xl">
         <div class="wishlist">
