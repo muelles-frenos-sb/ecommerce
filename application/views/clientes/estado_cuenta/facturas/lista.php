@@ -4,7 +4,7 @@ $opciones = [
     'pendientes' => true,
 ];
 
-if($datos['busqueda'] != '') $opciones['busqueda'] = $datos['busqueda'];
+// if($datos['busqueda'] != '') $opciones['busqueda'] = $datos['busqueda'];
 
 // Obtenemos las facturas del cliente pendientes por pagar
 $facturas = $this->clientes_model->obtener('clientes_facturas', $opciones);
@@ -147,7 +147,7 @@ if(empty($facturas)) {
             paging: true,
             stateSave: true,
             // scrollY: '600px',
-            searching: false,
+            searching: true,
             language: {
                 decimal: ',',
                 thousands: '.'
