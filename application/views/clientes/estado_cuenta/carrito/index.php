@@ -1,34 +1,31 @@
-<div class="vehicles-list">
-    <div class="form-group mt-2">
-        <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir el comprobante?</label>
-        <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
-            <option>Seleccione...</option>
-            <option value="1">Pagar en línea</option>
-            <option value="2">Subir comprobante</option>
-        </select>
+<div class="form-group">
+    <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir el comprobante?</label>
+    <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
+        <option value="1" selected>Pagar en línea</option>
+        <option value="2">Subir comprobante</option>
+    </select>
+</div>
+
+<div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
+    <div class="alert alert-primary mb-3">
+        Selecciona una o varias facturas a pagar, hacuiendo clic en el ícono <i class="fa fa-plus"></i>
     </div>
+</div>
 
-    <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
-        <div class="alert alert-primary mb-3">
-            Selecciona una o varias facturas a pagar, hacuiendo clic en el ícono <i class="fa fa-plus"></i>
-        </div>
-    </div>
+<div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
 
-    <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
+<div class="mt-2">
+    Total a pagar: <span id="total_pago">0</span>
+</div>
 
-    <div class="mt-2">
-        Total a pagar: <span id="total_pago">0</span>
-    </div>
+<div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
+    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivo">
+    <button class="btn btn-success"  onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante</button>
+</div>
 
-    <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
-        <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivo">
-        <button class="btn btn-info"  onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante de pago</button>
-    </div>
-
-    <div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
-        <div class="col-12">
-            <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
-        </div>
+<div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
+    <div class="col-12">
+        <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
     </div>
 </div>
 
@@ -157,6 +154,8 @@
         $(`input[type='number']`).keyup(() => {
             calcularTotal()
         })
+
+        $(`#contenedor_tipo_pago_wompi`).removeClass('d-none')
 
         $('#estado_cuenta_tipo_pago').change(function() {
             $(`#contenedor_tipo_pago_wompi, #contenedor_tipo_pago_comprobante`).addClass('d-none')

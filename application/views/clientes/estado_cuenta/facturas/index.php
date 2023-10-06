@@ -5,7 +5,8 @@
 
 <div id="contenedor_pago_estado_cuenta"></div>
 
-<div class="row mt-3 mb-3 no-gutters mx-n2">
+<div class="row no-gutters">
+    <!-- Datos del cliente -->
     <div class="col-sm-6 col-12 px-2">
         <div class="card address-card address-card--featured">
             <div class="address-card__badge tag-badge tag-badge--new">
@@ -28,11 +29,10 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-12 px-2 mt-sm-0 mt-3">
+
+    <!-- Datos del pago -->
+    <div class="col-sm-6 col-12 px-2">
         <div class="card address-card address-card--featured">
-            <div class="address-card__badge tag-badge tag-badge--theme">
-                Facturas seleccionadas para pagar
-            </div>
             <div class="address-card__body">
                 <div id="contenedor_carrito_facturas"></div>
             </div>
@@ -74,11 +74,11 @@
             }
 
             // Se insertan en la base de datos todos los registros obtenidos del cliente
-            await consulta('crear', {tipo: 'clientes_recibos_detalle', valores: productosFactura.detalle.Table}, false)
+            await consulta('crear', {tipo: 'clientes_facturas_detalle', valores: productosFactura.detalle.Table}, false)
 
             agregarLog(28, JSON.stringify(datos))
 
-            cargarInterfaz('clientes/estado_cuenta/productos/index', 'contenedor_modal', datos)
+            cargarInterfaz('clientes/estado_cuenta/facturas/productos', 'contenedor_modal', datos)
         })
         .catch(error => {
             agregarLog(29, JSON.stringify(datos))
@@ -104,7 +104,7 @@
 
             agregarLog(30, JSON.stringify(datos))
 
-            cargarInterfaz('clientes/estado_cuenta/movimientos/index', 'contenedor_modal', datos)
+            cargarInterfaz('clientes/estado_cuenta/facturas/movimientos', 'contenedor_modal', datos)
         })
         .catch(error => {
             agregarLog(31, JSON.stringify(datos))

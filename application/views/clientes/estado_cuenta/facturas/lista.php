@@ -98,6 +98,8 @@ if(empty($facturas)) {
                                 </div>
                             </div>
                             ";
+                        } else {
+                            echo 0;
                         }
                         ?>
                     </td>
