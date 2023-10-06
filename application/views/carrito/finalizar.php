@@ -43,7 +43,7 @@ if($this->session->userdata('usuario_id')) {
                             <h3 class="card-title">Detalles del pago</h3>
                             <div class="form-group">
                                 <label for="checkout_documento_numero">Número de documento *</label>
-                                <input type="number" class="form-control" id="checkout_documento_numero" value="901060079" autofocus>
+                                <input type="number" class="form-control" id="checkout_documento_numero" value="" autofocus>
                             </div>
                             <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar número de documento</button>
 
