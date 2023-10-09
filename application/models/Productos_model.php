@@ -140,7 +140,7 @@ Class Productos_model extends CI_Model{
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MAX(i.bodega) bodega,
-                    IF(MAX(i.bodega) = '00008', 'outlet', '') bodega_nombre,
+                    IF(MAX(i.bodega) = '{$this->config->item('bodega_outlet')}', 'outlet', '') bodega_nombre,
                     ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
                 FROM
                     productos AS p
@@ -188,7 +188,7 @@ Class Productos_model extends CI_Model{
                     productos_inventario AS pi
                     INNER JOIN productos AS p ON pi.producto_id = p.id 
                 WHERE
-                    pi.bodega = '00008' AND disponible > 0 
+                    pi.bodega = '{$this->config->item('bodega_outlet')}' AND disponible > 0 
                 ORDER BY
                     RAND() ASC 
                 LIMIT 50";

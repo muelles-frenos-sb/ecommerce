@@ -63,7 +63,7 @@
                     <div class="owl-carousel">
                         <?php
                         foreach($productos as $item) {
-                            $producto = $this->productos_model->obtener('productos', ['id' => $item->producto_id, 'bodega' => '00008']);
+                            $producto = $this->productos_model->obtener('productos', ['id' => $item->producto_id, 'bodega' => $this->config->item('bodega_outlet')]);
 
                             if(isset($producto)) {
                             ?>
