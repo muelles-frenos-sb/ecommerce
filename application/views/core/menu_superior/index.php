@@ -25,7 +25,7 @@
             <?php $this->load->view('core/menu_superior/menu') ?>
         </div>
         <div class="header__logo">
-            <a href="<?php echo site_url('inicio'); ?>" class="logo">
+            <a href="<?php echo site_url(); ?>" class="logo">
                 <!-- <div class="logo__slogan">
                     TODO PARA VEHÍCULOS PESADOS
                 </div> -->
@@ -40,17 +40,21 @@
         <?php $this->load->view('core/menu_superior/busqueda'); ?>
 
         <div class="header__indicators">
-            <div class="indicator mt-2">
+            <div class="main-menu mr-1">
+                <ul class="main-menu__list">
+                    <li class="main-menu__item">
+                        <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                            Mayorista
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="indicator mt-1">
                 <a href="<?php echo site_url('productos?busqueda=outlet'); ?>">
-                    <img src="<?php echo base_url(); ?>images/outlet.png" height="40px" alt="Outlet">
+                    <img src="<?php echo base_url(); ?>images/outlet.png" height="27px" alt="Outlet">
                 </a>
             </div>
-            
-            <!-- Datos del perfil del usuario -->
-            <?php $this->load->view('core/menu_superior/perfil'); ?>
-            
-            <!-- Carrito de compras -->
-            <?php $this->load->view('core/menu_superior/carrito'); ?>
         </div>
     </div>
 </header>

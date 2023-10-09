@@ -1,4 +1,7 @@
-<?php $recibo = $this->productos_model->obtener('recibo', ['token' => $this->uri->segment(4)]);?>
+<?php $recibo = $this->productos_model->obtener('recibo', ['token' => $this->uri->segment(4)]);
+echo '<hr>';
+print_r($recibo);
+?>
 
 <div class="block-space block-space--layout--after-header"></div>
 <div class="block">

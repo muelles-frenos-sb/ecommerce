@@ -1,13 +1,15 @@
 <div class="header__navbar-departments">
     <div class="departments">
         <button class="departments__button" type="button">
-            <span class="departments__button-icon"><svg width="16px" height="12px">
+            <span class="departments__button-icon d-xl-none">
+                <svg width="16px" height="12px">
                     <path d="M0,7L0,5L16,5L16,7L0,7ZM0,0L16,0L16,2L0,2L0,0ZM12,12L0,12L0,10L12,10L12,12Z" />
                 </svg>
             </span>
-            <span class="departments__button-title">Marcas</span>
-            <span class="departments__button-arrow"><svg width="9px" height="6px">
-                    <path d="M0.2,0.4c0.4-0.4,1-0.5,1.4-0.1l2.9,3l2.9-3c0.4-0.4,1.1-0.4,1.4,0.1c0.3,0.4,0.3,0.9-0.1,1.3L4.5,6L0.3,1.6C-0.1,1.3-0.1,0.7,0.2,0.4z" />
+            <span class="departments__button-title">
+                Tienda
+                <svg width="7px" height="5px">
+                    <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
                 </svg>
             </span>
         </button>

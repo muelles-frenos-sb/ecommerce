@@ -36,11 +36,11 @@ foreach ($registros as $recibo) {
         <td class="wishlist__column wishlist__column--body wishlist__column--stock">
             <div class="wishlist__product-name">
                 <a href="<?php echo site_url("configuracion/recibos/id/$recibo->token"); ?>">
-                    <?php echo $recibo->wompi_transaccion_id; ?>
+                    <?php echo $recibo->token; ?>
                 </a>
             </div>
             <div class="wishlist__product-rating">
-                <div class="wishlist__product-rating-title"><?php echo $recibo->token; ?></div>
+                <div class="wishlist__product-rating-title"><?php echo $recibo->wompi_transaccion_id; ?></div>
             </div>
         </td>
 

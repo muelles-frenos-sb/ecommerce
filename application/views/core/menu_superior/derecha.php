@@ -1,53 +1,100 @@
-<!-- <div class="header__topbar-end">
+<div class="header__topbar-end">
     <div class="topbar topbar--spaceship-end">
-        <div class="topbar__item-button">
-            <a href="" class="topbar__button">
-                <span class="topbar__button-label">Compare:</span>
-                <span class="topbar__button-title">5</span>
-            </a>
-        </div>
-        <div class="topbar__item-button topbar__menu">
-            <button class="topbar__button topbar__button--has-arrow topbar__menu-button" type="button">
-                <span class="topbar__button-label">Currency:</span>
-                <span class="topbar__button-title">USD</span>
-                <span class="topbar__button-arrow"><svg width="7px" height="5px">
-                        <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
-                    </svg>
+        <!-- Perfil -->
+        <div class="indicator indicator--trigger--click">
+            <a href="<?php echo site_url('sesion'); ?>" class="indicator__button mt-1">
+                <span class="indicator__icon">
+                    <img src="<?php echo base_url(); ?>images/icons/perfil.svg" height="24">
                 </span>
-            </button>
-            <div class="topbar__menu-body">
-                <a class="topbar__menu-item" href="#">€ Euro</a>
-                <a class="topbar__menu-item" href="#">£ Pound Sterling</a>
-                <a class="topbar__menu-item" href="#">$ US Dollar</a>
-                <a class="topbar__menu-item" href="#">₽ Russian Ruble</a>
+                
+                <?php if(!$this->session->userdata('usuario_id')) { ?>
+                    <span class="indicator__value">Inicia sesión</span>
+                <?php } else { ?>
+                    <span class="indicator__value">
+                        <?php echo $this->session->userdata('nombres'); ?>
+                        
+                        <svg width="8px" height="8px">
+                            <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
+                        </svg>
+                    </span>
+                <?php } ?>
+            </a>
+            <div class="indicator__content">
+                <div class="account-menu">
+                    <?php if(!$this->session->userdata('usuario_id')) { ?>
+                        <!-- Formulario para el inicio de sesión -->
+                        <form class="account-menu__form">
+                            <div class="account-menu__form-title">
+                                Inicia sesión en tu cuenta
+                            </div>
+                            <div class="form-group">
+                                <label for="usuario" class="sr-only">Nombre de usuario</label>
+                                <input id="usuario" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="clave" class="sr-only">Clave</label>
+                                <div class="account-menu__form-forgot">
+                                    <input id="clave" type="password" class="form-control form-control-sm" placeholder="Clave">
+                                    
+                                    <?php if(ENVIRONMENT == 'development') { ?>
+                                        <a href="" class="account-menu__form-forgot-link">¿Olvidaste?</a>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                            <div class="form-group account-menu__form-button">
+                                <button type="submit" class="btn btn-primary btn-sm" onClick="javascript:iniciarSesion(event)">Iniciar</button>
+                            </div>
+
+                            <?php if(ENVIRONMENT == 'development') { ?>
+                                <div class="account-menu__form-link">
+                                    <a href="account-login.html">Crear cuenta</a>
+                                </div>
+                            <?php } ?>
+                        </form>
+                    <?php } else { ?>
+                        <!-- Datos del usuario logueado -->
+                        <div class="account-menu__divider"></div>
+                        <a href="" class="account-menu__user">
+                            <div class="account-menu__user-avatar">
+                                <img src="<?php echo base_url(); ?>images/avatars/avatar-4.jpg" alt="">
+                            </div>
+                            <div class="account-menu__user-info">
+                                <div class="account-menu__user-name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('primer_apellido')}"; ?></div>
+                                <div class="account-menu__user-email"><?php echo $this->session->userdata('email'); ?></div>
+                            </div>
+                        </a>
+                        <div class="account-menu__divider"></div>
+                        <ul class="account-menu__links">
+                            <li><a href="<?php echo site_url('perfil/index/dashboard'); ?>">Dashboard</a></li>
+                            <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>
+                            <li><a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a></li>
+                            <li><a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis pedidos</a></li>
+                            <li><a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a></li>
+                        </ul>
+                        <div class="account-menu__divider"></div>
+                        <ul class="account-menu__links">
+                            <li><a href="<?php echo site_url('sesion/cerrar'); ?>">Cerrar sesión</a></li>
+                        </ul>
+                    <?php } ?>
+                </div>
             </div>
         </div>
-        <div class="topbar__menu">
-            <button class="topbar__button topbar__button--has-arrow topbar__menu-button" type="button">
-                <span class="topbar__button-label">Language:</span>
-                <span class="topbar__button-title">EN</span>
-                <span class="topbar__button-arrow"><svg width="7px" height="5px">
-                        <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
-                    </svg>
+
+        <!-- Carrito -->
+        <div class="indicator indicator--trigger--click">
+            <a href="#" class="indicator__button mt-1">
+                <span class="indicator__icon">
+                    <span class="indicator__counter" id="carrito_total_items">0</span>
+                    <img src="<?php echo base_url(); ?>images/icons/carrito.svg" height="24">
                 </span>
-            </button>
-            <div class="topbar__menu-body">
-                <a class="topbar__menu-item" href="#">
-                    <img src="<?php // echo base_url(); ?>images/languages/language-1.png" alt=""><span>English</span>
-                </a>
-                <a class="topbar__menu-item" href="#">
-                    <img src="<?php // echo base_url(); ?>images/languages/language-2.png" alt=""><span>French</span>
-                </a>
-                <a class="topbar__menu-item" href="#">
-                    <img src="<?php // echo base_url(); ?>images/languages/language-3.png" alt=""><span>German</span>
-                </a>
-                <a class="topbar__menu-item" href="#">
-                    <img src="<?php // echo base_url(); ?>images/languages/language-4.png" alt=""><span>Russian</span>
-                </a>
-                <a class="topbar__menu-item" href="#">
-                    <img src="<?php // echo base_url(); ?>images/languages/language-5.png" alt=""><span>Italian</span>
-                </a>
+                <!-- <span class="indicator__title">Carrito</span> -->
+                <span class="indicator__value" id="carrito_total">
+                    $ 0
+                </span>
+            </a>
+            <div class="indicator__content">
+                <div class="dropcart" id="contenedor_carrito_detalle"></div>
             </div>
         </div>
     </div>
-</div> -->
+</div>
