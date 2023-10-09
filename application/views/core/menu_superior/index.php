@@ -1,5 +1,8 @@
-<!-- Botón del menú para móviles -->
-<?php $this->load->view('core/menu_superior/movil'); ?>
+
+<div class="fixed-top">
+    <!-- Botón del menú para móviles -->
+    <?php $this->load->view('core/menu_superior/movil'); ?>
+</div>
 
 <header class="site__header fixed-top">
     <div class="header">
