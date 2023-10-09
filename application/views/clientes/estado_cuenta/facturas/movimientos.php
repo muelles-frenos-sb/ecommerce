@@ -40,7 +40,7 @@ $movimientos = $this->clientes_model->obtener('clientes_facturas_movimientos', [
                                             <th scope="row" class="text-right"><?php echo $contador_movimientos++; ?></th>
                                             <td><?php echo $movimiento->f253_id; ?></td>
                                             <td><?php echo $movimiento->nombre_homologado; ?></td>
-                                            <td><?php echo $movimiento->f351_valor_db; ?></td>
+                                            <td><?php echo formato_precio($movimiento->f351_valor_db); ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
