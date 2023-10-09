@@ -1,7 +1,7 @@
 <!-- Botón del menú para móviles -->
 <?php $this->load->view('core/menu_superior/movil'); ?>
 
-<header class="site__header">
+<header class="site__header fixed-top">
     <div class="header">
         <div class="header__megamenu-area megamenu-area"></div>
         <div class="header__topbar-start-bg"></div>
