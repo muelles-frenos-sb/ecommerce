@@ -37,9 +37,9 @@
         <?php $this->load->view('core/menu_superior/busqueda'); ?>
 
         <div class="header__indicators">
-            <div class="indicator">
+            <div class="indicator mt-2">
                 <a href="<?php echo site_url('productos?busqueda=outlet'); ?>">
-                    <img src="<?php echo base_url(); ?>images/outlet.jpg" width="50px" alt="Outlet">
+                    <img src="<?php echo base_url(); ?>images/outlet.png" height="40px" alt="Outlet">
                 </a>
             </div>
             
