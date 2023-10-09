@@ -23,20 +23,45 @@
                     <?php } ?>
                 </tbody>
             </table>
+
+            <div class="vehicles-list__body mt-2 ml-2 mr-2">
+                <h3>Distribución del pago</h3>
+
+                <!-- Se recorren las cuentas y se muestran -->
+                <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) { ?>
+                    <label class="vehicles-list__item">
+                        <span class="vehicles-list__item-info">
+                            <span class="vehicles-list__item-name"><?php echo $cuenta->nombre; ?></span>
+                            <span class="vehicles-list__item-details"><?php echo $cuenta->codigo; ?></span>
+                        </span>
+                        <span class="vehicles-list__item-info">
+                            <input 
+                                type="number"
+                                class="form-control valor_cuenta_recibo"
+                                style="text-align: right"
+                                value="0"
+                                data-codigo="<?php echo $cuenta->codigo; ?>"
+                                onChange="javascript:calcularTotal()"
+                            >
+                        </span>
+                    </label>
+                <?php } ?>
+    
+                <div class="card-body card-body--padding--2">
+                    <?php if($recibo->nombre_archivo) { ?>
+                        <a class="btn btn-info" href="<?php echo base_url()."archivos/recibos/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
+                    <?php } ?>
+                    
+                    <?php if($recibo->recibo_estado_id == 3) { ?>
+                        <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
+                        <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
     </div>
-    
-    <div class="card-body card-body--padding--2">
-        <?php if($recibo->nombre_archivo) { ?>
-            <a class="btn btn-info" href="<?php echo base_url()."archivos/recibos/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
-        <?php } ?>
-        
-        <?php if($recibo->recibo_estado_id == 3) { ?>
-            <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
-            <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-        <?php } ?>
-    </div>
 </div>
+
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>

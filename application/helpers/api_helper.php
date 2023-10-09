@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Consume el endpoint para la creación del
  * documento contable en Siesa
  */
-function crear_documento_contable($id_recibo, $datos_pago = null) {
+function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas = null) {
     $CI =& get_instance();
 
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);

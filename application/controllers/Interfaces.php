@@ -110,7 +110,10 @@ class Interfaces extends CI_Controller {
             break;
             
             case 'factura_documento_contable':
-                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'])]);
+                // Si trae cuentas contables, las agrega en la consulta
+                $cuentas_contables = (isset($datos['cuentas'])) ? $datos['cuentas'] : null ;
+                
+                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'], null, $cuentas_contables)]);
             break;
 
             case 'recibos':
