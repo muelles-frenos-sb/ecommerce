@@ -48,6 +48,20 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         array_push($documentos, $documento);
     }
 
+    // Si trae cuentas imputadas, las toma para ingresarlas al documento contable,
+    // sino, toma los valores básicos
+    $cuentas = 
+        ($datos_cuentas) 
+        ? $datos_cuentas 
+        : [
+            // Primer movimiento -> Banco
+            "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
+            "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
+            "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+            "F351_NOTAS" => $notas_recibo                                                              // Observaciones
+        ];
+
     $datos_documento_contable = [
         // Un solo documento contable para toda la transacción
         "Documento_contable" => [
@@ -58,25 +72,17 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
                 "F350_NOTAS" => $notas_recibo                                      // Observaciones
             ]
         ],
-        "Movimiento_contable" => [
-            // Primer movimiento -> Banco
-            [
-                "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
-                "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
-                "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-                "F351_NOTAS" => $notas_recibo                                                              // Observaciones
-            ],
-            // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
-            //             [
-            //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
-            //                 "F351_ID_AUXILIAR" => "11100504",                                            // Valida en maestro, código de cuenta contable
-            //                 // Pendiente
-            //                 "F351_VALOR_DB" => $factura->valor,                                          // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-            //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-            //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
-            //             ],
-        ],
+        "Movimiento_contable" => $cuentas,
+        // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
+        //             [
+        //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
+        //                 "F351_ID_AUXILIAR" => "11100504",                                            // Valida en maestro, código de cuenta contable
+        //                 // Pendiente
+        //                 "F351_VALOR_DB" => $factura->valor,                                          // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+        //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+        //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
+        //             ],
+
         // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
         "Movimiento_CxC" => $documentos
     ];

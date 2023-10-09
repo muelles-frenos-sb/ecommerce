@@ -46,11 +46,11 @@
 
                 // Se agrega la cuenta al arreglo
                 cuentas.push({
-                    "F350_CONSEC_DOCTO": 1,
-                    "F351_ID_AUXILIAR": $(this).attr('data-codigo'),
-                    "F351_VALOR_DB": parseFloat($(this).val()),
-                    // "F351_NRO_DOCTO_BANCO": '<?php // echo "{$recibo->anio}{$recibo->mes}{$recibo->dia}"; ?>',
-                    // "F351_NOTAS": $notas_recibo   
+                    F350_CONSEC_DOCTO: 1,
+                    F351_ID_AUXILIAR: $(this).attr('data-codigo'),
+                    F351_VALOR_DB: parseFloat($(this).val()),
+                    F351_NRO_DOCTO_BANCO: '<?php echo "{$recibo->anio}{$recibo->mes}{$recibo->dia}"; ?>',
+                    F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
                 })
             }
         })
@@ -82,6 +82,9 @@
                 `, 100000)
                 return false
             }
+
+            mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
+            return false
         })
         .catch(error => {
             mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
