@@ -3,13 +3,13 @@
         <ul class="main-menu__list">
             <?php $this->load->view('bitrix/garantia'); ?>
 
-            <li class="main-menu__item">
+            <li class="main-menu__item mr-1">
                 <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
                     Taller Aliado
                 </a>
             </li>
 
-            <li class="main-menu__item">
+            <li class="mr-1 menu_enfasis">
                 <a href="<?php echo site_url('blog/credito'); ?>" class="main-menu__link">
                     Crédito
                 </a>
