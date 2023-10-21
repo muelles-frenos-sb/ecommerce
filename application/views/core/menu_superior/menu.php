@@ -1,6 +1,12 @@
 <div class="header__navbar-menu">
     <div class="main-menu">
         <ul class="main-menu__list">
+            <li class="main-menu__item mr-1">
+                <a href="<?php echo site_url(); ?>" class="main-menu__link">
+                    Tienda
+                </a>
+            </li>
+
             <?php $this->load->view('bitrix/garantia'); ?>
 
             <li class="main-menu__item mr-1">

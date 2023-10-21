@@ -6393,16 +6393,6 @@ select.form-control::-ms-expand {
   top: 0;
 }
 
-[dir=ltr] .block-banners__item:before {
-  background: -webkit-gradient(linear, left top, right top, color-stop(25%, rgba(26, 26, 26, 0.98)), color-stop(90%, rgba(26, 26, 26, 0)));
-  background: linear-gradient(to right, rgba(26, 26, 26, 0.98) 25%, rgba(26, 26, 26, 0) 90%);
-}
-
-[dir=rtl] .block-banners__item:before {
-  background: -webkit-gradient(linear, right top, left top, color-stop(25%, rgba(26, 26, 26, 0.98)), color-stop(90%, rgba(26, 26, 26, 0)));
-  background: linear-gradient(to left, rgba(26, 26, 26, 0.98) 25%, rgba(26, 26, 26, 0) 90%);
-}
-
 .block-banners__item-title {
   display: block;
   font-size: 28px;
