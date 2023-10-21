@@ -52,7 +52,7 @@
 
                         foreach ($archivos as $archivo) {
                         ?>
-                            <a class="btn btn-info mb-2" href="<?php echo $archivo; ?>" download>Descargar comprobante</a>
+                            <a class="btn btn-info mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar comprobante</a>
                         <?php } ?>
                     <?php } ?>
                     
