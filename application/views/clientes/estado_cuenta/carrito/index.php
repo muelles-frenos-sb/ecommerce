@@ -41,7 +41,7 @@
 
         // Se agrega el ítem
         $('#contenedor_lista_carrito').append(`
-            <label class="vehicles-list__item">
+            <label id="id_registro_${datos.contador}" class="vehicles-list__item">
                 <span class="vehicles-list__item-radio input-radio">
                     <span class="input-radio__body">
                         <input class="input-radio__input" name="check_factura_${datos.contador}" type="radio" checked>
@@ -66,7 +66,7 @@
                     >
                 </span>
 
-                <button type="button" class="vehicles-list__item-remove">
+                <button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.contador})">
                     <svg width="16" height="16">
                         <path d="M2,4V2h3V1h6v1h3v2H2z M13,13c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5h10V13z" />
                     </svg>
@@ -175,6 +175,16 @@
                 }
             }
         }
+    }
+
+    removerFactura = async(id) => {
+        // El registro en el mini carrito se quita
+        $(`#id_registro_${id}`).remove()
+
+        // Se vuelve a agregar en la tabla
+        $(`#factura_${id}`).show()
+
+        calcularTotal()
     }
 
     $().ready(() => {
