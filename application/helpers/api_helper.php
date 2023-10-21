@@ -54,7 +54,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         ($datos_cuentas) 
         ? $datos_cuentas 
         : [
-            // Primer movimiento -> Banco
+            // Primer movimiento -> Bancos
             "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
             "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
             "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
@@ -73,6 +73,9 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             ]
         ],
         "Movimiento_contable" => $cuentas,
+        // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
+        "Movimiento_CxC" => $documentos
+
         // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
         //             [
         //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
@@ -82,9 +85,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
         //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
         //             ],
-
-        // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
-        "Movimiento_CxC" => $documentos
     ];
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));

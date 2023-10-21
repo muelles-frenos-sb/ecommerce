@@ -33,27 +33,52 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    aprobarPago = async(reciboid) => {
+    agregarCuenta = async(reciboId) => {
+        let id = Math.floor(Math.random() * 10000)
+
+        $('#contenedor_cuentas').append(`<div id="${id}"></div>`)
+
+        cargarInterfaz('configuracion/recibos/detalle/cuenta', id, {id: id, id_recibo: reciboId})
+    }
+
+    aprobarPago = async(reciboId) => {
         // Arreglo para enviar la imputación
         var cuentas = []
         var totalImputado = 0
         var totalRecibo = parseFloat($('#total_recibo').val())
+        var totalCuentas = 0
 
         $('.valor_cuenta_recibo').each(function() {
-            // Si la cuenta tiene valor registrado
-            if($(this).val() != '0') {
-                totalImputado += parseFloat($(this).val())
+            totalCuentas++
+            
+            let id = $(this).attr('data-id')
 
-                // Se agrega la cuenta al arreglo
-                cuentas.push({
-                    F350_CONSEC_DOCTO: 1,
-                    F351_ID_AUXILIAR: $(this).attr('data-codigo'),
-                    F351_VALOR_DB: parseFloat($(this).val()),
-                    F351_NRO_DOCTO_BANCO: '<?php echo "{$recibo->anio}{$recibo->mes}{$recibo->dia}"; ?>',
-                    F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
-                })
-            }
+            let camposObligatorios = [
+                $(`#cuenta_${id}`),
+                $(`#fecha_pago_${id}`),
+                $(`#valor_${id}`),
+            ]
+
+            if (!validarCamposObligatorios(camposObligatorios)) return false
+
+            totalImputado += parseFloat($(this).val())
+            let fechaPago = $(`#fecha_pago_${id}`).val().split('-')
+
+            // Se agrega la cuenta al arreglo
+            cuentas.push({
+                F350_CONSEC_DOCTO: 1,
+                F351_ID_AUXILIAR: $(`#cuenta_${id} option:selected`).attr('data-codigo'),
+                F351_VALOR_DB: parseFloat($(this).val()),
+                F351_NRO_DOCTO_BANCO: `${fechaPago[0]}${fechaPago[1]}${fechaPago[2]}`,
+                F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
+            })
         })
+
+        // Si los valores imputados y del recibo no coinciden
+        if(totalCuentas == 0) {
+            mostrarAviso('alerta', 'Por favor elija al menos una cuenta.')
+            return false
+        }
 
         // Si los valores imputados y del recibo no coinciden
         if(totalRecibo !== totalImputado) {
@@ -69,7 +94,7 @@
             allowOutsideClick: false
         })
         
-        await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboid, cuentas: cuentas}, false)
+        await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboId, cuentas: cuentas}, false)
         .then(pago => {
             Swal.close()
 

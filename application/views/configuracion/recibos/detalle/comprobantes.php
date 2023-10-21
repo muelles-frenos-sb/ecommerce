@@ -22,45 +22,31 @@
                 </tbody>
             </table>
 
+            <div class="card-body card-body--padding--2">
+                <?php
+                if($recibo->archivos) {
+                    $archivos = glob("./archivos/recibos/$recibo->id/*");
+
+                    foreach ($archivos as $archivo) {
+                    ?>
+                        <a class="btn btn-info mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar comprobante</a>
+                    <?php } ?>
+                <?php } ?>
+            </div>
+
             <div class="vehicles-list__body mt-2 ml-2 mr-2">
                 <h3>Distribución del pago</h3>
+                
+                <div id="contenedor_cuentas"></div>
 
-                <!-- Se recorren las cuentas y se muestran -->
-                <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) { ?>
-                    <label class="vehicles-list__item">
-                        <span class="vehicles-list__item-info">
-                            <span class="vehicles-list__item-name"><?php echo $cuenta->nombre; ?></span>
-                            <span class="vehicles-list__item-details"><?php echo $cuenta->codigo; ?></span>
-                        </span>
-                        <span class="vehicles-list__item-info">
-                            <input 
-                                type="number"
-                                class="form-control valor_cuenta_recibo"
-                                style="text-align: right"
-                                value="0"
-                                data-codigo="<?php echo $cuenta->codigo; ?>"
-                                onChange="javascript:calcularTotal()"
-                            >
-                        </span>
-                    </label>
-                <?php } ?>
-    
-                <div class="card-body card-body--padding--2">
-                    <?php
-                    if($recibo->archivos) {
-                        $archivos = glob("./archivos/recibos/$recibo->id/*");
+                <a class="btn btn-info btn-block mb-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">Agregar cuenta</a>
 
-                        foreach ($archivos as $archivo) {
-                        ?>
-                            <a class="btn btn-info mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar comprobante</a>
-                        <?php } ?>
-                    <?php } ?>
-                    
-                    <?php if($recibo->recibo_estado_id == 3) { ?>
+                <?php if($recibo->recibo_estado_id == 3) { ?>
+                    <p>
                         <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
                         <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-                    <?php } ?>
-                </div>
+                    </p>
+                <?php } ?>
             </div>
         </div>
     </div>

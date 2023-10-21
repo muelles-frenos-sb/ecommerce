@@ -1,8 +1,8 @@
 <div class="form-group">
-    <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir el comprobante?</label>
+    <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir comprobantes?</label>
     <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
         <option value="1" selected>Pagar en línea</option>
-        <option value="2">Subir comprobante</option>
+        <option value="2">Subir comprobantes</option>
     </select>
 </div>
 
