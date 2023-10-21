@@ -11,9 +11,7 @@
                     </tr>
                 </thead>
                 <tbody class="wishlist__body">
-                    <?php
-                    foreach($recibo_detalle as $detalle) {
-                        ?>
+                    <?php foreach($recibo_detalle as $detalle) { ?>
                         <tr class="wishlist__row wishlist__row--body">
                             <td class="wishlist__column wishlist__column--body wishlist__column--image"><?php echo "$detalle->documento_cruce_tipo-$detalle->documento_cruce_numero"; ?></td>
                             <td class="wishlist__column wishlist__column--body wishlist__column--price">
@@ -48,8 +46,14 @@
                 <?php } ?>
     
                 <div class="card-body card-body--padding--2">
-                    <?php if($recibo->nombre_archivo) { ?>
-                        <a class="btn btn-info" href="<?php echo base_url()."archivos/recibos/$recibo->nombre_archivo" ?>" download>Descargar comprobante</a>
+                    <?php
+                    if($recibo->archivos) {
+                        $archivos = glob("./archivos/recibos/$recibo->id/*");
+
+                        foreach ($archivos as $archivo) {
+                        ?>
+                            <a class="btn btn-info mb-2" href="<?php echo $archivo; ?>" download>Descargar comprobante</a>
+                        <?php } ?>
                     <?php } ?>
                     
                     <?php if($recibo->recibo_estado_id == 3) { ?>

@@ -74,7 +74,13 @@ class Interfaces extends CI_Controller {
     }
 
     function subir_comprobante() {
-        $directorio = "{$this->ruta}recibos/";
+        $id_recibo = $this->uri->segment(3);
+        $directorio = "{$this->ruta}recibos/$id_recibo/";
+
+        // Valida que el directorio exista. Si no existe,lo crea con el id obtenido,
+        // asigna los permisos correspondientes
+        if( ! is_dir($directorio)) @mkdir($directorio, 0777);
+
         $archivo = $_FILES;
 
         if(move_uploaded_file($archivo['name']['tmp_name'], $directorio.$archivo['name']['name'])) $resultado = true;

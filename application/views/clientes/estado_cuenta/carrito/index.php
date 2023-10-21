@@ -19,7 +19,7 @@
 </div>
 
 <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
-    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivo">
+    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
     <button class="btn btn-success"  onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante</button>
 </div>
 
@@ -98,7 +98,7 @@
 
     guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
         let total = parseFloat($('#total_pago').text())
-        var archivo = $('#estado_cuenta_archivo').prop('files')[0]
+        var archivos = $('#estado_cuenta_archivos').prop('files')
 
         if(total == 0) {
             mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar. Selecciona una o varias facturas para continuar el proceso.')
@@ -110,8 +110,8 @@
             return false
         }
 
-        // Si no es pago en línea y no tiene archivo
-        if(!pagarEnLinea && !archivo) {
+        // Si no es pago en línea y no tiene archivos
+        if(!pagarEnLinea && !archivos) {
             mostrarAviso('alerta', 'Por favor selecciona el comprobante de pago que vas a adjuntar al pago')
             return false
         }
@@ -137,33 +137,43 @@
             // Se crean los ítems del recibo
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle_estado_cuenta', 'recibo_id': recibo.resultado, items: calcularTotal()}, false)
 
-            // if (reciboItems.resultado) {
+            if (reciboItems.resultado) {
                 // Si es pago en línea, redirecciona a Wompi
                 if(pagarEnLinea) cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: recibo.resultado})
 
                 // Si es para subir comprobante
                 if(!pagarEnLinea) {
-                    let nombre = archivo.name.split('.')[0]
-                    let extension = archivo.name.split('.').pop()
-                    let tamanio = archivo.size / 1000
-                    let nombreArchivo = `${recibo.resultado}.${extension}`
-                    
-                    let anexo = new FormData()
-                    anexo.append('name', archivo, nombreArchivo)
-                    
-                    let peticion = new XMLHttpRequest()
-                    peticion.open('POST', $('#site_url').val() + '/interfaces/subir_comprobante')
-                    peticion.send(anexo)
-                    peticion.onload = evento => {
-                        let respuesta = JSON.parse(evento.target.responseText)
-                        consulta('actualizar', {
-                            tipo: 'recibos',
-                            id: recibo.resultado,
-                            nombre_archivo: nombreArchivo
-                        })
-                    }
+                    var contadorArchivos = 0
+
+                    // Se recorren los archivos
+                    $.each(archivos, (key, archivo) => {
+                        contadorArchivos++
+                        
+                        let nombre = archivo.name.split('.')[0]
+                        let extension = archivo.name.split('.').pop()
+                        let tamanio = archivo.size / 1000
+                        let nombreArchivo = `${contadorArchivos}.${extension}`
+
+                        let anexo = new FormData()
+                        anexo.append('name', archivo, nombreArchivo)
+
+                        let peticion = new XMLHttpRequest()
+                        peticion.open('POST', `${$('#site_url').val()}/interfaces/subir_comprobante/${recibo.resultado}`)
+                        peticion.send(anexo)
+                        peticion.onload = evento => {
+                            let respuesta = JSON.parse(evento.target.responseText)
+
+                            consulta('actualizar', {
+                                tipo: 'recibos',
+                                id: recibo.resultado,
+                                archivos: contadorArchivos
+                            }, false)
+                        }
+                    })
+
+                    mostrarAviso('exito', 'Comprobantes subidos exitosamente')
                 }
-            // }
+            }
         }
     }
 
