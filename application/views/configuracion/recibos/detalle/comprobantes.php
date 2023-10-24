@@ -1,52 +1,110 @@
 <div class="block">
     <div class="container container--max--xl">
-        <div class="wishlist">
-            <table class="wishlist__table">
-                <thead class="wishlist__head">
-                    <tr class="wishlist__row wishlist__row--head">
-                        <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">
-                            Documento
-                        </th>
-                        <th class="wishlist__column wishlist__column--head wishlist__column--price text-center">Valor</th>
-                    </tr>
-                </thead>
-                <tbody class="wishlist__body">
-                    <?php foreach($recibo_detalle as $detalle) { ?>
-                        <tr class="wishlist__row wishlist__row--body">
-                            <td class="wishlist__column wishlist__column--body wishlist__column--image"><?php echo "$detalle->documento_cruce_tipo-$detalle->documento_cruce_numero"; ?></td>
-                            <td class="wishlist__column wishlist__column--body wishlist__column--price">
-                                <?php echo formato_precio($detalle->subtotal); ?>
-                            </td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-
-            <div class="card-body card-body--padding--2">
-                <?php
-                if($recibo->archivos) {
-                    $archivos = glob("./archivos/recibos/$recibo->id/*");
-
-                    foreach ($archivos as $archivo) {
-                    ?>
-                        <a class="btn btn-info mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar comprobante</a>
-                    <?php } ?>
-                <?php } ?>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-center">Facturas asociadas</h5>
             </div>
+            <div class="card-divider"></div>
+            <div class="card-table">
+                <div class="table-responsive-sm">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sede</th>
+                                <th>Documento cruce</th>
+                                <th>Fecha factura</th>
+                                <th>Valor documento</th>
+                                <th>Valor pagado</th>
+                                <th>Valor saldo</th>
+                                <th>Sucursal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($recibo_detalle as $item) {
+                                $factura_cliente = $this->clientes_model->obtener('clientes_facturas', [
+                                    'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
+                                    'Nro_Doc_cruce' => $item->documento_cruce_numero,
+                                ]);
+                                ?>
+                                <tr>
+                                    <td><?php echo $factura_cliente->centro_operativo; ?></td>
+                                    <td class="text-right"><?php echo $factura_cliente->Nro_Doc_cruce; ?></td>
+                                    <td><?php echo $factura_cliente->Fecha_doc_cruce; ?></td>
+                                    <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado); ?></td>
+                                    <td class="text-right"><?php echo formato_precio($item->subtotal); ?></td>
+                                    <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado - $item->subtotal); ?></td>
+                                    <td><?php echo $factura_cliente->nombre_homologado; ?></td>
+                                </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-center">Comprobantes</h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-table">
+                <div class="table-responsive-sm">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nro.</th>
+                                <th>Nombre</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if($recibo->archivos) {
+                                $contador = 1;
+                                $archivos = glob("./archivos/recibos/$recibo->id/*");
 
-            <div class="vehicles-list__body mt-2 ml-2 mr-2">
-                <h3>Distribución del pago</h3>
-                
+                                foreach ($archivos as $archivo) {
+                                ?>
+                                    <tr>
+                                        <td><?php echo $contador++; ?></a></td>
+                                        <td><?php echo basename($archivo); ?></a></td>
+                                        <td>
+                                            <a class="mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            <?php } ?>
+                        </tbody>
+                        <tfoot>
+
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="card-divider"></div>
+        </div>
+        <div class="card-divider"></div>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="text-center">Distribución del pago</h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-body">
                 <div id="contenedor_cuentas"></div>
-
-                <a class="btn btn-info btn-block mb-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">Agregar cuenta</a>
-
-                <?php if($recibo->recibo_estado_id == 3) { ?>
-                    <p>
-                        <a class="btn btn-danger" href="javascript:;">Rechazar pago</a>
-                        <a class="btn btn-success" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-                    </p>
-                <?php } ?>
+                <a class="btn btn-info btn-block mt-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">
+                    Agregar cuenta
+                </a>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col-6">
+                        <a class="btn btn-danger btn-block" href="javascript:;">Rechazar pago</a>
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
