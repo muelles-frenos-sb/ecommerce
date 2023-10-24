@@ -20,7 +20,7 @@
 
 <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
     <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-    <button class="btn btn-success"  onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante</button>
+    <button class="btn btn-success" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante</button>
 </div>
 
 <div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
@@ -172,6 +172,8 @@
                     })
 
                     mostrarAviso('exito', 'Comprobantes subidos exitosamente')
+
+                    vaciarCarritoEstadoCuenta()
                 }
             }
         }
@@ -184,6 +186,12 @@
         // Se vuelve a agregar en la tabla
         $(`#factura_${id}`).show()
 
+        calcularTotal()
+    }
+
+    vaciarCarritoEstadoCuenta = () => {
+        $('#contenedor_lista_carrito').html('')
+        $('#estado_cuenta_archivos').val('')
         calcularTotal()
     }
 

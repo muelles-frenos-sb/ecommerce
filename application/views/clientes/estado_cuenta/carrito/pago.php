@@ -31,13 +31,11 @@
 
     checkout.open(function (resultado) {
         var transaction = resultado.transaction
-        console.log(transaction)
 
-        // // Se redirecciona a la página de resultados
-        // location.href = transaction.redirectUrl
+        // Se redirecciona a la página de resultados
+        location.href = transaction.redirectUrl
         
-        // // Si se aprobó la transacción, se vacea el carrito
-        // if(transaction.status == 'APPROVED') vaciarCarrito()
-
+        // Si se aprobó la transacción, se vacea el carrito
+        if(transaction.status == 'APPROVED') vaciarCarritoEstadoCuenta()
     })
 </script>
