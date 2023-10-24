@@ -52,10 +52,19 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'recibo_tipo':
+                return $this->db
+                    ->where($datos)
+                    ->get('recibos_tipos')
+                    ->row()
+                ;
+            break;
+
             case 'recibos':
                 $where = "WHERE r.recibo_estado_id";
                 
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
+                if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 
                 $sql =
                 "SELECT
@@ -76,6 +85,13 @@ Class Configuracion_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'recibos_tipos':
+                return $this->db
+                    ->get($tabla)
+                    ->result()
+                ;
             break;
 
 			case 'grupos':

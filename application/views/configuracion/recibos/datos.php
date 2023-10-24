@@ -1,5 +1,8 @@
 <?php
-$registros = $this->configuracion_model->obtener('recibos', ['contador' => $datos['contador']]);
+$registros = $this->configuracion_model->obtener('recibos', [
+    'contador' => $datos['contador'],
+    'id_tipo_recibo' => $datos['id_tipo_recibo']
+]);
 
 if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron registros.</li>';
 

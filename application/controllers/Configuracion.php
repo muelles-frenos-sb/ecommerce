@@ -37,6 +37,7 @@ class Configuracion extends MY_Controller {
 
         switch ($this->uri->segment(3)) {
             case 'ver':
+                $this->data['id_tipo_recibo'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'configuracion/recibos/index';
                 $this->load->view('core/body', $this->data);
             break;

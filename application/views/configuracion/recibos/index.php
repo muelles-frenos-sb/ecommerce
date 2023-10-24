@@ -1,7 +1,9 @@
+<?php $tipo_recibo = $this->configuracion_model->obtener('recibo_tipo', ['id' => $id_tipo_recibo]); ?>
+
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Recibos</h1>
+            <h1 class="block-header__title"><?php echo "Recibos de $tipo_recibo->nombre"; ?></h1>
         </div>
     </div>
 </div>
@@ -30,6 +32,7 @@
         let datos = {
             contador: localStorage.simonBolivar_contador,
             busqueda: $("#buscar").val(),
+            id_tipo_recibo: '<?php echo $id_tipo_recibo; ?>'
         }
 
         cargarInterfaz('configuracion/recibos/lista', 'contenedor_recibos', datos)
