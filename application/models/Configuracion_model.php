@@ -62,6 +62,28 @@ Class Configuracion_model extends CI_Model {
 
             case 'recibos':
                 $where = "WHERE r.recibo_estado_id";
+                $having = "";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+        
+                    $having = "HAVING";
+        
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " r.documento_numero LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.razon_social LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.direccion LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.email LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.telefono LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.token LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.wompi_transaccion_id LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR estado LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+        
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
                 
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
@@ -77,6 +99,7 @@ Class Configuracion_model extends CI_Model {
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
 	                LEFT JOIN recibos_estados AS re ON r.recibo_estado_id = re.id
                 $where
+                $having
                 ORDER BY
                     r.fecha_creacion DESC";
 

@@ -1,8 +1,11 @@
 <?php
-$registros = $this->configuracion_model->obtener('recibos', [
+$opciones = [
     'contador' => $datos['contador'],
-    'id_tipo_recibo' => $datos['id_tipo_recibo']
-]);
+    'id_tipo_recibo' => $datos['id_tipo_recibo'],
+];
+if($datos['busqueda']) $opciones['busqueda'] = $datos['busqueda'];
+
+$registros = $this->configuracion_model->obtener('recibos', $opciones);
 
 if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron registros.</li>';
 

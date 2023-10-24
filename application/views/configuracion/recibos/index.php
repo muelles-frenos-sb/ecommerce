@@ -3,7 +3,9 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title"><?php echo "Recibos de $tipo_recibo->nombre"; ?></h1>
+            <h1 class="block-header__title">
+                <?php echo "Recibos de $tipo_recibo->nombre"; ?>
+            </h1>
         </div>
     </div>
 </div>
@@ -25,13 +27,13 @@
 <script>
     listarRecibos = () => {
         // Si no hay valor en la búsqueda, pero si en loca storage, lo pone
-        if($("#buscar_recibo").val() == "" && localStorage.simonBolivar_busquedaFactura) $("#buscar_recibo").val(localStorage.simonBolivar_busquedaFactura)
+        if($("#buscar_recibo").val() == "" && localStorage.simonBolivar_busquedaRecibo) $("#buscar_recibo").val(localStorage.simonBolivar_busquedaRecibo)
 
         localStorage.simonBolivar_contador = 0
 
         let datos = {
             contador: localStorage.simonBolivar_contador,
-            busqueda: $("#buscar").val(),
+            busqueda: $("#buscar_recibo").val(),
             id_tipo_recibo: '<?php echo $id_tipo_recibo; ?>'
         }
 
@@ -43,7 +45,7 @@
 
         $("#buscar_recibo").keyup(() => {
             // Se almacena el valor de búsqueda en local storage
-            localStorage.simonBolivar_busquedaFactura = $("#buscar_recibo").val()
+            localStorage.simonBolivar_busquedaRecibo = $("#buscar_recibo").val()
 
             listarRecibos()
         })
