@@ -98,10 +98,13 @@
             <div class="card-divider"></div>
             <div class="card-footer">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-4">
+                        <button class="btn btn-info" href=":;" onclick="history.back()">Volver a recibos</button>
+                    </div>
+                    <div class="col-4">
                         <a class="btn btn-danger btn-block" href="javascript:;">Rechazar pago</a>
                     </div>
-                    <div class="col-6">
+                    <div class="col-4">
                         <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
                     </div>
                 </div>
