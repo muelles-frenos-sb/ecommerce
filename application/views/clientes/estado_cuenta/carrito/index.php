@@ -15,7 +15,8 @@
 <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
 
 <div class="mt-2">
-    Total a pagar: <span id="total_pago">0</span>
+    <input type="hidden" id="total_pago">
+    Total a pagar: $<span id="total_pago_formato">0</span>
 </div>
 
 <div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
@@ -54,7 +55,8 @@
                 </span>
                 <span class="vehicles-list__item-info">
                     <input 
-                        type="number"
+                        type="text"
+                        id="${datos.id}"
                         data-id="${datos.id}"
                         data-documento_cruce_numero="${datos.documento_cruce}"
                         data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
@@ -62,7 +64,6 @@
                         style="text-align: right"
                         max="${datos.valor}"
                         value="${datos.valor}"
-                        onChange="javascript:calcularTotal()"
                     >
                 </span>
 
@@ -74,6 +75,17 @@
             </label>
         `)
 
+        // Por defecto se formatea el campo
+        $(`#${datos.id}`).val(formatearNumero(datos.valor))
+
+        // Si el número cambia
+        $(`input`).on('keyup', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+
+            calcularTotal()
+        })
+
         calcularTotal()
     }
 
@@ -82,25 +94,27 @@
         var detalleFactura = []
 
         $(`.valor_pago_factura`).each(function() {
-            total += parseFloat($(this).val())
+            total += parseFloat($(this).val().replace(/\./g, ''))
 
             detalleFactura.push({
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
-                subtotal: $(this).val()
+                subtotal: $(this).val().replace(/\./g, '')
             })
         })
 
-        $('#total_pago').text(total)
+        // Se formatea el campo
+        $('#total_pago_formato').text(formatearNumero(total))
+        $('#total_pago').val(total)
 
         return detalleFactura
     }
 
     guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
-        let total = parseFloat($('#total_pago').text())
+        let total = parseFloat($('#total_pago').val())
         var archivos = $('#estado_cuenta_archivos').prop('files')
 
-        if(total == 0) {
+        if(total == 0 || isNaN(total)) {
             mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar. Selecciona una o varias facturas para continuar el proceso.')
             return false
         }
@@ -116,7 +130,7 @@
             return false
         }
 
-        let datosrecibo = {
+        let datosRecibo = {
             tipo: 'recibos',
             abreviatura: 'ec',
             recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
@@ -130,7 +144,7 @@
             valor: total,
         }
 
-        let recibo = await consulta('crear', datosrecibo, false)
+        let recibo = await consulta('crear', datosRecibo, false)
         
         // Una vez creado el recibo
         if (recibo.resultado) {
@@ -196,10 +210,6 @@
     }
 
     $().ready(() => {
-        $(`input[type='number']`).keyup(() => {
-            calcularTotal()
-        })
-
         $(`#contenedor_tipo_pago_wompi`).removeClass('d-none')
 
         $('#estado_cuenta_tipo_pago').change(function() {

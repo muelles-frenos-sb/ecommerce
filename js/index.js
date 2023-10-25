@@ -137,6 +137,15 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
 }
 
 /**
+ * Obtiene un número y le agrega
+ * separadores de mil
+ */
+formatearNumero = numero => {
+    numero = String(numero).replace(/\D/g, "")
+    return numero === '' ? numero : Number(numero).toLocaleString('es-ES')
+}
+
+/**
  * Obtiene las sucursales del API de Siesa y las almacena en la base de datos
  */
 gestionarSucursales = async(numeroDocumento) => {
