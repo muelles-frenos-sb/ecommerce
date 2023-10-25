@@ -11,16 +11,12 @@ if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron r
 
 foreach ($registros as $recibo) {
     $mensajes_estado_wompi = ($recibo->wompi_status) ? mostrar_mensajes_estados_wompi($recibo->wompi_status) : null;
+    if($recibo->wompi_datos) $wompi = json_decode($recibo->wompi_datos, true);
     ?>
     <tr class="wishlist__row wishlist__row--body">
         <!-- Fecha -->
         <td class="wishlist__column wishlist__column--body wishlist__column--product">
             <?php echo $recibo->fecha_creacion; ?>
-        </td>
-
-        <!-- Tipo de recibo -->
-        <td class="wishlist__column wishlist__column--body wishlist__column--product">
-            <?php echo $recibo->tipo; ?>
         </td>
 
         <!-- Cliente -->
@@ -46,7 +42,21 @@ foreach ($registros as $recibo) {
                 </a>
             </div>
             <div class="wishlist__product-rating">
-                <div class="wishlist__product-rating-title"><?php echo $recibo->wompi_transaccion_id; ?></div>
+                <div class="wishlist__product-rating-title">
+                    <?php echo $recibo->wompi_transaccion_id; ?>
+                </div>
+            </div>
+        </td>
+
+        <!-- Forma de pago -->
+        <td class="wishlist__column wishlist__column--body wishlist__column--stock">
+            <div class="wishlist__product-name">
+                <?php if(isset($wompi)) echo $wompi['payment_method_type']; ?>
+            </div>
+            <div class="wishlist__product-rating">
+                <div class="wishlist__product-rating-title">
+                    <?php if(isset($wompi) && $wompi['payment_method_type'] == 'CARD') echo $wompi['payment_method']['extra']['name']; ?>
+                </div>
             </div>
         </td>
 
