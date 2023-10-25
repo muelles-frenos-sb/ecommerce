@@ -52,6 +52,7 @@
             totalCuentas++
             
             let id = $(this).attr('data-id')
+            let valor = $(this).val().replace(/\./g, '')
 
             let camposObligatorios = [
                 $(`#cuenta_${id}`),
@@ -61,14 +62,14 @@
 
             if (!validarCamposObligatorios(camposObligatorios)) return false
 
-            totalImputado += parseFloat($(this).val())
+            totalImputado += parseFloat(valor)
             let fechaPago = $(`#fecha_pago_${id}`).val().split('-')
 
             // Se agrega la cuenta al arreglo
             cuentas.push({
                 F350_CONSEC_DOCTO: 1,
                 F351_ID_AUXILIAR: $(`#cuenta_${id} option:selected`).attr('data-codigo'),
-                F351_VALOR_DB: parseFloat($(this).val()),
+                F351_VALOR_DB: parseFloat(valor),
                 F351_NRO_DOCTO_BANCO: `${fechaPago[0]}${fechaPago[1]}${fechaPago[2]}`,
                 F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
             })

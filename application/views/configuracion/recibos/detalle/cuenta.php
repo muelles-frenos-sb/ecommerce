@@ -17,13 +17,22 @@
     <div class="form-group col-4">
         <label for="fecha_pago">Valor</label>
         <input 
-            type="number"
+            type="text"
             id="valor_<?php echo $datos['id']; ?>"
             class="form-control valor_cuenta_recibo"
             style="text-align: right"
             value="0"
             data-id="<?php echo $datos['id']; ?>"
-            onChange="javascript:calcularTotal()"
         >
     </div>
 </label>
+
+<script>
+    $().ready(() => {
+        // Si el número cambia
+        $('.valor_cuenta_recibo').on('keyup', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+        })
+    })
+</script>
