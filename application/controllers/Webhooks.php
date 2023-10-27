@@ -538,7 +538,7 @@ class Webhooks extends MY_Controller {
 
     /**
      * Importa de Siesa los precios configurados
-     * de cada producto
+     * de cada producto (Listas de precio 001, 002 y 003)
      */
     function importar_productos_precios() {
         try {

@@ -301,7 +301,8 @@ function obtener_inventario_api($datos) {
 
 function obtener_precios_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
 

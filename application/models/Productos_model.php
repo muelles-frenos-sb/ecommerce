@@ -92,10 +92,9 @@ Class Productos_model extends CI_Model{
 
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
-                $lista_precio = ($this->session->userdata('lista_precio')) ? $this->session->userdata('lista_precio') : '001' ;
                 
                 $where = "WHERE p.id ";
-                $having = "";
+                $having = "HAVING precio > 0";
                
                 if(!isset($datos['id'])) {
                     $marcas = $this->configuracion_model->obtener('marcas');
@@ -111,7 +110,7 @@ Class Productos_model extends CI_Model{
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
 
-                    $having = "HAVING";
+                    $having .= " AND ";
 
                     for ($i=0; $i < count($palabras); $i++) {
                         $having .= " (";
@@ -139,9 +138,18 @@ Class Productos_model extends CI_Model{
                     p.*,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
-                    MAX(i.bodega) bodega,
-                    IF(MAX(i.bodega) = '{$this->config->item('bodega_outlet')}', 'outlet', '') bodega_nombre,
-                    ( SELECT pp.precio_sugerido FROM productos_precios AS pp WHERE pp.producto_id = p.id AND pp.lista_precio = '$lista_precio' LIMIT 1 ) precio
+                    MIN(i.bodega) bodega,
+                    IF(MIN(i.bodega) = '{$this->config->item('bodega_outlet')}', 'outlet', '') bodega_nombre,
+                    ( 
+                        SELECT 
+                        IF ( MIN( i.bodega ) = '{$this->config->item('bodega_principal')}', pp.precio, pp.precio_sugerido ) 
+                        FROM 
+                            productos_precios AS pp 
+                        WHERE 
+                            pp.producto_id = p.id 
+                            AND pp.lista_precio = IF( MIN( i.bodega ) = '00008', '001', '{$this->config->item('lista_precio')}')
+                        LIMIT 1 
+                    ) precio
                 FROM
                     productos AS p
                     LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
