@@ -304,7 +304,6 @@ function obtener_precios_api($datos) {
     $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
-    $filtro_lista_precio = ($CI->session->userdata('lista_precio')) ? $CI->session->userdata('lista_precio') : '-1' ;
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -317,7 +316,36 @@ function obtener_precios_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'Precios_V2',
-                'parametros' => "IdItem='$filtro_id'|Lista_precio='$filtro_lista_precio'",
+                'parametros' => "IdItem='$filtro_id'|Lista_precio='-1'",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+function obtener_precios_009_api($datos) {
+    $CI =& get_instance();
+    // $url = $CI->config->item('api_siesa')['base_url'];
+    $url = 'https://serviciosconnekta.siesacloud.com';
+
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_ItemsPrecios',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => "f126_id_lista_precio=''{$CI->config->item('lista_precio')}''",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

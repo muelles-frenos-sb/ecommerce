@@ -550,7 +550,7 @@ class Webhooks extends MY_Controller {
             $datos = [];
 
             // Primero, eliminamos todos los ítems
-            if($this->productos_model->eliminar('productos_precios', 'id is  NOT NULL')) {
+            if($this->productos_model->eliminar('productos_precios', "lista_precio <> {$this->config->item('lista_precio')}")) {
                 foreach($precios as $precio) {
                     $nuevo_precio = [
                         'producto_id' => $precio->IdItem,
@@ -589,6 +589,74 @@ class Webhooks extends MY_Controller {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 9,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
+
+    /**
+     * Importa de Siesa los precios configurados
+     * de cada producto (Lista de precio 009)
+     */
+    function importar_productos_precios_009() {
+        try {
+            $fecha_actualizacion = date('Y-m-d H:i:s');
+            $codigo = 0;
+            $pagina = 1;
+            $nuevos_precios = [];
+
+            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}");
+
+            while ($codigo == 0) {
+                $resultado = json_decode(obtener_precios_009_api(['pagina' => $pagina]));
+                $codigo = $resultado->codigo;
+
+                if($codigo == 0) {
+                    $precios = $resultado->detalle->Table;
+                    
+                    foreach($precios as $precio) {
+                        $nuevo_precio = [
+                            'producto_id' => $precio->f120_id,
+                            'referencia' => $precio->f120_referencia,
+                            'descripcion_corta' => $precio->f120_descripcion,
+                            'lista_precio' => $precio->f126_id_lista_precio,
+                            'precio' => $precio->f126_precio,
+                            'precio_maximo' => $precio->f126_precio_maximo,
+                            'precio_minimo' => $precio->f126_precio_minimo,
+                            'precio_sugerido' => $precio->f126_precio_sugerido,
+                            'fecha_actualizacion' => $fecha_actualizacion,
+                        ];
+
+                        array_push($nuevos_precios, $nuevo_precio);
+                    }
+                    
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+
+            $total_items =  $this->productos_model->crear('productos_precios', $nuevos_precios);
+
+            $respuesta = [
+                'log_tipo_id' => 34,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados"
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 33,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
 
