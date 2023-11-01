@@ -64,12 +64,17 @@
                                 $archivos = glob("./archivos/recibos/$recibo->id/*");
 
                                 foreach ($archivos as $archivo) {
+                                    $archivo_completo = base_url()."archivos/recibos/$recibo->id/".basename($archivo);
                                 ?>
                                     <tr>
                                         <td><?php echo $contador++; ?></a></td>
                                         <td><?php echo basename($archivo); ?></a></td>
                                         <td>
-                                            <a class="mb-2" href="<?php echo base_url()."archivos/recibos/$recibo->id/".basename($archivo); ?>" download>Descargar</a>
+							                <a class="mb-2" target="_blank" onClick="window.open('<?php echo $archivo_completo; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">
+                                                <i class="fa fa-search"></i>
+                                            </a>
+                                            
+                                            <a class="mb-2" href="<?php echo $archivo_completo; ?>" download>Descargar</a>
                                         </td>
                                     </tr>
                                 <?php } ?>
