@@ -20,11 +20,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($recibo_detalle as $item) {
+                            <?php 
+                            $subtotal_valor_documento = 0;
+                            $subtotal_valor_pagado = 0;
+                            $subtotal_valor_saldo = 0;
+
+                            foreach($recibo_detalle as $item) {
                                 $factura_cliente = $this->clientes_model->obtener('clientes_facturas', [
                                     'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
                                     'Nro_Doc_cruce' => $item->documento_cruce_numero,
                                 ]);
+
+                                $subtotal_valor_documento += $factura_cliente->ValorAplicado;
+                                $subtotal_valor_pagado += $item->subtotal;
+                                $subtotal_valor_saldo += $factura_cliente->ValorAplicado - $item->subtotal;
+
                                 ?>
                                 <tr>
                                     <td><?php echo $factura_cliente->centro_operativo; ?></td>
@@ -37,6 +47,15 @@
                                 </tr>
                         <?php } ?>
                         </tbody>
+                        <tfoot>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"><b><?php echo formato_precio($subtotal_valor_documento); ?></b></td>
+                            <td class="text-right"><b><?php echo formato_precio($subtotal_valor_pagado); ?></b></td>
+                            <td class="text-right"><b><?php echo formato_precio($subtotal_valor_saldo); ?></b></td>
+                            <td></td>
+                        </tfoot>
                     </table>
                 </div>
             </div>
