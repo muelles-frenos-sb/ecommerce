@@ -42,7 +42,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,                                                                     // (Tipo_Doc_Cruce)
             "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,                                                                       // Numero de documento de cruce, es un numero entre 1 y 99999999.
             "F353_FECHA_VCTO" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",  // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-            "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_vencimiento}{$dia_vencimiento}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+            "F353_FECHA_DSCTO_PP" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
         ];
 
         array_push($documentos, $documento);
@@ -121,8 +121,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
 
 function obtener_clientes_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
@@ -150,8 +149,7 @@ function obtener_clientes_api($datos) {
 
 function obtener_estado_cuenta_cliente_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -176,8 +174,7 @@ function obtener_estado_cuenta_cliente_api($datos) {
 
 function obtener_facturas_desde_pedido_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $sucursal = str_pad($datos['id_sucursal'], 3, '0', STR_PAD_LEFT);
 
@@ -205,8 +202,7 @@ function obtener_facturas_desde_pedido_api($datos) {
 
 function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -232,8 +228,7 @@ function obtener_movimientos_contables_api($datos) {
 
 function obtener_terceros_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -301,8 +296,7 @@ function obtener_inventario_api($datos) {
 
 function obtener_precios_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
 
@@ -329,8 +323,7 @@ function obtener_precios_api($datos) {
 
 function obtener_precios_009_api($datos) {
     $CI =& get_instance();
-    // $url = $CI->config->item('api_siesa')['base_url'];
-    $url = 'https://serviciosconnekta.siesacloud.com';
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 

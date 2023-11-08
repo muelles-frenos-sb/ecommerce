@@ -89,9 +89,7 @@
                                         <td><?php echo $contador++; ?></a></td>
                                         <td><?php echo basename($archivo); ?></a></td>
                                         <td>
-							                <a class="mb-2" target="_blank" onClick="window.open('<?php echo $archivo_completo; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">
-                                                <i class="fa fa-search"></i>
-                                            </a>
+							                <a class="mb-2" target="_blank" onClick="window.open('<?php echo $archivo_completo; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">Previsualizar</a> |
                                             
                                             <a class="mb-2" href="<?php echo $archivo_completo; ?>" download>Descargar</a>
                                         </td>
