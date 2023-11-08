@@ -121,7 +121,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
 
 function obtener_clientes_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
@@ -149,7 +149,7 @@ function obtener_clientes_api($datos) {
 
 function obtener_estado_cuenta_cliente_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -174,7 +174,7 @@ function obtener_estado_cuenta_cliente_api($datos) {
 
 function obtener_facturas_desde_pedido_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $sucursal = str_pad($datos['id_sucursal'], 3, '0', STR_PAD_LEFT);
 
@@ -202,7 +202,7 @@ function obtener_facturas_desde_pedido_api($datos) {
 
 function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -228,7 +228,7 @@ function obtener_movimientos_contables_api($datos) {
 
 function obtener_terceros_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -268,7 +268,7 @@ function obtener_transaccion_wompi($id) {
 
 function obtener_inventario_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
     $filtro_bodega = (isset($datos['bodega'])) ? $datos['bodega'] : '-1' ;
@@ -296,7 +296,7 @@ function obtener_inventario_api($datos) {
 
 function obtener_precios_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
 
@@ -323,7 +323,7 @@ function obtener_precios_api($datos) {
 
 function obtener_precios_009_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
@@ -351,7 +351,7 @@ function obtener_precios_009_api($datos) {
 
 function obtener_productos_api($datos = []) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
     $filtro_marca = (isset($datos['marca'])) ? trim($datos['marca']) : '-1' ;
@@ -381,7 +381,7 @@ function obtener_productos_api($datos = []) {
 
 function obtener_pedidos_api($fecha = null) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_siesa')['base_url'];
+    $url = $CI->config->item('base_url_produccion');
 
     $client = new \GuzzleHttp\Client();
     try {
