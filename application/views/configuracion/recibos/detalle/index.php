@@ -132,6 +132,21 @@
         })
     }
 
+    calcularTotalAmortizacion = () => {
+        var total = 0
+        var faltante = parseFloat($('#total_faltante_amortizacion').val())
+
+        $(`.valor_cuenta_recibo`).each(function() {
+            total += parseFloat($(this).val().replace(/\./g, '')) || 0
+        })
+
+        faltante -= total
+        
+        // Se formatea el campo
+        $('#total_pago_amortizacion').text(formatearNumero(total))
+        $('#total_faltante_amortizacion_formato').text(formatearNumero(faltante))
+    }
+
     rechazarPago = async(reciboId, confirmacion = null) => {
         // Ventana de confirmación
         if(!confirmacion) {

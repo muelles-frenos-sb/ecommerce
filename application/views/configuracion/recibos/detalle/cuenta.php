@@ -33,6 +33,8 @@
         $('.valor_cuenta_recibo').on('keyup', function() {
             // Se formatea el campo
             $(this).val(formatearNumero($(this).val()))
+
+            calcularTotalAmortizacion()
         })
     })
 </script>
