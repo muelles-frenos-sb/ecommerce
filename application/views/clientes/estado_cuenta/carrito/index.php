@@ -1,11 +1,3 @@
-<div class="form-group">
-    <label for="estado_cuenta_tipo_pago">¿Vas a pagar en línea o vas a subir comprobantes?</label>
-    <select id="estado_cuenta_tipo_pago" class="form-control form-control-select2">
-        <option value="1" selected>Pagar en línea</option>
-        <option value="2">Subir comprobantes</option>
-    </select>
-</div>
-
 <div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
     <div class="alert alert-primary mb-3">
         Selecciona una o varias facturas a pagar, haciendo clic en el ícono <i class="fa fa-plus"></i>
@@ -14,24 +6,26 @@
 
 <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
 
-<div class="mt-2">
+<div class="input-group mt-2">
+    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+</div>
+
+<div class="mt-2 mb-2 d-flex justify-content-end">
     <input type="hidden" id="total_pago">
     Total a pagar: $<span id="total_pago_formato">0</span>
 </div>
 
-<div class="input-group mt-2 d-none" id="contenedor_tipo_pago_comprobante">
-    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-    <button class="btn btn-success" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobante</button>
-</div>
-
-<div class="row mt-2 d-none" id="contenedor_tipo_pago_wompi">
-    <div class="col-12">
-        <button type="submit" class="btn btn-success btn-sm btn-block mt-2" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
+<div class="row mt-2">
+    <div class="col-6">
+        <button class="btn btn-success btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
+    </div>
+    <div class="col-6">
+        <button class="btn btn-success btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
     </div>
 </div>
 
 <script>
-    var detalleFactura = []
+    var detalleFactura = [];
 
     agregarFactura = datos => {
         // Se oculta la celda
@@ -125,8 +119,8 @@
         }
 
         // Si no es pago en línea y no tiene archivos
-        if(!pagarEnLinea && !archivos) {
-            mostrarAviso('alerta', 'Por favor selecciona el comprobante de pago que vas a adjuntar al pago')
+        if(!pagarEnLinea && archivos.length == 0) {
+            mostrarAviso('alerta', 'Por favor selecciona los comprobantes de pago que vas a subir')
             return false
         }
 
@@ -187,6 +181,9 @@
 
                     mostrarAviso('exito', 'Comprobantes subidos exitosamente')
 
+                    // Se muestra el mensaje inicial
+                    $('#mensaje_inicial').show()
+
                     vaciarCarritoEstadoCuenta()
                 }
             }
@@ -208,15 +205,4 @@
         $('#estado_cuenta_archivos').val('')
         calcularTotal()
     }
-
-    $().ready(() => {
-        $(`#contenedor_tipo_pago_wompi`).removeClass('d-none')
-
-        $('#estado_cuenta_tipo_pago').change(function() {
-            $(`#contenedor_tipo_pago_wompi, #contenedor_tipo_pago_comprobante`).addClass('d-none')
-            
-            if($(this).val() == '1') $(`#contenedor_tipo_pago_wompi`).removeClass('d-none')
-            if($(this).val() == '2') $(`#contenedor_tipo_pago_comprobante`).removeClass('d-none')
-        })
-    })
 </script>
