@@ -54,22 +54,6 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
     </div>
 </div>
 
-<!-- <div class="form-group">
-    <div class="form-check">
-        <span class="input-check form-check-input">
-            <span class="input-check__body">
-                <input class="input-check__input" type="checkbox" id="checkout-create-account">
-                <span class="input-check__box"></span>
-                <span class="input-check__icon"><svg width="9px" height="7px">
-                        <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
-                    </svg>
-                </span>
-            </span>
-        </span>
-        <label class="form-check-label" for="checkout-create-account">Create an account?</label>
-    </div>
-</div> -->
-
 <?php if(isset($tercero)) { ?>
     <script>
         $().ready(() => {

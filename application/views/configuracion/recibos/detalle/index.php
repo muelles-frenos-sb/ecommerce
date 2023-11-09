@@ -48,6 +48,7 @@
         var totalImputado = 0
         var totalRecibo = parseFloat($('#total_recibo').val())
         var totalCuentas = 0
+        var validacion = true
 
         $('.valor_cuenta_recibo').each(function() {
             totalCuentas++
@@ -61,7 +62,7 @@
                 $(`#valor_${id}`),
             ]
 
-            if (!validarCamposObligatorios(camposObligatorios)) return false
+            if (!validarCamposObligatorios(camposObligatorios)) validacion = false
 
             totalImputado += parseFloat(valor)
             let fechaPago = $(`#fecha_pago_${id}`).val().split('-')
@@ -75,6 +76,11 @@
                 F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
             })
         })
+
+        if(!validacion) {
+            mostrarAviso('alerta', 'Por favor diligencie todos los campos.')
+            return false
+        }
 
         // Si los valores imputados y del recibo no coinciden
         if(totalCuentas == 0) {
