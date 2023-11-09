@@ -97,7 +97,7 @@
         })
         
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboId, cuentas: cuentas}, false)
-        .then(pago => {
+        .then(async(pago) => {
             Swal.close()
 
             if(pago.resultado.error) {
@@ -110,8 +110,21 @@
                 return false
             }
 
-            mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
-            return false
+            let datosRecibo = {
+                tipo: 'recibos',
+                id: reciboId,
+                recibo_estado_id: 1,
+            }
+
+            let resultado = await consulta('actualizar', datosRecibo, false)
+        
+            if(resultado) {
+                mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
+
+                setTimeout(() => {
+                    location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
+                }, 1000);
+            }
         })
         .catch(error => {
             mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
