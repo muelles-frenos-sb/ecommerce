@@ -10,7 +10,16 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
 
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
 
-    $notas_recibo = "- Recibo $recibo->id";
+    // Si es un recibo de Wompi
+    if($recibo->wompi_datos) {
+        $wompi = json_decode($recibo->wompi_datos, true);
+        $metodo_pago = $wompi['payment_method_type'];
+        $notas_recibo = "Pago a través de Wompi. Referencia $recibo->wompi_transaccion_id. Medio: $metodo_pago";
+        if($metodo_pago == 'CARD') $notas_recibo .= ' ('.$wompi['payment_method']['extra']['name'].')';
+    } else {
+        $notas_recibo = "Recibo cargado desde la página web por el cliente";
+    }
+
     // $notas_recibo = "- Recibo $recibo->id E-Commerce - Referencia Wompi: {$datos_pago['reference']} - ID de Transacción Wompi: {$datos_pago['id']}";
     // enviar_email_recibo($recibo);
 
