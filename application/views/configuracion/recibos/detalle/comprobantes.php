@@ -1,6 +1,8 @@
+<?php $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['token']]); ?>
+
 <div class="block">
     <div class="container container--max--xl">
-        <div class="card">
+        <div class="card mb-4">
             <div class="card-header">
                 <h5 class="text-center">Facturas asociadas</h5>
             </div>
@@ -60,8 +62,8 @@
                 </div>
             </div>
         </div>
-        <div class="card-divider"></div>
-        <div class="card">
+
+        <div class="card mb-4">
             <div class="card-header">
                 <h5 class="text-center">Comprobantes</h5>
             </div>
@@ -105,17 +107,21 @@
             </div>
             <div class="card-divider"></div>
         </div>
-        <div class="card-divider"></div>
-        <div class="card">
+
+        <div class="card mb-4">
             <div class="card-header">
                 <h5 class="text-center">Distribución del pago</h5>
             </div>
             <div class="card-divider"></div>
             <div class="card-body">
                 <div id="contenedor_cuentas"></div>
-                <a class="btn btn-info btn-block mt-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">
-                    Agregar cuenta
-                </a>
+                
+                <!-- Si está por validar el comprobante -->
+                <?php if($recibo->recibo_estado_id == 3) { ?>
+                    <a class="btn btn-info btn-block mt-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">
+                        Agregar cuenta
+                    </a>
+                <?php } ?>
             </div>
             <div class="card-divider"></div>
             <div class="card-footer">
@@ -123,12 +129,16 @@
                     <div class="col-4">
                         <button class="btn btn-info" href=":;" onclick="history.back()">Volver a recibos</button>
                     </div>
-                    <div class="col-4">
-                        <a class="btn btn-danger btn-block" href="javascript:;">Rechazar pago</a>
-                    </div>
-                    <div class="col-4">
-                        <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-                    </div>
+
+                    <!-- Si está por validar el comprobante -->
+                    <?php if($recibo->recibo_estado_id == 3) { ?>
+                        <div class="col-4">
+                            <a class="btn btn-danger btn-block" href="javascript:;" onClick="javascript:rechazarPago(<?php echo $recibo->id; ?>)">Rechazar pago</a>
+                        </div>
+                        <div class="col-4">
+                            <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>

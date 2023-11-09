@@ -31,6 +31,7 @@
     </div>
 </div>
 <div class="block-space block-space--layout--before-footer"></div>
+<div id="contenedor_modal_rechazo"></div>
 
 <script>
     agregarCuenta = async(reciboId) => {
@@ -116,6 +117,38 @@
             mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
             return false
         })
+    }
+
+    rechazarPago = async(reciboId, confirmacion = null) => {
+        // Ventana de confirmación
+        if(!confirmacion) {
+            cargarInterfaz('configuracion/recibos/detalle/rechazo', 'contenedor_modal_rechazo', {id_recibo: reciboId})
+            return false
+        }
+
+        let camposObligatorios = [
+            $('#motivo_rechazo_id'),
+        ]
+
+        if (!validarCamposObligatorios(camposObligatorios)) return false
+
+        let datosRecibo = {
+            tipo: 'recibos',
+            id: reciboId,
+            motivo_rechazo_id: $('#motivo_rechazo_id').val(),
+            recibo_estado_id: 4,
+            comentarios: $('#rechazo_comentarios').val(),
+        }
+        
+        let resultado = await consulta('actualizar', datosRecibo, false)
+        
+        if(resultado) {
+            mostrarAviso('exito', 'El pago se rechazó correctamente.')
+
+            setTimeout(() => {
+                location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
+            }, 1000);
+        }
     }
 
     $().ready(() => {

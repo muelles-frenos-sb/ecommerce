@@ -240,6 +240,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'motivos_rechazo':
+                return $this->db
+                    ->order_by('nombre')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'perfil_rol':
                 return $this->db
                     ->where($datos)
