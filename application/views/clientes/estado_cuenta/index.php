@@ -10,14 +10,30 @@
     <div class="container">
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--1">
-                <form id="formulario_buscar_cliente">
-                    <div class="form-group" id="contenedor_numero_documento">
+                <form id="formulario_buscar_cliente" class="row">
+                    <!-- Número de documento -->
+                    <div class="form-group col-12">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '860504882'; ?>" autofocus>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mis facturas</button>
 
-                    <div class="mt-2" id="contenedor_mensaje_carga"></div>
+                    <!-- Teléfono -->
+                    <div class="form-group col-6">
+                        <label for="estado_cuenta_telefono">Digita el número de celular *</label>
+                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3502675239'; ?>">
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group col-6">
+                        <label for="estado_cuenta_email">Correo electrónico al que deseas que lleguen los soportes *</label>
+                        <input type="email" class="form-control" id="estado_cuenta_email">
+                    </div>
+
+                    <div class="form-group col-12">
+                        <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mis facturas</button>
+
+                        <div class="mt-2" id="contenedor_mensaje_carga"></div>
+                    </div>
                 </form>
 
                 <div id="contenedor_estado_cuenta"></div>
@@ -30,13 +46,40 @@
 
 <script>
     var numeroDocumento = $('#estado_cuenta_numero_documento')
+    var numeroTelefono = $('#estado_cuenta_telefono')
+    var email = $('#estado_cuenta_email')
     
     $().ready(() => {
-        $('#formulario_buscar_cliente').submit(evento => {
+        $('#formulario_buscar_cliente').submit(async(evento) => {
             evento.preventDefault()
 
+            let datosObligatorios = [
+                numeroDocumento,
+                numeroTelefono,
+                email,
+            ]
+
             // Validación de campos obligatorios
-            if (!validarCamposObligatorios([numeroDocumento])) return false
+            if (!validarCamposObligatorios(datosObligatorios)) return false
+
+            let datosContacto = {
+                tipo: 'tercero_contacto',
+                nit: numeroDocumento.val(),
+                numero: numeroTelefono.val(),
+            }
+
+            // Se verifica que el número de teléfono exista en la base de datos
+            let contacto = await consulta('obtener', datosContacto)
+
+            // Si no se encontró el contacto
+            if(!contacto.resultado) {
+                mostrarAviso('alerta', 'El número de teléfono que nos indicas no coincide con el número de documento. Por favor, verifica nuevamente o ponte en contacto con nosotros.', 30000)
+                agregarLog(35, JSON.stringify(datosContacto))
+                return false
+            }
+
+            // En localStorage se almacena el email de contacto
+            localStorage.simonBolivar_emailContacto = email.val()
 
             // Se activa el spinner
             $('#btn_estado_cuenta_cliente').addClass('btn-loading').attr('disabled', true)
@@ -80,7 +123,7 @@
 
                     $('#btn_estado_cuenta_cliente').hide()
                     numeroDocumento.attr('disabled', true)
-                    $('#contenedor_numero_documento').hide()
+                    $('#formulario_buscar_cliente').hide()
                 })
                 .catch(error => {
                     agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
@@ -100,5 +143,8 @@
         numeroDocumento.keyup(function() {
             $(`#${$(this).attr('id')}`).val(limpiarCadena($(this).val()))
         })
+
+        // Si hay un email previamente creado, lo pone en el input
+        if(localStorage.simonBolivar_emailContacto) email.val(localStorage.simonBolivar_emailContacto)
     })
 </script>

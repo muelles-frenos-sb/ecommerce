@@ -274,6 +274,10 @@ class Interfaces extends CI_Controller {
             case 'terceros':
                 $resultado = json_decode(obtener_terceros_api($datos));
             break;
+
+            case 'tercero_contacto':
+                $resultado =  ['resultado' => $this->configuracion_model->obtener('tercero_contacto', $datos)];
+            break;
         }
 
         print json_encode($resultado);

@@ -380,6 +380,14 @@ Class Configuracion_model extends CI_Model {
                     ->result()
                 ;
             break;
+
+            case 'tercero_contacto':
+                return $this->db
+                    ->where($datos)
+                    ->get('terceros_contactos')
+                    ->row()
+                ;
+            break;
         }
 
         $this->db->close;
