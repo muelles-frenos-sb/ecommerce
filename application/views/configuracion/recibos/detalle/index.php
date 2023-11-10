@@ -34,17 +34,18 @@
 <div id="contenedor_modal_rechazo"></div>
 
 <script>
-    agregarCuenta = async(reciboId) => {
+    agregarCuenta = async(reciboId, datos = null) => {
         let id = Math.floor(Math.random() * 10000)
 
         $('#contenedor_cuentas').append(`<div id="${id}"></div>`)
 
-        cargarInterfaz('configuracion/recibos/detalle/cuenta', id, {id: id, id_recibo: reciboId})
+        cargarInterfaz('configuracion/recibos/detalle/cuenta', id, {id: id, id_recibo: reciboId, cuenta: datos})
     }
 
     aprobarPago = async(reciboId) => {
         // Arreglo para enviar la imputación
         var cuentas = []
+        var cuentasRecibo = []
         var totalImputado = 0
         var totalRecibo = parseFloat($('#total_recibo').val())
         var totalCuentas = 0
@@ -67,13 +68,23 @@
             totalImputado += parseFloat(valor)
             let fechaPago = $(`#fecha_pago_${id}`).val().split('-')
 
-            // Se agrega la cuenta al arreglo
+            // Se agrega la cuenta al arreglo que irá a Siesa
             cuentas.push({
                 F350_CONSEC_DOCTO: 1,
                 F351_ID_AUXILIAR: $(`#cuenta_${id} option:selected`).attr('data-codigo'),
                 F351_VALOR_DB: parseFloat(valor),
                 F351_NRO_DOCTO_BANCO: `${fechaPago[0]}${fechaPago[1]}${fechaPago[2]}`,
                 F351_NOTAS: 'Recibo cargado desde la página web por el cliente'
+            })
+
+            // Se agrega la cuenta al arreglo que irá a base de datos
+            cuentasRecibo.push({
+                recibo_id: reciboId,
+                cuenta_bancaria_id: $(`#cuenta_${id}`).val(),
+                fecha_documento_banco: $(`#fecha_pago_${id}`).val(),
+                valor: parseFloat(valor),
+                fecha_creacion: '<?php echo date('Y-m-d H:i:s'); ?>',
+                usuario_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
             })
         })
 
@@ -93,6 +104,9 @@
             mostrarAviso('alerta', 'El valor imputado no es igual al valor total del recibo.')
             return false
         }
+        
+        // Se crean las cuentas en bases de datos
+        await consulta('crear', {tipo: 'recibos_cuentas_bancarias', valores: cuentasRecibo}, false)
 
         Swal.fire({
             title: 'Creando documento contable en Siesa...',
@@ -185,7 +199,16 @@
         }
     }
 
-    $().ready(() => {
+    $().ready(async () => {
         cargarInterfaz('configuracion/recibos/detalle/resumen', 'contenedor_recibos_detalle', {token: '<?php echo $this->uri->segment(4); ?>'})
+
+        // Se consulta si el recibo ya tiene cuentas creadas
+        await consulta('obtener', {tipo: 'recibos_cuentas_bancarias', recibo_id: '<?php echo $recibo->id; ?>'})
+        .then(cuentasRecibo => {
+            let resultado = cuentasRecibo.resultado
+            resultado.forEach(async(cuenta) => {
+                await agregarCuenta(<?php echo $recibo->id; ?>, cuenta)
+            })
+        })
     })
 </script>

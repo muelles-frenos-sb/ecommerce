@@ -130,6 +130,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;
 
+            case 'recibos_cuentas_bancarias':
+                print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
             case 'recibos_detalle':
                 // Vamos a guardar el detalle de la factura
                 $items_recibo = [];
@@ -269,6 +273,10 @@ class Interfaces extends CI_Controller {
 
             case 'producto':
                 $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
+            break;
+
+            case 'recibos_cuentas_bancarias':
+                $resultado =  ['resultado' => $this->configuracion_model->obtener('recibos_cuentas_bancarias', $datos)];
             break;
 
             case 'terceros':

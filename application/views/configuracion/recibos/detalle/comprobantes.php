@@ -119,7 +119,7 @@
                 <div class="mt-2 mb-2 d-flex flex-column">
                     <input type="hidden" id="total_faltante_amortizacion" value="<?php echo $subtotal_valor_pagado; ?>">
                     <h4 class="align-self-end">Total amortizado: $<span id="total_pago_amortizacion">0</span></h4>
-                    <h4 class="align-self-end">Faltante: $<span id="total_faltante_amortizacion_formato">0</span></h4>
+                    <h4 class="align-self-end">Diferencia: $<span id="total_faltante_amortizacion_formato">0</span></h4>
                 </div>
                 
                 <!-- Si está por validar el comprobante -->
@@ -156,7 +156,5 @@
 <script>
     $(`.facturas_items`).addClass('account-nav__item--active')
 
-    $().ready(() => {
-        calcularTotalAmortizacion()
-    })
+    $().ready(() => calcularTotalAmortizacion())
 </script>

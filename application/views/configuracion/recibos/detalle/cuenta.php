@@ -11,7 +11,7 @@
 
     <div class="form-group col-4">
         <label for="fecha_pago_<?php echo $datos['id']; ?>">Fecha de documento banco</label>
-        <input type="date" class="form-control" id="fecha_pago_<?php echo $datos['id']; ?>">
+        <input type="date" class="form-control" id="fecha_pago_<?php echo $datos['id']; ?>" value="<?php if(isset($datos['cuenta']['fecha_documento_banco'])) echo $datos['cuenta']['fecha_documento_banco']; ?>">
     </div>
     
     <div class="form-group col-4">
@@ -21,11 +21,18 @@
             id="valor_<?php echo $datos['id']; ?>"
             class="form-control valor_cuenta_recibo"
             style="text-align: right"
-            value="0"
+            value="<?php if(isset($datos['cuenta']['valor'])) echo $datos['cuenta']['valor']; ?>"
             data-id="<?php echo $datos['id']; ?>"
         >
     </div>
 </label>
+
+<?php if(isset($datos['cuenta'])) { ?>
+    <script>
+        $('#cuenta_<?php echo $datos['id']; ?>').val(<?php echo $datos['cuenta']['cuenta_bancaria_id']; ?>)
+        calcularTotalAmortizacion()
+    </script>
+<?php } ?>
 
 <script>
     $().ready(() => {

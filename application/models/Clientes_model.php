@@ -7,6 +7,10 @@ Class Clientes_model extends CI_Model {
                 return $this->db->insert_id();
             break;
 
+            case 'recibos_cuentas_bancarias':
+                if($this->db->delete($tipo, ['recibo_id' => $datos[0]['recibo_id']])) return $this->db->insert_batch($tipo, $datos);
+            break;
+
             case 'clientes_facturas':
                 if($this->db->delete($tipo, ['Cliente' => $datos[0]['Cliente']])) return $this->db->insert_batch($tipo, $datos);
             break;

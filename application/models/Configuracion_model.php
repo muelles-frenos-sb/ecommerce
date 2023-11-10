@@ -110,6 +110,14 @@ Class Configuracion_model extends CI_Model {
                 }
             break;
 
+            case 'recibos_cuentas_bancarias':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'recibos_tipos':
                 return $this->db
                     ->get($tabla)
