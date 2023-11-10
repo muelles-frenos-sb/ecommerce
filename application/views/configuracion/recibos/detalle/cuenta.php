@@ -27,7 +27,7 @@
     </div>
 </label>
 
-<?php if(isset($datos['cuenta'])) { ?>
+<?php if(isset($datos['cuenta']['cuenta_bancaria_id'])) { ?>
     <script>
         $('#cuenta_<?php echo $datos['id']; ?>').val(<?php echo $datos['cuenta']['cuenta_bancaria_id']; ?>)
         calcularTotalAmortizacion()

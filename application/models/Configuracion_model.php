@@ -111,11 +111,18 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'recibos_cuentas_bancarias':
-                return $this->db
+                $this->db
+                    ->select([
+                        'rcb.*',
+                        'cb.codigo auxiliar', 
+                        'cb.nombre',
+                    ])
+                    ->from("recibos_cuentas_bancarias rcb")
+                    ->join("cuentas_bancarias cb", "rcb.cuenta_bancaria_id = cb.id", "left")
                     ->where($datos)
-                    ->get($tabla)
-                    ->result()
                 ;
+
+                return $this->db->get()->result();
             break;
 
             case 'recibos_tipos':

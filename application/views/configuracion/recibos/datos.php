@@ -79,6 +79,7 @@ foreach ($registros as $recibo) {
         <!-- Opciones -->
         <td class="wishlist__column wishlist__column--body wishlist__column--button">
             <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/recibos/id/$recibo->token"); ?>">Ver</a>
+            <a type="button" class="btn btn-sm btn-info" href="<?php echo site_url("reportes/pdf/recibo/$recibo->token"); ?>" target="_blank">Imprimir</a>
         </td>
     </tr>
 <?php } ?>
