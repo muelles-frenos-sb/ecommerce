@@ -73,7 +73,7 @@
                 F351_ID_AUXILIAR: $(`#cuenta_${id} option:selected`).attr('data-codigo'),
                 F351_VALOR_DB: parseFloat(valor),
                 F351_NRO_DOCTO_BANCO: `${fechaPago[0]}${fechaPago[1]}${fechaPago[2]}`,
-                F351_NOTAS: 'Pago mediante el Ecommerce, subiendo comprobante'
+                F351_NOTAS: 'Recibo cargado desde la página web por el cliente'
             })
         })
 
