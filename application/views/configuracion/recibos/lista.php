@@ -1,3 +1,5 @@
+<input type="text" id="recibo_id_tipo" value="<?php echo $datos['id_tipo_recibo']; ?>">
+
 <div class="wishlist">
     <table class="wishlist__table">
         <thead class="wishlist__head">

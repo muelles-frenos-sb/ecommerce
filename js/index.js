@@ -88,6 +88,7 @@ cargarMasDatos = tipo => {
     if($('#filtro_marca')) datos.marca = $('#filtro_marca').val()
     if($('#filtro_grupo')) datos.grupo = $('#filtro_grupo').val()
     if($('#filtro_linea')) datos.linea = $('#filtro_linea').val()
+    if($('#recibo_id_tipo')) datos.id_tipo_recibo = $('#recibo_id_tipo').val()
 
     $.ajax({
         url: `${$('#site_url').val()}interfaces/cargar_mas_datos`,

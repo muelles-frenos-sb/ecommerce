@@ -61,6 +61,7 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'recibos':
+				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $where = "WHERE r.recibo_estado_id";
                 $having = "";
 
@@ -93,6 +94,7 @@ Class Configuracion_model extends CI_Model {
                     r.*,
                     rt.nombre tipo,
                     re.nombre estado,
+                    re.nombre orden,
 	                re.clase estado_clase
                 FROM
                     recibos AS r
@@ -101,7 +103,8 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-                    r.fecha_creacion DESC";
+                    orden, r.fecha_creacion
+                $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
                     return $this->db->query($sql)->row();
