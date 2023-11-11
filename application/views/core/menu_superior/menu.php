@@ -32,26 +32,10 @@
                     <div class="main-menu__submenu">
                         <ul class="menu">
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
-                                <li class="menu__item menu__item--has-submenu">
-                                    <a href="javascript:;" class="menu__link">
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url("configuracion/recibos/ver/1"); ?>" class="menu__link">
                                         Recibos
-                                        <span class="menu__arrow">
-                                            <svg width="6px" height="9px">
-                                                <path d="M0.3,7.4l3-2.9l-3-2.9c-0.4-0.3-0.4-0.9,0-1.3l0,0c0.4-0.3,0.9-0.4,1.3,0L6,4.5L1.6,8.7c-0.4,0.4-0.9,0.4-1.3,0l0,0C-0.1,8.4-0.1,7.8,0.3,7.4z" />
-                                            </svg>
-                                        </span>
                                     </a>
-                                    <div class="menu__submenu">
-                                        <ul class="menu">
-                                            <?php foreach ($this->configuracion_model->obtener('recibos_tipos') as $recibo_tipo) { ?>
-                                                <li class="menu__item">
-                                                    <a href="<?php echo site_url("configuracion/recibos/ver/$recibo_tipo->id"); ?>" class="menu__link">
-                                                        <?php echo $recibo_tipo->nombre; ?>
-                                                    </a>
-                                                </li>
-                                            <?php } ?>
-                                        </ul>
-                                    </div>
                                 </li>
                             <?php } ?>
 
