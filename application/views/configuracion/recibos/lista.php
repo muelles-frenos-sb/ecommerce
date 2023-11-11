@@ -1,4 +1,4 @@
-<input type="text" id="recibo_id_tipo" value="<?php echo $datos['id_tipo_recibo']; ?>">
+<input type="hidden" id="recibo_id_tipo" value="<?php echo $datos['id_tipo_recibo']; ?>">
 
 <div class="wishlist">
     <table class="wishlist__table">
