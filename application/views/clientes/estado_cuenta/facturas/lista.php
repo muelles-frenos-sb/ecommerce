@@ -1,14 +1,26 @@
 <?php
-$opciones = [
+// Obtenemos las facturas del cliente pendientes por pagar
+$facturas = $this->clientes_model->obtener('clientes_facturas', [
     'numero_documento' => $datos['numero_documento'],
     'pendientes' => true,
-];
+    'mostrar_estado_cuenta'=> true,
+]);
 
-// if($datos['busqueda'] != '') $opciones['busqueda'] = $datos['busqueda'];
+$facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
+    'numero_documento' => $datos['numero_documento'],
+    'pendientes' => true,
+    'mostrar_alerta'=> true,
+]);
+;
+?>
 
-// Obtenemos las facturas del cliente pendientes por pagar
-$facturas = $this->clientes_model->obtener('clientes_facturas', $opciones);
+<?php if(count($facturas_invalidas) > 0) { ?>
+    <div class="alert alert-danger alert-lg alert-dismissible fade show">
+        Te informamos que el número de documento consultado presenta facturas que no se pueden reflejar en este módulo. Por favor, comunícate al teléfono 604 444 7232 - Extensión 110.
+    </div>
+<?php } ?>
 
+<?php
 if(empty($facturas)) {
     ?>
     <script>

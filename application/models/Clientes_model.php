@@ -61,7 +61,7 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_facturas':
-                $where = "WHERE a.mostrar_estado_cuenta = 1 AND cf.Tipo_Doc_cruce != 'CNE' ";
+                $where = "WHERE cf.Tipo_Doc_cruce != 'CNE' ";
                 $having = "";
 
                 if (isset($datos['busqueda'])) {
@@ -92,7 +92,9 @@ Class Clientes_model extends CI_Model {
                 if(isset($datos['id'])) $where .= " AND cf.id = {$datos['id']}";
                 if(isset($datos['Tipo_Doc_cruce'])) $where .= " AND cf.Tipo_Doc_cruce = '{$datos['Tipo_Doc_cruce']}'";
                 if(isset($datos['Nro_Doc_cruce'])) $where .= " AND cf.Nro_Doc_cruce = '{$datos['Nro_Doc_cruce']}'";
-
+                if(isset($datos['mostrar_estado_cuenta'])) $where .= " AND a.mostrar_estado_cuenta = 1";
+                if(isset($datos['mostrar_alerta'])) $where .= " AND a.mostrar_alerta = 1";
+                
                 $sql =
                 "SELECT
                     cf.*,
