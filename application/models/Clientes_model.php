@@ -115,7 +115,7 @@ Class Clientes_model extends CI_Model {
                 LEFT JOIN auxiliares AS a ON cf.Desc_auxiliar = a.nombre
                 $where
                 $having
-                ORDER BY diasvencidos DESC";
+                ORDER BY dias_vencido DESC";
                 
                 if (isset($datos['id']) || isset($datos['Tipo_Doc_cruce']) || isset($datos['Nro_Doc_cruce'])) {
                     return $this->db->query($sql)->row();

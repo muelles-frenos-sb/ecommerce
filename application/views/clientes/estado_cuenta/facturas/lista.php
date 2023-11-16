@@ -18,11 +18,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     <div class="alert alert-danger alert-lg alert-dismissible fade show">
         Te informamos que el número de documento consultado presenta facturas que no se pueden reflejar en este módulo. Por favor, comunícate al teléfono 604 444 7232 - Extensión 110.
     </div>
-<?php } ?>
-
-<?php
-if(empty($facturas)) {
-    ?>
+<?php } elseif(empty($facturas)) { ?>
     <script>
         $('#contenedor_mensaje_carga').html('')
         $('#contenedor_carrito_facturas').hide('')
