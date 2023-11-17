@@ -40,7 +40,7 @@
         <?php $this->load->view('core/menu_superior/busqueda'); ?>
 
         <div class="header__indicators">
-            <div class="main-menu mr-1">
+            <div class="main-menu">
                 <ul class="main-menu__list">
                     <li class="main-menu__item">
                         <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
@@ -49,12 +49,14 @@
                     </li>
                 </ul>
             </div>
+            
+            <a href="<?php echo site_url('productos?busqueda=outlet'); ?>">
+                <img src="<?php echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
+            </a>
 
-            <div class="indicator mt-1">
-                <a href="<?php echo site_url('productos?busqueda=outlet'); ?>">
-                    <img src="<?php echo base_url(); ?>images/outlet.png" height="27px" alt="Outlet">
-                </a>
-            </div>
+            <a href="<?php echo site_url('clientes'); ?>" class="ml-1">
+                <img src="<?php echo base_url(); ?>images/boton_pago.png?" height="32" alt="Paga tus facturas">
+            </a>
         </div>
     </div>
 </header>
