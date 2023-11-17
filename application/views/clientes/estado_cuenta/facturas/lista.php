@@ -73,7 +73,8 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
             ?>
                 <tr id="factura_<?php echo $contador; ?>">
                     <td>
-                        <button type="button" class="btn btn-success" onClick="javascript:agregarFactura({
+                        <?php echo $factura->id; ?>
+                        <button type="button" class="btn btn-primary" onClick="javascript:agregarFactura({
                             contador: '<?php echo $contador; ?>',
                             id: '<?php echo $factura->id; ?>',
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',

@@ -17,10 +17,10 @@
 
 <div class="row mt-2">
     <div class="col-6">
-        <button class="btn btn-success btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
+        <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
     </div>
     <div class="col-6">
-        <button class="btn btn-success btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
+        <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
     </div>
 </div>
 
