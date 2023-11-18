@@ -142,12 +142,12 @@ Class Productos_model extends CI_Model{
                     IF(MIN(i.bodega) = '{$this->config->item('bodega_outlet')}', 'outlet', '') bodega_nombre,
                     ( 
                         SELECT 
-                        IF ( MIN( i.bodega ) = '{$this->config->item('bodega_principal')}', pp.precio, pp.precio_sugerido ) 
+                        IF ( MIN( i.bodega ) = '{$this->config->item('bodega_principal')}', pp.precio, pp.precio ) 
                         FROM 
                             productos_precios AS pp 
                         WHERE 
                             pp.producto_id = p.id 
-                            AND pp.lista_precio = IF( MIN( i.bodega ) = '00008', '001', '{$this->config->item('lista_precio')}')
+                            AND pp.lista_precio = IF( MIN( i.bodega ) = '{$this->config->item('bodega_outlet')}', '{$this->config->item('lista_precio_clientes')}', '{$this->config->item('lista_precio')}')
                         LIMIT 1 
                     ) precio
                 FROM
@@ -172,7 +172,7 @@ Class Productos_model extends CI_Model{
             break;
 
             case 'productos_destacados':
-                $limite = (isset($datos['limite'])) ? "LIMIT {$datos['limite']}" : " LIMIT 62 ";
+                $limite = (isset($datos['limite'])) ? "LIMIT {$datos['limite']}" : " LIMIT 100 ";
                 
                 $sql = 
                 "SELECT

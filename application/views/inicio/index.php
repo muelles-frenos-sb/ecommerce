@@ -2,6 +2,9 @@
 // Se obtiene un arreglo con todos los productos destacados que se van a mostrar al inicio
 $productos = $this->productos_model->obtener('productos_destacados');
 $productos_outlet = $this->productos_model->obtener('productos_outlet');
+$cantidad_productos = count($productos);
+$cantidad_productos_por_bloque = intval($cantidad_productos / 8);
+$posicion = 0;
 
 /****************************************************************************************
  **************************************** Slider ****************************************
@@ -24,8 +27,9 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 /****************************************************************************************
  ******************************** Productos destacados **********************************
  ****************************************************************************************/
-$this->data['desde'] = 1;   // Posición del arreglo donde comenzará
-$this->data['hasta'] = 10;  // Posición del arreglo donde terminará
+$this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+$posicion += $cantidad_productos_por_bloque;
+$this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
 $this->data['productos'] = $productos;
 $this->load->view('inicio/productos_destacados', $this->data);
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
@@ -44,8 +48,9 @@ echo "
 <div class='block block-zone'>
     <div class='container'>
         <div class='block-zone__body'>";
-            $this->data['desde'] = 11; // Posición del arreglo donde comenzará
-            $this->data['hasta'] = 20; // Posición del arreglo donde terminará
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['tipo'] = 'marca';
             $this->load->view('inicio/bloques/marcas');
@@ -59,8 +64,9 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 /****************************************************************************************
  ********************************** Productos nuevos ************************************
  ****************************************************************************************/
-$this->data['desde'] = 21; // Posición del arreglo donde comenzará
-$this->data['hasta'] = 30; // Posición del arreglo donde terminará
+$this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+$posicion += $cantidad_productos_por_bloque;
+$this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
 $this->data['productos'] = $productos;
 $this->load->view('inicio/nuevos_productos', $this->data);
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
@@ -72,8 +78,9 @@ echo "
 <div class='block block-zone'>
     <div class='container'>
         <div class='block-zone__body'>";
-            $this->data['desde'] = 31; // Posición del arreglo donde comenzará
-            $this->data['hasta'] = 40; // Posición del arreglo donde terminará
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['tipo'] = 'grupo';
             $this->load->view('inicio/bloques/grupos');
@@ -97,8 +104,9 @@ echo "
 <div class='block block-zone'>
     <div class='container'>
         <div class='block-zone__body'>";
-            $this->data['desde'] = 41;
-            $this->data['hasta'] = 50;
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['tipo'] = 'linea';
             $this->load->view('inicio/bloques/lineas');
@@ -129,22 +137,25 @@ echo
     <div class='container'>
         <div class='row'>";
             // Columna 1
-            $this->data['desde'] = 51;
-            $this->data['hasta'] = 54;
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['titulo'] = 'Para tí';
             $this->load->view('inicio/footer_productos_destacados', $this->data);
 
             // Columna 2
-            $this->data['desde'] = 55;
-            $this->data['hasta'] = 58;
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['titulo'] = 'Destacados';
             $this->load->view('inicio/footer_productos_destacados', $this->data);
             
             // Columna 3
-            $this->data['desde'] = 59;
-            $this->data['hasta'] = 62;
+            $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+            $posicion += $cantidad_productos_por_bloque;
+            $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
             $this->data['productos'] = $productos;
             $this->data['titulo'] = 'Ofertas';
             $this->load->view('inicio/footer_productos_destacados', $this->data);
