@@ -20,7 +20,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         $notas_recibo = "Recibo cargado desde la página web por el cliente";
     }
 
-    // $notas_recibo = "- Recibo $recibo->id E-Commerce - Referencia Wompi: {$datos_pago['reference']} - ID de Transacción Wompi: {$datos_pago['id']}";
     // enviar_email_recibo($recibo);
 
     // Se obtienen los ítems del recibo
@@ -97,34 +96,35 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     ];
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
-    $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
-    $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
-    $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
+    // $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
+    // $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
+    // $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
-    // Si no se pudo crear el documento contable
-    if($codigo_resultado_documento_contable == '1') {
-        // Se agrega log
-        $CI->configuracion_model->crear('logs', [
-            'log_tipo_id' => 19,
-            'fecha_creacion' => date('Y-m-d H:i:s'),
-            'observacion' => $detalle_resultado_documento_contable
-        ]);
+    // // Si no se pudo crear el documento contable
+    // if($codigo_resultado_documento_contable == '1') {
+    //     // Se agrega log
+    //     $CI->configuracion_model->crear('logs', [
+    //         'log_tipo_id' => 19,
+    //         'fecha_creacion' => date('Y-m-d H:i:s'),
+    //         'observacion' => $detalle_resultado_documento_contable
+    //     ]);
         
-        $error = true;
-        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
-    } else {
-        // Se agrega log
-        $CI->configuracion_model->crear('logs', [
-            'log_tipo_id' => 20,
-            'fecha_creacion' => date('Y-m-d H:i:s'),
-        ]);
+    //     $error = true;
+    //     $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    // } else {
+    //     // Se agrega log
+    //     $CI->configuracion_model->crear('logs', [
+    //         'log_tipo_id' => 20,
+    //         'fecha_creacion' => date('Y-m-d H:i:s'),
+    //     ]);
 
-        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
-    }
+    //     $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    // }
 
     return [
-        'error' => $error,
-        'mensaje' => $respuesta,
+        // 'error' => $error,
+        'mensaje' => $resultado_documento_contable,
+        'datos_cuentas' => $datos_documento_contable
     ];
 }
 
@@ -303,34 +303,34 @@ function obtener_inventario_api($datos) {
     return $response->getBody()->getContents();
 }
 
-function obtener_precios_api($datos) {
-    $CI =& get_instance();
-    $url = $CI->config->item('base_url_produccion');
+// function obtener_precios_api($datos) {
+//     $CI =& get_instance();
+//     $url = $CI->config->item('base_url_produccion');
 
-    $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
+//     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
 
-    $client = new \GuzzleHttp\Client();
-    try {
-        $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
-            'headers' => [
-                'accept' => 'application/json',
-                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
-            ],
-            'query' => [
-                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-                'descripcion' => 'Precios_V2',
-                'parametros' => "IdItem='$filtro_id'|Lista_precio='-1'",
-            ]
-        ]);
-    } catch (GuzzleHttp\Exception\ClientException $e) {
-        $response = $e->getResponse();
-    }
+//     $client = new \GuzzleHttp\Client();
+//     try {
+//         $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
+//             'headers' => [
+//                 'accept' => 'application/json',
+//                 'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+//                 'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+//             ],
+//             'query' => [
+//                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+//                 'descripcion' => 'Precios_V2',
+//                 'parametros' => "IdItem='$filtro_id'|Lista_precio='-1'",
+//             ]
+//         ]);
+//     } catch (GuzzleHttp\Exception\ClientException $e) {
+//         $response = $e->getResponse();
+//     }
     
-    return $response->getBody()->getContents();
-}
+//     return $response->getBody()->getContents();
+// }
 
-function obtener_precios_009_api($datos) {
+function obtener_precios_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
 
@@ -348,7 +348,7 @@ function obtener_precios_009_api($datos) {
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_ItemsPrecios',
                 'paginacion' => "numPag=$filtro_pagina|tamPag=100",
-                'parametros' => "f126_id_lista_precio=''{$CI->config->item('lista_precio')}''",
+                'parametros' => "f126_id_lista_precio=''{$CI->config->item('lista_precio')}'' or f126_id_lista_precio=''{$CI->config->item('lista_precio_clientes')}''",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

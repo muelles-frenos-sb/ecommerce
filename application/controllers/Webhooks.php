@@ -74,9 +74,9 @@ class Webhooks extends MY_Controller {
 
         // Se obtienen todos los datos del recibo con el token que se almacena como referencia
         $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
-
-        // Dependiendo del estado de la transacción, trae los mensajes
-        $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($datos['status']);
+        
+        // // Dependiendo del estado de la transacción, trae los mensajes
+        // $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($datos['status']);
 
         /**
          * Actualización de datos del recibo
@@ -118,9 +118,7 @@ class Webhooks extends MY_Controller {
             $respuesta = crear_documento_contable($recibo->id, $datos);
         }
         
-        print json_encode($respuesta);
-
-        return http_response_code(200);
+        print json_encode([$respuesta]);
     }
 
     function gestionar_pedido($datos) {
@@ -311,105 +309,106 @@ class Webhooks extends MY_Controller {
 
     /**
      * Importa de Siesa los clientes y sucursales creadas para cada cliente
+     * (INHABILITADA)
      */
-    function importar_clientes() {
-        try {
-            $fecha_actualizacion = date('Y-m-d H:i:s');
-            $codigo = 0;
-            $pagina = 1;
-            $nuevos_clientes = [];
+    // function importar_clientes() {
+    //     try {
+    //         $fecha_actualizacion = date('Y-m-d H:i:s');
+    //         $codigo = 0;
+    //         $pagina = 1;
+    //         $nuevos_clientes = [];
 
-            // Se eliminan todos los clientes
-            $this->configuracion_model->eliminar('clientes', 'id is  NOT NULL');
+    //         // Se eliminan todos los clientes
+    //         $this->configuracion_model->eliminar('clientes', 'id is  NOT NULL');
             
-            while ($codigo == 0) {
-                $resultado = json_decode(obtener_clientes_api(['pagina' => $pagina]));
-                $codigo = $resultado->codigo;
+    //         while ($codigo == 0) {
+    //             $resultado = json_decode(obtener_clientes_api(['pagina' => $pagina]));
+    //             $codigo = $resultado->codigo;
 
-                if($codigo == 0) {
-                    $clientes = $resultado->detalle->Table;
+    //             if($codigo == 0) {
+    //                 $clientes = $resultado->detalle->Table;
                     
-                    foreach($clientes as $cliente) {
-                        $nuevo_cliente = [
-                            'id' => $cliente->f200_id,
-                            'compania_id' => $cliente->f201_id_cia,
-                            'row_id' => $cliente->f200_rowid,
-                            'nit' => $cliente->f200_nit,
-                            'sucursal_id' => $cliente->f201_id_sucursal,
-                            'sucursal_descripcion' => $cliente->f201_descripcion_sucursal,
-                            'ind_estado_bloqueado' => $cliente->f201_ind_estado_bloqueado,
-                            'moneda' => $cliente->f201_id_moneda,
-                            'vendedor_id' => $cliente->f201_id_vendedor,
-                            'calificacion' => $cliente->f201_ind_calificacion,
-                            'condicion_pago_id' => $cliente->f201_id_cond_pago,
-                            'dias_gracia' => $cliente->f201_dias_gracia,
-                            'cupo_credito' => $cliente->f201_cupo_credito,
-                            'cliente_tipo' => $cliente->f201_id_tipo_cli,
-                            'grupo_descuentoi_id' => $cliente->f201_id_grupo_dscto,
-                            'lista_precio_id' => $cliente->f201_id_lista_precio,
-                            'ind_pedido_backorder' => $cliente->f201_ind_pedido_backorder,
-                            'porcentaje_exceso_venta' => $cliente->f201_porc_exceso_venta,
-                            'porcentaje_minimo_margen' => $cliente->f201_porc_min_margen,
-                            'porcentaje_maximo_margen' => $cliente->f201_porc_max_margen,
-                            'ind_bloqueo_cupo' => $cliente->f201_ind_bloqueo_cupo,
-                            'ind_bloqueo_mora' => $cliente->f201_ind_bloqueo_mora,
-                            'ind_factura_unificada' => $cliente->f201_ind_factura_unificada,
-                            'id_co_factura' => $cliente->f201_id_co_factura,
-                            'notas' => $cliente->f201_notas,
-                            'fecha_ingreso' => $cliente->f201_fecha_ingreso,
-                            'ind_estado_activo' => $cliente->f201_ind_estado_activo,
-                            'co_movto_factura_id' => $cliente->f201_id_co_movto_factura,
-                            'un_movto_factura_id' => $cliente->f201_id_un_movto_factura,
-                            'fecha_cupo' => $cliente->f201_fecha_cupo,
-                            'tolerancia_porcentaje' => $cliente->f201_porc_tolerancia,
-                            'dia_maximo_factura' => $cliente->f201_dia_maximo_factura,
-                            'motivo_bloqueo_id' => $cliente->f201_id_motivo_bloqueo,
-                            'cobrador_id' => $cliente->f201_id_cobrador,
-                            'fecha_ts' => $cliente->f201_ts,
-                            'ind_compromiso_um_emp' => $cliente->f201_ind_compromiso_um_emp,
-                            'ind_anticipo_terc_corp' => $cliente->f201_ind_anticipo_terc_corp,
-                            'valida_cupo_despacho' => $cliente->f201_valida_cupo_despacho,
-                            'ind_exceso_venta_adic' => $cliente->f201_ind_exceso_venta_adic,
-                            'ind_valida_cartera_des' => $cliente->f201_ind_valida_cartera_des,
-                            'fecha_actualizacion' => $fecha_actualizacion,
-                        ];
+    //                 foreach($clientes as $cliente) {
+    //                     $nuevo_cliente = [
+    //                         'id' => $cliente->f200_id,
+    //                         'compania_id' => $cliente->f201_id_cia,
+    //                         'row_id' => $cliente->f200_rowid,
+    //                         'nit' => $cliente->f200_nit,
+    //                         'sucursal_id' => $cliente->f201_id_sucursal,
+    //                         'sucursal_descripcion' => $cliente->f201_descripcion_sucursal,
+    //                         'ind_estado_bloqueado' => $cliente->f201_ind_estado_bloqueado,
+    //                         'moneda' => $cliente->f201_id_moneda,
+    //                         'vendedor_id' => $cliente->f201_id_vendedor,
+    //                         'calificacion' => $cliente->f201_ind_calificacion,
+    //                         'condicion_pago_id' => $cliente->f201_id_cond_pago,
+    //                         'dias_gracia' => $cliente->f201_dias_gracia,
+    //                         'cupo_credito' => $cliente->f201_cupo_credito,
+    //                         'cliente_tipo' => $cliente->f201_id_tipo_cli,
+    //                         'grupo_descuentoi_id' => $cliente->f201_id_grupo_dscto,
+    //                         'lista_precio_id' => $cliente->f201_id_lista_precio,
+    //                         'ind_pedido_backorder' => $cliente->f201_ind_pedido_backorder,
+    //                         'porcentaje_exceso_venta' => $cliente->f201_porc_exceso_venta,
+    //                         'porcentaje_minimo_margen' => $cliente->f201_porc_min_margen,
+    //                         'porcentaje_maximo_margen' => $cliente->f201_porc_max_margen,
+    //                         'ind_bloqueo_cupo' => $cliente->f201_ind_bloqueo_cupo,
+    //                         'ind_bloqueo_mora' => $cliente->f201_ind_bloqueo_mora,
+    //                         'ind_factura_unificada' => $cliente->f201_ind_factura_unificada,
+    //                         'id_co_factura' => $cliente->f201_id_co_factura,
+    //                         'notas' => $cliente->f201_notas,
+    //                         'fecha_ingreso' => $cliente->f201_fecha_ingreso,
+    //                         'ind_estado_activo' => $cliente->f201_ind_estado_activo,
+    //                         'co_movto_factura_id' => $cliente->f201_id_co_movto_factura,
+    //                         'un_movto_factura_id' => $cliente->f201_id_un_movto_factura,
+    //                         'fecha_cupo' => $cliente->f201_fecha_cupo,
+    //                         'tolerancia_porcentaje' => $cliente->f201_porc_tolerancia,
+    //                         'dia_maximo_factura' => $cliente->f201_dia_maximo_factura,
+    //                         'motivo_bloqueo_id' => $cliente->f201_id_motivo_bloqueo,
+    //                         'cobrador_id' => $cliente->f201_id_cobrador,
+    //                         'fecha_ts' => $cliente->f201_ts,
+    //                         'ind_compromiso_um_emp' => $cliente->f201_ind_compromiso_um_emp,
+    //                         'ind_anticipo_terc_corp' => $cliente->f201_ind_anticipo_terc_corp,
+    //                         'valida_cupo_despacho' => $cliente->f201_valida_cupo_despacho,
+    //                         'ind_exceso_venta_adic' => $cliente->f201_ind_exceso_venta_adic,
+    //                         'ind_valida_cartera_des' => $cliente->f201_ind_valida_cartera_des,
+    //                         'fecha_actualizacion' => $fecha_actualizacion,
+    //                     ];
 
-                        array_push($nuevos_clientes, $nuevo_cliente);
-                    }
+    //                     array_push($nuevos_clientes, $nuevo_cliente);
+    //                 }
                     
-                    $pagina++;
-                } else {
-                    $codigo = '-1';
-                    break;
-                }
-            }
+    //                 $pagina++;
+    //             } else {
+    //                 $codigo = '-1';
+    //                 break;
+    //             }
+    //         }
             
-            $total_items = $this->configuracion_model->crear('clientes', $nuevos_clientes);
+    //         $total_items = $this->configuracion_model->crear('clientes', $nuevos_clientes);
 
-            $respuesta = [
-                'log_tipo_id' => 12,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados"
-            ];
+    //         $respuesta = [
+    //             'log_tipo_id' => 12,
+    //             'fecha_creacion' => date('Y-m-d H:i:s'),
+    //             'observacion' => "$total_items registros actualizados"
+    //         ];
 
-            // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', $respuesta);
+    //         // Se agrega el registro en los logs
+    //         $this->configuracion_model->crear('logs', $respuesta);
 
-            $this->db->close();
+    //         $this->db->close();
             
-            print json_encode($respuesta);
+    //         print json_encode($respuesta);
 
-            return http_response_code(200);
-        } catch (\Throwable $th) {
-            // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 13,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-            ]);
+    //         return http_response_code(200);
+    //     } catch (\Throwable $th) {
+    //         // Se agrega el registro en los logs
+    //         $this->configuracion_model->crear('logs', [
+    //             'log_tipo_id' => 13,
+    //             'fecha_creacion' => date('Y-m-d H:i:s'),
+    //         ]);
 
-            return http_response_code(400);
-        }
-    }
+    //         return http_response_code(400);
+    //     }
+    // }
 
     /**
      * Importa de Siesa los productos y su información básica
@@ -537,70 +536,71 @@ class Webhooks extends MY_Controller {
     }
 
     /**
-     * Importa de Siesa los precios configurados
+     * Importa de Siesa V1.1 los precios configurados
      * de cada producto (Listas de precio 001, 002 y 003)
+     * (YA NO SE USAN ESTAS LISTAS DE PRECIOS)
      */
-    function importar_productos_precios() {
-        try {
-            // Precio
-            $resultado_precios = json_decode(obtener_precios_api(['id' => '-1']));
-            $codigo_precio = $resultado_precios->codigo;
-            $precios = ($codigo_precio == 0) ? $resultado_precios->detalle->Table : 0 ;
-            $fecha_actualizacion = date('Y-m-d H:i:s');
-            $datos = [];
+    // function importar_productos_precios() {
+    //     try {
+    //         // Precio
+    //         $resultado_precios = json_decode(obtener_precios_api(['id' => '-1']));
+    //         $codigo_precio = $resultado_precios->codigo;
+    //         $precios = ($codigo_precio == 0) ? $resultado_precios->detalle->Table : 0 ;
+    //         $fecha_actualizacion = date('Y-m-d H:i:s');
+    //         $datos = [];
 
-            // Primero, eliminamos todos los ítems
-            if($this->productos_model->eliminar('productos_precios', "lista_precio <> {$this->config->item('lista_precio')}")) {
-                foreach($precios as $precio) {
-                    $nuevo_precio = [
-                        'producto_id' => $precio->IdItem,
-                        'referencia' => $precio->Referencia,
-                        'descripcion_corta' => $precio->Descripcion_Corta,
-                        'lista_precio' => $precio->Lista_precio,
-                        'precio' => $precio->Precio,
-                        'precio_maximo' => $precio->PrecioMaximo,
-                        'precio_minimo' => $precio->PrecioMinimo,
-                        'precio_sugerido' => $precio->PrecioSugerido,
-                        'fecha_actualizacion' => $fecha_actualizacion,
-                    ];
-                    array_push($datos, $nuevo_precio);
-                }
+    //         // Primero, eliminamos todos los ítems
+    //         if($this->productos_model->eliminar('productos_precios', "lista_precio <> {$this->config->item('lista_precio')}")) {
+    //             foreach($precios as $precio) {
+    //                 $nuevo_precio = [
+    //                     'producto_id' => $precio->IdItem,
+    //                     'referencia' => $precio->Referencia,
+    //                     'descripcion_corta' => $precio->Descripcion_Corta,
+    //                     'lista_precio' => $precio->Lista_precio,
+    //                     'precio' => $precio->Precio,
+    //                     'precio_maximo' => $precio->PrecioMaximo,
+    //                     'precio_minimo' => $precio->PrecioMinimo,
+    //                     'precio_sugerido' => $precio->PrecioSugerido,
+    //                     'fecha_actualizacion' => $fecha_actualizacion,
+    //                 ];
+    //                 array_push($datos, $nuevo_precio);
+    //             }
             
-                $total_items =  $this->productos_model->crear('productos_precios', $datos);
+    //             $total_items =  $this->productos_model->crear('productos_precios', $datos);
 
-                $respuesta = [
-                    'log_tipo_id' => 8,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "$total_items registros actualizados"
-                ];
+    //             $respuesta = [
+    //                 'log_tipo_id' => 8,
+    //                 'fecha_creacion' => date('Y-m-d H:i:s'),
+    //                 'observacion' => "$total_items registros actualizados"
+    //             ];
 
-                // Se agrega el registro en los logs
-                $this->configuracion_model->crear('logs', $respuesta);
+    //             // Se agrega el registro en los logs
+    //             $this->configuracion_model->crear('logs', $respuesta);
 
-                print json_encode($respuesta);
+    //             print json_encode($respuesta);
 
-                return http_response_code(200);
-            }
+    //             return http_response_code(200);
+    //         }
 
-            $this->db->close();
+    //         $this->db->close();
 
-            return http_response_code(200);
-        } catch (\Throwable $th) {
-            // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 9,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-            ]);
+    //         return http_response_code(200);
+    //     } catch (\Throwable $th) {
+    //         // Se agrega el registro en los logs
+    //         $this->configuracion_model->crear('logs', [
+    //             'log_tipo_id' => 9,
+    //             'fecha_creacion' => date('Y-m-d H:i:s'),
+    //         ]);
 
-            return http_response_code(400);
-        }
-    }
+    //         return http_response_code(400);
+    //     }
+    // }
 
     /**
-     * Importa de Siesa los precios configurados
-     * de cada producto (Lista de precio 009)
+     * Importa de Siesa V2 los precios configurados
+     * de cada producto (Lista de precio 009 y 010)
      */
-    function importar_productos_precios_009() {
+    function importar_productos_precios() {
         try {
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $codigo = 0;
@@ -608,9 +608,10 @@ class Webhooks extends MY_Controller {
             $nuevos_precios = [];
 
             $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}");
+            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio_clientes')}");
 
             while ($codigo == 0) {
-                $resultado = json_decode(obtener_precios_009_api(['pagina' => $pagina]));
+                $resultado = json_decode(obtener_precios_api(['pagina' => $pagina]));
                 $codigo = $resultado->codigo;
 
                 if($codigo == 0) {
