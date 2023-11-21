@@ -7,7 +7,7 @@
 
 <div class="row no-gutters">
     <!-- Datos del cliente -->
-    <div class="col-sm-6 col-12 px-2">
+    <div class="col-lg-3 px-2">
         <div class="card address-card address-card--featured">
             <div class="address-card__badge tag-badge tag-badge--new">
                 BIENVENIDO
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Datos del pago -->
-    <div class="col-sm-6 col-12 px-2">
+    <div class="col-lg-9 px-2">
         <div class="card address-card address-card--featured">
             <div class="address-card__body">
                 <div id="contenedor_carrito_facturas"></div>
@@ -87,7 +87,7 @@
         })
     }
 
-    cargarMovimientos = async(datos) => {
+    cargarMovimientos = async(datos, abrirModal = true) => {
         datos.tipo = 'movimientos_contables'
         let movimientosFactura = await consulta('obtener', datos, false)
 
@@ -104,7 +104,8 @@
 
             agregarLog(30, JSON.stringify(datos))
 
-            cargarInterfaz('clientes/estado_cuenta/facturas/movimientos', 'contenedor_modal', datos)
+            // Si se necesita cargar la interfaz
+            if(abrirModal) cargarInterfaz('clientes/estado_cuenta/facturas/movimientos', 'contenedor_modal', datos)
         })
         .catch(error => {
             agregarLog(31, JSON.stringify(datos))

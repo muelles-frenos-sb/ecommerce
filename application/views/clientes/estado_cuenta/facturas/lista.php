@@ -11,7 +11,6 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     'pendientes' => true,
     'mostrar_alerta'=> true,
 ]);
-;
 ?>
 
 <?php if(count($facturas_invalidas) > 0) { ?>
@@ -78,10 +77,13 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                             contador: '<?php echo $contador; ?>',
                             id: '<?php echo $factura->id; ?>',
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                            numero_documento: '<?php echo $factura->Cliente; ?>',
                             documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
                             valor: `<?php echo $factura->totalCop; ?>`,
                             sede: `<?php echo $factura->centro_operativo; ?>`,
                             tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
+                            descuento_porcentaje: `<?php echo $factura->descuento_porcentaje; ?>`,
+                            id_sucursal: '<?php echo $factura->sucursal_id; ?>',
                         })">
                             <i class="fa fa-plus"></i>
                         </button>

@@ -173,6 +173,7 @@ class Interfaces extends CI_Controller {
                         'documento_cruce_numero' => $item['documento_cruce_numero'],
                         'documento_cruce_tipo' => $item['documento_cruce_tipo'],
                         'subtotal' => $item['subtotal'],
+                        'descuento' => $item['descuento'],
                     ];
                     
                     array_push($items_recibo, $datos_item);

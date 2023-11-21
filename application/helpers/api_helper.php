@@ -26,6 +26,8 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $documentos = [];
+    $cuentas_bancarias= [];
+    $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
@@ -35,6 +37,9 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
             'Nro_Doc_cruce' => $item->documento_cruce_numero,
         ]);
+
+        // Si trae descuento, se va acumulando
+        if($item->descuento > 0) $descuento += $item->descuento;
 
         $mes_vencimiento = str_pad($factura_cliente->mes_vencimiento, 2, '0', STR_PAD_LEFT);
         $dia_vencimiento = str_pad($factura_cliente->dia_vencimiento, 2, '0', STR_PAD_LEFT);
@@ -69,6 +74,20 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
             "F351_NOTAS" => $notas_recibo                                                              // Observaciones
         ];
+    
+    array_push($cuentas_bancarias, $cuentas);
+
+    // si tiene descuentos
+    if($descuento > 0) {
+        // Se agrega el movimiento contable
+        array_push($cuentas_bancarias, [
+            "F350_CONSEC_DOCTO" => 1,                                           // Número de documento
+            "F351_ID_AUXILIAR" => "41750120",                                   // Valida en maestro, código de cuenta contable
+            "F351_VALOR_DB" => $descuento,                                      // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+            "F351_NOTAS" => $notas_recibo                                                // Observaciones
+        ]);
+    }
 
     $datos_documento_contable = [
         // Un solo documento contable para toda la transacción
@@ -80,14 +99,14 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
                 "F350_NOTAS" => $notas_recibo                                      // Observaciones
             ]
         ],
-        "Movimiento_contable" => $cuentas,
+        "Movimiento_contable" => $cuentas_bancarias,
         // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
         "Movimiento_CxC" => $documentos
 
         // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
         //             [
-        //                 "F350_CONSEC_DOCTO" => $factura->id,                                         // Número de documento
-        //                 "F351_ID_AUXILIAR" => "11100504",                                            // Valida en maestro, código de cuenta contable
+        //                 "F350_CONSEC_DOCTO" => 1,                                         // Número de documento
+        //                 "F351_ID_AUXILIAR" => "41750120",                                            // Valida en maestro, código de cuenta contable
         //                 // Pendiente
         //                 "F351_VALOR_DB" => $factura->valor,                                          // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
         //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.

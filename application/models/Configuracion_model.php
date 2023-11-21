@@ -44,6 +44,14 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'cliente_factura_movimiento':
+                return $this->db
+                    ->where($datos)
+                    ->get('clientes_facturas_movimientos')
+                    ->row()
+                ;
+            break;
+
             case 'cuentas_bancarias':
                 return $this->db
                     ->order_by('nombre')
