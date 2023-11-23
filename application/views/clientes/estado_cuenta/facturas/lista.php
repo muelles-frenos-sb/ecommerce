@@ -157,6 +157,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         new DataTable('#tabla_facturas', {
             info: true,
             ordering: true,
+            order: [[5, 'desc']],
             paging: true,
             stateSave: true,
             // scrollY: '600px',
