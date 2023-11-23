@@ -27,89 +27,109 @@
 <script>
     var detalleFactura = [];
 
-    agregarFactura = async(datos) => {
-        // Se cargan los movimientos de esa factura
-        await cargarMovimientos({
+    agregarFactura = datos => {
+        Swal.fire({
+            title: 'Cargando información de la factura...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        let datosConsulta = {
+            tipo: 'movimientos_contables',
             documento_cruce: datos.documento_cruce,
             numero_documento: datos.numero_documento,
             id_sucursal: datos.id_sucursal,
-        }, false)
+        }
 
-        // Se obtiene el valor bruto del ingreso en la factura
-        let valorBruto = await consulta('obtener', {tipo: 'cliente_factura_movimiento', f350_consec_docto: datos.documento_cruce, f253_id: '41359310'}, false)
+        // Se cargan los movimientos de la factura
+        consulta('obtener', datosConsulta, false)
+        .then(movimientosFactura => {
+            // Se insertan en la base de datos todos los movimientos obtenidos de la factura
+            consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
+            .then(() => {
+                // Se obtiene de los movimientos creados el valor bruto de ingreso ventas 19%
+                consulta('obtener', {tipo: 'cliente_factura_movimiento', f350_consec_docto: datos.documento_cruce, f253_id: '41359310'}, false)
+                .then(resultadoMovimiento => {
+                    // Se obtiene el valor bruto de ese movimiento, para calcular descuentos posteriormente
+                    valorBruto = (resultadoMovimiento) ? resultadoMovimiento.f351_valor_cr : 0
 
-        valorBruto = (valorBruto) ? valorBruto.f351_valor_cr : 0
+                    Swal.close()
 
-        // Se oculta la celda
-        $(`#factura_${datos.contador}`).hide()
+                    // Se oculta la celda
+                    $(`#factura_${datos.contador}`).hide()
 
-        // Se oculta el mensaje inicial
-        $('#mensaje_inicial').hide()
+                    // Se oculta el mensaje inicial
+                    $('#mensaje_inicial').hide()
 
-        // Se agrega el ítem
-        $('#contenedor_lista_carrito').append(`
-            <label id="id_registro_${datos.contador}" class="vehicles-list__item">
-                <span class="vehicles-list__item-radio input-radio">
-                    <span class="input-radio__body">
-                        <input class="input-radio__input" name="check_factura_${datos.contador}" type="radio" checked>
-                        <span class="input-radio__circle"></span>
-                    </span>
-                </span>
-                <span class="vehicles-list__item-info">
-                    <span class="vehicles-list__item-name">Factura ${datos.documento_cruce}</span>
-                    <span class="vehicles-list__item-details">SEDE ${datos.sede} - ${datos.tipo_credito}</span>
-                </span>
-                <span class="vehicles-list__item-info">
-                    <div class='row'>
-                        <div class='col-4'>
-                            <label>Retención</label>
-                            <input type='text' id="retencion_${datos.id}" class="form-control" placeholder='Retención'>
-                        </div>
+                    // Se agrega el ítem
+                    $('#contenedor_lista_carrito').append(`
+                        <label id="id_registro_${datos.contador}" class="vehicles-list__item">
+                            <span class="vehicles-list__item-radio input-radio">
+                                <span class="input-radio__body">
+                                    <input class="input-radio__input" name="check_factura_${datos.contador}" type="radio" checked>
+                                    <span class="input-radio__circle"></span>
+                                </span>
+                            </span>
+                            <span class="vehicles-list__item-info">
+                                <span class="vehicles-list__item-name">Factura ${datos.documento_cruce}</span>
+                                <span class="vehicles-list__item-details">SEDE ${datos.sede} - ${datos.tipo_credito}</span>
+                            </span>
+                            <span class="vehicles-list__item-info">
+                                <div class='row'>
+                                    <div class='col-4'>
+                                        <label>Valor a pagar</label>
+                                        <input 
+                                            type="text"
+                                            id="${datos.id}"
+                                            data-id="${datos.id}"
+                                            data-documento_cruce_numero="${datos.documento_cruce}"
+                                            data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
+                                            data-descuento_porcentaje="${datos.descuento_porcentaje}"
+                                            data-valor_bruto="${valorBruto}"
+                                            class="form-control valor_pago_factura"
+                                            style="text-align: right"
+                                            max="${datos.valor}"
+                                            value="${datos.valor}"
+                                        >
+                                    </div>
 
-                        <div class='col-4'>
-                            <label>Descuento</label>
-                            <input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' disabled>
-                        </div>
-
-                        <div class='col-4'>
-                            <label>Valor a pagar</label>
-                            <input 
-                                type="text"
-                                id="${datos.id}"
-                                data-id="${datos.id}"
-                                data-documento_cruce_numero="${datos.documento_cruce}"
-                                data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
-                                data-descuento_porcentaje="${datos.descuento_porcentaje}"
-                                data-valor_bruto="${valorBruto}"
-                                class="form-control valor_pago_factura"
-                                style="text-align: right"
-                                max="${datos.valor}"
-                                value="${datos.valor}"
-                            >
-                        </div>
-                    </div>
-                </span>
+                                    <div class='col-4'>
+                                        <label>Descuento</label>
+                                        <input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' disabled>
+                                    </div>
+                                    
+                                    <div class='col-4'>
+                                        <label>Valor final</label>
+                                        <input type='text' id="valor_completo_${datos.id}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                            </span>
+                                
+                            <button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.contador})">
+                                <svg width="16" height="16">
+                                    <path d="M2,4V2h3V1h6v1h3v2H2z M13,13c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5h10V13z" />
+                                </svg>
+                            </button>
+                        </label>
+                    `)
                     
-                <button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.contador})">
-                    <svg width="16" height="16">
-                        <path d="M2,4V2h3V1h6v1h3v2H2z M13,13c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5h10V13z" />
-                    </svg>
-                </button>
-            </label>
-        `)
+                    calcularTotal()
 
-        // Por defecto se formatea el campo
-        $(`#${datos.id}`).val(formatearNumero(datos.valor))
+                    // Por defecto se formatea el campo
+                    $(`#${datos.id}`).val(formatearNumero(datos.valor))
 
-        // Si el número cambia
-        $(`input`).on('keyup', function() {
-            // Se formatea el campo
-            $(this).val(formatearNumero($(this).val()))
+                    // Si el número cambia
+                    $(`input`).on('keyup', function() {
+                        // Se formatea el campo
+                        $(this).val(formatearNumero($(this).val()))
 
-            calcularTotal()
+                        calcularTotal()
+                    })
+                })
+            })
         })
-
-        calcularTotal()
     }
 
     calcularTotal = () => {
@@ -121,12 +141,14 @@
             let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
             let valorTotal = parseFloat($(this).attr('max'))
             let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
+            
             let valorDescuento = (valorAPagar == valorTotal) ? valorBruto * (porcentajeDescuento / 100) : 0
             
             total += parseFloat($(this).val().replace(/\./g, ''))
             total -= valorDescuento.toFixed(0)
 
             $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento.toFixed(0)))
+            $(`#valor_completo_${$(this).attr('data-id')}`).val(formatearNumero((valorAPagar - valorDescuento).toFixed(0)))
 
             detalleFactura.push({
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),

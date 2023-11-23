@@ -98,9 +98,22 @@ Class Clientes_model extends CI_Model {
                 
                 $sql =
                 "SELECT
-                    cf.*,
+                    cf.id,
+                    cf.Fecha_Creacion,
+                    cf.Desc_auxiliar,
+                    cf.Cliente,
+                    cf.Tipo_Doc_cruce,
+                    cf.Nro_Doc_cruce,
+                    cf.doccruce,
+                    cf.RazonSocial,
+                    cf.RazonSocial_Sucursal,
                     date(cf.Fecha_doc_cruce) Fecha_doc_cruce,
                     date(cf.Fecha_venc) Fecha_venc,
+                    cf.CentroOperaciones,
+                    cf.diasvencidos,
+                    cf.ValorAplicado,
+                    cf.valorDoc,
+                    cf.totalCop,
                     YEAR(cf.Fecha_venc) anio_vencimiento,
                     MONTH(cf.Fecha_venc) mes_vencimiento,
                     DAY(cf.Fecha_venc) dia_vencimiento,

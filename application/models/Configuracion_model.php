@@ -102,7 +102,7 @@ Class Configuracion_model extends CI_Model {
                     r.*,
                     rt.nombre tipo,
                     re.nombre estado,
-                    re.nombre orden,
+                    re.nombre,
 	                re.clase estado_clase
                 FROM
                     recibos AS r
@@ -111,7 +111,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-                    orden, r.fecha_creacion
+                    orden, r.fecha_creacion ASC
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
