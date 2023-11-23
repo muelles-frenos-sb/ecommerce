@@ -38,6 +38,8 @@
         // Se obtiene el valor bruto del ingreso en la factura
         let valorBruto = await consulta('obtener', {tipo: 'cliente_factura_movimiento', f350_consec_docto: datos.documento_cruce, f253_id: '41359310'}, false)
 
+        valorBruto = (valorBruto) ? valorBruto.f351_valor_cr : 0
+
         // Se oculta la celda
         $(`#factura_${datos.contador}`).hide()
 
@@ -78,7 +80,7 @@
                                 data-documento_cruce_numero="${datos.documento_cruce}"
                                 data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
                                 data-descuento_porcentaje="${datos.descuento_porcentaje}"
-                                data-valor_bruto="${valorBruto.f351_valor_cr}"
+                                data-valor_bruto="${valorBruto}"
                                 class="form-control valor_pago_factura"
                                 style="text-align: right"
                                 max="${datos.valor}"

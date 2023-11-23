@@ -26,7 +26,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $documentos = [];
-    $cuentas_bancarias= [];
+    $descuentos = [];
     $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
@@ -75,18 +75,16 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             "F351_NOTAS" => $notas_recibo                                                              // Observaciones
         ];
     
-    array_push($cuentas_bancarias, $cuentas);
-
     // si tiene descuentos
     if($descuento > 0) {
         // Se agrega el movimiento contable
-        array_push($cuentas_bancarias, [
+        $descuentos = [
             "F350_CONSEC_DOCTO" => 1,                                           // Número de documento
             "F351_ID_AUXILIAR" => "41750120",                                   // Valida en maestro, código de cuenta contable
             "F351_VALOR_DB" => $descuento,                                      // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
             "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
             "F351_NOTAS" => $notas_recibo                                                // Observaciones
-        ]);
+        ];
     }
 
     $datos_documento_contable = [
@@ -99,7 +97,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
                 "F350_NOTAS" => $notas_recibo                                      // Observaciones
             ]
         ],
-        "Movimiento_contable" => $cuentas_bancarias,
+        "Movimiento_contable" => $cuentas,
         // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
         "Movimiento_CxC" => $documentos
 

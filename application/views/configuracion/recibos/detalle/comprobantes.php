@@ -4,7 +4,7 @@
     <div class="container container--max--xl">
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="text-center">Facturas asociadas</h5>
+                <h5 class="text-center">Facturas asociadas de <?php echo $recibo->razon_social; ?></h5>
             </div>
             <div class="card-divider"></div>
             <div class="card-table">
@@ -29,7 +29,8 @@
 
                             foreach($recibo_detalle as $item) {
                                 $factura_cliente = $this->clientes_model->obtener('clientes_facturas', [
-                                    'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
+                                    'Cliente' => $recibo->documento_numero,
+                                    // 'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
                                     'Nro_Doc_cruce' => $item->documento_cruce_numero,
                                 ]);
 

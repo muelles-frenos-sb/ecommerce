@@ -92,6 +92,7 @@ Class Clientes_model extends CI_Model {
                 if(isset($datos['id'])) $where .= " AND cf.id = {$datos['id']}";
                 if(isset($datos['Tipo_Doc_cruce'])) $where .= " AND cf.Tipo_Doc_cruce = '{$datos['Tipo_Doc_cruce']}'";
                 if(isset($datos['Nro_Doc_cruce'])) $where .= " AND cf.Nro_Doc_cruce = '{$datos['Nro_Doc_cruce']}'";
+                if(isset($datos['Cliente'])) $where .= " AND cf.Cliente = '{$datos['Cliente']}'";
                 if(isset($datos['mostrar_estado_cuenta'])) $where .= " AND a.mostrar_estado_cuenta = 1";
                 if(isset($datos['mostrar_alerta'])) $where .= " AND a.mostrar_alerta = 1";
                 
@@ -106,8 +107,9 @@ Class Clientes_model extends CI_Model {
                     co.nombre centro_operativo,
                     a.nombre_homologado,
                     DATEDIFF (DATE(NOW()), DATE(cf.Fecha_doc_cruce)) AS dias_expedicion,
-	                IF((SELECT dias_expedicion) > 8 AND (SELECT dias_expedicion) <= 30, 1.5, IF((SELECT dias_expedicion) <= 8, 2.5, 0)) descuento_porcentaje,
-                    DATEDIFF(date(NOW()), date(cf.Fecha_venc)) dias_vencido,
+	                -- IF((SELECT dias_expedicion) > 8 AND (SELECT dias_expedicion) <= 30, 1.5, IF((SELECT dias_expedicion) <= 8, 2.5, 0)) descuento_porcentaje,
+                    IF(cf.Tipo_Doc_cruce = 'CFE', IF((SELECT dias_expedicion) > 8 AND (SELECT dias_expedicion) <= 30, 1.5, IF((SELECT dias_expedicion) <= 8, 2.5, 0) ), 0) descuento_porcentaje,
+                    DATEDIFF(date(NOW()), date(cf.Fecha_venc)) AS dias_vencido, 
                     ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id,
                     a.codigo codigo_auxiliar,
                     co.codigo centro_operativo_codigo
@@ -117,7 +119,7 @@ Class Clientes_model extends CI_Model {
                 LEFT JOIN auxiliares AS a ON cf.Desc_auxiliar = a.nombre
                 $where
                 $having
-                ORDER BY dias_vencido DESC";
+                ORDER BY dias_vencido DESC, dias_expedicion DESC";
                 
                 if (isset($datos['id']) || isset($datos['Tipo_Doc_cruce']) || isset($datos['Nro_Doc_cruce'])) {
                     return $this->db->query($sql)->row();
