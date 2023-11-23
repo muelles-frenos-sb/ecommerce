@@ -16,6 +16,7 @@
                                 <th>Documento cruce</th>
                                 <th>Fecha factura</th>
                                 <th>Valor documento</th>
+                                <th>Descuento</th>
                                 <th>Valor pagado</th>
                                 <th>Valor saldo</th>
                                 <th>Sucursal</th>
@@ -24,6 +25,7 @@
                         <tbody>
                             <?php 
                             $subtotal_valor_documento = 0;
+                            $subtotal_valor_descuento = 0;
                             $subtotal_valor_pagado = 0;
                             $subtotal_valor_saldo = 0;
 
@@ -35,17 +37,33 @@
                                 ]);
 
                                 $subtotal_valor_documento += $factura_cliente->ValorAplicado;
-                                $subtotal_valor_pagado += $item->subtotal;
+                                $subtotal_valor_descuento += $item->descuento;
+                                $subtotal_valor_pagado += $item->subtotal - $item->descuento;
                                 $subtotal_valor_saldo += $factura_cliente->ValorAplicado - $item->subtotal;
-
                                 ?>
                                 <tr>
+                                    <!-- Sede -->
                                     <td><?php echo $factura_cliente->centro_operativo; ?></td>
+                                    
+                                    <!-- Documento cruce -->
                                     <td class="text-right"><?php echo $factura_cliente->Nro_Doc_cruce; ?></td>
+
+                                    <!-- Fecha factura -->
                                     <td><?php echo $factura_cliente->Fecha_doc_cruce; ?></td>
+                                    
+                                    <!-- Valor documento -->
                                     <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado); ?></td>
-                                    <td class="text-right"><?php echo formato_precio($item->subtotal); ?></td>
+                                    
+                                    <!-- Valor descuento -->
+                                    <td class="text-right"><?php echo formato_precio($item->descuento); ?></td>
+                                    
+                                    <!-- Valor pagado -->
+                                    <td class="text-right"><?php echo formato_precio($item->subtotal - $item->descuento); ?></td>
+                                    
+                                    <!-- Valor saldo -->
                                     <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado - $item->subtotal); ?></td>
+                                    
+                                    <!-- Sucursal -->
                                     <td><?php echo $factura_cliente->nombre_homologado; ?></td>
                                 </tr>
                         <?php } ?>
@@ -55,6 +73,7 @@
                             <td></td>
                             <td></td>
                             <td class="text-right"><b><?php echo formato_precio($subtotal_valor_documento); ?></b></td>
+                            <td class="text-right"><b><?php echo formato_precio($subtotal_valor_descuento); ?></b></td>
                             <td class="text-right"><b><?php echo formato_precio($subtotal_valor_pagado); ?></b></td>
                             <td class="text-right"><b><?php echo formato_precio($subtotal_valor_saldo); ?></b></td>
                             <td></td>
@@ -118,7 +137,7 @@
                 <div id="contenedor_cuentas"></div>
 
                 <div class="mt-2 mb-2 d-flex flex-column">
-                    <input type="hidden" id="total_faltante_amortizacion" value="<?php echo $subtotal_valor_pagado; ?>">
+                    <input type="hidden" id="total_faltante_amortizacion" value="<?php echo number_format($subtotal_valor_pagado, 0, '', ''); ?>">
                     <h4 class="align-self-end">Total amortizado: $<span id="total_pago_amortizacion">0</span></h4>
                     <h4 class="align-self-end">Diferencia: $<span id="total_faltante_amortizacion_formato">0</span></h4>
                 </div>

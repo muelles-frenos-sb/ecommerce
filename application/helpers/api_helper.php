@@ -26,7 +26,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $documentos = [];
-    $descuentos = [];
     $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
@@ -74,18 +73,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
             "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
             "F351_NOTAS" => $notas_recibo                                                              // Observaciones
         ];
-    
-    // si tiene descuentos
-    if($descuento > 0) {
-        // Se agrega el movimiento contable
-        $descuentos = [
-            "F350_CONSEC_DOCTO" => 1,                                           // Número de documento
-            "F351_ID_AUXILIAR" => "41750120",                                   // Valida en maestro, código de cuenta contable
-            "F351_VALOR_DB" => $descuento,                                      // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-            "F351_NOTAS" => $notas_recibo                                                // Observaciones
-        ];
-    }
 
     $datos_documento_contable = [
         // Un solo documento contable para toda la transacción
@@ -111,36 +98,47 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
         //             ],
     ];
+    
+    // si tiene descuentos
+    if($descuento > 0) {
+        // Se agrega el movimiento contable
+        array_push($datos_documento_contable['Movimiento_contable'], [
+            "F350_CONSEC_DOCTO" => 1,                                           // Número de documento
+            "F351_ID_AUXILIAR" => "41750120",                                   // Valida en maestro, código de cuenta contable
+            "F351_VALOR_DB" => $descuento,                                      // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
+            "F351_NOTAS" => $notas_recibo                                                // Observaciones
+        ]);
+    }
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
-    // $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
-    // $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
-    // $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
+    $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
+    $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
-    // // Si no se pudo crear el documento contable
-    // if($codigo_resultado_documento_contable == '1') {
-    //     // Se agrega log
-    //     $CI->configuracion_model->crear('logs', [
-    //         'log_tipo_id' => 19,
-    //         'fecha_creacion' => date('Y-m-d H:i:s'),
-    //         'observacion' => $detalle_resultado_documento_contable
-    //     ]);
+    // Si no se pudo crear el documento contable
+    if($codigo_resultado_documento_contable == '1') {
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 19,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => $detalle_resultado_documento_contable
+        ]);
         
-    //     $error = true;
-    //     $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
-    // } else {
-    //     // Se agrega log
-    //     $CI->configuracion_model->crear('logs', [
-    //         'log_tipo_id' => 20,
-    //         'fecha_creacion' => date('Y-m-d H:i:s'),
-    //     ]);
+        $error = true;
+        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    } else {
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 20,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+        ]);
 
-    //     $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
-    // }
+        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    }
 
     return [
-        // 'error' => $error,
-        'mensaje' => $resultado_documento_contable,
+        'error' => $error,
+        'mensaje' => $respuesta,
         'datos_cuentas' => $datos_documento_contable
     ];
 }
