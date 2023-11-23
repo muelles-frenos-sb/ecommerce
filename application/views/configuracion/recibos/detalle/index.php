@@ -118,8 +118,6 @@
         
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboId, cuentas: cuentas}, false)
         .then(async(pago) => {
-            console.log(pago)
-            return false
             Swal.close()
 
             if(pago.resultado.error) {
