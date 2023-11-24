@@ -43,8 +43,8 @@
             <div class="main-menu">
                 <ul class="main-menu__list">
                     <li class="main-menu__item">
-                        <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
-                            Mayorista
+                        <a href="<?php echo site_url('blog/mayoristas'); ?>" class="main-menu__link">
+                            Mayoristas
                         </a>
                     </li>
                 </ul>
