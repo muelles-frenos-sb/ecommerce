@@ -84,7 +84,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
                 "F350_NOTAS" => $notas_recibo                                      // Observaciones
             ]
         ],
-        "Movimiento_contable" => $cuentas,
+        "Movimiento_contable" => [$cuentas],
         // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
         "Movimiento_CxC" => $documentos
 
