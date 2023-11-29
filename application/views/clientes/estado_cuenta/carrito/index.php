@@ -78,7 +78,7 @@
                             </span>
                             <span class="vehicles-list__item-info">
                                 <div class='row'>
-                                    <div class='col-4'>
+                                    <div class='col-12'>
                                         <label>Valor a pagar</label>
                                         <input 
                                             type="text"
@@ -95,12 +95,12 @@
                                         >
                                     </div>
 
-                                    <div class='col-4'>
+                                    <div class='col-4 d-none'>
                                         <label>Descuento</label>
                                         <input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' disabled>
                                     </div>
                                     
-                                    <div class='col-4'>
+                                    <div class='col-4 d-none'>
                                         <label>Valor final</label>
                                         <input type='text' id="valor_completo_${datos.id}" class="form-control" disabled>
                                     </div>
@@ -140,7 +140,8 @@
             let valorAPagar = parseFloat($(this).val().replace(/\./g, ''))
             let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
             let valorTotal = parseFloat($(this).attr('max'))
-            let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
+            // let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
+            let porcentajeDescuento = 0
             
             let valorDescuento = (valorAPagar == valorTotal) ? valorBruto * (porcentajeDescuento / 100) : 0
             
