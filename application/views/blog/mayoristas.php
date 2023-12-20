@@ -1,1 +1,1 @@
-<object frameborder="0" data="<?php echo $this->config->item('url_wordpress').'/mayoristas'; ?>"  style="width:100%;height:100vh;"></object>
+<object frameborder="0" data="<?php echo $this->config->item('url_wordpress').'/ser-mayoristas'; ?>"  style="width:100%;height:100vh;"></object>
