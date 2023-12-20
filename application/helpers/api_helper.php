@@ -68,7 +68,8 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         : [
             // Primer movimiento -> Bancos
             "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
-            "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
+            "F351_ID_AUXILIAR" => '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
+            // "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
             "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
             "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
             "F351_NOTAS" => $notas_recibo                                                              // Observaciones
