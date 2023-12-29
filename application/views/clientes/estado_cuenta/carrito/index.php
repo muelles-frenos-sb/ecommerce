@@ -78,7 +78,7 @@
                             </span>
                             <span class="vehicles-list__item-info">
                                 <div class='row'>
-                                    <div class='col-12'>
+                                    <div class='col-4'>
                                         <label>Valor a pagar</label>
                                         <input 
                                             type="text"
@@ -95,14 +95,14 @@
                                         >
                                     </div>
 
-                                    <div class='col-4 d-none'>
+                                    <div class='col-4'>
                                         <label>Descuento</label>
-                                        <input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' disabled>
+                                        <input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' style="text-align: right" disabled>
                                     </div>
                                     
-                                    <div class='col-4 d-none'>
+                                    <div class='col-4'>
                                         <label>Valor final</label>
-                                        <input type='text' id="valor_completo_${datos.id}" class="form-control" disabled>
+                                        <input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right" disabled>
                                     </div>
                                 </div>
                             </span>
@@ -140,8 +140,8 @@
             let valorAPagar = parseFloat($(this).val().replace(/\./g, ''))
             let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
             let valorTotal = parseFloat($(this).attr('max'))
-            // let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
-            let porcentajeDescuento = 0
+            let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
+            // let porcentajeDescuento = 0
             
             let valorDescuento = (valorAPagar == valorTotal) ? valorBruto * (porcentajeDescuento / 100) : 0
             
@@ -205,7 +205,11 @@
         // Una vez creado el recibo
         if (recibo.resultado) {
             // Se crean los ítems del recibo
-            let reciboItems = await consulta('crear', {tipo: 'recibos_detalle_estado_cuenta', 'recibo_id': recibo.resultado, items: calcularTotal()}, false)
+            let reciboItems = await consulta('crear', {
+                tipo: 'recibos_detalle_estado_cuenta',
+                recibo_id: recibo.resultado,
+                items: calcularTotal()
+            }, false)
 
             if (reciboItems.resultado) {
                 // Si es pago en línea, redirecciona a Wompi

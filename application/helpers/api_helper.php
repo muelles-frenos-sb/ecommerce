@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Consume el endpoint para la creación del
  * documento contable en Siesa
  */
-function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas = null) {
+function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimientos_contables = null) {
     $CI =& get_instance();
 
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
@@ -25,7 +25,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     // Se obtienen los ítems del recibo
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
-    $documentos = [];
+    $movimientos_cxc = [];
     $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
@@ -43,76 +43,128 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
         $mes_vencimiento = str_pad($factura_cliente->mes_vencimiento, 2, '0', STR_PAD_LEFT);
         $dia_vencimiento = str_pad($factura_cliente->dia_vencimiento, 2, '0', STR_PAD_LEFT);
         
-        $documento = [
+        $movimiento_cxc = [
+            "F_CIA" => '1',                                           // Código de la compañía
+            "F350_ID_CO" => 400,                                                                      // Código del centro operativo (sede)
+            "F350_ID_TIPO_DOCTO" => 'CG',                                                                     // (Tipo_Doc_Cruce)
             "F350_CONSEC_DOCTO" => 1,                                                                                                           // Numero de documento
             "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,                                                                            // Id de la tabla auxiliar
             "F351_ID_TERCERO" => $factura_cliente->Cliente,                                                                                     // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+            "F351_NOTAS" => $notas_recibo,                                                                                                     // Observaciones
             "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,                                                                      // Código del centro operativo (sede)
             "F351_VALOR_CR" => floatval($item->subtotal),                                                                                                 // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
-            "F351_NOTAS" => $notas_recibo,                                                                                                     // Observaciones
             "F353_ID_SUCURSAL" => str_pad($factura_cliente->sucursal_id, 3, '0', STR_PAD_LEFT),                                                 // Valida en maestro, código de sucursal del cliente.
             "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,                                                                     // (Tipo_Doc_Cruce)
             "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,                                                                       // Numero de documento de cruce, es un numero entre 1 y 99999999.
+            "F353_NRO_CUOTA_CRUCE" => 0,                                                                                                     // Observaciones
             "F353_FECHA_VCTO" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",  // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-            "F353_FECHA_DSCTO_PP" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}"                                                           // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+            "F353_FECHA_DSCTO_PP" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}", 
+            "F351_ID_UN" => '01',
+            "F351_ID_CCOSTO" => '',
+            "F351_VALOR_DB" => 0,
+            "F351_VALOR_DB_ALT" => 0,
+            "F351_VALOR_CR_ALT" => 0,
+            "F353_VLR_DSCTO_PP" => 0,
+            "F354_VALOR_APLICADO_PP" => 0,
+            "F354_VALOR_APLICADO_PP_ALT" => 0,
+            "F354_VALOR_APROVECHA" => 0,
+            "F354_VALOR_APROVECHA_ALT" => 0,
+            "F354_VALOR_RETENCION" => 0,
+            "F354_VALOR_RETENCION_ALT" => 0,
+            "F354_TERCERO_VEND" => '22222221',
+            "F354_NOTAS" => $notas_recibo,
         ];
 
-        array_push($documentos, $documento);
+        array_push($movimientos_cxc, $movimiento_cxc);
     }
 
     // Si trae cuentas imputadas, las toma para ingresarlas al documento contable,
     // sino, toma los valores básicos
-    $cuentas = 
-        ($datos_cuentas) 
-        ? $datos_cuentas 
+    $movimientos_contables = 
+        ($datos_movimientos_contables) 
+        ? $datos_movimientos_contables 
         : [
             // Primer movimiento -> Bancos
-            "F350_CONSEC_DOCTO" => 1,                                                                   // Número de documento (Siesa lo autogenera)
-            "F351_ID_AUXILIAR" => '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
-            // "F351_ID_AUXILIAR" => (isset($datos_pago) && $datos_pago['payment_method_type'] == 'PSE') ? '11100505' : '11100504',   // Para PSE, Banco de Bogotá; de resto, Bancolombia 
-            "F351_VALOR_DB" => floatval($recibo->valor),                                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",                 // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-            "F351_NOTAS" => $notas_recibo                                                              // Observaciones
+            "F_CIA" => 1,
+            "F350_ID_CO" => 400,
+            "F350_ID_TIPO_DOCTO" => 'FRC',
+            "F350_CONSEC_DOCTO" => 1,
+            "F351_ID_AUXILIAR" => '11100504',
+            "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
+            "F351_ID_TERCERO" => '',
+            "F351_VALOR_DB" => floatval($recibo->valor),
+            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
+            "F351_NOTAS" => $notas_recibo,
+            "F351_ID_UN" => '01',
+            "F351_ID_CCOSTO" => '',
+            "F351_ID_FE" => ($recibo->wompi_datos) ? '1102' : '1101',
+            "F351_VALOR_CR" => 0,
+            "F351_VALOR_DB_ALT" => 0,
+            "F351_VALOR_CR_ALT" => 0,
+            "F351_BASE_GRAVABLE" => 0,
+            "F351_DOCTO_BANCO" => 'CG',
         ];
 
-    $datos_documento_contable = [
-        // Un solo documento contable para toda la transacción
-        "Documento_contable" => [
+    /**
+     * Paquete a enviar al API 
+     **/    
+    $paquete_documento_contable = [
+        "Inicial" => [
             [
-                "F350_CONSEC_DOCTO" => 1,                                           // Número de documento (Siesa lo autogenera)
-                "F350_FECHA" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",   // El formato debe ser AAAAMMDD
-                "F350_ID_TERCERO" => $recibo->documento_numero,                    // Valida en maestro, código de tercero
-                "F350_NOTAS" => $notas_recibo                                      // Observaciones
+                "F_CIA" => 1,
             ]
         ],
-        "Movimiento_contable" => [$cuentas],
+        // Un solo documento contable para toda la transacción
+        "documentoContable" => [
+            [
+                "F_CIA" => 1,
+                "F_CONSEC_AUTO_REG" => 1,
+                "F350_ID_CO" => $factura_cliente->centro_operativo_codigo,
+                "F350_ID_TIPO_DOCTO" => 'FRC',
+                "F350_CONSEC_DOCTO" => 1,
+                "F350_FECHA" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
+                "F350_ID_TERCERO" => $recibo->documento_numero,
+                "F350_ID_CLASE_DOCTO" => 30,
+                "F350_IND_ESTADO" => 1,
+                "F350_IND_IMPRESION" => 1,
+                "F350_NOTAS" => $notas_recibo,
+                "F350_ID_MANDATO" => '',
+            ]
+        ],
+        // Primer movimiento -> Bancos
+        "movimientoContable" => [$movimientos_contables],
         // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
-        "Movimiento_CxC" => $documentos
-
-        // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
-        //             [
-        //                 "F350_CONSEC_DOCTO" => 1,                                         // Número de documento
-        //                 "F351_ID_AUXILIAR" => "41750120",                                            // Valida en maestro, código de cuenta contable
-        //                 // Pendiente
-        //                 "F351_VALOR_DB" => $factura->valor,                                          // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-        //                 "F351_NRO_DOCTO_BANCO" => "{$factura->anio}{$factura->mes}{$factura->dia}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-        //                 "F351_NOTAS" => $notas_pedido                                                // Observaciones
-        //             ],
+        "movimientoCxC" => $movimientos_cxc,
+        "Final" => [
+            [
+                "F_CIA" => 1,
+            ]
+        ],
     ];
     
     // si tiene descuentos
     if($descuento > 0) {
-        // Se agrega el movimiento contable
-        array_push($datos_documento_contable['Movimiento_contable'], [
-            "F350_CONSEC_DOCTO" => 1,                                           // Número de documento
-            "F351_ID_AUXILIAR" => "41750120",                                   // Valida en maestro, código de cuenta contable
-            "F351_VALOR_DB" => $descuento,                                      // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",  // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-            "F351_NOTAS" => $notas_recibo                                                // Observaciones
+        // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
+        array_push($paquete_documento_contable['movimientoContable'], [
+            "F_CIA" => '1',
+            "F350_ID_CO" => '400',
+            "F350_ID_TIPO_DOCTO" => 'FRC',
+            "F350_CONSEC_DOCTO" => 1,
+            "F351_ID_AUXILIAR" => '41750120',
+            "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
+            "F351_ID_TERCERO" => $recibo->documento_numero,
+            "F351_VALOR_DB" => floatval($descuento),
+            "F351_NRO_DOCTO_BANCO" => 0,
+            "F351_NOTAS" => $notas_recibo,
+            "F351_VALOR_CR" => 0,
+            "F351_VALOR_DB_ALT" => 0,
+            "F351_VALOR_CR_ALT" => 0,
+            "F351_BASE_GRAVABLE" => 0,
+            "F351_DOCTO_BANCO" => '',
         ]);
     }
 
-    $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
+    $resultado_documento_contable = json_decode(importar_documento_contable_api($paquete_documento_contable));
     $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
     $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
@@ -138,9 +190,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_cuentas
     }
 
     return [
-        'error' => $error,
+        'error' => false,
         'mensaje' => $respuesta,
-        'datos_cuentas' => $datos_documento_contable
+        'datos' => $paquete_documento_contable,
+        'factura_cliente' => $factura_cliente
     ];
 }
 
@@ -481,9 +534,9 @@ function importar_documento_contable_api($datos) {
             ],
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-                'idDocumento' => $CI->config->item('api_siesa')['idDocumentoImportacionDocumentoContable'],
+                'idDocumento' => $CI->config->item('api_siesa')['idDocumentoImportacionDocumentoContableV2'],
                 'idInterface' => $CI->config->item('api_siesa')['idInterface'],
-                'nombreDocumento' => 'DOCUMENTO_CONTABLE',
+                'nombreDocumento' => 'API_v1_DocumentoContable', // DOCUMENTO_CONTABLE
             ],
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {
