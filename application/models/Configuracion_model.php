@@ -100,6 +100,8 @@ Class Configuracion_model extends CI_Model {
                 $sql =
                 "SELECT
                     r.*,
+                    DATE(r.fecha_creacion) fecha,
+                    TIME(r.fecha_creacion) hora,
                     rt.nombre tipo,
                     re.nombre estado,
                     re.nombre,
@@ -111,7 +113,8 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-                    orden, r.fecha_creacion ASC
+                    r.fecha_creacion DESC
+                    -- orden, r.fecha_creacion DESC
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {

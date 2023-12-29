@@ -16,7 +16,12 @@ foreach ($registros as $recibo) {
     <tr class="wishlist__row wishlist__row--body">
         <!-- Fecha -->
         <td class="wishlist__column wishlist__column--body wishlist__column--product">
-            <?php echo $recibo->fecha_creacion; ?>
+            <?php echo $recibo->fecha; ?>
+        </td>
+
+        <!-- Hora -->
+        <td class="wishlist__column wishlist__column--body wishlist__column--product">
+            <?php echo $recibo->hora; ?>
         </td>
 
         <!-- Cliente -->
