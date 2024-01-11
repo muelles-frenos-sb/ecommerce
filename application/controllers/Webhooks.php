@@ -199,7 +199,7 @@ class Webhooks extends MY_Controller {
                     "f431_nro_registro" => $recibo->id, // Numero de registro del movimiento
                     // Pendiente
                     "f431_id_item" => "1501", // Codigo, es obligatorio si no va referencia ni codigo de barras
-                    "f431_id_bodega" => "00401", // Valida en maestro, código de bodega
+                    "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
                     "f431_id_motivo" => "01",  // Valida en maestro, código de motivo
                     "f431_id_co_movto" => "400", // Valida en maestro, código de centro de operación del movimiento
                     "f431_id_un_movto" => "01", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
