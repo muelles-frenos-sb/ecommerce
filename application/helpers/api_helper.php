@@ -80,7 +80,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     }
 
     // Si trae cuentas imputadas, las toma para ingresarlas al documento contable,
-    // sino, toma los valores básicos
+    // sino, toma los valores básicos del pago de Wompi
     $movimientos_contables = 
         ($datos_movimientos_contables) 
         ? $datos_movimientos_contables 
@@ -134,7 +134,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         ],
         // Primer movimiento -> Bancos
         "movimientoContable" => [$movimientos_contables],
-        // Cruce de la factura (Para todos los valores positivos a pagar). Este por cada factura que se vaya a pagar
+        // Cada factura que se va a pagar
         "movimientoCxC" => $movimientos_cxc,
         "Final" => [
             [

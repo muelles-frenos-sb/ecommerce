@@ -122,6 +122,9 @@ class Webhooks extends MY_Controller {
     }
 
     function gestionar_pedido($datos) {
+        $errores = 0;
+        $resultado = [];
+
         $wompi_reference = $datos['reference'];
         $wompi_transaction_id = $datos['id'];
         $wompi_status = $datos['status'];
@@ -143,7 +146,8 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
             ]);
 
-            exit();
+            array_push($resultado, ['El recibo no se actualizó']);
+            $errores++;
         }
 
         // Se obtienen todos los datos del recibo
@@ -151,7 +155,7 @@ class Webhooks extends MY_Controller {
             'wompi_transaccion_id' => $wompi_transaction_id
         ]);
 
-        enviar_email_pedido($recibo);
+        // enviar_email_pedido($recibo);
 
         // Si no existe el recibo
         if(empty($recibo)) {
@@ -162,14 +166,15 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
             ]);
 
-            exit();
+            array_push($resultado, ['El recibo no se encontró']);
+            $errores++;
         }
 
         // Si el pago no fue aprobado, se detiene la ejecución
         if($wompi_status != 'APPROVED') die;
 
         $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
-        
+
         $datos_pedido = [
             "Pedidos" => [
                 [
@@ -217,6 +222,7 @@ class Webhooks extends MY_Controller {
         $codigo_resultado_pedido = $resultado_pedido->codigo;
         $mensaje_resultado_pedido = $resultado_pedido->mensaje;
         $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
+        array_push($resultado, $detalle_resultado_pedido);
 
         // Si no se pudo crear el pedido
         if($codigo_resultado_pedido == '1') {
@@ -227,7 +233,7 @@ class Webhooks extends MY_Controller {
                 'observacion' => $detalle_resultado_pedido
             ]);
 
-            exit();
+            $errores++;
         }
 
         // Si se ejecutó correctamente
@@ -241,7 +247,7 @@ class Webhooks extends MY_Controller {
             $datos_documento_contable = [
                 "Documento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => $recibo->id,                                        // Número de documento
+                        "F350_CONSEC_DOCTO" => 1,                                        // Número de documento
                         "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}",           // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $recibo->documento_numero,                            // Valida en maestro, código de tercero
 			            "F350_NOTAS" => $notas_pedido                                               // Observaciones
@@ -280,6 +286,7 @@ class Webhooks extends MY_Controller {
             $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
             $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
             $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
+            array_push($resultado, $detalle_resultado_documento_contable);
 
             // Si no se pudo crear el documento contable
             if($codigo_resultado_documento_contable == '1') {
@@ -290,7 +297,7 @@ class Webhooks extends MY_Controller {
                     'observacion' => $detalle_resultado_documento_contable
                 ]);
 
-                exit();
+                $errores++;
             }
 
             // Se agrega log
@@ -301,10 +308,12 @@ class Webhooks extends MY_Controller {
         }
 
         print json_encode([
-            'exito' => true,
+            'errores' => $errores,
+            'resultado' => $resultado,
+            'datos' => $datos_pedido,
         ]);
 
-        return http_response_code(200);
+        return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
 
     /**
