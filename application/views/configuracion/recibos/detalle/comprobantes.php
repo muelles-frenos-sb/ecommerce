@@ -31,9 +31,9 @@
 
                             foreach($recibo_detalle as $item) {
                                 $factura_cliente = $this->clientes_model->obtener('clientes_facturas', [
-                                    'Cliente' => $recibo->documento_numero,
-                                    // 'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
+                                    'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
                                     'Nro_Doc_cruce' => $item->documento_cruce_numero,
+                                    'Cliente' => $recibo->documento_numero,
                                 ]);
 
                                 $subtotal_valor_documento += $factura_cliente->ValorAplicado;

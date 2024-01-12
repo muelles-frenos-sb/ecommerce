@@ -23,6 +23,7 @@
             style="text-align: right"
             value="<?php if(isset($datos['cuenta']['valor'])) echo $datos['cuenta']['valor']; ?>"
             data-id="<?php echo $datos['id']; ?>"
+            data-auxiliar="<?php echo $datos['cuenta']['auxiliar']; ?>"
         >
     </div>
 </label>

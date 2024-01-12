@@ -117,9 +117,9 @@ class Interfaces extends CI_Controller {
             
             case 'factura_documento_contable':
                 // Si trae cuentas contables, las agrega en la consulta
-                $cuentas_contables = (isset($datos['cuentas'])) ? $datos['cuentas'] : null ;
+                $datos_movimientos_contables = (isset($datos['movimientos_contables'])) ? $datos['movimientos_contables'] : null ;
                 
-                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'], null, $cuentas_contables)]);
+                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'], null, $datos_movimientos_contables)]);
             break;
 
             case 'recibos':
@@ -163,7 +163,7 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'recibos_detalle_estado_cuenta':
-                // Vamos a guardar el detalle de la factura
+                // Vamos a guardar el detalle del recibo
                 $items_recibo = [];
 
                 // Se recorren los ítems

@@ -84,7 +84,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     $movimientos_contables = 
         ($datos_movimientos_contables) 
         ? $datos_movimientos_contables 
-        : [
+        : [[
             // Primer movimiento -> Bancos
             "F_CIA" => 1,
             "F350_ID_CO" => 400,
@@ -104,7 +104,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F351_VALOR_CR_ALT" => 0,
             "F351_BASE_GRAVABLE" => 0,
             "F351_DOCTO_BANCO" => 'CG',
-        ];
+        ]];
 
     /**
      * Paquete a enviar al API 
@@ -133,7 +133,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             ]
         ],
         // Primer movimiento -> Bancos
-        "movimientoContable" => [$movimientos_contables],
+        "movimientoContable" => $movimientos_contables,
         // Cada factura que se va a pagar
         "movimientoCxC" => $movimientos_cxc,
         "Final" => [
