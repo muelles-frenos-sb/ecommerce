@@ -75,20 +75,12 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
             // Se agrega la cuenta al arreglo que irá a Siesa
             movimientosContables.push({
-                // Actualmente funciona asi
-                // F350_CONSEC_DOCTO: 1,
-                // F351_ID_AUXILIAR: $(`#cuenta_${id} option:selected`).attr('data-codigo'),
-                // F351_VALOR_DB: parseFloat(valor),
-                // F351_NRO_DOCTO_BANCO: `${fechaPago[0]}${fechaPago[1]}${fechaPago[2]}`,
-                // F351_NOTAS: 'Recibo cargado desde la página web por el cliente'
-
                 // Campos para V2
                 F_CIA: 1,
                 F350_ID_CO: 400,
                 F350_ID_TIPO_DOCTO: 'FRC',
                 F350_CONSEC_DOCTO: 1,
                 F351_ID_AUXILIAR: auxiliar,
-                // F351_ID_CO_MOV: $factura_cliente->centro_operativo_codigo,
                 F351_ID_CO_MOV: 400,
                 F351_ID_TERCERO: '',
                 F351_VALOR_DB: <?php echo number_format($recibo->valor, 0, '', ''); ?>,
@@ -146,6 +138,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboId, movimientos_contables: movimientosContables}, false)
         .then(async(pago) => {
             Swal.close()
+            console.log(pago)
 
             if(pago.resultado.error) {
                 mostrarAviso('error', `
@@ -169,7 +162,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
                 mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
 
                 setTimeout(() => {
-                    location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
+                    // location.href = `<?php // echo site_url("configuracion/recibos/ver/3"); ?>`;
                 }, 1000);
             }
         })
