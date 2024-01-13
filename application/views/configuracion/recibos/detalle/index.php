@@ -59,7 +59,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
             totalCuentas++
             
             let id = $(this).attr('data-id')
-            let auxiliar = $(this).attr('data-auxiliar')
+            let auxiliar = $(`#cuenta_${id} option:selected`).attr('data-codigo') // Código de auxiliar de la cuenta seleccionada
             let valor = $(this).val().replace(/\./g, '')
 
             let camposObligatorios = [
