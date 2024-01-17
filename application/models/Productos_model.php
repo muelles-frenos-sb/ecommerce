@@ -203,6 +203,16 @@ Class Productos_model extends CI_Model{
                 
                 return $this->db->query($sql)->result();
             break;
+
+            case 'productos_precios':
+                unset($datos['tipo']);
+
+                return $this->db
+                    ->where($datos)
+                    ->get($tipo)
+                    ->row()
+                ;
+            break;
         }
 
         // $this->db->close;

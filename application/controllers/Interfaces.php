@@ -140,14 +140,23 @@ class Interfaces extends CI_Controller {
 
                 // Se recorren los ítems del carrito
                 foreach ($this->cart->contents() as $item) {
-                    $producto = $this->productos_model->obtener('productos', ['id' => $item['id']]);
+                    // Se obtiene el precio original del producto
+                    $precio_producto_lista_original = $this->productos_model->obtener('productos_precios', [
+                        'producto_id' => $item['id'],
+                        'lista_precio' => $datos['lista_precio'],
+                    ]);
+
+                    $subtotal_lista_sucursal = $precio_producto_lista_original->precio * $item['qty'];
                     
                     $datos_item = [
                         'recibo_id' => $datos['recibo_id'],
-                        'producto_id' => $producto->id,
+                        'producto_id' => $item['id'],
                         'cantidad' => $item['qty'],
                         'precio' => $item['price'],
+                        'precio_lista_sucursal' => $precio_producto_lista_original->precio,
+                        'descuento' => $item['subtotal'] - $subtotal_lista_sucursal,
                         'subtotal' => $item['subtotal'],
+                        'subtotal_lista_sucursal' => $subtotal_lista_sucursal,
                     ];
                     
                     array_push($items_recibo, $datos_item);
@@ -159,7 +168,11 @@ class Interfaces extends CI_Controller {
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                 ]);
                 
-                if(!empty($items_recibo)) print json_encode(['resultado' => $this->productos_model->crear('recibos_detalle', $items_recibo)]);
+                if(!empty($items_recibo)) {
+                    $this->productos_model->crear('recibos_detalle', $items_recibo);
+
+                    print json_encode(['resultado' => $items_recibo]);
+                }
             break;
 
             case 'recibos_detalle_estado_cuenta':
@@ -276,6 +289,10 @@ class Interfaces extends CI_Controller {
                 $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
             break;
 
+            case 'cliente_sucursal':
+                $resultado =  ['resultado' => $this->configuracion_model->obtener('cliente_sucursal', $datos)];
+            break;
+
             case 'recibos_cuentas_bancarias':
                 $resultado =  ['resultado' => $this->configuracion_model->obtener('recibos_cuentas_bancarias', $datos)];
             break;
@@ -286,6 +303,27 @@ class Interfaces extends CI_Controller {
 
             case 'tercero_contacto':
                 $resultado =  ['resultado' => $this->configuracion_model->obtener('tercero_contacto', $datos)];
+            break;
+
+            case 'valores_detalle';
+                $descuento = 0;
+                
+                // Se recorren los ítems del carrito
+                foreach ($this->cart->contents() as $item) {
+                    // Se obtiene el precio original del producto
+                    $precio_producto_lista_original = $this->productos_model->obtener('productos_precios', [
+                        'producto_id' => $item['id'],
+                        'lista_precio' => $datos['lista_precio'],
+                    ]);
+
+                    // Se toma el valor del ítem con el precio de lista original
+                    $subtotal_lista_sucursal = $precio_producto_lista_original->precio * $item['qty'];
+
+                    $descuento += $item['subtotal'] - $subtotal_lista_sucursal;
+                }
+
+                // Se retorna el total del descuento
+                $resultado = $descuento;
             break;
         }
 

@@ -13,6 +13,7 @@ $resultado_tercero = json_decode(obtener_terceros_api($datos));
 $codigo_resultado_tercero = $resultado_tercero->codigo;
 $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table[0] : [] ;
 ?>
+<input type="hidden" id="total_pedido">
 
 <div class="form-row">
     <div class="form-group col-md-12">
@@ -63,3 +64,33 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
         })
     </script>
 <?php } ?>
+
+<script>
+    $().ready(() => {
+        // Cuando se elija una sucursal
+        $('#checkout_sucursal').change(async() => {
+            let subtotal = <?php echo $this->cart->total(); ?>
+            
+            // Se toma la lista de precio porque ya se confirma que es cliente y tiene sucursal
+            let listaPrecio = '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
+            let descuento = await consulta('obtener', {tipo: 'valores_detalle', lista_precio: listaPrecio}, false)
+            let total = subtotal - descuento
+
+            console.log(subtotal, descuento, total)
+
+            $('#descuento').html(`
+                <th>Decuento</th>
+                <td>$ ${formatearNumero(descuento)}</td>
+            `)
+
+            $('.checkout__totals-footer').html(`
+                <tr>
+                    <th>Total</th>
+                    <td>$${formatearNumero(total)}</td>
+                </tr>
+            `)
+
+            $('#total_pedido').val(total)
+        })
+    })
+</script>

@@ -410,6 +410,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'cliente_sucursal':
+                return $this->db
+                    ->where($datos)
+                    ->get('clientes_sucursales')
+                    ->row()
+                ;
+            break;
+
             case 'tercero_contacto':
                 return $this->db
                     ->where($datos)

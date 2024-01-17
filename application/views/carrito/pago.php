@@ -4,7 +4,7 @@
     var checkout = new WidgetCheckout({
         currency: 'COP',
         amountInCents: parseFloat(<?php echo $recibo->valor; ?>) * 100,
-        reference: '<?php echo $recibo->token; ?>',
+        reference: $('#total_pedido').val(),
         publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2',
         redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $recibo->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
