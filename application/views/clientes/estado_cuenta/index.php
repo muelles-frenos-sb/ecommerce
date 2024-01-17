@@ -14,13 +14,13 @@
                     <!-- Número de documento -->
                     <div class="form-group col-sm-12 col-lg-12">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '860504882'; ?>" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '10242730'; ?>" autofocus>
                     </div>
 
                     <!-- Teléfono -->
                     <div class="form-group col-sm-12 col-lg-6">
                         <label for="estado_cuenta_telefono">Digita el número de celular *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3502675239'; ?>">
+                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3008464995'; ?>">
                     </div>
 
                     <!-- Email -->

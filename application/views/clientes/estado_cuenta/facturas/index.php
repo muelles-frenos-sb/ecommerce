@@ -17,15 +17,17 @@
                 <div class="address-card__row">
                     <?php echo "$tercero->f200_nit-$tercero->f200_dv_nit"; ?><br>
                 </div>
-                <div class="address-card__row">
+                <!-- <div class="address-card__row">
                     <div class="address-card__row-title">Teléfono</div>
                     <div class="address-card__row-content">----</div>
                 </div>
                 <div class="address-card__row">
                     <div class="address-card__row-title">Dirección</div>
                     <div class="address-card__row-content">-----</div>
+                </div> -->
+                <div class="mt-2">
+                    <a href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
                 </div>
-                <a class="mt-2" href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
             </div>
         </div>
     </div>

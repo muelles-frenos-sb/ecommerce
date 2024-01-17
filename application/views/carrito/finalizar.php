@@ -130,11 +130,10 @@ if($this->session->userdata('usuario_id')) {
 
 <script>
     cargarDatosCliente = async() => {
+        if (!validarCamposObligatorios([$('#checkout_documento_numero')])) return false
+        
         // Se activa el spinner
         $('#btn_validar_documento').addClass('btn-loading').attr('disabled', true)
-
-        // e.target.addClass('btn-loading')
-        if (!validarCamposObligatorios([$('#checkout_documento_numero')])) return false
 
         cargarInterfaz('carrito/finalizar_datos_cliente', 'contenedor_datos_cliente', {numero_documento: $.trim($('#checkout_documento_numero').val())})
     }
