@@ -193,6 +193,7 @@
             recibo_estado_id: (!pagarEnLinea) ? 3 : null,
             razon_social: $('#factura_tercero_razon_social').val(),
             documento_numero: $('#factura_tercero_documento_numero').val(),
+            usuario_creacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
             // direccion: $('#checkout_direccion').val(),
             // email: $('#checkout_email').val(),
             // telefono: $('#checkout_telefono').val(),

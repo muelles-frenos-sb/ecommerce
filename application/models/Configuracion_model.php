@@ -380,6 +380,7 @@ Class Configuracion_model extends CI_Model {
                 $sql =
                 "SELECT
                     u.*,
+                    CONCAT_WS( ' ', u.nombres, u.primer_apellido, u.segundo_apellido) nombre_completo,
                     CASE u.estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre
                 FROM
                     usuarios AS u

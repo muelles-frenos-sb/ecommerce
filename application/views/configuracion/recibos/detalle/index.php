@@ -154,6 +154,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
                 tipo: 'recibos',
                 id: reciboId,
                 recibo_estado_id: 1,
+                usuario_aprobacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
             }
 
             let resultado = await consulta('actualizar', datosRecibo, false)
@@ -162,7 +163,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
                 mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
 
                 setTimeout(() => {
-                    // location.href = `<?php // echo site_url("configuracion/recibos/ver/3"); ?>`;
+                    location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
                 }, 1000);
             }
         })

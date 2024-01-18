@@ -5,6 +5,8 @@ $recibo = $this->productos_model->obtener('recibo', ['token' => $token]);
 $recibo_cuentas_bancarias = $this->configuracion_model->obtener('recibos_cuentas_bancarias', ['recibo_id' => $recibo->id]);
 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
 $numero_recibo_caja = '';
+$usuario_creacion = '';
+$usuario_aprobacion = '';
 
 $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'numero_documento' => $recibo->documento_numero,
@@ -15,10 +17,22 @@ $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
 if($resultado_movimientos->codigo == 0) {
     // Se capturan los datos
     $movimientos = $resultado_movimientos->detalle->Table;
-
     $consecutivo = str_pad($movimientos[0]->f350_consec_docto, 8, '0', STR_PAD_LEFT);
-
     $numero_recibo_caja = "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}";
+    $usuario_creacion = $movimientos[0]->f350_usuario_creacion;
+    $usuario_aprobacion = $movimientos[0]->f350_usuario_aprobacion;
+}
+
+// Usuario creación
+if($recibo->usuario_creacion_id) {
+    $usuario_creacion_sistema = $this->configuracion_model->obtener('usuarios', ['id' => $recibo->usuario_creacion_id]);
+    $usuario_creacion = $usuario_creacion_sistema->nombre_completo;
+}
+
+// Usuario aprobación
+if($recibo->usuario_aprobacion_id) {
+    $usuario_aprobacion_sistema = $this->configuracion_model->obtener('usuarios', ['id' => $recibo->usuario_creacion_id]);
+    $usuario_aprobacion = $usuario_aprobacion_sistema->nombre_completo;
 }
 
 $pdf = new FPDF('P', 'mm', 'Letter');
@@ -132,11 +146,11 @@ $pdf->Cell(30, 3, formato_precio($total_debitos), 'B,R', 0, 'R', 0);
 $pdf->Cell(30, 3, formato_precio($total_creditos), 'B,R', 0, 'R', 0);
 $pdf->Ln(15);
 
-$pdf->Cell(60, 3, utf8_decode('--------'), 'B', 0, 'C', 0);
+$pdf->Cell(60, 3, utf8_decode($usuario_creacion), 'B', 0, 'C', 0);
 $pdf->Cell(5, 3, '', 0, 0, 'C', 0);
-$pdf->Cell(60, 3, utf8_decode('--------'), 'B', 0, 'C', 0);
+$pdf->Cell(60, 3, utf8_decode($usuario_aprobacion), 'B', 0, 'C', 0);
 $pdf->Cell(5, 3, '', 0, 0, 'C', 0);
-$pdf->Cell(60, 3, utf8_decode('--------'), 'B', 1, 'C', 0);
+$pdf->Cell(60, 3, utf8_decode(''), 'B', 1, 'C', 0);
 
 $pdf->Cell(60, 5, utf8_decode('Elaborado'), 0, 0, 'C', 0);
 $pdf->Cell(5, 5, '', 0, 0, 'C', 0);
