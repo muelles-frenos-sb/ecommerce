@@ -43,7 +43,7 @@ if($this->session->userdata('usuario_id')) {
                             <h3 class="card-title">Detalles del pago</h3>
                             <div class="form-group">
                                 <label for="checkout_documento_numero">Número de documento *</label>
-                                <input type="number" class="form-control" id="checkout_documento_numero" value="" autofocus>
+                                <input type="number" class="form-control" id="checkout_documento_numero" value="<?php if(ENVIRONMENT == 'development') echo '39357772'; ?>" autofocus>
                             </div>
                             <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar número de documento</button>
 
@@ -86,10 +86,7 @@ if($this->session->userdata('usuario_id')) {
                                         <th>Subtotal</th>
                                         <td><?php echo formato_precio($this->cart->total()); ?></td>
                                     </tr>
-                                    <tr>
-                                        <th>Envío</th>
-                                        <td>$ 0</td>
-                                    </tr>
+                                    <tr id="descuento"></tr>
                                 </tbody>
                                 <tfoot class="checkout__totals-footer">
                                     <tr>
@@ -104,7 +101,8 @@ if($this->session->userdata('usuario_id')) {
                                         <span class="input-check__body">
                                             <input class="input-check__input" type="checkbox" id="checkout-terms">
                                             <span class="input-check__box"></span>
-                                            <span class="input-check__icon"><svg width="9px" height="7px">
+                                            <span class="input-check__icon">
+                                                <svg width="9px" height="7px">
                                                     <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
                                                 </svg>
                                             </span>
@@ -169,19 +167,33 @@ if($this->session->userdata('usuario_id')) {
             email: $('#checkout_email').val(),
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
-            valor: <?php echo $this->cart->total(); ?>,
+            valor: $('#total_pedido').val(),
             recibo_tipo_id: 1,
         }
 
-        // Si trae sucursales, se agrega a los datos
-        if(parseInt($('#cantidad_sucursales').val()) > 0) datosRecibo.sucursal_id = $('#checkout_sucursal').val()
+        // Se agrega la sucursal al pedido
+        datosRecibo.sucursal_id = $('#checkout_sucursal').val()
+
+        // // Si trae sucursales, se agrega a los datos
+        // if(parseInt($('#cantidad_sucursales').val()) > 0) {}
+
+        // Se crean las sucursales del tercero en la base de datos
+        await gestionarSucursales($('#checkout_documento_numero').val())
+
+        // Se obtienen los datos de la sucursal seleccionada para extraer la lista de precio
+        let sucursal = await consulta('obtener', {tipo: 'cliente_sucursal', f200_nit: $('#checkout_documento_numero').val()}, false)
+
+        // Si tiene sucursal, se le cambia la lista de precio
+        datosRecibo.lista_precio = (sucursal.resultado)
+            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
+            : '<?php echo $this->config->item('lista_precio'); ?>' // 009
 
         let recibo = await consulta('crear', datosRecibo, false)
         
         // Una vez creado el recibo
         if (recibo.resultado) {
             // Se crean los ítems de la factura
-            let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado}, false)
+            let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado, lista_precio: datosRecibo.lista_precio}, false)
 
             if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
         }

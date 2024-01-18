@@ -76,8 +76,6 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
             let descuento = await consulta('obtener', {tipo: 'valores_detalle', lista_precio: listaPrecio}, false)
             let total = subtotal - descuento
 
-            console.log(subtotal, descuento, total)
-
             $('#descuento').html(`
                 <th>Decuento</th>
                 <td>$ ${formatearNumero(descuento)}</td>

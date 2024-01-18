@@ -175,6 +175,29 @@ class Webhooks extends MY_Controller {
 
         $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
 
+        $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
+
+        $movimientos = [];
+        foreach($recibo_detalle as $item) {
+            array_push($movimientos, [
+                "f431_id_co" => "400", // Valida en maestro, código de centro de operación del documento
+                "f431_id_tipo_docto" => "CPE", // Valida en maestro, código de tipo de documento, tipo de documento del pedido
+                "f431_consec_docto" => $recibo->id, // Numero de documento del pedido
+                "f431_nro_registro" => $item->id, // Numero de registro del movimiento
+                // Pendiente
+                "f431_id_item" => $item->producto_id, // Codigo, es obligatorio si no va referencia ni codigo de barras
+                "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
+                "f431_id_motivo" => "01",  // Valida en maestro, código de motivo
+                "f431_id_co_movto" => "400", // Valida en maestro, código de centro de operación del movimiento
+                "f431_id_un_movto" => "", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
+                "f431_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
+                "f431_num_dias_entrega" => 0,
+                "f431_id_unidad_medida" => "UNID", // Valida en maestro, código de unidad de medida del movimiento
+                "f431_cant_pedida_base" => $item->cantidad,
+                "f431_notas" => $notas_pedido, // Notas del movimiento
+            ]);
+        }
+
         $datos_pedido = [
             "Pedidos" => [
                 [
@@ -196,27 +219,10 @@ class Webhooks extends MY_Controller {
                     "f430_id_tercero_vendedor" => "22222221", // Si es vacio lo trae del cliente a facturar
                 ]
             ],
-            "Movimientos" => [
-                [
-                    "f431_id_co" => "400", // Valida en maestro, código de centro de operación del documento
-                    "f431_id_tipo_docto" => "CPE", // Valida en maestro, código de tipo de documento, tipo de documento del pedido
-                    "f431_consec_docto" => $recibo->id, // Numero de documento del pedido
-                    "f431_nro_registro" => $recibo->id, // Numero de registro del movimiento
-                    // Pendiente
-                    "f431_id_item" => "1501", // Codigo, es obligatorio si no va referencia ni codigo de barras
-                    "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
-                    "f431_id_motivo" => "01",  // Valida en maestro, código de motivo
-                    "f431_id_co_movto" => "400", // Valida en maestro, código de centro de operación del movimiento
-                    "f431_id_un_movto" => "01", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
-                    "f431_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
-                    "f431_num_dias_entrega" => 0,
-                    "f431_id_unidad_medida" => "UNID", // Valida en maestro, código de unidad de medida del movimiento
-                    // Pendiente
-                    "f431_cant_pedida_base" => "1",
-                    "f431_notas" => $notas_pedido, // Notas del movimiento
-                ]
-            ]
+            "Movimientos" => $movimientos
         ];
+        // print json_encode([$datos_pedido, $recibo_detalle]);
+        // return;
 
         $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
         $codigo_resultado_pedido = $resultado_pedido->codigo;
@@ -247,7 +253,7 @@ class Webhooks extends MY_Controller {
             $datos_documento_contable = [
                 "Documento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => 1,                                        // Número de documento
+                        "F350_CONSEC_DOCTO" => $recibo->id,                                        // Número de documento
                         "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}",           // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $recibo->documento_numero,                            // Valida en maestro, código de tercero
 			            "F350_NOTAS" => $notas_pedido                                               // Observaciones
