@@ -20,7 +20,7 @@ class Reportes extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        // $this->load->model('productos_model');
+        $this->load->model('clientes_model');
     }
 
     function pdf() {

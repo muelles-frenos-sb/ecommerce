@@ -283,6 +283,11 @@ function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
 
+    $parametros = "f200_nit=''{$datos['numero_documento']}''";
+    if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";;
+    if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";;
+    if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";;
+
     $client = new \GuzzleHttp\Client();
     try {
         $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
@@ -295,7 +300,7 @@ function obtener_movimientos_contables_api($datos) {
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_MovtosContables_General',
                 'paginacion' => 'numPag=1|tamPag=100',
-                'parametros' => "f200_nit=''{$datos['numero_documento']}'' and f350_consec_docto=''{$datos['documento_cruce']}''",
+                'parametros' => $parametros,
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

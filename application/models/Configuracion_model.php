@@ -130,6 +130,7 @@ Class Configuracion_model extends CI_Model {
                         'rcb.*',
                         'cb.codigo auxiliar', 
                         'cb.nombre',
+                        'cb.numero',
                     ])
                     ->from("recibos_cuentas_bancarias rcb")
                     ->join("cuentas_bancarias cb", "rcb.cuenta_bancaria_id = cb.id", "left")
