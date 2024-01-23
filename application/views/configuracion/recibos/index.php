@@ -7,7 +7,7 @@
 </div>
 
 <div class="block">
-    <div class="container container--max--xl">
+    <div class="container container--max--xxl">
         <div class="block-zone__widget-header">
             <div class="block-zone__tabs">
                 <?php foreach ($this->configuracion_model->obtener('recibos_tipos') as $recibo_tipo) { ?>

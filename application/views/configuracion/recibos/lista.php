@@ -1,7 +1,7 @@
 <input type="hidden" id="recibo_id_tipo" value="<?php echo $datos['id_tipo_recibo']; ?>">
 
 <div class="wishlist">
-    <table class="wishlist__table">
+    <table class="wishlist__table table-responsive">
         <thead class="wishlist__head">
             <tr class="wishlist__row wishlist__row--head">
                 <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">Fecha</th>

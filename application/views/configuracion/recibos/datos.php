@@ -13,7 +13,7 @@ foreach ($registros as $recibo) {
     $mensajes_estado_wompi = ($recibo->wompi_status) ? mostrar_mensajes_estados_wompi($recibo->wompi_status) : null;
     if($recibo->wompi_datos) $wompi = json_decode($recibo->wompi_datos, true);
     ?>
-    <tr class="wishlist__row wishlist__row--body">
+    <tr class="wishlist__row wishlist__row--body" style="font-size: 0.8em;">
         <!-- Fecha -->
         <td class="wishlist__column wishlist__column--body wishlist__column--product">
             <?php echo $recibo->fecha; ?>
@@ -76,6 +76,18 @@ foreach ($registros as $recibo) {
             </div>
         </td>
 
+        <!-- Usuario que creó -->
+        <td class="wishlist__column wishlist__column--body wishlist__column--stock">
+            <div class="status-badge status-badge--style--<?php echo $recibo->estado_clase; ?> status-badge--has-text">
+                <?php echo $recibo->usuario_creacion; ?>
+            </div>
+        </td>
+
+        <!-- Usuario que aprobó o rechazó -->
+        <td class="wishlist__column wishlist__column--body wishlist__column--stock">
+            <?php echo $recibo->usuario_gestion; ?>
+        </td>
+
         <!-- Valor -->
         <td class="wishlist__column wishlist__column--body wishlist__column--price">
             <?php echo formato_precio($recibo->valor); ?>
@@ -84,7 +96,9 @@ foreach ($registros as $recibo) {
         <!-- Opciones -->
         <td class="wishlist__column wishlist__column--body wishlist__column--button">
             <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/recibos/id/$recibo->token"); ?>">Ver</a>
-            <a type="button" class="btn btn-sm btn-info" href="<?php echo site_url("reportes/pdf/recibo/$recibo->token"); ?>" target="_blank">Imprimir</a>
+            <a type="button" class="btn btn-sm btn-danger" href="<?php echo site_url("reportes/pdf/recibo/$recibo->token"); ?>" target="_blank">
+                <i class="fa fa-file-pdf"></i>
+            </a>
         </td>
     </tr>
 <?php } ?>

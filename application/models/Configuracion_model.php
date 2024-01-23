@@ -105,11 +105,15 @@ Class Configuracion_model extends CI_Model {
                     rt.nombre tipo,
                     re.nombre estado,
                     re.nombre,
-	                re.clase estado_clase
+	                re.clase estado_clase,
+                    CONCAT_WS( ' ', uc.nombres, uc.primer_apellido ) usuario_creacion,
+	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion
                 FROM
                     recibos AS r
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
-	                LEFT JOIN recibos_estados AS re ON r.recibo_estado_id = re.id
+	                LEFT JOIN recibos_estados AS re ON r.recibo_estado_id = re.id 
+                    LEFT JOIN usuarios AS uc ON r.usuario_creacion_id = uc.id 
+	                LEFT JOIN usuarios AS ug ON r.usuario_aprobacion_id = ug.id
                 $where
                 $having
                 ORDER BY
