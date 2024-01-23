@@ -85,7 +85,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
                 F351_ID_TERCERO: '',
                 F351_VALOR_DB: <?php echo number_format($recibo->valor, 0, '', ''); ?>,
                 F351_NRO_DOCTO_BANCO: <?php echo "{$recibo->anio}{$mes_recibo}{$dia_recibo}" ?>,
-                F351_NOTAS: 'Recibo cargado desde la página web por el cliente',
+                F351_NOTAS: `<?php echo "Recibo $recibo->id"; ?>`,
                 F351_ID_UN: '01',
                 F351_ID_CCOSTO: '',
                 F351_ID_FE: '1101',
