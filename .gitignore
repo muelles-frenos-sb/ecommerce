@@ -4,17 +4,17 @@ application/config/development/
 application/config/production/
 application/logs/
 application/vendor/
+application/views/productos_/
 archivos/fotos/
 archivos/recibos/
 frontend/
 
 # Directorios de imágenes
 images/avatars/
-images/banners/
+# images/banners/
 images/brands/
 images/categories/
 images/departments/
-images/icons/
 images/languages/
 images/posts/
 images/products/
@@ -54,8 +54,6 @@ images/favicon.ico
 images/favicon_.png
 images/finder-1903x500.jpg
 images/finder.jpg
-images/sale-1903x640.jpg
-images/sale-1903x640_.jpg
 images/sale.jpg
 images/signature.jpg
 images/sprite.svg

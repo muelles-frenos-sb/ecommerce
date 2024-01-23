@@ -97,24 +97,9 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: {$datos['reference']}, Transacción: {$datos['id']}"
             ]);
         }
-
-        // // Si no existe el recibo
-        // if(empty($recibo)) {
-        //     $error = true;
-        //     $respuesta['recibo'] = 'No actualizado';
-            
-        //     // Se agrega log
-        //     $this->configuracion_model->crear('logs', [
-        //         'log_tipo_id' => 17,
-        //         'fecha_creacion' => date('Y-m-d H:i:s'),
-        //         'observacion' => "Referencia: $wompi_reference, Transacción: $wompi_transaction_id"
-        //     ]);
-        // }
         
         // Si el pago fue aprobado
-        if($datos['status'] == 'APPROVED') {
-            $respuesta = crear_documento_contable($recibo->id, $datos);
-        }
+        if($datos['status'] == 'APPROVED') $respuesta = crear_documento_contable($recibo->id, $datos);
         
         print json_encode([$respuesta]);
     }
@@ -182,7 +167,6 @@ class Webhooks extends MY_Controller {
                 "f431_id_tipo_docto" => "CPE", // Valida en maestro, código de tipo de documento, tipo de documento del pedido
                 "f431_consec_docto" => $recibo->id, // Numero de documento del pedido
                 "f431_nro_registro" => $item->id, // Numero de registro del movimiento
-                // Pendiente
                 "f431_id_item" => $item->producto_id, // Codigo, es obligatorio si no va referencia ni codigo de barras
                 "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
                 "f431_id_motivo" => "01",  // Valida en maestro, código de motivo
@@ -251,37 +235,34 @@ class Webhooks extends MY_Controller {
             $datos_documento_contable = [
                 "Documento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => $recibo->id,                                        // Número de documento
-                        "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}",           // El formato debe ser AAAAMMDD
-                        "F350_ID_TERCERO" => $recibo->documento_numero,                            // Valida en maestro, código de tercero
-			            "F350_NOTAS" => $notas_pedido                                               // Observaciones
+                        "F350_CONSEC_DOCTO" => 1, // Número de documento
+                        "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
+                        "F350_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero
+			            "F350_NOTAS" => $notas_pedido // Observaciones
                     ]
                 ],
                 "Movimiento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => $recibo->id,                                        // Número de documento
-                        "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
-                        // Pendiente
-                        "F351_VALOR_DB" => $recibo->valor,                                         // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
+                        "F350_CONSEC_DOCTO" => 1, // Número de documento
+                        "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
+                        "F351_VALOR_DB" => $recibo->valor, // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
                         "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-                        "F351_NOTAS" => $notas_pedido                                               // Observaciones
+                        "F351_NOTAS" => $notas_pedido // Observaciones
                     ],
                 ],
                 "Movimiento_CxC" => [
                     [
-                        "F350_CONSEC_DOCTO" => $recibo->id,                                        // Numero de documento
-                        "F351_ID_AUXILIAR" => "11100504",                                           // Valida en maestro, código de cuenta contable
-                        "F351_ID_TERCERO" => $recibo->documento_numero,                            // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
-                        "F351_ID_CO_MOV" => "400",                                                  // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
-                        // Pendiente
-                        "F351_VALOR_CR" => "100000",                                                // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
-                        "F351_NOTAS" => "Pedido $recibo->id E-Commerce",                           // Observaciones
-                        // Pendiente
+                        "F350_CONSEC_DOCTO" => 1, // Numero de documento
+                        "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
+                        "F351_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
+                        "F351_ID_CO_MOV" => "400", // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
+                        "F351_VALOR_CR" => $recibo->valor, // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
+                        "F351_NOTAS" => "Pedido $recibo->id E-Commerce", // Observaciones
                         "F353_ID_SUCURSAL" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro, código de sucursal del cliente.
-                        "F353_ID_TIPO_DOCTO_CRUCE" => "CPE",                                        // Valida en maestro, código de tipo de documento.
-                        "F353_CONSEC_DOCTO_CRUCE" => $recibo->id,                                  // Numero de documento de cruce, es un numero entre 1 y 99999999.
-                        "F353_FECHA_VCTO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}",      // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-                        "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}"   // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
+                        "F353_ID_TIPO_DOCTO_CRUCE" => "CPE", // Valida en maestro, código de tipo de documento.
+                        "F353_CONSEC_DOCTO_CRUCE" => $recibo->id, // Numero de documento de cruce, es un numero entre 1 y 99999999.
+                        "F353_FECHA_VCTO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
+                        "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
                     ]
                 ]
             ];
@@ -319,109 +300,6 @@ class Webhooks extends MY_Controller {
 
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
-
-    /**
-     * Importa de Siesa los clientes y sucursales creadas para cada cliente
-     * (INHABILITADA)
-     */
-    // function importar_clientes() {
-    //     try {
-    //         $fecha_actualizacion = date('Y-m-d H:i:s');
-    //         $codigo = 0;
-    //         $pagina = 1;
-    //         $nuevos_clientes = [];
-
-    //         // Se eliminan todos los clientes
-    //         $this->configuracion_model->eliminar('clientes', 'id is  NOT NULL');
-            
-    //         while ($codigo == 0) {
-    //             $resultado = json_decode(obtener_clientes_api(['pagina' => $pagina]));
-    //             $codigo = $resultado->codigo;
-
-    //             if($codigo == 0) {
-    //                 $clientes = $resultado->detalle->Table;
-                    
-    //                 foreach($clientes as $cliente) {
-    //                     $nuevo_cliente = [
-    //                         'id' => $cliente->f200_id,
-    //                         'compania_id' => $cliente->f201_id_cia,
-    //                         'row_id' => $cliente->f200_rowid,
-    //                         'nit' => $cliente->f200_nit,
-    //                         'sucursal_id' => $cliente->f201_id_sucursal,
-    //                         'sucursal_descripcion' => $cliente->f201_descripcion_sucursal,
-    //                         'ind_estado_bloqueado' => $cliente->f201_ind_estado_bloqueado,
-    //                         'moneda' => $cliente->f201_id_moneda,
-    //                         'vendedor_id' => $cliente->f201_id_vendedor,
-    //                         'calificacion' => $cliente->f201_ind_calificacion,
-    //                         'condicion_pago_id' => $cliente->f201_id_cond_pago,
-    //                         'dias_gracia' => $cliente->f201_dias_gracia,
-    //                         'cupo_credito' => $cliente->f201_cupo_credito,
-    //                         'cliente_tipo' => $cliente->f201_id_tipo_cli,
-    //                         'grupo_descuentoi_id' => $cliente->f201_id_grupo_dscto,
-    //                         'lista_precio_id' => $cliente->f201_id_lista_precio,
-    //                         'ind_pedido_backorder' => $cliente->f201_ind_pedido_backorder,
-    //                         'porcentaje_exceso_venta' => $cliente->f201_porc_exceso_venta,
-    //                         'porcentaje_minimo_margen' => $cliente->f201_porc_min_margen,
-    //                         'porcentaje_maximo_margen' => $cliente->f201_porc_max_margen,
-    //                         'ind_bloqueo_cupo' => $cliente->f201_ind_bloqueo_cupo,
-    //                         'ind_bloqueo_mora' => $cliente->f201_ind_bloqueo_mora,
-    //                         'ind_factura_unificada' => $cliente->f201_ind_factura_unificada,
-    //                         'id_co_factura' => $cliente->f201_id_co_factura,
-    //                         'notas' => $cliente->f201_notas,
-    //                         'fecha_ingreso' => $cliente->f201_fecha_ingreso,
-    //                         'ind_estado_activo' => $cliente->f201_ind_estado_activo,
-    //                         'co_movto_factura_id' => $cliente->f201_id_co_movto_factura,
-    //                         'un_movto_factura_id' => $cliente->f201_id_un_movto_factura,
-    //                         'fecha_cupo' => $cliente->f201_fecha_cupo,
-    //                         'tolerancia_porcentaje' => $cliente->f201_porc_tolerancia,
-    //                         'dia_maximo_factura' => $cliente->f201_dia_maximo_factura,
-    //                         'motivo_bloqueo_id' => $cliente->f201_id_motivo_bloqueo,
-    //                         'cobrador_id' => $cliente->f201_id_cobrador,
-    //                         'fecha_ts' => $cliente->f201_ts,
-    //                         'ind_compromiso_um_emp' => $cliente->f201_ind_compromiso_um_emp,
-    //                         'ind_anticipo_terc_corp' => $cliente->f201_ind_anticipo_terc_corp,
-    //                         'valida_cupo_despacho' => $cliente->f201_valida_cupo_despacho,
-    //                         'ind_exceso_venta_adic' => $cliente->f201_ind_exceso_venta_adic,
-    //                         'ind_valida_cartera_des' => $cliente->f201_ind_valida_cartera_des,
-    //                         'fecha_actualizacion' => $fecha_actualizacion,
-    //                     ];
-
-    //                     array_push($nuevos_clientes, $nuevo_cliente);
-    //                 }
-                    
-    //                 $pagina++;
-    //             } else {
-    //                 $codigo = '-1';
-    //                 break;
-    //             }
-    //         }
-            
-    //         $total_items = $this->configuracion_model->crear('clientes', $nuevos_clientes);
-
-    //         $respuesta = [
-    //             'log_tipo_id' => 12,
-    //             'fecha_creacion' => date('Y-m-d H:i:s'),
-    //             'observacion' => "$total_items registros actualizados"
-    //         ];
-
-    //         // Se agrega el registro en los logs
-    //         $this->configuracion_model->crear('logs', $respuesta);
-
-    //         $this->db->close();
-            
-    //         print json_encode($respuesta);
-
-    //         return http_response_code(200);
-    //     } catch (\Throwable $th) {
-    //         // Se agrega el registro en los logs
-    //         $this->configuracion_model->crear('logs', [
-    //             'log_tipo_id' => 13,
-    //             'fecha_creacion' => date('Y-m-d H:i:s'),
-    //         ]);
-
-    //         return http_response_code(400);
-    //     }
-    // }
 
     /**
      * Importa de Siesa los productos y su información básica
