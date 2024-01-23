@@ -7,6 +7,7 @@ $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo
 $numero_recibo_caja = '';
 $usuario_creacion = '';
 $usuario_aprobacion = '';
+$notas = $recibo->comentarios;
 
 $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'numero_documento' => $recibo->documento_numero,
@@ -21,6 +22,7 @@ if($resultado_movimientos->codigo == 0) {
     $numero_recibo_caja = "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}";
     $usuario_creacion = $movimientos[0]->f350_usuario_creacion;
     $usuario_aprobacion = $movimientos[0]->f350_usuario_aprobacion;
+    $notas = $movimientos[0]->
 }
 
 // Usuario creación
@@ -91,7 +93,7 @@ $pdf->Cell(160, 6, "$recibo->dia/$recibo->mes/$recibo->anio", 'R', 1, 'L', 0);
 $pdf->SetFont('Arial', 'B', 9);
 $pdf->Cell(30, 6, 'Notas', 'L,B', 0, 'L', 0);
 $pdf->SetFont('Arial', '', 9);
-$pdf->Cell(160, 6, utf8_decode($recibo->comentarios), 'B,R', 1, 'L', 0);
+$pdf->Cell(160, 6, utf8_decode($notas), 'B,R', 1, 'L', 0);
 $pdf->Ln(5);
 
 // Encabezado de los registros

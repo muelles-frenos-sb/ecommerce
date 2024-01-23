@@ -1,8 +1,7 @@
 <?php
-$factura = $this->productos_model->obtener('factura', ['id' => $id]);
-$factura_detalle = $this->productos_model->obtener('factura_detalle', ['rd.recibo_id' => $id]);
-
-$wompi = json_decode($factura->wompi_datos, true);
+$recibo = $this->productos_model->obtener('recibo', ['id' => $id]);
+$recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
+$wompi = json_decode($recibo->wompi_datos, true);
 
 // Colores corporativos
 $azul_corporativo_primario = '#19287F';
@@ -35,9 +34,9 @@ $azul_corporativo_apoyo = '#1F2B50';
                                     <tr>
                                         <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:30px;padding-top:10px;">
                                             <div style="color:<?php echo $azul_corporativo_primario; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><span><strong><span><?php echo $factura->razon_social; ?></span></strong></span></p>
-                                                <p style="margin: 0; word-break: break-word;"><span><span><?php echo $factura->documento_numero; ?></span></span></p>
-                                                <p style="margin: 0; word-break: break-word;"><span><span><?php echo $factura->direccion; ?></span></span></p>
+                                                <p style="margin: 0; word-break: break-word;"><span><strong><span><?php echo $recibo->razon_social; ?></span></strong></span></p>
+                                                <p style="margin: 0; word-break: break-word;"><span><span><?php echo $recibo->documento_numero; ?></span></span></p>
+                                                <p style="margin: 0; word-break: break-word;"><span><span><?php echo $recibo->direccion; ?></span></span></p>
                                             </div>
                                         </td>
                                     </tr>
@@ -142,76 +141,79 @@ $azul_corporativo_apoyo = '#1F2B50';
 </table>
 
 <?php
-foreach($factura_detalle as $detalle) {
+foreach($recibo_detalle as $detalle) {
     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
-    ?>
 
-    <!-- Uno -->
-    <table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-        <tbody>
-            <tr>
-                <td>
-                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
-                        <tbody>
-                            <tr>
-                                <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                    <table class="image_block block-1" width="100%" border="0" cellpadding="20" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-                                        <tr>
-                                            <td class="pad">
-                                                <div class="alignment" align="center" style="line-height:10px">
-                                                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" target="_blank" style="outline:none" tabindex="-1">
-                                                        <img class="fullWidth" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" style="display: block; height: auto; border: 0; max-width: 120px; width: 100%;" width="120" alt="Fatty Burger" title="Fatty Burger">
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                    <div class="spacer_block block-1" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
-                                    <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                        <tr>
-                                            <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
-                                                <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:17px;line-height:120%;text-align:left;mso-line-height-alt:20.4px;">
-                                                    <p style="margin: 0; word-break: break-word;"><span><?php echo "$producto->notas x $detalle->cantidad"; ?></span></p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                        <tr>
-                                            <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
-                                                <div style="color:#848484;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:150%;text-align:left;mso-line-height-alt:21px;">
-                                                    <p style="margin: 0; word-break: break-word;">
-                                                        <span><?php echo $producto->marca; ?> |</span>
-                                                        <span><?php echo $producto->grupo; ?> |</span>
-                                                        <span><?php echo $producto->linea; ?> |</span>
-                                                        <span><?php echo $producto->referencia; ?> |</span>
-                                                    </p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                                <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                    <div class="spacer_block block-1 mobile_hide" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
-                                    <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                        <tr>
-                                            <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
-                                                <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                    <p style="margin: 0; word-break: break-word;"><?php echo formato_precio($detalle->precio); ?></p>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    // Si trae un producto
+    if($detalle->producto_id) {
+    ?>
+        <!-- Uno -->
+        <table class="row row-6" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+            <tbody>
+                <tr>
+                    <td>
+                        <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
+                            <tbody>
+                                <tr>
+                                    <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                        <table class="image_block block-1" width="100%" border="0" cellpadding="20" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+                                            <tr>
+                                                <td class="pad">
+                                                    <div class="alignment" align="center" style="line-height:10px">
+                                                        <a href='<?php echo site_url("productos/ver/$producto->id"); ?>' target="_blank" style="outline:none" tabindex="-1">
+                                                            <img class="fullWidth" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" style="display: block; height: auto; border: 0; max-width: 120px; width: 100%;" width="120" alt="Fatty Burger" title="Fatty Burger">
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                        <div class="spacer_block block-1" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
+                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                            <tr>
+                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                    <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:17px;line-height:120%;text-align:left;mso-line-height-alt:20.4px;">
+                                                        <p style="margin: 0; word-break: break-word;"><span><?php echo "$producto->notas x $detalle->cantidad"; ?></span></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                            <tr>
+                                                <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                    <div style="color:#848484;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:150%;text-align:left;mso-line-height-alt:21px;">
+                                                        <p style="margin: 0; word-break: break-word;">
+                                                            <span><?php echo $producto->marca; ?> |</span>
+                                                            <span><?php echo $producto->grupo; ?> |</span>
+                                                            <span><?php echo $producto->linea; ?> |</span>
+                                                            <span><?php echo $producto->referencia; ?> |</span>
+                                                        </p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                        <div class="spacer_block block-1 mobile_hide" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
+                                        <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                            <tr>
+                                                <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                    <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                        <p style="margin: 0; word-break: break-word;"><?php echo formato_precio($detalle->precio); ?></p>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    <?php } ?>
 <?php } ?>
 
 <!-- Línea -->
@@ -289,7 +291,7 @@ foreach($factura_detalle as $detalle) {
 </table>
 
 <!-- Envío -->
-<table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<!-- <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
     <tbody>
         <tr>
             <td>
@@ -327,10 +329,10 @@ foreach($factura_detalle as $detalle) {
             </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 <!-- Impuestos -->
-<table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+<!-- <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
     <tbody>
         <tr>
             <td>
@@ -368,7 +370,7 @@ foreach($factura_detalle as $detalle) {
             </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 <!-- Total -->
 <table class="row row-13" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">

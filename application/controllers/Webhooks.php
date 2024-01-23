@@ -38,10 +38,11 @@ class Webhooks extends MY_Controller {
     function email_test($id) {
         // Se obtienen todos los datos de la factura
         $recibo = $this->productos_model->obtener('recibo', [
-            'wompi_transaccion_id' => $id
+            'id' => $id
         ]);
 
-        enviar_email_pedido($recibo);
+        // enviar_email_pedido($recibo);
+        enviar_email_factura($recibo);
     }
 
     /**
@@ -75,9 +76,6 @@ class Webhooks extends MY_Controller {
         // Se obtienen todos los datos del recibo con el token que se almacena como referencia
         $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
         
-        // // Dependiendo del estado de la transacción, trae los mensajes
-        // $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($datos['status']);
-
         /**
          * Actualización de datos del recibo
          */
