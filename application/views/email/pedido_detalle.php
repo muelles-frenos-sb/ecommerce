@@ -42,36 +42,39 @@ $azul_corporativo_apoyo = '#1F2B50';
                                     </tr>
                                 </table>
                             </td>
-                            <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:10px;">
-                                            <div style="color:<?php echo $azul_corporativo_primario; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><strong><span>Información del Pago:</span></strong></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:30px;padding-right:30px;padding-top:10px;">
-                                            <div style="color:<?php echo $amarillo_corporativo_apoyo; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:26px;line-height:180%;text-align:left;mso-line-height-alt:46.800000000000004px;">
-                                                <p style="margin: 0; word-break: break-word;"><span><strong><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></strong></span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:30px;padding-top:10px;">
-                                            <div style="color:<?php echo $azul_corporativo_primario; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><span><?php echo $wompi['payment_method_type']; ?></span></p>
-                                                <p style="margin: 0; word-break: break-word;"><span><?php if(isset($wompi['payment_method']['extra']['last_four'])) echo "**** **** **** {$wompi['payment_method']['extra']['last_four']}"; ?></span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+
+                            <?php if($wompi) { ?>
+                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:10px;">
+                                                <div style="color:<?php echo $azul_corporativo_primario; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><strong><span>Información del Pago:</span></strong></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="paragraph_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:30px;padding-right:30px;padding-top:10px;">
+                                                <div style="color:<?php echo $amarillo_corporativo_apoyo; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:26px;line-height:180%;text-align:left;mso-line-height-alt:46.800000000000004px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span><strong><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></strong></span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table class="paragraph_block block-3" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:30px;padding-top:10px;">
+                                                <div style="color:<?php echo $azul_corporativo_primario; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:16px;line-height:180%;text-align:left;mso-line-height-alt:28.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span><?php echo $wompi['payment_method_type']; ?></span></p>
+                                                    <p style="margin: 0; word-break: break-word;"><span><?php if(isset($wompi['payment_method']['extra']['last_four'])) echo "**** **** **** {$wompi['payment_method']['extra']['last_four']}"; ?></span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            <?php } ?>
                         </tr>
                     </tbody>
                 </table>
@@ -249,166 +252,168 @@ foreach($recibo_detalle as $detalle) {
     </tbody>
 </table>
 
-<!-- Subtotal -->
-<table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-    <tbody>
-        <tr>
-            <td>
-                <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
-                    <tbody>
-                        <tr>
-                            <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
-                            </td>
-                            <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><span>Subtotal:</span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<?php if($wompi) { ?>
+    <!-- Subtotal -->
+    <table class="row row-10" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
+                        <tbody>
+                            <tr>
+                                <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
+                                </td>
+                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span>Subtotal:</span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<!-- Envío -->
-<!-- <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-    <tbody>
-        <tr>
-            <td>
-                <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
-                    <tbody>
-                        <tr>
-                            <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
-                            </td>
-                            <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><span>Envío:</span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;">----</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
+    <!-- Envío -->
+    <!-- <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
+                        <tbody>
+                            <tr>
+                                <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
+                                </td>
+                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span>Envío:</span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;">----</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table> -->
 
-<!-- Impuestos -->
-<!-- <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-    <tbody>
-        <tr>
-            <td>
-                <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
-                    <tbody>
-                        <tr>
-                            <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
-                            </td>
-                            <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;"><span>Impuestos:</span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                <p style="margin: 0; word-break: break-word;">---</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table> -->
+    <!-- Impuestos -->
+    <!-- <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
+                        <tbody>
+                            <tr>
+                                <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
+                                </td>
+                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span>Impuestos:</span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
+                                                    <p style="margin: 0; word-break: break-word;">---</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table> -->
 
-<!-- Total -->
-<table class="row row-13" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-    <tbody>
-        <tr>
-            <td>
-                <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
-                    <tbody>
-                        <tr>
-                            <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
-                            </td>
-                            <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-                                                <p style="margin: 0; word-break: break-word;"><span>Total</span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
-                                <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
-                                    <tr>
-                                        <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
-                                            <div style="color:<?php echo $amarillo_corporativo_apoyo; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
-                                                <p style="margin: 0; word-break: break-word;"><span><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></span></p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
-</table>
+    <!-- Total -->
+    <table class="row row-13" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="row-content stack" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; background-color: #fff; color: #000; width: 680px; margin: 0 auto;" width="680">
+                        <tbody>
+                            <tr>
+                                <td class="column column-1" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-left: 10px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <div class="spacer_block block-1 mobile_hide" style="height:25px;line-height:25px;font-size:1px;">&#8202;</div>
+                                </td>
+                                <td class="column column-2" width="50%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span>Total</span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="column column-3" width="25%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
+                                    <table class="paragraph_block block-1" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
+                                        <tr>
+                                            <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
+                                                <div style="color:<?php echo $amarillo_corporativo_apoyo; ?>;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:18px;line-height:120%;text-align:left;mso-line-height-alt:21.599999999999998px;">
+                                                    <p style="margin: 0; word-break: break-word;"><span><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></span></p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<?php } ?>

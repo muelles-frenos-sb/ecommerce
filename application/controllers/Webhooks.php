@@ -42,7 +42,7 @@ class Webhooks extends MY_Controller {
         ]);
 
         // enviar_email_pedido($recibo);
-        enviar_email_factura($recibo);
+        // enviar_email_factura_wompi($recibo);
     }
 
     /**
@@ -100,6 +100,9 @@ class Webhooks extends MY_Controller {
         
         // Si el pago fue aprobado
         if($datos['status'] == 'APPROVED') $respuesta = crear_documento_contable($recibo->id, $datos);
+
+        // Se envía el correo electrónico de confirmación o rechazo
+        enviar_email_factura_wompi($recibo);
         
         print json_encode([$respuesta]);
     }
@@ -152,6 +155,9 @@ class Webhooks extends MY_Controller {
             array_push($resultado, ['El recibo no se encontró']);
             $errores++;
         }
+
+        // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
+        enviar_email_pedido($recibo);
 
         // Si el pago no fue aprobado, se detiene la ejecución
         if($wompi_status != 'APPROVED') die;

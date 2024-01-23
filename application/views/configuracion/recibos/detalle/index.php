@@ -216,7 +216,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
             setTimeout(() => {
                 location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
-            }, 1000);
+            }, 1000)
         }
     }
 

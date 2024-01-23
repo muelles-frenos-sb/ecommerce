@@ -20,8 +20,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $notas_recibo = "Recibo cargado desde la página web por el cliente";
     }
 
-    // enviar_email_recibo($recibo);
-
     // Se obtienen los ítems del recibo
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
@@ -189,6 +187,9 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
         $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
     }
+
+    // Si vienen datos aquí, es un comprobante y se enviará email
+    if($datos_movimientos_contables) enviar_email_factura_wompi_comprobante($recibo);
 
     return [
         'error' => false,
