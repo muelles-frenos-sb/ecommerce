@@ -22,7 +22,7 @@ if($resultado_movimientos->codigo == 0) {
     $numero_recibo_caja = "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}";
     $usuario_creacion = $movimientos[0]->f350_usuario_creacion;
     $usuario_aprobacion = $movimientos[0]->f350_usuario_aprobacion;
-    $notas = $movimientos[0]->
+    $notas = $movimientos[0]->f350_notas;
 }
 
 // Usuario creación
