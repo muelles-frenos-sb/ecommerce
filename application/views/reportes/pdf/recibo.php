@@ -14,6 +14,7 @@ $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'notas' => 'Recibo cargado desde la página web por el cliente'
 ]));
 
+// Si se encontraron movimientos asociados al recibo
 if($resultado_movimientos->codigo == 0) {
     // Se capturan los datos
     $movimientos = $resultado_movimientos->detalle->Table;
@@ -52,17 +53,17 @@ $gris = array('r' => '211', 'g' => '211', 'b' => '211');
 // Título
 $pdf->setXY(60, 10);
 $pdf->SetFont('Arial', 'B', 8);
-$pdf->Cell(70, 5, 'MUELLES Y FRENOS SIMON BOLIVAR S.A.S.', 0, 0, 'L', 0);
+$pdf->Cell(70, 5, utf8_decode('MUELLES Y FRENOS SIMÓN BOLIVAR S.A.S.'), 0, 0, 'L', 0);
 $pdf->setXY(60, $pdf->getY() + 5);
 $pdf->SetFont('Arial', '', 8);
 $pdf->setXY(60, $pdf->getY());
-$pdf->Cell(70, 5, 'Nit: 900296641', 0, 1, 'L', 0);
+$pdf->Cell(70, 5, 'NIT: 900296641', 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
-$pdf->Cell(70, 5, 'CL 31 41 15 LC 6 P 2', 0, 1, 'L', 0);
+$pdf->Cell(70, 5, utf8_decode('Calle 40 # 30 - 139'), 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
-$pdf->Cell(70, 5, 'Tel: 44447232 Fax:', 0, 1, 'L', 0);
+$pdf->Cell(70, 5, utf8_decode('Teléfono: 310 411 4048'), 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
-$pdf->Cell(70, 5, utf8_decode('ITAGÜÍ'), 0, 1, 'L', 0);
+$pdf->Cell(70, 5, utf8_decode('Itagüí'), 0, 1, 'L', 0);
 $pdf->Ln();
 
 // Recibo de caja
@@ -132,7 +133,7 @@ if(isset($movimientos)) {
         $pdf->Cell(65, 5, $movimiento->f253_descripcion, 'B,R', 0, 'L', 0); // Concepto
         $pdf->Cell(10, 5, $movimiento->f351_id_un, 'B,R', 0, 'R', 0); // UN
         $pdf->Cell(20, 5, $movimiento->f200_nit, 'B,R', 0, 'L', 0); // Tercero
-        $pdf->Cell(20, 5, $recibo_detalle[0]->documento_cruce_numero, 'B,R', 0, 'R', 0); // Documento cruce
+        $pdf->Cell(20, 5, (!empty($recibo_detalle[0])) ? $recibo_detalle[0]->documento_cruce_numero : '', 'B,R', 0, 'R', 0); // Documento cruce
         $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_db), 'B,R', 0, 'R', 0); // Débitos
         $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_cr), 'B,R', 1, 'R', 0); // Créditos
 
