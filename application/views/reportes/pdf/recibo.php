@@ -3,7 +3,6 @@ use Fpdf\Fpdf;
 
 $recibo = $this->productos_model->obtener('recibo', ['token' => $token]);
 $recibo_cuentas_bancarias = $this->configuracion_model->obtener('recibos_cuentas_bancarias', ['recibo_id' => $recibo->id]);
-$recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
 $numero_recibo_caja = '';
 $usuario_creacion = '';
 $usuario_aprobacion = '';
@@ -127,11 +126,13 @@ foreach($recibo_cuentas_bancarias as $cuenta) {
 if(isset($movimientos)) {
     $pdf->SetFont('Arial', '', 6);
     foreach($movimientos as $movimiento) {
+        $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id, 'subtotal' => $movimiento->f351_valor_cr]);
+        
         $pdf->Cell(15, 5, $movimiento->f253_id, 'B,R,L', 0, 'L', 0); // Auxiliar
         $pdf->Cell(65, 5, $movimiento->f253_descripcion, 'B,R', 0, 'L', 0); // Concepto
         $pdf->Cell(10, 5, $movimiento->f351_id_un, 'B,R', 0, 'R', 0); // UN
         $pdf->Cell(20, 5, $movimiento->f200_nit, 'B,R', 0, 'L', 0); // Tercero
-        $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0); // Documento cruce
+        $pdf->Cell(20, 5, $recibo_detalle[0]->documento_cruce_numero, 'B,R', 0, 'R', 0); // Documento cruce
         $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_db), 'B,R', 0, 'R', 0); // Débitos
         $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_cr), 'B,R', 1, 'R', 0); // Créditos
 
