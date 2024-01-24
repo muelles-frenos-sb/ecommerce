@@ -11,7 +11,7 @@ $notas = $recibo->comentarios;
 $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'numero_documento' => $recibo->documento_numero,
     'fecha' => "{$recibo->anio}-{$recibo->mes}-{$recibo->dia}",
-    'notas' => 'Recibo cargado desde la página web por el cliente'
+    'notas' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente'
 ]));
 
 // Si se encontraron movimientos asociados al recibo
@@ -103,8 +103,9 @@ $pdf->Cell(65, 6, 'Concepto:', 'L,T', 0, 'C', 1);
 $pdf->Cell(10, 6, 'U.N.', 'L,T', 0, 'C', 1);
 $pdf->Cell(20, 6, 'Tercero:', 'L,T', 0, 'C', 1);
 $pdf->Cell(20, 6, 'Doc. Cruce', 'L,T', 0, 'C', 1);
-$pdf->Cell(30, 6, utf8_decode('Débitos:'), 'L,T,R', 0, 'C', 1);
-$pdf->Cell(30, 6, utf8_decode('Créditos:'), 'L,T,R', 1, 'C', 1);
+$pdf->Cell(20, 6, utf8_decode('C.O.:'), 'L,T,R', 0, 'C', 1);
+$pdf->Cell(20, 6, utf8_decode('Débitos:'), 'L,T,R', 0, 'C', 1);
+$pdf->Cell(20, 6, utf8_decode('Créditos:'), 'L,T,R', 1, 'C', 1);
 
 $total_debitos = 0;
 $total_creditos = 0;
@@ -117,8 +118,9 @@ foreach($recibo_cuentas_bancarias as $cuenta) {
     $pdf->Cell(10, 5, '01', 'B,R', 0, 'R', 0);
     $pdf->Cell(20, 5, $recibo->documento_numero, 'B,R', 0, 'L', 0);
     $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0);
-    $pdf->Cell(30, 5, formato_precio($cuenta->valor), 'B,R', 0, 'R', 0);
-    $pdf->Cell(30, 5, formato_precio(0), 'B,R', 1, 'R', 0);
+    $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0);
+    $pdf->Cell(20, 5, formato_precio($cuenta->valor), 'B,R', 0, 'R', 0);
+    $pdf->Cell(20, 5, formato_precio(0), 'B,R', 1, 'R', 0);
 
     $total_debitos += $cuenta->valor;
 }
@@ -134,8 +136,9 @@ if(isset($movimientos)) {
         $pdf->Cell(10, 5, $movimiento->f351_id_un, 'B,R', 0, 'R', 0); // UN
         $pdf->Cell(20, 5, $movimiento->f200_nit, 'B,R', 0, 'L', 0); // Tercero
         $pdf->Cell(20, 5, (!empty($recibo_detalle[0])) ? $recibo_detalle[0]->documento_cruce_numero : '', 'B,R', 0, 'R', 0); // Documento cruce
-        $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_db), 'B,R', 0, 'R', 0); // Débitos
-        $pdf->Cell(30, 5, formato_precio($movimiento->f351_valor_cr), 'B,R', 1, 'R', 0); // Créditos
+        $pdf->Cell(20, 5, $movimiento->f351_id_co_mov, 'B,R', 0, 'R', 0); // Centro operativo
+        $pdf->Cell(20, 5, formato_precio($movimiento->f351_valor_db), 'B,R', 0, 'R', 0); // Débitos
+        $pdf->Cell(20, 5, formato_precio($movimiento->f351_valor_cr), 'B,R', 1, 'R', 0); // Créditos
 
         $total_debitos += $movimiento->f351_valor_db;
         $total_creditos += $movimiento->f351_valor_cr;
@@ -144,10 +147,10 @@ if(isset($movimientos)) {
 
 // Sumas iguales
 $pdf->SetFont('Arial', 'B', 6);
-$pdf->Cell(130, 3, 'Sumas iguales', 1, 0, 'R', 0);
+$pdf->Cell(150, 3, 'Sumas iguales', 1, 0, 'R', 0);
 $pdf->SetFont('Arial', '', 6);
-$pdf->Cell(30, 3, formato_precio($total_debitos), 'B,R', 0, 'R', 0);
-$pdf->Cell(30, 3, formato_precio($total_creditos), 'B,R', 0, 'R', 0);
+$pdf->Cell(20, 3, formato_precio($total_debitos), 'B,R', 0, 'R', 0);
+$pdf->Cell(20, 3, formato_precio($total_creditos), 'B,R', 0, 'R', 0);
 $pdf->Ln(15);
 
 $pdf->Cell(60, 3, utf8_decode($usuario_creacion), 'B', 0, 'C', 0);

@@ -5,7 +5,7 @@
         currency: 'COP',
         amountInCents: parseFloat(<?php echo $recibo->valor; ?>) * 100,
         reference: '<?php echo $recibo->token; ?>',
-        publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2',
+        publicKey: '<?php echo $this->config->item('api_wompi')['llave_publica']; ?>',
         redirectUrl: `${$('#site_url').val()}clientes/respuesta?referencia=<?php echo $recibo->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
         // taxInCents: { // Opcional
