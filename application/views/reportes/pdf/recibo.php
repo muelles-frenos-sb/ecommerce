@@ -125,6 +125,20 @@ foreach($recibo_cuentas_bancarias as $cuenta) {
     $total_debitos += $cuenta->valor;
 }
 
+// Si no trae cuentas bancarias, se ingresa una por defecto
+if(empty($recibo_cuentas_bancarias)) {
+    $pdf->Cell(15, 5, '11100504', 'B,R,L', 0, 'L', 0);
+    $pdf->Cell(65, 5, utf8_decode('BANCOLOMBIA - CUENTA CORRIENTE Nro. 01952279149'), 'B,R', 0, 'L', 0);
+    $pdf->Cell(10, 5, '01', 'B,R', 0, 'R', 0);
+    $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0);
+    $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0);
+    $pdf->Cell(20, 5, '', 'B,R', 0, 'L', 0);
+    $pdf->Cell(20, 5, formato_precio($recibo->valor), 'B,R', 0, 'R', 0);
+    $pdf->Cell(20, 5, formato_precio(0), 'B,R', 1, 'R', 0);
+
+    $total_debitos += $recibo->valor;
+}
+
 // Movimientos
 if(isset($movimientos)) {
     $pdf->SetFont('Arial', '', 6);
