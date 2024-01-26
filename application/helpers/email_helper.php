@@ -34,6 +34,7 @@ function enviar_email_factura_wompi($recibo) {
 
     $wompi = json_decode($recibo->wompi_datos, true);
 
+    $url = site_url();
     $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
 
     // Dependiendo del estado de la transacción, trae los mensajes
@@ -46,7 +47,8 @@ function enviar_email_factura_wompi($recibo) {
         'cuerpo' => [
             'titulo' => 'Nos complace informarte que tu pago ha sido aprobado con éxito.',
             'subtitulo' => "Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos. Estamos aquí para ayudarte en todo momento. ¡Gracias por confiar en nosotros!<br><br>
-            Ahora puedes consultar el saldo de tu cartera actualizada en <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>este enlace</a>.",
+            Ahora puedes consultar el saldo de tu cartera actualizada en <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>este enlace</a>.<br><br>
+            <a href='$url' style='color: #FFF; text-decoration: none;'>www.repuestossimonbolivar.com</a>",
         ],
         'destinatarios' => $recibo->email,
     ];
@@ -60,6 +62,7 @@ function enviar_email_factura_wompi_comprobante($recibo) {
 
     $CI->load->model(['email_model']);
 
+    $url = site_url();
     $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
 
     $datos = [
@@ -70,7 +73,9 @@ function enviar_email_factura_wompi_comprobante($recibo) {
             'titulo' => 'El soporte de pago que ingresaste en la página web, ya fue validado, aprobado y abonado en tu cartera.',
             'subtitulo' =>  "Estamos muy contentos de que nos hayas elegido para tus necesidades en repuestos para tu vehículo. Nuestro equipo está trabajando duro para brindarte la mejor experiencia posible.<br><br>
             Para descargar el comprobante de pago, <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>haz clic aquí</a>.<br><br>
-            También te queremos recordar que puedes hacer el pago directo a través de nuestra página web.",
+            También te queremos recordar que puedes hacer el pago directo a través de nuestra página web:<br>
+            <a href='$url' style='color: #FFF; text-decoration: none;'>www.repuestossimonbolivar.com</a>
+            .",
         ],
         'destinatarios' => $recibo->email,
     ];

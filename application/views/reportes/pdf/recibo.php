@@ -61,7 +61,7 @@ $pdf->Cell(70, 5, 'NIT: 900296641', 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
 $pdf->Cell(70, 5, utf8_decode('Calle 40 # 30 - 139'), 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
-$pdf->Cell(70, 5, utf8_decode('Teléfono: 310 411 4048'), 0, 1, 'L', 0);
+$pdf->Cell(70, 5, utf8_decode('Teléfono: 310 515 0291'), 0, 1, 'L', 0);
 $pdf->setXY(60, $pdf->getY());
 $pdf->Cell(70, 5, utf8_decode('Itagüí'), 0, 1, 'L', 0);
 $pdf->Ln();
