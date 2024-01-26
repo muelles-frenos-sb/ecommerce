@@ -34,16 +34,19 @@ function enviar_email_factura_wompi($recibo) {
 
     $wompi = json_decode($recibo->wompi_datos, true);
 
+    $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
+
     // Dependiendo del estado de la transacción, trae los mensajes
     $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
     
     $datos = [
         'pedido_completo' => $mensajes_estado_wompi['pedido_completo'],
         'id' => $recibo->id,
-        'asunto' => $mensajes_estado_wompi['asunto_factura'],
+        'asunto' => 'Transacción exitosa',
         'cuerpo' => [
-            'titulo' => $mensajes_estado_wompi['titulo'],
-            'subtitulo' => $mensajes_estado_wompi['subtitulo'],
+            'titulo' => 'Nos complace informarte que tu pago ha sido aprobado con éxito.',
+            'subtitulo' => "Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos. Estamos aquí para ayudarte en todo momento. ¡Gracias por confiar en nosotros!<br><br>
+            Ahora puedes consultar el saldo de tu cartera actualizada en <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>este enlace</a>.",
         ],
         'destinatarios' => $recibo->email,
     ];
@@ -57,13 +60,17 @@ function enviar_email_factura_wompi_comprobante($recibo) {
 
     $CI->load->model(['email_model']);
 
+    $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
+
     $datos = [
         'pedido_completo' => true,
         'id' => $recibo->id,
         'asunto' => 'Pago aprobado',
         'cuerpo' => [
-            'titulo' => 'El pago que realizaste por otros canales, fue aprobado',
-            'subtitulo' =>  '¡Muchas gracias por comprar en la tienda de Repuestos Simón Bolívar! Acabamos de aprobar tu pago',
+            'titulo' => 'El soporte de pago que ingresaste en la página web, ya fue validado, aprobado y abonado en tu cartera.',
+            'subtitulo' =>  "Estamos muy contentos de que nos hayas elegido para tus necesidades en repuestos para tu vehículo. Nuestro equipo está trabajando duro para brindarte la mejor experiencia posible.<br><br>
+            También te queremos recordar que puedes hacer el pago directo a través de nuestra página web. Si prefieres esta opción, puedes encontrar los detalles de pago en el siguiente enlace: <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>(Clic aquí)</a>
+            ",
         ],
         'destinatarios' => $recibo->email,
     ];
