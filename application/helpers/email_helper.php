@@ -69,8 +69,8 @@ function enviar_email_factura_wompi_comprobante($recibo) {
         'cuerpo' => [
             'titulo' => 'El soporte de pago que ingresaste en la página web, ya fue validado, aprobado y abonado en tu cartera.',
             'subtitulo' =>  "Estamos muy contentos de que nos hayas elegido para tus necesidades en repuestos para tu vehículo. Nuestro equipo está trabajando duro para brindarte la mejor experiencia posible.<br><br>
-            También te queremos recordar que puedes hacer el pago directo a través de nuestra página web. Si prefieres esta opción, puedes encontrar los detalles de pago en el siguiente enlace: <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>(Clic aquí)</a>
-            ",
+            Para descargar el comprobante de pago, <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>haz clic aquí</a>.<br><br>
+            También te queremos recordar que puedes hacer el pago directo a través de nuestra página web.",
         ],
         'destinatarios' => $recibo->email,
     ];
