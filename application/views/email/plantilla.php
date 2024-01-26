@@ -111,14 +111,6 @@
 																</td>
 															</tr>
 														</table>
-														<div class="spacer_block block-3" style="height:45px;line-height:45px;font-size:1px;">&#8202;</div>
-														<table class="image_block block-4" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
-															<tr>
-																<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
-																	<div class="alignment" align="center" style="line-height:10px"><a href="https://repuestossimonbolivar.com" target="_blank" style="outline:none" tabindex="-1"><img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1951/Coo_Burger_Walking.png" style="display: block; height: auto; border: 0; max-width: 306px; width: 100%;" width="306" alt="Cool Burger Walking" title="Cool Burger Walking"></a></div>
-																</td>
-															</tr>
-														</table>
 														<div class="spacer_block block-5" style="height:20px;line-height:20px;font-size:1px;">&#8202;</div>
 														<table class="paragraph_block block-6" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; word-break: break-word;">
 															<tr>
