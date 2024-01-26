@@ -97,7 +97,10 @@ class Webhooks extends MY_Controller {
                 'observacion' => "Referencia: {$datos['reference']}, Transacción: {$datos['id']}"
             ]);
         }
-        
+
+        // Si el pago no fue aprobado, se detiene la ejecución
+        if($datos['status'] != 'APPROVED') die;
+
         // Si el pago fue aprobado
         if($datos['status'] == 'APPROVED') $respuesta = crear_documento_contable($recibo->id, $datos);
 
