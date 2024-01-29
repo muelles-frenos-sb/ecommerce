@@ -34,7 +34,7 @@ function enviar_email_factura_wompi($recibo) {
 
     $wompi = json_decode($recibo->wompi_datos, true);
 
-    $url = site_url();
+    $url = site_url('clientes');
     $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
 
     // Dependiendo del estado de la transacción, trae los mensajes
@@ -47,8 +47,11 @@ function enviar_email_factura_wompi($recibo) {
         'cuerpo' => [
             'titulo' => 'Nos complace informarte que tu pago ha sido aprobado con éxito.',
             'subtitulo' => "Si tienes alguna pregunta o necesitas más información, no dudes en contactarnos. Estamos aquí para ayudarte en todo momento. ¡Gracias por confiar en nosotros!<br><br>
-            Ahora puedes consultar el saldo de tu cartera actualizada en <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>este enlace</a>.<br><br>
-            <a href='$url' style='color: #FFF; text-decoration: none;'>www.repuestossimonbolivar.com</a>",
+
+            Descarga tu recibo de pago en <a href='$url_recibo' style='color: #ffd400; text-decoration: none;'>este enlace</a>.<br><br>
+
+            Ahora puedes consultar el saldo de tu cartera actualizado en <a href='$url' style='color: #ffd400; text-decoration: none;'>www.repuestossimonbolivar.com</a>.<br><br>
+            ",
         ],
         'destinatarios' => $recibo->email,
     ];
@@ -62,7 +65,7 @@ function enviar_email_factura_wompi_comprobante($recibo) {
 
     $CI->load->model(['email_model']);
 
-    $url = site_url();
+    $url = site_url('clientes');
     $url_recibo = site_url("reportes/pdf/recibo/$recibo->token");
 
     $datos = [
