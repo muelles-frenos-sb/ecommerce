@@ -148,6 +148,7 @@ Class Productos_model extends CI_Model{
                         WHERE 
                             pp.producto_id = p.id 
                             AND pp.lista_precio = IF( MIN( i.bodega ) = '{$this->config->item('bodega_outlet')}', '{$this->config->item('lista_precio_clientes')}', '{$this->config->item('lista_precio')}')
+                            ORDER BY fecha_actualizacion_api DESC 
                         LIMIT 1 
                     ) precio
                 FROM

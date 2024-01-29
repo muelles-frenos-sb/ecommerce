@@ -527,6 +527,7 @@ class Webhooks extends MY_Controller {
                             'precio_maximo' => $precio->f126_precio_maximo,
                             'precio_minimo' => $precio->f126_precio_minimo,
                             'precio_sugerido' => $precio->f126_precio_sugerido,
+                            'fecha_actualizacion_api' => $precio->f126_fecha_ts_actualizacion,
                             'fecha_actualizacion' => $fecha_actualizacion,
                         ];
 
