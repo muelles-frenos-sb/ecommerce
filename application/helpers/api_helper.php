@@ -34,6 +34,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             'Tipo_Doc_cruce' => $item->documento_cruce_tipo,
             'Nro_Doc_cruce' => $item->documento_cruce_numero,
             'Cliente' => $recibo->documento_numero,
+            'pendientes' => true,
         ]);
 
         // Si trae descuento, se va acumulando
