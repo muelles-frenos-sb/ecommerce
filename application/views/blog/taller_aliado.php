@@ -1,1 +1,1 @@
-<object frameborder="0" data="<?php echo $this->config->item('url_wordpress').'/talleres-aliados'; ?>"  style="width:100%;height:100vh;"></object>
+<object frameborder="0" data="<?php echo $this->config->item('url_wordpress').'?p=61'; ?>"  style="width:100%;height:100vh;"></object>

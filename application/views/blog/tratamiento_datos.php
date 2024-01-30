@@ -1,1 +1,1 @@
-<object class='mt-5' frameborder="0" data="<?php echo $this->config->item('url_wordpress').'/politica-de-privacidad-y-manejo-de-datos'; ?>"  style="width:100%;height:100vh;"></object>
+<object class='mt-5' frameborder="0" data="<?php echo $this->config->item('url_wordpress').'?p=698'; ?>"  style="width:100%;height:100vh;"></object>
