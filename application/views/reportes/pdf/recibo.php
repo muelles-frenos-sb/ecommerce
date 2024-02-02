@@ -11,7 +11,8 @@ $notas = $recibo->comentarios;
 $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'numero_documento' => $recibo->documento_numero,
     'fecha' => "{$recibo->anio}-{$recibo->mes}-{$recibo->dia}",
-    'notas' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente'
+    'notas' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente',
+    'estado' => 1,
 ]));
 
 // Si se encontraron movimientos asociados al recibo
