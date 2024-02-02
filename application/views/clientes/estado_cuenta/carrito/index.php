@@ -93,8 +93,8 @@
                                             data-valor_bruto="${valorBruto}"
                                             class="form-control valor_pago_factura"
                                             style="text-align: right"
-                                            max="${datos.valor}"
-                                            value="${datos.valor}"
+                                            max="${parseFloat(datos.valor)}"
+                                            value="${parseFloat(datos.valor)}"
                                             ${desactivado}
                                         >
                                     </div>
@@ -158,7 +158,7 @@
             detalleFactura.push({
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
-                subtotal: valorAPagar,
+                subtotal: (valorTotal < 0) ? valorAPagar*-1 : valorAPagar, // Vuelve negativo un valor si es negativo
                 descuento: valorDescuento
             })
         })

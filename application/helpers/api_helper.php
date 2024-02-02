@@ -54,7 +54,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F351_ID_TERCERO" => $factura_cliente->Cliente,
             "F351_NOTAS" => "Recibo $recibo->id",
             "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
-            "F351_VALOR_CR" => number_format($item->subtotal, 0, '', ''),
+            "F351_VALOR_CR" => ($item->subtotal >= 0) ? number_format($item->subtotal, 0, '', '') : 0,
             "F353_ID_SUCURSAL" => str_pad($factura_cliente->sucursal_id, 3, '0', STR_PAD_LEFT),
             "F353_ID_TIPO_DOCTO_CRUCE" => $factura_cliente->Tipo_Doc_cruce,
             "F353_CONSEC_DOCTO_CRUCE" => $factura_cliente->Nro_Doc_cruce,
@@ -63,7 +63,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F353_FECHA_DSCTO_PP" => "{$factura_cliente->anio_vencimiento}{$mes_vencimiento}{$dia_vencimiento}",
             "F351_ID_UN" => '01',
             "F351_ID_CCOSTO" => '',
-            "F351_VALOR_DB" => 0,
+            "F351_VALOR_DB" => ($item->subtotal <= 0) ? number_format(($item->subtotal*-1), 0, '', '') : 0, // Saldos a favor
             "F351_VALOR_DB_ALT" => 0,
             "F351_VALOR_CR_ALT" => 0,
             "F353_VLR_DSCTO_PP" => 0,
