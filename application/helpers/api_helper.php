@@ -302,9 +302,10 @@ function obtener_movimientos_contables_api($datos) {
     $url = $CI->config->item('base_url_produccion');
 
     $parametros = "f200_nit=''{$datos['numero_documento']}''";
-    if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";;
-    if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";;
-    if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";;
+    if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";
+    if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";
+    if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";
+    if(isset($datos['estado'])) $parametros .= "and f350_ind_estado=''{$datos['estado']}''";
 
     $client = new \GuzzleHttp\Client();
     try {
