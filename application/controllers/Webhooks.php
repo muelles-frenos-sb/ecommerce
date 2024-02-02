@@ -43,6 +43,7 @@ class Webhooks extends MY_Controller {
 
         // enviar_email_pedido($recibo);
         // enviar_email_factura_wompi($recibo);
+        // enviar_email_factura_wompi_comprobante($recibo);
     }
 
     /**
@@ -50,64 +51,74 @@ class Webhooks extends MY_Controller {
     * Y almacena el id de la transacción, para futuras consultas
     **/
     function pedido() {
-        // Se agrega log
-        $this->configuracion_model->crear('logs', [
-            'log_tipo_id' => 14,
-            'fecha_creacion' => date('Y-m-d H:i:s'),
-        ]);
-
         $post = file_get_contents('php://input');
         $datos = json_decode($post, true)['data']['transaction'];
+
+        $datos_log = [
+            'log_tipo_id' => 14,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => $datos['reference'],
+        ];
 
         // Tomamos las iniciales de la referencia para saber qué tipo de documento va a guardar
         $tipo_documento = explode("-", $datos['reference']);
 
         // Si es pedido, se ejecuta la gestión de un pedido
-        if($tipo_documento[0] == 'pe') $this->gestionar_pedido($datos);
+        if($tipo_documento[0] == 'pe') {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', $datos_log);
+
+            $this->gestionar_pedido($datos);
+        }
 
         // Si es el pago de una factura del estado de cuenta, se ejecuta la gestión de un pedido
-        if($tipo_documento[0] == 'ec') $this->gestionar_estado_cuenta($datos);
+        if($tipo_documento[0] == 'ec') {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', $datos_log);
+
+            $this->gestionar_estado_cuenta($datos);
+        }
     }
 
     function gestionar_estado_cuenta($datos) {
         $respuesta = [];
-        $error = false;
 
         // Se obtienen todos los datos del recibo con el token que se almacena como referencia
         $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
-        
-        /**
-         * Actualización de datos del recibo
-         */
-        if($this->productos_model->actualizar('recibos', ['token' => $datos['reference']], [
+
+        $datos_actualizacion = [
             'wompi_transaccion_id' => $datos['id'],
             'wompi_status' => $datos['status'],
             'wompi_datos' => json_encode($datos),
             'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
-        ])) {
-            $respuesta['recibo'] = 'Recibo actualizado';
-        } else {
-            $error = true;
-            $respuesta['recibo'] = 'No actualizado';
+            'fecha_actualizacion' => date('Y-m-d H:i:s'),
+        ];
+        
+        /**
+         * Actualización de datos del recibo
+         */
+        $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], $datos_actualizacion);
+
+        // Si el pago no fue aprobado, se detiene la ejecución
+        if($datos['status'] != 'APPROVED') {
+            print json_encode([
+                'error' => false,
+                'mensaje' => 'No se creó documento contable, porque el pago fue rechazado.',
+                'datos' => $datos,
+            ]);
 
             // Se agrega log
             $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 16,
+                'log_tipo_id' => 36,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "Referencia: {$datos['reference']}, Transacción: {$datos['id']}"
+                'observacion' => json_encode($datos),
             ]);
-        }
 
-        // Si el pago no fue aprobado, se detiene la ejecución
-        if($datos['status'] != 'APPROVED') die;
-
+            return;
+        } 
+        
         // Si el pago fue aprobado
         if($datos['status'] == 'APPROVED') $respuesta = crear_documento_contable($recibo->id, $datos);
-
-        // Se envía el correo electrónico de confirmación o rechazo
-        enviar_email_factura_wompi($recibo);
-        
-        print json_encode([$respuesta]);
     }
 
     function gestionar_pedido($datos) {

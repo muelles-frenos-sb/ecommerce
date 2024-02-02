@@ -8,6 +8,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimientos_contables = null) {
     $CI =& get_instance();
 
+    $errores = 0;
+
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
 
     // Si es un recibo de Wompi
@@ -168,8 +170,21 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
     $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
+    if($codigo_resultado_documento_contable != '0') {
+        $errores++;
+
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 19,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode($resultado_documento_contable)
+        ]);
+    }
+
     // Si no se pudo crear el documento contable
     if($codigo_resultado_documento_contable == '1') {
+        $errores++;
+
         // Se agrega log
         $CI->configuracion_model->crear('logs', [
             'log_tipo_id' => 19,
@@ -177,7 +192,6 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             'observacion' => $detalle_resultado_documento_contable
         ]);
         
-        $error = true;
         $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
     } else {
         // Se agrega log
@@ -186,18 +200,20 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             'fecha_creacion' => date('Y-m-d H:i:s'),
         ]);
 
-        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+        $respuesta['documento_contable'] = $resultado_documento_contable;
     }
 
     // Si vienen datos aquí, es un comprobante y se enviará email
-    if($datos_movimientos_contables) enviar_email_factura_wompi_comprobante($recibo);
+    if($datos_movimientos_contables && $errores == 0) enviar_email_factura_wompi_comprobante($recibo);
 
-    return [
-        'error' => false,
-        'mensaje' => $respuesta,
+    if($recibo->wompi_datos && $errores == 0) enviar_email_factura_wompi($recibo);
+
+    print json_encode([
+        'errores' => $errores,
+        'mensaje' => $resultado_documento_contable,
         'datos' => $paquete_documento_contable,
         'factura_cliente' => $factura_cliente
-    ];
+    ]);
 }
 
 function obtener_clientes_api($datos) {
