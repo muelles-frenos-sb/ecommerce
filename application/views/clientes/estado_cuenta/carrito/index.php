@@ -63,6 +63,9 @@
                     // Se oculta el mensaje inicial
                     $('#mensaje_inicial').hide()
 
+                    // Si el valor es negativo, no debe dejarse editar
+                    let desactivado = (datos.valor < 0) ? 'disabled' : ''
+
                     // Se agrega el ítem
                     $('#contenedor_lista_carrito').append(`
                         <label id="id_registro_${datos.contador}" class="vehicles-list__item">
@@ -92,6 +95,7 @@
                                             style="text-align: right"
                                             max="${datos.valor}"
                                             value="${datos.valor}"
+                                            ${desactivado}
                                         >
                                     </div>
 
