@@ -221,14 +221,12 @@ class Webhooks extends MY_Controller {
             ],
             "Movimientos" => $movimientos
         ];
-        // print json_encode([$datos_pedido, $recibo_detalle]);
-        // return;
 
         $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
         $codigo_resultado_pedido = $resultado_pedido->codigo;
         $mensaje_resultado_pedido = $resultado_pedido->mensaje;
         $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
-        array_push($resultado, $detalle_resultado_pedido);
+        array_push($resultado, ['pedido' => $detalle_resultado_pedido]);
 
         // Si no se pudo crear el pedido
         if($codigo_resultado_pedido == '1') {
@@ -253,7 +251,7 @@ class Webhooks extends MY_Controller {
             $datos_documento_contable = [
                 "Documento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => 1, // Número de documento
+                        "F350_CONSEC_DOCTO" => '1', // Número de documento
                         "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                         "F350_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero
 			            "F350_NOTAS" => $notas_pedido // Observaciones
@@ -261,7 +259,7 @@ class Webhooks extends MY_Controller {
                 ],
                 "Movimiento_contable" => [
                     [
-                        "F350_CONSEC_DOCTO" => 1, // Número de documento
+                        "F350_CONSEC_DOCTO" => '1', // Número de documento
                         "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
                         "F351_VALOR_DB" => $recibo->valor, // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
                         "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
@@ -270,7 +268,7 @@ class Webhooks extends MY_Controller {
                 ],
                 "Movimiento_CxC" => [
                     [
-                        "F350_CONSEC_DOCTO" => 1, // Numero de documento
+                        "F350_CONSEC_DOCTO" => '1', // Numero de documento
                         "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
                         "F351_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
                         "F351_ID_CO_MOV" => "400", // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
@@ -289,7 +287,7 @@ class Webhooks extends MY_Controller {
             $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
             $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
             $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
-            array_push($resultado, $detalle_resultado_documento_contable);
+            array_push($resultado, ['documento_contable' => $detalle_resultado_documento_contable]);
 
             // Si no se pudo crear el documento contable
             if($codigo_resultado_documento_contable == '1') {
@@ -313,7 +311,8 @@ class Webhooks extends MY_Controller {
         print json_encode([
             'errores' => $errores,
             'resultado' => $resultado,
-            'datos' => $datos_pedido,
+            'datos_pedido' => $datos_pedido,
+            'datos_movimiento_contable' => (isset($datos_documento_contable)) ? $datos_documento_contable : null,
         ]);
 
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
