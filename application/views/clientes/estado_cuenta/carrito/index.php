@@ -50,7 +50,7 @@
             consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
             .then(() => {
                 // Se obtiene de los movimientos creados el valor bruto de ingreso ventas 19%
-                consulta('obtener', {tipo: 'cliente_factura_movimiento', f350_consec_docto: datos.documento_cruce, f253_id: '41359310'}, false)
+                consulta('obtener', {tipo: 'cliente_factura_movimiento', f200_nit: datos.numero_documento, f350_consec_docto: datos.documento_cruce}, false)
                 .then(resultadoMovimiento => {
                     // Se obtiene el valor bruto de ese movimiento, para calcular descuentos posteriormente
                     valorBruto = (resultadoMovimiento) ? resultadoMovimiento.f351_valor_cr : 0

@@ -45,11 +45,17 @@ Class Configuracion_model extends CI_Model {
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
             case 'cliente_factura_movimiento':
-                return $this->db
-                    ->where($datos)
-                    ->get('clientes_facturas_movimientos')
-                    ->row()
-                ;
+                $sql =
+                "SELECT
+                    SUM(cfm.f351_valor_cr ) f351_valor_cr 
+                FROM
+                    clientes_facturas_movimientos AS cfm 
+                WHERE
+                    cfm.f253_id LIKE '4135%' 
+                    AND cfm.f200_nit = '{$datos['f200_nit']}' 
+                    AND cfm.f350_consec_docto = '{$datos['f350_consec_docto']}'";
+
+                return $this->db->query($sql)->row();
             break;
 
             case 'cuentas_bancarias':
