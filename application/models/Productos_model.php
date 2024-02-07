@@ -210,6 +210,7 @@ Class Productos_model extends CI_Model{
 
                 return $this->db
                     ->where($datos)
+                    ->order_by('fecha_actualizacion_api', 'DESC')
                     ->get($tipo)
                     ->row()
                 ;
