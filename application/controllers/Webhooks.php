@@ -155,8 +155,6 @@ class Webhooks extends MY_Controller {
             'wompi_transaccion_id' => $wompi_transaction_id
         ]);
 
-        // enviar_email_pedido($recibo);
-
         // Si no existe el recibo
         if(empty($recibo)) {
             // Se agrega log
