@@ -58,8 +58,14 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                             </thead>
                             <tbody class="order-list__products">
                                 <?php
+                                $subtotal = 0;
+                                $descuento = 0;
+
                                 foreach($recibo_detalle as $detalle) {
                                     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
+                                    
+                                    $subtotal += $detalle->precio;
+                                    $descuento += $detalle->descuento;
                                     ?>
                                     <tr>
                                         <td class="order-list__column-image">
@@ -114,15 +120,11 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                             <tbody class="order-list__subtotals">
                                 <tr>
                                     <th class="order-list__column-label" colspan="3">Subtotal</th>
-                                    <td class="order-list__column-total"><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></td>
+                                    <td class="order-list__column-total"><?php echo formato_precio($subtotal); ?></td>
                                 </tr>
                                 <tr>
-                                    <th class="order-list__column-label" colspan="3">Envío</th>
-                                    <td class="order-list__column-total">----</td>
-                                </tr>
-                                <tr>
-                                    <th class="order-list__column-label" colspan="3">Impuestos</th>
-                                    <td class="order-list__column-total">-----</td>
+                                    <th class="order-list__column-label" colspan="3">Descuento</th>
+                                    <td class="order-list__column-total"><?php echo formato_precio($descuento); ?></td>
                                 </tr>
                             </tbody>
                             <tfoot class="order-list__footer">

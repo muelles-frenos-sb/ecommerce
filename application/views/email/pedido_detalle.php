@@ -144,8 +144,13 @@ $azul_corporativo_apoyo = '#1F2B50';
 </table>
 
 <?php
+$subtotal = 0;
+$descuento = 0;
+
 foreach($recibo_detalle as $detalle) {
     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
+    $subtotal += $detalle->precio;
+    $descuento += $detalle->descuento;
 
     // Si trae un producto
     if($detalle->producto_id) {
@@ -164,7 +169,7 @@ foreach($recibo_detalle as $detalle) {
                                                 <td class="pad">
                                                     <div class="alignment" align="center" style="line-height:10px">
                                                         <a href='<?php echo site_url("productos/ver/$producto->id"); ?>' target="_blank" style="outline:none" tabindex="-1">
-                                                            <img class="fullWidth" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" style="display: block; height: auto; border: 0; max-width: 120px; width: 100%;" width="120" alt="Fatty Burger" title="Fatty Burger">
+                                                            <img class="fullWidth" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" style="display: block; height: auto; border: 0; max-width: 120px; width: 100%;" width="120" alt="<?php echo $producto->referencia; ?>" title="Fatty Burger">
                                                         </a>
                                                     </div>
                                                 </td>
@@ -280,7 +285,7 @@ foreach($recibo_detalle as $detalle) {
                                         <tr>
                                             <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
                                                 <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                    <p style="margin: 0; word-break: break-word;"><?php echo formato_precio(($wompi['amount_in_cents'] / 100)); ?></p>
+                                                    <p style="margin: 0; word-break: break-word;"><?php echo formato_precio($subtotal); ?></p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -294,8 +299,8 @@ foreach($recibo_detalle as $detalle) {
         </tbody>
     </table>
 
-    <!-- Envío -->
-    <!-- <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+    <!-- Descuento -->
+    <table class="row row-11" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
         <tbody>
             <tr>
                 <td>
@@ -310,7 +315,7 @@ foreach($recibo_detalle as $detalle) {
                                         <tr>
                                             <td class="pad" style="padding-left:35px;padding-right:10px;padding-top:10px;">
                                                 <div style="color:#232323;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                    <p style="margin: 0; word-break: break-word;"><span>Envío:</span></p>
+                                                    <p style="margin: 0; word-break: break-word;"><span>Descuento:</span></p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -321,7 +326,7 @@ foreach($recibo_detalle as $detalle) {
                                         <tr>
                                             <td class="pad" style="padding-left:30px;padding-right:10px;padding-top:10px;">
                                                 <div style="color:#555555;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:14px;line-height:120%;text-align:left;mso-line-height-alt:16.8px;">
-                                                    <p style="margin: 0; word-break: break-word;">----</p>
+                                                    <p style="margin: 0; word-break: break-word;"><?php echo formato_precio($descuento); ?></p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -333,7 +338,7 @@ foreach($recibo_detalle as $detalle) {
                 </td>
             </tr>
         </tbody>
-    </table> -->
+    </table>
 
     <!-- Impuestos -->
     <!-- <table class="row row-12" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
