@@ -95,9 +95,25 @@
                         </a>
                     </li>
 
+                    <!-- Outlet -->
+                    <p class="m-2">
+                        <a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="ml-1">
+                            <img src="<?php echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
+                        </a>
+                    </p>
+                    
+                    <!-- Garantía -->
+                    <?php $this->load->view('bitrix/garantia'); ?>
+
                     <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
                         <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
                             Taller aliado
+                        </a>
+                    </li>
+
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                            Crédito
                         </a>
                     </li>
 
@@ -113,8 +129,11 @@
                         </a>
                     </li>
                     
-                    <!-- Garantía -->
-                    <?php $this->load->view('bitrix/garantia'); ?>
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                        <a href="<?php echo site_url('blog/mayoristas'); ?>" class="main-menu__link">
+                            Mayoristas
+                        </a>
+                    </li>
 
                     <!-- Botón para pago de facturas -->
                     <p class="m-2">
