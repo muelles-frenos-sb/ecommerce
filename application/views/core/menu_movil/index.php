@@ -116,6 +116,13 @@
                     <!-- Garantía -->
                     <?php $this->load->view('bitrix/garantia'); ?>
 
+                    <!-- Botón para pago de facturas -->
+                    <p class="m-2">
+                        <a href="<?php echo site_url('clientes'); ?>" class="ml-1">
+                            <img src="<?php echo base_url(); ?>images/boton_pago.png" height="32" alt="Paga tus facturas">
+                        </a>
+                    </p>
+
                     <?php if($this->session->userdata('usuario_id')) { ?>
                         <li data-mobile-menu-item>
                             <a href="<?php echo site_url('sesion/cerrar'); ?>" data-mobile-menu-trigger>
