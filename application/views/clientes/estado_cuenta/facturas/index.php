@@ -7,25 +7,15 @@
 
 <div class="row no-gutters">
     <!-- Datos del cliente -->
-    <div class="col-lg-3 px-2">
+    <div class="col-lg-3 px-1">
         <div class="card address-card address-card--featured">
             <div class="address-card__badge tag-badge tag-badge--new">
                 BIENVENIDO
             </div>
-            <div class="address-card__body">
-                <div class="address-card__name"><?php echo $tercero->f200_razon_social; ?></div>
-                <div class="address-card__row">
-                    <?php echo "$tercero->f200_nit-$tercero->f200_dv_nit"; ?><br>
-                </div>
-                <!-- <div class="address-card__row">
-                    <div class="address-card__row-title">Teléfono</div>
-                    <div class="address-card__row-content">----</div>
-                </div>
-                <div class="address-card__row">
-                    <div class="address-card__row-title">Dirección</div>
-                    <div class="address-card__row-content">-----</div>
-                </div> -->
-                <div class="mt-2">
+            <div class="address-card__body mt-1 pt-5 pb-2 pl-1 pr-1">
+                <div class="address-card__name"><?php echo $tercero->f200_razon_social; ?> <small><?php echo "$tercero->f200_nit-$tercero->f200_dv_nit"; ?></small></div>
+                
+                <div class="mt-1">
                     <a href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
                 </div>
 
@@ -35,7 +25,7 @@
     </div>
 
     <!-- Datos del pago -->
-    <div class="col-lg-9 px-2">
+    <div class="col-lg-9 px-1">
         <div class="card address-card address-card--featured">
             <div class="address-card__body">
                 <div id="contenedor_carrito_facturas"></div>
@@ -44,7 +34,7 @@
     </div>
 </div>
 
-<div class="card-table">
+<div class="card-table mt-3">
     <!-- <form class="form-group" id="formulario_buscar_factura">
         <div class="row">
             <div class="col-lg-10 col-sm-12">
