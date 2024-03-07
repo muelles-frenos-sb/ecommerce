@@ -28,6 +28,8 @@
                 <div class="mt-2">
                     <a href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
                 </div>
+
+                <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid" alt="Opciones de pago">
             </div>
         </div>
     </div>
