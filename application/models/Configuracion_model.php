@@ -94,6 +94,7 @@ Class Configuracion_model extends CI_Model {
                         $having .= " OR r.token LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.wompi_transaccion_id LIKE '%{$palabras[$i]}%'";
                         $having .= " OR estado LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.numero_siesa LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";

@@ -8,6 +8,9 @@ $usuario_creacion = '';
 $usuario_aprobacion = '';
 $notas = $recibo->comentarios;
 
+// Temporalemte, se actualiza el recibo con el número de recibo de caja de Siesa
+$this->productos_model->actualizar('recibos', ['id' => $recibo->id], ['numero_siesa' => obtener_numero_recibo_caja($recibo)]);
+
 $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
     'numero_documento' => $recibo->documento_numero,
     'fecha' => "{$recibo->anio}-{$recibo->mes}-{$recibo->dia}",

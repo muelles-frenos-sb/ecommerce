@@ -65,6 +65,11 @@ foreach ($registros as $recibo) {
             </div>
         </td>
 
+        <!-- Número de recibo Siesa -->
+        <td class="wishlist__column wishlist__column--body wishlist__column--product">
+            <?php echo $recibo->numero_siesa; ?>
+        </td>
+
         <!-- Estado -->
         <td class="wishlist__column wishlist__column--body wishlist__column--stock">
             <div class="status-badge status-badge--style--<?php echo $recibo->estado_clase; ?> status-badge--has-text">

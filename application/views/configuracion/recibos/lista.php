@@ -9,6 +9,7 @@
                 <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">Cliente</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">Referencia</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">Forma de pago</th>
+                <th class="wishlist__column wishlist__column--head wishlist__column--product text-center">Recibo Siesa</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock text-center">Estado</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock text-center">Creador</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock text-center">Gestionador</th>
