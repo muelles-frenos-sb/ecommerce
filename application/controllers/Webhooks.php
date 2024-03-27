@@ -81,44 +81,60 @@ class Webhooks extends MY_Controller {
     }
 
     function gestionar_estado_cuenta($datos) {
-        $respuesta = [];
+        $errores = 0;
+        $resultado = [];
 
         // Se obtienen todos los datos del recibo con el token que se almacena como referencia
         $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
 
-        $datos_actualizacion = [
-            'wompi_transaccion_id' => $datos['id'],
-            'wompi_status' => $datos['status'],
-            'wompi_datos' => json_encode($datos),
-            'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
-            'fecha_actualizacion' => date('Y-m-d H:i:s'),
-        ];
-        
-        /**
-         * Actualización de datos del recibo
-         */
-        $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], $datos_actualizacion);
+        // Si se vuelve a ejecutar el wehbook, se ve mensaje
+        if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
 
-        // Si el pago no fue aprobado, se detiene la ejecución
-        if($datos['status'] != 'APPROVED') {
-            print json_encode([
-                'error' => false,
-                'mensaje' => 'No se creó documento contable, porque el pago fue rechazado.',
-                'datos' => $datos,
+        // Si no ha sido actualizado por el webhook
+        if($recibo->actualizado_webhook == 0) {
+            // Tabla, condiciones, datos
+            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], [
+                'actualizado_webhook' => 1,
+                'wompi_transaccion_id' => $datos['id'],
+                'wompi_status' => $datos['status'],
+                'wompi_datos' => json_encode($datos),
+                'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
+                'fecha_actualizacion' => date('Y-m-d H:i:s'),
             ]);
 
-            // Se agrega log
-            $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 36,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => json_encode($datos),
-            ]);
+            // Se actualiza el recibo con el id de la transacción
+            if(!$actualizar_recibo) {
+                array_push($resultado, ['El recibo no se pudo actualizar']);
+                $errores++;
+            }
 
-            return;
-        } 
+            // Si el pago fue aprobado
+            if($datos['status'] != 'APPROVED') {
+                array_push($resultado, ['No se creó documento contable, porque el pago fue rechazado']);
+
+                // Se agrega log
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 36,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode($datos),
+                ]);
+            }
+            
+            // Si el pago fue aprobado
+            if($datos['status'] == 'APPROVED') {
+                $documento_contable = crear_documento_contable($recibo->id, $datos);
+                array_push($resultado, $documento_contable);
+            }
+        }
+
+        print json_encode([
+            'errores' => $errores,
+            'resultado' => $resultado,
+            'datos_pedido' => (isset($datos_pedido)) ? $datos_pedido : [],
+            'datos_movimiento_contable' => (isset($datos_documento_contable)) ? $datos_documento_contable : [],
+        ]);
         
-        // Si el pago fue aprobado
-        if($datos['status'] == 'APPROVED') $respuesta = crear_documento_contable($recibo->id, $datos);
+        return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
 
     function gestionar_pedido($datos) {
@@ -130,9 +146,7 @@ class Webhooks extends MY_Controller {
         $wompi_status = $datos['status'];
 
         // Se obtienen todos los datos del recibo
-        $recibo = $this->productos_model->obtener('recibo', [
-            'wompi_transaccion_id' => $wompi_transaction_id
-        ]);
+        $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $wompi_transaction_id]);
 
         // Si se vuelve a ejecutar el wehbook, se ve mensaje
         if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
@@ -155,9 +169,7 @@ class Webhooks extends MY_Controller {
             }
 
             // Se obtienen todos los datos del recibo
-            $recibo = $this->productos_model->obtener('recibo', [
-                'wompi_transaccion_id' => $wompi_transaction_id
-            ]);
+            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $wompi_transaction_id]);
 
             // Si no existe el recibo
             if(empty($recibo)) {
