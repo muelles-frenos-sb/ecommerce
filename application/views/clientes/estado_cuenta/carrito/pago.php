@@ -10,7 +10,6 @@ $llave_integridad = generar_llave_integridad([
 ?>
 
 <script>
-    console.log('<?php print_r($llave_integridad); ?>')
     var checkout = new WidgetCheckout({
         currency: 'COP',
         amountInCents: parseFloat(<?php echo $recibo->valor; ?>) * 100,
