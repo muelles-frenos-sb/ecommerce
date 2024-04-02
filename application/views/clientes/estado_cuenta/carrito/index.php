@@ -17,7 +17,7 @@
 
 <div class="row mt-2">
     <div class="col-6">
-        <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta(true)">Pagar en línea</button>
+        <button class="btn btn-primary btn-sm btn-block" id="btn_pago_en_linea">Pagar en línea</button>
     </div>
     <div class="col-6">
         <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
@@ -276,4 +276,16 @@
         $('#estado_cuenta_archivos').val('')
         calcularTotal()
     }
+
+    $().ready(() => {
+        $('#btn_pago_en_linea').on('click', e => {
+            // Se activa el spinner
+            $('#btn_pago_en_linea').addClass('btn-loading').attr('disabled', true)
+
+            guardarReciboEstadoCuenta(true)
+            
+            // Se desactiva el spinner después de cierto tiempo
+            setTimeout(() => $('#btn_pago_en_linea').removeClass('btn-loading').attr('disabled', false), 1000)
+        })
+    })
 </script>
