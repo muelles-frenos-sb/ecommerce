@@ -11,7 +11,7 @@ $config['direccion_girardota'] = "
     </a>";
 $config['direccion_itagui'] = "
     <a href='https://maps.app.goo.gl/hWhUjv2r2wx1WMcs8' target='_blank'>
-        Calle 40 # 30 - 139 | Dentro del Parqueadero Saloga, por la Av. Pilsen
+        Carrera 40 # 30 - 139 | Dentro del Parqueadero Saloga, por la Av. Pilsen
     </a>";
 $config['direccion_marinilla'] = "
     <a href='https://maps.app.goo.gl/jeMcEkpaTvZcXaSXA' target='_blank'>
