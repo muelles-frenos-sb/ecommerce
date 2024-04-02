@@ -183,7 +183,7 @@
         }
 
         if(total < 10000) {
-            mostrarAviso('alerta', 'Lamtenamos informarte que si deseas pagar por este medio, el valor debe ser superior o igual a $10.000', 20000)
+            mostrarAviso('alerta', 'Lamentamos informarte que si deseas pagar por este medio, el valor debe ser superior o igual a $10.000', 20000)
             return false
         }
 
