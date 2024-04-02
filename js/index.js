@@ -142,8 +142,11 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
  * separadores de mil
  */
 formatearNumero = numero => {
+    let signo = (numero < 0) ? '-' : ''
+
+    // numero = Math.floor(numero)
     numero = String(numero).replace(/\D/g, "")
-    return numero === '' ? numero : Number(numero).toLocaleString('es-ES')
+    return numero === '' ? signo + numero : signo + Number(numero).toLocaleString('es-ES')
 }
 
 /**
