@@ -53,7 +53,7 @@
                 consulta('obtener', {tipo: 'cliente_factura_movimiento', f200_nit: datos.numero_documento, f350_consec_docto: datos.documento_cruce}, false)
                 .then(resultadoMovimiento => {
                     // Se obtiene el valor bruto de ese movimiento, para calcular descuentos posteriormente
-                    valorBruto = (resultadoMovimiento) ? resultadoMovimiento.f351_valor_cr : 0
+                    valorBruto = (resultadoMovimiento.f351_valor_cr) ? resultadoMovimiento.f351_valor_cr : 0
 
                     Swal.close()
 
@@ -125,7 +125,7 @@
                     $(`#${datos.id}`).val(formatearNumero(datos.valor))
 
                     // Si el número cambia
-                    $(`input`).on('keyup', function() {
+                    $(`.valor_pago_factura`).on('keyup', function() {
                         // Se formatea el campo
                         $(this).val(formatearNumero($(this).val()))
 
@@ -145,20 +145,18 @@
             let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
             let valorTotal = parseFloat($(this).attr('max'))
             let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
-            // let porcentajeDescuento = 0
-            
-            let valorDescuento = (valorAPagar == valorTotal) ? valorBruto * (porcentajeDescuento / 100) : 0
+            let valorDescuento = (valorAPagar == valorTotal) ? Math.floor(valorBruto * (porcentajeDescuento / 100)) : 0
             
             total += parseFloat($(this).val().replace(/\./g, ''))
-            total -= valorDescuento.toFixed(0)
+            total -= valorDescuento
 
-            $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento.toFixed(0)))
-            $(`#valor_completo_${$(this).attr('data-id')}`).val(formatearNumero((valorAPagar - valorDescuento).toFixed(0)))
+            $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento))
+            $(`#valor_completo_${$(this).attr('data-id')}`).val(formatearNumero((valorAPagar - valorDescuento)))
 
             detalleFactura.push({
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
-                subtotal: (valorTotal < 0) ? valorAPagar*-1 : valorAPagar, // Vuelve negativo un valor si es negativo
+                subtotal: valorAPagar,
                 descuento: valorDescuento
             })
         })

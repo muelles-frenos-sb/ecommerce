@@ -81,11 +81,15 @@ function obtener_numero_recibo_caja($recibo) {
         'estado' => 1,
     ]));
 
-    $movimientos = $resultado_movimientos->detalle->Table;
-    $consecutivo = str_pad($movimientos[0]->f350_consec_docto, 8, '0', STR_PAD_LEFT);
+    if($resultado_movimientos->codigo == 0) {
+        $movimientos = $resultado_movimientos->detalle->Table;
+        $consecutivo = str_pad($movimientos[0]->f350_consec_docto, 8, '0', STR_PAD_LEFT);
 
-    // Si se encontraron movimientos asociados al recibo
-    return ($resultado_movimientos->codigo == 0) ? "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}" : null ;
+        // Si se encontraron movimientos asociados al recibo
+        return ($resultado_movimientos->codigo == 0) ? "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}" : null ;
+    }
+
+    return null;
 }
 
 function url_fotos($marca, $referencia) {
