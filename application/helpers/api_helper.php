@@ -202,7 +202,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
         $respuesta['documento_contable'] = $resultado_documento_contable;
 
-        $this->productos_model->actualizar('recibos', ['id' => $id_recibo], [
+        $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
             'numero_siesa' => obtener_numero_recibo_caja($recibo),
         ]);
     }
