@@ -227,6 +227,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear('terceros', $datos['valores'])]);
             break;
 
+            case 'terceros_contactos':
+                print json_encode(['resultado' => $this->configuracion_model->crear('terceros_contactos', $datos)]);
+            break;
+
             case 'usuarios':
                 // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');

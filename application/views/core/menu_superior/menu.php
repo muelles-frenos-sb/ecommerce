@@ -33,8 +33,16 @@
                         <ul class="menu">
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
                                 <li class="menu__item">
-                                    <a href="<?php echo site_url("configuracion/recibos/ver/1"); ?>" class="menu__link">
+                                    <a href="<?php echo site_url("configuracion/recibos/ver/2"); ?>" class="menu__link">
                                         Recibos
+                                    </a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_contactos_ver'], $permisos)) { ?>
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url("configuracion/contactos/ver"); ?>" class="menu__link">
+                                        Contactos
                                     </a>
                                 </li>
                             <?php } ?>

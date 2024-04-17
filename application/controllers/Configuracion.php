@@ -31,6 +31,23 @@ class Configuracion extends MY_Controller {
         print json_encode($resultado);
     }
 
+    function contactos() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_usuarios_ver'], $this->data['permisos'])) redirect('inicio');
+
+        switch ($this->uri->segment(3)) {
+            case 'crear':
+                $this->data['contenido_principal'] = 'configuracion/contactos/crear';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'ver':
+                $this->data['contenido_principal'] = 'configuracion/contactos/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function recibos() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
         if(!in_array(['configuracion' => 'configuracion_recibos_ver'], $this->data['permisos'])) redirect('inicio');

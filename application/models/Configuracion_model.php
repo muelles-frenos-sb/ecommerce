@@ -19,6 +19,11 @@ Class Configuracion_model extends CI_Model {
                 $this->db->insert('usuarios', $datos);
                 return $this->db->insert_id();
             break;
+
+            case 'terceros_contactos':
+                // return $datos;
+                return $this->db->insert_batch('terceros_contactos', $datos);
+            break;
         }
 
         $this->db->close;
@@ -56,6 +61,56 @@ Class Configuracion_model extends CI_Model {
                     AND cfm.f350_consec_docto = '{$datos['f350_consec_docto']}'";
 
                 return $this->db->query($sql)->row();
+            break;
+
+            case 'contactos':
+                // Filtro contador
+				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+                $having = "";
+                $where = "WHERE tc.id";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+        
+                    $having = "HAVING";
+        
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " nombre LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR tc.numero LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR tc.nit LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+        
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
+
+                if(isset($datos['id'])) $where .= " AND tc.id = {$datos['id']} ";
+                if(isset($datos['numero'])) $where .= " AND tc.numero = '{$datos['numero']}' ";
+                if(isset($datos['nit'])) $where .= " AND tc.nit = '{$datos['nit']}' ";
+                // if(isset($datos['token'])) $where .= " AND u.token = '{$datos['token']}'";
+                // if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
+
+                $sql =
+                "SELECT
+                    tc.id,
+                    tc.nit,
+                    tc.numero,
+                    t.f200_razon_social nombre
+                FROM
+                    terceros_contactos AS tc
+                    LEFT JOIN terceros AS t ON tc.nit = t.f200_nit
+                $where
+                $having
+                ORDER BY
+                    nombre IS NULL, nombre ASC, tc.fecha_creacion DESC
+                $contador";
+
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
             break;
 
             case 'cuentas_bancarias':
