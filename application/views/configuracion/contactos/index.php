@@ -25,6 +25,16 @@
 </div>
 
 <script>
+    eliminarContacto = async(id) => {
+        let confirmacion = await confirmar('Eliminar', `¿Está seguro de eliminar el contacto?`)
+        
+        if (confirmacion) {
+            let eliminar = await consulta('eliminar', {tipo: 'terceros_contactos', id: id})
+
+            if(eliminar) listarContactos()
+        }
+    }
+
     listarContactos = () => {
         // Si no hay valor en la búsqueda, pero si en loca storage, lo pone
         if($("#buscar_contacto").val() == "" && localStorage.simonBolivar_busquedaContacto) $("#buscar_contacto").val(localStorage.simonBolivar_busquedaContacto)

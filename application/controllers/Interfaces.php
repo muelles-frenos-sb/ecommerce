@@ -256,6 +256,10 @@ class Interfaces extends CI_Controller {
             case 'perfiles_roles':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;
+
+            case 'terceros_contactos':
+                print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
         }
     }
 

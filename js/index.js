@@ -104,6 +104,23 @@ cargarMasDatos = tipo => {
     .fail((jqXHR, ajaxOptions, thrownError) => console.error('El servidor no responde.'))
 }
 
+confirmar = (tipo, mensaje) => {
+    let respuesta = Swal.fire({
+        text: mensaje,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: `Si, ${tipo}`,
+        cancelButtonText: 'Cancelar'
+
+    }).then((resultado) => {
+        return resultado.isConfirmed
+    })
+
+    return respuesta
+}
+
 consulta = (tipo, datos, notificacion = true, mensaje = '') => {
     let respuesta = obtenerPromesa(`${$('#site_url').val()}interfaces/${tipo}`, datos)
         .then(resultado => {

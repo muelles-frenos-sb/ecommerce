@@ -21,6 +21,7 @@ foreach ($registros as $contacto) { ?>
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--button">
             <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/contactos/id/$contacto->id"); ?>">Ver</a>
+            <a type="button" class="btn btn-sm btn-danger" href="#" onClick="javascript:eliminarContacto(<?php echo $contacto->id; ?>)"><i class="fa fa-times"></i></a>
         </td>
     </tr>
 <?php } ?>
