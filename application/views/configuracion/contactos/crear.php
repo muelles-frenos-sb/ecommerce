@@ -85,7 +85,7 @@ if($this->uri->segment(4)) {
         mostrarAviso('exito', `Se crearon ${totalCreados.resultado} contactos exitosamente.`)
         $('#contacto_datos').val('')
     }
-    
+
     $().ready(() => {
         $('form').submit(e => {
             e.preventDefault()
