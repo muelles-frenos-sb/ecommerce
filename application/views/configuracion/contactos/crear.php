@@ -64,7 +64,12 @@ if($this->uri->segment(4)) {
             // Si el contacto no existe, lo almacena en el arreglo
             if(contactoExistente.length == 0) {
                 // Agregar los datos al arreglo
-                datos.push({ nit: numeroDocumento, numero: telefono, fecha_creacion: '<?php echo date('Y-m-d H:i:s'); ?>' })
+                datos.push({
+                    nit: numeroDocumento,
+                    numero: telefono,
+                    fecha_creacion: '<?php echo date('Y-m-d H:i:s'); ?>',
+                    usuario_id: <?php echo $this->session->userdata('usuario_id'); ?>,
+                })
             }
         }
 
