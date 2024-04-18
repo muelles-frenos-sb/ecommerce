@@ -138,7 +138,6 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
         await consulta('crear', {tipo: 'factura_documento_contable', 'id_factura': reciboId, movimientos_contables: movimientosContables}, false)
         .then(async(pago) => {
             Swal.close()
-            console.log(pago)
 
             if(pago.resultado.error) {
                 mostrarAviso('error', `

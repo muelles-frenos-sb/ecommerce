@@ -14,7 +14,7 @@
 
         <div class="form-row mt-2">
             <div class="form-group col-md-12">
-                <input type="text" class="form-control" id="buscar_usuario" placeholder="Buscar por alguna palabra clave">
+                <input type="text" class="form-control" id="buscar_usuario" placeholder="Buscar por alguna palabra clave" autofocus>
             </div>
         </div>
 
