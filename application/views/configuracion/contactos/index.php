@@ -31,7 +31,11 @@
         if (confirmacion) {
             let eliminar = await consulta('eliminar', {tipo: 'terceros_contactos', id: id})
 
-            if(eliminar) listarContactos()
+            if(eliminar) {
+                agregarLog(39, `Registro con id ${id}`)
+
+                listarContactos()
+            }
         }
     }
 

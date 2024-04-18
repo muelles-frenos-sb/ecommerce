@@ -36,7 +36,7 @@ if($this->uri->segment(4)) {
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    actualizarContacto = async(id) => {
+    actualizarContacto = async() => {
         let camposObligatorios = [
             $('#contacto_nit'),
             $('#contacto_telefono'),
@@ -55,6 +55,7 @@ if($this->uri->segment(4)) {
 
         await consulta('actualizar', datos)
 
+        agregarLog(38, `Registro con id ${datos.id}`)
         location.href = '<?php echo site_url("configuracion/contactos/ver"); ?>'
     }
 

@@ -88,6 +88,7 @@ if($this->uri->segment(4)) {
         Swal.close()
 
         mostrarAviso('exito', `Se crearon ${totalCreados.resultado} contactos exitosamente.`)
+        agregarLog(37, `${totalCreados.resultado} registros`)
         $('#contacto_datos').val('')
     }
 
