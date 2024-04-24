@@ -33,6 +33,11 @@ class Blog extends MY_Controller {
         $this->load->view('core/body', $this->data);
     }
 
+    function distribuidores() {
+        $this->data['contenido_principal'] = 'blog/distribuidores';
+        $this->load->view('core/body', $this->data);
+    }
+
     function nosotros() {
         $this->data['contenido_principal'] = 'blog/nosotros';
         $this->load->view('core/body', $this->data);
@@ -45,11 +50,6 @@ class Blog extends MY_Controller {
 
     function tratamiento_datos() {
         $this->data['contenido_principal'] = 'blog/tratamiento_datos';
-        $this->load->view('core/body', $this->data);
-    }
-
-    function mayoristas() {
-        $this->data['contenido_principal'] = 'blog/mayoristas';
         $this->load->view('core/body', $this->data);
     }
 }

@@ -45,8 +45,8 @@
                     <?php $this->load->view('bitrix/empleo'); ?>
                     
                     <li class="main-menu__item">
-                        <a href="<?php echo site_url('blog/mayoristas'); ?>" class="main-menu__link">
-                            Mayoristas
+                        <a href="<?php echo site_url('blog/distribuidores'); ?>" class="main-menu__link">
+                            Distribuidores
                         </a>
                     </li>
                 </ul>

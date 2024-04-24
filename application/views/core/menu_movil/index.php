@@ -130,8 +130,8 @@
                     </li>
                     
                     <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                        <a href="<?php echo site_url('blog/mayoristas'); ?>" class="main-menu__link">
-                            Mayoristas
+                        <a href="<?php echo site_url('blog/distribuidores'); ?>" class="main-menu__link">
+                            Distribuidores
                         </a>
                     </li>
 
