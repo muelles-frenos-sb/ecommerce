@@ -134,6 +134,9 @@
                             Distribuidores
                         </a>
                     </li>
+                    
+                    <!-- Trabaja con nosotros -->
+                    <?php $this->load->view('bitrix/empleo'); ?>
 
                     <!-- Botón para pago de facturas -->
                     <p class="m-2">
