@@ -1,6 +1,7 @@
 <?php
 $datos = ['id' => $id];
 $producto = $this->productos_model->obtener('productos', $datos);
+if(empty($producto)) redirect(site_url(''));
 ?>
 
 <div class="site__body">
