@@ -149,7 +149,7 @@ $descuento = 0;
 
 foreach($recibo_detalle as $detalle) {
     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
-    $subtotal += $detalle->precio;
+    $subtotal += $detalle->precio * $detalle->cantidad;
     $descuento += $detalle->descuento;
 
     // Si trae un producto
