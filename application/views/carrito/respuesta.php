@@ -64,7 +64,7 @@ $mensajes_estado_wompi = mostrar_mensajes_estados_wompi($wompi['status']);
                                 foreach($recibo_detalle as $detalle) {
                                     $producto = $this->productos_model->obtener('productos', ['id' => $detalle->producto_id]);
                                     
-                                    $subtotal += $detalle->precio;
+                                    $subtotal += $detalle->precio * $detalle->cantidad;
                                     $descuento += $detalle->descuento;
                                     ?>
                                     <tr>
