@@ -453,67 +453,6 @@ class Webhooks extends MY_Controller {
     }
 
     /**
-     * Importa de Siesa V1.1 los precios configurados
-     * de cada producto (Listas de precio 001, 002 y 003)
-     * (YA NO SE USAN ESTAS LISTAS DE PRECIOS)
-     */
-    // function importar_productos_precios() {
-    //     try {
-    //         // Precio
-    //         $resultado_precios = json_decode(obtener_precios_api(['id' => '-1']));
-    //         $codigo_precio = $resultado_precios->codigo;
-    //         $precios = ($codigo_precio == 0) ? $resultado_precios->detalle->Table : 0 ;
-    //         $fecha_actualizacion = date('Y-m-d H:i:s');
-    //         $datos = [];
-
-    //         // Primero, eliminamos todos los ítems
-    //         if($this->productos_model->eliminar('productos_precios', "lista_precio <> {$this->config->item('lista_precio')}")) {
-    //             foreach($precios as $precio) {
-    //                 $nuevo_precio = [
-    //                     'producto_id' => $precio->IdItem,
-    //                     'referencia' => $precio->Referencia,
-    //                     'descripcion_corta' => $precio->Descripcion_Corta,
-    //                     'lista_precio' => $precio->Lista_precio,
-    //                     'precio' => $precio->Precio,
-    //                     'precio_maximo' => $precio->PrecioMaximo,
-    //                     'precio_minimo' => $precio->PrecioMinimo,
-    //                     'precio_sugerido' => $precio->PrecioSugerido,
-    //                     'fecha_actualizacion' => $fecha_actualizacion,
-    //                 ];
-    //                 array_push($datos, $nuevo_precio);
-    //             }
-            
-    //             $total_items =  $this->productos_model->crear('productos_precios', $datos);
-
-    //             $respuesta = [
-    //                 'log_tipo_id' => 8,
-    //                 'fecha_creacion' => date('Y-m-d H:i:s'),
-    //                 'observacion' => "$total_items registros actualizados"
-    //             ];
-
-    //             // Se agrega el registro en los logs
-    //             $this->configuracion_model->crear('logs', $respuesta);
-
-    //             print json_encode($respuesta);
-
-    //             return http_response_code(200);
-    //         }
-
-    //         $this->db->close();
-
-    //         return http_response_code(200);
-    //     } catch (\Throwable $th) {
-    //         // Se agrega el registro en los logs
-    //         $this->configuracion_model->crear('logs', [
-    //             'log_tipo_id' => 9,
-    //             'fecha_creacion' => date('Y-m-d H:i:s'),
-    //         ]);
-
-    //         return http_response_code(400);
-    //     }
-    // }
-
-    /**
      * Importa de Siesa V2 los precios configurados
      * de cada producto (Lista de precio 009 y 010)
      */

@@ -401,33 +401,6 @@ function obtener_inventario_api($datos) {
     return $response->getBody()->getContents();
 }
 
-// function obtener_precios_api($datos) {
-//     $CI =& get_instance();
-//     $url = $CI->config->item('base_url_produccion');
-
-//     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
-
-//     $client = new \GuzzleHttp\Client();
-//     try {
-//         $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
-//             'headers' => [
-//                 'accept' => 'application/json',
-//                 'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-//                 'conniToken' => $CI->config->item('api_siesa')['conniToken'],
-//             ],
-//             'query' => [
-//                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-//                 'descripcion' => 'Precios_V2',
-//                 'parametros' => "IdItem='$filtro_id'|Lista_precio='-1'",
-//             ]
-//         ]);
-//     } catch (GuzzleHttp\Exception\ClientException $e) {
-//         $response = $e->getResponse();
-//     }
-    
-//     return $response->getBody()->getContents();
-// }
-
 function obtener_precios_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
