@@ -566,6 +566,7 @@ function importar_documento_contable_api($datos) {
                 'idDocumento' => $CI->config->item('api_siesa')['idDocumentoImportacionDocumentoContableV2'],
                 'idInterface' => $CI->config->item('api_siesa')['idInterface'],
                 'nombreDocumento' => 'API_v1_DocumentoContable', // DOCUMENTO_CONTABLE
+                'validarEstructura' => 'false',
             ],
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {
