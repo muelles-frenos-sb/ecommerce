@@ -3,8 +3,8 @@ date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido');
 
-// ini_set('MAX_EXECUTION_TIME', '-1');
-// ini_set('memory_limit', '-1');
+ini_set('MAX_EXECUTION_TIME', '-1');
+ini_set('memory_limit', '-1');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);

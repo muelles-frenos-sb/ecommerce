@@ -98,8 +98,8 @@ function url_fotos($marca, $referencia) {
     $marca_filtrada = trim($marca);
     $referencia_filtrada = str_replace('/', '_', trim($referencia));
 
-    $url_foto_producto = "{$CI->config->item('url_fotos')}$marca_filtrada/$referencia_filtrada.jpg?".date('YmdHis');
+    return $url_foto_producto = "{$CI->config->item('url_fotos')}$marca_filtrada/$referencia_filtrada.jpg?".date('YmdHis');
     $url_foto_generica = "{$CI->config->item('url_fotos')}producto_generico.jpg";
    
-    return (filter_var($url_foto_producto, FILTER_VALIDATE_URL)) ? $url_foto_producto : $url_foto_generica;
+    return (filter_var($url_foto_producto, FILTER_VALIDATE_URL) !== false) ? $url_foto_producto : $url_foto_generica;
 }
