@@ -333,7 +333,10 @@ function obtener_movimientos_contables_api($datos) {
     return $response->getBody()->getContents();
 }
 
-function obtener_terceros_api($datos) {
+function obtener_terceros_api($datos = null) {
+    $nit_tercero = (isset($datos['numero_documento'])) ? "f200_nit=''{$datos['numero_documento']}''" : '' ;
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
 
@@ -348,8 +351,8 @@ function obtener_terceros_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_Terceros',
-                'paginacion' => 'numPag=1|tamPag=100',
-                'parametros' => "f200_nit=''{$datos['numero_documento']}''",
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $nit_tercero,
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

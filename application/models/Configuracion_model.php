@@ -20,6 +20,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_id();
             break;
 
+            case 'terceros_api':
+                return $this->db->insert_batch('terceros', $datos);
+            break;
+
             case 'terceros_contactos':
                 // return $datos;
                 return $this->db->insert_batch('terceros_contactos', $datos);

@@ -591,6 +591,63 @@ class Webhooks extends MY_Controller {
             return http_response_code(200);
         }
     }
+
+    /**
+     * Descarga todos los terceros de Siesa,
+     * recorriendo cada página e insertando en
+     * la base de datos el resultado en una sola vez
+     */
+    function importar_terceros_api() {
+        try {
+            $codigo = 0;
+            $pagina = 1;
+            $datos = [];
+
+            // Primero, eliminamos todos los ítems
+            $this->configuracion_model->eliminar('terceros', ['id']);
+
+            // Mientras obtenga resultados la consulta
+            while ($codigo == 0) {
+                $resultado = json_decode(obtener_terceros_api(['pagina' => $pagina]));
+                $codigo = $resultado->codigo;
+
+                // Si el resultado es exitoso
+                if($codigo == 0) {
+                    $terceros = $resultado->detalle->Table;
+
+                    // Recorrido de todos los registros de la página
+                    foreach($terceros as $tercero) array_push($datos, $tercero);
+                    
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+
+            $total_items =  $this->configuracion_model->crear('terceros_api', $datos);
+
+            $respuesta = [
+                'log_tipo_id' => 40,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados"
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 41,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
 }
 /* Fin del archivo Webhooks.php */
 /* Ubicación: ./application/controllers/Webhooks.php */
