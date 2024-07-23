@@ -38,6 +38,10 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     ?>
 <!-- </div> -->
 
+<div class="mt-2 mb-2">
+    <button class="btn btn-success btn-md btn-block" onClick="javascript:generarReporte('excel/facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})">Decargar facturas en Excel</button>
+</div>
+
 <div class="table-responsive">
     <table class="table-striped" id="tabla_facturas">
         <thead>

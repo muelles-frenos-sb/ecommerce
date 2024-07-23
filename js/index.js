@@ -167,6 +167,18 @@ formatearNumero = numero => {
 }
 
 /**
+ * Genera reportes en diferentes formatos
+ */
+generarReporte = (tipo, datos) => {
+    switch (tipo) {
+        case 'excel/facturas':
+            agregarLog(42, datos.numero_documento)
+            location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.numero_documento}`)
+        break;
+    }
+}
+
+/**
  * Obtiene las sucursales del API de Siesa y las almacena en la base de datos
  */
 gestionarSucursales = async(numeroDocumento) => {

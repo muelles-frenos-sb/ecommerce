@@ -23,6 +23,15 @@ class Reportes extends MY_Controller {
         $this->load->model('clientes_model');
     }
 
+    function excel() {
+        switch ($this->uri->segment(3)) {
+            case 'facturas':
+                $this->data["numero_documento"] = $this->uri->segment(4);
+                $this->load->view('reportes/excel/facturas', $this->data);
+            break;
+        }
+    }
+
     function pdf() {
         switch ($this->uri->segment(3)) {
             case "recibo":
