@@ -601,7 +601,7 @@ class Webhooks extends MY_Controller {
         try {
             $codigo = 0;
             $pagina = 1;
-            $datos = [];
+            $total_items = 0;
 
             // Primero, eliminamos todos los ítems
             $this->configuracion_model->eliminar('terceros', ['id']);
@@ -615,8 +615,10 @@ class Webhooks extends MY_Controller {
                 if($codigo == 0) {
                     $terceros = $resultado->detalle->Table;
 
+                    $total_items += count($terceros);
+
                     // Recorrido de todos los registros de la página
-                    foreach($terceros as $tercero) array_push($datos, $tercero);
+                    $this->configuracion_model->crear('terceros_api', $terceros);
                     
                     $pagina++;
                 } else {
@@ -624,8 +626,6 @@ class Webhooks extends MY_Controller {
                     break;
                 }
             }
-
-            $total_items =  $this->configuracion_model->crear('terceros_api', $datos);
 
             $respuesta = [
                 'log_tipo_id' => 40,
