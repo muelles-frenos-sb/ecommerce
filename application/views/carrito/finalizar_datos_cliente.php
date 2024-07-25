@@ -6,13 +6,18 @@ $sucursales = ($codigo_resultado_sucursales == 0) ? $resultado_sucursales->detal
 
 // Campo oculto para almacenar la cantidad de sucursales del cliente
 $cantidad_sucursales = count($sucursales);
+
 echo "<input type='hidden' value='$cantidad_sucursales' id='cantidad_sucursales'>";
 
 // Consulta de terceros
 $resultado_tercero = json_decode(obtener_terceros_api($datos));
 $codigo_resultado_tercero = $resultado_tercero->codigo;
 $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table[0] : [] ;
+
+// Se almacena un dato para reconocer que el tercero existía previamente, y no crearlo al ir al pago
+if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$tercero->f200_id' />";     
 ?>
+
 <input type="hidden" id="total_pedido">
 
 <div class="form-row">
@@ -41,6 +46,7 @@ $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table
     <label for="checkout_sucursal">Elija la sucursal o placa a la que desea asociar el pedido</label>
     <select id="checkout_sucursal" class="form-control form-control-select2">
         <option value="">Seleccione...</option>
+        <?php if(empty($sucursales)) echo "<option value='001'>Principal</option>" ?>
         <?php foreach($sucursales as $sucursal) echo "<option value='$sucursal->f201_id_sucursal'>$sucursal->f201_descripcion_sucursal</option>"; ?>
     </select>
 </div>

@@ -155,6 +155,29 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
 }
 
 /**
+ * Crea en Siesa el tercero cliente
+ */
+ crearTerceroCliente = async(datos) => {
+    // Swal.fire({
+    //     title: 'Estamos cargando la información...',
+    //     text: 'Por favor, espera.',
+    //     imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+    //     showConfirmButton: false,
+    //     allowOutsideClick: false
+    // })
+
+    datos.tipo = 'tercero_cliente'
+
+    // Se cargan los movimientos de la factura
+    return consulta('crear', datos, false)
+    .then(consulta => {
+        // Swal.close()
+        
+        return consulta.resultado
+    })
+}
+
+/**
  * Obtiene un número y le agrega
  * separadores de mil
  */

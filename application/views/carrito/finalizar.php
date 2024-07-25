@@ -155,6 +155,7 @@ if($this->session->userdata('usuario_id')) {
             $('#checkout_direccion'),
             $('#checkout_email'),
             $('#checkout_telefono'),
+            $('#checkout_sucursal'),
         ]
         
         // Si tiene sucursales, es obligatorio
@@ -203,6 +204,14 @@ if($this->session->userdata('usuario_id')) {
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado, lista_precio: datosRecibo.lista_precio}, false)
 
             if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
+
+            // Si el tercero no existe aun, se va a crear
+            if(!$('#api_tercero_id').val()) {
+                creacionTercero = crearTerceroCliente(datosRecibo)
+                creacionTercero.then(resultado => {
+                    console.log(resultado)
+                })
+            }
         }
     }
 

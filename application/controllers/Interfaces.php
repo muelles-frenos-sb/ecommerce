@@ -227,6 +227,79 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear('terceros', $datos['valores'])]);
             break;
 
+            case 'tercero_cliente':
+                $datos_tercero = [
+                    'Terceros' => [
+                        [
+                            "F200_ID" => $datos['documento_numero'],                             // Código del Tercero
+                            "F200_NIT" => $datos['documento_numero'],                            // Numero de documento de identificación del tercero
+                            "F200_ID_TIPO_IDENT" => "C",                          // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
+                            "F200_IND_TIPO_TERCERO" => "1",                       // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
+                            "F200_RAZON_SOCIAL" => $datos['razon_social'],                // Solo se requiere si el tipo de tercero es persona juridica '2'.
+                            "F200_APELLIDO1" => $datos['primer_apellido'],                               // Solo se requiere si el tercero es persona natural
+                            "F200_APELLIDO2" => $datos['segundo_apellido'],                               // Solo se requiere si el tercero es persona natural
+                            "F200_NOMBRES" => $datos['nombres'],                                 // Solo se requiere si el tercero es persona natural
+                            "F015_CONTACTO" => "----",                   // Nombre de la persona de contacto	
+                            "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
+                            "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
+                            "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
+                            "F015_ID_DEPTO" => "11",                              // Valida en maestro, código del departamento, solo se debe usar si existe país
+                            "F015_ID_CIUDAD" => "001",                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
+                            "F015_TELEFONO" => "4170809",                         // Teléfono
+                            "F015_COD_POSTAL" => "",                              // 900127622
+                            "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico
+                            "F200_FECHA_NACIMIENTO" => "19970808",                // El formato debe ser AAAAMMDD
+                            "F200_ID_CIIU" => "4530",                             // Valida en maestro, código de la actividad económica
+                            "F015_CELULAR" => $datos['telefono']                        // Celular
+                        ],
+                    ],
+                    'Clientes' => [
+                        [
+                            "F201_ID_TERCERO" => $datos['documento_numero'],                     // Código del cliente
+                            "F201_ID_SUCURSAL" => "001",                          // Sucursal del cliente (Siempre va 001 por ser la primera sucursal)
+                            "F201_DESCRIPCION_SUCURSAL" => $datos['razon_social'],        // Razón social para la sucursal del cliente
+                            "F201_ID_VENDEDOR" => "Z019",                         // Valida en maestro, código de vendedor asignado al cliente
+                            "F201_ID_COND_PAGO" => "CON",                         // Valida en maestro, código de condición de pago asignada a este cliente
+                            "F201_DIAS_GRACIA" => "0",                            // Días de gracia otorgados al cliente
+                            "F201_CUPO_CREDITO" => "0",                           // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
+                            "F201_ID_TIPO_CLI" => "C001",                         // Valida en maestro, tipo de cliente asignado al cliente
+                            "F201_ID_LISTA_PRECIO" => "001",                      // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
+                            "F015_CONTACTO" => $datos['razon_social'],                   // Nombre de la persona de contacto
+                            "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
+                            "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
+                            "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
+                            "F015_ID_DEPTO" => "11",                              // Valida en maestro, código del departamento, solo se debe usar si existe país
+                            "F015_ID_CIUDAD" => "001",                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
+                            "F015_TELEFONO" => $datos['telefono'],                         // Teléfono
+                            "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico	
+                            "F201_FECHA_INGRESO" => "20240723",                   // Fecha de ingreso AAAAMMDD
+                            "f201_id_cobrador" => "Z019",                         // Valida en maestro, código de cobrador asignado al cliente
+                            "f015_celular" => $datos['telefono'] 
+                        ]
+                    ],
+                    'Imptos_y_Reten' => [
+                        [
+                            "F_TIPO_REG" => "46",                                  // Impuestos cliente = 46, retención cliente = 47, Impuestos proveedor = 49, retención proveedor = 50
+                            "F_ID_TERCERO" => $datos['documento_numero'],                         // Código del cliente / proveedor
+                            "F_ID_SUCURSAL" => "001",                              // Sucursal del cliente / proveedor
+                            "F_ID_CLASE" => "1",                                   // Código de la clase de impuesto / retención. Ver anexo 1
+                            "F_ID_VALOR_TERCERO" => "1"                            // Ver anexo 2
+                        ],
+                        [
+                            "F_TIPO_REG" => "46",                                  // Impuestos cliente = 46, retención cliente = 47, Impuestos proveedor = 49, retención proveedor = 50
+                            "F_ID_TERCERO" => $datos['documento_numero'],                         // Código del cliente / proveedor
+                            "F_ID_SUCURSAL" => "001",                              // Sucursal del cliente / proveedor
+                            "F_ID_CLASE" => "1",                                   // Código de la clase de impuesto / retención. Ver anexo 1
+                            "F_ID_VALOR_TERCERO" => "1"                            // Ver anexo 2
+                        ]
+                    ],
+                ];
+
+                $resultado = json_decode(importar_tercero_cliente($datos_tercero));
+                
+                print json_encode(['resultado' => $resultado]);
+            break;
+
             case 'terceros_contactos':
                 print json_encode(['resultado' => $this->configuracion_model->crear('terceros_contactos', $datos)]);
             break;
