@@ -114,6 +114,13 @@ if($this->session->userdata('usuario_id')) {
                                 </div>
                             </div>
 
+                            <div class="address-card__row mt-2 mb-2">
+                                <div class="alert alert-primary mb-3">
+                                    Ten en cuenta que puede aplicar pago de flete y se debe realizar al momento de recibir tu pedido.
+                                </div>
+                            </div>
+
+
                             <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>Realizar pago seguro</button>
                         </div>
                     </div>
