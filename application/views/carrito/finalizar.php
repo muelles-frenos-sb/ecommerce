@@ -116,7 +116,7 @@ if($this->session->userdata('usuario_id')) {
 
                             <div class="address-card__row mt-2 mb-2">
                                 <div class="alert alert-primary mb-3">
-                                    Ten en cuenta que puede aplicar pago de flete y se debe realizar al momento de recibir tu pedido.
+                                    Ten en cuenta que puede aplicarse un cargo por flete, el cual deberá pagarse al momento de recibir tu pedido.
                                 </div>
                             </div>
 
