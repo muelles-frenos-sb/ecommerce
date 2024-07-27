@@ -709,6 +709,57 @@ class Webhooks extends MY_Controller {
             return http_response_code(400);
         }
     }
+
+    /**
+     * Importa de Siesa los movimientos de un documento de venta
+     * y los inserta en la base de datos
+     */
+    function importar_movimientos_ventas_api($fecha = null) {
+        $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+        $total_items = 0;
+
+        try {
+            // Primero, se obtienen los documentos de la fecha
+            $documentos_ventas =  $this->configuracion_model->obtener('api_ventas_documentos', ['f350_fecha' => $filtro_fecha]);
+            
+            // Se recorre cada documento
+            foreach($documentos_ventas as $documento) {
+                $resultado = json_decode(obtener_movimientos_ventas_api(['row_id' => $documento->f350_rowid]));
+                $codigo = $resultado->codigo;
+
+                // Primero, eliminamos todos los ítems de ese documento
+                $this->configuracion_model->eliminar('api_ventas_movimientos', ['f470_rowid_docto' => $documento->f350_rowid]);
+
+                // Si el resultado es exitoso
+                if($codigo == 0) {
+                    $movimientos = $resultado->detalle->Table;
+                    $total_items += count($movimientos);
+
+                    $this->configuracion_model->crear('movimientos_ventas_api', $movimientos);
+                }
+            }
+
+            $respuesta = [
+                'log_tipo_id' => 45,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados"
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 46,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
 }
 /* Fin del archivo Webhooks.php */
 /* Ubicación: ./application/controllers/Webhooks.php */

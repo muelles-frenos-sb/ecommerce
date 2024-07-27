@@ -15,6 +15,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_batch('api_ventas_documentos', $datos);
             break;
 
+            case 'movimientos_ventas_api':
+                return $this->db->insert_batch('api_ventas_movimientos', $datos);
+            break;
+
             case 'clientes':
                 return $this->db->insert_batch('clientes', $datos);
             break;
@@ -57,6 +61,14 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'api_ventas_documentos':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'cliente_factura_movimiento':
                 $sql =
                 "SELECT
