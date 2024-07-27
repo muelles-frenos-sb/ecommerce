@@ -286,7 +286,7 @@ function obtener_clientes_api($datos) {
  */
 function obtener_documentos_ventas_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('base_url_qa');
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $client = new \GuzzleHttp\Client();
     try {
