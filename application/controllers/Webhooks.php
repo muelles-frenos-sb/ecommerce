@@ -372,7 +372,6 @@ class Webhooks extends MY_Controller {
                 print json_encode($respuesta);
 
                 return http_response_code(200);
-            
             }
 
             $this->db->close();
@@ -382,6 +381,8 @@ class Webhooks extends MY_Controller {
                 'log_tipo_id' => 5,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
+
+            return http_response_code(400);
         }
     }
 
@@ -588,21 +589,21 @@ class Webhooks extends MY_Controller {
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
 
-            return http_response_code(200);
+            return http_response_code(400);
         }
     }
 
     /**
      * Descarga todos los terceros de Siesa,
      * recorriendo cada página e insertando en
-     * la base de datos el resultado en una sola vez
+     * la base de datos el resultado por cada página
      */
     function importar_terceros_api() {
-        try {
-            $codigo = 0;
-            $pagina = 1;
-            $total_items = 0;
+        $codigo = 0;
+        $pagina = 1;
+        $total_items = 0;
 
+        try {
             // Primero, eliminamos todos los ítems
             $this->configuracion_model->eliminar('terceros', ['id']);
 

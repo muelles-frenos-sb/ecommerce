@@ -253,6 +253,9 @@ function importar_tercero_cliente($datos) {
 }
 
 
+/**
+ * Obtiene todos los clientes creados en Siesa
+ */
 function obtener_clientes_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
