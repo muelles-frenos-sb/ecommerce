@@ -648,6 +648,66 @@ class Webhooks extends MY_Controller {
             return http_response_code(400);
         }
     }
+
+    /**
+     * Importa de Siesa los documentos de pedidos del día
+     * y los inserta en base de datos
+     */
+    function importar_documentos_ventas_api($fecha = null) {
+        $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+        $codigo = 0;
+        $pagina = 1;
+        $total_items = 0;
+        $datos = [
+            'fecha' => $filtro_fecha
+        ];
+
+        try {
+            // Primero, eliminamos todos los ítems
+            $this->configuracion_model->eliminar('api_ventas_documentos', ['f350_fecha' => $filtro_fecha]);
+
+            // Mientras obtenga resultados la consulta
+            while ($codigo == 0) {
+                $datos['pagina'] = $pagina; 
+                $resultado = json_decode(obtener_documentos_ventas_api($datos));
+                $codigo = $resultado->codigo;
+
+                // Si el resultado es exitoso
+                if($codigo == 0) {
+                    $documentos = $resultado->detalle->Table;
+                    $total_items += count($documentos);
+
+                    // Recorrido de todos los registros de la página
+                    $this->configuracion_model->crear('documentos_ventas_api', $documentos);
+
+                    echo $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+
+            $respuesta = [
+                'log_tipo_id' => 43,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados"
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 44,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
 }
 /* Fin del archivo Webhooks.php */
 /* Ubicación: ./application/controllers/Webhooks.php */
