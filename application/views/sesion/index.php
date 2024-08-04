@@ -9,13 +9,13 @@
                             <h3 class="card-title">Iniciar sesión</h3>
                             <form>
                                 <div class="form-group">
-                                    <label for="usuario" class="sr-only">Nombre de usuario</label>
-                                    <input id="usuario" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
+                                    <label for="sesion_login" class="sr-only">Nombre de usuario</label>
+                                    <input id="sesion_login" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
                                 </div>
                                 <div class="form-group">
-                                    <label for="clave" class="sr-only">Clave</label>
+                                    <label for="sesion_clave" class="sr-only">Clave</label>
                                     <div class="account-menu__form-forgot">
-                                        <input id="clave" type="password" class="form-control form-control-sm" placeholder="Clave">
+                                        <input id="sesion_clave" type="password" class="form-control form-control-sm" placeholder="Clave">
                                         
                                         <?php if(ENVIRONMENT == 'development') { ?>
                                             <a href="" class="account-menu__form-forgot-link">¿Olvidaste?</a>
@@ -38,7 +38,7 @@
                                     </div>
                                 </div> -->
                                 <div class="form-group mb-0">
-                                    <button type="submit" class="btn btn-primary mt-3" onClick="javascript:iniciarSesion(event, '<?php echo $url; ?>')">Iniciar</button>
+                                    <button type="submit" class="btn btn-primary mt-3" onClick="javascript:iniciarSesion(event, '<?php echo $url; ?>', 'sesion_login', 'sesion_clave')">Iniciar</button>
                                 </div>
                             </form>
                         </div>

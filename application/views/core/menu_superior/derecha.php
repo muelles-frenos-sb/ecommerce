@@ -28,21 +28,21 @@
                                 Inicia sesión en tu cuenta
                             </div>
                             <div class="form-group">
-                                <label for="usuario" class="sr-only">Nombre de usuario</label>
-                                <input id="usuario" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
+                                <label for="menu_login" class="sr-only">Nombre de usuario</label>
+                                <input id="menu_login" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
                             </div>
                             <div class="form-group">
-                                <label for="clave" class="sr-only">Clave</label>
+                                <label for="menu_clave" class="sr-only">Clave</label>
                                 <div class="account-menu__form-forgot">
-                                    <input id="clave" type="password" class="form-control form-control-sm" placeholder="Clave">
+                                    <input id="menu_clave" type="password" class="form-control form-control-sm" placeholder="Clave">
                                     
                                     <?php if(ENVIRONMENT == 'development') { ?>
-                                        <a href="" class="account-menu__form-forgot-link">¿Olvidaste?</a>
+                                        <a href="" class="account-menu__form-forgot-link">Recordar</a>
                                     <?php } ?>
                                 </div>
                             </div>
                             <div class="form-group account-menu__form-button">
-                                <button type="submit" class="btn btn-primary btn-sm" onClick="javascript:iniciarSesion(event)">Iniciar</button>
+                                <button type="submit" class="btn btn-primary btn-sm" onClick="javascript:iniciarSesion(event, null, 'menu_login', 'menu_clave')">Iniciar</button>
                             </div>
 
                             <?php if(ENVIRONMENT == 'development') { ?>

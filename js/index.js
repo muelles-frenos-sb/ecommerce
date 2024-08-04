@@ -233,11 +233,11 @@ gestionarSucursales = async(numeroDocumento) => {
     }
 }
 
-const iniciarSesion = async(evento, url = null) => {
+const iniciarSesion = async(evento, url = null, nombreElementoLogin, nombreElementoClave) => {
     evento.preventDefault()
 
-    let nombreUsuario = $('#usuario')
-    let clave = $('#clave')
+    let nombreUsuario = $(`#${nombreElementoLogin}`)
+    let clave = $(`#${nombreElementoClave}`)
 
     let campos = [
         nombreUsuario,
