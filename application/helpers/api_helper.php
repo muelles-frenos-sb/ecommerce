@@ -332,7 +332,7 @@ function obtener_movimientos_ventas_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'Movimiento_ventas',
-                'parametros' => "rowid_docto={$datos['row_id']}",
+                'parametros' => "rowid_docto=|fecha={$datos['fecha']}|tamPag=100|numPag={$datos['pagina']}",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

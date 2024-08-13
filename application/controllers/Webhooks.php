@@ -678,10 +678,9 @@ class Webhooks extends MY_Controller {
                     $documentos = $resultado->detalle->Table;
                     $total_items += count($documentos);
 
-                    // Recorrido de todos los registros de la página
                     $this->configuracion_model->crear('documentos_ventas_api', $documentos);
 
-                    echo $pagina++;
+                    $pagina++;
                 } else {
                     $codigo = '-1';
                     break;
@@ -716,19 +715,22 @@ class Webhooks extends MY_Controller {
      */
     function importar_movimientos_ventas_api($fecha = null) {
         $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+        $codigo = 0;
+        $pagina = 1;
         $total_items = 0;
+        $datos = [
+            'fecha' => $filtro_fecha
+        ];
 
         try {
-            // Primero, se obtienen los documentos de la fecha
-            $documentos_ventas =  $this->configuracion_model->obtener('api_ventas_documentos', ['f350_fecha' => $filtro_fecha]);
-            
-            // Se recorre cada documento
-            foreach($documentos_ventas as $documento) {
-                $resultado = json_decode(obtener_movimientos_ventas_api(['row_id' => $documento->f350_rowid]));
-                $codigo = $resultado->codigo;
+            // Primero, eliminamos todos los ítems
+            $this->configuracion_model->eliminar('api_ventas_movimientos', ['f350_fecha' => $filtro_fecha]);
 
-                // Primero, eliminamos todos los ítems de ese documento
-                $this->configuracion_model->eliminar('api_ventas_movimientos', ['f470_rowid_docto' => $documento->f350_rowid]);
+            // Mientras obtenga resultados la consulta
+            while ($codigo == 0) {
+                $datos['pagina'] = $pagina; 
+                $resultado = json_decode(obtener_movimientos_ventas_api($datos));
+                $codigo = $resultado->codigo;
 
                 // Si el resultado es exitoso
                 if($codigo == 0) {
@@ -736,6 +738,11 @@ class Webhooks extends MY_Controller {
                     $total_items += count($movimientos);
 
                     $this->configuracion_model->crear('movimientos_ventas_api', $movimientos);
+
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
                 }
             }
 
