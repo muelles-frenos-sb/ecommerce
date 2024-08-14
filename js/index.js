@@ -288,6 +288,18 @@ const iniciarSesion = async(evento, url = null, nombreElementoLogin, nombreEleme
  */
 const limpiarCadena = valor => valor.replace(/[\a-z\&\/\\#,+()$~%.'":*?<>{}/ /_|¿?\-\°!=¡]/g, '')
 
+listarDatos = async(elemento, datos = null) => {
+    $(`#${elemento}`).html('').append("<option value=''>Seleccione...</option>")
+                                    
+    let resultado = await consulta('obtener', datos)
+
+    $.each(resultado, (index, registro) => {
+        let campoId = (datos.tipo == 'departamentos' || datos.tipo == 'municipios') ? registro.codigo : registro.id
+            
+        $(`#${elemento}`).append(`<option value="${campoId}">${registro.nombre}</option>`)
+    })
+}
+
 const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
     switch (tipo) {
         case 'exito':
@@ -410,7 +422,7 @@ const validarCamposObligatorios = campos => {
         // Se remueve la validación a todos los campos
         $(`.invalid-feedback`).remove()
         campos[i].removeClass(`is-invalid`)
-
+        
         // Si el campo está vacío
         if($.trim(campos[i].val()) == "") {
             // Se resta el campo al total de validaciones exitosas

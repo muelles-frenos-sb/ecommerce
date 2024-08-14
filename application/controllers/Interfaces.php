@@ -73,6 +73,16 @@ class Interfaces extends CI_Controller {
         $this->load->view('email/pedido_detalle', $this->data);
     }
 
+    function enviar_email() {
+        $datos = json_decode($this->input->post('datos'), true);
+
+        switch ($datos['tipo']) {
+            case 'usuario_nuevo':
+                echo enviar_email_usuario_nuevo($datos['id']);
+            break;
+        }
+    }
+
     function subir_comprobante() {
         $id_recibo = $this->uri->segment(3);
         $directorio = "{$this->ruta}recibos/$id_recibo/";
@@ -233,22 +243,22 @@ class Interfaces extends CI_Controller {
                         [
                             "F200_ID" => $datos['documento_numero'],                             // Código del Tercero
                             "F200_NIT" => $datos['documento_numero'],                            // Numero de documento de identificación del tercero
-                            "F200_ID_TIPO_IDENT" => "C",                          // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
-                            "F200_IND_TIPO_TERCERO" => "1",                       // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
+                            "F200_ID_TIPO_IDENT" => $datos['documento_tipo'],                          // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
+                            "F200_IND_TIPO_TERCERO" => $datos['tipo_tercero'],                       // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
                             "F200_RAZON_SOCIAL" => $datos['razon_social'],                // Solo se requiere si el tipo de tercero es persona juridica '2'.
                             "F200_APELLIDO1" => $datos['primer_apellido'],                               // Solo se requiere si el tercero es persona natural
                             "F200_APELLIDO2" => $datos['segundo_apellido'],                               // Solo se requiere si el tercero es persona natural
                             "F200_NOMBRES" => $datos['nombres'],                                 // Solo se requiere si el tercero es persona natural
-                            "F015_CONTACTO" => "----",                   // Nombre de la persona de contacto	
+                            "F015_CONTACTO" => $datos['contacto'],                   // Nombre de la persona de contacto	
                             "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
                             "F015_ID_DEPTO" => "11",                              // Valida en maestro, código del departamento, solo se debe usar si existe país
                             "F015_ID_CIUDAD" => "001",                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
-                            "F015_TELEFONO" => "4170809",                         // Teléfono
+                            "F015_TELEFONO" => $datos['telefono'],                         // Teléfono
                             "F015_COD_POSTAL" => "",                              // 900127622
                             "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico
-                            "F200_FECHA_NACIMIENTO" => "19970808",                // El formato debe ser AAAAMMDD
+                            "F200_FECHA_NACIMIENTO" => date('Ymd'),                // El formato debe ser AAAAMMDD
                             "F200_ID_CIIU" => "4530",                             // Valida en maestro, código de la actividad económica
                             "F015_CELULAR" => $datos['telefono']                        // Celular
                         ],
@@ -268,11 +278,11 @@ class Interfaces extends CI_Controller {
                             "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
-                            "F015_ID_DEPTO" => "11",                              // Valida en maestro, código del departamento, solo se debe usar si existe país
-                            "F015_ID_CIUDAD" => "001",                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
+                            "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),                              // Valida en maestro, código del departamento, solo se debe usar si existe país
+                            "F015_ID_CIUDAD" => str_pad($datos['id_departamento'], 3, '0', STR_PAD_LEFT),                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
                             "F015_TELEFONO" => $datos['telefono'],                         // Teléfono
                             "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico	
-                            "F201_FECHA_INGRESO" => "20240723",                   // Fecha de ingreso AAAAMMDD
+                            "F201_FECHA_INGRESO" => date('Ymd'),                   // Fecha de ingreso AAAAMMDD
                             "f201_id_cobrador" => "Z019",                         // Valida en maestro, código de cobrador asignado al cliente
                             "f015_celular" => $datos['telefono'] 
                         ]

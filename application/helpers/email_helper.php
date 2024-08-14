@@ -86,3 +86,29 @@ function enviar_email_factura_wompi_comprobante($recibo) {
 
     $CI->email_model->enviar($datos);
 }
+
+function enviar_email_usuario_nuevo($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $CI = get_instance();
+
+    $CI->load->model(['email_model']);
+
+    $usuario = $CI->configuracion_model->obtener('usuarios', ['id' => $id]);
+    $url = site_url('sesion');
+    
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $usuario->id,
+        'asunto' => 'Registro exitoso',
+        'cuerpo' => [
+            'titulo' => '¡Tu registro ha sido exitoso!',
+            'subtitulo' => "
+                Hola, $usuario->nombres. A partir de ahora tienes acceso a grandes descuentos en nuestra tienda.<br><br>
+                Ahora puedes <a href='$url' style='color: #ffd400; text-decoration: none;'>iniciar sesión haciendo clic aquí</a>
+            ",
+        ],
+        'destinatarios' => $usuario->email,
+    ];
+
+    return $CI->email_model->enviar($datos);
+}

@@ -47,7 +47,7 @@
 
                             <?php if(ENVIRONMENT == 'development') { ?>
                                 <div class="account-menu__form-link">
-                                    <a href="account-login.html">Crear cuenta</a>
+                                    <a href="<?php echo site_url('usuarios/registro'); ?>">Crear cuenta</a>
                                 </div>
                             <?php } ?>
                         </form>

@@ -462,6 +462,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id'])) $where .= " AND u.id = {$datos['id']} ";
                 if(isset($datos['token'])) $where .= " AND u.token = '{$datos['token']}'";
                 if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
+                if(isset($datos['login'])) $where .= " AND u.login = '{$datos['login']}'";
 
                 $sql =
                 "SELECT
@@ -476,7 +477,7 @@ Class Configuracion_model extends CI_Model {
 	                u.razon_social
                 $contador";
 
-                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero'])) {
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero']) || isset($datos['login'])) {
                     return $this->db->query($sql)->row();
                 } else {
                     return $this->db->query($sql)->result();
@@ -503,6 +504,24 @@ Class Configuracion_model extends CI_Model {
                     ->where($datos)
                     ->get('clientes_sucursales')
                     ->row()
+                ;
+            break;
+
+            case 'departamentos':
+                return $this->db
+                    ->where($datos)
+                    ->order_by('nombre')
+                    ->get('departamentos')
+                    ->result()
+                ;
+            break;
+
+            case 'municipios':
+                return $this->db
+                    ->where($datos)
+                    ->order_by('nombre')
+                    ->get('municipios')
+                    ->result()
                 ;
             break;
 
