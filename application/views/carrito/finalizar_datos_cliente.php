@@ -38,9 +38,20 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
     <label for="checkout_razon_social">Razón social *<span class="text-muted">(Opcional)</span></label>
     <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->f200_razon_social; ?>" placeholder="Nombre de la empresa o nombre completo">
 </div>
+<div class="form-row">
+    <div class="form-group col-lg-6 col-sm-12">
+        <label for="checkout_departamento_id">Departamento *</label>
+        <select id="checkout_departamento_id" class="form-control"></select>
+    </div>
+
+    <div class="form-group col-lg-6 col-sm-12">
+        <label for="checkout_municipio_id">Municipio *</label>
+        <select id="checkout_municipio_id" class="form-control"></select>
+    </div>
+</div>
 <div class="form-group">
     <label for="checkout_direccion">Dirección *</label>
-    <input type="text" class="form-control" id="checkout_direccion" value="<?php // if(!empty($tercero)) echo $tercero->direccion1; ?>">
+    <input type="text" class="form-control" id="checkout_direccion" value="<?php if(!empty($tercero)) echo $tercero->f015_direccion1; ?>">
 </div>
 <div class="form-group">
     <label for="checkout_sucursal">Elija la sucursal o placa a la que desea asociar el pedido</label>
@@ -53,11 +64,11 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="checkout_email">Correo electrónico *</label>
-        <input type="email" class="form-control" id="checkout_email" value="<?php // if(!empty($tercero)) echo $tercero->email; ?>">
+        <input type="email" class="form-control" id="checkout_email" value="<?php if(!empty($tercero)) echo $tercero->f015_email; ?>">
     </div>
     <div class="form-group col-md-6">
         <label for="checkout_telefono">Teléfono *</label>
-        <input type="text" class="form-control" id="checkout_telefono" value="<?php // if(!empty($tercero)) echo $tercero->telefono; ?>">
+        <input type="text" class="form-control" id="checkout_telefono" value="<?php if(!empty($tercero)) echo $tercero->f015_celular; ?>">
     </div>
 </div>
 
@@ -72,9 +83,9 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
 <?php } ?>
 
 <script>
-    $().ready(() => {
-        // Cuando se elija una sucursal
-        $('#checkout_sucursal').change(async() => {
+    $().ready(async() => {
+        // Si es un usuario logueado
+        if($('#sesion_usuario_id').val() != '') {
             let subtotal = <?php echo $this->cart->total(); ?>
             
             // Se toma la lista de precio porque ya se confirma que es cliente y tiene sucursal
@@ -95,6 +106,13 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
             `)
 
             $('#total_pedido').val(total)
+        }
+
+        listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
+        
+        // Cuando se seleccione un departamento
+        $('#checkout_departamento_id').change(() => {
+            listarDatos('checkout_municipio_id', {tipo: 'municipios', departamento_id: $('#checkout_departamento_id').val()})
         })
     })
 </script>

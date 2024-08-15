@@ -253,8 +253,8 @@ class Interfaces extends CI_Controller {
                             "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
-                            "F015_ID_DEPTO" => "11",                              // Valida en maestro, código del departamento, solo se debe usar si existe país
-                            "F015_ID_CIUDAD" => "001",                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
+                            "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),                              // Valida en maestro, código del departamento, solo se debe usar si existe país
+                            "F015_ID_CIUDAD" => str_pad($datos['id_municipio'], 3, '0', STR_PAD_LEFT),                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
                             "F015_TELEFONO" => $datos['telefono'],                         // Teléfono
                             "F015_COD_POSTAL" => "",                              // 900127622
                             "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico
@@ -273,13 +273,13 @@ class Interfaces extends CI_Controller {
                             "F201_DIAS_GRACIA" => "0",                            // Días de gracia otorgados al cliente
                             "F201_CUPO_CREDITO" => "0",                           // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
                             "F201_ID_TIPO_CLI" => "C001",                         // Valida en maestro, tipo de cliente asignado al cliente
-                            "F201_ID_LISTA_PRECIO" => "001",                      // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
+                            "F201_ID_LISTA_PRECIO" => "010",                      // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
                             "F015_CONTACTO" => $datos['razon_social'],                   // Nombre de la persona de contacto
                             "F015_DIRECCION1" => $datos['direccion'],                   // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                              // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                              // Valida en maestro, código del país
                             "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),                              // Valida en maestro, código del departamento, solo se debe usar si existe país
-                            "F015_ID_CIUDAD" => str_pad($datos['id_departamento'], 3, '0', STR_PAD_LEFT),                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
+                            "F015_ID_CIUDAD" => str_pad($datos['id_municipio'], 3, '0', STR_PAD_LEFT),                            // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
                             "F015_TELEFONO" => $datos['telefono'],                         // Teléfono
                             "F015_EMAIL" => $datos['email'],        // Dirección de correo electrónico	
                             "F201_FECHA_INGRESO" => date('Ymd'),                   // Fecha de ingreso AAAAMMDD

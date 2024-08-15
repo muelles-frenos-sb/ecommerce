@@ -10,6 +10,7 @@
         <input type="hidden" id="site_url" value="<?php echo site_url(); ?>">
         <input type="hidden" id="base_url" value="<?php echo site_url(); ?>">
         <input type="hidden" id="cantidad_datos" value="<?php echo $this->config->item('cantidad_datos'); ?>">
+        <input type="hidden" id="sesion_usuario_id" value="<?php echo $this->session->userdata('usuario_id'); ?>">
         
         <div class="site">
             <!-- Menú superior -->
