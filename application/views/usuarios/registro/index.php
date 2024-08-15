@@ -50,7 +50,7 @@
                     <input type="text" class="form-control" id="usuario_razon_social">
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <div class="form-group">
                             <label for="usuario_tipo_documento">Tipo de documento *</label>
                             <select id="usuario_tipo_documento" class="form-control">
@@ -62,28 +62,28 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_numero_documento1">Número de documento (sin dígito de verificación) *</label>
                         <input type="text" class="form-control" id="usuario_numero_documento1" placeholder="sin dígito de verificación">
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_numero_documento2">Repite el número de documento *</label>
                         <input type="text" class="form-control" id="usuario_numero_documento2" onpaste="return false;">
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_login">Nombre de usuario *</label>
                         <input type="text" class="form-control" id="usuario_login">
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_clave1">Contraseña *</label>
                         <input type="password" class="form-control" id="usuario_clave1">
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_clave2">Repite la contraseña *</label>
                         <input type="password" class="form-control" id="usuario_clave2">
                     </div>
@@ -96,32 +96,32 @@
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
                 <div class="form-row">
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="usuario_departamento_id">Departamento *</label>
                         <select id="usuario_departamento_id" class="form-control"></select>
                     </div>
 
-                    <div class="form-group col-3">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="usuario_municipio_id">Municipio *</label>
                         <select id="usuario_municipio_id" class="form-control"></select>
                     </div>
 
-                    <div class="form-group col-6">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="usuario_direccion">Dirección completa *</label>
                         <input type="text" class="form-control" id="usuario_direccion">
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_contacto">Datos de contacto <span class="text-muted">(Opcional)</span></label>
                         <input type="text" class="form-control" id="usuario_contacto">
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_telefono">Número de teléfono *</label>
                         <input type="text" class="form-control" id="usuario_telefono">
                     </div>
-                    <div class="form-group col-4">
+                    <div class="form-group col-lg-4 col-sm-12">
                         <label for="usuario_email">Correo electrónico *</label>
                         <input type="email" class="form-control" id="usuario_email">
                     </div>

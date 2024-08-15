@@ -45,11 +45,9 @@
                                 <button type="submit" class="btn btn-primary btn-sm" onClick="javascript:iniciarSesion(event, null, 'menu_login', 'menu_clave')">Iniciar</button>
                             </div>
 
-                            <?php if(ENVIRONMENT == 'development') { ?>
-                                <div class="account-menu__form-link">
-                                    <a href="<?php echo site_url('usuarios/registro'); ?>">Crear cuenta</a>
-                                </div>
-                            <?php } ?>
+                            <div class="account-menu__form-link">
+                                <a href="<?php echo site_url('usuarios/registro'); ?>">Crear cuenta</a>
+                            </div>
                         </form>
                     <?php } else { ?>
                         <!-- Datos del usuario logueado -->
