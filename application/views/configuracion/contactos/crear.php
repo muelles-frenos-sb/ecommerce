@@ -15,8 +15,8 @@ if($this->uri->segment(4)) {
             <div class="col-12">
                 <div class="form-row">
                     <div class="form-group col-12">
-                        <label for="contacto_datos">Ingrese los datos en cada línea (NIT y Teléfono), separados por coma</label>
-                        <textarea class="form-control" id="contacto_datos" rows="10" placeholder="81100512,3135823366&#10;1017552663,3178896655" autofocus></textarea>
+                        <label for="contacto_datos">Ingrese los datos en cada línea (NIT, Teléfono y correo electrónico), separados por coma</label>
+                        <textarea class="form-control" id="contacto_datos" rows="10" placeholder="81100512,3135823366,juan.perez@empresa.com&#10;1017552663,3178896655,gerencia@empresa.com" autofocus></textarea>
                     </div>
 
                     <div class="form-group mb-0">
@@ -58,6 +58,7 @@ if($this->uri->segment(4)) {
             let partes = linea.split(',')
             let numeroDocumento = partes[0].replace(/\s/g, '')
             let telefono = partes[1].replace(/\s/g, '')
+            let email = partes[2].replace(/\s/g, '')
             
             let contactoExistente = await consulta('obtener', {tipo: 'contactos', numero: telefono, nit: numeroDocumento})
             
@@ -67,6 +68,7 @@ if($this->uri->segment(4)) {
                 datos.push({
                     nit: numeroDocumento,
                     numero: telefono,
+                    email: email,
                     fecha_creacion: '<?php echo date('Y-m-d H:i:s'); ?>',
                     usuario_id: <?php echo $this->session->userdata('usuario_id'); ?>,
                 })

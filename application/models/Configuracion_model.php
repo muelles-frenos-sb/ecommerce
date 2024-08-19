@@ -99,6 +99,7 @@ Class Configuracion_model extends CI_Model {
                         $having .= " nombre LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.nit LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR tc.email LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";
@@ -116,6 +117,7 @@ Class Configuracion_model extends CI_Model {
                     tc.id,
                     tc.nit,
                     tc.numero,
+                    tc.email,
                     t.f200_razon_social nombre
                 FROM
                     terceros_contactos AS tc

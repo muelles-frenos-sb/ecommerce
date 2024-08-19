@@ -22,6 +22,10 @@ if($this->uri->segment(4)) {
                                 <label for="contacto_telefono">Teléfono</label>
                                 <input id="contacto_telefono" type="text" class="form-control" value="<?php echo $contacto->numero; ?>">
                             </div>
+                            <div class="form-group">
+                                <label for="contacto_email">Correo electrónico</label>
+                                <input id="contacto_email" type="text" class="form-control" value="<?php echo $contacto->email; ?>">
+                            </div>
                             <div class="form-group mb-0">
                                 <a class="btn btn-info mt-3" href="<?php echo site_url("configuracion/contactos/ver"); ?>">Volver</a>
                                 <button type="submit" class="btn btn-primary mt-3">Actualizar</button>
@@ -48,6 +52,8 @@ if($this->uri->segment(4)) {
             tipo: 'terceros_contactos',
             nit: $('#contacto_nit').val(),
             numero: $('#contacto_telefono').val(),
+            numero: $('#contacto_telefono').val(),
+            email: $('#contacto_email').val(),
             fecha_actualizacion: '<?php echo date('Y-m-d H:i:s'); ?>'
         }
 

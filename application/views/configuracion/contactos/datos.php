@@ -13,7 +13,9 @@ foreach ($registros as $contacto) { ?>
                 <a href=""><?php echo $contacto->nombre; ?></a>
             </div>
             <div class="wishlist__product-rating">
-                <div class="wishlist__product-rating-title"><?php echo $contacto->nit; ?></div>
+                <div class="wishlist__product-rating-title">
+                    <?php echo "$contacto->nit - $contacto->email"; ?>
+                </div>
             </div>
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--price">
