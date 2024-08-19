@@ -176,7 +176,7 @@
         let usuarioExistenteLogin = await consulta('obtener', {tipo: 'usuarios', login: $.trim($('#usuario_login').val())})
 
         if(usuarioExistenteDocumento || usuarioExistenteLogin) {
-            mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el usuario y el número de documento, inicia sesión o recupera tu contraseña`, 10000)
+            mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el usuario y el número de documento. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`, 10000)
             return false
         }
 
