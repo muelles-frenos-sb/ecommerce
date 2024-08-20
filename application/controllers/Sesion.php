@@ -70,6 +70,18 @@ class Sesion extends MY_Controller {
 
         print json_encode($resultado);
     }
+    
+    function cambiar_clave() {
+        $this->data['url'] = $this->input->get('url');
+        $this->data['contenido_principal'] = 'sesion/cambiar_clave';
+        $this->load->view('core/body', $this->data);
+    }
+
+    function recordar_clave() {
+        $this->data['url'] = $this->input->get('url');
+        $this->data['contenido_principal'] = 'sesion/recordar_clave';
+        $this->load->view('core/body', $this->data);
+    }
 }
 /* Fin del archivo Sesion.php */
 /* Ubicación: ./application/controllers/Sesion.php */

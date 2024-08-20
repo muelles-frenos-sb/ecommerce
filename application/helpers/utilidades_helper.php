@@ -18,8 +18,34 @@ function buscar_item_carrito($id) {
     return $encontrado;
 }
 
+function cubrir_correo($email) {
+    // Dividir el correo en dos partes: antes y después de "@"
+    list($usuario, $dominio) = explode('@', $email);
+
+    // Calcular cuántos caracteres ocultar en la parte del usuario
+    $longitudUsuario = strlen($usuario);
+    $ocultarDesde = ceil($longitudUsuario / 3);
+
+    // Reemplazar la parte seleccionada del usuario con asteriscos
+    $usuarioOculto = substr_replace($usuario, str_repeat('*', $longitudUsuario - $ocultarDesde), $ocultarDesde);
+
+    // Reconstruir el correo con la parte cubierta
+    return $usuarioOculto . '@' . $dominio;
+}
+
 function formato_precio($valor) {
     return "$".number_format($valor, 0, ',', '.');
+}
+
+function generar_codigo_OTP($longitud = 6) {
+    // Definir los caracteres que pueden aparecer en el código OTP
+    $caracteres = '1234567890'; // Solo números para un OTP de dígitos
+    $codigoOTP = '';
+    
+    // Generar un código aleatorio de la longitud deseada
+    for ($i = 0; $i < $longitud; $i++) $codigoOTP .= $caracteres[random_int(0, strlen($caracteres) - 1)];
+    
+    return $codigoOTP;
 }
 
 function generar_llave_integridad($datos) {

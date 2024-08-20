@@ -1,6 +1,58 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+function enviar_email_clave_cambiada($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $CI = get_instance();
+
+    $CI->load->model(['email_model']);
+
+    $usuario = $CI->configuracion_model->obtener('usuarios', ['id' => $id]);
+    $url = site_url('sesion');
+    
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $usuario->id,
+        'asunto' => 'Clave de acceso actualizada',
+        'cuerpo' => [
+            'titulo' => '¡Tu clave ha sido cambiada con éxito!',
+            'subtitulo' => "
+                Hola, $usuario->nombres. A partir de ahora tienes acceso a grandes descuentos en nuestra tienda.<br><br>
+                Ahora puedes <a href='$url' style='color: #ffd400; text-decoration: none;'>iniciar sesión haciendo clic aquí</a>
+            ",
+        ],
+        'destinatarios' => $usuario->email,
+    ];
+
+    return $CI->email_model->enviar($datos);
+}
+
+function enviar_email_codigo_otp($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $CI = get_instance();
+
+    $CI->load->model(['email_model']);
+
+    $codigo = $CI->configuracion_model->obtener('codigo_temporal', ['ct.id' => $id]);
+
+    $url = site_url('sesion');
+    
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $codigo->id,
+        'asunto' => 'Código de verificación',
+        'cuerpo' => [
+            'titulo' => $codigo->codigo,
+            'subtitulo' => "
+                Hola, $codigo->nombres. Este es el código de validación que solicitaste.<br>
+            ",
+        ],
+        'destinatarios' => $codigo->email,
+    ];
+
+    return $CI->email_model->enviar($datos);
+}
+
 function enviar_email_pedido($recibo) {
     // Se obtiene una referencia del objeto Controlador
     $CI = get_instance();

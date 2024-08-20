@@ -17,9 +17,7 @@
                                     <div class="account-menu__form-forgot">
                                         <input id="sesion_clave" type="password" class="form-control form-control-sm" placeholder="Clave">
                                         
-                                        <?php if(ENVIRONMENT == 'development') { ?>
-                                            <a href="" class="account-menu__form-forgot-link">Recordar clave</a>
-                                        <?php } ?>
+                                        <a href="<?php echo site_url('sesion/recordar_clave'); ?>" class="account-menu__form-forgot-link">Recordar clave</a>
                                     </div>
                                 </div>
                                 <!-- <div class="form-group">

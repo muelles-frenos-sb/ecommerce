@@ -135,6 +135,33 @@ Class Configuracion_model extends CI_Model {
                 }
             break;
 
+            case 'codigo_temporal':
+                return $this->db
+                    ->select([
+                        'ct.*',
+                        'u.nombres',
+                        'u.email',
+                    ])
+                    ->from("usuarios_codigos_temporales ct")
+                    ->join("usuarios u", "ct.usuario_id = u.id")
+                    ->where($datos)
+                    ->get()
+                    ->row()
+                ;
+            break;
+
+            case 'codigo_temporal_valido':
+                return $this->db
+                    ->where([
+                        'usuario_id' => $datos['usuario_id'],
+                        'codigo' => $datos['codigo'],
+                        'fecha_vencimiento >' => date('Y-m-d H:i:s'),
+                    ])
+                    ->get('usuarios_codigos_temporales')
+                    ->row()
+                ;
+            break;
+
             case 'cuentas_bancarias':
                 return $this->db
                     ->order_by('nombre')
@@ -465,6 +492,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['token'])) $where .= " AND u.token = '{$datos['token']}'";
                 if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
                 if(isset($datos['login'])) $where .= " AND u.login = '{$datos['login']}'";
+                if(isset($datos['email'])) $where .= " AND u.email = '{$datos['email']}'";
 
                 $sql =
                 "SELECT
@@ -479,7 +507,7 @@ Class Configuracion_model extends CI_Model {
 	                u.razon_social
                 $contador";
 
-                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero']) || isset($datos['login'])) {
+                if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero']) || isset($datos['login']) || isset($datos['email'])) {
                     return $this->db->query($sql)->row();
                 } else {
                     return $this->db->query($sql)->result();

@@ -174,9 +174,10 @@
         // Se consulta si existe un usuario con ese mismo login
         let usuarioExistenteDocumento = await consulta('obtener', {tipo: 'usuarios', documento_numero: $.trim($('#usuario_numero_documento').val())})
         let usuarioExistenteLogin = await consulta('obtener', {tipo: 'usuarios', login: $.trim($('#usuario_login').val())})
+        let usuarioExistenteEmail = await consulta('obtener', {tipo: 'usuarios', email: $.trim($('#usuario_email').val())})
 
-        if(usuarioExistenteDocumento || usuarioExistenteLogin) {
-            mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el usuario y el número de documento. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`, 10000)
+        if(usuarioExistenteDocumento || usuarioExistenteLogin || usuarioExistenteEmail) {
+            mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el correo electrónico, usuario y el número de documento. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`, 10000)
             return false
         }
 

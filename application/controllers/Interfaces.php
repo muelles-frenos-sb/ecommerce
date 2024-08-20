@@ -61,6 +61,8 @@ class Interfaces extends CI_Controller {
 
         switch($tipo) {
             default:
+                if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
+
                 $resultado = $this->configuracion_model->actualizar($tipo, $id, $datos);
             break;
         }
@@ -77,6 +79,14 @@ class Interfaces extends CI_Controller {
         $datos = json_decode($this->input->post('datos'), true);
 
         switch ($datos['tipo']) {
+            case 'clave_cambiada':
+                echo enviar_email_clave_cambiada($datos['id']);
+            break;
+
+            case 'codigo_otp':
+                echo enviar_email_codigo_otp($datos['id']);
+            break;
+
             case 'usuario_nuevo':
                 echo enviar_email_usuario_nuevo($datos['id']);
             break;
@@ -123,6 +133,20 @@ class Interfaces extends CI_Controller {
             // Datos obtenidos del API de Siesa - Clientes
             case 'clientes_sucursales':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
+            case 'codigo_otp':
+                $fecha_actual = date('Y-m-d H:i:s');
+                $fecha_vencimiento = date('Y-m-d H:i:s', strtotime('+10 minutes', strtotime($fecha_actual)));
+
+                $codigo = generar_codigo_OTP();
+
+                echo $this->configuracion_model->crear('usuarios_codigos_temporales', [
+                    'usuario_id' => $datos['usuario_id'],
+                    'fecha_creacion' => $fecha_actual,
+                    'fecha_vencimiento' => $fecha_vencimiento,
+                    'codigo' => $codigo,
+                ]);
             break;
             
             case 'factura_documento_contable':
