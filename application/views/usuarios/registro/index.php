@@ -20,9 +20,22 @@
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <div class="form-group">
+                            <label for="usuario_responsable_iva">¿Eres responsable de IVA? *</label>
+                            <select id="usuario_responsable_iva" class="form-control">
+                                <option value="">Selecciona...</option>
+                                <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
+                                <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <div class="form-group">
                             <label for="usuario_tipo_tercero">¿Eres persona natural o jurídica? *</label>
-                            <select id="usuario_tipo_tercero" class="form-control" autofocus>
-                                <option value="">Seleccione...</option>
+                            <select id="usuario_tipo_tercero" class="form-control">
+                                <option value="">Selecciona...</option>
                                 <option value="1">Persona natural</option>
                                 <option value="2">Persona jurídica</option>
                             </select>
@@ -54,7 +67,7 @@
                         <div class="form-group">
                             <label for="usuario_tipo_documento">Tipo de documento *</label>
                             <select id="usuario_tipo_documento" class="form-control">
-                                <option value="">Seleccione...</option>
+                                <option value="">Selecciona...</option>
                                 <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
                                 <option value="N" data-tipo_tercero="2">NIT</option>
                                 <option value="E" data-tipo_tercero="1">Cédula de extranjería</option>
@@ -110,18 +123,17 @@
                         <label for="usuario_direccion">Dirección completa *</label>
                         <input type="text" class="form-control" id="usuario_direccion">
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-lg-4 col-sm-12">
-                        <label for="usuario_contacto">Datos de contacto <span class="text-muted">(Opcional)</span></label>
-                        <input type="text" class="form-control" id="usuario_contacto">
-                    </div>
-
-                    <div class="form-group col-lg-4 col-sm-12">
+                    <div class="form-group col-lg-3 col-sm-12">
                         <label for="usuario_telefono">Número de teléfono *</label>
                         <input type="text" class="form-control" id="usuario_telefono">
                     </div>
-                    <div class="form-group col-lg-4 col-sm-12">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-6 col-sm-12">
+                        <label for="usuario_contacto">Nombre de un contacto *</label>
+                        <input type="text" class="form-control" id="usuario_contacto">
+                    </div>
+                    <div class="form-group col-lg-6 col-sm-12">
                         <label for="usuario_email">Correo electrónico *</label>
                         <input type="email" class="form-control" id="usuario_email">
                     </div>
@@ -149,6 +161,8 @@
             $('#usuario_clave1'),
             $('#usuario_clave2'),
             $('#usuario_municipio_id'),
+            $('#usuario_contacto'),
+            $('#usuario_responsable_iva'),
         ]
 
         // Si es persona natural
@@ -195,6 +209,20 @@
             email: $('#usuario_email').val(),
             id_departamento: $('#usuario_departamento_id').val(),
             id_ciudad: $('#usuario_municipio_id').val(),
+            responsable_iva: $('#usuario_responsable_iva option:selected').attr('data-responsable_iva'),
+            causante_iva: $('#usuario_responsable_iva option:selected').attr('data-causante_iva'),
+        }
+
+        // Si es cédula de extranjería, se envía una entidad dinámica adicional
+        // para la creación del tercero en Siesa
+        if($('#usuario_tipo_documento').val() == 'E') {
+            datosTerceroSiesa.entidad_dinamica_extranjero = {
+                f200_id: $('#usuario_numero_documento1').val(),
+                f753_id_entidad: 'EUNOECO036',
+                f753_id_atributo: 'co036_id_procedencia_org',
+                f753_id_maestro: 'MUNOECO043',
+                f753_id_maestro_detalle: 11,
+            }
         }
 
         let datosUsuario = {
@@ -215,6 +243,7 @@
             clave: $('#usuario_clave1').val(),
             login: $('#usuario_login').val(),
             perfil_id: 3,
+            responsable_iva: $('#usuario_responsable_iva').val(),
         }
 
         Swal.fire({
@@ -240,7 +269,7 @@
 
         // Envío de email de confirmación
         obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'usuario_nuevo', id: usuarioId.resultado})
-
+        
         // Si el tercero no existe en Siesa
         if(!consultaTercero.codigo == 0) {
             let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)

@@ -435,7 +435,7 @@ function obtener_terceros_api($datos = null) {
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
     $CI =& get_instance();
-    $url = $CI->config->item('base_url_produccion');
+    $url = $CI->config->item('api_siesa')['base_url'];
 
     $client = new \GuzzleHttp\Client();
     try {
