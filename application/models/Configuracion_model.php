@@ -565,7 +565,7 @@ Class Configuracion_model extends CI_Model {
                 FROM
                     terceros AS t
                 WHERE
-                    (t.f015_telefono = '{$datos['numero']}' OR t.f015_celular = '{$datos['numero']}')
+                    (REPLACE(t.f015_telefono, ' ', '') = {$datos['numero']} OR REPLACE(t.f015_celular, ' ', '') = {$datos['numero']})
                     AND t.f200_nit = '{$datos['nit']}'
                 UNION
                 SELECT
@@ -576,7 +576,7 @@ Class Configuracion_model extends CI_Model {
                     terceros_contactos AS tc
                 WHERE
                     tc.nit = '{$datos['nit']}'
-                    AND tc.numero = '{$datos['numero']}'";
+                    AND REPLACE(tc.numero, ' ', '') = {$datos['numero']}";
 
                 return $this->db->query($sql)->row();
             break;
