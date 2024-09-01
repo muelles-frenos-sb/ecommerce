@@ -555,12 +555,30 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            // Une las tablas tercero y tercero_contacto para buscar en ambas
             case 'tercero_contacto':
-                return $this->db
-                    ->where($datos)
-                    ->get('terceros_contactos')
-                    ->row()
-                ;
+                $sql =
+                "SELECT
+                    t.f015_telefono telefono,
+                    t.f015_celular celular,
+                    t.f200_nit nit
+                FROM
+                    terceros AS t
+                WHERE
+                    (t.f015_telefono = '{$datos['numero']}' OR t.f015_celular = '{$datos['numero']}')
+                    AND t.f200_nit = '{$datos['nit']}'
+                UNION
+                SELECT
+                    tc.numero telefono,
+                    NULL celular,
+                    tc.nit
+                FROM
+                    terceros_contactos AS tc
+                WHERE
+                    tc.nit = '{$datos['nit']}'
+                    AND tc.numero = '{$datos['numero']}'";
+
+                return $this->db->query($sql)->row();
             break;
         }
 
