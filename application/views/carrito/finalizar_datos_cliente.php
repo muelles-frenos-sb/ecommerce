@@ -21,6 +21,26 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
 <input type="hidden" id="total_pedido">
 
 <div class="form-row">
+    <div class="form-group col-6">
+        <label for="checkout_responsable_iva">¿Eres responsable de IVA? *</label>
+        <select id="checkout_responsable_iva" class="form-control">
+            <option value="">Selecciona...</option>
+            <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
+            <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
+        </select>
+    </div>
+
+    <div class="form-group col-6">
+        <label for="checkout_tipo_tercero">¿Eres persona natural o jurídica? *</label>
+        <select id="checkout_tipo_tercero" class="form-control" autofocus>
+            <option value="">Seleccione...</option>
+            <option value="1">Persona natural</option>
+            <option value="2">Persona jurídica</option>
+        </select>
+    </div>
+</div>
+
+<div class="form-row" id="checkout_datos_persona_natural">
     <div class="form-group col-md-12">
         <label for="checkout_nombres">Nombres</label>
         <input type="text" class="form-control" id="checkout_nombres" value="<?php if(!empty($tercero)) echo $tercero->f200_nombres; ?>">
@@ -76,43 +96,77 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
     <script>
         $().ready(() => {
             $('#btn_validar_documento').removeClass('btn-loading').hide()
-            $('#checkout_documento_numero').attr('disabled', true)
+            $('#checkout_documento_numero, #checkout_tipo_documento').attr('disabled', true)
             $('#btn_pagar').attr('disabled', false)
         })
     </script>
 <?php } ?>
 
 <script>
-    $().ready(async() => {
-        // Si es un usuario logueado
-        if($('#sesion_usuario_id').val() != '') {
-            let subtotal = <?php echo $this->cart->total(); ?>
-            
-            // Se toma la lista de precio porque ya se confirma que es cliente y tiene sucursal
-            let listaPrecio = '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
-            let descuento = await consulta('obtener', {tipo: 'valores_detalle', lista_precio: listaPrecio}, false)
-            let total = subtotal - descuento
+    mostrarTotales = async listaPrecio => {
+        let descuento = 0
+        let subtotal = parseFloat('<?php echo $this->cart->total(); ?>')
 
-            $('#descuento').html(`
-                <th>Decuento</th>
-                <td>$ ${formatearNumero(descuento)}</td>
-            `)
-
-            $('.checkout__totals-footer').html(`
-                <tr>
-                    <th>Total</th>
-                    <td>$${formatearNumero(total)}</td>
-                </tr>
-            `)
-
-            $('#total_pedido').val(total)
+        if(listaPrecio == '<?php echo $this->config->item('lista_precio_clientes'); ?>') {
+            descuento = await consulta('obtener', {tipo: 'valores_detalle', lista_precio: listaPrecio}, false)
         }
+        
+        let total = subtotal - descuento
+
+        $('#descuento').html(`
+            <th>Decuento</th>
+            <td>$ ${formatearNumero(descuento)}</td>
+        `)
+
+        $('.checkout__totals-footer').html(`
+            <tr>
+                <th>Total</th>
+                <td>$${formatearNumero(total)}</td>
+            </tr>
+        `)
+
+        $('#total_pedido').val(total)
+    }
+
+    $().ready(async() => {
+        // Si tiene sesión iniciada, la lista de precio es la de clientes
+        let listaPrecioPorDefecto = 
+            ($('#sesion_usuario_id').val() != '')
+            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>'
+            : '<?php echo $this->config->item('lista_precio'); ?>'
+
+        mostrarTotales(listaPrecioPorDefecto)
 
         listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
+
+        // Cuando se seleccione el tipo de tercero
+        $('#checkout_tipo_tercero').change(() => {
+            // Persona natural
+            if ($('#checkout_tipo_tercero').val() == 1) {
+                $('#checkout_datos_persona_natural').show()
+                $('#checkout_razon_social').attr('disabled', true)
+            }
+
+            // Persona jurídica
+            if ($('#checkout_tipo_tercero').val() == 2) {
+                $('#checkout_datos_persona_natural').hide()
+                $('#checkout_razon_social').attr('disabled', false)
+                $('#checkout_nombres, #checkout_primer_apellido, #checkout_segundo_apellido, #checkout_razon_social').val('')
+            }
+        })
         
         // Cuando se seleccione un departamento
         $('#checkout_departamento_id').change(() => {
             listarDatos('checkout_municipio_id', {tipo: 'municipios', departamento_id: $('#checkout_departamento_id').val()})
+        })
+
+        // Cuando se escribe nombres o apellidos
+        $('#checkout_datos_persona_natural').keyup(function(e) {
+            // Si es persona natural
+            if($('#checkout_tipo_tercero').val() == '1') {
+                // Se completa la razón social
+                $('#checkout_razon_social').val(`${$('#checkout_nombres').val()} ${$('#checkout_primer_apellido').val()} ${$('#checkout_segundo_apellido').val()}`)
+            }
         })
     })
 </script>

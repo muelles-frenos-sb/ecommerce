@@ -196,21 +196,21 @@
         }
 
         let datosTerceroSiesa = {
-            documento_numero: $('#usuario_numero_documento1').val(),
+            responsable_iva: $('#usuario_responsable_iva option:selected').attr('data-responsable_iva'), // Sí, No
+            causante_iva: $('#usuario_responsable_iva option:selected').attr('data-causante_iva'), // Sí, No
+            tipo_tercero: $('#usuario_tipo_tercero').val(), // Natural, jurídica
             documento_tipo: $('#usuario_tipo_documento').val(),
-            tipo_tercero: $('#usuario_tipo_tercero').val(),
-            razon_social: $('#usuario_razon_social').val(),
+            documento_numero: $('#usuario_numero_documento1').val(),
             nombres: $('#usuario_nombres').val(),
             primer_apellido: $('#usuario_primer_apellido').val(),
             segundo_apellido: $('#usuario_segundo_apellido').val(),
-            contacto: $('#usuario_contacto').val(),
-            direccion: $('#usuario_direccion').val(),
-            telefono: $('#usuario_telefono').val(),
-            email: $('#usuario_email').val(),
+            razon_social: $('#usuario_razon_social').val(),
             id_departamento: $('#usuario_departamento_id').val(),
             id_ciudad: $('#usuario_municipio_id').val(),
-            responsable_iva: $('#usuario_responsable_iva option:selected').attr('data-responsable_iva'),
-            causante_iva: $('#usuario_responsable_iva option:selected').attr('data-causante_iva'),
+            direccion: $('#usuario_direccion').val(),
+            contacto: $('#usuario_contacto').val(),
+            email: $('#usuario_email').val(),
+            telefono: $('#usuario_telefono').val(),
         }
 
         // Si es cédula de extranjería, se envía una entidad dinámica adicional

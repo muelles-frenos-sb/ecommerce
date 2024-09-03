@@ -51,26 +51,6 @@ if($this->session->userdata('usuario_id')) {
                         <h3 class="card-title">Detalles del pago</h3>
                         <div class="form-row">
                             <div class="form-group col-6">
-                                <label for="checkout_responsable_iva">¿Eres responsable de IVA? *</label>
-                                <select id="checkout_responsable_iva" class="form-control">
-                                    <option value="">Selecciona...</option>
-                                    <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
-                                    <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-6">
-                                <label for="checkout_tipo_tercero">¿Eres persona natural o jurídica? *</label>
-                                <select id="checkout_tipo_tercero" class="form-control" autofocus>
-                                    <option value="">Seleccione...</option>
-                                    <option value="1">Persona natural</option>
-                                    <option value="2">Persona jurídica</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-6">
                                 <label for="checkout_tipo_documento">Tipo de documento *</label>
                                 <select id="checkout_tipo_documento" class="form-control">
                                     <option value="">Seleccione...</option>
@@ -175,7 +155,6 @@ if($this->session->userdata('usuario_id')) {
     cargarDatosCliente = async() => {
         if (!validarCamposObligatorios([
             $('#checkout_documento_numero'),
-            $('#checkout_tipo_tercero'),
             $('#checkout_tipo_documento'),
         ])) return false
         
@@ -256,23 +235,16 @@ if($this->session->userdata('usuario_id')) {
                     tipo_tercero: $('#checkout_tipo_tercero').val(), // Natural, jurídica
                     documento_tipo: $('#checkout_tipo_documento').val(),
                     documento_numero: $('#checkout_documento_numero').val(),
-
-
-
-
-
-
-
-                    razon_social: $('#checkout_razon_social').val(),
                     nombres: $('#checkout_nombres').val(),
                     primer_apellido: $('#checkout_primer_apellido').val(),
                     segundo_apellido: $('#checkout_segundo_apellido').val(),
-                    contacto: '-',
-                    direccion: $('#checkout_direccion').val(),
-                    telefono: $('#checkout_telefono').val(),
-                    email: $('#checkout_email').val(),
+                    razon_social: $('#checkout_razon_social').val(),
                     id_departamento: $('#checkout_departamento_id').val(),
                     id_ciudad: $('#checkout_municipio_id').val(),
+                    direccion: $('#checkout_direccion').val(),
+                    contacto: '-',
+                    email: $('#checkout_email').val(),
+                    telefono: $('#checkout_telefono').val(),
                 }
                 
                 // Si es cédula de extranjería, se envía una entidad dinámica adicional
@@ -288,9 +260,7 @@ if($this->session->userdata('usuario_id')) {
                 }
 
                 creacionTercero = crearTerceroCliente(datosTerceroSiesa)
-                creacionTercero.then(resultado => {
-                    console.log(resultado)
-                })
+                creacionTercero.then(resultado => console.log(resultado))
             }
         }
     }
