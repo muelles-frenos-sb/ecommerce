@@ -10,7 +10,16 @@ $item = buscar_item_carrito($producto->id);
         <div class="input-number__sub" onClick="javascript:modificarItem('remover', '<?php echo $item['rowid']; ?>', <?php echo $producto->id; ?>)"></div>
     </div>
 <?php } else { ?>
-    <button class="product-card__addtocart-icon" type="button" aria-label="Agregar al carrito" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, `<?php echo $producto->referencia; ?>`)">
+    <button
+        class="product-card__addtocart-icon"
+        type="button"
+        aria-label="Agregar al carrito"
+        onClick="javascript:agregarProducto({
+            id: <?php echo $producto->id; ?>,
+            precio: <?php echo $producto->precio; ?>,
+            referencia: '<?php echo $producto->referencia; ?>',
+            unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
+        })">
         <svg width="20" height="20">
             <circle cx="7" cy="17" r="2" />
             <circle cx="15" cy="17" r="2" />
@@ -18,7 +27,15 @@ $item = buscar_item_carrito($producto->id);
         </svg>
     </button>
 
-    <button class="product-card__addtocart-full" type="button" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, '<?php echo $producto->referencia; ?>')">
+    <button
+        class="product-card__addtocart-full"
+        type="button"
+        onClick="javascript:agregarProducto({
+            id: <?php echo $producto->id; ?>,
+            precio: <?php echo $producto->precio; ?>,
+            referencia: '<?php echo $producto->referencia; ?>',
+            unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
+        })">
         Agregar al carrito
     </button>
 <?php } ?>

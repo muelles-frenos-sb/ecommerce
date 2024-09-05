@@ -199,7 +199,7 @@ class Webhooks extends MY_Controller {
                         "f431_id_un_movto" => "", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
                         "f431_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                         "f431_num_dias_entrega" => 0,
-                        "f431_id_unidad_medida" => "UNID", // Valida en maestro, código de unidad de medida del movimiento
+                        "f431_id_unidad_medida" => $item->unidad_inventario, // Valida en maestro, código de unidad de medida del movimiento
                         "f431_cant_pedida_base" => $item->cantidad,
                         "f431_notas" => $notas_pedido, // Notas del movimiento
                     ]);

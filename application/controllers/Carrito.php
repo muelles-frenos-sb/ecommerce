@@ -32,13 +32,14 @@ class Carrito extends MY_Controller {
         $id = $datos['id'];
         $precio = $datos['precio'];
         $nombre = $datos['nombre'];
+        $unidad_inventario = $datos['unidad_inventario'];
 
         print json_encode(['resultado' => $this->cart->insert([
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
             'name'    => $nombre,
-            // 'options' => ['Size' => 'L', 'Color' => 'Red')
+            'options' => ['unidad_inventario' => $unidad_inventario]
         ])]);
     }
 

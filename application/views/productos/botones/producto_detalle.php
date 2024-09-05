@@ -12,7 +12,16 @@ $item = buscar_item_carrito($producto->id);
             </div>
     <?php } else { ?>
         <div class="product__actions-item product__actions-item--addtocart">
-            <button class="btn btn-primary btn-lg btn-block" onClick="javascript:agregarProducto(<?php echo $producto->id; ?>, <?php echo $producto->precio; ?>, '<?php echo $producto->referencia; ?>')">Añadir</button>
+            <button
+                class="btn btn-primary btn-lg btn-block"
+                onClick="javascript:agregarProducto({
+                    id: <?php echo $producto->id; ?>,
+                    precio: <?php echo $producto->precio; ?>,
+                    referencia: '<?php echo $producto->referencia; ?>',
+                    unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
+                })">
+                Añadir
+            </button>
         </div>
         <div class="product__actions-divider"></div>
     <?php } ?>

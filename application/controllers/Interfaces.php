@@ -186,6 +186,7 @@ class Interfaces extends CI_Controller {
                         'recibo_id' => $datos['recibo_id'],
                         'producto_id' => $item['id'],
                         'cantidad' => $item['qty'],
+                        'unidad_inventario' => $item['options']['unidad_inventario'],
                         'precio' => $item['price'],
                         'precio_lista_sucursal' => $precio_producto_lista_original->precio,
                         'descuento' => $item['subtotal'] - $subtotal_lista_sucursal,

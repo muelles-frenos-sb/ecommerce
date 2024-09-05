@@ -1,8 +1,11 @@
-const agregarProducto = async(id, precio, nombre) => {
+const agregarProducto = async datos => {
+    let {id, precio, referencia, unidad_inventario} = datos
+
     obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, {
         id: id,
         precio: precio,
-        nombre: nombre,
+        nombre: referencia,
+        unidad_inventario: unidad_inventario,
     })
     .then(resultado => {
         mostrarNotificacion({
