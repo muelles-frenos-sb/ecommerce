@@ -1,11 +1,21 @@
-<?php $recibo = $this->productos_model->obtener('recibo', ['id' => $datos['id']]); ?>
+<?php
+$recibo = $this->productos_model->obtener('recibo', ['id' => $datos['id']]);
+
+$llave_integridad = generar_llave_integridad([
+    $recibo->token,
+    (floatval($recibo->valor)) * 100,
+    'COP',
+    $this->config->item('api_wompi')['secret_integridad'],
+]);
+?>
 
 <script>
     var checkout = new WidgetCheckout({
         currency: 'COP',
         amountInCents: parseFloat($('#total_pedido').val()) * 100,
         reference: '<?php echo $recibo->token; ?>',
-        publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2',
+        publicKey: '<?php echo $this->config->item('api_wompi')['llave_publica']; ?>',
+        signature: {integrity : '<?php echo $llave_integridad; ?>'},
         redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $recibo->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
         // taxInCents: { // Opcional
