@@ -2,6 +2,7 @@
 Class Productos_model extends CI_Model{
     function actualizar($tabla, $condiciones, $datos){
         return $this->db->where($condiciones)->update($tabla, $datos);
+        $this->db->close;
     }
 
     function crear($tipo, $datos){
@@ -32,7 +33,7 @@ Class Productos_model extends CI_Model{
             break;
         }
 
-        // $this->db->close;
+        $this->db->close;
     }
 
     function eliminar($tipo, $datos = []){
@@ -54,7 +55,7 @@ Class Productos_model extends CI_Model{
             break;
         }
 
-        // $this->db->close;
+        $this->db->close;
     }
     
     public function obtener($tipo, $datos = null) {
@@ -217,7 +218,7 @@ Class Productos_model extends CI_Model{
             break;
         }
 
-        // $this->db->close;
+        $this->db->close;
     }
 }
 /* Fin del archivo Productos_model.php */

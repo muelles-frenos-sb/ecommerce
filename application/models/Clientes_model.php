@@ -31,6 +31,8 @@ Class Clientes_model extends CI_Model {
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
         }
+
+        $this->db->close;
     }
 
     function eliminar($tipo, $datos){
@@ -39,6 +41,8 @@ Class Clientes_model extends CI_Model {
                 return $this->db->delete($tipo, $datos);
             break;
         }
+
+        $this->db->close;
     }
 
     /**
@@ -185,6 +189,8 @@ Class Clientes_model extends CI_Model {
                 ;
             break;
         }
+
+        $this->db->close;
 	}
 }
 /* Fin del archivo Clientes_model.php */
