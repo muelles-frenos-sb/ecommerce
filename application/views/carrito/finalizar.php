@@ -172,13 +172,23 @@ if($this->session->userdata('usuario_id')) {
         }
 
         let camposObligatorios = [
+            $('#checkout_tipo_tercero'),
+            $('#checkout_tipo_documento'),
             $('#checkout_razon_social'),
             $('#checkout_direccion'),
-            $('#checkout_email'),
             $('#checkout_telefono'),
+            $('#checkout_email'),
+            $('#checkout_municipio_id'),
             $('#checkout_sucursal'),
             $('#checkout_responsable_iva'),
         ]
+
+        // Si es persona natural
+        if ($('#checkout_tipo_tercero').val() == 1) {
+            camposObligatorios.push($('#checkout_nombres'))
+            camposObligatorios.push($('#checkout_primer_apellido'))
+        }
+
         
         // Si tiene sucursales, es obligatorio
         if(parseInt($('#cantidad_sucursales').val()) > 0) camposObligatorios.push($('#checkout_sucursal'))
