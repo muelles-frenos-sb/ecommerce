@@ -22,6 +22,11 @@ class Clientes extends MY_Controller {
         $this->consultar();
     }
 
+    function credito() {
+        $this->data['contenido_principal'] = 'clientes/solicitud_credito/index';
+        $this->load->view('core/body', $this->data);
+    }
+
     function consultar() {
         $this->data['contenido_principal'] = 'clientes/estado_cuenta/index';
         $this->load->view('core/body', $this->data);
