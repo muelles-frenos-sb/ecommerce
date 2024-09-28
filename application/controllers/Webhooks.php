@@ -331,6 +331,8 @@ class Webhooks extends MY_Controller {
      * Importa de Siesa los productos y su información básica
      */
     function importar_productos_detalle() {
+        $tiempo_inicial = microtime(true);
+
         try {
             $resultado_productos = json_decode(obtener_productos_api());
             $codigo_producto = $resultado_productos->codigo;
@@ -360,10 +362,13 @@ class Webhooks extends MY_Controller {
         
                 $total_items = $this->productos_model->crear('productos', $datos);
 
+                $tiempo_final = microtime(true);
+
                 $respuesta = [
                     'log_tipo_id' => 4,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "$total_items registros actualizados"
+                    'observacion' => "$total_items registros actualizados",
+                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
                 ];
 
                 // Se agrega el registro en los logs
@@ -390,6 +395,8 @@ class Webhooks extends MY_Controller {
      * Importa de Siesa el inventario disponible de cada producto
      */
     function importar_productos_inventario() {
+        $tiempo_inicial = microtime(true);
+        
         try {
             // Inventario de la bodega por defecto
             $resultado_inventario = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_principal')]));
@@ -425,10 +432,13 @@ class Webhooks extends MY_Controller {
             
                 $total_items = $this->productos_model->crear('productos_inventario', $datos);
 
+                $tiempo_final = microtime(true);
+                
                 $respuesta = [
                     'log_tipo_id' => 6,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "$total_items registros actualizados"
+                    'observacion' => "$total_items registros actualizados",
+                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
                 ];
                 
                 // Se agrega el registro en los logs
@@ -458,6 +468,8 @@ class Webhooks extends MY_Controller {
      * de cada producto (Lista de precio 009 y 010)
      */
     function importar_productos_precios() {
+        $tiempo_inicial = microtime(true);
+
         try {
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $codigo = 0;
@@ -499,11 +511,14 @@ class Webhooks extends MY_Controller {
             }
 
             $total_items =  $this->productos_model->crear('productos_precios', $nuevos_precios);
+            
+            $tiempo_final = microtime(true);
 
             $respuesta = [
                 'log_tipo_id' => 34,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados"
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
             ];
 
             // Se agrega el registro en los logs
@@ -529,6 +544,8 @@ class Webhooks extends MY_Controller {
      * Los productos destacados y/o más vendidos
      */
     function importar_productos_pedidos($fecha = null) {
+        $tiempo_inicial = microtime(true);
+
         try {
             $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
             $resultado_pedidos = json_decode(obtener_pedidos_api($filtro_fecha));
@@ -564,14 +581,18 @@ class Webhooks extends MY_Controller {
                 
                     $total_items = $this->productos_model->crear('productos_pedidos', $datos);
 
+                    $tiempo_final = microtime(true);
+                    
                     $respuesta = [
                         'log_tipo_id' => 10,
                         'fecha_creacion' => date('Y-m-d H:i:s'),
-                        'observacion' => "$total_items registros actualizados"
+                        'observacion' => "$total_items registros actualizados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
                     ];
 
                     // Se agrega el registro en los logs
                     $this->configuracion_model->crear('logs', $respuesta);
+
 
                     print json_encode($respuesta);
 
@@ -599,6 +620,8 @@ class Webhooks extends MY_Controller {
      * la base de datos el resultado por cada página
      */
     function importar_terceros_api() {
+        $tiempo_inicial = microtime(true);
+
         $codigo = 0;
         $pagina = 1;
         $total_items = 0;
@@ -628,10 +651,13 @@ class Webhooks extends MY_Controller {
                 }
             }
 
+            $tiempo_final = microtime(true);
+
             $respuesta = [
                 'log_tipo_id' => 40,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados"
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
             ];
 
             // Se agrega el registro en los logs
@@ -655,6 +681,8 @@ class Webhooks extends MY_Controller {
      * y los inserta en base de datos
      */
     function importar_documentos_ventas_api($fecha = null) {
+        $tiempo_inicial = microtime(true);
+
         $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
         $codigo = 0;
         $pagina = 1;
@@ -687,10 +715,13 @@ class Webhooks extends MY_Controller {
                 }
             }
 
+            $tiempo_final = microtime(true);
+
             $respuesta = [
                 'log_tipo_id' => 43,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados"
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
             ];
 
             // Se agrega el registro en los logs
@@ -714,6 +745,8 @@ class Webhooks extends MY_Controller {
      * y los inserta en la base de datos
      */
     function importar_movimientos_ventas_api($fecha = null) {
+        $tiempo_inicial = microtime(true);
+
         $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
         $codigo = 0;
         $pagina = 1;
@@ -746,10 +779,13 @@ class Webhooks extends MY_Controller {
                 }
             }
 
+            $tiempo_final = microtime(true);
+          
             $respuesta = [
                 'log_tipo_id' => 45,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados"
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
             ];
 
             // Se agrega el registro en los logs
