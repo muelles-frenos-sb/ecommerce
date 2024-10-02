@@ -661,7 +661,7 @@
 
         Swal.close()
 
-        let personasAutorizadas = obtenerCamposPersonasAutorizadas("personas_autorizadas", 2)
+        let personasAutorizadas = obtenerCamposPersonasAutorizadas("personas_autorizadas", solicitudId.resultado)
         let sociosAccionistas = obtenerClientesSociosAccionistas('clientes', solicitudId.resultado)
         let beneficicariosSociosAccionistas = obtenerClientesSociosAccionistas('beneficiarios_cliente', solicitudId.resultado)
 

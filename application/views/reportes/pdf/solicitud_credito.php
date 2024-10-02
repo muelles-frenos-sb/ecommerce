@@ -210,27 +210,27 @@ $pdf->Write(0, $solicitud->persona_expuesta_cual);
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(62, 126.3);
-$pdf->Write(0, number_format($solicitud->ingresos_mensuales, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->ingresos_mensuales) ? number_format($solicitud->ingresos_mensuales, 2, ',', '.'): "");
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(144, 126.3);
-$pdf->Write(0, number_format($solicitud->egresos_mensuales, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->egresos_mensuales) ? number_format($solicitud->egresos_mensuales, 2, ',', '.'): "");
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(62, 129.7);
-$pdf->Write(0, number_format($solicitud->activos, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->activos) ? number_format($solicitud->activos, 2, ',', '.'): "");
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(144, 129.7);
-$pdf->Write(0, number_format($solicitud->pasivos, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->pasivos) ? number_format($solicitud->pasivos, 2, ',', '.'): "");
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(62, 133.2);
-$pdf->Write(0, number_format($solicitud->otros_ingresos, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->otros_ingresos) ? number_format($solicitud->otros_ingresos, 2, ',', '.'): "");
 
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(144, 133.2);
-$pdf->Write(0, number_format($solicitud->concepto_otros_ingresos, 2, ',', '.'));
+$pdf->Write(0, ($solicitud->concepto_otros_ingresos) ? number_format($solicitud->concepto_otros_ingresos, 2, ',', '.'): "");
 
 $coordenada = 52;
 foreach ($clientes_socios_accionistas as $registro) {
