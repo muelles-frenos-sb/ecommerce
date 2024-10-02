@@ -183,6 +183,27 @@ Class Clientes_model extends CI_Model {
                 }
             break;
 
+            case 'solicitudes_credito':
+                return $this->db
+                    ->where($datos)
+                    ->get('solicitudes_credito')
+                    ->row()
+                ;
+            break;
+
+            case 'solicitudes_credito_clientes':
+                return $this->db
+                    ->select([
+                        'scc.*',
+                        'uit.nombre tipo_identificacion'
+                    ])
+                    ->from('solicitudes_credito_clientes scc')
+                    ->join('usuarios_identificacion_tipos uit', 'scc.identificacion_tipo_id = uit.id', 'left')
+                    ->where($datos)
+                    ->get()->result()
+                ;
+            break;
+
             case 'tercero':
                 unset($datos['tipo']);
                 

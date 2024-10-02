@@ -676,7 +676,7 @@
             ¡Tu solicitud de crédito ha sido creada correctamente!
         `, 20000)
 
-        //generarReporte('pdf/solicitud_credito', {solicitud_id: solicitudId.resultado})
+        generarReporte('pdf/solicitud_credito', {solicitud_id: solicitudId.resultado})
     }
 
     $().ready(() => {

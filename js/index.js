@@ -198,6 +198,10 @@ generarReporte = (tipo, datos) => {
             agregarLog(42, datos.numero_documento)
             location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.numero_documento}`)
         break;
+
+        case 'pdf/solicitud_credito':
+            location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.solicitud_id}`)
+        break;
     }
 }
 
