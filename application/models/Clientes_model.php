@@ -27,6 +27,10 @@ Class Clientes_model extends CI_Model {
                 return $this->db->insert_batch($tipo, $datos);
             break;
 
+            case 'solicitudes_credito_clientes':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
+
             case 'terceros':
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
