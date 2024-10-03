@@ -38,6 +38,11 @@ class Reportes extends MY_Controller {
                 $this->data['token'] = $this->uri->segment(4);
                 $this->load->view('reportes/pdf/recibo', $this->data);
             break;
+
+            case "solicitud_credito":
+                $this->data['solicitud_id'] = $this->uri->segment(4);
+                $this->load->view('reportes/pdf/solicitud_credito', $this->data);
+            break;
         }
     }
 }

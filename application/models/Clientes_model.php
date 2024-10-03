@@ -27,6 +27,10 @@ Class Clientes_model extends CI_Model {
                 return $this->db->insert_batch($tipo, $datos);
             break;
 
+            case 'solicitudes_credito_clientes':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
+
             case 'terceros':
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
@@ -177,6 +181,27 @@ Class Clientes_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'solicitudes_credito':
+                return $this->db
+                    ->where($datos)
+                    ->get('solicitudes_credito')
+                    ->row()
+                ;
+            break;
+
+            case 'solicitudes_credito_clientes':
+                return $this->db
+                    ->select([
+                        'scc.*',
+                        'uit.nombre tipo_identificacion'
+                    ])
+                    ->from('solicitudes_credito_clientes scc')
+                    ->join('usuarios_identificacion_tipos uit', 'scc.identificacion_tipo_id = uit.id', 'left')
+                    ->where($datos)
+                    ->get()->result()
+                ;
             break;
 
             case 'tercero':

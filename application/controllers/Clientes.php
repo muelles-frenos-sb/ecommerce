@@ -41,6 +41,21 @@ class Clientes extends MY_Controller {
         $this->data['contenido_principal'] = 'clientes/estado_cuenta/carrito/respuesta';
         $this->load->view('core/body', $this->data);
     }
+
+    function subir() {
+        $id_solicitud = $this->uri->segment(3);
+        $directorio = "./archivos/solicitudes_credito/$id_solicitud/";
+
+        // Valida que el directorio exista. Si no existe,lo crea con el id obtenido,
+        // asigna los permisos correspondientes
+        if( ! is_dir($directorio)) @mkdir($directorio, 0777);
+
+        $archivo = $_FILES;
+
+        if(move_uploaded_file($archivo['fileBlob']['tmp_name'], $directorio.$archivo['fileBlob']['name'])) $resultado = true;
+
+        print json_encode(['resultado' => $resultado]);
+    }
 }
 /* Fin del archivo Clientes.php */
 /* Ubicación: ./application/controllers/Clientes.php */
