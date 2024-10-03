@@ -4,10 +4,10 @@ use setasign\Fpdi\Fpdi;
 // Crear una instancia de FPDI
 $pdf = new FPDI();
 
-$solicitud = $this->clientes_model->obtener("solicitudes_credito", ["id" => $solicitud_id]);
-$clientes_socios_accionistas = $this->clientes_model->obtener("solicitudes_credito_clientes", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 1]);
-$beneficiarios_clientes_socios_accionistas = $this->clientes_model->obtener("solicitudes_credito_clientes", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 2]);
-$personas_autorizadas = $this->clientes_model->obtener("solicitudes_credito_clientes", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 3]);
+$solicitud = $this->clientes_model->obtener("clientes_solicitudes_credito", ["id" => $solicitud_id]);
+$clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 1]);
+$beneficiarios_clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 2]);
+$personas_autorizadas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 3]);
 
 // Cargar el archivo PDF como plantilla
 $pdf->AddPage();
@@ -274,4 +274,4 @@ foreach ($beneficiarios_clientes_socios_accionistas as $registro) {
     $coordenada = $coordenada + 4;
 }
 
-$pdf->Output('D', 'Solicitud de crédito.pdf');
+$pdf->Output("F", "archivos/solicitudes_credito/$solicitud_id/Solicitud de crédito.pdf");

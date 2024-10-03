@@ -598,8 +598,13 @@
     }
 
     crearSolicitudCredito = async() => {
+        if ($("#subir_archivos").prop('files').length < 1) {
+            mostrarAviso('alerta', `¡Debe seleccionar los archivos para poder finalizar la solicitud de crédito!`, 20000)
+            return false
+        }
+
         let datosSolicitud = {
-            tipo: 'solicitudes_credito',
+            tipo: 'clientes_solicitudes_credito',
             nombre: $('#solicitud_nombre').val(),
             persona_tipo_id: $('#solicitud_persona_tipo').val(),
             identificacion_tipo_id: $('#solicitud_tipo_documento option:selected').attr('data-tipo_tercero'),
@@ -665,9 +670,9 @@
         let sociosAccionistas = obtenerClientesSociosAccionistas('clientes', solicitudId.resultado)
         let beneficicariosSociosAccionistas = obtenerClientesSociosAccionistas('beneficiarios_cliente', solicitudId.resultado)
 
-        if (personasAutorizadas.length > 0) consulta('crear', {tipo: "solicitudes_credito_clientes", valores: personasAutorizadas}, false)
-        if (sociosAccionistas.length > 0) consulta('crear', {tipo: "solicitudes_credito_clientes", valores: sociosAccionistas}, false)
-        if (beneficicariosSociosAccionistas.length > 0) consulta('crear', {tipo: "solicitudes_credito_clientes", valores: beneficicariosSociosAccionistas}, false)
+        if (personasAutorizadas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: personasAutorizadas}, false)
+        if (sociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: sociosAccionistas}, false)
+        if (beneficicariosSociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: beneficicariosSociosAccionistas}, false)
 
         $('#subir_archivos').data('fileinput').uploadUrl = `${$("#site_url").val()}/clientes/subir/${solicitudId.resultado}`
         $('#subir_archivos').fileinput('upload')
@@ -676,7 +681,9 @@
             ¡Tu solicitud de crédito ha sido creada correctamente!
         `, 20000)
 
-        generarReporte('pdf/solicitud_credito', {solicitud_id: solicitudId.resultado})
+        $('#subir_archivos').on('fileuploaded', function() {
+            obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
+        })
     }
 
     $().ready(() => {
@@ -687,6 +694,8 @@
             initialPreviewAsData: true,
             showDownload: true,
             showUpload: false,
+            sizeUnits: ['MB'],
+            maxFileSize: 3072,
         })
     })
 </script>
