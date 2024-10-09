@@ -514,7 +514,62 @@
                 </div>
             </div>
 
+
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    Documentos requeridos
+                </div>
+                <div class="container">
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th rowspan="2">Documentos</th>
+                            </tr>
+                            <tr>
+                                <th>Persona natural</th>
+                                <th>Persona jurídica</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fotocopia cédula del Representante Legal</td>
+                                <td class="text-center">X</td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>Fotocopia RUT</td>
+                                <td class="text-center">X</td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días)</td>
+                                <td class="text-center"></td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>Extractos bancarios últimos 3 meses</td>
+                                <td class="text-center"></td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>2 referencias comerciales</td>
+                                <td class="text-center"></td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>Estados financieros año anterior</td>
+                                <td class="text-center"></td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
+                                <td>Declaración de renta año anterior</td>
+                                <td class="text-center"></td>
+                                <td class="text-center">X</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <div class="file-loading">
                     <input id="subir_archivos" type="file" data-browse-on-zone-click="true" multiple>
                 </div>
