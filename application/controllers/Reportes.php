@@ -41,7 +41,9 @@ class Reportes extends MY_Controller {
 
             case "solicitud_credito":
                 $this->data['solicitud_id'] = $this->uri->segment(4);
-                $this->load->view('reportes/pdf/solicitud_credito', $this->data);
+                if ($this->load->view('reportes/pdf/solicitud_credito', $this->data)) {
+                    print json_encode(true);
+                }
             break;
         }
     }

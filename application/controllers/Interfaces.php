@@ -258,13 +258,13 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
 
-            case 'solicitudes_credito':
+            case 'clientes_solicitudes_credito':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                print json_encode(['resultado' => $this->clientes_model->crear('solicitudes_credito', $datos)]);
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito', $datos)]);
             break;
 
-            case 'solicitudes_credito_clientes':
-                print json_encode(['resultado' => $this->clientes_model->crear('solicitudes_credito_clientes', $datos['valores'])]);
+            case 'clientes_solicitudes_credito_detalle':
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_detalle', $datos['valores'])]);
             break;
 
             case 'tercero':

@@ -27,7 +27,7 @@ Class Clientes_model extends CI_Model {
                 return $this->db->insert_batch($tipo, $datos);
             break;
 
-            case 'solicitudes_credito_clientes':
+            case 'clientes_solicitudes_credito_detalle':
                 return $this->db->insert_batch($tipo, $datos);
             break;
 
@@ -183,22 +183,22 @@ Class Clientes_model extends CI_Model {
                 }
             break;
 
-            case 'solicitudes_credito':
+            case 'clientes_solicitudes_credito':
                 return $this->db
                     ->where($datos)
-                    ->get('solicitudes_credito')
+                    ->get('clientes_solicitudes_credito')
                     ->row()
                 ;
             break;
 
-            case 'solicitudes_credito_clientes':
+            case 'clientes_solicitudes_credito_detalle':
                 return $this->db
                     ->select([
-                        'scc.*',
+                        'cscd.*',
                         'uit.nombre tipo_identificacion'
                     ])
-                    ->from('solicitudes_credito_clientes scc')
-                    ->join('usuarios_identificacion_tipos uit', 'scc.identificacion_tipo_id = uit.id', 'left')
+                    ->from('clientes_solicitudes_credito_detalle cscd')
+                    ->join('usuarios_identificacion_tipos uit', 'cscd.identificacion_tipo_id = uit.id', 'left')
                     ->where($datos)
                     ->get()->result()
                 ;
