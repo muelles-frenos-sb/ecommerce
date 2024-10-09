@@ -68,3 +68,6 @@ CREATE TABLE `solicitudes_credito_clientes` (
 -- 20241003 SE cambian nombres de tablas anteriormente creadas
 RENAME TABLE solicitudes_credito TO clientes_solicitudes_credito;
 RENAME TABLE solicitudes_credito_clientes TO clientes_solicitudes_credito_detalle;
+
+-- 20241008 Campo para diferenciar solicitudes nuevas o actualizaciones
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `nueva` tinyint(1) NULL DEFAULT NULL AFTER `concepto_otros_ingresos`;

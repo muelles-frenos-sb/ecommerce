@@ -3,7 +3,7 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title"></h1>
+            <h1 class="block-header__title">Solicitud de crédito</h1>
         </div>
     </div>
 </div>
@@ -11,15 +11,30 @@
 <div class="block">
     <div class="container">
         <div class="card mb-lg-0">
-            <div class="card-header text-center">
-                <h5><b>MUELLES Y FRENOS SIMON BOLIVAR S.A.S SOLICITUD CREDITO TRACIONAL</b></h5>
-            </div>
-
-            <div class="card-header">
-                <h5>Datos básicos</h5>
-            </div>
-            <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="form-row mb-2">
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva1" value="1">
+                            <label class="form-check-label" for="solicitud_nueva1">
+                                Quiero crear una solicitud nueva
+                            </label>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva0" value="0">
+                            <label class="form-check-label" for="solicitud_nueva0">
+                                Quiero actualizar mi solicitud
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-divider"></div>
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                    DATOS BÁSICOS
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="solicitud_persona_tipo">¿Eres persona natural o jurídica?</label>
@@ -35,20 +50,28 @@
                         <input type="text" class="form-control" id="solicitud_nombre">
                     </div>
                 </div>
-
                 <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="solicitud_tipo_documento">Tipo de identificación</label>
-                        <select id="solicitud_tipo_documento" class="form-control">
-                            <option value="">Selecciona...</option>
-                            <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
-                            <option value="N" data-tipo_tercero="2">NIT</option>
-                            <option value="E" data-tipo_tercero="1">Cédula de extranjería</option>
-                        </select>
+                    <div class="col-md-3">
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1">
+                            <label class="form-check-label" for="solicitud_tipo_documento1">
+                                Cédula de ciudadanía
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <br>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2">
+                            <label class="form-check-label" for="solicitud_tipo_documento2">
+                                Nit
+                            </label>
+                        </div>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_numero_documento">CC/NIT</label>
+                        <label for="solicitud_numero_documento">Número de documento</label>
                         <input type="text" class="form-control" id="solicitud_numero_documento">
                     </div>
                 </div>
@@ -78,13 +101,13 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="solicitud_representante_legal">Representante legal</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal">
+                        <label for="solicitud_representante_legal">Representante legal (para personas jurídicas)</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_representante_legal_documento">CC</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_documento">
+                        <label for="solicitud_representante_legal_documento">Número de documento del representante legal</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal_documento" placeholder="Solo para personas jurídicas">
                     </div>
                 </div>
                 <div class="form-row">
@@ -95,11 +118,11 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Personas de contacto</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    PERSONAS DE CONTACTO
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label>Área</label>
@@ -164,11 +187,11 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Referencia comercial</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    REFERENCIAS COMERCIALES
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="referencia_comercial_entidad1">Entidad</label>
@@ -200,11 +223,11 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Referencia bancaria</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    REFERENCIA BANCARIA
+                </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="referencia_bancaria_entidad">Entidad</label>
@@ -223,11 +246,12 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Personas autorizadas para brindar atención</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1" id="personas_autorizadas">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    PERSONAS AUTORIZADAS
+                </div>
+                <small>(personas a quiénes autorizas para brindar información de tu cuenta)</small>
                 <div class="form-row" id="personas_autorizadas_0">
                     <div class="form-group col-md-4">
                         <label>Nombre</label>
@@ -250,15 +274,16 @@
                 <button class="btn btn-success" onClick="javascript:agregarCamposPersonaAutorizada('personas_autorizadas')">Agregar</button>
             </div>
 
-            <div class="card-header p-1 text-center">
-                <h5><b>SAGRILAFT FORMULARIO DE CONOCIMIENTO DE CLIENTES</b></h5>
-            </div>
-
-            <div class="card-header">
-                <h5>Socios y/o accionistas</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1" id="clientes">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    SAGRILAFT FORMULARIO DE CONOCIMIENTO DE CLIENTES
+                </div>
+
+                <div class="card-header">
+                    <h5>Socios y/o accionistas (solo para personas jurídicas)</h5>
+                </div>
+
                 <div class="form-row" id="clientes_0">
                     <div class="form-group col-md-3">
                         <label>Nombre socio o accionista</label>
@@ -291,11 +316,12 @@
                 <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('clientes')">Agregar</button>
             </div>
 
-            <div class="card-header">
-                <h5>Beneficiarios finales de socios y/o accionistas iguales o superiores al 5%</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1" id="beneficiarios_cliente">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    BENEFICIARIOS FINALES DE SOCIOS Y/O ACCIONISTAS IGUALES O SUPERIORES AL 5%
+                </div>
+                <small>(Solo para personas jurídicas)</small>
                 <div class="form-row" id="beneficiarios_cliente_0">
                     <div class="form-group col-md-3">
                         <label>Nombre socio o accionista</label>
@@ -328,11 +354,11 @@
                 <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('beneficiarios_cliente')">Agregar</button>
             </div>
 
-            <div class="card-header">
-                <h5>Persona expuesta políticamente (PEP) (De las personas del punto anterior indique)</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    PERSONA POLÍTICAMENTE EXPUESTA
+                </div>
                 <div class="form-row">
                     <div class="col-md-6">
                         <label>¿Por su cargo o actividad maneja recursos públicos?</label>
@@ -447,11 +473,12 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Información financiera</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                    INFORMACIÓN FINANCIERA
+                </div>
+
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="solicitud_ingresos_mensuales">Ingresos mensuales (pesos)</label>
@@ -494,7 +521,7 @@
             </div>
 
             <div class="form-group mb-2 mt-2 mx-3 my-2">
-                <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()">Finalizar solicitud de crédito</button>
+                <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()">ENVIAR SOLICITUD DE CRÉDITO</button>
             </div>
         </div>
     </div>
@@ -650,7 +677,8 @@
             activos: $('#solicitud_activos').val(),
             pasivos: $('#solicitud_pasivos').val(),
             otros_ingresos: $('#solicitud_otros_ingresos').val(),
-            concepto_otros_ingresos: $('#solicitud_concepto_otros_ingresos').val()
+            concepto_otros_ingresos: $('#solicitud_concepto_otros_ingresos').val(),
+            nueva: ($(`#solicitud_nueva1`).is(':checked')) ? 1: 0,
         }
 
         Swal.fire({
