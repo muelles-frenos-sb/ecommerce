@@ -448,3 +448,31 @@ const validarCamposObligatorios = campos => {
     
     return exito
 }
+
+validarCamposTipoRadio = (campos) => {
+    let validacionesExitosas = campos.length
+    let exito = true
+
+    for (var i = 0; i < campos.length; i++){
+        let elementos = $(`input[name^='${campos[i]}']`)
+        elementos.removeClass(`is-invalid`)
+
+        if (!elementos.is(':checked')) {
+            // Se resta el campo al total de validaciones exitosas
+            validacionesExitosas--
+
+            // Se marcan los campos en rojo con un mensaje
+            elementos.addClass(`is-invalid`)
+        }
+    }
+
+    // Si los exitosos son todos
+    if (validacionesExitosas != campos.length) {
+        mostrarAviso('alerta', 'Hay campos obligatorios por diligenciar')
+
+        // No es exitoso
+        exito = false
+    }
+
+    return exito
+}

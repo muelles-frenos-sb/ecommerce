@@ -17,7 +17,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva1" value="1">
                             <label class="form-check-label" for="solicitud_nueva1">
-                                Quiero crear una solicitud nueva
+                                Quiero crear una solicitud nueva *
                             </label>
                         </div>
                     </div>
@@ -26,7 +26,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva0" value="0">
                             <label class="form-check-label" for="solicitud_nueva0">
-                                Quiero actualizar mi solicitud
+                                Quiero actualizar mi solicitud *
                             </label>
                         </div>
                     </div>
@@ -37,7 +37,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="solicitud_persona_tipo">¿Eres persona natural o jurídica?</label>
+                        <label for="solicitud_persona_tipo">¿Eres persona natural o jurídica? *</label>
                         <select id="solicitud_persona_tipo" class="form-control">
                             <option value="">Selecciona...</option>
                             <option value="1">Persona natural</option>
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="form-group col-md-8">
-                        <label for="solicitud_nombre">Nombre o razón social</label>
+                        <label for="solicitud_nombre">Nombre o razón social *</label>
                         <input type="text" class="form-control" id="solicitud_nombre">
                     </div>
                 </div>
@@ -56,7 +56,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1">
                             <label class="form-check-label" for="solicitud_tipo_documento1">
-                                Cédula de ciudadanía
+                                Cédula de ciudadanía *
                             </label>
                         </div>
                     </div>
@@ -65,37 +65,37 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2">
                             <label class="form-check-label" for="solicitud_tipo_documento2">
-                                Nit
+                                Nit *
                             </label>
                         </div>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_numero_documento">Número de documento</label>
+                        <label for="solicitud_numero_documento">Número de documento *</label>
                         <input type="text" class="form-control" id="solicitud_numero_documento">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <div class="form-group">
-                            <label for="solicitud_direccion">Dirección</label>
+                            <label for="solicitud_direccion">Dirección *</label>
                             <input type="text" class="form-control" id="solicitud_direccion">
                         </div>
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_telefono">Telefono</label>
+                        <label for="solicitud_telefono">Telefono *</label>
                         <input type="text" class="form-control" id="solicitud_telefono">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="solicitud_email">E-mail</label>
+                        <label for="solicitud_email">E-mail *</label>
                         <input type="text" class="form-control" id="solicitud_email">
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_celular">Celular</label>
+                        <label for="solicitud_celular">Celular *</label>
                         <input type="text" class="form-control" id="solicitud_celular">
                     </div>
                 </div>
@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label for="solicitud_correo_facturacion_electronica">Correo para facturación electrónica</label>
+                        <label for="solicitud_correo_facturacion_electronica">Correo para facturación electrónica *</label>
                         <input type="text" class="form-control" id="solicitud_correo_facturacion_electronica">
                     </div>
                 </div>
@@ -361,7 +361,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label>¿Por su cargo o actividad maneja recursos públicos?</label>
+                        <label>¿Por su cargo o actividad maneja recursos públicos? *</label>
                     </div>
 
                     <div class="form-group col-md-1">
@@ -389,7 +389,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label>¿Por su cargo o actividad ejerce algún grado de poder público?</label>
+                        <label>¿Por su cargo o actividad ejerce algún grado de poder público? *</label>
                     </div>
 
                     <div class="form-group col-md-1">
@@ -417,7 +417,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label>Por su actividad u oficio, goza usted de reconocimiento público</label>
+                        <label>Por su actividad u oficio, goza usted de reconocimiento público *</label>
                     </div>
 
                     <div class="form-group col-md-1">
@@ -445,7 +445,7 @@
                 </div>
                 <div class="form-row">
                     <div class="col-md-6">
-                        <label>Existe algún vínculo entre usted y una persona considerada expuesta</label>
+                        <label>Existe algún vínculo entre usted y una persona considerada expuesta *</label>
                     </div>
 
                     <div class="form-group col-md-1">
@@ -632,7 +632,7 @@
         `)
     }
 
-    obtenerClientesSociosAccionistas = (elemento, solicitudId) => {
+    obtenerClientesSociosAccionistas = (elemento, solicitudId = null) => {
         let registros = []
 
         $(`div[id^='${elemento}_']`).each(function(index) {
@@ -680,6 +680,40 @@
     }
 
     crearSolicitudCredito = async() => {
+        let camposObligatorios = [
+            $('#solicitud_persona_tipo'),
+            $('#solicitud_nombre'),
+            $('#solicitud_numero_documento'),
+            $('#solicitud_direccion'),
+            $('#solicitud_telefono'),
+            $('#solicitud_email'),
+            $('#solicitud_celular'),
+            $('#solicitud_correo_facturacion_electronica')
+        ]
+
+        let camposRadioObligatorios = [
+            'solicitud_nueva',
+            'solicitud_tipo_documento',
+            'recursos_publicos',
+            'reconocimiento_publico',
+            'persona_expuesta',
+            'poder_publico',
+        ]
+
+        // Si es persona jurídica
+        if ($('#solicitud_persona_tipo').val() == 2) {
+            camposObligatorios.push($('#solicitud_representante_legal'))
+            camposObligatorios.push($('#solicitud_representante_legal_documento'))
+        }
+
+        if (!validarCamposObligatorios(camposObligatorios)) return false
+        if (!validarCamposTipoRadio(camposRadioObligatorios)) return false
+
+        if ($('#solicitud_persona_tipo').val() == 2 && obtenerClientesSociosAccionistas('clientes').length < 1) {
+            mostrarAviso('alerta', `¡Debe rellenar la sección de socios y/o accionistas!`, 20000)
+            return false
+        }
+
         if ($("#subir_archivos").prop('files').length < 1) {
             mostrarAviso('alerta', `¡Debe seleccionar los archivos para poder finalizar la solicitud de crédito!`, 20000)
             return false
