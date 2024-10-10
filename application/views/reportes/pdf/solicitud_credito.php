@@ -9,6 +9,8 @@ $clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitu
 $beneficiarios_clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 2]);
 $personas_autorizadas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 3]);
 
+$fecha =  date("d / m / Y", strtotime($solicitud->fecha_creacion));
+
 // Cargar el archivo PDF como plantilla
 $pdf->AddPage();
 $pageCount = $pdf->setSourceFile('application/views/reportes/plantillas/solicitud_credito.pdf');
@@ -17,7 +19,18 @@ $tplIdx = $pdf->importPage(1);
 // Usar la página del archivo como plantilla
 $pdf->useTemplate($tplIdx, 10, 10, 200);
 
-// Agregar texto sobre la plantilla
+$pdf->SetFont('Arial', '', 8);
+$pdf->SetXY(30.6, 38.5);
+$pdf->Write(0, ($solicitud->nueva) ? "X": "");
+
+$pdf->SetFont('Arial', '', 8);
+$pdf->SetXY(47, 38.5);
+$pdf->Write(0, ($solicitud->nueva) ? "": "X");
+
+$pdf->SetFont('Arial', '', 8);
+$pdf->SetXY(39, 46.5);
+$pdf->Write(0, $fecha);
+
 $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(57, 57.5);
 $pdf->Write(0, $solicitud->nombre);
