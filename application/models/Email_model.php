@@ -7,6 +7,9 @@
 Class Email_model extends CI_Model {
     function __construct() {
         parent::__construct();
+     
+        // Carga de modelos y librerías
+        $this->load->helper('directory');
     }
 
     function enviar($datos) {
@@ -33,6 +36,19 @@ Class Email_model extends CI_Model {
         }
 
         $this->email->message($mensaje);
+
+        // Si tiene archivos adjuntos
+        if(isset($datos['adjuntos'])) {
+            $directorio = "./archivos/solicitudes_credito/{$datos['id']}/";
+
+            $archivos = directory_map($directorio);
+
+            // Recorrer y adjuntar los archivos al email
+            foreach ($archivos as $archivo) {
+                $ruta_completa = $directorio.$archivo;
+                $this->email->attach($ruta_completa);
+            }
+        }
        
         // Envío del mensaje
         $this->email->send();

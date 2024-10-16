@@ -164,3 +164,29 @@ function enviar_email_usuario_nuevo($id) {
 
     return $CI->email_model->enviar($datos);
 }
+
+function enviar_email_solicitud_credito($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $instancia = get_instance();
+
+    $instancia->load->model(['email_model']);
+
+    $solicitud = $instancia->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $id]);
+    $url = site_url('');
+
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $solicitud->id,
+        'asunto' => 'Solicitud de crédito recibida',
+        'cuerpo' => [
+            'titulo' => '¡Hemos recibido tu solicitud de crédito!',
+            'subtitulo' => "
+                Hola, $solicitud->nombre. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
+            ",
+        ],
+        'destinatarios' => $solicitud->email,
+        'adjuntos' => true,
+    ];
+
+    return $instancia->email_model->enviar($datos);
+}

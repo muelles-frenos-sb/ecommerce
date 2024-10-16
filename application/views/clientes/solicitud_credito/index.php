@@ -798,8 +798,11 @@
             ¡Tu solicitud de crédito ha sido creada correctamente!
         `, 20000)
 
-        $('#subir_archivos').on('fileuploaded', function() {
-            obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
+        $('#subir_archivos').on('fileuploaded', async function() {
+            await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
+
+            // Se envía un correo electrónico de notificación
+            obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
         })
     }
 

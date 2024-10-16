@@ -87,6 +87,10 @@ class Interfaces extends CI_Controller {
                 echo enviar_email_codigo_otp($datos['id']);
             break;
 
+            case 'solicitud_credito':
+                echo enviar_email_solicitud_credito($datos['id']);
+            break;
+
             case 'usuario_nuevo':
                 echo enviar_email_usuario_nuevo($datos['id']);
             break;
