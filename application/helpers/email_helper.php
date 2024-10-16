@@ -184,7 +184,7 @@ function enviar_email_solicitud_credito($id) {
                 Hola, $solicitud->nombre. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
             ",
         ],
-        'destinatarios' => $solicitud->email,
+        'destinatarios' => [$solicitud->email, 'analistacartera@repuestossimonbolivar.com'],
         'adjuntos' => true,
     ];
 

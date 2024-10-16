@@ -111,9 +111,14 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-6">
                         <label for="solicitud_correo_facturacion_electronica">Correo para facturación electrónica *</label>
                         <input type="text" class="form-control" id="solicitud_correo_facturacion_electronica">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="solicitud_cantidad_vehiculos">Si posees vehículos propios, indica cuántos</label>
+                        <input type="number" class="form-control" id="solicitud_cantidad_vehiculos">
                     </div>
                 </div>
             </div>

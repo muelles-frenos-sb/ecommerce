@@ -68,6 +68,10 @@ $pdf->SetXY(65, 72.7);
 $pdf->Write(0, $solicitud->email_factura_electronica);
 
 $pdf->SetFont('Arial', '', 8);
+$pdf->SetXY(145, 72.7);
+$pdf->Write(0, utf8_decode("¿Cuántos vehículos posee? $solicitud->cantidad_vehiculos"));
+
+$pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(59.3, 86.8);
 $pdf->Write(0, $solicitud->tesoreria_nombre);
 

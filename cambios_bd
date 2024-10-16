@@ -71,3 +71,6 @@ RENAME TABLE solicitudes_credito_clientes TO clientes_solicitudes_credito_detall
 
 -- 20241008 Campo para diferenciar solicitudes nuevas o actualizaciones
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `nueva` tinyint(1) NULL DEFAULT NULL AFTER `concepto_otros_ingresos`;
+
+-- 20241016 Campos nuevos para la solicitud del crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cantidad_vehiculos` int NULL DEFAULT 0 AFTER `nueva`;
