@@ -74,3 +74,4 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `nueva` tinyint(1) NULL DE
 
 -- 20241016 Campos nuevos para la solicitud del crédito
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cantidad_vehiculos` int NULL DEFAULT 0 AFTER `nueva`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `preferencia_enlace` tinyint(1) NULL COMMENT '1: Whatsapp; 2: Email' AFTER `cantidad_vehiculos`;

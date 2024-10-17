@@ -578,6 +578,27 @@
                 <div class="file-loading">
                     <input id="subir_archivos" type="file" data-browse-on-zone-click="true" multiple>
                 </div>
+
+                <div class="card-divider"></div>
+                <div class="form-row mt-2">
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_preferencia_enlace" id="solicitud_preferencia_enlace1" value="1">
+                            <label class="form-check-label" for="solicitud_preferencia_enlace1">
+                                Quiero que mi enlace para firmar la solicitud me llegue por WhatsApp *
+                            </label>
+                        </div>
+                    </div>
+                
+                    <div class="col-md-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="solicitud_preferencia_enlace" id="solicitud_preferencia_enlace2" value="2">
+                            <label class="form-check-label" for="solicitud_preferencia_enlace2">
+                                Quiero que mi enlace para firmar la solicitud me llegue por correo electrónico *
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="form-group mb-2 mt-2 mx-3 my-2">
@@ -703,6 +724,7 @@
             'reconocimiento_publico',
             'persona_expuesta',
             'poder_publico',
+            'solicitud_preferencia_enlace',
         ]
 
         // Si es persona jurídica
@@ -773,6 +795,7 @@
             otros_ingresos: $('#solicitud_otros_ingresos').val(),
             concepto_otros_ingresos: $('#solicitud_concepto_otros_ingresos').val(),
             nueva: ($(`#solicitud_nueva1`).is(':checked')) ? 1: 0,
+            preferencia_enlace: ($(`#solicitud_preferencia_enlace1`).is(':checked')) ? 1: 2,
         }
 
         Swal.fire({
