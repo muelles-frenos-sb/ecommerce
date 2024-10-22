@@ -743,7 +743,7 @@
             return false
         }
 
-        if ($("#subir_archivos").prop('files').length < 1) {
+        if ($("#subir_archivos").fileinput('getFilesCount') < 1) {
             mostrarAviso('alerta', `¡Debe seleccionar los archivos para poder finalizar la solicitud de crédito!`, 20000)
             return false
         }
