@@ -189,22 +189,22 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
-            case 'productos_outlet':
-                $sql = 
-                "SELECT
-                    pi.producto_id,
-                    pi.bodega
-                FROM
-                    productos_inventario AS pi
-                    INNER JOIN productos AS p ON pi.producto_id = p.id 
-                WHERE
-                    pi.bodega = '{$this->config->item('bodega_outlet')}' AND disponible > 0 
-                ORDER BY
-                    RAND() ASC 
-                LIMIT 50";
+            // case 'productos_outlet':
+            //     $sql = 
+            //     "SELECT
+            //         pi.producto_id,
+            //         pi.bodega
+            //     FROM
+            //         productos_inventario AS pi
+            //         INNER JOIN productos AS p ON pi.producto_id = p.id 
+            //     WHERE
+            //         pi.bodega = '{$this->config->item('bodega_outlet')}' AND disponible > 0 
+            //     ORDER BY
+            //         RAND() ASC 
+            //     LIMIT 50";
                 
-                return $this->db->query($sql)->result();
-            break;
+            //     return $this->db->query($sql)->result();
+            // break;
 
             case 'productos_precios':
                 unset($datos['tipo']);

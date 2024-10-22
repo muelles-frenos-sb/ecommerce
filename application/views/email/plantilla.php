@@ -218,7 +218,7 @@
 												<tr>
 													<td class="column column-1" width="100%" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt; font-weight: 400; text-align: left; padding-bottom: 5px; padding-top: 5px; vertical-align: top; border-top: 0px; border-right: 0px; border-bottom: 0px; border-left: 0px;">
 														<div class="spacer_block block-1" style="height:30px;line-height:30px;font-size:1px;">&#8202;</div>
-														<table class="image_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
+														<!-- <table class="image_block block-2" width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace: 0pt; mso-table-rspace: 0pt;">
 															<tr>
 																<td class="pad" style="width:100%;padding-right:0px;padding-left:0px;">
 																	<div class="alignment" align="center" style="line-height:10px"><a href="https://repuestossimonbolivar.com/productos?busqueda=outlet" target="_blank" style="outline:none" tabindex="-1"><img src="https://d1oco4z2z1fhwp.cloudfront.net/templates/default/1951/Coin.png" style="display: block; height: auto; border: 0; max-width: 238px; width: 100%;" width="238" alt="Outlet" title="Outlet"></a></div>
@@ -233,7 +233,7 @@
 																	</div>
 																</td>
 															</tr>
-														</table>
+														</table> -->
 													</td>
 												</tr>
 											</tbody>

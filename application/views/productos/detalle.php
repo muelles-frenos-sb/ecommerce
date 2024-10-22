@@ -102,7 +102,7 @@ if(empty($producto)) redirect(site_url(''));
                                 <div class="product__info-card">
                                     <div class="product__info-body">
                                         <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
-                                        <?php if($producto->disponible > 0 & $producto->bodega == '0008') echo "<div class='tag-badge tag-badge--hot'>Outlet</div>"; ?>
+                                        <?php // if($producto->disponible > 0 & $producto->bodega == '0008') echo "<div class='tag-badge tag-badge--hot'>Outlet</div>"; ?>
                                         
                                         <div class="product__prices-stock">
                                             <?php if ($producto->disponible > 0) { ?>

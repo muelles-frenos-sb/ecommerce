@@ -96,11 +96,11 @@
                     </li>
 
                     <!-- Outlet -->
-                    <p class="m-2">
-                        <a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="ml-1">
-                            <img src="<?php echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
+                    <!-- <p class="m-2">
+                        <a href="<?php // echo site_url('productos?busqueda=outlet'); ?>" class="ml-1">
+                            <img src="<?php // echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
                         </a>
-                    </p>
+                    </p> -->
                     
                     <!-- Garantía -->
                     <?php $this->load->view('bitrix/garantia'); ?>

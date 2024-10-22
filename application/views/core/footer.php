@@ -64,9 +64,9 @@
                     <div class="col-6 col-md-3 col-xl-2">
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Mi cuenta</h5>
-                            <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="<?php echo site_url('productos?busqueda=outlet'); ?>" class="footer-links__link">Outlet</a></li>
-                            </ul>
+                            <!-- <ul class="footer-links__list">
+                                <li class="footer-links__item"><a href="<?php // echo site_url('productos?busqueda=outlet'); ?>" class="footer-links__link">Outlet</a></li>
+                            </ul> -->
                         </div>
                     </div>
                     <div class="col-12 col-md-6 col-xl-4">

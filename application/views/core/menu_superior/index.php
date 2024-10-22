@@ -52,9 +52,9 @@
                 </ul>
             </div>
             
-            <a href="<?php echo site_url('productos?busqueda=outlet'); ?>">
-                <img src="<?php echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
-            </a>
+            <!-- <a href="<?php // echo site_url('productos?busqueda=outlet'); ?>">
+                <img src="<?php // echo base_url(); ?>images/outlet.png" height="32" alt="Outlet">
+            </a> -->
 
             <a href="<?php echo site_url('clientes'); ?>" class="ml-1">
                 <img src="<?php echo base_url(); ?>images/boton_pago.png" height="32" alt="Paga tus facturas">

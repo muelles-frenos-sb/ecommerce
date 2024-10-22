@@ -1,7 +1,7 @@
 <?php
 // Se obtiene un arreglo con todos los productos destacados que se van a mostrar al inicio
 $productos = $this->productos_model->obtener('productos_destacados');
-$productos_outlet = $this->productos_model->obtener('productos_outlet');
+// $productos_outlet = $this->productos_model->obtener('productos_outlet');
 $cantidad_productos = count($productos);
 $cantidad_productos_por_bloque = intval($cantidad_productos / 8);
 $posicion = 0;
@@ -37,9 +37,9 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 /****************************************************************************************
  *************************************** Outlet *****************************************
  ****************************************************************************************/
-$this->data['productos'] = $productos_outlet;
-$this->load->view('inicio/outlet', $this->data);
-echo "<div class='block-space block-space--layout--divider-nl'></div>";
+// $this->data['productos'] = $productos_outlet;
+// $this->load->view('inicio/outlet', $this->data);
+// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  *********************** Bloque de marcas y productos destacados ************************
@@ -120,8 +120,8 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 /****************************************************************************************
  *************************** Banners de outlet y promociones ****************************
  ****************************************************************************************/
-$this->load->view('inicio/bloques_banners');
-echo "<div class='block-space block-space--layout--divider-nl'></div>";
+// $this->load->view('inicio/bloques_banners');
+// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  *********************************** Últimas noticias ***********************************

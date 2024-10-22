@@ -28,7 +28,7 @@
         <div>
             <div class="product-card__badges">
                 <?php if($producto->disponible > 0 & $producto->disponible <= 3) echo "<div class='tag-badge tag-badge--sale'>Últimas unidades</div>"; ?>
-                <?php if($producto->disponible > 0 & $producto->bodega == '0008') echo "<div class='tag-badge tag-badge--hot'>Outlet</div>"; ?>
+                <?php // if($producto->disponible > 0 & $producto->bodega == '0008') echo "<div class='tag-badge tag-badge--hot'>Outlet</div>"; ?>
                 
                 <!-- <div class="tag-badge tag-badge--new">new</div>
                 <div class="tag-badge tag-badge--hot">hot</div> -->

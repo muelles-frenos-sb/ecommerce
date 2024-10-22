@@ -401,16 +401,8 @@ class Webhooks extends MY_Controller {
             // Inventario de la bodega por defecto
             $resultado_inventario = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_principal')]));
             $codigo_inventario = $resultado_inventario->codigo;
-            $inventario_por_defecto = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table : 0 ;
+            $inventario = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table : 0 ;
 
-            // Inventario de bodega outlet
-            $resultado_inventario_outlet = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_outlet')]));
-            $codigo_inventario_outlet = $resultado_inventario_outlet->codigo;
-            $inventario_outlet = ($codigo_inventario_outlet == 0) ? $resultado_inventario_outlet->detalle->Table : 0 ;
-            
-            // Se juntan los arreglos resultantes
-            $inventario = array_merge($inventario_por_defecto, $inventario_outlet);
-            
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
 
