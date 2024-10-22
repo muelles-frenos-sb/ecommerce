@@ -475,6 +475,7 @@ class Webhooks extends MY_Controller {
             $codigo = 0;
             $pagina = 1;
             $nuevos_precios = [];
+            $total_items = 0;
 
             $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}");
             $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio_clientes')}");
@@ -510,7 +511,7 @@ class Webhooks extends MY_Controller {
                 }
             }
 
-            $total_items =  $this->productos_model->crear('productos_precios', $nuevos_precios);
+            if($total_items > 0) $total_items = $this->productos_model->crear('productos_precios', $nuevos_precios);
             
             $tiempo_final = microtime(true);
 
