@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_celular">Celular *</label>
+                        <label for="solicitud_celular">Celular del titular o Representante legal</label>
                         <input type="text" class="form-control" id="solicitud_celular">
                     </div>
                 </div>
@@ -580,12 +580,15 @@
                 </div>
 
                 <div class="card-divider"></div>
+                <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
+                    Deseo recibir el enlace para firmar la solicitud por:
+                </label>
                 <div class="form-row mt-2">
                     <div class="col-md-6">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_preferencia_enlace" id="solicitud_preferencia_enlace1" value="1">
                             <label class="form-check-label" for="solicitud_preferencia_enlace1">
-                                Quiero que mi enlace para firmar la solicitud me llegue por WhatsApp *
+                                WhatsApp
                             </label>
                         </div>
                     </div>
@@ -594,7 +597,7 @@
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_preferencia_enlace" id="solicitud_preferencia_enlace2" value="2">
                             <label class="form-check-label" for="solicitud_preferencia_enlace2">
-                                Quiero que mi enlace para firmar la solicitud me llegue por correo electrónico *
+                                Correo electrónico
                             </label>
                         </div>
                     </div>
@@ -711,7 +714,6 @@
             $('#solicitud_nombre'),
             $('#solicitud_numero_documento'),
             $('#solicitud_direccion'),
-            $('#solicitud_telefono'),
             $('#solicitud_email'),
             $('#solicitud_celular'),
             $('#solicitud_correo_facturacion_electronica')
