@@ -514,7 +514,7 @@
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_concepto_otros_ingresos">Concepto otros ingresos</label>
-                        <input type="number" class="form-control" id="solicitud_concepto_otros_ingresos">
+                        <input type="text" class="form-control" id="solicitud_concepto_otros_ingresos">
                     </div>
                 </div>
             </div>
