@@ -494,6 +494,8 @@ class Webhooks extends MY_Controller {
                         ];
 
                         array_push($nuevos_precios, $nuevo_precio);
+
+                        $total_items++;
                     }
                     
                     $pagina++;
