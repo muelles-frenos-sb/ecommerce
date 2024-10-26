@@ -10,6 +10,12 @@
 
 <div class="block">
     <div class="container">
+        <div class="address-card__row mt-2 mb-2">
+            <div class="alert alert-primary mb-3">
+                Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 110) o al celular 316 269 4009
+            </div>
+        </div>
+        
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--1">
                 <div class="form-row mb-2">
@@ -84,7 +90,7 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_telefono">Telefono *</label>
+                        <label for="solicitud_telefono">Telefono</label>
                         <input type="text" class="form-control" id="solicitud_telefono">
                     </div>
                 </div>
@@ -95,7 +101,7 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_celular">Celular del titular o Representante legal</label>
+                        <label for="solicitud_celular">Celular del titular o Representante legal *</label>
                         <input type="text" class="form-control" id="solicitud_celular">
                     </div>
                 </div>
@@ -830,10 +836,10 @@
 
         $('#subir_archivos').on('fileuploaded', async function() {
             await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
-
-            // Se envía un correo electrónico de notificación
-            obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
         })
+
+        // Se envía un correo electrónico de notificación
+        obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
     }
 
     $().ready(() => {
