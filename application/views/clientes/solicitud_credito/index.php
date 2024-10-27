@@ -834,12 +834,12 @@
             ¡Tu solicitud de crédito ha sido creada correctamente!
         `, 20000)
 
-        $('#subir_archivos').on('fileuploaded', async function() {
+        $('#subir_archivos').on('filebatchuploadcomplete', async function() {
             await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
-        })
 
-        // Se envía un correo electrónico de notificación
-        obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+            // Se envía un correo electrónico de notificación
+            obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+        })
     }
 
     $().ready(() => {
