@@ -10,12 +10,6 @@
 
 <div class="block">
     <div class="container">
-        <div class="address-card__row mt-2 mb-2">
-            <div class="alert alert-primary mb-3">
-                Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 110) o al celular 316 269 4009
-            </div>
-        </div>
-        
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--1">
                 <div class="form-row mb-2">
@@ -608,10 +602,19 @@
                         </div>
                     </div>
                 </div>
+                <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
+                    REUCUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b>
+                </label>
             </div>
 
             <div class="form-group mb-2 mt-2 mx-3 my-2">
-                <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()">ENVIAR SOLICITUD DE CRÉDITO</button>
+                <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()" id="btn_enviar_solicitud">ENVIAR SOLICITUD DE CRÉDITO</button>
+
+                <div class="address-card__row mt-2 mb-2">
+                    <div class="alert alert-primary mb-3">
+                        Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 110) o al celular 316 269 4009
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -830,15 +833,13 @@
         $('#subir_archivos').data('fileinput').uploadUrl = `${$("#site_url").val()}/clientes/subir/${solicitudId.resultado}`
         $('#subir_archivos').fileinput('upload')
     
-        mostrarAviso('exito', `
-            ¡Tu solicitud de crédito ha sido creada correctamente!
-        `, 20000)
+        mostrarAviso('exito', `¡Tu solicitud de crédito ha sido creada correctamente!`, 20000)
 
         $('#subir_archivos').on('filebatchuploadcomplete', async function() {
             await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
 
             // Se envía un correo electrónico de notificación
-            obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+            await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
         })
     }
 

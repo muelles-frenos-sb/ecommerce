@@ -295,6 +295,6 @@ $pdf->SetFont('Arial', '', 8);
 $pdf->SetXY(25, 237);
 $pdf->Write(0, "Nota: El cliente desea recibir la firma digital mediante");
 $pdf->SetXY(93, 237);
-$pdf->Write(0, ($solicitud->preferencia_enlace == 1) ? "Whatsapp" : "correo electrónico");
+$pdf->Write(0, ($solicitud->preferencia_enlace == 1) ? "Whatsapp" : utf8_decode("correo electrónico"));
 
 $pdf->Output("F", "archivos/solicitudes_credito/$solicitud_id/Solicitud de crédito.pdf");
