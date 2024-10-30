@@ -174,6 +174,8 @@ function enviar_email_solicitud_credito($id) {
     $solicitud = $instancia->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $id]);
     $url = site_url('');
 
+    $preferencia_enlace = ($solicitud->preferencia_enlace == 1) ? "Whatsapp" : "correo electrónico";
+
     $datos = [
         'pedido_completo' => '',
         'id' => $solicitud->id,
@@ -182,6 +184,7 @@ function enviar_email_solicitud_credito($id) {
             'titulo' => '¡Hemos recibido tu solicitud de crédito!',
             'subtitulo' => "
                 Hola, $solicitud->nombre. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
+                Nota: El cliente desea recibir la firma digital mediante $preferencia_enlace.
             ",
         ],
         'destinatarios' => [$solicitud->email, 'analistacartera@repuestossimonbolivar.com'],

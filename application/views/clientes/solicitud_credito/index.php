@@ -130,64 +130,61 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <label>Área</label>
-                        <input type="text" class="form-control" value="Tesorería y pagos" readonly>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label for="tesoreria_nombre">Nombre</label>
-                        <input type="text" class="form-control" id="tesoreria_nombre">
+                        <h3>Tesorería y pagos</h3>
                     </div>
 
                     <div class="form-group col-md-3">
-                        <label for="tesoreria_email">Email</label>
-                        <input type="text" class="form-control" id="tesoreria_email">
+                        <input type="text" class="form-control" id="tesoreria_nombre" placeholder="Nombre">
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input type="text" class="form-control" id="tesoreria_email" placeholder="Correo electrónico">
                     </div>
 
                     <div class="form-group col-md-2">
-                        <label for="tesoreria_telefono">Teléfono directo</label>
-                        <input type="text" class="form-control" id="tesoreria_telefono">
+                        <input type="text" class="form-control" id="tesoreria_telefono" placeholder="Teléfono directo">
                     </div>
                     <div class="form-group col-md-2">
-                        <label for="tesoreria_celular">Celular</label>
-                        <input type="text" class="form-control" id="tesoreria_celular">
+                        <input type="text" class="form-control" id="tesoreria_celular" placeholder="Celular">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" value="Comercial" readonly>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <input type="text" class="form-control" id="comercial_nombre">
+                        <h3>Comercial</h3>
                     </div>
 
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control" id="comercial_email">
+                        <input type="text" class="form-control" id="comercial_nombre" placeholder="Nombre">
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input type="text" class="form-control" id="comercial_email" placeholder="Correo electrónico">
                     </div>
 
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" id="comercial_telefono">
+                        <input type="text" class="form-control" id="comercial_telefono" placeholder="Teléfono directo">
                     </div>
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" id="comercial_celular">
+                        <input type="text" class="form-control" id="comercial_celular" placeholder="Celular">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" value="Contabilidad" readonly>
+                        <h3>Contabilidad</h3>
                     </div>
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control" id="contabilidad_nombre">
+                        <input type="text" class="form-control" id="contabilidad_nombre" placeholder="Nombre">
                     </div>
 
                     <div class="form-group col-md-3">
-                        <input type="text" class="form-control" id="contabilidad_email">
+                        <input type="text" class="form-control" id="contabilidad_email" placeholder="Correo electrónico">
                     </div>
 
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" id="contabilidad_telefono">
+                        <input type="text" class="form-control" id="contabilidad_telefono" placeholder="Teléfono directo">
                     </div>
                     <div class="form-group col-md-2">
-                        <input type="text" class="form-control" id="contabilidad_celular">
+                        <input type="text" class="form-control" id="contabilidad_celular" placeholder="Celular">
                     </div>
                 </div>
             </div>
@@ -198,32 +195,37 @@
                     REFERENCIAS COMERCIALES
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="referencia_comercial_entidad1">Entidad</label>
-                        <input type="text" class="form-control" id="referencia_comercial_entidad1">
+                    <div class="form-group col-md-1">
+                        <h3>1</h3>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input type="text" class="form-control" id="referencia_comercial_entidad1" placeholder="Nombre de la entidad">
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="referencia_comercial_celular1">Celular</label>
-                        <input type="text" class="form-control" id="referencia_comercial_celular1">
+                        <input type="text" class="form-control" id="referencia_comercial_celular1" placeholder="Celular">
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="referencia_comercial_direccion1">Dirección</label>
-                        <input type="text" class="form-control" id="referencia_comercial_direccion1">
+                        <input type="text" class="form-control" id="referencia_comercial_direccion1" placeholder="Dirección">
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="referencia_comercial_entidad2">
+                    <div class="form-group col-md-1">
+                        <h3>2</h3>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <input type="text" class="form-control" id="referencia_comercial_entidad2" placeholder="Nombre de la entidad">
                     </div>
 
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="referencia_comercial_celular2">
+                        <input type="text" class="form-control" id="referencia_comercial_celular2" placeholder="Celular">
                     </div>
 
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="referencia_comercial_direccion2">
+                        <input type="text" class="form-control" id="referencia_comercial_direccion2" placeholder="Dirección">
                     </div>
                 </div>
             </div>
@@ -264,7 +266,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label>Identificación</label>
+                        <label>Numero de identificación</label>
                         <input type="text" class="form-control" id="personas_autorizadas_identificacion_0">
                     </div>
 
@@ -603,7 +605,7 @@
                     </div>
                 </div>
                 <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
-                    REUCUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b>
+                    RECUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b>
                 </label>
             </div>
 
@@ -625,12 +627,15 @@
         let index = $(`#${elemento} .form-row`).length
 
         $(`#${elemento}`).append(`
+            <hr>
             <div class="form-row" id="${elemento}_${index}">
                 <div class="form-group col-md-3">
+                    <label>Nombre socio o accionista</label>
                     <input type="text" class="form-control" id="${elemento}_nombre_${index}">
                 </div>
 
                 <div class="form-group col-md-3">
+                    <label>Tipo de identificación</label>
                     <select id="${elemento}_tipo_identificacion_${index}" class="form-control">
                         <option value="">Selecciona...</option>
                         <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
@@ -640,10 +645,12 @@
                 </div>
 
                 <div class="form-group col-md-3">
+                    <label>Número de identificación</label>
                     <input type="text" class="form-control" id="${elemento}_numero_documento_${index}">
                 </div>
 
                 <div class="form-group col-md-3">
+                    <label>% participación</label>
                     <input type="text" class="form-control" id="${elemento}_porcentaje_participacion_${index}">
                 </div>
             </div>
@@ -654,16 +661,20 @@
         let index = $(`#${elemento} .form-row`).length
 
         $(`#${elemento}`).append(`
+            <hr>
             <div class="form-row" id="${elemento}_${index}">
                 <div class="form-group col-md-4">
+                    <label>Nombre</label>
                     <input type="text" class="form-control" id="${elemento}_nombre_${index}">
                 </div>
 
                 <div class="form-group col-md-4">
+                    <label>Numero de identificación</label>
                     <input type="text" class="form-control" id="${elemento}_identificacion_${index}">
                 </div>
 
                 <div class="form-group col-md-4">
+                    <label>Celular</label>
                     <input type="text" class="form-control" id="${elemento}_celular_${index}">
                 </div>
             </div>
