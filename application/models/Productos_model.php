@@ -189,6 +189,32 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
+            case 'productos_inventario_wms':
+                unset($datos['tipo']);
+
+                // Conexión a SQL Server desde Windows
+                if(ENVIRONMENT == 'development') {
+                    $db_wms = $this->load->database('wms', TRUE);
+                 
+                    return $db_wms
+                        ->get('VTA_BodegasECOMMERECE')
+                        ->result()
+                    ;
+                }
+                
+                // Conexión a SQL Server desde Linux (Hostinger)
+                if(ENVIRONMENT == 'production') {
+                    $pdo = new PDO("odbc:mssql_odbc", "ecomerce", 'Ecom#Rce2024$Strong!');
+
+                    $sql = "SELECT * FROM VTA_BodegasECOMMERECE";
+                    $stmt = $pdo->query($sql);
+
+                    // Obtener y mostrar los resultados
+                    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    return $resultados;
+                }
+            break;
+
             // case 'productos_outlet':
             //     $sql = 
             //     "SELECT

@@ -399,49 +399,45 @@ class Webhooks extends MY_Controller {
         
         try {
             // Inventario de la bodega por defecto
-            $resultado_inventario = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_principal')]));
-            $codigo_inventario = $resultado_inventario->codigo;
-            $inventario = ($codigo_inventario == 0) ? $resultado_inventario->detalle->Table : 0 ;
-
+            $inventario = $this->productos_model->obtener('productos_inventario_wms');
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
 
             // Primero, eliminamos todos los ítems
-            if($this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL')) {
-                foreach($inventario as $item) {
-                    $nuevo_item = [
-                        'producto_id' => $item->Iditem,
-                        'referencia' => $item->Referencia,
-                        'bodega' => $item->Bodega,
-                        'descripcion_corta' => $item->Descripcion_Corta,
-                        'unidad_inventario' => $item->Unidad_Inventario,
-                        'existencia' => $item->Existencia,
-                        'disponible' => $item->Disponible,
-                        'fecha_actualizacion' => $fecha_actualizacion,
-                    ];
-                    array_push($datos, $nuevo_item);
-                }
-            
-                $total_items = $this->productos_model->crear('productos_inventario', $datos);
+            $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
 
-                $tiempo_final = microtime(true);
-                
-                $respuesta = [
-                    'log_tipo_id' => 6,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "$total_items registros actualizados",
-                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+            foreach($inventario as $item) {
+                $nuevo_item = [
+                    'producto_id' => $item->Producto_id,
+                    'referencia' => $item->Referencia,
+                    'bodega' => $item->Bodega,
+                    'descripcion_corta' => $item->Descripcion_corta,
+                    'unidad_inventario' => $item->Unidad_Inventario,
+                    'disponible' => $item->Disponible,
+                    'fecha_actualizacion' => $fecha_actualizacion,
                 ];
-                
-                // Se agrega el registro en los logs
-                $this->configuracion_model->crear('logs', $respuesta);
-
-                print json_encode($respuesta);
-
-                return http_response_code(200);
+                array_push($datos, $nuevo_item);
             }
+            
+            $total_items = $this->productos_model->crear('productos_inventario', $datos);
 
-            $this->db->close();
+            $tiempo_final = microtime(true);
+            
+            $respuesta = [
+                'log_tipo_id' => 6,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+            ];
+            
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+
+            return http_response_code(200);
+
+            $this->db_wms->close();
 
             return http_response_code(200);
         } catch (\Throwable $th) {
