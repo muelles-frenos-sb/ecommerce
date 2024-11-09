@@ -25,7 +25,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/estilos.css?<?php echo date('Ymdhis'); ?>">
 
 <!-- font - fontawesome -->
-<link rel="stylesheet" href="<?php echo base_url(); ?>vendor/fontawesome/css/all.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>vendor/fontawesome/css/all.min.css?">
 
 <!-- Scripts -->
 <script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>

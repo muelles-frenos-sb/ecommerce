@@ -3917,6 +3917,11 @@ select.form-control::-ms-expand {
   color: #664729;
 }
 
+.social-links__item--tiktok a {
+  background: white;
+  color: black;
+}
+
 /*
 // .status-badge
 */

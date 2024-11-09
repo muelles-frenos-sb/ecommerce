@@ -297,7 +297,7 @@
 															<tr>
 																<td class="pad" style="padding-bottom:10px;padding-left:30px;padding-right:10px;padding-top:10px;">
 																	<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:12px;line-height:150%;text-align:left;mso-line-height-alt:18px;">
-																		<p style="margin: 0; word-break: break-word;"><span>Somos importadores de marcas reconocidas como SKF, Mansons, KTC y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes</span></p>
+																		<p style="margin: 0; word-break: break-word;"><span>Somos importadores de marcas reconocidas como SKF, Mansons, KTC, Cummins, Firestone y Randon, siempre nos esforzamos por ofrecer lo mejor a nuestros clientes</span></p>
 																	</div>
 																</td>
 															</tr>
@@ -336,7 +336,7 @@
 																	<div style="color:#33563c;font-family:'Roboto', Tahoma, Verdana, Segoe, sans-serif;font-size:12px;line-height:150%;text-align:left;mso-line-height-alt:18px;">
 																		<p style="margin: 0; word-break: break-word;"><a href="https://repuestossimonbolivar.com/" target="_blank" style="text-decoration: underline; color: #33563c;" rel="noopener">www.repuestossimonbolivar.com</a></p>
 																		<p style="margin: 0; word-break: break-word;"><span>Calle 40 # 30 - 139<br></span></p>
-																		<p style="margin: 0; word-break: break-word;">310 411 4048</p>
+																		<p style="margin: 0; word-break: break-word;">311 491 4780</p>
 																	</div>
 																</td>
 															</tr>
