@@ -406,17 +406,35 @@ class Webhooks extends MY_Controller {
             // Primero, eliminamos todos los ítems
             $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
 
-            foreach($inventario as $item) {
-                $nuevo_item = [
-                    'producto_id' => $item->Producto_id,
-                    'referencia' => $item->Referencia,
-                    'bodega' => $item->Bodega,
-                    'descripcion_corta' => $item->Descripcion_corta,
-                    'unidad_inventario' => $item->Unidad_Inventario,
-                    'disponible' => $item->Disponible,
-                    'fecha_actualizacion' => $fecha_actualizacion,
-                ];
-                array_push($datos, $nuevo_item);
+            if(ENVIRONMENT == 'development') {
+                foreach($inventario as $item) {
+                    $nuevo_item = [
+                        'producto_id' => $item->Producto_id,
+                        'referencia' => $item->Referencia,
+                        'bodega' => $item->Bodega,
+                        'descripcion_corta' => $item->Descripcion_corta,
+                        'unidad_inventario' => $item->Unidad_Inventario,
+                        'disponible' => $item->Disponible,
+                        'fecha_actualizacion' => $fecha_actualizacion,
+                    ];
+                    array_push($datos, $nuevo_item);
+                }
+            }
+
+            if(ENVIRONMENT == 'production') {
+                foreach($inventario as $item) {
+
+                    $nuevo_item = [
+                        'producto_id' => $item['Producto_id'],
+                        'referencia' => $item['Referencia'],
+                        'bodega' => $item['Bodega'],
+                        'descripcion_corta' => $item['Descripcion_corta'],
+                        'unidad_inventario' => $item['Unidad_inventario'],
+                        'disponible' => $item['Disponible'],
+                        'fecha_actualizacion' => $fecha_actualizacion,
+                    ];
+                    array_push($datos, $nuevo_item);
+                }
             }
             
             $total_items = $this->productos_model->crear('productos_inventario', $datos);
