@@ -9,7 +9,7 @@
 <div class="block">
     <div class="container container--max--xl">
         <div>
-            <a class="btn btn-success" href="<?php echo site_url('configuracion/usuarios/id'); ?>">Crear</a>
+            <a class="btn btn-success" href="<?php echo site_url('usuarios/registro'); ?>">Crear</a>
         </div>
 
         <div class="form-row mt-2">

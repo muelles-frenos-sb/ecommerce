@@ -346,7 +346,9 @@ class Interfaces extends CI_Controller {
                             "F015_EMAIL" => $datos['email'],                                                // Dirección de correo electrónico	
                             "F201_FECHA_INGRESO" => date('Ymd'),                                            // Fecha de ingreso AAAAMMDD
                             "f201_id_cobrador" => "U003",                                                   // Valida en maestro, código de cobrador asignado al cliente
-                            "f015_celular" => $datos['telefono'] 
+                            "f015_celular" => $datos['telefono'],
+                            "F201_IND_BLOQUEO_CUPO" => 0,                                                   // Bloquear por cupo
+                            "F201_IND_BLOQUEO_MORA" => 1                                                    // Bloquear por mora
                         ]
                     ],
                     'Imptos_y_Reten' => [

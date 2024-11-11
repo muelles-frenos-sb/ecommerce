@@ -17,32 +17,79 @@
             </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <div class="form-group">
-                            <label for="usuario_responsable_iva">¿Eres responsable de IVA? *</label>
-                            <select id="usuario_responsable_iva" class="form-control">
-                                <option value="">Selecciona...</option>
-                                <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
-                                <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
-                            </select>
+                <div class="form-row mb-2">
+                    <div class="form-group col-4">
+                        <label for="usuario_tipo_tercero1">Tipo de persona *</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_tipo_tercero" id="usuario_tipo_tercero1" value="1">
+                                    <label class="form-check-label" for="usuario_tipo_tercero1">
+                                        Natural
+                                    </label>
+                                </div>
+                            </div>
+                        
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_tipo_tercero" id="usuario_tipo_tercero2" value="2">
+                                    <label class="form-check-label" for="usuario_tipo_tercero2">
+                                        Jurídica
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-4">
+                        <label for="usuario_tiene_rut1">¿Tienes RUT? *</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_tiene_rut" id="usuario_tiene_rut1" value="1">
+                                    <label class="form-check-label" for="usuario_tiene_rut1">
+                                        Sí
+                                    </label>
+                                </div>
+                            </div>
+                        
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_tiene_rut" id="usuario_tiene_rut0" value="0">
+                                    <label class="form-check-label" for="usuario_tiene_rut0">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-4">
+                        <label for="usuario_tiene_rut1">¿Eres responsable de IVA? *</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_responsable_iva" id="usuario_responsable_iva1" value="1" data-responsable_iva="48" data-causante_iva="01">
+                                    <label class="form-check-label" for="usuario_responsable_iva1">
+                                        Sí
+                                    </label>
+                                </div>
+                            </div>
+                        
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="usuario_responsable_iva" id="usuario_responsable_iva0" value="0" data-responsable_iva="49" data-causante_iva="ZY">
+                                    <label class="form-check-label" for="usuario_responsable_iva0">
+                                        No
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <div class="form-group">
-                            <label for="usuario_tipo_tercero">¿Eres persona natural o jurídica? *</label>
-                            <select id="usuario_tipo_tercero" class="form-control">
-                                <option value="">Selecciona...</option>
-                                <option value="1">Persona natural</option>
-                                <option value="2">Persona jurídica</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row col-md-9" id="datos_persona_natural">
+                    <div class="form-row col-md-12" id="datos_persona_natural">
                         <div class="form-group col-md-4">
                             <label for="usuario_nombres">Nombres *</label>
                             <input type="text" class="form-control" id="usuario_nombres">
@@ -69,7 +116,6 @@
                             <select id="usuario_tipo_documento" class="form-control">
                                 <option value="">Selecciona...</option>
                                 <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
-                                <option value="N" data-tipo_tercero="2">NIT</option>
                                 <option value="E" data-tipo_tercero="1">Cédula de extranjería</option>
                             </select>
                         </div>
@@ -150,7 +196,6 @@
 <script>
     crearUsuario = async() => {
         let camposObligatorios = [
-            $('#usuario_tipo_tercero'),
             $('#usuario_numero_documento1'),
             $('#usuario_tipo_documento'),
             $('#usuario_razon_social'),
@@ -162,16 +207,22 @@
             $('#usuario_clave2'),
             $('#usuario_municipio_id'),
             $('#usuario_contacto'),
-            $('#usuario_responsable_iva'),
         ]
 
         // Si es persona natural
-        if ($('#usuario_tipo_tercero').val() == 1) {
+        if ($('#usuario_tipo_tercero1').is(':checked')) {
             camposObligatorios.push($('#usuario_nombres'))
             camposObligatorios.push($('#usuario_primer_apellido'))
         }
 
+        let camposRadioObligatorios = [
+            'usuario_tipo_tercero',
+            'usuario_tiene_rut',
+            'usuario_responsable_iva',
+        ]
+
         if (!validarCamposObligatorios(camposObligatorios)) return false
+        if (!validarCamposTipoRadio(camposRadioObligatorios)) return false
 
         // Si no coinciden los números de documento
         if ($("#usuario_numero_documento1").val() !== $("#usuario_numero_documento2").val()) {
@@ -195,10 +246,18 @@
             return false
         }
 
+        let responsableIVA = ($(`#usuario_responsable_iva1`).is(':checked'))
+            ? $(`#usuario_responsable_iva1`).attr('data-responsable_iva')
+            : $(`#usuario_responsable_iva0`).attr('data-responsable_iva')
+
+        let causanteIVA = ($(`#usuario_responsable_iva1`).is(':checked'))
+            ? $(`#usuario_responsable_iva1`).attr('data-causante_iva')
+            : $(`#usuario_responsable_iva0`).attr('data-causante_iva')
+
         let datosTerceroSiesa = {
-            responsable_iva: $('#usuario_responsable_iva option:selected').attr('data-responsable_iva'), // Sí, No
-            causante_iva: $('#usuario_responsable_iva option:selected').attr('data-causante_iva'), // Sí, No
-            tipo_tercero: $('#usuario_tipo_tercero').val(), // Natural, jurídica
+            responsable_iva: responsableIVA,
+            causante_iva: causanteIVA,
+            tipo_tercero: ($(`#usuario_tipo_tercero1`).is(':checked')) ? 1 : 2, // Natural, jurídica
             documento_tipo: $('#usuario_tipo_documento').val(),
             documento_numero: $('#usuario_numero_documento1').val(),
             nombres: $('#usuario_nombres').val(),
@@ -232,7 +291,7 @@
             segundo_apellido: $('#usuario_segundo_apellido').val(),
             razon_social: $('#usuario_razon_social').val(),
             celular: $('#usuario_telefono').val(),
-            usuario_tipo_id: $('#usuario_tipo_tercero').val(),
+            usuario_tipo_id: ($(`#usuario_tipo_tercero1`).is(':checked')) ? 1 : 2,
             documento_numero: $('#usuario_numero_documento1').val(),
             usuario_identificacion_tipo_id: $('#usuario_tipo_documento option:selected').attr('data-tipo_tercero'),
             email: $('#usuario_email').val(),
@@ -243,7 +302,7 @@
             clave: $('#usuario_clave1').val(),
             login: $('#usuario_login').val(),
             perfil_id: 3,
-            responsable_iva: $('#usuario_responsable_iva').val(),
+            responsable_iva: ($(`#usuario_responsable_iva1`).is(':checked')) ? 1 : 0,
         }
 
         Swal.fire({
@@ -279,25 +338,39 @@
 
     $().ready(() => {
         // Cuando se seleccione el tipo de tercero
-        $('#usuario_tipo_tercero').change(() => {
+        $('input[name="usuario_tipo_tercero"]').change(() => {
             // Persona natural
-            if ($('#usuario_tipo_tercero').val() == 1) {
+            if ($('#usuario_tipo_tercero1').is(':checked')) {
                 $('#datos_persona_natural').show()
                 $('#usuario_razon_social').attr('disabled', true)
             }
 
             // Persona jurídica
-            if ($('#usuario_tipo_tercero').val() == 2) {
+            if ($('#usuario_tipo_tercero2').is(':checked')) {
                 $('#datos_persona_natural').hide()
                 $('#usuario_razon_social').attr('disabled', false)
                 $('#usuario_nombres, #usuario_primer_apellido, #usuario_segundo_apellido, #usuario_razon_social').val('')
             }
         })
 
+        // Cuando se seleccione si tiene RUT o no
+        $('input[name="usuario_tiene_rut"]').change(() => {
+
+            // Si tiene RUT
+            if ($('#usuario_tiene_rut1').is(':checked')) {
+                // El tipo de documento tiene que ser NIT
+                $("#usuario_tipo_documento").append("<option value='N' data-tipo_tercero='2'>NIT</option>").val('N').attr('disabled', true)
+            } else {
+                // Se elimina la posibilidad de escoger NIT
+                $("#usuario_tipo_documento option[value='N']").remove()
+                $('#usuario_tipo_documento').attr('disabled', false)
+            }
+        })
+
         // Cuando se escribe nombres o apellidos
         $('#datos_persona_natural').keyup(function(e) {
             // Si es persona natural
-            if($('#usuario_tipo_tercero').val() == '1') {
+            if($('#usuario_tipo_tercero1').is(':checked')) {
                 // Se completa la razón social
                 $('#usuario_razon_social').val(`${$('#usuario_nombres').val()} ${$('#usuario_primer_apellido').val()} ${$('#usuario_segundo_apellido').val()}`)
             }
