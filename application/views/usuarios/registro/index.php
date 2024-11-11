@@ -12,11 +12,10 @@
 <div class="block">
     <div class="container">
         <div class="card mb-lg-0">
-            <div class="card-header">
-                <h5>Datos principales</h5>
-            </div>
-            <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                    DATOS BÁSICOS
+                </div>
                 <div class="form-row mb-2">
                     <div class="form-group col-4">
                         <label for="usuario_tipo_tercero1">Tipo de persona *</label>
@@ -88,7 +87,7 @@
                     </div>
                 </div>
                 
-                <div class="form-row">
+                <div class="form-row mt-2">
                     <div class="form-row col-md-12" id="datos_persona_natural">
                         <div class="form-group col-md-4">
                             <label for="usuario_nombres">Nombres *</label>
@@ -149,11 +148,11 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                <h5>Datos que necesitamos para enviarte tus productos</h5>
-            </div>
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                    Datos que necesitamos para enviar tus productos
+                </div>
                 <div class="form-row">
                     <div class="form-group col-lg-3 col-sm-12">
                         <label for="usuario_departamento_id">Departamento *</label>
