@@ -89,16 +89,16 @@
                 
                 <div class="form-row mt-2">
                     <div class="form-row col-md-12" id="datos_persona_natural">
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-6">
                             <label for="usuario_nombres">Nombres *</label>
                             <input type="text" class="form-control" id="usuario_nombres">
                         </div>
 
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label for="usuario_primer_apellido">Primer apellido *</label>
                             <input type="text" class="form-control" id="usuario_primer_apellido">
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-3">
                             <label for="usuario_segundo_apellido">Segundo apellido <span class="text-muted">(Opcional)</span></label>
                             <input type="text" class="form-control" id="usuario_segundo_apellido">
                         </div>
@@ -130,22 +130,39 @@
                         <input type="text" class="form-control" id="usuario_numero_documento2" onpaste="return false;">
                     </div>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-lg-4 col-sm-12">
-                        <label for="usuario_login">Nombre de usuario *</label>
-                        <input type="text" class="form-control" id="usuario_login">
-                    </div>
 
-                    <div class="form-group col-lg-4 col-sm-12">
-                        <label for="usuario_clave1">Contraseña *</label>
-                        <input type="password" class="form-control" id="usuario_clave1">
-                    </div>
+                <!-- Si no es vendedor -->
+                <?php if(!$this->session->userdata('codigo_vendedor') || $this->session->userdata('codigo_vendedor') == '0') { ?>
+                    <div class="form-row" id="datos_usuario_sistema">
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <label for="usuario_login">Nombre de usuario *</label>
+                            <input type="text" class="form-control" id="usuario_login">
+                        </div>
 
-                    <div class="form-group col-lg-4 col-sm-12">
-                        <label for="usuario_clave2">Repite la contraseña *</label>
-                        <input type="password" class="form-control" id="usuario_clave2">
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <label for="usuario_clave1">Contraseña *</label>
+                            <input type="password" class="form-control" id="usuario_clave1">
+                        </div>
+
+                        <div class="form-group col-lg-4 col-sm-12">
+                            <label for="usuario_clave2">Repite la contraseña *</label>
+                            <input type="password" class="form-control" id="usuario_clave2">
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
+
+                <!-- Si es vendedor -->
+                <?php if($this->session->userdata('codigo_vendedor') && $this->session->userdata('codigo_vendedor') != '0') { ?>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="usuario_segmento_id">Segmento *</label>
+                            <select id="usuario_segmento_id" class="form-control">
+                                <option value="">Seleccione...</option>
+                                <?php foreach($this->configuracion_model->obtener('segmentos') as $segmento) echo "<option value='$segmento->id' data-plan='$segmento->plan' data-mayor='$segmento->mayor'>$segmento->plan - $segmento->nombre</option>"; ?>
+                            </select>
+                        </div>
+                    </div>
+                <?php } ?>
             </div>
 
             <div class="card-divider"></div>
@@ -193,6 +210,9 @@
 </div>
 
 <script>
+    let esVendedor = ($('#codigo_vendedor').val() == 0) ? false : true
+    console.log(esVendedor)
+        
     crearUsuario = async() => {
         let camposObligatorios = [
             $('#usuario_numero_documento1'),
@@ -201,9 +221,6 @@
             $('#usuario_direccion'),
             $('#usuario_telefono'),
             $('#usuario_email'),
-            $('#usuario_login'),
-            $('#usuario_clave1'),
-            $('#usuario_clave2'),
             $('#usuario_municipio_id'),
             $('#usuario_contacto'),
         ]
@@ -213,6 +230,17 @@
             camposObligatorios.push($('#usuario_nombres'))
             camposObligatorios.push($('#usuario_primer_apellido'))
         }
+
+        // Si no es un vendedor el que está logueado
+        if(!esVendedor) {
+            // Los datos de login son obligatorios
+            camposObligatorios.push($('#usuario_login'))
+            camposObligatorios.push($('#usuario_clave1'))
+            camposObligatorios.push($('#usuario_clave2'))
+        }
+
+        // Si es vendedor, el segmento es obligatorio
+        if(esVendedor) camposObligatorios.push($("#usuario_segmento_id"))
 
         let camposRadioObligatorios = [
             'usuario_tipo_tercero',
@@ -230,7 +258,7 @@
         }
 
         // Si no coinciden las claves
-        if ($("#usuario_clave1").val() !== $("#usuario_clave2").val()) {
+        if (!esVendedor && $("#usuario_clave1").val() !== $("#usuario_clave2").val()) {
             mostrarAviso('alerta', `Las contraseñas no coinciden. Por favor, verifica nuevamente.`, 10000)
             return false
         }
@@ -240,7 +268,7 @@
         let usuarioExistenteLogin = await consulta('obtener', {tipo: 'usuarios', login: $.trim($('#usuario_login').val())})
         let usuarioExistenteEmail = await consulta('obtener', {tipo: 'usuarios', email: $.trim($('#usuario_email').val())})
 
-        if(usuarioExistenteDocumento || usuarioExistenteLogin || usuarioExistenteEmail) {
+        if(!esVendedor && (usuarioExistenteDocumento || usuarioExistenteLogin || usuarioExistenteEmail)) {
             mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el correo electrónico, usuario y el número de documento. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`, 10000)
             return false
         }
@@ -269,6 +297,8 @@
             contacto: $('#usuario_contacto').val(),
             email: $('#usuario_email').val(),
             telefono: $('#usuario_telefono').val(),
+            vendedor: (esVendedor) ? $('#codigo_vendedor').val() : "U003",
+            lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio_clientes'); ?>',
         }
 
         // Si es cédula de extranjería, se envía una entidad dinámica adicional
@@ -283,25 +313,15 @@
             }
         }
 
-        let datosUsuario = {
-            tipo: 'usuarios',
-            nombres: $('#usuario_nombres').val(),
-            primer_apellido: $('#usuario_primer_apellido').val(),
-            segundo_apellido: $('#usuario_segundo_apellido').val(),
-            razon_social: $('#usuario_razon_social').val(),
-            celular: $('#usuario_telefono').val(),
-            usuario_tipo_id: ($(`#usuario_tipo_tercero1`).is(':checked')) ? 1 : 2,
-            documento_numero: $('#usuario_numero_documento1').val(),
-            usuario_identificacion_tipo_id: $('#usuario_tipo_documento option:selected').attr('data-tipo_tercero'),
-            email: $('#usuario_email').val(),
-            nombre_contacto: $('#usuario_contacto').val(),
-            ciudad_id: $('#usuario_municipio_id').val(),
-            departamento_id: $('#usuario_departamento_id').val(),
-            direccion1: $('#usuario_direccion').val(),
-            clave: $('#usuario_clave1').val(),
-            login: $('#usuario_login').val(),
-            perfil_id: 3,
-            responsable_iva: ($(`#usuario_responsable_iva1`).is(':checked')) ? 1 : 0,
+        // Si es vendedor, se envía una entidad dinámica adicional
+        // para la asignación del segmento
+        if(esVendedor) {
+            datosTerceroSiesa.criterio_cliente = {
+                f207_id_tercero: $('#usuario_numero_documento1').val(),
+                f207_id_sucursal: '001',
+                f207_id_plan_criterios: $('#usuario_segmento_id option:selected').attr('data-plan'),
+                f207_id_criterio_mayor: $('#usuario_segmento_id option:selected').attr('data-mayor'),
+            }
         }
 
         Swal.fire({
@@ -315,23 +335,52 @@
         // Se consulta en Siesa el tercero
         let consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: $('#usuario_numero_documento1').val()}, false)
 
-        // Se crea el usuario
-        let usuarioId = await consulta('crear', datosUsuario, false)
+        // Si no es vendedor
+        if(!esVendedor) {
+            let datosUsuario = {
+                tipo: 'usuarios',
+                nombres: $('#usuario_nombres').val(),
+                primer_apellido: $('#usuario_primer_apellido').val(),
+                segundo_apellido: $('#usuario_segundo_apellido').val(),
+                razon_social: $('#usuario_razon_social').val(),
+                celular: $('#usuario_telefono').val(),
+                usuario_tipo_id: ($(`#usuario_tipo_tercero1`).is(':checked')) ? 1 : 2,
+                documento_numero: $('#usuario_numero_documento1').val(),
+                usuario_identificacion_tipo_id: $('#usuario_tipo_documento option:selected').attr('data-tipo_tercero'),
+                email: $('#usuario_email').val(),
+                nombre_contacto: $('#usuario_contacto').val(),
+                ciudad_id: $('#usuario_municipio_id').val(),
+                departamento_id: $('#usuario_departamento_id').val(),
+                direccion1: $('#usuario_direccion').val(),
+                clave: $('#usuario_clave1').val(),
+                login: $('#usuario_login').val(),
+                perfil_id: 3,
+                responsable_iva: ($(`#usuario_responsable_iva1`).is(':checked')) ? 1 : 0,
+            }
 
-        Swal.close()
+            // Se crea el usuario
+            let usuarioId = await consulta('crear', datosUsuario, false)
 
-        mostrarAviso('exito', `
-            ¡Tu usuario ha sido creado correctamente!<br><br>
-            Ahora puedes <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a>
-        `, 20000)
+            // Envío de email de confirmación
+            obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'usuario_nuevo', id: usuarioId.resultado})
+            
+            Swal.close()
+            mostrarAviso('exito', `
+                ¡Tu usuario ha sido creado correctamente!<br><br>
+                Ahora puedes <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a>
+            `, 20000)
+        }
 
-        // Envío de email de confirmación
-        obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'usuario_nuevo', id: usuarioId.resultado})
-        
         // Si el tercero no existe en Siesa
         if(!consultaTercero.codigo == 0) {
             let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
-            creacionTerceroSiesa.then(resultado => console.log(resultado))
+            creacionTerceroSiesa.then(resultado => {
+                if(esVendedor) mostrarAviso('exito', `¡El tercero ha sido creado correctamente!`, 20000)
+                console.log(resultado)
+            })
+        } else if(esVendedor) {
+            Swal.close()
+            mostrarAviso('alerta', `No se creó el tercero en Siesa, porque ya existe`, 20000)
         }
     }
 
@@ -354,7 +403,6 @@
 
         // Cuando se seleccione si tiene RUT o no
         $('input[name="usuario_tiene_rut"]').change(() => {
-
             // Si tiene RUT
             if ($('#usuario_tiene_rut1').is(':checked')) {
                 // El tipo de documento tiene que ser NIT
@@ -385,6 +433,11 @@
         // Control del input para que registren solamente números
         $(`#usuario_numero_documento1, #usuario_numero_documento2`).keyup(function() {
             $(this).val(limpiarCadena($(this).val()))
+        })
+
+        // Control del input para que registren solamente números Y espacios
+        $(`#usuario_direccion`).keyup(function() {
+            $(this).val(limpiarCadena($(this).val(), true))
         })
     })
 </script>

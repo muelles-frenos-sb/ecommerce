@@ -290,7 +290,13 @@ const iniciarSesion = async(evento, url = null, nombreElementoLogin, nombreEleme
 /**
  * Toma una cadena de texto y le elimina valores alfabéticos
  */
-const limpiarCadena = valor => valor.replace(/[\a-z\&\/\\#,+()$~%.'":*?<>{}/ /_|¿?\-\°!=¡]/g, '')
+const limpiarCadena = (valor, permitirEspacios = false) => {
+    if(permitirEspacios) {
+        return valor.replace(/[^a-zA-Z0-9\s]/g, '')
+    } else {
+        return valor.replace(/[\a-z\&\/\\#,+()$~%.'":*?<>{}/ /_|¿?\-\°!=¡]/g, '')
+    }
+} 
 
 listarDatos = async(elemento, datos = null) => {
     $(`#${elemento}`).html('').append("<option value=''>Seleccione...</option>")

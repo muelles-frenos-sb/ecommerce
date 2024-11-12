@@ -31,6 +31,9 @@ class Sesion extends MY_Controller {
 		// Se consultan los datos del usuario
 		$usuario = $this->sesion_model->obtener('usuario', ['id' => $datos['id']]);
 
+        // Se consulta si el usuario es vendedor
+        $vendedor = $this->configuracion_model->obtener('vendedor', ['nit' => $usuario->documento_numero]);
+
         // Se arma un arreglo con los datos de sesion que va a mantener
 		$datos = [
 			'usuario_id' => $usuario->id,
@@ -41,6 +44,7 @@ class Sesion extends MY_Controller {
 			'razon_social' => $usuario->razon_social,
 			'email' => $usuario->email,
 			'documento_numero' => $usuario->documento_numero,
+            'codigo_vendedor' => (!empty($vendedor)) ? $vendedor->codigo : 0,
 		];
 
         // Se inicia la sesión

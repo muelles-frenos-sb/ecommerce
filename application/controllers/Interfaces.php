@@ -294,10 +294,15 @@ class Interfaces extends CI_Controller {
                         "f753_id_maestro_detalle" => $datos['causante_iva'],    // 01: Causa IVA; ZY: no causa IVA
                     ],
                 ];
-
+                
                 // Si viene entidad dinámica de cédula de extranjería
                 if(isset($datos['entidad_dinamica_extranjero'])) {
                     array_push($entidades_dinamicas, $datos['entidad_dinamica_extranjero']);
+                }
+
+                // Si viene criterio cliente
+                if(isset($datos['criterio_cliente'])) {
+                    $datos_tercero['Criterios_Clientes'] = $datos['criterio_cliente'];
                 }
 
                 $datos_tercero = [
@@ -321,7 +326,7 @@ class Interfaces extends CI_Controller {
                             "F015_COD_POSTAL" => "",                                
                             "F015_EMAIL" => $datos['email'],                                                // Dirección de correo electrónico
                             "F200_FECHA_NACIMIENTO" => date('Ymd'),                                         // El formato debe ser AAAAMMDD
-                            "F200_ID_CIIU" => "4530",                                                       // Valida en maestro, código de la actividad económica
+                            "F200_ID_CIIU" => "",                                                       // Valida en maestro, código de la actividad económica
                             "F015_CELULAR" => $datos['telefono']                                            // Celular
                         ],
                     ],
@@ -330,12 +335,12 @@ class Interfaces extends CI_Controller {
                             "F201_ID_TERCERO" => $datos['documento_numero'],                                // Código del cliente
                             "F201_ID_SUCURSAL" => "001",                                                    // Sucursal del cliente (Siempre va 001 por ser la primera sucursal)
                             "F201_DESCRIPCION_SUCURSAL" => strtoupper($datos['razon_social']),              // Razón social para la sucursal del cliente
-                            "F201_ID_VENDEDOR" => "U003",                                                   // Valida en maestro, código de vendedor asignado al cliente
+                            "F201_ID_VENDEDOR" => strtoupper($datos['vendedor']),                                                   // Valida en maestro, código de vendedor asignado al cliente
                             "F201_ID_COND_PAGO" => "CNT",                                                   // Valida en maestro, código de condición de pago asignada a este cliente
                             "F201_DIAS_GRACIA" => "8",                                                      // Días de gracia otorgados al cliente
                             "F201_CUPO_CREDITO" => "0",                                                     // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
                             "F201_ID_TIPO_CLI" => "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
-                            "F201_ID_LISTA_PRECIO" => "010",                                                // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
+                            "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                                                // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
                             "F015_CONTACTO" => strtoupper($datos['contacto']),                              // Nombre de la persona de contacto
                             "F015_DIRECCION1" => strtoupper($datos['direccion']),                           // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
@@ -345,7 +350,7 @@ class Interfaces extends CI_Controller {
                             "F015_TELEFONO" => "",                                                          // Teléfono
                             "F015_EMAIL" => $datos['email'],                                                // Dirección de correo electrónico	
                             "F201_FECHA_INGRESO" => date('Ymd'),                                            // Fecha de ingreso AAAAMMDD
-                            "f201_id_cobrador" => "U003",                                                   // Valida en maestro, código de cobrador asignado al cliente
+                            "f201_id_cobrador" => "",                                                   // Valida en maestro, código de cobrador asignado al cliente
                             "f015_celular" => $datos['telefono'],
                             "F201_IND_BLOQUEO_CUPO" => 0,                                                   // Bloquear por cupo
                             "F201_IND_BLOQUEO_MORA" => 1                                                    // Bloquear por mora

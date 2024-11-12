@@ -555,6 +555,15 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'segmentos':
+                return $this->db
+                    ->order_by('plan')
+                    ->order_by('nombre')
+                    ->get('segmentos')
+                    ->result()
+                ;
+            break;
+
             // Une las tablas tercero y tercero_contacto para buscar en ambas
             case 'tercero_contacto':
                 $sql =
@@ -579,6 +588,14 @@ Class Configuracion_model extends CI_Model {
                     AND REPLACE(tc.numero, ' ', '') = {$datos['numero']}";
 
                 return $this->db->query($sql)->row();
+            break;
+
+            case 'vendedor':
+                return $this->db
+                    ->where($datos)
+                    ->get('terceros_vendedores')
+                    ->row()
+                ;
             break;
         }
 
