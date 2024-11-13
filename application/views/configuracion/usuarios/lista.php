@@ -4,7 +4,7 @@
             <tr class="wishlist__row wishlist__row--head">
                 <th class="wishlist__column wishlist__column--head wishlist__column--product">Datos generales</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock">Estado</th>
-                <th class="wishlist__column wishlist__column--head wishlist__column--price">----</th>
+                <th class="wishlist__column wishlist__column--head wishlist__column--price">Perfil</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--button"></th>
             </tr>
         </thead>

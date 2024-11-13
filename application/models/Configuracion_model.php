@@ -482,6 +482,7 @@ Class Configuracion_model extends CI_Model {
                         $having .= " OR documento_numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR email LIKE '%{$palabras[$i]}%'";
                         $having .= " OR nombre_contacto LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR perfil LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";
@@ -498,9 +499,11 @@ Class Configuracion_model extends CI_Model {
                 "SELECT
                     u.*,
                     CONCAT_WS( ' ', u.nombres, u.primer_apellido, u.segundo_apellido) nombre_completo,
-                    CASE u.estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre
+                    CASE u.estado WHEN 1 THEN 'Activo' ELSE 'Inactivo' END estado_nombre,
+                    p.nombre perfil
                 FROM
                     usuarios AS u
+                INNER JOIN perfiles AS p ON u.perfil_id = p.id
                 $where
                 $having
                 ORDER BY

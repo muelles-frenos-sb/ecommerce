@@ -25,8 +25,8 @@ foreach ($registros as $usuario) { ?>
                 </div>
             </div>
         </td>
-        <td class="wishlist__column wishlist__column--body wishlist__column--price">
-            ----
+        <td class="wishlist__column wishlist__column--body wishlist__column--product">
+        <?php echo $usuario->perfil; ?>
         </td>
         <td class="wishlist__column wishlist__column--body wishlist__column--button">
             <a type="button" class="btn btn-sm btn-primary" href="<?php echo site_url("configuracion/usuarios/id/$usuario->token"); ?>">Ver</a>
