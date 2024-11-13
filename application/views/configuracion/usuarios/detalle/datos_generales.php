@@ -105,7 +105,7 @@ if($this->uri->segment(4)) {
                 <div class="form-group mb-0 pt-3 mt-3">
                     <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
 
-                    <?php if(!isset($tercero)) { ?>
+                    <?php if(!empty($tercero)) { ?>
                         <button class="btn btn-success" onClick="javascript:guardarTercero()">Guardar datos</button>
                     <?php } ?>
                 </div>
