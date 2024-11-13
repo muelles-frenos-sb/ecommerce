@@ -297,7 +297,7 @@
             contacto: $('#usuario_contacto').val(),
             email: $('#usuario_email').val(),
             telefono: $('#usuario_telefono').val(),
-            vendedor: (esVendedor) ? $('#codigo_vendedor').val() : "U003",
+            vendedor: (esVendedor) ? $('#codigo_vendedor').val() : "",
             lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio_clientes'); ?>',
         }
 
