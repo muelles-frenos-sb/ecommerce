@@ -30,28 +30,28 @@ $pdf->SetXY(39, 46.5);
 $pdf->Write(0, $fecha);
 
 $pdf->SetXY(57, 57.5);
-$pdf->Write(0, $solicitud->nombre);
+$pdf->Write(0, utf8_decode($solicitud->nombre));
 
 $pdf->SetXY(143, 57.5);
-$pdf->Write(0, $solicitud->documento_numero);
+$pdf->Write(0, utf8_decode($solicitud->documento_numero));
 
 $pdf->SetXY(40, 61.5);
-$pdf->Write(0, $solicitud->direccion);
+$pdf->Write(0, utf8_decode($solicitud->direccion));
 
 $pdf->SetXY(147, 61.5);
-$pdf->Write(0, $solicitud->telefono);
+$pdf->Write(0, utf8_decode($solicitud->telefono));
 
 $pdf->SetXY(36, 65.5);
-$pdf->Write(0, $solicitud->email);
+$pdf->Write(0, utf8_decode($solicitud->email));
 
 $pdf->SetXY(145, 65.5);
-$pdf->Write(0, $solicitud->celular);
+$pdf->Write(0, utf8_decode($solicitud->celular));
 
 $pdf->SetXY(40, 69);
-$pdf->Write(0, $solicitud->representante_legal);
+$pdf->Write(0, utf8_decode($solicitud->representante_legal));
 
 $pdf->SetXY(138, 69);
-$pdf->Write(0, $solicitud->representante_legal_documento_numero);
+$pdf->Write(0, utf8_decode($solicitud->representante_legal_documento_numero));
 
 $pdf->SetXY(65, 72.7);
 $pdf->Write(0, $solicitud->email_factura_electronica);
@@ -69,31 +69,31 @@ $pdf->SetXY(144, 86.8);
 $pdf->Write(0, utf8_decode($solicitud->tesoreria_telefono));
 
 $pdf->SetXY(172, 86.8);
-$pdf->Write(0, $solicitud->tesoreria_celular);
+$pdf->Write(0, utf8_decode($solicitud->tesoreria_celular));
 
 $pdf->SetXY(51.3, 90.3);
-$pdf->Write(0, $solicitud->comercial_nombre);
+$pdf->Write(0, utf8_decode($solicitud->comercial_nombre));
 
 $pdf->SetXY(93, 90.3);
-$pdf->Write(0, $solicitud->comercial_email);
+$pdf->Write(0, utf8_decode($solicitud->comercial_email));
 
 $pdf->SetXY(144, 90.3);
-$pdf->Write(0, $solicitud->comercial_telefono);
+$pdf->Write(0, utf8_decode($solicitud->comercial_telefono));
 
 $pdf->SetXY(172, 90.3);
-$pdf->Write(0, $solicitud->comercial_celular);
+$pdf->Write(0, utf8_decode($solicitud->comercial_celular));
 
 $pdf->SetXY(51.3, 93.7);
-$pdf->Write(0, $solicitud->contabilidad_nombre);
+$pdf->Write(0, utf8_decode($solicitud->contabilidad_nombre));
 
 $pdf->SetXY(93, 93.7);
-$pdf->Write(0, $solicitud->contabilidad_email);
+$pdf->Write(0, utf8_decode($solicitud->contabilidad_email));
 
 $pdf->SetXY(144, 93.7);
-$pdf->Write(0, $solicitud->contabilidad_telefono);
+$pdf->Write(0, utf8_decode($solicitud->contabilidad_telefono));
 
 $pdf->SetXY(172, 93.7);
-$pdf->Write(0, $solicitud->contabilidad_celular);
+$pdf->Write(0, utf8_decode($solicitud->contabilidad_celular));
 
 $pdf->SetXY(40, 105.5);
 $pdf->Write(0, utf8_decode($solicitud->referencia_comercial_entidad1));
@@ -102,7 +102,7 @@ $pdf->SetXY(89, 105.5);
 $pdf->Write(0, $solicitud->referencia_comercial_cel1);
 
 $pdf->SetXY(137, 105.5);
-$pdf->Write(0, utf8_decode(substr($solicitud->referencia_comercial_direccion1, 0, 49)));
+$pdf->Write(0, utf8_decode(substr($solicitud->referencia_comercial_direccion1, 0, 39)));
 
 $pdf->SetXY(40, 109.5);
 $pdf->Write(0, utf8_decode($solicitud->referencia_comercial_entidad2));
@@ -111,7 +111,7 @@ $pdf->SetXY(89, 109.5);
 $pdf->Write(0, $solicitud->referencia_comercial_cel2);
 
 $pdf->SetXY(137, 109.5);
-$pdf->Write(0, utf8_decode(substr($solicitud->referencia_comercial_direccion2, 0, 49)));
+$pdf->Write(0, utf8_decode(substr($solicitud->referencia_comercial_direccion2, 0, 39)));
 
 $pdf->SetXY(62, 119.8);
 $pdf->Write(0, utf8_decode($solicitud->referencia_bancaria_entidad));
@@ -125,13 +125,13 @@ $pdf->Write(0, utf8_decode($solicitud->referencia_bancaria_numero));
 $coordenada = 138;
 foreach ($personas_autorizadas as $registro) {
     $pdf->SetXY(105, $coordenada);
-    $pdf->Write(0, $registro->nombre);
+    $pdf->Write(0, utf8_decode($registro->nombre));
 
     $pdf->SetXY(154, $coordenada);
-    $pdf->Write(0, $registro->documento_numero);
+    $pdf->Write(0, utf8_decode($registro->documento_numero));
 
     $pdf->SetXY(174, $coordenada);
-    $pdf->Write(0, $registro->celular);
+    $pdf->Write(0, utf8_decode($registro->celular));
 
     $coordenada = $coordenada + 5;
 }
@@ -198,16 +198,16 @@ $pdf->Write(0, ($solicitud->concepto_otros_ingresos) ? '$'.number_format(floatva
 $coordenada = 52;
 foreach ($clientes_socios_accionistas as $registro) {
     $pdf->SetXY(26.5, $coordenada);
-    $pdf->Write(0, $registro->nombre);
+    $pdf->Write(0, utf8_decode($registro->nombre));
 
     $pdf->SetXY(68, $coordenada);
-    $pdf->Write(0, $registro->tipo_identificacion);
+    $pdf->Write(0, utf8_decode($registro->tipo_identificacion));
 
     $pdf->SetXY(110, $coordenada);
-    $pdf->Write(0, $registro->documento_numero);
+    $pdf->Write(0, utf8_decode($registro->documento_numero));
 
     $pdf->SetXY(151, $coordenada);
-    $pdf->Write(0, $registro->porcentaje_participacion);
+    $pdf->Write(0, utf8_decode($registro->porcentaje_participacion));
 
     $coordenada = $coordenada + 4;
 }
@@ -215,16 +215,16 @@ foreach ($clientes_socios_accionistas as $registro) {
 $coordenada = 80.7;
 foreach ($beneficiarios_clientes_socios_accionistas as $registro) {
     $pdf->SetXY(26.5, $coordenada);
-    $pdf->Write(0, $registro->nombre);
+    $pdf->Write(0, utf8_decode($registro->nombre));
 
     $pdf->SetXY(68, $coordenada);
-    $pdf->Write(0, $registro->tipo_identificacion);
+    $pdf->Write(0, utf8_decode($registro->tipo_identificacion));
 
     $pdf->SetXY(110, $coordenada);
-    $pdf->Write(0, $registro->documento_numero);
+    $pdf->Write(0, utf8_decode($registro->documento_numero));
 
     $pdf->SetXY(151, $coordenada);
-    $pdf->Write(0, $registro->porcentaje_participacion);
+    $pdf->Write(0, utf8_decode($registro->porcentaje_participacion));
 
     $coordenada = $coordenada + 4;
 }
