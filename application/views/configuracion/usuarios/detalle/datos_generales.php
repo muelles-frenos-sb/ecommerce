@@ -93,14 +93,14 @@ if($this->uri->segment(4)) {
                             <?php foreach($this->configuracion_model->obtener('perfiles') as $perfil) echo "<option value='$perfil->id'>$perfil->nombre</option>"; ?>
                         </select>
                     </div>
-                    <div class="form-group col-md-6 mb-2">
+                    <!-- <div class="form-group col-md-6 mb-2">
                         <label for="usuario_login">Nombre de usuario</label>
-                        <input type="text" class="form-control" id="usuario_login" value="<?php if(!empty($tercero)) echo $tercero->login; ?>">
+                        <input type="text" class="form-control" id="usuario_login" value="<?php // if(!empty($tercero)) echo $tercero->login; ?>">
                     </div>
                     <div class="form-group col-md-6 mb-2">
                         <label for="usuario_clave">Contraseña</label>
                         <input type="password" class="form-control" id="usuario_clave">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="form-group mb-0 pt-3 mt-3">
                     <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
@@ -133,8 +133,6 @@ if($this->uri->segment(4)) {
             $('#tercero_email'),
             $('#tercero_estado'),
             $('#usuario_perfil'),
-            $('#usuario_login'),
-            $('#usuario_clave'),
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
