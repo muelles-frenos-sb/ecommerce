@@ -204,14 +204,13 @@ Class Productos_model extends CI_Model{
                 
                 // Conexión a SQL Server desde Linux (Hostinger)
                 if(ENVIRONMENT == 'production') {
-                    $pdo = new PDO("odbc:mssql_odbc", "ecomerce", 'Ecom#Rce2024$Strong!');
+                    $pdo = new PDO("odbc:mssql_odbc", $this->config->item('wms_usuario'), $this->config->item('wms_clave'));
 
                     $sql = "SELECT * FROM VTA_BodegasECOMMERECE";
                     $stmt = $pdo->query($sql);
 
                     // Obtener y mostrar los resultados
-                    $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    return $resultados;
+                    return $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             break;
 
