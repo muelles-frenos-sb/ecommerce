@@ -300,11 +300,6 @@ class Interfaces extends CI_Controller {
                     array_push($entidades_dinamicas, $datos['entidad_dinamica_extranjero']);
                 }
 
-                // Si viene criterio cliente
-                if(isset($datos['criterio_cliente'])) {
-                    $datos_tercero['Criterios_Clientes'] = $datos['criterio_cliente'];
-                }
-
                 $datos_tercero = [
                     'Terceros' => [
                         [
@@ -312,7 +307,7 @@ class Interfaces extends CI_Controller {
                             "F200_NIT" => $datos['documento_numero'],                                       // Numero de documento de identificación del tercero
                             "F200_ID_TIPO_IDENT" => $datos['documento_tipo'],                               // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
                             "F200_IND_TIPO_TERCERO" => $datos['tipo_tercero'],                              // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
-                            "F200_RAZON_SOCIAL" => strtoupper($datos['razon_social']),                      // Solo se requiere si el tipo de tercero es persona juridica '2'.
+                            "F200_RAZON_SOCIAL" => strtoupper(substr($datos['razon_social']), 0, 62),                      // Solo se requiere si el tipo de tercero es persona juridica '2'.
                             "F200_APELLIDO1" => strtoupper($datos['primer_apellido']),                      // Solo se requiere si el tercero es persona natural
                             "F200_APELLIDO2" => strtoupper($datos['segundo_apellido']),                     // Solo se requiere si el tercero es persona natural
                             "F200_NOMBRES" => strtoupper($datos['nombres']),                                // Solo se requiere si el tercero es persona natural
@@ -334,7 +329,7 @@ class Interfaces extends CI_Controller {
                         [
                             "F201_ID_TERCERO" => $datos['documento_numero'],                                // Código del cliente
                             "F201_ID_SUCURSAL" => "001",                                                    // Sucursal del cliente (Siempre va 001 por ser la primera sucursal)
-                            "F201_DESCRIPCION_SUCURSAL" => strtoupper($datos['razon_social']),              // Razón social para la sucursal del cliente
+                            "F201_DESCRIPCION_SUCURSAL" => strtoupper(substr($datos['razon_social'], 0, 35)),              // Razón social para la sucursal del cliente
                             "F201_ID_VENDEDOR" => strtoupper($datos['vendedor']),                                                   // Valida en maestro, código de vendedor asignado al cliente
                             "F201_ID_COND_PAGO" => "CNT",                                                   // Valida en maestro, código de condición de pago asignada a este cliente
                             "F201_DIAS_GRACIA" => "8",                                                      // Días de gracia otorgados al cliente
@@ -374,6 +369,11 @@ class Interfaces extends CI_Controller {
                     ],
                     'Ent_Dinamica_Tercero' => $entidades_dinamicas,
                 ];
+                
+                // Si viene criterio cliente
+                if(isset($datos['criterio_cliente'])) {
+                    $datos_tercero['Criterios_Clientes'] = [$datos['criterio_cliente']];
+                }
 
                 $resultado = json_decode(importar_tercero_cliente($datos_tercero));
                 
