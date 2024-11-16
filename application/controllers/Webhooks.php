@@ -141,12 +141,8 @@ class Webhooks extends MY_Controller {
         $errores = 0;
         $resultado = [];
 
-        $wompi_reference = $datos['reference'];
-        $wompi_transaction_id = $datos['id'];
-        $wompi_status = $datos['status'];
-
         // Se obtienen todos los datos del recibo
-        $recibo = $this->productos_model->obtener('recibo', ['token' => $wompi_reference]);
+        $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
 
         // Si se vuelve a ejecutar el wehbook, se ve mensaje
         if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
@@ -154,10 +150,10 @@ class Webhooks extends MY_Controller {
         // Si no ha sido actualizado por el webhook
         if($recibo->actualizado_webhook == 0) {
             // Tabla, condiciones, datos
-            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $wompi_reference], [
+            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], [
                 'actualizado_webhook' => 1,
-                'wompi_transaccion_id' => $wompi_transaction_id,
-                'wompi_status' => $wompi_status,
+                'wompi_transaccion_id' => $datos['id'],
+                'wompi_status' => $datos['status'],
                 'wompi_datos' => json_encode($datos),
                 'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
             ]);
@@ -169,7 +165,7 @@ class Webhooks extends MY_Controller {
             }
 
             // Se obtienen todos los datos del recibo
-            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $wompi_transaction_id]);
+            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $datos['id']]);
 
             // Si no existe el recibo
             if(empty($recibo)) {
@@ -177,12 +173,12 @@ class Webhooks extends MY_Controller {
                 $errores++;
             }
 
-            // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
-            enviar_email_pedido($recibo);
-
             // Si el pago fue aprobado
-            if($wompi_status == 'APPROVED') {
-                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
+            if($datos['status'] == 'APPROVED') {
+                // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
+                enviar_email_pedido($recibo);
+                
+                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: {$datos['reference']} - ID de Transacción Wompi: {$datos['id']}";
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
                 $movimientos = [];
