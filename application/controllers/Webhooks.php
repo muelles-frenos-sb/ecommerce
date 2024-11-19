@@ -175,9 +175,8 @@ class Webhooks extends MY_Controller {
 
             // Si el pago fue aprobado
             if($datos['status'] == 'APPROVED') {
-                // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
                 enviar_email_pedido($recibo);
-                
+
                 $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: {$datos['reference']} - ID de Transacción Wompi: {$datos['id']}";
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
@@ -227,9 +226,9 @@ class Webhooks extends MY_Controller {
 
                 $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
                 $codigo_resultado_pedido = $resultado_pedido->codigo;
-                $mensaje_resultado_pedido = $resultado_pedido->mensaje;
                 $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
                 array_push($resultado, ['pedido' => $detalle_resultado_pedido]);
+
 
                 // Si no se pudo crear el pedido
                 if($codigo_resultado_pedido == '1') {
@@ -243,13 +242,13 @@ class Webhooks extends MY_Controller {
                     $errores++;
                 }
 
-            //     // Si se ejecutó correctamente
-            //     if($codigo_resultado_pedido == '0') {
-            //         // Se agrega log
-            //         $this->configuracion_model->crear('logs', [
-            //             'log_tipo_id' => 15,
-            //             'fecha_creacion' => date('Y-m-d H:i:s'),
-            //         ]);
+                // Si se ejecutó correctamente
+                if($codigo_resultado_pedido == '0') {
+                    // Se agrega log
+                    $this->configuracion_model->crear('logs', [
+                        'log_tipo_id' => 15,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                    ]);
 
             //         $datos_documento_contable = [
             //             "Documento_contable" => [
@@ -309,7 +308,10 @@ class Webhooks extends MY_Controller {
             //             'log_tipo_id' => 20,
             //             'fecha_creacion' => date('Y-m-d H:i:s'),
             //         ]);
-            //     }
+
+                    $datos_documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
+                    
+                }
             }
         }
 

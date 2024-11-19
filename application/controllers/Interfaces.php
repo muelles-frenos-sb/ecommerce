@@ -335,7 +335,7 @@ class Interfaces extends CI_Controller {
                             "F201_DIAS_GRACIA" => "8",                                                      // Días de gracia otorgados al cliente
                             "F201_CUPO_CREDITO" => "0",                                                     // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
                             "F201_ID_TIPO_CLI" => "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
-                            "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                                                // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
+                            "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                               // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
                             "F015_CONTACTO" => strtoupper($datos['contacto']),                              // Nombre de la persona de contacto
                             "F015_DIRECCION1" => strtoupper($datos['direccion']),                           // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
@@ -377,7 +377,7 @@ class Interfaces extends CI_Controller {
 
                 $resultado = json_decode(importar_tercero_cliente($datos_tercero));
                 
-                print json_encode(['resultado' => $resultado]);
+                print json_encode(['resultado' => [$resultado, $datos_tercero]]);
             break;
 
             case 'terceros_contactos':
