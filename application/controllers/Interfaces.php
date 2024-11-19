@@ -307,7 +307,7 @@ class Interfaces extends CI_Controller {
                             "F200_NIT" => $datos['documento_numero'],                                       // Numero de documento de identificación del tercero
                             "F200_ID_TIPO_IDENT" => $datos['documento_tipo'],                               // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
                             "F200_IND_TIPO_TERCERO" => $datos['tipo_tercero'],                              // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
-                            "F200_RAZON_SOCIAL" => strtoupper(substr($datos['razon_social']), 0, 62),                      // Solo se requiere si el tipo de tercero es persona juridica '2'.
+                            "F200_RAZON_SOCIAL" => strtoupper(substr($datos['razon_social'], 0, 62)),                      // Solo se requiere si el tipo de tercero es persona juridica '2'.
                             "F200_APELLIDO1" => strtoupper($datos['primer_apellido']),                      // Solo se requiere si el tercero es persona natural
                             "F200_APELLIDO2" => strtoupper($datos['segundo_apellido']),                     // Solo se requiere si el tercero es persona natural
                             "F200_NOMBRES" => strtoupper($datos['nombres']),                                // Solo se requiere si el tercero es persona natural
