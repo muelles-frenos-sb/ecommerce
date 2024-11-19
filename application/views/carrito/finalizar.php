@@ -152,6 +152,8 @@ if($this->session->userdata('usuario_id')) {
 <div id="contenedor_pago"></div>
 
 <script>
+    let esVendedor = ($('#codigo_vendedor').val() == 0) ? false : true
+    
     cargarDatosCliente = async() => {
         if (!validarCamposObligatorios([
             $('#checkout_documento_numero'),
@@ -255,6 +257,8 @@ if($this->session->userdata('usuario_id')) {
                     contacto: '-',
                     email: $('#checkout_email').val(),
                     telefono: $('#checkout_telefono').val(),
+                    vendedor: 'U003',
+                    lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio_clientes'); ?>',
                 }
                 
                 // Si es cédula de extranjería, se envía una entidad dinámica adicional
@@ -266,6 +270,17 @@ if($this->session->userdata('usuario_id')) {
                         f753_id_atributo: 'co036_id_procedencia_org',
                         f753_id_maestro: 'MUNOECO043',
                         f753_id_maestro_detalle: 11,
+                    }
+                }
+
+                // Si es vendedor, se envía una entidad dinámica adicional
+                // para la asignación del segmento
+                if(esVendedor) {
+                    datosTerceroSiesa.criterio_cliente = {
+                        f207_id_tercero: $('#checkout_documento_numero').val(),
+                        f207_id_sucursal: '001',
+                        f207_id_plan_criterios: $('#usuario_segmento_id option:selected').attr('data-plan'),
+                        f207_id_criterio_mayor: $('#usuario_segmento_id option:selected').attr('data-mayor'),
                     }
                 }
 
