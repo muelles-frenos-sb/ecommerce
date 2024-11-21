@@ -232,23 +232,28 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
 
     $wompi = json_decode($recibo->wompi_datos, true);
     $metodo_pago = $wompi['payment_method_type'];
-    $notas_recibo = "Pago a través de Wompi. Referencia $recibo->wompi_transaccion_id. Medio: $metodo_pago";
+
+    $notas_recibo = "- Pedido $recibo->id E-Commerce - Referencia Wompi: {$wompi['reference']} - ID de Transacción Wompi: {$wompi['id']} - {$wompi['payment_method']['type']}";
     if($metodo_pago == 'CARD') $notas_recibo .= ' ('.$wompi['payment_method']['extra']['name'].')';
     
     // Se obtienen los ítems del recibo
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $movimientos_cxc = [];
+    $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
     // Se recorre cada ítem
     foreach ($items as $item) {
+        // Si trae descuento, se va acumulando
+        if($item->descuento > 0) $descuento += $item->descuento;
+
         $movimiento_cxc = [
             "F_CIA" => 1,
             "F350_ID_CO" => 400, 
             "F350_ID_TIPO_DOCTO" => 'FRC',
-            "F350_CONSEC_DOCTO" => 1,
+            "F350_CONSEC_DOCTO" => $recibo->id,
             "F351_ID_AUXILIAR" => '28050505',
             "F351_ID_TERCERO" => $recibo->documento_numero,
             "F351_NOTAS" => "Recibo $recibo->id",
@@ -256,7 +261,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
             "F351_VALOR_CR" => ($item->subtotal >= 0) ? number_format($item->subtotal, 0, '', '') : 0,
             "F353_ID_SUCURSAL" => '001',
             "F353_ID_TIPO_DOCTO_CRUCE" => 'CPE',
-            "F353_CONSEC_DOCTO_CRUCE" => 1,
+            "F353_CONSEC_DOCTO_CRUCE" => $recibo->id,
             "F353_NRO_CUOTA_CRUCE" => 0,
             "F353_FECHA_VCTO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
             "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
@@ -272,7 +277,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
             "F354_VALOR_APROVECHA_ALT" => 0,
             "F354_VALOR_RETENCION" => 0,
             "F354_VALOR_RETENCION_ALT" => 0,
-            "F354_TERCERO_VEND" => 'U003',
+            "F354_TERCERO_VEND" => '22222221',
             "F354_NOTAS" => $notas_recibo,
         ];
 
@@ -295,7 +300,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
                 "F_CONSEC_AUTO_REG" => 1,
                 "F350_ID_CO" => 400,
                 "F350_ID_TIPO_DOCTO" => 'FRC',
-                "F350_CONSEC_DOCTO" => 1,
+                "F350_CONSEC_DOCTO" => $recibo->id,
                 "F350_FECHA" => date('Ymd'),
                 "F350_ID_TERCERO" => $recibo->documento_numero,
                 "F350_ID_CLASE_DOCTO" => 30,
@@ -312,10 +317,10 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
                 "F_CIA" => 1,
                 "F350_ID_CO" => 400,
                 "F350_ID_TIPO_DOCTO" => 'FRC',
-                "F350_CONSEC_DOCTO" => 1,
+                "F350_CONSEC_DOCTO" => $recibo->id,
                 "F351_ID_AUXILIAR" => '11100504',
                 "F351_ID_CO_MOV" => 400,
-                "F351_ID_TERCERO" => $recibo->documento_numero,
+                "F351_ID_TERCERO" => '',
                 "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
                 "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
                 "F351_NOTAS" => "Recibo $recibo->id",
@@ -338,33 +343,63 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
         ],
     ];
 
-    // // si tiene descuentos
-    // if($descuento > 0) {
-    //     // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
-    //     array_push($paquete_documento_contable['movimientoContable'], [
-            // "F_CIA" => '1',
-            // "F350_ID_CO" => '400',
-            // "F350_ID_TIPO_DOCTO" => 'FRC',
-            // "F350_CONSEC_DOCTO" => 1,
-            // "F351_ID_AUXILIAR" => '41750120',
-            // "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
-            // "F351_ID_TERCERO" => $recibo->documento_numero,
-            // "F351_VALOR_DB" => number_format($descuento, 0, '', ''),
-            // "F351_NRO_DOCTO_BANCO" => 0,
-            // "F351_NOTAS" => "Recibo $recibo->id",
-            // "F351_VALOR_CR" => 0,
-            // "F351_VALOR_DB_ALT" => 0,
-            // "F351_VALOR_CR_ALT" => 0,
-            // "F351_BASE_GRAVABLE" => 0,
-            // "F351_DOCTO_BANCO" => '',
-        // ]);
-    // }
+    // si tiene descuentos
+    if($descuento > 0) {
+        // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
+        array_push($paquete_documento_contable['movimientoContable'], [
+            "F_CIA" => '1',
+            "F350_ID_CO" => '400',
+            "F350_ID_TIPO_DOCTO" => 'FRC',
+            "F350_CONSEC_DOCTO" => $recibo->id,
+            "F351_ID_AUXILIAR" => '41750120',
+            "F351_ID_CO_MOV" => 400,
+            "F351_ID_TERCERO" => $recibo->documento_numero,
+            "F351_VALOR_DB" => number_format($descuento, 0, '', ''),
+            "F351_NRO_DOCTO_BANCO" => 0,
+            "F351_NOTAS" => "Recibo $recibo->id",
+            "F351_VALOR_CR" => 0,
+            "F351_VALOR_DB_ALT" => 0,
+            "F351_VALOR_CR_ALT" => 0,
+            "F351_BASE_GRAVABLE" => 0,
+            "F351_DOCTO_BANCO" => '',
+        ]);
+    }
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($paquete_documento_contable));
     $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
     $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
 
-    return [$resultado_documento_contable, $paquete_documento_contable];
+    // Si no se pudo crear el documento contable
+    if($codigo_resultado_documento_contable == '1') {
+        $errores++;
+
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 48,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => $detalle_resultado_documento_contable
+        ]);
+        
+        $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
+    } else {
+        // Se agrega log
+        $CI->configuracion_model->crear('logs', [
+            'log_tipo_id' => 49,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+        ]);
+
+        $respuesta['documento_contable'] = $resultado_documento_contable;
+
+        $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
+            'numero_siesa' => obtener_numero_recibo_caja($recibo),
+        ]);
+    }
+
+    print json_encode([
+        'errores' => $errores,
+        'mensaje' => $resultado_documento_contable,
+        'datos' => $paquete_documento_contable,
+    ]);
 }
 
 /**

@@ -131,7 +131,7 @@ class Webhooks extends MY_Controller {
             'errores' => $errores,
             'resultado' => $resultado,
             'datos_pedido' => (isset($datos_pedido)) ? $datos_pedido : [],
-            'datos_movimiento_contable' => (isset($datos_documento_contable)) ? $datos_documento_contable : [],
+            'datos_movimiento_contable' => (isset($documento_contable)) ? $documento_contable : [],
         ]);
         
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
@@ -141,8 +141,12 @@ class Webhooks extends MY_Controller {
         $errores = 0;
         $resultado = [];
 
+        $wompi_reference = $datos['reference'];
+        $wompi_transaction_id = $datos['id'];
+        $wompi_status = $datos['status'];
+
         // Se obtienen todos los datos del recibo
-        $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['reference']]);
+        $recibo = $this->productos_model->obtener('recibo', ['token' => $wompi_reference]);
 
         // Si se vuelve a ejecutar el wehbook, se ve mensaje
         if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
@@ -150,10 +154,10 @@ class Webhooks extends MY_Controller {
         // Si no ha sido actualizado por el webhook
         if($recibo->actualizado_webhook == 0) {
             // Tabla, condiciones, datos
-            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], [
+            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $wompi_reference], [
                 'actualizado_webhook' => 1,
-                'wompi_transaccion_id' => $datos['id'],
-                'wompi_status' => $datos['status'],
+                'wompi_transaccion_id' => $wompi_transaction_id,
+                'wompi_status' => $wompi_status,
                 'wompi_datos' => json_encode($datos),
                 'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
             ]);
@@ -165,7 +169,7 @@ class Webhooks extends MY_Controller {
             }
 
             // Se obtienen todos los datos del recibo
-            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $datos['id']]);
+            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $wompi_transaction_id]);
 
             // Si no existe el recibo
             if(empty($recibo)) {
@@ -173,11 +177,12 @@ class Webhooks extends MY_Controller {
                 $errores++;
             }
 
-            // Si el pago fue aprobado
-            if($datos['status'] == 'APPROVED') {
-                enviar_email_pedido($recibo);
+            // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
+            enviar_email_pedido($recibo);
 
-                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: {$datos['reference']} - ID de Transacción Wompi: {$datos['id']}";
+            // Si el pago fue aprobado
+            if($wompi_status == 'APPROVED') {
+                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
                 $movimientos = [];
@@ -216,7 +221,7 @@ class Webhooks extends MY_Controller {
                             "f430_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                             "f430_num_dias_entrega" => 0, // Valida Nro de dias en que se estima, la entrega del pedido
                             "f430_num_docto_referencia" => $recibo->id, // Valida la orden de compra del documento
-                            "f430_id_cond_pago" => "C30", // Valida en maestro, condiciones de pago
+                            "f430_id_cond_pago" => "CNT", // Valida en maestro, condiciones de pago
                             "f430_notas" => "Pedido Realizado desde el Ecommerce", // Observaciones
                             "f430_id_tercero_vendedor" => "22222221", // Si es vacio lo trae del cliente a facturar
                         ]
@@ -226,9 +231,9 @@ class Webhooks extends MY_Controller {
 
                 $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
                 $codigo_resultado_pedido = $resultado_pedido->codigo;
+                $mensaje_resultado_pedido = $resultado_pedido->mensaje;
                 $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
                 array_push($resultado, ['pedido' => $detalle_resultado_pedido]);
-
 
                 // Si no se pudo crear el pedido
                 if($codigo_resultado_pedido == '1') {
@@ -250,67 +255,8 @@ class Webhooks extends MY_Controller {
                         'fecha_creacion' => date('Y-m-d H:i:s'),
                     ]);
 
-            //         $datos_documento_contable = [
-            //             "Documento_contable" => [
-            //                 [
-            //                     "F350_CONSEC_DOCTO" => '1', // Número de documento
-            //                     "F350_FECHA" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
-            //                     "F350_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero
-            //                     "F350_NOTAS" => $notas_pedido // Observaciones
-            //                 ]
-            //             ],
-            //             "Movimiento_contable" => [
-            //                 [
-            //                     "F350_CONSEC_DOCTO" => '1', // Número de documento
-            //                     "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
-            //                     "F351_VALOR_DB" => $recibo->valor, // Valor debito del asiento, si el asiento es crédito este debe ir en cero (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000)
-            //                     "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Solo si la cuenta es de bancos, corresponde al numero 'CH', 'CG', 'ND' o 'NC'.
-            //                     "F351_NOTAS" => $notas_pedido // Observaciones
-            //                 ],
-            //             ],
-            //             "Movimiento_CxC" => [
-            //                 [
-            //                     "F350_CONSEC_DOCTO" => '1', // Numero de documento
-            //                     "F351_ID_AUXILIAR" => "11100504", // Valida en maestro, código de cuenta contable
-            //                     "F351_ID_TERCERO" => $recibo->documento_numero, // Valida en maestro, código de tercero, solo se requiere si la auxiliar contable maneja tercero
-            //                     "F351_ID_CO_MOV" => "400", // Valida en maestro, código de centro de operación del movimiento, es obligatorio si la auxiliar no tiene uno por defecto
-            //                     "F351_VALOR_CR" => $recibo->valor, // Valor crédito del asiento, si el asiento es debito este debe ir en cero, el formato debe ser (signo + 15 enteros + punto + 4 decimales) (+000000000000000.0000
-            //                     "F351_NOTAS" => "Pedido $recibo->id E-Commerce", // Observaciones
-            //                     "F353_ID_SUCURSAL" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro, código de sucursal del cliente.
-            //                     "F353_ID_TIPO_DOCTO_CRUCE" => "CPE", // Valida en maestro, código de tipo de documento.
-            //                     "F353_CONSEC_DOCTO_CRUCE" => $recibo->id, // Numero de documento de cruce, es un numero entre 1 y 99999999.
-            //                     "F353_FECHA_VCTO" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Fecha de vencimiento del documento, el formato debe ser AAAAMMDD
-            //                     "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // Fecha de pronto pago del documento, el formato debe ser AAAAMMDD
-            //                 ]
-            //             ]
-            //         ];
-
-            //         $resultado_documento_contable = json_decode(importar_documento_contable_api($datos_documento_contable));
-            //         $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
-            //         $mensaje_resultado_documento_contable = $resultado_documento_contable->mensaje;
-            //         $detalle_resultado_documento_contable = json_encode($resultado_documento_contable->detalle);
-            //         array_push($resultado, ['documento_contable' => $detalle_resultado_documento_contable]);
-
-            //         // Si no se pudo crear el documento contable
-            //         if($codigo_resultado_documento_contable == '1') {
-            //             // Se agrega log
-            //             $this->configuracion_model->crear('logs', [
-            //                 'log_tipo_id' => 19,
-            //                 'fecha_creacion' => date('Y-m-d H:i:s'),
-            //                 'observacion' => $detalle_resultado_documento_contable
-            //             ]);
-
-            //             $errores++;
-            //         }
-
-            //         // Se agrega log
-            //         $this->configuracion_model->crear('logs', [
-            //             'log_tipo_id' => 20,
-            //             'fecha_creacion' => date('Y-m-d H:i:s'),
-            //         ]);
-
-                    $datos_documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
-                    
+                    $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
+                    array_push($resultado, $documento_contable);
                 }
             }
         }
