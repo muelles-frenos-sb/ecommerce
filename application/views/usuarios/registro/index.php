@@ -17,7 +17,7 @@
                     DATOS BÁSICOS
                 </div>
                 <div class="form-row mb-2">
-                    <div class="form-group col-4">
+                    <div class="form-group col-md-4 col-sm-12 m-2" style="border: 1px solid #EBEBEB;">
                         <label for="usuario_tipo_tercero1">Tipo de persona *</label>
                         <div class="row">
                             <div class="col-6">
@@ -40,7 +40,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-md-2 col-sm-12 m-2" style="border: 1px solid #EBEBEB;">
                         <label for="usuario_tiene_rut1">¿Tienes RUT? *</label>
                         <div class="row">
                             <div class="col-6">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-4">
+                    <div class="form-group col-md-4 col-sm-12 m-2" style="border: 1px solid #EBEBEB;">
                         <label for="usuario_tiene_rut1">¿Eres responsable de IVA? *</label>
                         <div class="row">
                             <div class="col-6">
@@ -211,7 +211,6 @@
 
 <script>
     let esVendedor = ($('#codigo_vendedor').val() == 0) ? false : true
-    console.log(esVendedor)
         
     crearUsuario = async() => {
         let camposObligatorios = [
@@ -263,13 +262,24 @@
             return false
         }
 
-        // Se consulta si existe un usuario con ese mismo login
-        let usuarioExistenteDocumento = await consulta('obtener', {tipo: 'usuarios', documento_numero: $.trim($('#usuario_numero_documento').val())})
-        let usuarioExistenteLogin = await consulta('obtener', {tipo: 'usuarios', login: $.trim($('#usuario_login').val())})
-        let usuarioExistenteEmail = await consulta('obtener', {tipo: 'usuarios', email: $.trim($('#usuario_email').val())})
+        // Se consulta si existe un usuario con ese mismo documento y correo electrónico
+        let usuarioTerceroExistente = await consulta('obtener', {tipo: 'usuarios', documento_numero: $.trim($('#usuario_numero_documento1').val()), email: $.trim($('#usuario_email').val())})
 
-        if(!esVendedor && (usuarioExistenteDocumento || usuarioExistenteLogin || usuarioExistenteEmail)) {
-            mostrarAviso('alerta', `Ya estás registrado en nuestro sistema, por favor verifica nuevamente el correo electrónico, usuario y el número de documento. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`, 10000)
+        // Si no es vendedor y el usuario ya existe
+        if(!esVendedor && !usuarioTerceroExistente) {
+            mostrarAviso('alerta', `
+                El usuario con número de documento <b>${$.trim($('#usuario_numero_documento1').val())}</b> y correo <b>${$.trim($('#usuario_email').val())}</b> ya se encuentra registrado en nuestra sistema, por favor verifica nuevamente. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`,
+            10000)
+            return false
+        }
+
+        let usuarioExistenteLogin = await consulta('obtener', {tipo: 'usuarios', login: $.trim($('#usuario_login').val())})
+        
+        // Si no es vendedor y el login ya existe
+        if(!esVendedor && usuarioExistenteLogin) {
+            mostrarAviso('alerta', `
+                El nombre de usuario <b>${$.trim($('#usuario_login').val())}</b> ya se encuentra registrado en nuestra sistema, por favor intenta con un nombre diferente.`,
+            10000)
             return false
         }
 

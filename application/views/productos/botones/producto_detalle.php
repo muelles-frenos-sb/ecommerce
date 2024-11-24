@@ -20,8 +20,16 @@ $item = buscar_item_carrito($producto->id);
                     referencia: '<?php echo $producto->referencia; ?>',
                     unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
                 })">
-                Añadir
+                <i class="fa fa-plus"></i> Agregar al carrito
             </button>
+
+            <a class="btn btn-success btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
+                Ir a pagar
+            </a>
+
+            <a class="btn btn-info btn-lg btn-block" href="<?php echo site_url(); ?>">
+                Continuar comprando
+            </a>
         </div>
         <div class="product__actions-divider"></div>
     <?php } ?>

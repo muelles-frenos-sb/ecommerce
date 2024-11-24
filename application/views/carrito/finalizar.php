@@ -136,11 +136,14 @@ if($this->session->userdata('usuario_id')) {
 
                         <div class="address-card__row mt-2 mb-2">
                             <div class="alert alert-primary mb-3">
-                                Ten en cuenta que puede aplicarse un cargo por flete, el cual deberá pagarse al momento de recibir tu pedido.
+                                ¡Hola! Si tu punto de entrega está en Medellín o su área metropolitana, el envío es gratuito. Para otras ubicaciones, el costo del flete se cobrará al recibir el pedido y variará según tu ubicación y los productos solicitados.
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>Realizar pago seguro</button>
+                        <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
+                        <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
+                            Realizar pago seguro
+                        </button>
                     </div>
                 </div>
             </div>
@@ -167,6 +170,8 @@ if($this->session->userdata('usuario_id')) {
     }
 
     guardarFactura = async() => {
+        let total = parseFloat($('#pedido_total_pago').val())
+        
         // Alerta cuando no hay ítems en el carrito
         if(<?php echo $this->cart->total(); ?> == 0) {
             mostrarAviso('alerta', 'No hay ningún producto en el carrito.')
@@ -191,7 +196,11 @@ if($this->session->userdata('usuario_id')) {
             camposObligatorios.push($('#checkout_primer_apellido'))
         }
 
-        
+        if(total < 50000) {
+            mostrarAviso('alerta', 'Te informamos que si deseas pagar por este medio, el valor debe ser superior o igual a $50.000', 20000)
+            return false
+        }
+
         // Si tiene sucursales, es obligatorio
         if(parseInt($('#cantidad_sucursales').val()) > 0) camposObligatorios.push($('#checkout_sucursal'))
 
