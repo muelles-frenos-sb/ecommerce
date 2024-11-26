@@ -187,7 +187,7 @@ function enviar_email_solicitud_credito($id) {
                 Nota: El cliente desea recibir la firma digital mediante $preferencia_enlace.
             ",
         ],
-        'destinatarios' => [$solicitud->email, 'analistacartera@repuestossimonbolivar.com'],
+        'destinatarios' => [$solicitud->email, 'analistacartera@repuestossimonbolivar.com', 'carteramyfsimonbolivar@gmail.com'],
         'adjuntos' => true,
     ];
 
