@@ -234,7 +234,6 @@ class Webhooks extends MY_Controller {
 
                 $resultado_pedido = json_decode(importar_pedidos_api($datos_pedido));
                 $codigo_resultado_pedido = $resultado_pedido->codigo;
-                $mensaje_resultado_pedido = $resultado_pedido->mensaje;
                 $detalle_resultado_pedido = json_encode($resultado_pedido->detalle);
                 array_push($resultado, ['pedido' => $detalle_resultado_pedido]);
 

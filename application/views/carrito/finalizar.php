@@ -119,7 +119,7 @@ if($this->session->userdata('usuario_id')) {
                             <div class="form-check">
                                 <span class="input-check form-check-input">
                                     <span class="input-check__body">
-                                        <input class="input-check__input" type="checkbox" id="checkout-terms">
+                                        <input class="input-check__input" type="checkbox" id="checkout_terminos">
                                         <span class="input-check__box"></span>
                                         <span class="input-check__icon">
                                             <svg width="9px" height="7px">
@@ -201,6 +201,11 @@ if($this->session->userdata('usuario_id')) {
             return false
         }
 
+        if(!$(`#checkout_terminos`).is(':checked')) {
+            mostrarAviso('alerta', 'Por favor lee y acepta los términos y condiciones', 20000)
+            return false
+        }
+        
         // Si tiene sucursales, es obligatorio
         if(parseInt($('#cantidad_sucursales').val()) > 0) camposObligatorios.push($('#checkout_sucursal'))
 

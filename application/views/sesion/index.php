@@ -9,11 +9,11 @@
                             <h3 class="card-title">Iniciar sesión</h3>
                             <form>
                                 <div class="form-group">
-                                    <label for="sesion_login" class="sr-only">Nombre de usuario</label>
+                                    <label for="sesion_login">Nombre de usuario</label>
                                     <input id="sesion_login" type="text" class="form-control form-control-sm" placeholder="Nombre de usuario">
                                 </div>
                                 <div class="form-group">
-                                    <label for="sesion_clave" class="sr-only">Clave</label>
+                                    <label for="sesion_clave">Clave</label>
                                     <div class="account-menu__form-forgot">
                                         <input id="sesion_clave" type="password" class="form-control form-control-sm" placeholder="Clave">
                                         

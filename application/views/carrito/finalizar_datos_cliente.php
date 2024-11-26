@@ -15,7 +15,11 @@ $codigo_resultado_tercero = $resultado_tercero->codigo;
 $tercero = ($codigo_resultado_tercero == 0) ? $resultado_tercero->detalle->Table[0] : [] ;
 
 // Se almacena un dato para reconocer que el tercero existía previamente, y no crearlo al ir al pago
-if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$tercero->f200_id' />";     
+if(!empty($tercero)) {
+    echo "<input type='hidden' id='api_tercero_id' value='$tercero->f200_id' />";
+    echo "<input type='hidden' id='api_departamento_codigo' value='$tercero->f015_id_depto' />";
+    echo "<input type='hidden' id='api_municipio_codigo' value='$tercero->f015_id_ciudad' />";
+}
 ?>
 
 <input type="hidden" id="total_pedido">
@@ -137,7 +141,22 @@ if(!empty($tercero)) echo "<input type='hidden' id='api_tercero_id' value='$terc
 
         mostrarTotales(listaPrecioPorDefecto)
 
-        listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
+        await listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
+
+        // Si es un tercero existente
+        if($('#api_tercero_id').val()) {
+            // Pone por defecto el departamento
+            $(`#checkout_departamento_id option[data-codigo="${$('#api_departamento_codigo').val()}"]`).attr('selected', true)
+
+            // Carga los datos de municipios
+            await listarDatos('checkout_municipio_id', {tipo: 'municipios', departamento_id: $('#checkout_departamento_id').val()})
+
+            // Pone por defecto el municipio
+            $(`#checkout_municipio_id option[data-codigo="${$('#api_municipio_codigo').val()}"]`).attr('selected', true)
+        }
+
+        // Si es una sola sucursal, se pone por defecto
+        if($('#cantidad_sucursales').val() == 1) $('#checkout_sucursal').val('001')
 
         // Cuando se seleccione el tipo de tercero
         $('#checkout_tipo_tercero').change(() => {

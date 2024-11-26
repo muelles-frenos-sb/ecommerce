@@ -306,7 +306,7 @@ listarDatos = async(elemento, datos = null) => {
     $.each(resultado, (index, registro) => {
         let campoId = (datos.tipo == 'departamentos' || datos.tipo == 'municipios') ? registro.codigo : registro.id
             
-        $(`#${elemento}`).append(`<option value="${campoId}">${registro.nombre}</option>`)
+        $(`#${elemento}`).append(`<option value="${campoId}" data-codigo="${registro.codigo}">${registro.nombre}</option>`)
     })
 }
 
