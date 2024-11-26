@@ -240,15 +240,11 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
     $items = $CI->productos_model->obtener('recibos_detalle', ['recibo_id' => $recibo->id]);
 
     $movimientos_cxc = [];
-    $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
     // Se recorre cada ítem
     foreach ($items as $item) {
-        // Si trae descuento, se va acumulando
-        if($item->descuento > 0) $descuento += $item->descuento;
-
         $movimiento_cxc = [
             "F_CIA" => 1,
             "F350_ID_CO" => 400, 
@@ -258,7 +254,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
             "F351_ID_TERCERO" => $recibo->documento_numero,
             "F351_NOTAS" => "Recibo $recibo->id",
             "F351_ID_CO_MOV" => 400,
-            "F351_VALOR_CR" => ($item->subtotal >= 0) ? number_format($item->subtotal, 0, '', '') : 0,
+            "F351_VALOR_CR" => ($item->subtotal >= 0) ? number_format(($item->subtotal - $item->descuento), 0, '', '') : 0,
             "F353_ID_SUCURSAL" => '001',
             "F353_ID_TIPO_DOCTO_CRUCE" => 'CPE',
             "F353_CONSEC_DOCTO_CRUCE" => $recibo->id,
@@ -267,7 +263,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
             "F353_FECHA_DSCTO_PP" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
             "F351_ID_UN" => '01',
             "F351_ID_CCOSTO" => '',
-            "F351_VALOR_DB" => ($item->subtotal <= 0) ? number_format(($item->subtotal*-1), 0, '', '') : 0, // Saldos a favor
+            "F351_VALOR_DB" => ($item->subtotal <= 0) ? number_format((($item->subtotal - $item->descuento) * -1), 0, '', '') : 0, // Saldos a favor
             "F351_VALOR_DB_ALT" => 0,
             "F351_VALOR_CR_ALT" => 0,
             "F353_VLR_DSCTO_PP" => 0,
@@ -342,28 +338,6 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
             ]
         ],
     ];
-
-    // si tiene descuentos
-    if($descuento > 0) {
-        // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
-        array_push($paquete_documento_contable['movimientoContable'], [
-            "F_CIA" => '1',
-            "F350_ID_CO" => '400',
-            "F350_ID_TIPO_DOCTO" => 'FRC',
-            "F350_CONSEC_DOCTO" => $recibo->id,
-            "F351_ID_AUXILIAR" => '41750120',
-            "F351_ID_CO_MOV" => 400,
-            "F351_ID_TERCERO" => $recibo->documento_numero,
-            "F351_VALOR_DB" => number_format($descuento, 0, '', ''),
-            "F351_NRO_DOCTO_BANCO" => 0,
-            "F351_NOTAS" => "Recibo $recibo->id",
-            "F351_VALOR_CR" => 0,
-            "F351_VALOR_DB_ALT" => 0,
-            "F351_VALOR_CR_ALT" => 0,
-            "F351_BASE_GRAVABLE" => 0,
-            "F351_DOCTO_BANCO" => '',
-        ]);
-    }
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($paquete_documento_contable));
     $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;
