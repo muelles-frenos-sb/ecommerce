@@ -55,7 +55,6 @@ class Webhooks extends MY_Controller {
         $datos = json_decode($post, true)['data']['transaction'];
 
         $datos_log = [
-            'log_tipo_id' => 14,
             'fecha_creacion' => date('Y-m-d H:i:s'),
             'observacion' => $datos['reference'],
         ];
@@ -65,6 +64,8 @@ class Webhooks extends MY_Controller {
 
         // Si es pedido, se ejecuta la gestión de un pedido
         if($tipo_documento[0] == 'pe') {
+            $datos_log['log_tipo_id'] = 50;
+
             // Se agrega log
             $this->configuracion_model->crear('logs', $datos_log);
 
@@ -73,6 +74,8 @@ class Webhooks extends MY_Controller {
 
         // Si es el pago de una factura del estado de cuenta, se ejecuta la gestión de un pedido
         if($tipo_documento[0] == 'ec') {
+            $datos_log['log_tipo_id'] = 14;
+
             // Se agrega log
             $this->configuracion_model->crear('logs', $datos_log);
 
