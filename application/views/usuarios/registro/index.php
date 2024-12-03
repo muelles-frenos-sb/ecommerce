@@ -266,7 +266,7 @@
         let usuarioTerceroExistente = await consulta('obtener', {tipo: 'usuarios', documento_numero: $.trim($('#usuario_numero_documento1').val()), email: $.trim($('#usuario_email').val())})
 
         // Si no es vendedor y el usuario ya existe
-        if(!esVendedor && !usuarioTerceroExistente) {
+        if(!esVendedor && usuarioTerceroExistente) {
             mostrarAviso('alerta', `
                 El usuario con número de documento <b>${$.trim($('#usuario_numero_documento1').val())}</b> y correo <b>${$.trim($('#usuario_email').val())}</b> ya se encuentra registrado en nuestra sistema, por favor verifica nuevamente. Podrás iniciar sesión <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a> o recuperar tu contraseña`,
             10000)
