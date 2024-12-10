@@ -25,21 +25,36 @@ if(!empty($tercero)) {
 <input type="hidden" id="total_pedido">
 
 <div class="form-row">
-    <div class="form-group col-6">
-        <label for="checkout_responsable_iva">¿Eres responsable de IVA? *</label>
-        <select id="checkout_responsable_iva" class="form-control">
-            <option value="">Selecciona...</option>
-            <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
-            <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
-        </select>
+    <div class="form-group col-12">
+        <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+            DATOS DEL PAGO
+        </div>
     </div>
 
     <div class="form-group col-6">
-        <label for="checkout_tipo_tercero">¿Eres persona natural o jurídica? *</label>
+        <label for="checkout_tipo_tercero">Tipo de persona *</label>
         <select id="checkout_tipo_tercero" class="form-control" autofocus>
             <option value="">Seleccione...</option>
             <option value="1">Persona natural</option>
             <option value="2">Persona jurídica</option>
+        </select>
+    </div>
+
+    <!-- <div class="form-group col-4">
+        <label for="checkout_tiene_rut">¿Tienes RUT? *</label>
+        <select id="checkout_tiene_rut" class="form-control">
+            <option value="">Seleccione...</option>
+            <option value="1">Sí</option>
+            <option value="2">No</option>
+        </select>
+    </div> -->
+
+    <div class="form-group col-6">
+        <label for="checkout_responsable_iva">¿Responsable de IVA? *</label>
+        <select id="checkout_responsable_iva" class="form-control">
+            <option value="">Selecciona...</option>
+            <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
+            <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
         </select>
     </div>
 </div>
@@ -58,10 +73,12 @@ if(!empty($tercero)) {
         <input type="text" class="form-control" id="checkout_segundo_apellido" value="<?php if(!empty($tercero)) echo $tercero->f200_apellido2; ?>">
     </div>
 </div>
+
 <div class="form-group">
     <label for="checkout_razon_social">Razón social *<span class="text-muted">(Opcional)</span></label>
     <input type="text" class="form-control" id="checkout_razon_social" value="<?php if(!empty($tercero)) echo $tercero->f200_razon_social; ?>" placeholder="Nombre de la empresa o nombre completo">
 </div>
+
 <div class="form-row">
     <div class="form-group col-lg-6 col-sm-12">
         <label for="checkout_departamento_id">Departamento *</label>
@@ -73,10 +90,12 @@ if(!empty($tercero)) {
         <select id="checkout_municipio_id" class="form-control"></select>
     </div>
 </div>
+
 <div class="form-group">
     <label for="checkout_direccion">Dirección *</label>
     <input type="text" class="form-control" id="checkout_direccion" value="<?php if(!empty($tercero)) echo $tercero->f015_direccion1; ?>">
 </div>
+
 <div class="form-group">
     <label for="checkout_sucursal">Elija la sucursal o placa a la que desea asociar el pedido</label>
     <select id="checkout_sucursal" class="form-control form-control-select2">
@@ -85,14 +104,34 @@ if(!empty($tercero)) {
         <?php foreach($sucursales as $sucursal) echo "<option value='$sucursal->f201_id_sucursal'>$sucursal->f201_descripcion_sucursal</option>"; ?>
     </select>
 </div>
+
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="checkout_email">Correo electrónico *</label>
         <input type="email" class="form-control" id="checkout_email" value="<?php if(!empty($tercero)) echo $tercero->f015_email; ?>">
     </div>
+
     <div class="form-group col-md-6">
         <label for="checkout_telefono">Teléfono *</label>
         <input type="text" class="form-control" id="checkout_telefono" value="<?php if(!empty($tercero)) echo $tercero->f015_celular; ?>">
+    </div>
+
+    <div class="form-group col-md-12">
+        <label for="checkout_comentarios">Observaciones <span class="text-muted">(Opcional)</span></label>
+        <textarea id="checkout_comentarios" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-12">
+            <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                DATOS DE ENVÍO
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group col-12">
+        <label for="checkout_direccion_envio">Dirección de envío *</label>
+        <input type="text" class="form-control" id="checkout_direccion_envio" value="<?php if(!empty($tercero)) echo $tercero->f015_direccion1; ?>">
     </div>
 </div>
 
@@ -187,5 +226,20 @@ if(!empty($tercero)) {
                 $('#checkout_razon_social').val(`${$('#checkout_nombres').val()} ${$('#checkout_primer_apellido').val()} ${$('#checkout_segundo_apellido').val()}`)
             }
         })
+
+        // Si cambia la dirección
+        $('#checkout_direccion').keyup(function(e) {
+            $('#checkout_direccion_envio').val($('#checkout_direccion').val())
+        })
+
+        // // Cuando seleccione si tiene o no RUT
+        // $('#checkout_tiene_rut').change(function(e) {
+        //     if($(this).val() == 1) {
+        //         // El tipo de documento tiene que ser NIT
+        //         $("#checkout_tipo_documento").append("<option value='N' data-tipo_tercero='2'>NIT</option>").val('N').attr('disabled', true)
+        //     } else {
+
+        //     }
+        // })
     })
 </script>

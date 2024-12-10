@@ -24,31 +24,22 @@ if($this->session->userdata('usuario_id')) {
                 </ol>
             </nav>
             <h1 class="block-header__title">Proceso de pago</h1>
-
-            <!-- Si no ha iniciado sesión -->
-            <?php if(!$this->session->userdata('usuario_id')) { ?>
-                <div class="address-card__row">
-                    <div class="alert alert-success mb-3">
-                        <h4>¡No olvides <a href="<?php echo site_url('sesion?url='.current_url()); ?>">iniciar sesión aquí</a> o <a href="<?php echo site_url('usuarios/registro'); ?>">registrarte haciendo clic aquí</a> y accederás automáticamente a grandes descuentos!</h4>
-                    </div>
-                </div>
-            <?php } ?>
         </div>
     </div>
 </div>
 <div class="checkout block">
     <div class="container container--max--xl">
         <div class="row">
-            <?php if(ENVIRONMENT == 'development' && !$this->session->userdata('usuario_id')) { ?>
-                <!-- <div class="col-12 mb-3">
-                    <div class="alert alert-lg alert-primary">¿Ya estás registrado? <a href="<?php // echo site_url('sesion?url='.current_url()); ?>">Inicia sesión</a></div>
-                </div> -->
+            <!-- Si no ha iniciado sesión -->
+            <?php if(!$this->session->userdata('usuario_id')) { ?>
+                <a href="<?php echo site_url('sesion?url='.current_url()); ?>">
+                    <img src="<?php echo base_url(); ?>images/inicia_sesion.png" alt="Inicia sesión" class="mb-2" width="100%">
+                </a>
             <?php } ?>
 
             <div class="col-12 col-lg-6 col-xl-7">
                 <div class="card mb-lg-0">
                     <div class="card-body card-body--padding--2">
-                        <h3 class="card-title">Detalles del pago</h3>
                         <div class="form-row">
                             <div class="form-group col-6">
                                 <label for="checkout_tipo_documento">Tipo de documento *</label>
@@ -68,14 +59,6 @@ if($this->session->userdata('usuario_id')) {
                         <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar datos</button>
 
                         <div id="contenedor_datos_cliente"></div>
-                    </div>
-                    <div class="card-divider"></div>
-                    <div class="card-body card-body--padding--2">
-                        <h3 class="card-title">Detalles</h3>
-                        <div class="form-group">
-                            <label for="checkout_comentarios">Notas adicionales <span class="text-muted">(Opcional)</span></label>
-                            <textarea id="checkout_comentarios" class="form-control" rows="4"></textarea>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -134,11 +117,7 @@ if($this->session->userdata('usuario_id')) {
                             </div>
                         </div>
 
-                        <div class="address-card__row mt-2 mb-2">
-                            <div class="alert alert-primary mb-3">
-                                ¡Hola! Si tu punto de entrega está en Medellín o su área metropolitana, el envío es gratuito. Para otras ubicaciones, el costo del flete se cobrará al recibir el pedido y variará según tu ubicación y los productos solicitados.
-                            </div>
-                        </div>
+                        <img src="<?php echo base_url(); ?>images/mensaje_flete.png" alt="Continuar comprando" class="mb-2" width="100%">
 
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
@@ -220,6 +199,7 @@ if($this->session->userdata('usuario_id')) {
             segundo_apellido: $('#checkout_segundo_apellido').val(),
             razon_social: $('#checkout_razon_social').val(),
             direccion: $('#checkout_direccion').val(),
+            direccion_envio: $('#checkout_direccion_envio').val(),
             email: $('#checkout_email').val(),
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),

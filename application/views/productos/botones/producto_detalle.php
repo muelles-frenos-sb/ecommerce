@@ -27,8 +27,8 @@ $item = buscar_item_carrito($producto->id);
                 Ir a pagar
             </a>
 
-            <a class="btn btn-info btn-lg btn-block" href="<?php echo site_url(); ?>">
-                Continuar comprando
+            <a href="<?php echo site_url(); ?>">
+                <img src="<?php echo base_url(); ?>images/continuar_compra.png" alt="Continuar comprando" class="mt-2 mb-2" width="100%">
             </a>
         </div>
         <div class="product__actions-divider"></div>

@@ -185,7 +185,7 @@ class Webhooks extends MY_Controller {
 
             // Si el pago fue aprobado
             if($wompi_status == 'APPROVED') {
-                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id";
+                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id - Dirección de entrega: $recibo->direccion_envio";
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
                 $movimientos = [];
