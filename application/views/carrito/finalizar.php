@@ -219,8 +219,8 @@ if($this->session->userdata('usuario_id')) {
         // Se obtienen los datos de la sucursal seleccionada para extraer la lista de precio
         let sucursal = await consulta('obtener', {tipo: 'cliente_sucursal', f200_nit: $('#checkout_documento_numero').val()}, false)
 
-        // Si tiene sucursal, se le cambia la lista de precio
-        datosRecibo.lista_precio = (sucursal.resultado)
+        // Si tiene sesión iniciada, la lista de precio es la de clientes
+        datosRecibo.lista_precio = ($('#sesion_usuario_id').val() != '')
             ? '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
             : '<?php echo $this->config->item('lista_precio'); ?>' // 009
 
