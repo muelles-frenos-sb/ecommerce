@@ -41,19 +41,9 @@ if($this->session->userdata('usuario_id')) {
                 <div class="card mb-lg-0">
                     <div class="card-body card-body--padding--2">
                         <div class="form-row">
-                            <div class="form-group col-6">
-                                <label for="checkout_tipo_documento">Tipo de documento *</label>
-                                <select id="checkout_tipo_documento" class="form-control">
-                                    <option value="">Seleccione...</option>
-                                    <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
-                                    <option value="N" data-tipo_tercero="2">NIT</option>
-                                    <option value="E" data-tipo_tercero="1">Cédula de extranjería</option>
-                                </select>
-                            </div>
-
-                            <div class="form-group col-6">
+                            <div class="form-group col-12">
                                 <label for="checkout_documento_numero">Número de documento *</label>
-                                <input type="number" class="form-control" id="checkout_documento_numero" value="<?php if(ENVIRONMENT == 'development') echo '1017250261'; ?>" autofocus>
+                                <input type="number" class="form-control" id="checkout_documento_numero" value="<?php if(ENVIRONMENT == 'development') echo '1039448943'; ?>" autofocus>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar datos</button>
@@ -139,7 +129,6 @@ if($this->session->userdata('usuario_id')) {
     cargarDatosCliente = async() => {
         if (!validarCamposObligatorios([
             $('#checkout_documento_numero'),
-            $('#checkout_tipo_documento'),
         ])) return false
         
         // Se activa el spinner
@@ -269,14 +258,14 @@ if($this->session->userdata('usuario_id')) {
 
                 // Si es vendedor, se envía una entidad dinámica adicional
                 // para la asignación del segmento
-                if(esVendedor) {
-                    datosTerceroSiesa.criterio_cliente = {
-                        f207_id_tercero: $('#checkout_documento_numero').val(),
-                        f207_id_sucursal: '001',
-                        f207_id_plan_criterios: $('#usuario_segmento_id option:selected').attr('data-plan'),
-                        f207_id_criterio_mayor: $('#usuario_segmento_id option:selected').attr('data-mayor'),
-                    }
-                }
+                // if(esVendedor) {
+                //     datosTerceroSiesa.criterio_cliente = {
+                //         f207_id_tercero: $('#checkout_documento_numero').val(),
+                //         f207_id_sucursal: '001',
+                //         f207_id_plan_criterios: $('#usuario_segmento_id option:selected').attr('data-plan'),
+                //         f207_id_criterio_mayor: $('#usuario_segmento_id option:selected').attr('data-mayor'),
+                //     }
+                // }
 
                 creacionTercero = crearTerceroCliente(datosTerceroSiesa)
                 creacionTercero.then(resultado => {

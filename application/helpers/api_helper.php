@@ -371,8 +371,7 @@ function crear_documento_contable_pedido($id_recibo, $datos_pago = null) {
 
     print json_encode([
         'errores' => $errores,
-        'mensaje' => $resultado_documento_contable,
-        'datos' => $paquete_documento_contable,
+        'resultado' => $respuesta,
     ]);
 }
 

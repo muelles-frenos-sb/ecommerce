@@ -31,7 +31,7 @@ if(!empty($tercero)) {
         </div>
     </div>
 
-    <div class="form-group col-6">
+    <div class="form-group col-4">
         <label for="checkout_tipo_tercero">Tipo de persona *</label>
         <select id="checkout_tipo_tercero" class="form-control" autofocus>
             <option value="">Seleccione...</option>
@@ -40,21 +40,30 @@ if(!empty($tercero)) {
         </select>
     </div>
 
-    <!-- <div class="form-group col-4">
+    <div class="form-group col-4">
         <label for="checkout_tiene_rut">¿Tienes RUT? *</label>
         <select id="checkout_tiene_rut" class="form-control">
             <option value="">Seleccione...</option>
             <option value="1">Sí</option>
             <option value="2">No</option>
         </select>
-    </div> -->
+    </div>
 
-    <div class="form-group col-6">
+    <div class="form-group col-4">
         <label for="checkout_responsable_iva">¿Responsable de IVA? *</label>
         <select id="checkout_responsable_iva" class="form-control">
             <option value="">Selecciona...</option>
             <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
             <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
+        </select>
+    </div>
+
+    <div class="form-group col-12">
+        <label for="checkout_tipo_documento">Tipo de documento *</label>
+        <select id="checkout_tipo_documento" class="form-control">
+            <option value="">Seleccione...</option>
+            <option value="C" data-tipo_tercero="1">Cédula de ciudadanía</option>
+            <option value="E" data-tipo_tercero="1">Cédula de extranjería</option>
         </select>
     </div>
 </div>
@@ -139,7 +148,7 @@ if(!empty($tercero)) {
     <script>
         $().ready(() => {
             $('#btn_validar_documento').removeClass('btn-loading').hide()
-            $('#checkout_documento_numero, #checkout_tipo_documento').attr('disabled', true)
+            $('#checkout_documento_numero').attr('disabled', true)
             $('#btn_pagar').attr('disabled', false)
         })
     </script>
@@ -175,8 +184,8 @@ if(!empty($tercero)) {
         // Si tiene sesión iniciada, la lista de precio es la de clientes
         let listaPrecioPorDefecto = 
             ($('#sesion_usuario_id').val() != '')
-            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>'
-            : '<?php echo $this->config->item('lista_precio'); ?>'
+            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
+            : '<?php echo $this->config->item('lista_precio'); ?>' // 009
 
         mostrarTotales(listaPrecioPorDefecto)
 
@@ -212,6 +221,18 @@ if(!empty($tercero)) {
                 $('#checkout_nombres, #checkout_primer_apellido, #checkout_segundo_apellido, #checkout_razon_social').val('')
             }
         })
+
+        // Cuando seleccione si tiene o no RUT
+        $('#checkout_tiene_rut').change(function(e) {
+            if($(this).val() == 1) {
+                // El tipo de documento tiene que ser NIT
+                $("#checkout_tipo_documento").append("<option value='N' data-tipo_tercero='2'>NIT</option>").val('N').attr('disabled', true)
+            } else {
+                // Se elimina la posibilidad de escoger NIT
+                $("#checkout_tipo_documento option[value='N']").remove()
+                $('#checkout_tipo_documento').attr('disabled', false)
+            }
+        })
         
         // Cuando se seleccione un departamento
         $('#checkout_departamento_id').change(() => {
@@ -231,15 +252,5 @@ if(!empty($tercero)) {
         $('#checkout_direccion').keyup(function(e) {
             $('#checkout_direccion_envio').val($('#checkout_direccion').val())
         })
-
-        // // Cuando seleccione si tiene o no RUT
-        // $('#checkout_tiene_rut').change(function(e) {
-        //     if($(this).val() == 1) {
-        //         // El tipo de documento tiene que ser NIT
-        //         $("#checkout_tipo_documento").append("<option value='N' data-tipo_tercero='2'>NIT</option>").val('N').attr('disabled', true)
-        //     } else {
-
-        //     }
-        // })
     })
 </script>
