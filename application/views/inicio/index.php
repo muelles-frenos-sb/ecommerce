@@ -13,15 +13,15 @@ $this->load->view('inicio/slider');
 // echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
- ******************** Información de envíos, pago seguro y garantía *********************
- ****************************************************************************************/
-$this->load->view('inicio/caracteristicas');
-echo "<div class='block-space block-space--layout--divider-nl'></div>";
-
-/****************************************************************************************
  ******************************** Buscador de repuestos *********************************
  ****************************************************************************************/
 $this->load->view('inicio/buscar_repuestos');
+echo "<div class='block-space block-space--layout--divider-nl'></div>";
+
+/****************************************************************************************
+ ******************** Información de envíos, pago seguro y garantía *********************
+ ****************************************************************************************/
+$this->load->view('inicio/caracteristicas');
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
