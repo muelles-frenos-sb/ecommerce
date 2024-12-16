@@ -279,7 +279,11 @@ if($this->session->userdata('usuario_id')) {
                 }
 
                 creacionTercero = crearTerceroCliente(datosTerceroSiesa)
-                creacionTercero.then(resultado => console.log(resultado))
+                creacionTercero.then(resultado => {
+                    console.log(resultado)
+
+                    agregarLog(52, JSON.stringify(resultado))
+                })
             }
         }
     }

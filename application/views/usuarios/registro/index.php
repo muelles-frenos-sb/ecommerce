@@ -387,6 +387,8 @@
             creacionTerceroSiesa.then(resultado => {
                 if(esVendedor) mostrarAviso('exito', `¡El tercero ha sido creado correctamente!`, 20000)
                 console.log(resultado)
+
+                agregarLog(51, JSON.stringify(resultado))
             })
         } else if(esVendedor) {
             Swal.close()
