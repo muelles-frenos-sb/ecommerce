@@ -431,7 +431,7 @@
             // Si es persona natural
             if($('#usuario_tipo_tercero1').is(':checked')) {
                 // Se completa la razón social
-                $('#usuario_razon_social').val(`${$('#usuario_nombres').val()} ${$('#usuario_primer_apellido').val()} ${$('#usuario_segundo_apellido').val()}`)
+                $('#usuario_razon_social').val(`${$('#usuario_primer_apellido').val()} ${$('#usuario_segundo_apellido').val()} ${$('#usuario_nombres').val()}`)
             }
         })
 

@@ -223,7 +223,7 @@ if(!empty($tercero)) {
             // Si es persona natural
             if($('#checkout_tipo_tercero').val() == '1') {
                 // Se completa la razón social
-                $('#checkout_razon_social').val(`${$('#checkout_nombres').val()} ${$('#checkout_primer_apellido').val()} ${$('#checkout_segundo_apellido').val()}`)
+                $('#checkout_razon_social').val(`${$('#checkout_primer_apellido').val()} ${$('#checkout_segundo_apellido').val()} ${$('#checkout_nombres').val()}`)
             }
         })
 
