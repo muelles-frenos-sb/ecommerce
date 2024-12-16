@@ -279,5 +279,14 @@ if($this->session->userdata('usuario_id')) {
 
     $().ready(() => {
         $('#btn_validar_documento').click(() => cargarDatosCliente())
+
+        // Si es un usuario logueado
+        if($('#sesion_documento_numero').val() != '') {
+            // Pone el número de documento del usuario por defecto
+            $('#checkout_documento_numero').val($('#sesion_documento_numero').val())
+
+            // Carga los datos del cliente
+            cargarDatosCliente()
+        }
     })
 </script>
