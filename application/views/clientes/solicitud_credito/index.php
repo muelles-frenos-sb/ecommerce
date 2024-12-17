@@ -247,7 +247,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="referencia_bancaria_numero">Dirección</label>
+                        <label for="referencia_bancaria_numero">Número</label>
                         <input type="text" class="form-control" id="referencia_bancaria_numero">
                     </div>
                 </div>
