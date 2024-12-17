@@ -149,6 +149,15 @@
                             <input type="password" class="form-control" id="usuario_clave2">
                         </div>
                     </div>
+
+                    <!-- Si puede ver usuarios -->
+                    <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_usuarios_ver'], $permisos)) { ?>
+                        <label for="usuario_perfil">Perfil *</label>
+                        <select id="usuario_perfil" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach($this->configuracion_model->obtener('perfiles') as $perfil) echo "<option value='$perfil->id'>$perfil->nombre</option>"; ?>
+                        </select>
+                    <?php } ?>
                 <?php } ?>
 
                 <!-- Si es vendedor -->
@@ -223,6 +232,9 @@
             $('#usuario_municipio_id'),
             $('#usuario_contacto'),
         ]
+
+        // Si tiene perfil, se agrega como dato obligatorio
+        if($('#usuario_perfil').val() !== undefined) camposObligatorios.push($('#usuario_perfil'))
 
         // Si es persona natural
         if ($('#usuario_tipo_tercero1').is(':checked')) {
@@ -364,9 +376,11 @@
                 direccion1: $('#usuario_direccion').val(),
                 clave: $('#usuario_clave1').val(),
                 login: $('#usuario_login').val(),
-                perfil_id: 3,
                 responsable_iva: ($(`#usuario_responsable_iva1`).is(':checked')) ? 1 : 0,
             }
+
+            // Si tiene perfil, se agrega el perfil
+            if($('#usuario_perfil').val() !== undefined) datosUsuario.perfil_id = $('#usuario_perfil').val()
 
             // Se crea el usuario
             let usuarioId = await consulta('crear', datosUsuario, false)
