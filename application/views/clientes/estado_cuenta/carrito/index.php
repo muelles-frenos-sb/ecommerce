@@ -16,12 +16,12 @@
 </div>
 
 <div class="row mt-2">
-    <div class="col-6">
+    <div class="col-12">
         <button class="btn btn-primary btn-sm btn-block" id="btn_pago_en_linea">Pagar en línea</button>
     </div>
-    <div class="col-6">
+    <!-- <div class="col-6">
         <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
-    </div>
+    </div> -->
 </div>
 
 <script>
