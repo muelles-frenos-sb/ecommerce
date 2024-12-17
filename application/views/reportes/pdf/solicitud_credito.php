@@ -30,7 +30,7 @@ $pdf->SetXY(39, 46.5);
 $pdf->Write(0, $fecha);
 
 $pdf->SetXY(57, 57.5);
-$pdf->Write(0, utf8_decode($solicitud->nombre));
+$pdf->Write(0, substr(utf8_decode($solicitud->nombre), 0, 50));
 
 $pdf->SetXY(143, 57.5);
 $pdf->Write(0, utf8_decode($solicitud->documento_numero));
