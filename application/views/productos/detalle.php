@@ -140,7 +140,17 @@ if(empty($producto)) redirect(site_url(''));
                                     
                                     <?php if ($producto->disponible > 0) { ?>
                                         <div id="producto_detalle_<?php echo $producto->id; ?>"></div>
+                                        
+                                        <div class="product__actions">
+                                            <a class="btn btn-success btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
+                                                Ir a pagar
+                                            </a>
 
+                                            <a href="<?php echo site_url(); ?>">
+                                                <img src="<?php echo base_url(); ?>images/continuar_compra.png" alt="Continuar comprando" class="mt-2 mb-2" width="100%">
+                                            </a>
+                                        </div>
+                                        
                                         <script>
                                             // Se cargan los botones para agregar y adicionar el ítem al carrito
                                             cargarBotones('producto_detalle', <?php echo $producto->id; ?>);

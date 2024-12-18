@@ -22,14 +22,6 @@ $item = buscar_item_carrito($producto->id);
                 })">
                 <i class="fa fa-plus"></i> Agregar al carrito
             </button>
-
-            <a class="btn btn-success btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
-                Ir a pagar
-            </a>
-
-            <a href="<?php echo site_url(); ?>">
-                <img src="<?php echo base_url(); ?>images/continuar_compra.png" alt="Continuar comprando" class="mt-2 mb-2" width="100%">
-            </a>
         </div>
         <div class="product__actions-divider"></div>
     <?php } ?>
