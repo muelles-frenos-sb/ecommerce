@@ -136,11 +136,26 @@ if(!empty($tercero)) {
                 DATOS DE ENVÍO
             </div>
         </div>
-    </div>
 
-    <div class="form-group col-12">
-        <label for="checkout_direccion_envio">Dirección de envío *</label>
-        <input type="text" class="form-control" id="checkout_direccion_envio" value="<?php if(!empty($tercero)) echo $tercero->f015_direccion1; ?>">
+        <div class="form-group col-6">
+            <label for="checkout_departamento_envio_id">Departamento *</label>
+            <select id="checkout_departamento_envio_id" class="form-control"></select>
+        </div>
+
+        <div class="form-group col-6">
+            <label for="checkout_municipio_envio_id">Municipio *</label>
+            <select id="checkout_municipio_envio_id" class="form-control"></select>
+        </div>
+
+        <div class="form-group col-12">
+            <label for="checkout_direccion_envio">Dirección completa *</label>
+            <input type="text" class="form-control" id="checkout_direccion_envio" value="<?php if(!empty($tercero)) echo $tercero->f015_direccion1; ?>">
+        </div>
+
+        <div class="form-group col-12">
+            <label for="checkout_email_factura_electronica">Email para envío de factura electrónica *</label>
+            <input type="text" class="form-control" id="checkout_email_factura_electronica" value="<?php if(!empty($tercero)) echo $tercero->f015_email; ?>">
+        </div>
     </div>
 </div>
 
@@ -190,6 +205,7 @@ if(!empty($tercero)) {
         mostrarTotales(listaPrecioPorDefecto)
 
         await listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
+        await listarDatos('checkout_departamento_envio_id', {tipo: 'departamentos', pais_id: 169})
 
         // Si es un tercero existente
         if($('#api_tercero_id').val()) {
@@ -237,6 +253,11 @@ if(!empty($tercero)) {
         // Cuando se seleccione un departamento
         $('#checkout_departamento_id').change(() => {
             listarDatos('checkout_municipio_id', {tipo: 'municipios', departamento_id: $('#checkout_departamento_id').val()})
+        })
+
+        // Cuando se seleccione un departamento de envío
+        $('#checkout_departamento_envio_id').change(() => {
+            listarDatos('checkout_municipio_envio_id', {tipo: 'municipios', departamento_id: $('#checkout_departamento_envio_id').val()})
         })
 
         // Cuando se escribe nombres o apellidos

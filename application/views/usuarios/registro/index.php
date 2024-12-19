@@ -133,7 +133,15 @@
 
                 <!-- Si no es vendedor -->
                 <?php if(!$this->session->userdata('codigo_vendedor') || $this->session->userdata('codigo_vendedor') == '0') { ?>
-                    <div class="form-row" id="datos_usuario_sistema">
+                    <div class="card-divider"></div>
+                    <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                        Crear usuario y contraseña
+                    </div>
+                    <div class="alert alert-primary mb-3">
+                        Crea tu nombre de usuario y contraseña. Recuerda que con estos datos iniciarás sesión
+                    </div>
+
+                    <div class="form-row mt-2" id="datos_usuario_sistema">
                         <div class="form-group col-lg-4 col-sm-12">
                             <label for="usuario_login">Nombre de usuario *</label>
                             <input type="text" class="form-control" id="usuario_login">

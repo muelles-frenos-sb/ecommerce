@@ -147,13 +147,16 @@ if($this->session->userdata('usuario_id')) {
         }
 
         let camposObligatorios = [
+            $('#checkout_tiene_rut'),
             $('#checkout_tipo_tercero'),
             $('#checkout_tipo_documento'),
             $('#checkout_razon_social'),
             $('#checkout_direccion'),
             $('#checkout_telefono'),
             $('#checkout_email'),
+            $('#checkout_email_factura_electronica'),
             $('#checkout_municipio_id'),
+            $('#checkout_municipio_envio_id'),
             $('#checkout_sucursal'),
             $('#checkout_responsable_iva'),
         ]
@@ -189,11 +192,14 @@ if($this->session->userdata('usuario_id')) {
             razon_social: $('#checkout_razon_social').val(),
             direccion: $('#checkout_direccion').val(),
             direccion_envio: $('#checkout_direccion_envio').val(),
+            municipio_envio_codigo: $('#checkout_municipio_envio_id').val(),
+            departamento_envio_codigo: $('#checkout_departamento_envio_id').val(),
             email: $('#checkout_email').val(),
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
             valor: $('#total_pedido').val(),
             recibo_tipo_id: 1,
+            email_factura_electronica: $('#checkout_email_factura_electronica').val(),
         }
 
         // Se agrega la sucursal al pedido

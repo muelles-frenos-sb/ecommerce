@@ -69,6 +69,16 @@ Class Productos_model extends CI_Model{
                         'YEAR(r.fecha_creacion) anio',
                         'LPAD(MONTH(r.fecha_creacion), 2, 0) mes',
                         'LPAD(DAY(r.fecha_creacion), 2, 0) dia',
+                        "(
+                        SELECT
+                            CONCAT_WS(' - ', m.nombre, d.nombre ) 
+                        FROM
+                            municipios AS m
+                            INNER JOIN departamentos AS d ON m.departamento_id = d.id 
+                        WHERE
+                            d.codigo = r.departamento_envio_codigo 
+                            AND m.codigo = r.municipio_envio_codigo 
+                        ) ubicacion_envio"
                     ])
                     ->where($datos)
                     ->get('recibos r')
@@ -213,23 +223,6 @@ Class Productos_model extends CI_Model{
                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
             break;
-
-            // case 'productos_outlet':
-            //     $sql = 
-            //     "SELECT
-            //         pi.producto_id,
-            //         pi.bodega
-            //     FROM
-            //         productos_inventario AS pi
-            //         INNER JOIN productos AS p ON pi.producto_id = p.id 
-            //     WHERE
-            //         pi.bodega = '{$this->config->item('bodega_outlet')}' AND disponible > 0 
-            //     ORDER BY
-            //         RAND() ASC 
-            //     LIMIT 50";
-                
-            //     return $this->db->query($sql)->result();
-            // break;
 
             case 'productos_precios':
                 unset($datos['tipo']);
