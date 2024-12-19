@@ -312,7 +312,7 @@ class Interfaces extends CI_Controller {
                             "F200_APELLIDO2" => strtoupper($datos['segundo_apellido']),                     // Solo se requiere si el tercero es persona natural
                             "F200_NOMBRES" => strtoupper($datos['nombres']),                                // Solo se requiere si el tercero es persona natural
                             "F015_CONTACTO" => strtoupper($datos['contacto']),                              // Nombre de la persona de contacto	
-                            "F015_DIRECCION1" => strtoupper($datos['direccion']),                           // Renglón 1 de la dirección del contacto
+                            "F015_DIRECCION1" => strtoupper(substr($datos['direccion'], 0, 34)),                           // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                                                        // Valida en maestro, código del país
                             "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),    // Valida en maestro, código del departamento, solo se debe usar si existe país
@@ -337,7 +337,7 @@ class Interfaces extends CI_Controller {
                             "F201_ID_TIPO_CLI" => "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
                             "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                               // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
                             "F015_CONTACTO" => strtoupper($datos['contacto']),                              // Nombre de la persona de contacto
-                            "F015_DIRECCION1" => strtoupper($datos['direccion']),                           // Renglón 1 de la dirección del contacto
+                            "F015_DIRECCION1" => strtoupper(substr($datos['direccion'], 0, 34)),                           // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                                                        // Valida en maestro, código del país
                             "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),    // Valida en maestro, código del departamento, solo se debe usar si existe país
