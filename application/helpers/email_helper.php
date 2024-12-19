@@ -18,6 +18,9 @@ function enviar_email_clave_cambiada($id) {
             'titulo' => '¡Tu clave ha sido cambiada con éxito!',
             'subtitulo' => "
                 Hola, $usuario->nombres. A partir de ahora tienes acceso a grandes descuentos en nuestra tienda.<br><br>
+                <hr>
+                Recuerda que tu usuario de ingreso es <b style='color: #ffd400;'>$usuario->login</b>
+                <hr>
                 Ahora puedes <a href='$url' style='color: #ffd400; text-decoration: none;'>iniciar sesión haciendo clic aquí</a>
             ",
         ],
