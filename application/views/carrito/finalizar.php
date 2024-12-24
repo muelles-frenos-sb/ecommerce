@@ -102,7 +102,7 @@ if($this->session->userdata('usuario_id')) {
                                     </span>
                                 </span>
                                 <label class="form-check-label" for="checkout-terms">
-                                    He leído los <a target="_blank" href="<?php echo site_url('blog/tratamiento_datos'); ?>">términos y condiciones</a>
+                                    He leído y acepto los <a target="_blank" href="<?php echo site_url('blog/tratamiento_datos'); ?>">términos y condiciones</a>
                                 </label>
                             </div>
                         </div>

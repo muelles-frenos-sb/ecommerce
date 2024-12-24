@@ -10,7 +10,7 @@
     <div class="container container--max--xxl">
         <div class="block-zone__widget-header">
             <div class="block-zone__tabs">
-                <?php foreach ($this->configuracion_model->obtener('recibos_tipos') as $recibo_tipo) { ?>
+                <?php foreach ($this->configuracion_model->obtener('recibos_tipos', ['activo' => 1]) as $recibo_tipo) { ?>
                     <button type="button" class="block-zone__tabs-button" id="pestana_recibo_tipo_<?php echo $recibo_tipo->id; ?>">
                         <a href="<?php echo site_url("configuracion/recibos/ver/$recibo_tipo->id"); ?>">
                             <?php echo $recibo_tipo->nombre; ?>

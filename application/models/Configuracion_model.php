@@ -256,10 +256,8 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'recibos_tipos':
-                return $this->db
-                    ->get($tabla)
-                    ->result()
-                ;
+                if(isset($datos)) $this->db->where($datos);
+                return $this->db->get($tabla)->result();
             break;
 
 			case 'grupos':
