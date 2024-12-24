@@ -185,7 +185,12 @@ class Webhooks extends MY_Controller {
 
             // Si el pago fue aprobado
             if($wompi_status == 'APPROVED') {
-                $notas_pedido = "- Pedido $recibo->id E-Commerce - Referencia Wompi: $wompi_reference - ID de Transacción Wompi: $wompi_transaction_id - Dirección de entrega: $recibo->direccion_envio - $recibo->ubicacion_envio";
+                $notas_pedido = `
+                    - Pedido $recibo->id E-Commerce | Referencia Wompi: $wompi_reference | ID de Transacción Wompi: $wompi_transaction_id<br>
+                    - Dirección de entrega: $recibo->direccion_envio | $recibo->ubicacion_envio<br>
+                    - Comentarios: $recibo->comentarios
+                `;
+
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
                 $movimientos = [];
@@ -202,9 +207,12 @@ class Webhooks extends MY_Controller {
                         "f431_id_un_movto" => "", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
                         "f431_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                         "f431_num_dias_entrega" => 0,
+                        "f431_id_lista_precio" => $recibo->lista_precio,
                         "f431_id_unidad_medida" => $item->unidad_inventario, // Valida en maestro, código de unidad de medida del movimiento
                         "f431_cant_pedida_base" => $item->cantidad,
+                        "f431_precio_unitario" => floatval($item->subtotal) - floatval($item->descuento),
                         "f431_notas" => $notas_pedido, // Notas del movimiento
+                        "f431_ind_precio" => 2,
                     ]);
                 }
 
@@ -225,7 +233,7 @@ class Webhooks extends MY_Controller {
                             "f430_num_dias_entrega" => 0, // Valida Nro de dias en que se estima, la entrega del pedido
                             "f430_num_docto_referencia" => $recibo->id, // Valida la orden de compra del documento
                             "f430_id_cond_pago" => "CNT", // Valida en maestro, condiciones de pago
-                            "f430_notas" => "Pedido Realizado desde el Ecommerce", // Observaciones
+                            "f430_notas" => $notas_pedido, // Observaciones
                             "f430_id_tercero_vendedor" => "22222221", // Si es vacio lo trae del cliente a facturar
                         ]
                     ],

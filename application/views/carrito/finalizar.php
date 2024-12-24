@@ -107,7 +107,7 @@ if($this->session->userdata('usuario_id')) {
                             </div>
                         </div>
 
-                        <img src="<?php echo base_url(); ?>images/mensaje_flete.png" alt="Continuar comprando" class="mb-2" width="100%">
+                        <img src="<?php echo base_url(); ?>images/mensaje_flete.png?" alt="Continuar comprando" class="mb-2" width="100%">
 
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
