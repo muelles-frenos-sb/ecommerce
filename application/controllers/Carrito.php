@@ -38,7 +38,7 @@ class Carrito extends MY_Controller {
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
-            'name'    => $nombre,
+            'name'    => preg_replace('/[^a-zA-Z0-9\-_\.]/', '-', $nombre),
             'options' => ['unidad_inventario' => $unidad_inventario]
         ])]);
     }
