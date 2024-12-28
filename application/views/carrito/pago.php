@@ -15,7 +15,8 @@ $llave_integridad = generar_llave_integridad([
         amountInCents: parseFloat($('#total_pedido').val()) * 100,
         reference: '<?php echo $recibo->token; ?>',
         publicKey: '<?php echo $this->config->item('api_wompi')['llave_publica']; ?>',
-        signature: {integrity : '<?php echo $llave_integridad; ?>'},
+        // publicKey: 'pub_test_05yNa2NGkuB1CJhYLt6lflBHe0xTu3I2', // Modo Sandbox
+        signature: {integrity : '<?php echo $llave_integridad; ?>'}, // Debe comentarse para entrar en modo Sandbox
         redirectUrl: `${$('#site_url').val()}carrito/respuesta?referencia=<?php echo $recibo->token; ?>`, // Opcional
         // expirationTime: '2023-06-09T20:28:50.000Z', // Opcional
         // taxInCents: { // Opcional
