@@ -6,9 +6,9 @@
 
 <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
 
-<div class="input-group mt-2">
+<!-- <div class="input-group mt-2">
     <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-</div>
+</div> -->
 
 <div class="mt-2 mb-2 d-flex justify-content-end">
     <input type="hidden" id="total_pago">
