@@ -14,8 +14,8 @@ const agregarProducto = async datos => {
         })
 
         actualizarCarrito(id)
-        
         listarCarrito()
+        agregarLog(53, id)
     })
 }
 
@@ -55,6 +55,8 @@ const vaciarCarrito = async() => {
         actualizarCarrito()
         listarCarrito()
     })
+
+    agregarLog(54)
 }
 
 const eliminarProducto = async(rowId) => {
@@ -63,6 +65,7 @@ const eliminarProducto = async(rowId) => {
         mostrarNotificacion({
             tipo: 'carrito_producto_eliminado',
         })
+
         actualizarCarrito()
         listarCarrito()
     })
