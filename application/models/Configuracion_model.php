@@ -193,12 +193,14 @@ Class Configuracion_model extends CI_Model {
                         $having .= " r.documento_numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.razon_social LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.direccion LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.direccion_envio LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.email LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.telefono LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.token LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.wompi_transaccion_id LIKE '%{$palabras[$i]}%'";
                         $having .= " OR estado LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.numero_siesa LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR r.wompi_datos LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";
