@@ -205,6 +205,7 @@ Class Configuracion_model extends CI_Model {
                     }
                 }
                 
+                if(isset($datos['id']) && $datos['id']) $where .= " AND r.id = {$datos['id']} ";
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 
