@@ -2,8 +2,13 @@
 if( ! defined('BASEPATH') ) exit('No direct script access allowed');
 
 $config = [
-	'filtro_id' => [
+    'recibos_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
+    ],
+
+	'recibos_detalle_get' => [
+		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
+        ['field' => 'recibo_id', 'label' => 'id del recibo', 'rules' => 'trim|integer|greater_than[0]'],
     ],
 
     'recibo_put' => [

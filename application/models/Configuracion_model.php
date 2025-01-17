@@ -270,7 +270,8 @@ Class Configuracion_model extends CI_Model {
                     ->join("recibos r", "rd.recibo_id = r.id", "left")
                 ;
 
-                if (isset($datos["id"])) $this->db->where("rd.id", $datos["id"]);
+                if (isset($datos["id"]) && $datos["id"]) $this->db->where("rd.id", $datos["id"]);
+                if (isset($datos["recibo_id"]) && $datos["recibo_id"]) $this->db->where("rd.recibo_id", $datos["recibo_id"]);
 
                 if (isset($datos["id"])) return $this->db->get()->row();
                 return $this->db->get()->result();

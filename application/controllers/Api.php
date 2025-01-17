@@ -25,7 +25,7 @@ class Api extends RestController {
 
         $this->form_validation->set_data($datos);
 
-        if (!$this->form_validation->run("filtro_id")) {
+        if (!$this->form_validation->run("recibos_get")) {
             $this->response([
                 "error" => true,
                 "mensaje" => "Parámetros inválidos.",
@@ -60,11 +60,12 @@ class Api extends RestController {
     function recibos_detalle_get() {
         $datos = [
             "id" => $this->get("id"),
+            "recibo_id" => $this->get("recibo_id"),
         ];
 
         $this->form_validation->set_data($datos);
 
-        if (!$this->form_validation->run("filtro_id")) {
+        if (!$this->form_validation->run("recibos_detalle_get")) {
             $this->response([
                 "error" => true,
                 "mensaje" => "Parámetros inválidos.",
