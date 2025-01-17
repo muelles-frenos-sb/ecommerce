@@ -15,7 +15,7 @@ class Api extends RestController {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(["configuracion_model"]);
+        $this->load->model(["configuracion_model", "productos_model"]);
     }
 
     function recibos_get() {
@@ -93,6 +93,53 @@ class Api extends RestController {
             "error" => false,
             "mensaje" => $mensaje,
             "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    function recibo_put() {
+        $datos = [
+            'id' => $this->put('id'),
+            'fecha_actualizacion_bot' => $this->put('fecha_actualizacion_bot')
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run('recibo_put')) {
+            $this->response([
+                'error' => true,
+                'mensaje' => 'Parámetros inválidos.',
+                'resultado' => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $id = $datos['id'];
+        unset($datos['id']);
+        $filtro = ["id" => $id];
+
+        $recibo = $this->configuracion_model->obtener("recibos", $filtro);
+
+        if (!$recibo) {
+            $this->response([
+                'error' => false,
+                'mensaje' => 'No ha sido encontrado el recibo.',
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        $resultado = $this->productos_model->actualizar("recibos", $filtro, $datos);
+
+        if (!$resultado) {
+            $this->response([
+                'error' => false,
+                'mensaje' => 'No se ha actualizado el registro.',
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        $this->response([
+            'error' => false,
+            'mensaje' => 'Registro actualizado correctamente.',
+            'resultado' => $resultado
         ], RestController::HTTP_OK);
     }
 }

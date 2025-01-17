@@ -101,3 +101,6 @@ CREATE TABLE `api_logs` (
     `response_code` smallint(3) DEFAULT '0',
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20250116 Se agrega nuevo campo en tabla de recibos
+ALTER TABLE `recibos` ADD COLUMN `fecha_actualizacion_bot` datetime(0) NULL AFTER `numero_siesa`;
