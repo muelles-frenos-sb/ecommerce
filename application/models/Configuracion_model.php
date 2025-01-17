@@ -261,6 +261,21 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->get($tabla)->result();
             break;
 
+            case 'recibos_detalle':
+                $this->db
+                    ->select([
+                        "rd.*",
+                    ])
+                    ->from("recibos_detalle rd")
+                    ->join("recibos r", "rd.recibo_id = r.id", "left")
+                ;
+
+                if (isset($datos["id"])) $this->db->where("rd.id", $datos["id"]);
+
+                if (isset($datos["id"])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
+
 			case 'grupos':
                 $where = "WHERE p.id";
 

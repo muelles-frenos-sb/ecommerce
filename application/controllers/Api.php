@@ -35,6 +35,53 @@ class Api extends RestController {
 
         $resultado = $this->configuracion_model->obtener("recibos", $datos);
 
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No han sido encontrados registros",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        $mensaje = "Registro cargado correctamente";
+
+        if (!is_object($resultado)) {
+            $total_registros = count($resultado);
+            $mensaje = "Se cargaron correctamente $total_registros registros";
+        }
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    function recibos_detalle_get() {
+        $datos = [
+            "id" => $this->get("id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("filtro_id")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $resultado = $this->configuracion_model->obtener("recibos_detalle", $datos);
+
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No han sido encontrados registros",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
         $mensaje = "Registro cargado correctamente";
 
         if (!is_object($resultado)) {
