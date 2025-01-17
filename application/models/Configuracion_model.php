@@ -207,6 +207,7 @@ Class Configuracion_model extends CI_Model {
                     }
                 }
                 
+                if(isset($datos['id']) && $datos['id']) $where .= " AND r.id = {$datos['id']} ";
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 
@@ -260,6 +261,22 @@ Class Configuracion_model extends CI_Model {
             case 'recibos_tipos':
                 if(isset($datos)) $this->db->where($datos);
                 return $this->db->get($tabla)->result();
+            break;
+
+            case 'recibos_detalle':
+                $this->db
+                    ->select([
+                        "rd.*",
+                    ])
+                    ->from("recibos_detalle rd")
+                    ->join("recibos r", "rd.recibo_id = r.id", "left")
+                ;
+
+                if (isset($datos["id"]) && $datos["id"]) $this->db->where("rd.id", $datos["id"]);
+                if (isset($datos["recibo_id"]) && $datos["recibo_id"]) $this->db->where("rd.recibo_id", $datos["recibo_id"]);
+
+                if (isset($datos["id"])) return $this->db->get()->row();
+                return $this->db->get()->result();
             break;
 
 			case 'grupos':
