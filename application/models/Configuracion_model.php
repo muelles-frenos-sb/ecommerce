@@ -208,7 +208,8 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id']) && $datos['id']) $where .= " AND r.id = {$datos['id']} ";
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
-                
+                if(isset($datos['actualizado_bot']) && trim($datos['actualizado_bot']) !== '') $having .= " HAVING actualizado_bot = {$datos['actualizado_bot']} ";
+
                 $sql =
                 "SELECT
                     r.*,
@@ -219,7 +220,8 @@ Class Configuracion_model extends CI_Model {
                     re.nombre,
 	                re.clase estado_clase,
                     CONCAT_WS( ' ', uc.nombres, uc.primer_apellido ) usuario_creacion,
-	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion
+	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion,
+                    IF(r.fecha_actualizacion_bot is NOT NULL, 1, 0) actualizado_bot
                 FROM
                     recibos AS r
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id

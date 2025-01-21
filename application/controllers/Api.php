@@ -21,6 +21,7 @@ class Api extends RestController {
     function recibos_get() {
         $datos = [
             "id" => $this->get("id"),
+            "actualizado_bot" => $this->get("actualizado_bot")
         ];
 
         $this->form_validation->set_data($datos);
@@ -99,7 +100,7 @@ class Api extends RestController {
 
     function recibo_put() {
         $datos = [
-            'id' => $this->put('id'),
+            'id' => $this->input->get('id'),
             'fecha_actualizacion_bot' => $this->put('fecha_actualizacion_bot')
         ];
 
