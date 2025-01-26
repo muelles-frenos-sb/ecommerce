@@ -96,6 +96,9 @@ class Api extends RestController {
         ], RestController::HTTP_OK);
     }
 
+    /**
+     * Devuelve el listado con el detalle de los recibos
+     */
     function recibos_detalle_get() {
         $datos = [
             "id" => $this->get("id"),
@@ -136,6 +139,9 @@ class Api extends RestController {
         ], RestController::HTTP_OK);
     }
 
+    /**
+     * Actualiza un recibo
+     */
     function recibo_put() {
         $datos = [
             'id' => $this->input->get('id'),
