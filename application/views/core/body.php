@@ -43,15 +43,28 @@
         <script src="<?php echo base_url(); ?>js/number.js"></script>
         <script src="<?php echo base_url(); ?>js/main.js?<?php echo date('Ymdhis'); ?>"></script>
 
-        <script>
-            $().ready(() => actualizarCarrito())
-        </script>
+        <!-- Botón de Whatsapp -->
+        <a
+            id="btn_whatsapp"
+            href="https://wa.me/573114914780" 
+            target="_blank" 
+            class="btn_whatsapp" 
+            title="Contáctanos en WhatsApp"
+        >
+            <i class="fab fa-whatsapp"></i>
+        </a>
 
         <script>
             (function(w,d,u){
                 var s=d.createElement('script');s.async=true;s.src=u+'?'+(Date.now()/60000|0);
                 var h=d.getElementsByTagName('script')[0];h.parentNode.insertBefore(s,h);
             })(window,document,'https://cdn.bitrix24.es/b24455241/crm/tag/call.tracker.js');
+
+            $().ready(() => {
+                $('#btn_whatsapp').click(() => agregarLog(55))
+
+                actualizarCarrito()
+            })
         </script>
     </body>
 </html>

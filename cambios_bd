@@ -104,3 +104,6 @@ CREATE TABLE `api_logs` (
 
 -- 20250116 Se agrega nuevo campo en tabla de recibos
 ALTER TABLE `recibos` ADD COLUMN `fecha_actualizacion_bot` datetime(0) NULL AFTER `numero_siesa`;
+
+-- 20250125 Log agregado
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (55, 'Ingresa a contacto por Whatsapp')
