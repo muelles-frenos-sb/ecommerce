@@ -39,14 +39,31 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
 <!-- </div> -->
 
 <div class="mt-2 mb-2">
-    <button class="btn btn-success btn-md btn-block" onClick="javascript:generarReporte('excel/facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})">Decargar facturas en Excel</button>
+    <button class="btn btn-success btn-md btn-block" onClick="javascript:generarReporte('excel/facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
+        <i class="fa fa-file-excel"></i>
+        Decargar facturas
+    </button>
 </div>
 
+<style>
+    #tabla_facturas {
+        font-size: 0.8em;
+        font-family: Futura;
+    }
+
+    #tabla_facturas th {
+        background-color: #19287F;
+        color: white;
+    }
+</style>
+
 <div class="table-responsive">
-    <table class="table-striped" id="tabla_facturas">
+    <table class="table-striped table-bordered" id="tabla_facturas">
         <thead>
             <tr>
-                <th class="text-center"></th>
+                <th class="text-center">
+                    <b><i class="fa fa-plus fa-2x"></i></b>
+                </th>
                 <th class="text-center">Sede</th>
                 <th class="text-center">Doc</th>
                 <th class="text-center">Fecha fact</th>
@@ -76,20 +93,20 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
             ?>
                 <tr id="factura_<?php echo $contador; ?>">
                     <td>
-                        <button type="button" class="btn btn-primary" onClick="javascript:agregarFactura({
-                            contador: '<?php echo $contador; ?>',
-                            id: '<?php echo $factura->id; ?>',
-                            documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
-                            numero_documento: '<?php echo $factura->Cliente; ?>',
-                            documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
-                            valor: `<?php echo number_format($factura->totalCop, 0, '', ''); ?>`,
-                            sede: `<?php echo $factura->centro_operativo; ?>`,
-                            tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
-                            descuento_porcentaje: `<?php echo $factura->descuento_porcentaje; ?>`,
-                            id_sucursal: '<?php echo $factura->sucursal_id; ?>',
-                        })">
-                            <i class="fa fa-plus"></i>
-                        </button>
+                        <div class="form-check" style="height: 13px;">
+                            <input class="form-check-input" type="radio" onClick="javascript:agregarFactura({
+                                contador: '<?php echo $contador; ?>',
+                                id: '<?php echo $factura->id; ?>',
+                                documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                                numero_documento: '<?php echo $factura->Cliente; ?>',
+                                documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
+                                valor: `<?php echo number_format($factura->totalCop, 0, '', ''); ?>`,
+                                sede: `<?php echo $factura->centro_operativo; ?>`,
+                                tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
+                                descuento_porcentaje: `<?php echo $factura->descuento_porcentaje; ?>`,
+                                id_sucursal: '<?php echo $factura->sucursal_id; ?>',
+                            })" style="padding: 2px 5px 2px 5px;">
+                        </div>
                     </td>
                     <td>
                         <?php echo $factura->centro_operativo; ?>
@@ -140,17 +157,18 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         </tbody>
         <tfoot>
             <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th class="text-right"><?php echo formato_precio($total_facturas); ?></th>
-                <th class="text-right"><?php echo formato_precio($total_pagado); ?></th>
-                <th class="text-right"><?php echo formato_precio($total_saldo); ?></th>
-                <th></th>
-                <th></th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right"><?php echo formato_precio($total_facturas); ?></td>
+                <td class="text-right"><?php echo formato_precio($total_pagado); ?></td>
+                <td class="text-right"><?php echo formato_precio($total_saldo); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </tfoot>
     </table>
@@ -164,7 +182,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
             order: [[5, 'desc']],
             paging: true,
             stateSave: true,
-            // scrollY: '600px',
+            scrollY: '320px',
             searching: true,
             language: {
                 decimal: ',',
@@ -174,6 +192,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
             scrollX: false,
+            scrollCollapse: true,
         })
        
         $('#contenedor_mensaje_carga').html('')

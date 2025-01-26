@@ -1,5 +1,5 @@
-<div class="address-card__row mt-2 mb-2" id="mensaje_inicial">
-    <div class="alert alert-primary mb-3">
+<div class="address-card__row" id="mensaje_inicial">
+    <div class="alert alert-primary">
         Selecciona una o varias facturas a pagar, haciendo clic en el ícono <i class="fa fa-plus"></i>
     </div>
 </div>
@@ -12,16 +12,42 @@
 
 <div class="mt-2 mb-2 d-flex justify-content-end">
     <input type="hidden" id="total_pago">
-    Total a pagar: $<span id="total_pago_formato">0</span>
+    
+    <!-- Total a pagar: $<span id="total_pago_formato">0</span> -->
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Resumen del pago</h2>
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <td>Subtotal</td>
+                    <td>$<span id="subtotal_formato">0</span></td>
+                </tr>
+                <tr>
+                    <td>Descuento</td>
+                    <td>$<span id="total_descuento_formato">0</span></td>
+                </tr>
+                <tr class="table-success">
+                    <td><strong>Total</strong></td>
+                    <td>$<span id="total_pago_formato">0</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="row mt-2">
     <div class="col-12">
-        <button class="btn btn-primary btn-sm btn-block" id="btn_pago_en_linea">Pagar en línea</button>
+        <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
+
+        <!-- <div class="col-6">
+            <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
+        </div> -->
+        
+        <center>
+            <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid"alt="Opciones de pago">
+        </center>
     </div>
-    <!-- <div class="col-6">
-        <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
-    </div> -->
 </div>
 
 <script>
@@ -131,12 +157,16 @@
 
                         calcularTotal()
                     })
+
+                    mostrarAviso('exito', '!Bien! En la parte inferior podrás ver tus facturas seleccionadas para pago', 10000)
                 })
             })
         })
     }
 
     calcularTotal = () => {
+        var subtotal = 0
+        var totalDescuento = 0
         var total = 0
         var detalleFactura = []
 
@@ -147,6 +177,8 @@
             let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
             let valorDescuento = (valorAPagar == valorTotal) ? Math.floor(valorBruto * (porcentajeDescuento / 100)) : 0
             
+            subtotal += valorAPagar
+            totalDescuento += valorDescuento
             total += parseFloat($(this).val().replace(/\./g, ''))
             total -= valorDescuento
 
@@ -162,6 +194,8 @@
         })
 
         // Se formatea el campo
+        $('#subtotal_formato').text(formatearNumero(subtotal))
+        $('#total_descuento_formato').text(formatearNumero(totalDescuento))
         $('#total_pago_formato').text(formatearNumero(total))
         $('#total_pago').val(total)
 

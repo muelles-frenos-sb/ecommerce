@@ -3,53 +3,28 @@
 <input type="hidden" id="factura_tercero_razon_social" value="<?php echo $tercero->f200_razon_social; ?>">
 <input type="hidden" id="factura_tercero_documento_numero" value="<?php echo $tercero->f200_nit; ?>">
 
+<!-- Modal que se usa para abrir la interfaz de pago de Wompi -->
 <div id="contenedor_pago_estado_cuenta"></div>
 
-<div class="row no-gutters">
-    <!-- Datos del cliente -->
-    <div class="col-lg-3 px-1">
-        <div class="card address-card address-card--featured">
-            <div class="address-card__badge tag-badge tag-badge--new">
-                BIENVENIDO
-            </div>
-            <div class="address-card__body mt-1 pt-5 pb-2 pl-1 pr-1">
-                <div class="address-card__name"><?php echo $tercero->f200_razon_social; ?> <small><?php echo "$tercero->f200_nit-$tercero->f200_dv_nit"; ?></small></div>
-                
-                <div class="mt-1">
-                    <a href="<?php echo site_url('clientes'); ?>">Consultar con otro número de documento</a>
-                </div>
+<div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
+    <div class="card-body card-body--padding--2">
+        <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes</div>
 
-                <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid" alt="Opciones de pago">
-            </div>
-        </div>
-    </div>
-
-    <!-- Datos del pago -->
-    <div class="col-lg-9 px-1">
-        <div class="card address-card address-card--featured">
-            <div class="address-card__body">
-                <div id="contenedor_carrito_facturas"></div>
-            </div>
+        <div class="card-table">
+            <div id="contenedor_lista_facturas"></div>
         </div>
     </div>
 </div>
 
-<div class="card-table mt-3">
-    <!-- <form class="form-group" id="formulario_buscar_factura">
-        <div class="row">
-            <div class="col-lg-10 col-sm-12">
-                <input type="text" class="form-control" id="estado_cuenta_buscar" placeholder="Buscar una factura por número, placa, fecha, valor, etc.">
-            </div>
-            <div class="col-lg-2 col-sm-12">
-                <button type="submit" class="btn btn-primary btn-block">Buscar</button>
-            </div>
-        </div>
-    </form> -->
-    
-    <div id="contenedor_lista_facturas"></div>
-</div>
+<div class="mb-3 mt-3"></div>
 
-<div class="card-divider"></div>
+<div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
+    <div class="card-body card-body--padding--2">
+        <div class="tag-badge tag-badge--new badge_formulario mb-1 mt-1">Facturas seleccionadas para pago</div>
+
+        <div id="contenedor_carrito_facturas"></div>
+    </div>
+</div>
 
 <div id="contenedor_modal"></div>
 
@@ -109,13 +84,8 @@
     }
 
     listarFacturas = async() => {
-        // if($('#estado_cuenta_buscar').val() == '' && localStorage.simonBolivar_buscarFacturaEstadoCuenta) $('#estado_cuenta_buscar').val(localStorage.simonBolivar_buscarFacturaEstadoCuenta)
-        
-        // if(localStorage.simonBolivar_buscarFacturaEstadoCuenta) $('#estado_cuenta_buscar').val(localStorage.simonBolivar_buscarFacturaEstadoCuenta)
-
         let datos = {
             numero_documento: '<?php echo $datos['numero_documento']; ?>',
-            // busqueda: $("#estado_cuenta_buscar").val(),
         }
 
         cargarInterfaz('clientes/estado_cuenta/facturas/lista', 'contenedor_lista_facturas', datos)
@@ -126,13 +96,8 @@
 
         cargarInterfaz('clientes/estado_cuenta/carrito/index', 'contenedor_carrito_facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})
 
-        // $('#formulario_buscar_factura').submit(evento => {
-        //     evento.preventDefault()
-
-        //     // Se almacena el valor de búsqueda en local storage
-        //     localStorage.simonBolivar_buscarFacturaEstadoCuenta = $('#estado_cuenta_buscar').val()
-
-        //     listarFacturas()
-        // })
+        // Datos del cliente para mostrar al inicio de la interfaz
+        let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')
+        cargarInterfaz('clientes/estado_cuenta/facturas/detalle_cliente', 'contenedor_cabecera_cliente', datosCliente)
     })
 </script>

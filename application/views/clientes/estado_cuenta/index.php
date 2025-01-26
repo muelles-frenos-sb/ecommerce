@@ -1,26 +1,26 @@
-<div class="block-header block-header--has-breadcrumb block-header--has-title">
+<div class="block-header" id="contenedor_cabecera_cliente">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Pagar facturas</h1>
+            <h1 class="block-header__title">Pagar tus facturas de una manera fácil y rápida</h1>
         </div>
     </div>
 </div>
 
-<div class="block">
+<div class="block mb-5">
     <div class="container">
-        <div class="card mb-lg-0">
-            <div class="card-body card-body--padding--1">
-                <form id="formulario_buscar_cliente" class="row">
+        <div class="card mb-lg-0" id="formulario_buscar_cliente">
+            <div class="card-body card-body">
+                <form class="row">
                     <!-- Número de documento -->
                     <div class="form-group col-sm-12 col-lg-12">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '901728703'; ?>" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '811007434'; ?>" autofocus>
                     </div>
 
                     <!-- Teléfono -->
                     <div class="form-group col-sm-12 col-lg-6">
                         <label for="estado_cuenta_telefono">Digita el número de celular *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3233457984'; ?>">
+                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3218524528'; ?>">
                     </div>
 
                     <!-- Email -->
@@ -35,13 +35,11 @@
                         <div class="mt-2" id="contenedor_mensaje_carga"></div>
                     </div>
                 </form>
-
-                <div id="contenedor_estado_cuenta"></div>
             </div>
         </div>
-    </div>
 
-    <div class="block-space block-space--layout--before-footer"></div>
+        <div id="contenedor_estado_cuenta"></div>
+    </div>
 </div>
 
 <script>
@@ -123,7 +121,7 @@
 
                     $('#btn_estado_cuenta_cliente').hide()
                     numeroDocumento.attr('disabled', true)
-                    $('#formulario_buscar_cliente').hide()
+                    $('#formulario_buscar_cliente').remove() // hide()
                 })
                 .catch(error => {
                     agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
