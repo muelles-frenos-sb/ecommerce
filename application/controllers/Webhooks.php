@@ -64,22 +64,25 @@ class Webhooks extends MY_Controller {
 
         // Si es pedido, se ejecuta la gestión de un pedido
         if($tipo_documento[0] == 'pe') {
-            $datos_log['log_tipo_id'] = 50;
-
             // Se agrega log
+            $datos_log['log_tipo_id'] = 50;
             $this->configuracion_model->crear('logs', $datos_log);
 
             $this->gestionar_pedido($datos);
-        }
-
         // Si es el pago de una factura del estado de cuenta, se ejecuta la gestión de un pedido
-        if($tipo_documento[0] == 'ec') {
-            $datos_log['log_tipo_id'] = 14;
-
+        }elseif($tipo_documento[0] == 'ec') {
             // Se agrega log
+            $datos_log['log_tipo_id'] = 14;
             $this->configuracion_model->crear('logs', $datos_log);
 
             $this->gestionar_estado_cuenta($datos);
+        // Para el resto de las transacciones de Wompi
+        } else {
+            // Se agrega log
+            $datos_log['log_tipo_id'] = 56;
+            $this->configuracion_model->crear('logs', $datos_log);
+
+            $this->gestionar_otras_transacciones_wompi($datos);
         }
     }
 
@@ -275,6 +278,63 @@ class Webhooks extends MY_Controller {
         ]);
 
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
+    }
+
+    /**
+     * Captura los eventos de Wompi y crea un recibo para las transacciones
+     * distintas a las generadas en el Ecommerce
+     */
+    function gestionar_otras_transacciones_wompi($datos) {
+        $errores = 0;
+        $resultado = [];
+        $datos_cliente = $datos['payment_method']['extra'];
+
+        // Arreglo para almacenamiento del recibo
+        $datos_recibo = [
+            'actualizado_webhook' => 1,
+            'documento_numero' => $datos_cliente['serviceNIT'],
+            'razon_social' => strtoupper($datos_cliente['fullName']),
+            'direccion' => strtoupper($datos_cliente['address']),
+            'email' => $datos_cliente['email'],
+            'email_factura_electronica' => $datos_cliente['email'],
+            'telefono' => $datos_cliente['cellphoneNumber'],
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'token' => $datos['reference'],
+            'valor' => $datos_cliente['transactionValue'],
+            'wompi_datos' => json_encode($datos),
+            'wompi_status' => $datos['status'],
+            'wompi_transaccion_id' => $datos['id'],
+            'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
+            'recibo_tipo_id' => 4,
+        ];
+
+        // Se almacena el recibo en la base de datos
+        $id_recibo = $this->productos_model->crear('recibos', $datos_recibo);
+
+        // Si no se guardó el recibo
+        if(!$id_recibo) {
+            $errores++;
+
+            print json_encode([
+                'errores' => $errores,
+                'resultado' => 'No se pudo guardar el recibo',
+            ]);
+        } else {
+            // Se agrega log
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 57,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "Recibo $id_recibo",
+            ]);
+
+            print json_encode([
+                'errores' => $errores,
+                'resultado' => 'Se almacenó el recibo correctamente',
+                'id' => $id_recibo
+            ]);
+        }      
+
+        return ($errores > 0) ? http_response_code(400) : http_response_code(201);
     }
 
     /**

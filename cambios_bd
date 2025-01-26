@@ -105,5 +105,10 @@ CREATE TABLE `api_logs` (
 -- 20250116 Se agrega nuevo campo en tabla de recibos
 ALTER TABLE `recibos` ADD COLUMN `fecha_actualizacion_bot` datetime(0) NULL AFTER `numero_siesa`;
 
--- 20250125 Log agregado
+-- 20250125 Logs agregados
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (55, 'Ingresa a contacto por Whatsapp')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (56, 'Otras transacciones de Wompi - Acceso al webhook')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (57, 'Webhook - Recibo de Wompi almacenado correctamente')
+
+-- 20250125 Tipo de recibo agregado
+INSERT INTO `recibos_tipos` (`id`, `nombre`) VALUES (4, 'Otras transacciones Wompi')
