@@ -224,6 +224,16 @@ Class Productos_model extends CI_Model{
                 }
             break;
 
+            case 'productos_pedidos':
+                unset($datos['tipo']);
+
+                return $this->db
+                    ->where($datos)
+                    ->get($tipo)
+                    ->result()
+                ;
+            break;
+
             case 'productos_precios':
                 unset($datos['tipo']);
 

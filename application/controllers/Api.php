@@ -18,6 +18,44 @@ class Api extends RestController {
         $this->load->model(["configuracion_model", "productos_model"]);
     }
 
+    /**
+     * Devuelve el listado de pedidos que fueron obtenidos
+     * de la API de Siesa
+     */
+    function pedidos_get() {
+        $datos = [
+            "id" => $this->get("id")
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("pedidos_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $resultado = $this->productos_model->obtener("productos_pedidos", $datos);
+
+        $mensaje = "Registros cargados correctamente";
+
+        if (!is_object($resultado)) {
+            $total_registros = count($resultado);
+            $mensaje = "Se cargaron correctamente $total_registros registros";
+        }
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Devuelve el listado de recibos
+     */
     function recibos_get() {
         $datos = [
             "id" => $this->get("id"),
