@@ -112,3 +112,18 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (57, 'Webhook - Recibo de Wompi
 
 -- 20250125 Tipo de recibo agregado
 INSERT INTO `recibos_tipos` (`id`, `nombre`) VALUES (4, 'Otras transacciones Wompi')
+
+-- 20250126 Se agregan nuevos campos en las solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito` 
+CHANGE COLUMN `nombre` `razon_social` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `fecha_creacion`,
+ADD COLUMN `nombre` varchar(100) NULL AFTER `fecha_creacion`,
+ADD COLUMN `primer_apellido` varchar(55) NULL AFTER `nombre`,
+ADD COLUMN `segundo_apellido` varchar(55) NULL AFTER `primer_apellido`;
+
+ALTER TABLE `clientes_solicitudes_credito` 
+ADD COLUMN `departamento_id` int NULL AFTER `documento_numero`,
+ADD COLUMN `ciudad_id` int NULL AFTER `departamento_id`;
+
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_expedicion` date NULL AFTER `fecha_creacion`;
+
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `representante_legal_correo` varchar(255) NULL AFTER `representante_legal_documento_numero`;

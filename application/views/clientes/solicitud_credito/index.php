@@ -14,6 +14,7 @@
             <div class="card-body card-body--padding--1">
                 <div class="form-row mb-2">
                     <div class="col-md-3">
+                        <br>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva1" value="1">
                             <label class="form-check-label" for="solicitud_nueva1">
@@ -21,14 +22,19 @@
                             </label>
                         </div>
                     </div>
-                
                     <div class="col-md-3">
+                        <br>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva0" value="0">
                             <label class="form-check-label" for="solicitud_nueva0">
                                 Quiero actualizar mi solicitud *
                             </label>
                         </div>
+                    </div>
+                    <div class="col-md-4"></div>
+                    <div class="form-group col-md-2">
+                        <label for="solicitud_fecha_expedicion">Fecha de expedición *</label>
+                        <input type="date" class="form-control" id="solicitud_fecha_expedicion">
                     </div>
                 </div>
                 <div class="card-divider"></div>
@@ -45,9 +51,24 @@
                         </select>
                     </div>
 
-                    <div class="form-group col-md-8">
-                        <label for="solicitud_nombre">Nombre o razón social *</label>
+                    <div class="form-group col-md-4 persona_natural">
+                        <label for="solicitud_nombre">Nombres *</label>
                         <input type="text" class="form-control" id="solicitud_nombre">
+                    </div>
+
+                    <div class="form-group col-md-2 persona_natural">
+                        <label for="solicitud_primer_apellido">Primer apellido *</label>
+                        <input type="text" class="form-control" id="solicitud_primer_apellido">
+                    </div>
+
+                    <div class="form-group col-md-2 persona_natural">
+                        <label for="solicitud_segundo_apellido">Segundo apellido</label>
+                        <input type="text" class="form-control" id="solicitud_segundo_apellido">
+                    </div>
+
+                    <div class="form-group col-md-12 persona_juridica">
+                        <label for="solicitud_razon_social">Razón social *</label>
+                        <input type="text" class="form-control" id="solicitud_razon_social" disabled>
                     </div>
                 </div>
                 <div class="form-row">
@@ -76,14 +97,24 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-3">
+                        <label for="solicitud_departamento">Departamento *</label>
+                        <select id="solicitud_departamento" class="form-control"></select>
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="solicitud_municipio">Municipio *</label>
+                        <select id="solicitud_municipio" class="form-control"></select>
+                    </div>
+
+                    <div class="form-group col-md-4">
                         <div class="form-group">
                             <label for="solicitud_direccion">Dirección *</label>
                             <input type="text" class="form-control" id="solicitud_direccion">
                         </div>
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-2">
                         <label for="solicitud_telefono">Telefono</label>
                         <input type="text" class="form-control" id="solicitud_telefono">
                     </div>
@@ -100,14 +131,19 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="solicitud_representante_legal">Representante legal (para personas jurídicas)</label>
                         <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="solicitud_representante_legal_documento">Número de documento del representante legal</label>
                         <input type="text" class="form-control" id="solicitud_representante_legal_documento" placeholder="Solo para personas jurídicas">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
                     </div>
                 </div>
                 <div class="form-row">
@@ -549,6 +585,11 @@
                                 <td class="text-center">X</td>
                             </tr>
                             <tr>
+                                <td>Selfie con el documento de identidad</td>
+                                <td class="text-center">X</td>
+                                <td class="text-center">X</td>
+                            </tr>
+                            <tr>
                                 <td>Fotocopia Cámara de Comercio (no mayor a 30 días)</td>
                                 <td class="text-center"></td>
                                 <td class="text-center">X</td>
@@ -728,16 +769,31 @@
         return registros
     }
 
+    concatenarRazonSocial = () => {
+        $('#solicitud_razon_social').val(`${$('#solicitud_primer_apellido').val()} ${$('#solicitud_segundo_apellido').val()} ${$('#solicitud_nombre').val()}`)
+    }
+
     crearSolicitudCredito = async() => {
         let camposObligatorios = [
             $('#solicitud_persona_tipo'),
-            $('#solicitud_nombre'),
+            $('#solicitud_razon_social'),
             $('#solicitud_numero_documento'),
             $('#solicitud_direccion'),
             $('#solicitud_email'),
             $('#solicitud_celular'),
-            $('#solicitud_correo_facturacion_electronica')
+            $('#solicitud_correo_facturacion_electronica'),
+            $('#solicitud_municipio'),
+            $('#solicitud_departamento'),
+            $('#solicitud_fecha_expedicion')
         ]
+
+        if (!$('#solicitud_persona_tipo').val() || $('#solicitud_persona_tipo').val() == 1) {
+            camposObligatorios.push(
+                $('#solicitud_nombre'),
+                $('#solicitud_primer_apellido'),
+                $('#solicitud_segundo_apellido')
+            )
+        }
 
         let camposRadioObligatorios = [
             'solicitud_nueva',
@@ -771,15 +827,21 @@
         let datosSolicitud = {
             tipo: 'clientes_solicitudes_credito',
             nombre: $('#solicitud_nombre').val(),
+            primer_apellido: $('#solicitud_primer_apellido').val(),
+            segundo_apellido: $('#solicitud_segundo_apellido').val(),
+            razon_social: $('#solicitud_razon_social').val(),
             persona_tipo_id: $('#solicitud_persona_tipo').val(),
             identificacion_tipo_id: $('#solicitud_tipo_documento option:selected').attr('data-tipo_tercero'),
             documento_numero: $('#solicitud_numero_documento').val(),
+            departamento_id: $('#solicitud_departamento').val(),
+            ciudad_id: $('#solicitud_municipio').val(),
             direccion: $('#solicitud_direccion').val(),
             telefono: $('#solicitud_telefono').val(),
             email: $('#solicitud_email').val(),
             celular: $('#solicitud_celular').val(),
             representante_legal: $('#solicitud_representante_legal').val(),
             representante_legal_documento_numero: $('#solicitud_representante_legal_documento').val(),
+            representante_legal_correo: $('#solicitud_representante_legal_correo').val(),
             email_factura_electronica: $('#solicitud_correo_facturacion_electronica').val(),
             tesoreria_nombre: $('#tesoreria_nombre').val(),
             tesoreria_email: $('#tesoreria_email').val(),
@@ -818,6 +880,7 @@
             concepto_otros_ingresos: $('#solicitud_concepto_otros_ingresos').val(),
             nueva: ($(`#solicitud_nueva1`).is(':checked')) ? 1: 0,
             preferencia_enlace: ($(`#solicitud_preferencia_enlace1`).is(':checked')) ? 1: 2,
+            fecha_expedicion: $('#solicitud_fecha_expedicion').val()
         }
 
         Swal.fire({
@@ -864,6 +927,34 @@
             showUpload: false,
             sizeUnits: ['MB'],
             maxFileSize: 3072,
+        })
+
+        $('#solicitud_persona_tipo').change(() => {
+            if ($('#solicitud_persona_tipo').val() == 1) {
+                $('.persona_natural').removeClass('d-none')
+                $('.persona_juridica').removeClass('col-md-8').addClass('col-md-12')
+                $('.persona_juridica input').attr('disabled', true)
+                $('#solicitud_razon_social').val('')
+                concatenarRazonSocial()
+            }
+
+            if ($('#solicitud_persona_tipo').val() == 2) {
+                $('.persona_natural').addClass('d-none')
+                $('.persona_juridica').removeClass('col-md-12').addClass('col-md-8')
+                $('.persona_juridica input').attr('disabled', false)
+            }
+        })
+
+        $('.persona_natural input').keyup(() => {
+            if ($('#solicitud_persona_tipo').val() == 1) {
+                concatenarRazonSocial()
+            }
+        })
+
+        listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
+
+        $('#solicitud_departamento').change(() => {
+            listarDatos('solicitud_municipio', {tipo: 'municipios', departamento_id: $('#solicitud_departamento').val()})
         })
     })
 </script>
