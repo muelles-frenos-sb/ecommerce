@@ -2,7 +2,7 @@
 use setasign\Fpdi\Fpdi;
 
 // Crear una instancia de FPDI
-$pdf = new FPDI('P', 'mm', [216, 356]);
+$pdf = new FPDI();
 
 $solicitud = $this->clientes_model->obtener("clientes_solicitudes_credito", ["id" => $solicitud_id]);
 $clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 1]);
