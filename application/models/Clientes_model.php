@@ -185,9 +185,16 @@ Class Clientes_model extends CI_Model {
 
             case 'clientes_solicitudes_credito':
                 return $this->db
-                    ->where($datos)
-                    ->get('clientes_solicitudes_credito')
-                    ->row()
+                    ->select([
+                        'csc.*',
+                        'd.nombre departamento',
+                        'm.nombre municipio'
+                    ])
+                    ->from('clientes_solicitudes_credito csc')
+                    ->join('municipios m', 'csc.ciudad_id = m.id', 'left')
+                    ->join('departamentos d', 'csc.departamento_id = d.id', 'left')
+                    ->where('csc.id', $datos['id'])
+                    ->get()->row()
                 ;
             break;
 
