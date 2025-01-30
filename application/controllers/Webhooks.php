@@ -334,7 +334,7 @@ class Webhooks extends MY_Controller {
             ]);
         }      
 
-        return ($errores > 0) ? http_response_code(400) : http_response_code(201);
+        return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
 
     /**
