@@ -165,3 +165,8 @@ echo
 </div>";
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
 ?>
+
+<script>
+    // Se elimina el valor que haya en la búsqueda, para que no interfiera en posteriores búsquedas
+    localStorage.removeItem('simonBolivar_buscarProducto')
+</script>

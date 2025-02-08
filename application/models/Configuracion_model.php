@@ -373,20 +373,21 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'marcas':
-                $where = "WHERE m.activo = 1";
+                $where = "WHERE p.id IS NOT NULL";
 
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
+                if(isset($datos['activo'])) $where .= " AND m.activo = '{$datos['activo']}' ";
                 $order_by = (isset($datos['marcas_activas'])) ? " ORDER BY RAND() " : " ORDER BY nombre " ;
 
                 $sql =
                 "SELECT
                     m.id, 
                     m.codigo, 
-                    m.nombre
+                    p.marca nombre
                 FROM
                     productos AS p
-                    INNER JOIN marcas AS m ON p.marca = m.nombre 
+                    LEFT JOIN marcas AS m ON p.marca = m.nombre 
                 $where
                 GROUP BY
                     p.marca

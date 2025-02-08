@@ -24,7 +24,7 @@
                     </a>
 
                     <!-- Marcas -->
-                    <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
+                    <?php foreach ($this->configuracion_model->obtener('marcas', ['activo' => 1]) as $marca) { ?>
                         <li class="departments__item departments__item--submenu--megamenu departments__item--has-submenu">
                             <a href="<?php echo site_url("productos?marca=$marca->nombre"); ?>" class="departments__item-link" id="filtro_marca_<?php echo $marca->id; ?>" data-marca-nombre="<?php echo $marca->nombre; ?>" data-marca-id="<?php echo $marca->id; ?>">
                                 <?php echo $marca->nombre; ?> 

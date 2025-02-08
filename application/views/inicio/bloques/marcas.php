@@ -12,7 +12,7 @@
                     <a href="<?php echo site_url('productos'); ?>">Marcas</a>
                 </div>
                 <ul class="category-card__children" style="padding-top: 75px;">
-                    <?php foreach($this->configuracion_model->obtener('marcas') as $marca) echo "<li><a href='".site_url('productos')."?marca=$marca->nombre'>$marca->nombre</a></li>"; ?>
+                    <?php foreach($this->configuracion_model->obtener('marcas', ['activo' => 1]) as $marca) echo "<li><a href='".site_url('productos')."?marca=$marca->nombre'>$marca->nombre</a></li>"; ?>
                 </ul>
                 <div class="category-card__actions">
                     <a href="<?php echo site_url('productos'); ?>" class="btn btn-primary btn-sm">Ver todas las marcas</a>
