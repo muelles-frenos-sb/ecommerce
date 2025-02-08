@@ -485,13 +485,13 @@ class Webhooks extends MY_Controller {
      */
     function importar_productos_precios() {
         $tiempo_inicial = microtime(true);
+        $total_items = 0;
 
         try {
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $codigo = 0;
             $pagina = 1;
-            $nuevos_precios = [];
-            $total_items = 0;
+            $items_almacenados = 0;
 
             $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}");
             $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio_clientes')}");
@@ -499,10 +499,11 @@ class Webhooks extends MY_Controller {
             while ($codigo == 0) {
                 $resultado = json_decode(obtener_precios_api(['pagina' => $pagina]));
                 $codigo = $resultado->codigo;
+                $nuevos_precios = [];
 
                 if($codigo == 0) {
                     $precios = $resultado->detalle->Table;
-                    
+
                     foreach($precios as $precio) {
                         $nuevo_precio = [
                             'producto_id' => $precio->f120_id,
@@ -521,6 +522,8 @@ class Webhooks extends MY_Controller {
 
                         $total_items++;
                     }
+
+                    $items_almacenados += $this->productos_model->crear('productos_precios', $nuevos_precios);
                     
                     $pagina++;
                 } else {
@@ -528,15 +531,13 @@ class Webhooks extends MY_Controller {
                     break;
                 }
             }
-
-            if($total_items > 0) $total_items = $this->productos_model->crear('productos_precios', $nuevos_precios);
             
             $tiempo_final = microtime(true);
 
             $respuesta = [
                 'log_tipo_id' => 34,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados",
+                'observacion' => "$items_almacenados registros actualizados",
                 'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
             ];
 
