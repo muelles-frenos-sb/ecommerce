@@ -44,15 +44,18 @@
         <script src="<?php echo base_url(); ?>js/main.js?<?php echo date('Ymdhis'); ?>"></script>
 
         <!-- Botón de Whatsapp -->
-        <a
-            id="btn_whatsapp"
-            href="https://wa.me/573114914780" 
-            target="_blank" 
-            class="btn_whatsapp" 
-            title="Contáctanos en WhatsApp"
-        >
-            <i class="fab fa-whatsapp"></i>
-        </a>
+        <div class="whatsapp-container">
+            <a
+                id="btn_whatsapp"
+                href="https://wa.me/573114914780" 
+                target="_blank" 
+                class="btn_whatsapp" 
+                title="Contáctanos en WhatsApp"
+            >
+                <i class="fab fa-whatsapp"></i>
+                <span class="txt_whatsapp">Cotiza aquí</span>
+            </a>
+        </div>
 
         <script>
             (function(w,d,u){
