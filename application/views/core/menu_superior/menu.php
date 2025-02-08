@@ -31,6 +31,10 @@
                     </a>
                     <div class="main-menu__submenu">
                         <ul class="menu">
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_comprobantes_ver'], $permisos)) { ?>
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url("configuracion/comprobantes/ver"); ?>" class="menu__link">
+                                        Comprobantes
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
                                 <li class="menu__item">
                                     <a href="<?php echo site_url("configuracion/recibos/ver/2"); ?>" class="menu__link">

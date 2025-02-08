@@ -112,3 +112,8 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (57, 'Webhook - Recibo de Wompi
 
 -- 20250125 Tipo de recibo agregado
 INSERT INTO `recibos_tipos` (`id`, `nombre`) VALUES (4, 'Otras transacciones Wompi')
+
+-- 20250208 Rol agregado
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (7, 'configuracion_comprobantes_ver', 'Ver comprobantes subidos', 2)
+INSERT INTO `perfiles_roles` (`fecha_creacion`, `rol_id`, `perfil_id`, `usuario_id`) VALUES ('2025-02-08 16:04:00', 7, 1, 8408)
+INSERT INTO `perfiles_roles` (`fecha_creacion`, `rol_id`, `perfil_id`, `usuario_id`) VALUES ('2025-02-08 16:04:00', 7, 2, 8408)
