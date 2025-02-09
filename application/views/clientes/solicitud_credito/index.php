@@ -1,5 +1,3 @@
-<?php $this->load->view("core/subida_archivos"); ?>
-
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
@@ -569,57 +567,60 @@
                                 <th rowspan="2">Documentos</th>
                             </tr>
                             <tr>
-                                <th>Persona natural</th>
-                                <th>Persona jurídica</th>
+                                <th>Archivo</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>Fotocopia cédula del Representante Legal</td>
-                                <td class="text-center">X</td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica documentos_natural">
+                                <td>Fotocopia cédula del Representante Legal *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="fotocopia_cedula">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Fotocopia RUT</td>
-                                <td class="text-center">X</td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica documentos_natural">
+                                <td>Fotocopia RUT *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="fotocopia_rut">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Selfie con el documento de identidad</td>
-                                <td class="text-center">X</td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica documentos_natural">
+                                <td>Selfie con el documento de identidad *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="selfie_documento">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días)</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica d-none">
+                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="fotocopia_camara_comercio">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Extractos bancarios últimos 3 meses</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica d-none">
+                                <td>Extractos bancarios últimos 3 meses *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="extractos_bancarios">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>2 referencias comerciales</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica d-none">
+                                <td>2 referencias comerciales *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="referencias_comerciales" multiple>
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Estados financieros año anterior</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica d-none">
+                                <td>Estados financieros año anterior *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="estados_financieros">
+                                </td>
                             </tr>
-                            <tr>
-                                <td>Declaración de renta año anterior</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">X</td>
+                            <tr class="documentos_juridica d-none">
+                                <td>Declaración de renta año anterior *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="declaracion_renta">
+                                </td>
                             </tr>
                         </tbody>
                     </table>
-                </div>
-
-                <div class="file-loading">
-                    <input id="subir_archivos" type="file" data-browse-on-zone-click="true" multiple>
                 </div>
 
                 <div class="card-divider"></div>
@@ -819,7 +820,8 @@
             return false
         }
 
-        if ($("#subir_archivos").fileinput('getFilesCount') < 1) {
+        let archivos = validarArchivos()
+        if (!archivos) {
             mostrarAviso('alerta', `¡Debe seleccionar los archivos para poder finalizar la solicitud de crédito!`, 20000)
             return false
         }
@@ -904,34 +906,69 @@
         if (sociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: sociosAccionistas}, false)
         if (beneficicariosSociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: beneficicariosSociosAccionistas}, false)
 
-        $('#subir_archivos').data('fileinput').uploadUrl = `${$("#site_url").val()}/clientes/subir/${solicitudId.resultado}`
-        $('#subir_archivos').fileinput('upload')
-    
         mostrarAviso('exito', `¡Tu solicitud de crédito ha sido creada correctamente!`, 20000)
 
-        $('#subir_archivos').on('filebatchuploadcomplete', async function() {
-            await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
+        await subirArchivos(solicitudId.resultado, archivos)
 
-            // Se envía un correo electrónico de notificación
-            await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+        await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
+
+        // Se envía un correo electrónico de notificación
+        await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+    }
+
+    subirArchivos = (solicitudCreditoId, archivos) => {
+        Array.from(archivos).forEach((archivo, index) => {
+            let documento = new FormData()
+
+            documento.append(index, archivo)
+
+            let subida = new XMLHttpRequest()
+            subida.open('POST', `${$("#site_url").val()}clientes/subir/${solicitudCreditoId}`)
+            subida.send(documento)
+            subida.onload = evento => {
+                let respuesta = JSON.parse(evento.target.responseText)
+            }
         })
     }
 
-    $().ready(() => {
-        $("#subir_archivos").fileinput({
-            language: "es",
-            uploadUrl: `${$("#site_url").val()}/clientes/subir`,
-            enableResumableUpload: true,
-            initialPreviewAsData: true,
-            showDownload: true,
-            showUpload: false,
-            sizeUnits: ['MB'],
-            maxFileSize: 3072,
+    validarArchivos = () => {
+        let reglas = {
+            fotocopia_cedula: 1,
+            fotocopia_rut: 1,
+            selfie_documento: 1,
+            fotocopia_camara_comercio: 1,
+            extractos_bancarios: 1,
+            referencias_comerciales: 2,
+            estados_financieros: 1,
+            declaracion_renta: 1,
+        }
+
+        let archivosSubir = []
+        let cumpleReglas = true
+
+        $(`tr:not(.d-none) .archivos`).each(function(index, elemento) {
+            let $elemento = $(elemento)
+            let archivos = $elemento.prop('files')
+
+            if (reglas[$(elemento).attr('id')] === archivos.length) {
+                let archivo =  Array.from(archivos)
+                archivosSubir = archivosSubir.concat(archivo)
+
+                $elemento.removeClass("is-invalid")
+            } else {
+                $elemento.addClass("is-invalid")
+                cumpleReglas = false
+            }
         })
 
+        return (cumpleReglas) ? archivosSubir: cumpleReglas
+    }
+
+    $().ready(() => {
         $('#solicitud_persona_tipo').change(() => {
             if ($('#solicitud_persona_tipo').val() == 1) {
-                $('.persona_natural').removeClass('d-none')
+                $('.documentos_juridica').addClass('d-none')
+                $('.persona_natural, .documentos_natural').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-8').addClass('col-md-12')
                 $('.persona_juridica input').attr('disabled', true)
                 $('#solicitud_razon_social').val('')
@@ -940,6 +977,7 @@
 
             if ($('#solicitud_persona_tipo').val() == 2) {
                 $('.persona_natural').addClass('d-none')
+                $('.documentos_juridica').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-12').addClass('col-md-8')
                 $('.persona_juridica input').attr('disabled', false)
             }
