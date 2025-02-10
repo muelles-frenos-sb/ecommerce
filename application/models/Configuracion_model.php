@@ -478,6 +478,45 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'terceros':
+                // Filtro contador
+                $having = "";
+                $where = "WHERE 1";
+
+                if (isset($datos['busqueda'])) {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+        
+                    $having = "HAVING";
+        
+                    for ($i=0; $i < count($palabras); $i++) {
+                        $having .= " (";
+                        $having .= " t.f200_nit LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR t.f200_razon_social LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+        
+                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
+
+                if(isset($datos['f200_ind_cliente'])) $where .= " AND t.f200_ind_cliente = {$datos['f200_ind_cliente']} ";
+
+                $sql =
+                "SELECT
+                    t.*
+                FROM
+                    terceros AS t
+                $where
+                $having
+                ORDER BY
+	                t.f200_razon_social";
+
+                if(isset($datos['id'])) {
+                    return $this->db->query($sql)->row();
+                } else {
+                    return $this->db->query($sql)->result();
+                }
+            break;
+
             case 'usuarios':
                 // Filtro contador
 				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
