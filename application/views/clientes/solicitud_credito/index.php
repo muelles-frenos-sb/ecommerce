@@ -30,10 +30,6 @@
                         </div>
                     </div>
                     <div class="col-md-4"></div>
-                    <div class="form-group col-md-2">
-                        <label for="solicitud_fecha_expedicion">Fecha de expedición *</label>
-                        <input type="date" class="form-control" id="solicitud_fecha_expedicion">
-                    </div>
                 </div>
                 <div class="card-divider"></div>
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
@@ -89,9 +85,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="solicitud_numero_documento">Número de documento *</label>
                         <input type="text" class="form-control" id="solicitud_numero_documento">
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="solicitud_fecha_expedicion">Fecha de expedición *</label>
+                        <input type="date" class="form-control" id="solicitud_fecha_expedicion">
                     </div>
                 </div>
                 <div class="form-row">

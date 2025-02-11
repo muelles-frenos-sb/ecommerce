@@ -127,3 +127,5 @@ ADD COLUMN `ciudad_id` int NULL AFTER `departamento_id`;
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_expedicion` date NULL AFTER `fecha_creacion`;
 
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `representante_legal_correo` varchar(255) NULL AFTER `representante_legal_documento_numero`;
+
+ALTER TABLE `clientes_solicitudes_credito` MODIFY COLUMN `fecha_expedicion` date NULL DEFAULT NULL AFTER `documento_numero`;
