@@ -113,7 +113,7 @@
                     </div>
 
                     <div class="form-group col-md-2">
-                        <label for="solicitud_telefono">Telefono</label>
+                        <label for="solicitud_telefono">Teléfono</label>
                         <input type="text" class="form-control" id="solicitud_telefono">
                     </div>
                 </div>
