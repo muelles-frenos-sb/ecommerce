@@ -119,41 +119,40 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="solicitud_email">E-mail *</label>
                         <input type="text" class="form-control" id="solicitud_email">
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="solicitud_celular">Celular del titular o Representante legal *</label>
-                        <input type="text" class="form-control" id="solicitud_celular">
-                    </div>
-                </div>
-                <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="solicitud_representante_legal">Representante legal (para personas jurídicas)</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="solicitud_representante_legal_documento">Número de documento del representante legal</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_documento" placeholder="Solo para personas jurídicas">
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
                         <label for="solicitud_correo_facturacion_electronica">Correo para facturación electrónica *</label>
                         <input type="text" class="form-control" id="solicitud_correo_facturacion_electronica">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label for="solicitud_cantidad_vehiculos">Si posees vehículos propios, indica cuántos</label>
                         <input type="number" class="form-control" id="solicitud_cantidad_vehiculos">
+                    </div>
+                </div>
+                <div class="form-row representante_legal">
+                    <div class="form-group col-md-6">
+                        <label for="solicitud_representante_legal">Representante legal (para personas jurídicas) *</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="solicitud_representante_legal_documento">Número de documento del representante legal *</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal_documento" placeholder="Solo para personas jurídicas">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="solicitud_celular">Celular del titular o Representante legal *</label>
+                        <input type="text" class="form-control" id="solicitud_celular" placeholder="Solo para personas jurídicas">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
                     </div>
                 </div>
             </div>
@@ -782,7 +781,6 @@
             $('#solicitud_numero_documento'),
             $('#solicitud_direccion'),
             $('#solicitud_email'),
-            $('#solicitud_celular'),
             $('#solicitud_correo_facturacion_electronica'),
             $('#solicitud_municipio'),
             $('#solicitud_departamento'),
@@ -809,7 +807,7 @@
 
         // Si es persona jurídica
         if ($('#solicitud_persona_tipo').val() == 2) {
-            camposObligatorios.push($('#solicitud_representante_legal'))
+            camposObligatorios.push($('#solicitud_representante_legal'), $('#solicitud_celular'))
             camposObligatorios.push($('#solicitud_representante_legal_documento'))
         }
 
@@ -968,7 +966,7 @@
     $().ready(() => {
         $('#solicitud_persona_tipo').change(() => {
             if ($('#solicitud_persona_tipo').val() == 1) {
-                $('.documentos_juridica').addClass('d-none')
+                $('.documentos_juridica, .representante_legal').addClass('d-none')
                 $('.persona_natural, .documentos_natural').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-8').addClass('col-md-12')
                 $('.persona_juridica input').attr('disabled', true)
@@ -978,7 +976,7 @@
 
             if ($('#solicitud_persona_tipo').val() == 2) {
                 $('.persona_natural').addClass('d-none')
-                $('.documentos_juridica').removeClass('d-none')
+                $('.documentos_juridica, .representante_legal').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-12').addClass('col-md-8')
                 $('.persona_juridica input').attr('disabled', false)
             }
