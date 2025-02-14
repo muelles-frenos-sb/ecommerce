@@ -1,3 +1,6 @@
+<!-- Se captura el nit si viene desde el formulario de comprobante -->
+<input type="hidden" id="nit_comprobante" value="<?php echo $this->input->get('nit'); ?>">
+
 <div class="block-header" id="contenedor_cabecera_cliente">
     <div class="container">
         <div class="block-header__body">
@@ -14,20 +17,23 @@
                     <!-- Número de documento -->
                     <div class="form-group col-sm-12 col-lg-12">
                         <label for="estado_cuenta_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if(ENVIRONMENT == 'development') echo '811007434'; ?>" autofocus>
+                        <input type="number" class="form-control" id="estado_cuenta_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if($this->input->get('nit') != '') echo $this->input->get('nit'); ?>" autofocus>
                     </div>
 
-                    <!-- Teléfono -->
-                    <div class="form-group col-sm-12 col-lg-6">
-                        <label for="estado_cuenta_telefono">Digita el número de celular *</label>
-                        <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3218524528'; ?>">
-                    </div>
+                    <!-- Si trae un NIT desde la subida de comprobantes, carga los campos -->
+                    <?php if($this->input->get('nit') == '') { ?>
+                        <!-- Teléfono -->
+                        <div class="form-group col-sm-12 col-lg-6">
+                            <label for="estado_cuenta_telefono">Digita el número de celular *</label>
+                            <input type="number" class="form-control" id="estado_cuenta_telefono" value="<?php if(ENVIRONMENT == 'development') echo '3218524528'; ?>">
+                        </div>
 
-                    <!-- Email -->
-                    <div class="form-group col-sm-12 col-lg-6">
-                        <label for="estado_cuenta_email">Correo electrónico al que deseas que lleguen los soportes *</label>
-                        <input type="email" class="form-control" id="estado_cuenta_email">
-                    </div>
+                        <!-- Email -->
+                        <div class="form-group col-sm-12 col-lg-6">
+                            <label for="estado_cuenta_email">Correo electrónico al que deseas que lleguen los soportes *</label>
+                            <input type="email" class="form-control" id="estado_cuenta_email">
+                        </div>
+                    <?php } ?>
 
                     <div class="form-group col-sm-12 col-lg-12">
                         <button type="submit" class="btn btn-primary btn-block" id="btn_estado_cuenta_cliente">Consultar mis facturas</button>
@@ -46,26 +52,29 @@
     var numeroDocumento = $('#estado_cuenta_numero_documento')
     var numeroTelefono = $('#estado_cuenta_telefono')
     var email = $('#estado_cuenta_email')
-    
-    $().ready(() => {
-        $('#formulario_buscar_cliente').submit(async(evento) => {
-            evento.preventDefault()
 
-            let datosObligatorios = [
-                numeroDocumento,
-                numeroTelefono,
-                email,
-            ]
+    procesarBusqueda = async (nit = null) => {
+        let datosObligatorios = [
+            numeroDocumento,
+        ]
 
-            // Validación de campos obligatorios
-            if (!validarCamposObligatorios(datosObligatorios)) return false
+        // Si no trae NIT, se deben validar todos los campos
+        if(!nit) {
+            datosObligatorios.push(numeroTelefono)
+            datosObligatorios.push(email)
+        }
 
-            let datosContacto = {
-                tipo: 'tercero_contacto',
-                nit: numeroDocumento.val(),
-                numero: numeroTelefono.val(),
-            }
+        // Validación de campos obligatorios
+        if (!validarCamposObligatorios(datosObligatorios)) return false
 
+        let datosContacto = {
+            tipo: 'tercero_contacto',
+            nit: numeroDocumento.val(),
+            numero: numeroTelefono.val(),
+        }
+
+        // Si no trae NIT, consulta el contacto
+        if(!nit) {
             // Se verifica que el número de teléfono exista en la base de datos
             let contacto = await consulta('obtener', datosContacto)
 
@@ -78,63 +87,74 @@
 
             // En localStorage se almacena el email de contacto
             localStorage.simonBolivar_emailContacto = email.val()
+        }
 
-            // Se activa el spinner
-            $('#btn_estado_cuenta_cliente').addClass('btn-loading').attr('disabled', true)
+        // Se activa el spinner
+        $('#btn_estado_cuenta_cliente').addClass('btn-loading').attr('disabled', true)
 
-            agregarLog(22, `Número de documento ${numeroDocumento.val()}`)
+        agregarLog(22, `Número de documento ${numeroDocumento.val()}`)
 
-            // Mensaje mientras se consultan los datos
-            $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Consultando los datos del cliente...`)
+        // Mensaje mientras se consultan los datos
+        $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Consultando los datos del cliente...`)
+        
+        let consultaTercero = consulta('obtener', {tipo: 'terceros', numero_documento: numeroDocumento.val()}, false)
+        let consultaEstadoCuentaCliente = consulta('obtener', {tipo: 'estado_cuenta_cliente', numero_documento: numeroDocumento.val()}, false)
+        
+        Promise.all([consultaTercero, consultaEstadoCuentaCliente])
+        .then(async(resultado) => {
+            // Obtenemos e insertamos las sucursales por aparte, para recorrer la paginación
+            await gestionarSucursales(numeroDocumento.val())
+
+            $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Preparando la visualización de los datos...`)
+
+            let tercero = resultado[0]
+            let facturas = resultado[1]
+
+            // Si no se encuentra el estado de cuenta
+            if(facturas.codigo && facturas.codigo == 1) {
+                $('#btn_estado_cuenta_cliente').removeClass('btn-loading').attr('disabled', false)
+                $('#contenedor_mensaje_carga').html('')
+                mostrarAviso('alerta', 'No se encontraron resultados con el número de documento que nos indicas. Por favor, asegúrate de que el número sea correcto o no tenga dígito de verificación.', 30000)
+                agregarLog(23, `Número de documento ${numeroDocumento.val()}`)
+                return false
+            }
+
+            let creacionTercero = consulta('crear', {tipo: 'tercero', valores: tercero.detalle.Table}, false)
+            let creacionFacturas = consulta('crear', {tipo: 'clientes_facturas', valores: facturas.detalle.Table}, false)
             
-            let consultaTercero = consulta('obtener', {tipo: 'terceros', numero_documento: numeroDocumento.val()}, false)
-            let consultaEstadoCuentaCliente = consulta('obtener', {tipo: 'estado_cuenta_cliente', numero_documento: numeroDocumento.val()}, false)
-            
-            Promise.all([consultaTercero, consultaEstadoCuentaCliente])
-            .then(async(resultado) => {
-                // Obtenemos e insertamos las sucursales por aparte, para recorrer la paginación
-                await gestionarSucursales(numeroDocumento.val())
-
-                $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Preparando la visualización de los datos...`)
-
-                let tercero = resultado[0]
-                let facturas = resultado[1]
-
-                // Si no se encuentra el estado de cuenta
-                if(facturas.codigo && facturas.codigo == 1) {
-                    $('#btn_estado_cuenta_cliente').removeClass('btn-loading').attr('disabled', false)
-                    $('#contenedor_mensaje_carga').html('')
-                    mostrarAviso('alerta', 'No se encontraron resultados con el número de documento que nos indicas. Por favor, asegúrate de que el número sea correcto o no tenga dígito de verificación.', 30000)
-                    agregarLog(23, `Número de documento ${numeroDocumento.val()}`)
-                    return false
-                }
-
-                let creacionTercero = consulta('crear', {tipo: 'tercero', valores: tercero.detalle.Table}, false)
-                let creacionFacturas = consulta('crear', {tipo: 'clientes_facturas', valores: facturas.detalle.Table}, false)
+            Promise.all([creacionTercero, creacionFacturas])
+            .then(async(resultado) => {                    
+                agregarLog(24, `Número de documento ${numeroDocumento.val()}`)
                 
-                Promise.all([creacionTercero, creacionFacturas])
-                .then(async(resultado) => {                    
-                    agregarLog(24, `Número de documento ${numeroDocumento.val()}`)
-                    
-                    // location.href = `${$('#site_url').val()}clientes/estado_cuenta/${numeroDocumento.val()}`
-                    cargarInterfaz('clientes/estado_cuenta/facturas/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val()})
+                // location.href = `${$('#site_url').val()}clientes/estado_cuenta/${numeroDocumento.val()}`
+                cargarInterfaz('clientes/estado_cuenta/facturas/index', 'contenedor_estado_cuenta', {numero_documento: numeroDocumento.val(), nit_comprobante: $('#nit_comprobante').val()})
 
-                    $('#btn_estado_cuenta_cliente').hide()
-                    numeroDocumento.attr('disabled', true)
-                    $('#formulario_buscar_cliente').remove() // hide()
-                })
-                .catch(error => {
-                    agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
-                    mostrarAviso('error', 'Ocurrió un error consultando las facturas del cliente. Intenta de nuevo más tarde.', 30000)
-                    $('#contenedor_mensaje_carga').html('')
-                    return false
-                })
+                $('#btn_estado_cuenta_cliente').hide()
+                numeroDocumento.attr('disabled', true)
+                $('#formulario_buscar_cliente').remove() // hide()
             })
             .catch(error => {
-                agregarLog(25, `Número de documento ${numeroDocumento.val()}`)
-                mostrarAviso('error', 'Ocurrió un error consultando los datos del cliente. Por favor, intenta más tarde.', 30000)
+                agregarLog(26, `Número de documento ${numeroDocumento.val()}`)
+                mostrarAviso('error', 'Ocurrió un error consultando las facturas del cliente. Intenta de nuevo más tarde.', 30000)
+                $('#contenedor_mensaje_carga').html('')
                 return false
             })
+        })
+        .catch(error => {
+            agregarLog(25, `Número de documento ${numeroDocumento.val()}`)
+            mostrarAviso('error', 'Ocurrió un error consultando los datos del cliente. Por favor, intenta más tarde.', 30000)
+            return false
+        })
+    }
+    
+    $().ready(() => {
+        // Si viene NIT del formulario de comprobante
+        if($('#nit_comprobante').val() != '') procesarBusqueda($('#nit_comprobante').val())
+
+        $('#formulario_buscar_cliente').submit(async(evento) => {
+            evento.preventDefault()
+
+            procesarBusqueda()
         })
 
         // Control del input para que registren solamente números

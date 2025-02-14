@@ -128,46 +128,48 @@
             <div class="card-divider"></div>
         </div>
 
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5 class="text-center">Distribución del pago</h5>
-            </div>
-            <div class="card-divider"></div>
-            <div class="card-body">
-                <div id="contenedor_cuentas"></div>
-
-                <div class="mt-2 mb-2 d-flex flex-column">
-                    <input type="hidden" id="total_faltante_amortizacion" value="<?php echo number_format($subtotal_valor_pagado, 0, '', ''); ?>">
-                    <h4 class="align-self-end">Total amortizado: $<span id="total_pago_amortizacion">0</span></h4>
-                    <h4 class="align-self-end">Diferencia: $<span id="total_faltante_amortizacion_formato">0</span></h4>
+        <?php if(false) { ?>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="text-center">Distribución del pago</h5>
                 </div>
-                
-                <!-- Si está por validar el comprobante -->
-                <?php if($recibo->recibo_estado_id == 3) { ?>
-                    <a class="btn btn-info btn-block mt-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">
-                        Agregar cuenta
-                    </a>
-                <?php } ?>
-            </div>
-            <div class="card-divider"></div>
-            <div class="card-footer">
-                <div class="row">
-                    <div class="col-4">
-                        <button class="btn btn-info" href=":;" onclick="history.back()">Volver a recibos</button>
-                    </div>
+                <div class="card-divider"></div>
+                <div class="card-body">
+                    <div id="contenedor_cuentas"></div>
 
+                    <div class="mt-2 mb-2 d-flex flex-column">
+                        <input type="hidden" id="total_faltante_amortizacion" value="<?php echo number_format($subtotal_valor_pagado, 0, '', ''); ?>">
+                        <h4 class="align-self-end">Total amortizado: $<span id="total_pago_amortizacion">0</span></h4>
+                        <h4 class="align-self-end">Diferencia: $<span id="total_faltante_amortizacion_formato">0</span></h4>
+                    </div>
+                    
                     <!-- Si está por validar el comprobante -->
                     <?php if($recibo->recibo_estado_id == 3) { ?>
-                        <div class="col-4">
-                            <a class="btn btn-danger btn-block" href="javascript:;" onClick="javascript:rechazarPago(<?php echo $recibo->id; ?>)">Rechazar pago</a>
-                        </div>
-                        <div class="col-4">
-                            <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-                        </div>
+                        <a class="btn btn-info btn-block mt-2" href="javascript:;" onClick="javascript:agregarCuenta(<?php echo $recibo->id; ?>);">
+                            Agregar cuenta
+                        </a>
                     <?php } ?>
                 </div>
+                <div class="card-divider"></div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-4">
+                            <button class="btn btn-info" href=":;" onclick="history.back()">Volver a recibos</button>
+                        </div>
+
+                        <!-- Si está por validar el comprobante -->
+                        <?php if($recibo->recibo_estado_id == 3) { ?>
+                            <div class="col-4">
+                                <a class="btn btn-danger btn-block" href="javascript:;" onClick="javascript:rechazarPago(<?php echo $recibo->id; ?>)">Rechazar pago</a>
+                            </div>
+                            <div class="col-4">
+                                <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
+                            </div>
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
-        </div>
+        <?php } ?>
     </div>
 </div>
 
