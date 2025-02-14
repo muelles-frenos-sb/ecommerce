@@ -57,12 +57,6 @@ class Configuracion extends MY_Controller {
                 $this->data['contenido_principal'] = 'configuracion/contactos/index';
                 $this->load->view('core/body', $this->data);
             break;
-
-            case 'id':
-                $this->data['token'] = $this->uri->segment(4);
-                $this->data['contenido_principal'] = 'configuracion/contactos/detalle';
-                $this->load->view('core/body', $this->data);
-            break;
         }
     }
 
