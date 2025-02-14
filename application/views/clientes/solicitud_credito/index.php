@@ -791,7 +791,6 @@
             camposObligatorios.push(
                 $('#solicitud_nombre'),
                 $('#solicitud_primer_apellido'),
-                $('#solicitud_segundo_apellido')
             )
         }
 
