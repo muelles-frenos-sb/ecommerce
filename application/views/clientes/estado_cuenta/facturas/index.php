@@ -94,7 +94,7 @@
     $().ready(() => {
         listarFacturas()
 
-        cargarInterfaz('clientes/estado_cuenta/carrito/index', 'contenedor_carrito_facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})
+        cargarInterfaz('clientes/estado_cuenta/carrito/index', 'contenedor_carrito_facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>', nit_comprobante: '<?php echo $datos['nit_comprobante']; ?>'})
 
         // Datos del cliente para mostrar al inicio de la interfaz
         let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')

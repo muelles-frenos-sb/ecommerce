@@ -6,10 +6,6 @@
 
 <div class="vehicles-list__body mt-2" id="contenedor_lista_carrito"></div>
 
-<!-- <div class="input-group mt-2">
-    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-</div> -->
-
 <div class="mt-2 mb-2 d-flex justify-content-end">
     <input type="hidden" id="total_pago">
     
@@ -38,7 +34,42 @@
 
 <div class="row mt-2">
     <div class="col-12">
-        <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
+        <!-- Si trae NIT de comprobante, es la sección para vendedores -->
+        <?php if($datos['nit_comprobante']) { ?>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="fecha_consignacion">Fecha de consignación *</label>
+                    <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="monto">Monto *</label>
+                    <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
+                </div>
+
+                <div class="form-group col-4">
+                    <label for="cuenta">Cuenta</label>
+                    <select id="cuenta" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->codigo - $cuenta->nombre</option>"; ?>
+                    </select>
+                </div>
+
+                <div class="input-group col-12 mt-2">
+                    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+                </div>
+            </div>
+
+            <div class="mt-2 mb-2 d-flex flex-column">
+                <!-- <input type="hidden" id="total_faltante_amortizacion" value=""> -->
+                <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>
+                <h4 class="align-self-end">Valor faltante: $<span id="comprobante_valor_faltante">0</span></h4>
+            </div>
+
+            <button class="btn btn-primary btn-lg btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Guardar pago con comprobante</button>
+        <?php } else { ?>
+            <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
+        <?php } ?>
 
         <!-- <div class="col-6">
             <button class="btn btn-primary btn-sm btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Subir comprobantes</button>
@@ -169,6 +200,7 @@
         var totalDescuento = 0
         var total = 0
         var detalleFactura = []
+        var montoComprobante = parseFloat($("#monto").val().replace(/\./g, '')) // Monto especificado cuando se sube un comprobante
 
         $(`.valor_pago_factura`).each(function() {
             let valorAPagar = parseFloat($(this).val().replace(/\./g, ''))
@@ -199,6 +231,13 @@
         $('#total_pago_formato').text(formatearNumero(total))
         $('#total_pago').val(total)
 
+        // Sección para subida de comprobante
+        $('#valor_total_seleccionadas').text(formatearNumero(total))
+
+        // Valor que falta para poder subir el comprobante
+        let valorFaltanteComprobante = montoComprobante - total
+        $('#comprobante_valor_faltante').text(formatearNumero(valorFaltanteComprobante))
+
         return detalleFactura
     }
 
@@ -221,10 +260,24 @@
             return false
         }
 
-        // Si no es pago en línea y no tiene archivos
-        if(!pagarEnLinea && archivos.length == 0) {
-            mostrarAviso('alerta', 'Por favor selecciona los comprobantes de pago que vas a subir')
-            return false
+        // Si no es un pago en línea, se validan campos obligatorios
+        if(!pagarEnLinea) {
+            let camposObligatorios = [
+                $('#fecha_consignacion'),
+                $('#monto'),
+                $('#cuenta'),
+            ]
+
+            if (!validarCamposObligatorios(camposObligatorios)) return false
+
+            // Si no es pago en línea y no tiene archivos
+            if(archivos.length == 0) {
+                mostrarAviso('alerta', 'Por favor selecciona los comprobantes de pago que vas a subir')
+                return false
+            }
+
+            let confirmacion = await confirmar('Guardar', `¿Estás seguro de guardar el comprobante?`)
+            if (!confirmacion) return false
         }
 
         let datosRecibo = {
@@ -320,6 +373,13 @@
             
             // Se desactiva el spinner después de cierto tiempo
             setTimeout(() => $('#btn_pago_en_linea').removeClass('btn-loading').attr('disabled', false), 1000)
+        })
+
+        $(`#monto`).on('keyup', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+
+            calcularTotal()
         })
     })
 </script>
