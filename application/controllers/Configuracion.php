@@ -40,11 +40,6 @@ class Configuracion extends MY_Controller {
                 $this->data['contenido_principal'] = 'configuracion/comprobantes/crear';
                 $this->load->view('core/body', $this->data);
             break;
-
-            case 'ver':
-                $this->data['contenido_principal'] = 'configuracion/comprobantes/index';
-                $this->load->view('core/body', $this->data);
-            break;
         }
     }
 

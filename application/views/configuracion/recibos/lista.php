@@ -1,5 +1,9 @@
 <input type="hidden" id="recibo_id_tipo" value="<?php echo $datos['id_tipo_recibo']; ?>">
 
+<?php if($datos['id_tipo_recibo'] == 3 && (isset($permisos) && in_array(['configuracion' => 'configuracion_comprobantes_ver'], $permisos))) { ?>
+    <a class="btn btn-success mb-2" href="<?php echo site_url('configuracion/comprobantes/crear'); ?>">Subir comprobante</a>
+<?php } ?>
+
 <div class="wishlist">
     <table class="wishlist__table table-responsive">
         <thead class="wishlist__head">
