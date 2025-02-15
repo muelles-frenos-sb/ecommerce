@@ -191,7 +191,7 @@ Class Clientes_model extends CI_Model {
                         'm.nombre municipio'
                     ])
                     ->from('clientes_solicitudes_credito csc')
-                    ->join('municipios m', 'csc.ciudad_id = m.id', 'left')
+                    ->join('municipios m', 'csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id', 'left')
                     ->join('departamentos d', 'csc.departamento_id = d.id', 'left')
                     ->where('csc.id', $datos['id'])
                     ->get()->row()
