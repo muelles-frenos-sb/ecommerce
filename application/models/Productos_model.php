@@ -199,6 +199,23 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
+            case 'productos_promocion':
+                $sql = 
+                "SELECT
+                    p.id AS producto_id,
+                    p.notas,
+                    p.marca 
+                FROM
+                    productos AS p 
+                WHERE
+                    p.notas LIKE '%PROMOCION%' 
+                ORDER BY
+                    RAND() 
+                LIMIT 50";
+                
+                return $this->db->query($sql)->result();
+            break;
+
             case 'productos_inventario_wms':
                 unset($datos['tipo']);
 

@@ -1,7 +1,7 @@
 <?php
 // Se obtiene un arreglo con todos los productos destacados que se van a mostrar al inicio
 $productos = $this->productos_model->obtener('productos_destacados');
-// $productos_outlet = $this->productos_model->obtener('productos_outlet');
+$productos_promocion = $this->productos_model->obtener('productos_promocion');
 $cantidad_productos = count($productos);
 $cantidad_productos_por_bloque = intval($cantidad_productos / 8);
 $posicion = 0;
@@ -10,18 +10,26 @@ $posicion = 0;
  **************************************** Slider ****************************************
  ****************************************************************************************/
 $this->load->view('inicio/slider');
-// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
- ******************************** Buscador de repuestos *********************************
+ ************************************* Promociones **************************************
  ****************************************************************************************/
-$this->load->view('inicio/buscar_repuestos');
-echo "<div class='block-space block-space--layout--divider-nl'></div>";
+if(!empty($productos_promocion)) {
+    $this->data['productos'] = $productos_promocion;
+    $this->load->view('inicio/promociones', $this->data);
+    echo "<div class='block-space block-space--layout--divider-nl'></div>";
+}
 
 /****************************************************************************************
  ******************** Información de envíos, pago seguro y garantía *********************
  ****************************************************************************************/
 $this->load->view('inicio/caracteristicas');
+echo "<div class='block-space block-space--layout--divider-nl'></div>";
+
+/****************************************************************************************
+ ******************************** Buscador de repuestos *********************************
+ ****************************************************************************************/
+$this->load->view('inicio/buscar_repuestos');
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
@@ -33,13 +41,6 @@ $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
 $this->data['productos'] = $productos;
 $this->load->view('inicio/productos_destacados', $this->data);
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
-
-/****************************************************************************************
- *************************************** Outlet *****************************************
- ****************************************************************************************/
-// $this->data['productos'] = $productos_outlet;
-// $this->load->view('inicio/outlet', $this->data);
-// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  *********************** Bloque de marcas y productos destacados ************************
@@ -169,4 +170,12 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 <script>
     // Se elimina el valor que haya en la búsqueda, para que no interfiera en posteriores búsquedas
     localStorage.removeItem('simonBolivar_buscarProducto')
+
+    // Se envía un correo electrónico de notificación
+    // let email = obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: 163})
+    // email.then((result) => {
+    //     console.log(result)
+    // }).catch((err) => {
+    //     console.log(error)
+    // });
 </script>
