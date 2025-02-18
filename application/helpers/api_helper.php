@@ -457,7 +457,7 @@ function obtener_documentos_ventas_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'Documento_ventas',
-                'parametros' => "fecha={$datos['fecha']}|nit=|tamPag=100|numPag={$datos['pagina']}",
+                'parametros' => "fecha={$datos['fecha']}|nit=|tamPag=500|numPag={$datos['pagina']}",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {
@@ -487,7 +487,7 @@ function obtener_movimientos_ventas_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'Movimiento_ventas',
-                'parametros' => "rowid_docto=|fecha={$datos['fecha']}|tamPag=100|numPag={$datos['pagina']}",
+                'parametros' => "rowid_docto=|fecha={$datos['fecha']}|tamPag=500|numPag={$datos['pagina']}",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

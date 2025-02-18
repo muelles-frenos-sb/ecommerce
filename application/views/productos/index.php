@@ -174,17 +174,10 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
     listarProductos = async() => {
         localStorage.simonBolivar_contador = 0
 
-        // let productos = await obtenerPromesa(`${$("#site_url").val()}/productos/obtener`, {tipo: 'detalle'})
-        // let numeroPagina = parseInt($('#filtro_pagina').val())
-        // let itemsPorPagina = parseInt($('#view-option-limit').val())
-        // let cantidadProductos = productos.length
-
         if($('#filtro_busqueda').val()) localStorage.simonBolivar_buscarProducto = $('#filtro_busqueda').val()
 
         if(localStorage.simonBolivar_buscarProducto) $('#buscar').val(localStorage.simonBolivar_buscarProducto)
 
-        // const datosPaginacion = paginar(cantidadProductos, numeroPagina, itemsPorPagina)
-        
         let datos = {
             contador: localStorage.simonBolivar_contador,
             busqueda: $("#buscar").val(),

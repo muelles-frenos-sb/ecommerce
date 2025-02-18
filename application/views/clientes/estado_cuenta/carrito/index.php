@@ -288,6 +288,12 @@
                 return false
             }
 
+            // Si el total es diferente al monto
+            if(total !== parseFloat($('#monto').val().replace(/\./g, ''))) {
+                mostrarAviso('alerta', 'El monto indicado no es igual al valor pagado de las facturas.')
+                return false
+            }
+
             let confirmacion = await confirmar('Guardar', `¿Validaste que toda la información está correcta?`)
             if (!confirmacion) return false
 

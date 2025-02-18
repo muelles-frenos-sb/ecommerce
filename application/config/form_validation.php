@@ -8,11 +8,11 @@ $config = [
 
     'recibos_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
-        ['field' => 'actualizado_bot', 'label' => 'actualizado_bot', 'rules' => 'trim|in_list[0,1]'],
+        ['field' => 'actualizado_bot', 'label' => 'actualizado_bot', 'rules' => 'required|trim|in_list[0,1]'],
+        ['field' => 'id_tipo_recibo', 'label' => 'recibo_tipo_id', 'rules' => 'required|trim|in_list[1,2,3,4]'],
     ],
 
 	'recibos_detalle_get' => [
-		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
         ['field' => 'recibo_id', 'label' => 'id del recibo', 'rules' => 'required|trim|integer|greater_than[0]'],
     ],
 

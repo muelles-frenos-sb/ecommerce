@@ -4,7 +4,7 @@ Class Configuracion_model extends CI_Model {
         return $this->db->where('id', $id)->update($tabla, $datos);
     }
 
-    function crear($tipo, $datos){
+    function crear($tipo, $datos) {
         switch ($tipo) {
             default:
                 $this->db->insert($tipo, $datos);
@@ -41,8 +41,7 @@ Class Configuracion_model extends CI_Model {
         $this->db->close;
     }
 
-    function eliminar($tipo, $datos)
-    {
+    function eliminar($tipo, $datos) {
         switch ($tipo) {
             default:
                 return $this->db->delete($tipo, $datos);

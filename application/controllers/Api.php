@@ -102,7 +102,6 @@ class Api extends RestController {
      */
     function recibos_detalle_get() {
         $datos = [
-            "id" => $this->get("id"),
             "recibo_id" => $this->get("recibo_id"),
         ];
 
@@ -159,11 +158,7 @@ class Api extends RestController {
             ], RestController::HTTP_BAD_REQUEST);
         }
 
-        $id = $datos['id'];
-        unset($datos['id']);
-        $filtro = ["id" => $id];
-
-        $recibo = $this->configuracion_model->obtener("recibos", $filtro);
+        $recibo = $this->configuracion_model->obtener("recibos", ["id" => $datos['id']]);
 
         if (!$recibo) {
             $this->response([
@@ -173,7 +168,7 @@ class Api extends RestController {
             ], RestController::HTTP_OK);
         }
 
-        $resultado = $this->productos_model->actualizar("recibos", $filtro, $datos);
+        $resultado = $this->productos_model->actualizar("recibos", ["id" => $datos['id']], $datos);
 
         if (!$resultado) {
             $this->response([
