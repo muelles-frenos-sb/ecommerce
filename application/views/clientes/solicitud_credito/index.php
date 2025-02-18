@@ -164,7 +164,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h3>Tesorería y pagos</h3>
+                        <h5>Tesorería y pagos</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -184,7 +184,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h3>Comercial</h3>
+                        <h5>Comercial</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -204,7 +204,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h3>Contabilidad</h3>
+                        <h5>Contabilidad</h5>
                     </div>
                     <div class="form-group col-md-3">
                         <input type="text" class="form-control" id="contabilidad_nombre" placeholder="Nombre">
@@ -230,7 +230,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-1">
-                        <h3>1</h3>
+                        <h5>1</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -247,7 +247,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-1">
-                        <h3>2</h3>
+                        <h5>2</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -265,30 +265,7 @@
             </div>
 
             <div class="card-divider"></div>
-            <div class="card-body card-body--padding--1">
-                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
-                    REFERENCIA BANCARIA
-                </div>
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="referencia_bancaria_entidad">Entidad</label>
-                        <input type="text" class="form-control" id="referencia_bancaria_entidad">
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="referencia_bancaria_tipo">Tipo</label>
-                        <input type="text" class="form-control" id="referencia_bancaria_tipo">
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="referencia_bancaria_numero">Número</label>
-                        <input type="text" class="form-control" id="referencia_bancaria_numero">
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-divider"></div>
-            <div class="card-body card-body--padding--1" id="personas_autorizadas">
+            <div class="card-body" id="personas_autorizadas">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
                     PERSONAS AUTORIZADAS
                 </div>
@@ -523,38 +500,37 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="solicitud_ingresos_mensuales">Ingresos mensuales (pesos)</label>
-                        <input type="number" class="form-control" id="solicitud_ingresos_mensuales">
+                        <input type="number" class="form-control" id="solicitud_ingresos_mensuales" placeholder="$0">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_egresos_mensuales">Egresos mensuales (pesos)</label>
-                        <input type="number" class="form-control" id="solicitud_egresos_mensuales">
+                        <input type="number" class="form-control" id="solicitud_egresos_mensuales" placeholder="$0">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="solicitud_activos">Activos (pesos)</label>
-                        <input type="number" class="form-control" id="solicitud_activos">
+                        <label for="solicitud_activos">Activos (Pertenencias. Ej: propiedades, vehículos, etc.)</label>
+                        <input type="number" class="form-control" id="solicitud_activos" placeholder="$0">
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_pasivos">Pasivos (pesos)</label>
-                        <input type="number" class="form-control" id="solicitud_pasivos">
+                        <label for="solicitud_pasivos">Pasivos (Deudas)</label>
+                        <input type="number" class="form-control" id="solicitud_pasivos" placeholder="$0">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="solicitud_otros_ingresos">Otros ingresos (pesos)</label>
-                        <input type="number" class="form-control" id="solicitud_otros_ingresos">
+                        <input type="number" class="form-control" id="solicitud_otros_ingresos" placeholder="$0">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_concepto_otros_ingresos">Concepto otros ingresos</label>
-                        <input type="text" class="form-control" id="solicitud_concepto_otros_ingresos">
+                        <input type="text" class="form-control" id="solicitud_concepto_otros_ingresos" placeholder="$0">
                     </div>
                 </div>
             </div>
-
 
             <div class="card-body card-body--padding--1">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
@@ -621,6 +597,16 @@
                             </tr>
                         </tbody>
                     </table>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label for="vendedor_id">Asesor comercial *</label>
+                            <select id="vendedor_id" class="form-control">
+                                <option value="">Sin asesor comercial asignado</option>
+                                <?php foreach($this->configuracion_model->obtener('vendedores') as $vendedor) echo "<option value='$vendedor->id'>$vendedor->nombre</option>"; ?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-divider"></div>
@@ -647,7 +633,11 @@
                     </div>
                 </div>
                 <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
-                    RECUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b>
+                    <ul>
+                        <li>RECUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b></li>
+                        <li>DESPUÉS DE ENVIADA LA NOTIFICACIÓN DE FIRMA ELECTRÓNICA, CUENTAS CON <b>24 HORAS</b> PARA REALIZARLA.</li>
+                    </ul>
+                    
                 </label>
             </div>
 
@@ -861,9 +851,6 @@
             referencia_comercial_entidad2: $('#referencia_comercial_entidad2').val(),
             referencia_comercial_cel2: $('#referencia_comercial_celular2').val(),
             referencia_comercial_direccion2: $('#referencia_comercial_direccion2').val(),
-            referencia_bancaria_entidad: $('#referencia_bancaria_entidad').val(),
-            referencia_bancaria_tipo: $('#referencia_bancaria_tipo').val(),
-            referencia_bancaria_numero: $('#referencia_bancaria_numero').val(),
             reconocimiento_publico: ($(`#reconocimiento_publico_si`).is(':checked')) ? 1: 0,
             reconocimiento_publico_cual: $('#reconocimiento_publico_cliente').val(),
             persona_expuesta: ($(`#persona_expuesta_si`).is(':checked')) ? 1: 0,
@@ -880,7 +867,8 @@
             concepto_otros_ingresos: $('#solicitud_concepto_otros_ingresos').val(),
             nueva: ($(`#solicitud_nueva1`).is(':checked')) ? 1: 0,
             preferencia_enlace: ($(`#solicitud_preferencia_enlace1`).is(':checked')) ? 1: 2,
-            fecha_expedicion: $('#solicitud_fecha_expedicion').val()
+            fecha_expedicion: $('#solicitud_fecha_expedicion').val(),
+            tercero_vendedor_id: $('#vendedor_id').val(),
         }
 
         Swal.fire({

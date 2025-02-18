@@ -188,11 +188,13 @@ Class Clientes_model extends CI_Model {
                     ->select([
                         'csc.*',
                         'd.nombre departamento',
-                        'm.nombre municipio'
+                        'm.nombre municipio',
+                        'tv.nombre vendedor_nombre',
                     ])
                     ->from('clientes_solicitudes_credito csc')
                     ->join('municipios m', 'csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id', 'left')
                     ->join('departamentos d', 'csc.departamento_id = d.id', 'left')
+                    ->join('terceros_vendedores tv', 'csc.tercero_vendedor_id = tv.id', 'left')
                     ->where('csc.id', $datos['id'])
                     ->get()->row()
                 ;

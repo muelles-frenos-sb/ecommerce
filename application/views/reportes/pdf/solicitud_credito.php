@@ -174,8 +174,12 @@ foreach ($personas_autorizadas as $registro) {
     $coordenada = $coordenada + 5;
 }
 
+$pdf->SetXY(55, $coordenada + 36.5);
+$pdf->Write(0, utf8_decode($solicitud->vendedor_nombre));
+
 $pdf->AddPage();
 $tplIdx = $pdf->importPage(2);
+
 // Usar la página del archivo como plantilla
 $pdf->useTemplate($tplIdx, 10, 10, 200);
 
