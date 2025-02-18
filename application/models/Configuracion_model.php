@@ -182,6 +182,7 @@ Class Configuracion_model extends CI_Model {
 				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 $where = "WHERE r.recibo_estado_id";
                 $having = "";
+                $url_archivo = base_url().'archivos/recibos';
 
                 if (isset($datos['busqueda'])) {
                     $palabras = explode(' ', trim($datos['busqueda']));
@@ -223,13 +224,16 @@ Class Configuracion_model extends CI_Model {
 	                re.clase estado_clase,
                     CONCAT_WS( ' ', uc.nombres, uc.primer_apellido ) usuario_creacion,
 	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion,
-                    IF(r.fecha_actualizacion_bot is NOT NULL, 1, 0) actualizado_bot
+                    IF(r.fecha_actualizacion_bot is NOT NULL, 1, 0) actualizado_bot,
+                    cb.codigo AS cuenta_bancaria_codigo,
+                    CONCAT_WS('/', '$url_archivo', r.id, r.archivo_soporte) archivo_soporte 
                 FROM
                     recibos AS r
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
 	                LEFT JOIN recibos_estados AS re ON r.recibo_estado_id = re.id 
                     LEFT JOIN usuarios AS uc ON r.usuario_creacion_id = uc.id 
 	                LEFT JOIN usuarios AS ug ON r.usuario_aprobacion_id = ug.id
+                    LEFT JOIN cuentas_bancarias AS cb ON r.cuenta_bancaria_id = cb.id
                 $where
                 $having
                 ORDER BY

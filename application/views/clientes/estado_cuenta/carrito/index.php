@@ -260,6 +260,18 @@
             return false
         }
 
+        let datosRecibo = {
+            tipo: 'recibos',
+            abreviatura: 'ec',
+            recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
+            recibo_estado_id: (!pagarEnLinea) ? 3 : null,
+            razon_social: $('#factura_tercero_razon_social').val(),
+            documento_numero: $('#factura_tercero_documento_numero').val(),
+            usuario_creacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
+            email: localStorage.simonBolivar_emailContacto,
+            valor: total,
+        }
+
         // Si no es un pago en línea, se validan campos obligatorios
         if(!pagarEnLinea) {
             let camposObligatorios = [
@@ -276,20 +288,13 @@
                 return false
             }
 
-            let confirmacion = await confirmar('Guardar', `¿Estás seguro de guardar el comprobante?`)
+            let confirmacion = await confirmar('Guardar', `¿Validaste que toda la información está correcta?`)
             if (!confirmacion) return false
-        }
 
-        let datosRecibo = {
-            tipo: 'recibos',
-            abreviatura: 'ec',
-            recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
-            recibo_estado_id: (!pagarEnLinea) ? 3 : null,
-            razon_social: $('#factura_tercero_razon_social').val(),
-            documento_numero: $('#factura_tercero_documento_numero').val(),
-            usuario_creacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
-            email: localStorage.simonBolivar_emailContacto,
-            valor: total,
+            // Se agregan los datos del comprobante al recibo
+            datosRecibo.fecha_consignacion = $('#fecha_consignacion').val()
+            datosRecibo.cuenta_bancaria_id = $('#cuenta').val()
+            datosRecibo.archivo_soporte = `1.${archivos[0].name.split('.').pop()}`
         }
 
         let recibo = await consulta('crear', datosRecibo, false)

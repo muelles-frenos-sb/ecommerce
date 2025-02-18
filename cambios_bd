@@ -121,3 +121,8 @@ INSERT INTO `perfiles_roles` (`fecha_creacion`, `rol_id`, `perfil_id`, `usuario_
 -- 20250208 Log agregado
 INSERT INTO `logs_tipos` (`id`,`nombre`) VALUES (58, 'Clientes - Búsqueda de cliente en menú Comprobantes')
 INSERT INTO `logs_tipos` (`id`,`nombre`) VALUES (59, 'Clientes - Cliente no encontrado en menú Comprobantes')
+
+-- 20250217 Campos para datos del recibo cuando es comprobante
+ALTER TABLE `recibos` ADD COLUMN `cuenta_bancaria_id` int NULL AFTER `numero_siesa`;
+ALTER TABLE `recibos` ADD COLUMN `fecha_consignacion` date NULL AFTER `numero_siesa`;
+ALTER TABLE `recibos` ADD COLUMN `archivo_soporte` varchar(255) NULL AFTER `cuenta_bancaria_id`;
