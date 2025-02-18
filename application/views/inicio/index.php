@@ -14,7 +14,7 @@ $this->load->view('inicio/slider');
 /****************************************************************************************
  ************************************* Promociones **************************************
  ****************************************************************************************/
-if(!empty($productos_promocion)) {
+if(count($productos_promocion) > 0) {
     $this->data['productos'] = $productos_promocion;
     $this->load->view('inicio/promociones', $this->data);
     echo "<div class='block-space block-space--layout--divider-nl'></div>";
