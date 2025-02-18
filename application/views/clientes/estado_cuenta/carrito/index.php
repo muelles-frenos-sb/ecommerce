@@ -200,7 +200,7 @@
         var totalDescuento = 0
         var total = 0
         var detalleFactura = []
-        var montoComprobante = parseFloat($("#monto").val().replace(/\./g, '')) // Monto especificado cuando se sube un comprobante
+        var montoComprobante = ($("#monto").val()) ? parseFloat($("#monto").val().replace(/\./g, '')) : 0 // Monto especificado cuando se sube un comprobante
 
         $(`.valor_pago_factura`).each(function() {
             let valorAPagar = parseFloat($(this).val().replace(/\./g, ''))
