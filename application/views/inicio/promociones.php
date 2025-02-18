@@ -1,8 +1,7 @@
 <div class="block block-sale">
     <div class="block-sale__content">
         <div class="block-sale__header">
-            <div class="block-sale__title">¡Descuentos imperdibles!</div>
-            <div class="block-sale__subtitle">Encuentra repuestos de alta calidad</div>
+            <img src="<?php echo base_url(); ?>images/banners/promociones.png" alt="Promociones" height="70">
             <!-- <div class="block-sale__timer">
                 <div class="timer">
                     <div class="timer__part">

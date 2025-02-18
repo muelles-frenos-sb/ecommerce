@@ -142,7 +142,7 @@ if(empty($producto)) redirect(site_url(''));
                                         <div id="producto_detalle_<?php echo $producto->id; ?>"></div>
                                         
                                         <div class="product__actions">
-                                            <a class="btn btn-success btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
+                                            <a class="btn btn-primary btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
                                                 Ir a pagar
                                             </a>
 
