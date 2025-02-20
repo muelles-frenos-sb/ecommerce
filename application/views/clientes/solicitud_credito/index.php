@@ -134,7 +134,7 @@
                         <input type="number" class="form-control" id="solicitud_cantidad_vehiculos">
                     </div>
                 </div>
-                <div class="form-row representante_legal">
+                <div class="form-row datos_persona_juridica">
                     <div class="form-group col-md-6">
                         <label for="solicitud_representante_legal">Representante legal (para personas jurídicas) *</label>
                         <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
@@ -293,7 +293,7 @@
             </div>
 
             <div class="card-divider"></div>
-            <div class="card-body card-body--padding--1" id="clientes">
+            <div class="card-body card-body--padding--1 datos_persona_juridica" id="clientes">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
                     SAGRILAFT FORMULARIO DE CONOCIMIENTO DE CLIENTES
                 </div>
@@ -330,12 +330,12 @@
                 </div>
             </div>
 
-            <div class="form-group mx-3">
+            <div class="form-group mx-3 datos_persona_juridica">
                 <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('clientes')">Agregar</button>
             </div>
 
             <div class="card-divider"></div>
-            <div class="card-body card-body--padding--1" id="beneficiarios_cliente">
+            <div class="card-body card-body--padding--1 datos_persona_juridica" id="beneficiarios_cliente">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
                     BENEFICIARIOS FINALES DE SOCIOS Y/O ACCIONISTAS IGUALES O SUPERIORES AL 5%
                 </div>
@@ -368,7 +368,7 @@
                 </div>
             </div>
 
-            <div class="form-group mx-3">
+            <div class="form-group mx-3 datos_persona_juridica">
                 <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('beneficiarios_cliente')">Agregar</button>
             </div>
 
@@ -894,15 +894,13 @@
 
         mostrarAviso('exito', `¡Tu solicitud de crédito ha sido creada correctamente!`, 20000)
 
-        await subirArchivos(solicitudId.resultado, archivos)
-
-        await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudId.resultado}`)
-
-        // Se envía un correo electrónico de notificación
-        await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudId.resultado})
+        subirArchivos(solicitudId.resultado, archivos)
     }
 
-    subirArchivos = (solicitudCreditoId, archivos) => {
+    subirArchivos = async (solicitudCreditoId, archivos) => {
+        let cantidadArchivos = archivos.length
+        let cantidadArchivosSubidos = 0
+
         Array.from(archivos).forEach((archivo, index) => {
             let documento = new FormData()
 
@@ -911,8 +909,18 @@
             let subida = new XMLHttpRequest()
             subida.open('POST', `${$("#site_url").val()}clientes/subir/${solicitudCreditoId}`)
             subida.send(documento)
-            subida.onload = evento => {
+            subida.onload = async evento => {
                 let respuesta = JSON.parse(evento.target.responseText)
+
+                cantidadArchivosSubidos+=1
+
+                // Si se subieron todos los archivos se genera el reporte y envía el email
+                if (cantidadArchivos === cantidadArchivosSubidos) {
+                    await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudCreditoId}`)
+
+                    // Se envía un correo electrónico de notificación
+                    await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudCreditoId})
+                }
             }
         })
     }
@@ -953,7 +961,7 @@
     $().ready(() => {
         $('#solicitud_persona_tipo').change(() => {
             if ($('#solicitud_persona_tipo').val() == 1) {
-                $('.documentos_juridica, .representante_legal').addClass('d-none')
+                $('.documentos_juridica, .datos_persona_juridica').addClass('d-none')
                 $('.persona_natural, .documentos_natural').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-8').addClass('col-md-12')
                 $('.persona_juridica input').attr('disabled', true)
@@ -963,7 +971,7 @@
 
             if ($('#solicitud_persona_tipo').val() == 2) {
                 $('.persona_natural').addClass('d-none')
-                $('.documentos_juridica, .representante_legal').removeClass('d-none')
+                $('.documentos_juridica, .datos_persona_juridica').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-12').addClass('col-md-8')
                 $('.persona_juridica input').attr('disabled', false)
             }
