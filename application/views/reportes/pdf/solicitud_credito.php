@@ -2,7 +2,7 @@
 use setasign\Fpdi\Fpdi;
 
 // Crear una instancia de FPDI
-$pdf = new FPDI();
+$pdf = new FPDI('P', 'mm', 'LEGAL');
 
 $solicitud = $this->clientes_model->obtener("clientes_solicitudes_credito", ["id" => $solicitud_id]);
 $clientes_socios_accionistas = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ["solicitud_id" => $solicitud_id, "formulario_tipo" => 1]);
@@ -30,6 +30,7 @@ $pdf->Write(0, ($solicitud->nueva) ? "": "X");
 $pdf->SetXY(74, 43.6);
 $pdf->Write(0, $fecha);
 
+// Persona natural
 if ($solicitud->persona_tipo_id == 1) {
     $pdf->SetXY(49, 61);
     $pdf->Write(0, substr(utf8_decode($solicitud->primer_apellido), 0, 50));
@@ -65,6 +66,10 @@ if ($solicitud->persona_tipo_id == 1) {
     $pdf->Write(0, utf8_decode($solicitud->email_factura_electronica));
 }
 
+$pdf->SetXY(170, 77.8);
+$pdf->Write(0, utf8_decode($solicitud->cantidad_vehiculos));
+
+// Persona jurídica
 if ($solicitud->persona_tipo_id == 2) {
     $pdf->SetXY(45, 96.8);
     $pdf->Write(0, utf8_decode($solicitud->razon_social));
@@ -72,13 +77,13 @@ if ($solicitud->persona_tipo_id == 2) {
     $pdf->SetXY(34, 100.8);
     $pdf->Write(0, utf8_decode($solicitud->documento_numero));
 
-    $pdf->SetXY(137, 100.8);
+    $pdf->SetXY(145, 100.8);
     $pdf->Write(0, utf8_decode($solicitud->telefono));
 
-    $pdf->SetXY(42, 105);
+    $pdf->SetXY(52, 105);
     $pdf->Write(0, utf8_decode($solicitud->direccion));
 
-    $pdf->SetXY(115, 105);
+    $pdf->SetXY(112, 105);
     $pdf->Write(0, utf8_decode($solicitud->municipio));
 
     $pdf->SetXY(168, 105);
@@ -99,12 +104,9 @@ if ($solicitud->persona_tipo_id == 2) {
     $pdf->SetXY(40, 121.5);
     $pdf->Write(0, $solicitud->representante_legal_correo);
 
-    $pdf->SetXY(138, 121.5);
+    $pdf->SetXY(145, 121.5);
     $pdf->Write(0, $solicitud->celular);
 }
-
-// $pdf->SetXY(145, 72.7);
-// $pdf->Write(0, utf8_decode("¿Cuántos vehículos posee? $solicitud->cantidad_vehiculos"));
 
 $pdf->SetXY(52, 142);
 $pdf->Write(0, utf8_decode($solicitud->tesoreria_nombre));

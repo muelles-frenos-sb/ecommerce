@@ -33,7 +33,7 @@
                 </div>
                 <div class="card-divider"></div>
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
-                    DATOS BÁSICOS
+                    DATOS BÁSICOS DEL SOLICITANTE
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
@@ -96,6 +96,13 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <div class="form-group">
+                            <label for="solicitud_direccion">Dirección *</label>
+                            <input type="text" class="form-control" id="solicitud_direccion">
+                        </div>
+                    </div>
+
                     <div class="form-group col-md-3">
                         <label for="solicitud_departamento">Departamento *</label>
                         <select id="solicitud_departamento" class="form-control"></select>
@@ -104,13 +111,6 @@
                     <div class="form-group col-md-3">
                         <label for="solicitud_municipio">Municipio *</label>
                         <select id="solicitud_municipio" class="form-control"></select>
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <div class="form-group">
-                            <label for="solicitud_direccion">Dirección *</label>
-                            <input type="text" class="form-control" id="solicitud_direccion">
-                        </div>
                     </div>
 
                     <div class="form-group col-md-2">
@@ -135,8 +135,13 @@
                     </div>
                 </div>
                 <div class="form-row datos_persona_juridica">
+                    <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                        DATOS REPRESENTANTE LEGAL (PARA PERSONAS JURÍDICAS)
+                    </div>
+                    <hr>
+
                     <div class="form-group col-md-6">
-                        <label for="solicitud_representante_legal">Representante legal (para personas jurídicas) *</label>
+                        <label for="solicitud_representante_legal">Nombre del representante legal (para personas jurídicas) *</label>
                         <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
                     </div>
 
@@ -146,13 +151,13 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_celular">Celular del titular o Representante legal *</label>
-                        <input type="text" class="form-control" id="solicitud_celular" placeholder="Solo para personas jurídicas">
+                        <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
+                        <label for="solicitud_celular">Celular del titular o Representante legal *</label>
+                        <input type="text" class="form-control" id="solicitud_celular" placeholder="Solo para personas jurídicas">
                     </div>
                 </div>
             </div>
@@ -265,7 +270,7 @@
             </div>
 
             <div class="card-divider"></div>
-            <div class="card-body" id="personas_autorizadas">
+            <div class="card-body card-body--padding--1" id="personas_autorizadas">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
                     PERSONAS AUTORIZADAS
                 </div>
@@ -401,8 +406,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="recursos_publicos_cliente">Cuál/quién?</label>
-                        <input type="text" class="form-control" id="recursos_publicos_cliente">
+                        <input type="text" class="form-control" id="recursos_publicos_cliente" placeholder="¿Cuál/quién?">
                     </div>
                 </div>
                 <div class="form-row">
@@ -429,8 +433,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="poder_publico_cliente">Cuál/quién?</label>
-                        <input type="text" class="form-control" id="poder_publico_cliente">
+                        <input type="text" class="form-control" id="poder_publico_cliente" placeholder="¿Cuál/quién?">
                     </div>
                 </div>
                 <div class="form-row">
@@ -457,8 +460,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="reconocimiento_publico_cliente">Cuál/quién?</label>
-                        <input type="text" class="form-control" id="reconocimiento_publico_cliente">
+                        <input type="text" class="form-control" id="reconocimiento_publico_cliente" placeholder="¿Cuál/quién?">
                     </div>
                 </div>
                 <div class="form-row">
@@ -485,8 +487,7 @@
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="persona_expuesta_cliente">Cuál/quién?</label>
-                        <input type="text" class="form-control" id="persona_expuesta_cliente">
+                        <input type="text" class="form-control" id="persona_expuesta_cliente" placeholder="¿Cuál/quién?">
                     </div>
                 </div>
             </div>
@@ -494,7 +495,7 @@
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2">
-                    INFORMACIÓN FINANCIERA
+                    INFORMACIÓN FINANCIERA (EN PESOS)
                 </div>
 
                 <div class="form-row">
@@ -510,7 +511,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="solicitud_activos">Activos (Pertenencias. Ej: propiedades, vehículos, etc.)</label>
+                        <label for="solicitud_activos">Activos (pesos)</label>
                         <input type="number" class="form-control" id="solicitud_activos" placeholder="$0">
                     </div>
 
@@ -566,31 +567,31 @@
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) *</td>
+                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) (Opcional)</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="fotocopia_camara_comercio">
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>Extractos bancarios últimos 3 meses *</td>
+                                <td>Extractos bancarios últimos 3 meses (Opcional)</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="extractos_bancarios">
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>2 referencias comerciales *</td>
+                                <td>2 referencias comerciales (Opcional)</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="referencias_comerciales" multiple>
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>Estados financieros año anterior *</td>
+                                <td>Estados financieros año anterior (Opcional)*</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="estados_financieros">
                                 </td>
                             </tr>
-                            <tr class="documentos_juridica d-none">
-                                <td>Declaración de renta año anterior *</td>
+                            <tr class="documentos_juridica documentos_natural">
+                                <td>Declaración de renta año anterior (opcional)</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="declaracion_renta">
                                 </td>
@@ -609,11 +610,11 @@
                     </div>
                 </div>
 
-                <div class="card-divider"></div>
-                <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
-                    Deseo recibir el enlace para firmar la solicitud por:
-                </label>
-                <div class="form-row mt-2">
+                <div class="form-row mt-2 alert alert-primary" role="alert">
+                    <label class="form-check-label col-md-12 mt-2" for="solicitud_preferencia_enlace1">
+                        Deseo recibir el enlace para firmar la solicitud por:
+                    </label>
+
                     <div class="col-md-6">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="solicitud_preferencia_enlace" id="solicitud_preferencia_enlace1" value="1">
@@ -631,22 +632,23 @@
                             </label>
                         </div>
                     </div>
+                    <hr>
+
+                    <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
+                        <ul>
+                            <li>RECUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b></li>
+                            <li>DESPUÉS DE ENVIADA LA NOTIFICACIÓN DE FIRMA ELECTRÓNICA, CUENTAS CON <b>24 HORAS</b> PARA REALIZARLA.</li>
+                        </ul>
+                    </label>
                 </div>
-                <label class="form-check-label mt-2" for="solicitud_preferencia_enlace1">
-                    <ul>
-                        <li>RECUERDA QUE TE LLEGARÁ UN MENSAJE DEL PROVEEDOR <b>HOMINI BIOMETRIC</b></li>
-                        <li>DESPUÉS DE ENVIADA LA NOTIFICACIÓN DE FIRMA ELECTRÓNICA, CUENTAS CON <b>24 HORAS</b> PARA REALIZARLA.</li>
-                    </ul>
-                    
-                </label>
             </div>
 
             <div class="form-group mb-2 mt-2 mx-3 my-2">
                 <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()" id="btn_enviar_solicitud">ENVIAR SOLICITUD DE CRÉDITO</button>
 
                 <div class="address-card__row mt-2 mb-2">
-                    <div class="alert alert-primary mb-3">
-                        Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 110) o al celular 316 269 4009
+                    <div class="alert alert-light mb-3">
+                        Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 111) o a los celulares 310 297 8620 - 311 272 8428
                     </div>
                 </div>
             </div>
@@ -869,6 +871,7 @@
             preferencia_enlace: ($(`#solicitud_preferencia_enlace1`).is(':checked')) ? 1: 2,
             fecha_expedicion: $('#solicitud_fecha_expedicion').val(),
             tercero_vendedor_id: $('#vendedor_id').val(),
+            cantidad_vehiculos: $("#solicitud_cantidad_vehiculos").val(),
         }
 
         Swal.fire({
@@ -930,11 +933,11 @@
             fotocopia_cedula: 1,
             fotocopia_rut: 1,
             selfie_documento: 1,
-            fotocopia_camara_comercio: 1,
-            extractos_bancarios: 1,
-            referencias_comerciales: 2,
-            estados_financieros: 1,
-            declaracion_renta: 1,
+            fotocopia_camara_comercio: 0,
+            extractos_bancarios: 0,
+            referencias_comerciales: 0,
+            estados_financieros: 0,
+            declaracion_renta: 0,
         }
 
         let archivosSubir = []
@@ -959,7 +962,13 @@
     }
 
     $().ready(() => {
+        $('#vendedor_id').select2()
+        
+        // Cuando se seleccione el tipo de persona
         $('#solicitud_persona_tipo').change(() => {
+            $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', false)
+
+            // Si es persona natural
             if ($('#solicitud_persona_tipo').val() == 1) {
                 $('.documentos_juridica, .datos_persona_juridica').addClass('d-none')
                 $('.persona_natural, .documentos_natural').removeClass('d-none')
@@ -969,18 +978,21 @@
                 concatenarRazonSocial()
             }
 
+            // Si es persona jurídica
             if ($('#solicitud_persona_tipo').val() == 2) {
                 $('.persona_natural').addClass('d-none')
                 $('.documentos_juridica, .datos_persona_juridica').removeClass('d-none')
                 $('.persona_juridica').removeClass('col-md-12').addClass('col-md-8')
                 $('.persona_juridica input').attr('disabled', false)
+
+                $('#solicitud_tipo_documento2').prop('checked', true)
+                $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', true)
             }
         })
 
         $('.persona_natural input').keyup(() => {
-            if ($('#solicitud_persona_tipo').val() == 1) {
-                concatenarRazonSocial()
-            }
+            // Si es persona natural
+            if ($('#solicitud_persona_tipo').val() == 1) concatenarRazonSocial()
         })
 
         listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
