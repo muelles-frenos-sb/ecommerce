@@ -136,28 +136,28 @@
                 </div>
                 <div class="form-row datos_persona_juridica">
                     <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
-                        DATOS REPRESENTANTE LEGAL (PARA PERSONAS JURÍDICAS)
+                        DATOS REPRESENTANTE LEGAL
                     </div>
                     <hr>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_representante_legal">Nombre del representante legal (para personas jurídicas) *</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal" placeholder="Solo para personas jurídicas">
+                        <label for="solicitud_representante_legal">Nombre del representante legal *</label>
+                        <input type="text" class="form-control" id="solicitud_representante_legal">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_representante_legal_documento">Número de documento del representante legal *</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_documento" placeholder="Solo para personas jurídicas">
+                        <input type="text" class="form-control" id="solicitud_representante_legal_documento">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_representante_legal_correo">E-mail del representante legal</label>
-                        <input type="text" class="form-control" id="solicitud_representante_legal_correo" placeholder="Solo para personas jurídicas">
+                        <input type="text" class="form-control" id="solicitud_representante_legal_correo">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_celular">Celular del titular o Representante legal *</label>
-                        <input type="text" class="form-control" id="solicitud_celular" placeholder="Solo para personas jurídicas">
+                        <input type="text" class="form-control" id="solicitud_celular">
                     </div>
                 </div>
             </div>
@@ -505,13 +505,13 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label for="solicitud_egresos_mensuales">Egresos mensuales (pesos)</label>
+                        <label for="solicitud_egresos_mensuales">Egresos mensuales (Gastos)</label>
                         <input type="number" class="form-control" id="solicitud_egresos_mensuales" placeholder="$0">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label for="solicitud_activos">Activos (pesos)</label>
+                        <label for="solicitud_activos">Activos (Pertenencias. Ej: propiedades, vehículos, etc.)</label>
                         <input type="number" class="form-control" id="solicitud_activos" placeholder="$0">
                     </div>
 
@@ -560,16 +560,16 @@
                                     <input type="file" class="form-control archivos" id="fotocopia_rut">
                                 </td>
                             </tr>
-                            <tr class="documentos_juridica documentos_natural">
-                                <td>Selfie con el documento de identidad *</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="selfie_documento">
-                                </td>
-                            </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) (Opcional)</td>
+                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) *</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="fotocopia_camara_comercio">
+                                </td>
+                            </tr>
+                            <tr class="documentos_juridica documentos_natural">
+                                <td>Selfie con el documento de identidad (Opcional)</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="selfie_documento">
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
@@ -585,7 +585,7 @@
                                 </td>
                             </tr>
                             <tr class="documentos_juridica d-none">
-                                <td>Estados financieros año anterior (Opcional)*</td>
+                                <td>Estados financieros año anterior (Opcional)</td>
                                 <td class="text-center">
                                     <input type="file" class="form-control archivos" id="estados_financieros">
                                 </td>
@@ -601,7 +601,7 @@
 
                     <div class="form-row">
                         <div class="form-group col-12">
-                            <label for="vendedor_id">Asesor comercial *</label>
+                            <label for="vendedor_id">Elige tu asesor comercial *</label>
                             <select id="vendedor_id" class="form-control">
                                 <option value="">Sin asesor comercial asignado</option>
                                 <?php foreach($this->configuracion_model->obtener('vendedores') as $vendedor) echo "<option value='$vendedor->id'>$vendedor->nombre</option>"; ?>
@@ -932,8 +932,8 @@
         let reglas = {
             fotocopia_cedula: 1,
             fotocopia_rut: 1,
-            selfie_documento: 1,
-            fotocopia_camara_comercio: 0,
+            fotocopia_camara_comercio: 1,
+            selfie_documento: 0,
             extractos_bancarios: 0,
             referencias_comerciales: 0,
             estados_financieros: 0,
