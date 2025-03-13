@@ -45,6 +45,7 @@ class Clientes extends MY_Controller {
     function subir() {
         $id_solicitud = $this->uri->segment(3);
         $directorio = "./archivos/solicitudes_credito/$id_solicitud/";
+        $exito = false;
 
         // Valida que el directorio exista. Si no existe,lo crea con el id obtenido,
         // asigna los permisos correspondientes
@@ -52,9 +53,28 @@ class Clientes extends MY_Controller {
 
         $archivo = $_FILES;
 
-        if(move_uploaded_file($archivo['fileBlob']['tmp_name'], $directorio.$archivo['fileBlob']['name'])) $resultado = true;
+        foreach($_FILES as $archivo) {
+            $nombre_principal = pathinfo($archivo['name'], PATHINFO_FILENAME);
+            $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+            $nombre_archivo = $archivo['name'];
 
-        print json_encode(['resultado' => $resultado]);
+            if (file_exists($directorio.$nombre_archivo)) {
+                $nombre_archivo = "{$nombre_principal} (".uniqid().").$extension";
+            }
+
+            // Si se guarda el archivo
+            if(move_uploaded_file($archivo['tmp_name'], $directorio.$nombre_archivo)) {
+                $exito = true;
+                $mensaje = "El archivo <b>{$nombre_archivo}</b> se subió correctamente.";
+            } else {
+                $mensaje = "Ha ocurrido un error subiendo el archivo.";
+            }
+        }
+
+        print json_encode(['resultado' => [
+            "mensaje" => $mensaje,
+            "exito" => $exito
+        ]]);
     }
 }
 /* Fin del archivo Clientes.php */

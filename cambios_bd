@@ -126,3 +126,16 @@ INSERT INTO `logs_tipos` (`id`,`nombre`) VALUES (59, 'Clientes - Cliente no enco
 ALTER TABLE `recibos` ADD COLUMN `cuenta_bancaria_id` int NULL AFTER `numero_siesa`;
 ALTER TABLE `recibos` ADD COLUMN `fecha_consignacion` date NULL AFTER `numero_siesa`;
 ALTER TABLE `recibos` ADD COLUMN `archivo_soporte` varchar(255) NULL AFTER `cuenta_bancaria_id`;
+
+-- 20250126 Se agregan nuevos campos en las solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito` 
+    ADD COLUMN `nombre` varchar(100) NULL AFTER `fecha_creacion`,
+    CHANGE COLUMN `nombre` `razon_social` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `fecha_creacion`,
+    ADD COLUMN `primer_apellido` varchar(55) NULL AFTER `nombre`,
+    ADD COLUMN `segundo_apellido` varchar(55) NULL AFTER `primer_apellido`;
+    ADD COLUMN `departamento_id` int NULL AFTER `documento_numero`,
+    ADD COLUMN `ciudad_id` int NULL AFTER `departamento_id`,
+    ADD COLUMN `fecha_expedicion` date NULL AFTER `fecha_creacion`,
+    ADD COLUMN `representante_legal_correo` varchar(255) NULL AFTER `representante_legal_documento_numero`,
+    MODIFY COLUMN `fecha_expedicion` date NULL DEFAULT NULL AFTER `documento_numero`,
+    ADD COLUMN `tercero_vendedor_id` int NULL AFTER `preferencia_enlace`;

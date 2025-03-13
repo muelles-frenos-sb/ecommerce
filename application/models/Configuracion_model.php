@@ -655,6 +655,14 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->query($sql)->row();
             break;
 
+            case 'vendedores':
+                return $this->db
+                    ->order_by('nombre')
+                    ->get('terceros_vendedores')
+                    ->result()
+                ;
+            break;
+
             case 'vendedor':
                 return $this->db
                     ->where($datos)

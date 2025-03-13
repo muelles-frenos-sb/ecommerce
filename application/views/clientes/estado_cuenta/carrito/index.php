@@ -255,7 +255,8 @@
             return false
         }
 
-        if(total < 10000) {
+        // Si es un pago en línea y el monto no supera lo indicado
+        if(pagarEnLinea && total < 10000) {
             mostrarAviso('alerta', 'Lamentamos informarte que si deseas pagar por este medio, el valor debe ser superior o igual a $10.000', 20000)
             return false
         }
