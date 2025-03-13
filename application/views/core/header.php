@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/photoswipe/photoswipe.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/photoswipe/default-skin/default-skin.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/select2/css/select2.min.css">
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/select2.min.css" />
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.header-spaceship-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(min-width: 1200px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.mobile-header-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(max-width: 1199px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css?<?php echo date('Ymdhis'); ?>">
@@ -30,6 +31,7 @@
 <!-- Scripts -->
 <script type="text/javascript" src="https://checkout.wompi.co/widget.js"></script>
 <script src="<?php echo base_url(); ?>vendor/jquery/jquery.min.js"></script>
+<script src="<?php echo base_url(); ?>js/select2.min.js"></script>
 <script src="<?php echo base_url(); ?>js/datatables.js"></script>
 <script src="<?php echo base_url(); ?>vendor/sweetalert2/sweetalert2.min.js"></script>
 <script src="<?php echo base_url(); ?>js/carrito.js?<?php echo date('Ymdhis'); ?>"></script>

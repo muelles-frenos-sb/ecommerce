@@ -260,6 +260,26 @@
             return false
         }
 
+        // Si no es un pago en línea, se validan campos obligatorios
+        if(!pagarEnLinea) {
+            let camposObligatorios = [
+                $('#fecha_consignacion'),
+                $('#monto'),
+                $('#cuenta'),
+            ]
+
+            if (!validarCamposObligatorios(camposObligatorios)) return false
+
+            // Si no es pago en línea y no tiene archivos
+            if(archivos.length == 0) {
+                mostrarAviso('alerta', 'Por favor selecciona los comprobantes de pago que vas a subir')
+                return false
+            }
+
+            let confirmacion = await confirmar('Guardar', `¿Estás seguro de guardar el comprobante?`)
+            if (!confirmacion) return false
+        }
+
         let datosRecibo = {
             tipo: 'recibos',
             abreviatura: 'ec',

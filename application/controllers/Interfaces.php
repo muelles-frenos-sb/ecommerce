@@ -264,7 +264,16 @@ class Interfaces extends CI_Controller {
 
             case 'clientes_solicitudes_credito':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito', $datos)]);
+
+                // Se obtiene el id 
+                $id = $this->clientes_model->crear('clientes_solicitudes_credito', $datos);
+                $directorio = $directorio = "./archivos/solicitudes_credito/$id/";
+
+                // Valida que el directorio exista. Si no existe,lo crea con el id obtenido,
+                // asigna los permisos correspondientes
+                if( ! is_dir($directorio)) @mkdir($directorio, 0777);
+
+                print json_encode(['resultado' => $id]);
             break;
 
             case 'clientes_solicitudes_credito_detalle':
