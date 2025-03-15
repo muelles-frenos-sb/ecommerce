@@ -186,6 +186,48 @@ class Api extends RestController {
             'resultado' => $resultado
         ], RestController::HTTP_OK);
     }
+
+    /**
+     * Devuelve el listado con el detalle de los terceros
+     */
+    function terceros_get() {
+        $datos = [
+            'nit' => $this->get('nit'),
+        ];
+
+        $this->form_validation->set_data($datos);
+    
+        if (!$this->form_validation->run('terceros_get')) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+    
+        $resultado = $this->configuracion_model->obtener('terceros', $datos);
+    
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => 'No se han encontrados registros',
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        $mensaje = 'Información cargada exitosamente';
+
+        if (!is_object($resultado)) {
+            $total_registros = number_format(count($resultado), 0, '', '.');
+            $mensaje = "Se cargaron $total_registros registros exitosamente.";
+        }
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
 }
 /* Fin del archivo Api.php */
 /* Ubicación: ./application/controllers/Api.php */

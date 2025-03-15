@@ -502,6 +502,7 @@ Class Configuracion_model extends CI_Model {
                 }
 
                 if(isset($datos['f200_ind_cliente'])) $where .= " AND t.f200_ind_cliente = {$datos['f200_ind_cliente']} ";
+                if(isset($datos['nit'])) $where .= " AND t.f200_nit = {$datos['nit']} ";
 
                 $sql =
                 "SELECT
