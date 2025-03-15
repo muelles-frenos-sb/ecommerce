@@ -6,6 +6,10 @@ $config = [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
     ],
 
+	'productos_get' => [
+        ['field' => 'id', 'label' => 'ID del producto', 'rules' => 'trim|integer|greater_than[0]'],
+    ],
+
     'recibos_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
         ['field' => 'actualizado_bot', 'label' => 'actualizado_bot', 'rules' => 'required|trim|in_list[0,1]'],
