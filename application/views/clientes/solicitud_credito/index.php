@@ -946,8 +946,9 @@
         $(`tr:not(.d-none) .archivos`).each(function(index, elemento) {
             let $elemento = $(elemento)
             let archivos = $elemento.prop('files')
+            let numeroPorRegla = reglas[$(elemento).attr('id')]
 
-            if (reglas[$(elemento).attr('id')] === archivos.length) {
+            if (!numeroPorRegla || numeroPorRegla === archivos.length) {
                 let archivo =  Array.from(archivos)
                 archivosSubir = archivosSubir.concat(archivo)
 
