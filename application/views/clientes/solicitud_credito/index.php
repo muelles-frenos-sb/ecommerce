@@ -137,12 +137,10 @@
                         <input type="number" class="form-control" id="solicitud_cantidad_vehiculos">
                     </div>
                 </div>
+                <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
+                    DATOS REPRESENTANTE LEGAL
+                </div>
                 <div class="form-row datos_persona_juridica">
-                    <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
-                        DATOS REPRESENTANTE LEGAL
-                    </div>
-                    <hr>
-
                     <div class="form-group col-md-6">
                         <label for="solicitud_representante_legal">Nombre del representante legal *</label>
                         <input type="text" class="form-control" id="solicitud_representante_legal">
@@ -531,7 +529,7 @@
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_concepto_otros_ingresos">Concepto otros ingresos</label>
-                        <input type="text" class="form-control" id="solicitud_concepto_otros_ingresos" placeholder="$0">
+                        <input type="text" class="form-control" id="solicitud_concepto_otros_ingresos" placeholder="Describa el origen de los otros ingresos">
                     </div>
                 </div>
             </div>
