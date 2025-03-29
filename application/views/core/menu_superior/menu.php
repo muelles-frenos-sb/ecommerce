@@ -34,7 +34,7 @@
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
                                 <li class="menu__item">
                                     <a href="<?php echo site_url("configuracion/recibos/ver/2"); ?>" class="menu__link">
-                                        Recibos
+                                        Pagos
                                     </a>
                                 </li>
                             <?php } ?>

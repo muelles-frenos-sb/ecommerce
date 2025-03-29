@@ -19,12 +19,6 @@
                 <?php } ?>
             </div>
         </div>
-        
-        <div class="form-row">
-            <div class="form-group col-md-12">
-                <input type="text" class="form-control" id="buscar_recibo" placeholder="Buscar por alguna palabra clave" autofocus>
-            </div>
-        </div>
 
         <div id="contenedor_recibos"></div>
     </div>
