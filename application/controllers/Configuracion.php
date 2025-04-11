@@ -166,6 +166,17 @@ class Configuracion extends MY_Controller {
             case 'lista':
                 $this->load->view('configuracion/productos/metadatos/lista');
             break;
+
+            case 'crear':
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'editar':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
         }
     }
 

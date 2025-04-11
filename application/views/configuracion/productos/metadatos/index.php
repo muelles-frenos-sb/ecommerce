@@ -8,6 +8,10 @@
 
 <div class="block">
     <div class="container container--max--xl">
+        <div class="mb-4">
+            <a class="btn btn-success" href="<?php echo site_url('configuracion/productos/crear'); ?>">Crear</a>
+        </div>
+
         <div id="contenedor_productos_metadatos"></div>
     </div>
 

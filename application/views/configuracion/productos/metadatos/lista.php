@@ -57,7 +57,13 @@
                 {
                     data: null, 
                     render: (data, type, row) => {
-                        return null
+                        return `
+                            <div class="p-1">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}configuracion/productos/editar/${data.id}" target="_blank">
+                                    Editar
+                                </a>
+                            </div>
+                        `
                     }
                 }
             ],
