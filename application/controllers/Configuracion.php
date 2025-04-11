@@ -31,6 +31,57 @@ class Configuracion extends MY_Controller {
         print json_encode($resultado);
     }
 
+    function obtener_datos_tabla() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+
+        $tipo = $this->input->get("tipo");
+        $busqueda = $this->input->get("search")["value"];
+        $indice = $this->input->get("start");
+        $cantidad = $this->input->get("length");
+        $columns = $this->input->get("columns");
+        $order = $this->input->get("order");
+        $ordenar = null;
+
+        // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
+        if ($order) {
+            $columna = $order[0]["column"];
+            $orden = $order[0]["dir"];
+            $campo = $columns[$columna]["data"];
+            if ($campo) $ordenar = "$campo $orden";
+        }
+
+        switch ($tipo) {
+            case "productos_metadatos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->productos_model->obtener("productos_metadatos", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->productos_model->obtener("productos_metadatos", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+        }
+    }
+
     function comprobantes() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
         if(!in_array(['configuracion' => 'configuracion_comprobantes_ver'], $this->data['permisos'])) redirect('inicio');
@@ -98,6 +149,22 @@ class Configuracion extends MY_Controller {
                 $this->data['token'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'configuracion/perfiles/detalle/index';
                 $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
+    function productos() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_productos_ver'], $this->data['permisos'])) redirect('inicio');
+
+        switch ($this->uri->segment(3)) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'lista':
+                $this->load->view('configuracion/productos/metadatos/lista');
             break;
         }
     }
