@@ -59,8 +59,12 @@
                     render: (data, type, row) => {
                         return `
                             <div class="p-1">
-                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}configuracion/productos/editar/${data.id}" target="_blank">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}configuracion/productos/editar/${data.id}">
                                     Editar
+                                </a>
+
+                                <a type="button" class="btn btn-sm btn-danger" href="javascript:eliminarProductoMetaDatos(${data.id})">
+                                    Eliminar
                                 </a>
                             </div>
                         `

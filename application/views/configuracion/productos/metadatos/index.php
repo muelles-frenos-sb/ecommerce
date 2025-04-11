@@ -26,6 +26,18 @@
         return textoRecortado
     }
 
+    eliminarProductoMetaDatos = async (id) => {
+        let confirmacion = await confirmar('Eliminar', `¿Está seguro de eliminar el metadato del producto?`)
+        
+        if (confirmacion) {
+            let eliminar = await consulta('eliminar', {tipo: 'productos_metadatos', id: id})
+
+            if (eliminar) {
+                listarProductosMetaDatos()
+            }
+        }
+    }
+
     listarProductosMetaDatos = () => {
         cargarInterfaz('configuracion/productos/metadatos/lista', 'contenedor_productos_metadatos')
     }

@@ -431,6 +431,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;
 
+            case 'productos_metadatos':
+                print json_encode(['resultado' => $this->productos_model->eliminar($tipo, $datos)]);
+            break;
+
             case 'terceros_contactos':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;

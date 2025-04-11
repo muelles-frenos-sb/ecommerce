@@ -46,6 +46,10 @@ Class Productos_model extends CI_Model{
                 return $this->db->delete('productos_inventario', $datos);
             break;
 
+            case 'productos_metadatos':
+                return $this->db->delete('productos_metadatos', $datos);
+            break;
+
             case 'productos_precios':
                 return $this->db->delete('productos_precios', $datos);
             break;
