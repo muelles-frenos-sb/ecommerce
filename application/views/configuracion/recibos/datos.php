@@ -5,6 +5,7 @@ $opciones = [
 ];
 
 $registros = $this->configuracion_model->obtener('recibos', $opciones);
+$permisos = $this->configuracion_model->obtener('permisos');
 
 if(count($registros) == 0) echo '<li class="list-group-item">No se encontraron registros.</li>';
 
@@ -76,10 +77,16 @@ foreach ($registros as $recibo) {
         <td class="text-right"><?php echo formato_precio($recibo->valor); ?></td>
 
         <!-- Opciones -->
-        <td>
+        <td class="p-1">
             <a type="button" class="btn btn-sm btn-danger" href="<?php echo site_url("reportes/pdf/recibo/$recibo->token"); ?>" target="_blank">
                 <i class="fa fa-file-pdf"></i>
             </a>
+
+            <?php if (in_array(['configuracion' => 'configuracion_comprobantes_eliminar'], $permisos) && $datos['id_tipo_recibo'] == 3 && !$recibo->fecha_actualizacion_bot) { ?>
+                <a type="button" class="btn btn-sm btn-danger" title="Eliminar" href="javascript:eliminarComprobante(<?php echo $recibo->id; ?>)">
+                    <i class="fas fa-trash"></i>
+                </a>
+            <?php } ?>
         </td>
     </tr>
 <?php } ?>

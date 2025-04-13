@@ -43,6 +43,10 @@ Class Configuracion_model extends CI_Model {
 
     function eliminar($tipo, $datos) {
         switch ($tipo) {
+            case 'comprobante':
+                $datos['recibo_tipo_id'] = 3;
+    
+                return $this->db->delete('recibos', $datos);
             default:
                 return $this->db->delete($tipo, $datos);
             break;
