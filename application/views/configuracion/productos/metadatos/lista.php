@@ -46,8 +46,8 @@
                 { data: 'palabras_clave' },
                 { data: 'slug', 
                     render: (data, type, row) => {
-                        let texto = recortarTexto(`${$('#site_url').val()}${data}`, 40)
-                        let url = `${$('#site_url').val()}${data}`
+                        let url = `${$('#site_url').val()}productos/ver/${data}`
+                        let texto = recortarTexto(url, 40)
 
                         return `
                             <a href="${url}" class="copiar" data-valor="${url}" title="${url}">${texto}</a>

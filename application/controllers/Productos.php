@@ -42,7 +42,18 @@ class Productos extends MY_Controller {
     }
 
     function ver() {
-        $this->data['id'] = $this->uri->segment(3);
+        $segmento = $this->uri->segment(3);
+
+        if (!$segmento) redirect(site_url(''));
+
+        // Se valida si el tercer segmento de la url es un número
+        // o de lo contrario un string
+        if (intval($segmento)) {
+            $this->data['id'] = $segmento;
+        } else {
+            $this->data['slug'] = $segmento;
+        }
+
         $this->data['contenido_principal'] = 'productos/detalle';
         $this->load->view('core/body', $this->data);
     }

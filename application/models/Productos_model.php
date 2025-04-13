@@ -142,6 +142,7 @@ Class Productos_model extends CI_Model{
                 }
 
                 if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
+                if(isset($datos['slug'])) $where .= " AND pm.slug = '{$datos['slug']}' ";
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
@@ -169,6 +170,7 @@ Class Productos_model extends CI_Model{
                 FROM
                     productos AS p
                     LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
+                    LEFT JOIN productos_metadatos pm ON pm.producto_id = p.id
                 $where
                 GROUP BY p.id
                 $having
@@ -179,7 +181,7 @@ Class Productos_model extends CI_Model{
                 
                 // return $sql;
 
-                if (isset($datos['id'])) {
+                if (isset($datos['id']) || isset($datos['slug'])) {
                     // return $sql;
                     return $this->db->query($sql)->row();
                 } else {
