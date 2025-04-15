@@ -180,6 +180,100 @@ class Configuracion extends MY_Controller {
         }
     }
 
+    private function importar_productos_metadatos($archivo) {
+        try {
+            $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
+            $hoja = $excel->getActiveSheet();
+            $registros = $hoja->toArray();
+
+            // Se elimina la primera fila del excel
+            unset($registros[0]);
+
+            // Se filtran los datos y se obtienen solo los id
+            $productos_id = array_column($registros, 0);
+            array_walk($productos_id, function(&$valor, $indice) {
+                $valor = obtener_segmentos_url($valor)[2];
+            });
+
+            $productos_metadatos = $this->productos_model->obtener("productos_metadatos", ["productos_ids" => implode(",", $productos_id)]);
+            $productos_metadatos_registrados = array_column($productos_metadatos, null, "producto_id");
+
+            $datos_insertar = [];
+            $datos_actualizar = [];
+            $total = 0;
+
+            foreach ($registros as $registro) {
+                $producto_id = obtener_segmentos_url($registro[0])[2];
+
+                $datos = [
+                    "producto_id" => $producto_id,
+                    "palabras_clave" => $registro[1],
+                    "titulo" => $registro[2],
+                    "descripcion" => $registro[3],
+                    "slug" => obtener_segmentos_url($registro[4])[2]
+                ];
+
+                if (isset($productos_metadatos_registrados[$producto_id])) {
+                    $datos["id"] = $productos_metadatos_registrados[$producto_id]->id;
+                    array_push($datos_actualizar, $datos);
+                    continue;
+                }
+
+                array_push($datos_insertar, $datos);
+            }
+
+            if (!empty($datos_insertar)) $this->productos_model->crear("productos_metadatos_batch", $datos_insertar);
+            if (!empty($datos_actualizar)) $this->productos_model->actualizar_batch("productos_metadatos", $datos_actualizar, "id");
+
+            return [
+                "exito" => true,
+                "mensaje" => "Se subió y se importaron correctamente los metadatos de los productos"
+            ];
+        } catch (Exception $e) {
+            log_message('error', 'Error al importar los datos de los productos metadatos: ' . $e->getMessage());
+
+            return [
+                "exito" => true,
+                "mensaje" => "No se subieron y no se importaron correctamente los metadatos de los productos"
+            ];
+        }
+    }
+
+    function subir() {
+        $exito = false;
+        $mensaje = "";
+
+        $directorio = "archivos/temporales/";
+
+        if(!is_dir($directorio)) @mkdir($directorio, 0777);
+
+        $archivo = $_FILES['archivo'];
+        $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+        $nombre_archivo = bin2hex(random_bytes(8)).".$extension";
+
+        if (move_uploaded_file($archivo['tmp_name'], $directorio.$nombre_archivo)) {
+            $exito = true;
+            $mensaje = "El archivo subió correctamente.";
+        } else {
+            $mensaje = "Ha ocurrido un error subiendo el archivo.";
+        }
+
+        if ($exito) {
+            $resultado = $this->importar_productos_metadatos($directorio.$nombre_archivo);
+            $exito = $resultado["exito"];
+            $mensaje = $resultado["mensaje"];
+        }
+
+        unlink($directorio.$nombre_archivo);
+
+        $respuesta = [
+            "exito" => $exito,
+            "mensaje" => $mensaje
+        ];
+
+        print json_encode($respuesta);
+    }
+
     function usuarios() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
         if(!in_array(['configuracion' => 'configuracion_usuarios_ver'], $this->data['permisos'])) redirect('inicio');

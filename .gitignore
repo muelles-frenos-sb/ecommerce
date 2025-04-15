@@ -8,6 +8,7 @@ application/views/productos_/
 archivos/fotos/
 archivos/recibos/
 archivos/solicitudes_credito/
+archivos/temporales/
 frontend/
 
 # Directorios de imágenes

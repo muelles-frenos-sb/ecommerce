@@ -5,6 +5,10 @@ Class Productos_model extends CI_Model{
         $this->db->close;
     }
 
+    function actualizar_batch($tabla, $datos, $campo) {
+        return $this->db->update_batch($tabla, $datos, $campo);
+    }
+
     function crear($tipo, $datos){
         switch ($tipo) {
             default:
@@ -30,6 +34,10 @@ Class Productos_model extends CI_Model{
 
             case 'productos_pedidos':
                 return $this->db->insert_batch('productos_pedidos', $datos);
+            break;
+
+            case 'productos_metadatos_batch':
+                return $this->db->insert_batch('productos_metadatos', $datos);
             break;
         }
 
@@ -280,6 +288,7 @@ Class Productos_model extends CI_Model{
 
                 // Se aplican los filtros
                 if (isset($datos['id']) && $datos['id']) $filtros_where .= " AND pm.id = {$datos['id']} ";
+                if (isset($datos['productos_ids']) && $datos['productos_ids']) $filtros_where .= " AND pm.producto_id in ({$datos['productos_ids']}) ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pm.fecha_creacion DESC";
 
