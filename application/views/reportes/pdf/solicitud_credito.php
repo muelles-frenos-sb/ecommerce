@@ -176,7 +176,7 @@ foreach ($personas_autorizadas as $registro) {
     $coordenada = $coordenada + 5;
 }
 
-$pdf->SetXY(55, $coordenada + 36.5);
+$pdf->SetXY(55, 233);
 $pdf->Write(0, utf8_decode($solicitud->vendedor_nombre));
 
 $pdf->AddPage();
