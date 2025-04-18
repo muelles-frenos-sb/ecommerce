@@ -19,10 +19,10 @@ if(isset($id)) {
                     <div class="col-12 col-lg-10 col-xl-8">
                         <div class="form-row">
                             <div class="form-group col-md-12">
-                                <label for="metadato_producto">Productos *</label>
+                                <label for="metadato_producto">Producto *</label>
                                 <select id="metadato_producto" class="form-control">
                                     <option value="">Seleccione...</option>
-                                    <?php foreach($this->productos_model->obtener("productos") as $producto) echo "<option value='$producto->id'>$producto->notas</option>"; ?>
+                                    <?php foreach($this->productos_model->obtener("productos") as $producto) echo "<option value='$producto->id'>$producto->id - $producto->notas</option>"; ?>
                                 </select>
                             </div>
                             <div class="form-group col-md-12">

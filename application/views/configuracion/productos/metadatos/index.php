@@ -1,7 +1,7 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Productos metadatos</h1>
+            <h1 class="block-header__title">Metadatos de productos</h1>
         </div>
     </div>
 </div>
