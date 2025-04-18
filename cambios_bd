@@ -139,3 +139,6 @@ ALTER TABLE `clientes_solicitudes_credito`
     ADD COLUMN `representante_legal_correo` varchar(255) NULL AFTER `representante_legal_documento_numero`,
     MODIFY COLUMN `fecha_expedicion` date NULL DEFAULT NULL AFTER `documento_numero`,
     ADD COLUMN `tercero_vendedor_id` int NULL AFTER `preferencia_enlace`;
+
+-- 20250412 Se agrega log para los comprobantes eliminados
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (60, 'Recibos - Comprobante eliminado');

@@ -31,6 +31,57 @@ class Configuracion extends MY_Controller {
         print json_encode($resultado);
     }
 
+    function obtener_datos_tabla() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+
+        $tipo = $this->input->get("tipo");
+        $busqueda = $this->input->get("search")["value"];
+        $indice = $this->input->get("start");
+        $cantidad = $this->input->get("length");
+        $columns = $this->input->get("columns");
+        $order = $this->input->get("order");
+        $ordenar = null;
+
+        // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
+        if ($order) {
+            $columna = $order[0]["column"];
+            $orden = $order[0]["dir"];
+            $campo = $columns[$columna]["data"];
+            if ($campo) $ordenar = "$campo $orden";
+        }
+
+        switch ($tipo) {
+            case "productos_metadatos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->productos_model->obtener("productos_metadatos", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->productos_model->obtener("productos_metadatos", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+        }
+    }
+
     function comprobantes() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
         if(!in_array(['configuracion' => 'configuracion_comprobantes_ver'], $this->data['permisos'])) redirect('inicio');
@@ -100,6 +151,127 @@ class Configuracion extends MY_Controller {
                 $this->load->view('core/body', $this->data);
             break;
         }
+    }
+
+    function productos() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_productos_ver'], $this->data['permisos'])) redirect('inicio');
+
+        switch ($this->uri->segment(3)) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'lista':
+                $this->load->view('configuracion/productos/metadatos/lista');
+            break;
+
+            case 'crear':
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'editar':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'configuracion/productos/metadatos/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
+    private function importar_productos_metadatos($archivo) {
+        try {
+            $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
+            $hoja = $excel->getActiveSheet();
+            $registros = $hoja->toArray();
+
+            // Se elimina la primera fila del excel
+            unset($registros[0]);
+
+            // Se filtran los datos y se obtienen solo los id
+            $productos_id = array_column($registros, 0);
+            array_walk($productos_id, function(&$valor, $indice) {
+                $valor = obtener_segmentos_url($valor)[2];
+            });
+
+            $productos_metadatos = $this->productos_model->obtener("productos_metadatos", ["productos_ids" => implode(",", $productos_id)]);
+            $productos_metadatos_registrados = array_column($productos_metadatos, null, "producto_id");
+
+            $datos_insertar = [];
+            $datos_actualizar = [];
+            $total = 0;
+
+            foreach ($registros as $registro) {
+                $producto_id = obtener_segmentos_url($registro[0])[2];
+
+                $datos = [
+                    "producto_id" => $producto_id,
+                    "palabras_clave" => $registro[1],
+                    "titulo" => $registro[2],
+                    "descripcion" => $registro[3],
+                    "slug" => obtener_segmentos_url($registro[4])[2]
+                ];
+
+                if (isset($productos_metadatos_registrados[$producto_id])) {
+                    $datos["id"] = $productos_metadatos_registrados[$producto_id]->id;
+                    array_push($datos_actualizar, $datos);
+                    continue;
+                }
+
+                array_push($datos_insertar, $datos);
+            }
+
+            if (!empty($datos_insertar)) $this->productos_model->crear("productos_metadatos_batch", $datos_insertar);
+            if (!empty($datos_actualizar)) $this->productos_model->actualizar_batch("productos_metadatos", $datos_actualizar, "id");
+
+            return [
+                "exito" => true,
+                "mensaje" => "Se subió y se importaron correctamente los metadatos de los productos"
+            ];
+        } catch (Exception $e) {
+            log_message('error', 'Error al importar los datos de los productos metadatos: ' . $e->getMessage());
+
+            return [
+                "exito" => true,
+                "mensaje" => "No se subieron y no se importaron correctamente los metadatos de los productos"
+            ];
+        }
+    }
+
+    function subir() {
+        $exito = false;
+        $mensaje = "";
+
+        $directorio = "archivos/temporales/";
+
+        if(!is_dir($directorio)) @mkdir($directorio, 0777);
+
+        $archivo = $_FILES['archivo'];
+        $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+        $nombre_archivo = bin2hex(random_bytes(8)).".$extension";
+
+        if (move_uploaded_file($archivo['tmp_name'], $directorio.$nombre_archivo)) {
+            $exito = true;
+            $mensaje = "El archivo subió correctamente.";
+        } else {
+            $mensaje = "Ha ocurrido un error subiendo el archivo.";
+        }
+
+        if ($exito) {
+            $resultado = $this->importar_productos_metadatos($directorio.$nombre_archivo);
+            $exito = $resultado["exito"];
+            $mensaje = $resultado["mensaje"];
+        }
+
+        unlink($directorio.$nombre_archivo);
+
+        $respuesta = [
+            "exito" => $exito,
+            "mensaje" => $mensaje
+        ];
+
+        print json_encode($respuesta);
     }
 
     function usuarios() {

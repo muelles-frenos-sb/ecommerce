@@ -118,6 +118,15 @@ function obtener_numero_recibo_caja($recibo) {
     return null;
 }
 
+function obtener_segmentos_url($url) {
+    // Obtiene de la url todos los segmentos menos el principal(dominio)
+    $path = parse_url($url, PHP_URL_PATH);
+    // Separa los segmentos de la url
+    $segmentos = explode('/', trim($path, '/'));
+
+    return $segmentos;
+}
+
 function url_fotos($marca, $referencia) {
     $CI =& get_instance();
 

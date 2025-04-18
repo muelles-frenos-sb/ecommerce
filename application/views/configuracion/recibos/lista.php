@@ -20,7 +20,7 @@
                 <th class="text-center">Creador</th>
                 <th class="text-center">Gestionador</th>
                 <th class="text-center">Valor</th>
-                <th class="text-center">Ver</th>
+                <th class="text-center">Opciones</th>
             </tr>
         </thead>
         <tbody id="datos">

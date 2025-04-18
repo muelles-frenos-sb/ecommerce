@@ -52,7 +52,7 @@ class Interfaces extends CI_Controller {
     function actualizar() {
         // Se obtienen los datos que llegan por POST
         $datos = json_decode($this->input->post('datos'), true);
-        
+
         $id = $datos['id'];
         $tipo = $datos['tipo'];
 
@@ -60,6 +60,11 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch($tipo) {
+            case 'productos_metadatos':
+                $datos['fecha_modificacion'] = date("Y-m-d H:i:s");
+                $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             default:
                 if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
 
@@ -402,6 +407,13 @@ class Interfaces extends CI_Controller {
                 
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
+
+            case 'productos_metadatos':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['fecha_modificacion'] = date('Y-m-d H:i:s');
+
+                print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
+            break;
         }
     }
 
@@ -415,8 +427,16 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->eliminar($tipo, $datos)]);
             break;
 
+            case 'comprobante':
+                print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
+
             case 'perfiles_roles':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'productos_metadatos':
+                print json_encode(['resultado' => $this->productos_model->eliminar($tipo, $datos)]);
             break;
 
             case 'terceros_contactos':

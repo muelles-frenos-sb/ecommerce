@@ -5,6 +5,10 @@ Class Productos_model extends CI_Model{
         $this->db->close;
     }
 
+    function actualizar_batch($tabla, $datos, $campo) {
+        return $this->db->update_batch($tabla, $datos, $campo);
+    }
+
     function crear($tipo, $datos){
         switch ($tipo) {
             default:
@@ -31,6 +35,10 @@ Class Productos_model extends CI_Model{
             case 'productos_pedidos':
                 return $this->db->insert_batch('productos_pedidos', $datos);
             break;
+
+            case 'productos_metadatos_batch':
+                return $this->db->insert_batch('productos_metadatos', $datos);
+            break;
         }
 
         $this->db->close;
@@ -44,6 +52,10 @@ Class Productos_model extends CI_Model{
 
             case 'productos_inventario':
                 return $this->db->delete('productos_inventario', $datos);
+            break;
+
+            case 'productos_metadatos':
+                return $this->db->delete('productos_metadatos', $datos);
             break;
 
             case 'productos_precios':
@@ -138,6 +150,7 @@ Class Productos_model extends CI_Model{
                 }
 
                 if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
+                if(isset($datos['slug'])) $where .= " AND pm.slug = '{$datos['slug']}' ";
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
@@ -165,6 +178,7 @@ Class Productos_model extends CI_Model{
                 FROM
                     productos AS p
                     LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
+                    LEFT JOIN productos_metadatos pm ON pm.producto_id = p.id
                 $where
                 GROUP BY p.id
                 $having
@@ -175,7 +189,7 @@ Class Productos_model extends CI_Model{
                 
                 // return $sql;
 
-                if (isset($datos['id'])) {
+                if (isset($datos['id']) || isset($datos['slug'])) {
                     // return $sql;
                     return $this->db->query($sql)->row();
                 } else {
@@ -239,6 +253,68 @@ Class Productos_model extends CI_Model{
                     // Obtener y mostrar los resultados
                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                 }
+            break;
+
+            case 'productos_metadatos':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    $filtros_having = "HAVING";
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " (";
+                        $filtros_having .= " producto_id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR palabras_clave LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR titulo LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR descripcion LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR slug LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if (isset($datos['id']) && $datos['id']) $filtros_where .= " AND pm.id = {$datos['id']} ";
+                if (isset($datos['productos_ids']) && $datos['productos_ids']) $filtros_where .= " AND pm.producto_id in ({$datos['productos_ids']}) ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pm.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    pm.id,
+                    pm.producto_id,
+                    pm.palabras_clave,
+                    pm.titulo,
+                    pm.descripcion,
+                    pm.slug,
+                    pm.fecha_creacion,
+                    pm.fecha_modificacion,
+                    p.notas
+                FROM productos_metadatos pm
+                INNER JOIN productos p ON pm.producto_id = p.id
+                WHERE pm.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
             break;
 
             case 'productos_pedidos':

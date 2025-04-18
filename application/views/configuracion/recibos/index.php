@@ -27,6 +27,20 @@
 </div>
 
 <script>
+    eliminarComprobante = async (id) => {
+        let confirmacion = await confirmar('Eliminar', `¿Está seguro de eliminar el recibo comprobante?`)
+        
+        if (confirmacion) {
+            let eliminar = await consulta('eliminar', {tipo: 'comprobante', id: id})
+
+            if (eliminar) {
+                agregarLog(60, `Eliminado recibo comprobante ${id}`)
+
+                listarRecibos()
+            }
+        }
+    }
+
     listarRecibos = () => {
         // Si no hay valor en la búsqueda, pero si en loca storage, lo pone
         if($("#buscar_recibo").val() == "" && localStorage.simonBolivar_busquedaRecibo) $("#buscar_recibo").val(localStorage.simonBolivar_busquedaRecibo)
