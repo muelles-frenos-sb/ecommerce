@@ -30,6 +30,10 @@ if(isset($id)) {
                                 <input type="text" class="form-control" id="metadato_titulo" value="<?php if(!empty($producto_metadato)) echo $producto_metadato->titulo; ?>">
                             </div>
                             <div class="form-group col-md-12">
+                                <label for="metadato_slug">Slug * </label>
+                                <input type="text" class="form-control" id="metadato_slug" value="<?php if(!empty($producto_metadato)) echo $producto_metadato->slug; ?>">
+                            </div>
+                            <div class="form-group col-md-12">
                                 <label for="metadato_palabras_clave">Palabras clave * </label>
                                 <textarea rows="3" class="form-control form-control-lg" id="metadato_palabras_clave"><?php if(!empty($producto_metadato)) echo $producto_metadato->palabras_clave; ?></textarea>
                             </div>
@@ -64,6 +68,7 @@ if(isset($id)) {
         let camposObligatorios = [
             $('#metadato_producto'),
             $('#metadato_titulo'),
+            $('#metadato_slug'),
             $('#metadato_palabras_clave'),
             $('#metadato_descripcion')
         ]
@@ -74,6 +79,7 @@ if(isset($id)) {
             tipo: 'productos_metadatos',
             producto_id: $('#metadato_producto').val(),
             titulo: $('#metadato_titulo').val(),
+            slug: $('#metadato_slug').val(),
             palabras_clave: $('#metadato_palabras_clave').val(),
             descripcion: $('#metadato_descripcion').val()
         }

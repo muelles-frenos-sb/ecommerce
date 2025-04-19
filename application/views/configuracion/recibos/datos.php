@@ -79,7 +79,7 @@ foreach ($registros as $recibo) {
         <!-- Opciones -->
         <td class="p-1">
             <a type="button" class="btn btn-sm btn-danger" href="<?php echo site_url("reportes/pdf/recibo/$recibo->token"); ?>" target="_blank">
-                <i class="fa fa-file-pdf"></i>
+                <i class="fas fa-search"></i>
             </a>
 
             <?php if (in_array(['configuracion' => 'configuracion_comprobantes_eliminar'], $permisos) && $datos['id_tipo_recibo'] == 3 && !$recibo->fecha_actualizacion_bot) { ?>

@@ -44,21 +44,16 @@
                     }
                 },
                 { data: 'palabras_clave' },
-                { data: 'slug', 
-                    render: (data, type, row) => {
-                        let url = `${$('#site_url').val()}productos/ver/${data}`
-                        let texto = recortarTexto(url, 40)
-
-                        return `
-                            <a href="${url}" class="copiar" data-valor="${url}" title="${url}">${texto}</a>
-                        `
-                    }
-                },
+                { data: 'slug' },
                 {
                     data: null, 
                     render: (data, type, row) => {
                         return `
                             <div class="p-1">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$('#site_url').val()}productos/ver/${data.slug}" target="_blank">
+                                    Ver
+                                </a>
+
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}configuracion/productos/editar/${data.id}">
                                     Editar
                                 </a>
