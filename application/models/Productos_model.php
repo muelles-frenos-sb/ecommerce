@@ -150,7 +150,6 @@ Class Productos_model extends CI_Model{
                 }
 
                 if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
-                if(isset($datos['slug'])) $where .= " AND pm.slug = '{$datos['slug']}' ";
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
@@ -178,7 +177,6 @@ Class Productos_model extends CI_Model{
                 FROM
                     productos AS p
                     LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
-                    LEFT JOIN productos_metadatos pm ON pm.producto_id = p.id
                 $where
                 GROUP BY p.id
                 $having
@@ -288,6 +286,8 @@ Class Productos_model extends CI_Model{
 
                 // Se aplican los filtros
                 if (isset($datos['id']) && $datos['id']) $filtros_where .= " AND pm.id = {$datos['id']} ";
+                if (isset($datos['slug']) && $datos['slug']) $filtros_where .= " AND pm.slug = '{$datos['slug']}' ";
+                if (isset($datos['producto_id']) && $datos['producto_id']) $filtros_where .= " AND pm.producto_id = {$datos['producto_id']} ";
                 if (isset($datos['productos_ids']) && $datos['productos_ids']) $filtros_where .= " AND pm.producto_id in ({$datos['productos_ids']}) ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pm.fecha_creacion DESC";
@@ -313,7 +313,7 @@ Class Productos_model extends CI_Model{
                 ";
 
                 if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
-                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                if (isset($datos['id']) || isset($datos['slug']) || isset($datos['producto_id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
             break;
 
