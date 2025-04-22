@@ -43,15 +43,29 @@ class Productos extends MY_Controller {
 
     function ver() {
         $segmento = $this->uri->segment(3);
-
         if (!$segmento) redirect(site_url(''));
 
         // Se valida si el tercer segmento de la url es un número
         // o de lo contrario un string
         if (intval($segmento)) {
+            $datos["producto_id"] = $segmento;
             $this->data['id'] = $segmento;
         } else {
-            $this->data['slug'] = $segmento;
+            $datos["slug"] = $segmento;
+        }
+
+        // Se consultan los metadatos del producto
+        $metadatos = $this->productos_model->obtener("productos_metadatos", $datos);
+
+        if (!empty($metadatos)) {
+            // Se cargan los metadatos en la data
+            $this->data["metadatos"] = [
+                "titulo" => $metadatos->titulo,
+                "descripcion" => $metadatos->descripcion,
+                "palabras_clave" => $metadatos->palabras_clave
+            ];
+
+            $this->data['id'] = $metadatos->producto_id;
         }
 
         $this->data['contenido_principal'] = 'productos/detalle';

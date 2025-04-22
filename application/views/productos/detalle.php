@@ -1,7 +1,5 @@
 <?php
-$datos = [];
-if (isset($id)) $datos['id'] = $id;
-if (isset($slug)) $datos['slug'] = $slug;
+$datos = ['id' => $id];
 $producto = $this->productos_model->obtener('productos', $datos);
 if(empty($producto)) redirect(site_url(''));
 ?>

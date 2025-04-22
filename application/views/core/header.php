@@ -5,7 +5,16 @@
 <!-- Meta TAG para Google Analytics -->
 <meta name="google-site-verification" content="6YWQqaPE-WcHqYZrqVAiR44E-So6A330C0ZWxMy7dhM"/>
 
-<title>Simón Bolívar - Repuestos y Accesorios</title>
+<?php 
+if (isset($metadatos)) {
+    echo "<meta name='description' content='{$metadatos['descripcion']}'/>";
+    echo "<meta name='keywords' content='{$metadatos['palabras_clave']}'/>";
+    echo "<title>{$metadatos['titulo']}</title>";
+} else {
+    echo "<title>Simón Bolívar - Repuestos y Accesorios</title>";
+}
+?>
+
 <link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico">
 
 <!-- fonts -->
