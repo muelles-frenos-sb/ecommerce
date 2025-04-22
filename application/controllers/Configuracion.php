@@ -210,11 +210,14 @@ class Configuracion extends MY_Controller {
                     "palabras_clave" => $registro[1],
                     "titulo" => $registro[2],
                     "descripcion" => $registro[3],
-                    "slug" => obtener_segmentos_url($registro[4])[2]
+                    "slug" => obtener_segmentos_url($registro[4])[2],
+                    "fecha_creacion" => date("Y-m-d H:i:s")
                 ];
 
                 if (isset($productos_metadatos_registrados[$producto_id])) {
+                    unset($datos["fecha_creacion"]);
                     $datos["id"] = $productos_metadatos_registrados[$producto_id]->id;
+                    $datos["fecha_modificacion"] = date("Y-m-d H:i:s");
                     array_push($datos_actualizar, $datos);
                     continue;
                 }
