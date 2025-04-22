@@ -26,6 +26,6 @@ $config = [
     ],
 
 	'terceros_get' => [
-        ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'trim|integer|greater_than[0]'],
+        ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'trim'],
     ],
 ];
