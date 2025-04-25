@@ -154,3 +154,6 @@ ALTER TABLE `recibos_detalle` ADD COLUMN `cuota_numero` int NULL AFTER `descuent
 
 -- 20250424 Campo para almacenar el centro operativo
 ALTER TABLE `recibos_detalle` ADD COLUMN `centro_operativo` varchar(255) NULL AFTER `subtotal_lista_sucursal`;
+
+-- 20250424 Campo para almacenar el valor inicial de la factura
+ALTER TABLE `recibos_detalle` ADD COLUMN `valor_inicial` double NULL DEFAULT NULL AFTER `unidad_inventario`;

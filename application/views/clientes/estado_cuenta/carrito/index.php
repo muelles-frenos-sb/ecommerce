@@ -126,6 +126,7 @@
                                             data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
                                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                                             data-valor_bruto="${valorBruto}"
+                                            data-valor_inicial="${datos.valor_inicial}"
                                             class="form-control valor_pago_factura"
                                             style="text-align: right"
                                             max="${parseFloat(datos.valor)}"
@@ -202,6 +203,7 @@
                 subtotal: valorAPagar,
                 descuento: valorDescuento,
                 centro_operativo: $(this).attr('data-centro_operativo'),
+                valor_inicial: $(this).attr('data-valor_inicial'),
             })
         })
 

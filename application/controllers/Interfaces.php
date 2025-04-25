@@ -233,6 +233,7 @@ class Interfaces extends CI_Controller {
                         'descuento' => $item['descuento'],
                         'cuota_numero' => $item['cuota_numero'],
                         'centro_operativo' => $item['centro_operativo'],
+                        'valor_inicial' => $item['valor_inicial'],
                     ];
                     
                     array_push($items_recibo, $datos_item);
