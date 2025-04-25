@@ -66,6 +66,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 </th>
                 <th class="text-center">Sede</th>
                 <th class="text-center">Doc</th>
+                <th class="text-center">Cuota</th>
                 <th class="text-center">Fecha fact</th>
                 <th class="text-center">Fecha vcto</th>
                 <th class="text-center">Días venc</th>
@@ -99,6 +100,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 id: '<?php echo $factura->id; ?>',
                                 documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
                                 numero_documento: '<?php echo $factura->Cliente; ?>',
+                                numero_cuota: '<?php echo $factura->Nro_cuota; ?>',
                                 documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
                                 valor: `<?php echo number_format($factura->totalCop, 0, '', ''); ?>`,
                                 sede: `<?php echo $factura->centro_operativo; ?>`,
@@ -118,6 +120,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                             id_sucursal: '<?php echo $factura->sucursal_id; ?>',
                         });"><?php echo $factura->Nro_Doc_cruce; ?></a>
                     </td>
+                    <td class="text-right"><?php echo $factura->Nro_cuota; ?></td>
                     <td><?php echo $factura->Fecha_doc_cruce; ?></td>
                     <td><?php echo $factura->Fecha_venc; ?></td>
                     <td class="text-right">
@@ -157,6 +160,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         </tbody>
         <tfoot>
             <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>

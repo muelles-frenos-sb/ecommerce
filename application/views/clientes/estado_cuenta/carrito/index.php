@@ -121,6 +121,7 @@
                                             id="${datos.id}"
                                             data-id="${datos.id}"
                                             data-documento_cruce_numero="${datos.documento_cruce}"
+                                            data-numero_cuota="${datos.numero_cuota}"
                                             data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
                                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                                             data-valor_bruto="${valorBruto}"
@@ -195,6 +196,7 @@
 
             detalleFactura.push({
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
+                cuota_numero: $(this).attr('data-numero_cuota'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
                 subtotal: valorAPagar,
                 descuento: valorDescuento

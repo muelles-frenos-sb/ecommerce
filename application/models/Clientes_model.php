@@ -122,6 +122,7 @@ Class Clientes_model extends CI_Model {
                     cf.ValorAplicado,
                     cf.valorDoc,
                     cf.totalCop,
+                    cf.Nro_cuota,
                     YEAR(cf.Fecha_venc) anio_vencimiento,
                     MONTH(cf.Fecha_venc) mes_vencimiento,
                     DAY(cf.Fecha_venc) dia_vencimiento,
