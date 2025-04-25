@@ -8,6 +8,32 @@
 
 <div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
     <div class="card-body card-body--padding--2">
+        <?php if($datos['nit_comprobante']) { ?>
+            <div class="form-row mb-4">
+                <div class="form-group col-md-4">
+                    <label for="fecha_consignacion">Fecha de consignación *</label>
+                    <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="monto">Monto *</label>
+                    <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
+                </div>
+
+                <div class="form-group col-4">
+                    <label for="cuenta">Cuenta</label>
+                    <select id="cuenta" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->numero - $cuenta->nombre</option>"; ?>
+                    </select>
+                </div>
+
+                <div class="input-group col-12 mt-2">
+                    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+                </div>
+            </div>
+        <?php } ?>
+
         <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes</div>
 
         <div class="card-table">

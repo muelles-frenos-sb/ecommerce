@@ -142,3 +142,6 @@ ALTER TABLE `clientes_solicitudes_credito`
 
 -- 20250412 Se agrega log para los comprobantes eliminados
 INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (60, 'Recibos - Comprobante eliminado');
+
+-- 20250421 Estado de recibos agregado
+INSERT INTO `recibos_estados` (`id`, `nombre`, `clase`, `orden`) VALUES (5, 'Procesado con errores', 'warning', 5);

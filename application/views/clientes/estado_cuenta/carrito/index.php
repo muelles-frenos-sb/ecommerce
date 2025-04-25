@@ -36,30 +36,6 @@
     <div class="col-12">
         <!-- Si trae NIT de comprobante, es la sección para vendedores -->
         <?php if($datos['nit_comprobante']) { ?>
-            <div class="form-row">
-                <div class="form-group col-md-4">
-                    <label for="fecha_consignacion">Fecha de consignación *</label>
-                    <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
-                </div>
-
-                <div class="form-group col-md-4">
-                    <label for="monto">Monto *</label>
-                    <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
-                </div>
-
-                <div class="form-group col-4">
-                    <label for="cuenta">Cuenta</label>
-                    <select id="cuenta" class="form-control">
-                        <option value="">Seleccione...</option>
-                        <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->codigo - $cuenta->nombre</option>"; ?>
-                    </select>
-                </div>
-
-                <div class="input-group col-12 mt-2">
-                    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-                </div>
-            </div>
-
             <div class="mt-2 mb-2 d-flex flex-column">
                 <!-- <input type="hidden" id="total_faltante_amortizacion" value=""> -->
                 <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>

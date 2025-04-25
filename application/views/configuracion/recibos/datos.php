@@ -41,16 +41,18 @@ foreach ($registros as $recibo) {
         <?php } ?>
 
         <!-- Forma de pago -->
-        <td>
-            <div class="wishlist__product-name">
-                <?php if(isset($wompi)) echo $wompi['payment_method_type']; ?>
-            </div>
-            <div class="wishlist__product-rating">
-                <div class="wishlist__product-rating-title">
-                    <?php if(isset($wompi) && $wompi['payment_method_type'] == 'CARD') echo $wompi['payment_method']['extra']['name']; ?>
+        <?php if($datos['id_tipo_recibo'] != 3) { ?>
+            <td>
+                <div class="wishlist__product-name">
+                    <?php if(isset($wompi)) echo $wompi['payment_method_type']; ?>
                 </div>
-            </div>
-        </td>
+                <div class="wishlist__product-rating">
+                    <div class="wishlist__product-rating-title">
+                        <?php if(isset($wompi) && $wompi['payment_method_type'] == 'CARD') echo $wompi['payment_method']['extra']['name']; ?>
+                    </div>
+                </div>
+            </td>
+        <?php } ?>
 
         <td><?php echo $recibo->numero_siesa; ?></td>
 
@@ -70,9 +72,11 @@ foreach ($registros as $recibo) {
             </div>
         </td>
 
-        <td>
-            <?php echo $recibo->usuario_gestion; ?>
-        </td>
+        <?php if($datos['id_tipo_recibo'] != 3) { ?>
+            <td>
+                <?php echo $recibo->usuario_gestion; ?>
+            </td>
+        <?php } ?>
 
         <td class="text-right"><?php echo formato_precio($recibo->valor); ?></td>
 

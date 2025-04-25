@@ -3,7 +3,7 @@
     <div class="block-header__body">
         <div class="row">
             <div class="post-header__body">
-                <h1 class="post-header__title"><?php echo "FACTURAS DE {$datos['f200_razon_social']}"; ?></h1>
+                <h4><?php echo "DATOS DEL COMPROBANTE O PAGO DE {$datos['f200_razon_social']}"; ?></h4>
                 <div class="post-header__meta">
                     <ul class="post-header__meta-list">
                         <li class="post-header__meta-item"><a href="#" class="post-header__meta-link"><?php echo $datos['f200_nit']; ?></a></li>
