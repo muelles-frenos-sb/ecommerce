@@ -122,6 +122,7 @@
                                             data-id="${datos.id}"
                                             data-documento_cruce_numero="${datos.documento_cruce}"
                                             data-numero_cuota="${datos.numero_cuota}"
+                                            data-centro_operativo="${datos.centro_operativo}"
                                             data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
                                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                                             data-valor_bruto="${valorBruto}"
@@ -199,7 +200,8 @@
                 cuota_numero: $(this).attr('data-numero_cuota'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
                 subtotal: valorAPagar,
-                descuento: valorDescuento
+                descuento: valorDescuento,
+                centro_operativo: $(this).attr('data-centro_operativo'),
             })
         })
 

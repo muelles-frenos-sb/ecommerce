@@ -151,3 +151,6 @@ ALTER TABLE `clientes_facturas` ADD COLUMN `Nro_cuota` int NULL;
 
 -- 20240424 Campo para almacenar el número de cuota en el detalle del recibo
 ALTER TABLE `recibos_detalle` ADD COLUMN `cuota_numero` int NULL AFTER `descuento`;
+
+-- 20250424 Campo para almacenar el centro operativo
+ALTER TABLE `recibos_detalle` ADD COLUMN `centro_operativo` varchar(255) NULL AFTER `subtotal_lista_sucursal`;
