@@ -160,6 +160,16 @@ class Api extends RestController {
 
         $resultado = $this->configuracion_model->obtener("recibos_detalle", $datos);
 
+        // Se procesan los valores de precio para agregarle dos decimales
+        $resultado = array_map(function($item) {
+            if (isset($item->valor_inicial)) {
+                $item->valor_inicial = number_format($item->valor_inicial, 2, '.', '');
+                $item->subtotal = number_format($item->subtotal, 2, '.', '');
+                $item->descuento = number_format($item->descuento, 2, '.', '');
+            }
+            return $item;
+        }, $resultado);
+
         if (!$resultado) {
             $this->response([
                 "error" => false,
