@@ -158,7 +158,17 @@ Class Productos_model extends CI_Model{
 
                 $sql = 
                 "SELECT
-                    p.*,
+                    IF(pm.slug IS NOT NULL, pm.slug, p.id) id,
+                    p.descripcion_corta,
+                    p.referencia,
+                    p.unidad_inventario,
+                    p.notas,
+                    p.tipo_inventario,
+                    p.marca,
+                    p.linea,
+                    p.grupo,
+                    p.fecha_actualizacion,
+                    p.fecha_actualizacion_api,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MIN(i.bodega) bodega,
@@ -177,6 +187,7 @@ Class Productos_model extends CI_Model{
                 FROM
                     productos AS p
                     LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
+                    LEFT JOIN productos_metadatos AS pm ON p.id = pm.producto_id
                 $where
                 GROUP BY p.id
                 $having

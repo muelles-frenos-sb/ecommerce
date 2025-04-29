@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="form-group col-md-2">
-                        <label for="solicitud_telefono">Teléfono</label>
+                        <label for="solicitud_telefono">Teléfono *</label>
                         <input type="text" class="form-control" id="solicitud_telefono">
                     </div>
                 </div>
@@ -776,8 +776,10 @@
             $('#solicitud_email'),
             $('#solicitud_correo_facturacion_electronica'),
             $('#solicitud_municipio'),
+            $('#solicitud_telefono'),
             $('#solicitud_departamento'),
-            $('#solicitud_fecha_expedicion')
+            $('#solicitud_fecha_expedicion'),
+            $('#vendedor_id'),
         ]
 
         if (!$('#solicitud_persona_tipo').val() || $('#solicitud_persona_tipo').val() == 1) {
@@ -964,7 +966,7 @@
     }
 
     $().ready(() => {
-        $('#vendedor_id').select2()
+        // $('#vendedor_id').select2({"theme": "bootstrap-5"})
         
         // Cuando se seleccione el tipo de persona
         $('#solicitud_persona_tipo').change(() => {
