@@ -40,7 +40,7 @@
                                 <div class="product-card product-card--layout--horizontal">
                                     <div class="product-card__image">
                                         <div class="image image--type--product">
-                                            <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body">
+                                            <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>" class="image__body">
                                                 <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                                             </a>
                                         </div>
@@ -53,7 +53,7 @@
                                                     <div class="tag-badge tag-badge--new">new</div>
                                                     <div class="tag-badge tag-badge--hot">hot</div>
                                                 </div> -->
-                                                <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo $producto->notas; ?></a>
+                                                <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>"><?php echo $producto->notas; ?></a>
                                             </div>
                                         </div>
                                     </div>

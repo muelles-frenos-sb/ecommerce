@@ -21,14 +21,14 @@
                             <?php if($recibo->recibo_tipo_id == 1) { ?>
                                 <td class="wishlist__column wishlist__column--body wishlist__column--image">
                                     <div class="image image--type--product">
-                                        <a href="<?php echo site_url("productos/ver/$item->id"); ?>" class="image__body" target="_blank">
+                                        <a href="<?php echo site_url("productos/ver/$item->slug"); ?>" class="image__body" target="_blank">
                                             <img class="image__tag" src="<?php echo url_fotos($item->marca, $item->referencia); ?>">
                                         </a>
                                     </div>
                                 </td>
                                 <td class="wishlist__column wishlist__column--body wishlist__column--product">
                                     <div class="wishlist__product-name">
-                                        <a href="<?php echo site_url("productos/ver/$item->id"); ?>" target="_blank"><?php echo $item->notas; ?></a>
+                                        <a href="<?php echo site_url("productos/ver/$item->slug"); ?>" target="_blank"><?php echo $item->notas; ?></a>
                                     </div>
                                 </td>
                             <?php } else { ?>

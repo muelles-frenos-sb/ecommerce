@@ -4,7 +4,7 @@ for ($i=0; $i < count($datos['productos']); $i++) {
 
     if(!empty($producto)) {
     ?>
-        <a class="suggestions__item suggestions__product" href="<?php echo site_url("productos/ver/$producto->id"); ?>">
+        <a class="suggestions__item suggestions__product" href="<?php echo site_url("productos/ver/$producto->slug"); ?>">
             <div class="suggestions__product-image image image--type--product">
                 <div class="image__body">
                     <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">

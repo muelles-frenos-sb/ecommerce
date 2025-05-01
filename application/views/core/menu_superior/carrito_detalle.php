@@ -5,13 +5,13 @@
     ?>
         <li class="dropcart__item">
             <div class="dropcart__item-image image image--type--product">
-                <a class="image__body" href="<?php echo site_url("productos/ver/$producto->id"); ?>">
+                <a class="image__body" href="<?php echo site_url("productos/ver/$producto->slug"); ?>">
                     <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                 </a>
             </div>
             <div class="dropcart__item-info">
                 <div class="dropcart__item-name">
-                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>"><?php echo $producto->notas; ?></a>
+                    <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>"><?php echo $producto->notas; ?></a>
                 </div>
                 <ul class="dropcart__item-features">
                     <li>Marca: <?php echo $producto->marca; ?></li>

@@ -157,17 +157,8 @@ Class Productos_model extends CI_Model{
 
                 $sql = 
                 "SELECT
-                    IF(pm.slug IS NOT NULL, pm.slug, p.id) id,
-                    p.descripcion_corta,
-                    p.referencia,
-                    p.unidad_inventario,
-                    p.notas,
-                    p.tipo_inventario,
-                    p.marca,
-                    p.linea,
-                    p.grupo,
-                    p.fecha_actualizacion,
-                    p.fecha_actualizacion_api,
+                    p.*,
+                    IF(pm.slug IS NOT NULL, pm.slug, p.id) slug,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MIN(i.bodega) bodega,
