@@ -254,7 +254,11 @@ Class Productos_model extends CI_Model{
                 
                 // Conexión a SQL Server desde Linux (Hostinger)
                 if(ENVIRONMENT == 'production') {
-                    $pdo = new PDO("odbc:mssql_odbc", $this->config->item('wms_usuario'), $this->config->item('wms_clave'));
+                    $pdo = new PDO(
+                        "sqlsrv:Server={$this->config->item('wms_url')};Database={$this->config->item('wms_base_datos')}",
+                        $this->config->item('wms_usuario'),
+                        $this->config->item('wms_clave')
+                    );
 
                     $sql = "SELECT * FROM VTA_BodegasECOMMERECE";
                     $stmt = $pdo->query($sql);
