@@ -328,7 +328,7 @@
             email: $('#usuario_email').val(),
             telefono: $('#usuario_telefono').val(),
             vendedor: (esVendedor) ? $('#codigo_vendedor').val() : "U003",
-            lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio_clientes'); ?>',
+            lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio'); ?>',
         }
 
         // Si es cédula de extranjería, se envía una entidad dinámica adicional

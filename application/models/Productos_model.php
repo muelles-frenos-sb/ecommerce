@@ -143,7 +143,6 @@ Class Productos_model extends CI_Model{
                         $having .= " OR p.linea LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.marca LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.grupo LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR bodega_nombre LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
                         if(($i + 1) < count($palabras)) $having .= " AND ";
                     }
@@ -158,21 +157,11 @@ Class Productos_model extends CI_Model{
 
                 $sql = 
                 "SELECT
-                    IF(pm.slug IS NOT NULL, pm.slug, p.id) id,
-                    p.descripcion_corta,
-                    p.referencia,
-                    p.unidad_inventario,
-                    p.notas,
-                    p.tipo_inventario,
-                    p.marca,
-                    p.linea,
-                    p.grupo,
-                    p.fecha_actualizacion,
-                    p.fecha_actualizacion_api,
+                    p.*,
+                    IF(pm.slug IS NOT NULL, pm.slug, p.id) slug,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MIN(i.bodega) bodega,
-                    IF(MIN(i.bodega) = '{$this->config->item('bodega_outlet')}', 'outlet', '') bodega_nombre,
                     ( 
                         SELECT 
                         IF ( MIN( i.bodega ) = '{$this->config->item('bodega_principal')}', pp.precio, pp.precio ) 
@@ -180,7 +169,7 @@ Class Productos_model extends CI_Model{
                             productos_precios AS pp 
                         WHERE 
                             pp.producto_id = p.id 
-                            AND pp.lista_precio = IF( MIN( i.bodega ) = '{$this->config->item('bodega_outlet')}', '{$this->config->item('lista_precio_clientes')}', '{$this->config->item('lista_precio')}')
+                            AND pp.lista_precio = '{$this->config->item('lista_precio')}'
                             ORDER BY fecha_actualizacion_api DESC 
                         LIMIT 1 
                     ) precio

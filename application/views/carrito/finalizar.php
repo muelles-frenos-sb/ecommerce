@@ -200,6 +200,7 @@ if($this->session->userdata('usuario_id')) {
             valor: $('#total_pedido').val(),
             recibo_tipo_id: 1,
             email_factura_electronica: $('#checkout_email_factura_electronica').val(),
+            lista_precio: '<?php echo $this->config->item('lista_precio'); ?>',
         }
 
         // Se agrega la sucursal al pedido
@@ -213,11 +214,6 @@ if($this->session->userdata('usuario_id')) {
 
         // Se obtienen los datos de la sucursal seleccionada para extraer la lista de precio
         let sucursal = await consulta('obtener', {tipo: 'cliente_sucursal', f200_nit: $('#checkout_documento_numero').val()}, false)
-
-        // Si tiene sesión iniciada, la lista de precio es la de clientes
-        datosRecibo.lista_precio = ($('#sesion_usuario_id').val() != '')
-            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
-            : '<?php echo $this->config->item('lista_precio'); ?>' // 009
 
         let recibo = await consulta('crear', datosRecibo, false)
         
@@ -247,7 +243,7 @@ if($this->session->userdata('usuario_id')) {
                     email: $('#checkout_email').val(),
                     telefono: $('#checkout_telefono').val(),
                     vendedor: 'U003',
-                    lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio_clientes'); ?>',
+                    lista_precio: (esVendedor) ? '001' : '<?php echo $this->config->item('lista_precio'); ?>',
                 }
                 
                 // Si es cédula de extranjería, se envía una entidad dinámica adicional

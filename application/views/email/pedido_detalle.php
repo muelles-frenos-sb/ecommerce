@@ -168,7 +168,7 @@ foreach($recibo_detalle as $detalle) {
                                             <tr>
                                                 <td class="pad">
                                                     <div class="alignment" align="center" style="line-height:10px">
-                                                        <a href='<?php echo site_url("productos/ver/$producto->id"); ?>' target="_blank" style="outline:none" tabindex="-1">
+                                                        <a href='<?php echo site_url("productos/ver/$producto->slug"); ?>' target="_blank" style="outline:none" tabindex="-1">
                                                             <img class="fullWidth" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" style="display: block; height: auto; border: 0; max-width: 120px; width: 100%;" width="120" alt="<?php echo $producto->referencia; ?>" title="Fatty Burger">
                                                         </a>
                                                     </div>

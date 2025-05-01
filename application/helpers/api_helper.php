@@ -674,7 +674,7 @@ function obtener_precios_api($datos) {
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_ItemsPrecios',
                 'paginacion' => "numPag=$filtro_pagina|tamPag=100",
-                'parametros' => "f126_id_lista_precio=''{$CI->config->item('lista_precio')}'' or f126_id_lista_precio=''{$CI->config->item('lista_precio_clientes')}''",
+                'parametros' => "f126_id_lista_precio=''{$CI->config->item('lista_precio')}''",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

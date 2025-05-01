@@ -493,9 +493,10 @@ class Webhooks extends MY_Controller {
             $pagina = 1;
             $items_almacenados = 0;
 
-            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}");
-            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio_clientes')}");
+            // Eliminamos todos los ítems asociados a la lista de precio
+            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}"); // Antes 009
 
+            // Mientras la API de Siesa retorne código 0 (Registros encontrados)
             while ($codigo == 0) {
                 $resultado = json_decode(obtener_precios_api(['pagina' => $pagina]));
                 $codigo = $resultado->codigo;
@@ -510,7 +511,7 @@ class Webhooks extends MY_Controller {
                             'referencia' => $precio->f120_referencia,
                             'descripcion_corta' => $precio->f120_descripcion,
                             'lista_precio' => $precio->f126_id_lista_precio,
-                            'precio' => $precio->f126_precio,
+                            'precio' => $precio->f126_precio_sugerido, // Precio oficial
                             'precio_maximo' => $precio->f126_precio_maximo,
                             'precio_minimo' => $precio->f126_precio_minimo,
                             'precio_sugerido' => $precio->f126_precio_sugerido,

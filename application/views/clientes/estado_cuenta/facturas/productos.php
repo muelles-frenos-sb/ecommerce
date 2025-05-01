@@ -47,14 +47,14 @@ $productos = $this->clientes_model->obtener('clientes_facturas_detalle', [
                                         <tr class="wishlist__row wishlist__row--body">
                                             <td class="wishlist__column wishlist__column--body wishlist__column--image">
                                                 <div class="image image--type--product">
-                                                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body" target="_blank">
+                                                    <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>" class="image__body" target="_blank">
                                                         <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>" alt="Foto del producto">
                                                     </a>
                                                 </div>
                                             </td>
                                             <td class="wishlist__column wishlist__column--body wishlist__column--product">
                                                 <div class="wishlist__product-name">
-                                                    <a href="<?php echo site_url("productos/ver/$producto->id"); ?>">
+                                                    <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>">
                                                         <?php echo $detalle->f120_descripcion; ?>
                                                     </a>
                                                 </div>
