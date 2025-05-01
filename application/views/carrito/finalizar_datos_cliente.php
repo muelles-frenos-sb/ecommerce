@@ -171,37 +171,22 @@ if(!empty($tercero)) {
 
 <script>
     mostrarTotales = async listaPrecio => {
-        let descuento = 0
+        // let descuento = 0
         let subtotal = parseFloat('<?php echo $this->cart->total(); ?>')
-
-        if(listaPrecio == '<?php echo $this->config->item('lista_precio_clientes'); ?>') {
-            descuento = await consulta('obtener', {tipo: 'valores_detalle', lista_precio: listaPrecio}, false)
-        }
-        
-        let total = subtotal - descuento
-
-        $('#descuento').html(`
-            <th>Decuento</th>
-            <td>$ ${formatearNumero(descuento)}</td>
-        `)
 
         $('.checkout__totals-footer').html(`
             <tr>
                 <th>Total</th>
-                <td>$${formatearNumero(total)}</td>
+                <td>$${formatearNumero(subtotal)}</td>
             </tr>
         `)
 
-        $('#total_pedido').val(total)
+        $('#total_pedido').val(subtotal)
     }
 
     $().ready(async() => {
         // Si tiene sesión iniciada, la lista de precio es la de clientes
-        let listaPrecioPorDefecto = 
-            ($('#sesion_usuario_id').val() != '')
-            ? '<?php echo $this->config->item('lista_precio_clientes'); ?>' // 010
-            : '<?php echo $this->config->item('lista_precio'); ?>' // 009
-
+        let listaPrecioPorDefecto = '<?php echo $this->config->item('lista_precio'); ?>'
         mostrarTotales(listaPrecioPorDefecto)
 
         await listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
