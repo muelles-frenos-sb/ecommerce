@@ -242,7 +242,7 @@ Class Productos_model extends CI_Model{
                 }
                 
                 // Conexión a SQL Server desde Linux (Hostinger)
-                if(ENVIRONMENT == 'production') {
+                if(ENVIRONMENT == 'production' || ENVIRONMENT == 'testing') {
                     $pdo = new PDO(
                         "sqlsrv:Server={$this->config->item('wms_url')};Database={$this->config->item('wms_base_datos')}",
                         $this->config->item('wms_usuario'),

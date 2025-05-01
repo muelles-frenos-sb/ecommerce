@@ -431,7 +431,7 @@ class Webhooks extends MY_Controller {
                 }
             }
 
-            if(ENVIRONMENT == 'production') {
+            if(ENVIRONMENT == 'production' || ENVIRONMENT == 'testing') {
                 foreach($inventario as $item) {
 
                     $nuevo_item = [
