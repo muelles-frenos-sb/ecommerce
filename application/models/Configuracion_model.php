@@ -276,6 +276,7 @@ Class Configuracion_model extends CI_Model {
                 $this->db
                     ->select([
                         "rd.*",
+                        "(rd.subtotal - rd.descuento) valor_pagado",
                     ])
                     ->from("recibos_detalle rd")
                     ->join("recibos r", "rd.recibo_id = r.id", "left")

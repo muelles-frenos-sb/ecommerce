@@ -164,6 +164,7 @@ class Api extends RestController {
             $item->valor_inicial = number_format($item->valor_inicial, 2, '.', '');
             $item->subtotal = number_format($item->subtotal, 2, '.', '');
             $item->descuento = number_format($item->descuento, 2, '.', '');
+            $item->valor_pagado = number_format($item->valor_pagado, 2, '.', '');
             
             return $item;
         }, $resultado);
