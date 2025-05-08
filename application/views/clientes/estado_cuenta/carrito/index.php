@@ -126,12 +126,14 @@
                                             data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
                                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                                             data-valor_bruto="${valorBruto}"
-                                            data-valor_inicial="${datos.valor_inicial}"
                                             class="form-control valor_pago_factura"
                                             style="text-align: right"
                                             max="${parseFloat(datos.valor)}"
                                             value="${parseFloat(datos.valor)}"
                                             ${desactivado}
+                                            data-valor_aplicado="${datos.valor_aplicado}"
+                                            data-valor_documento="${datos.valor_documento}"
+                                            data-total_cop="${datos.total_cop}"
                                         >
                                     </div>
 
@@ -203,7 +205,9 @@
                 subtotal: valorAPagar,
                 descuento: valorDescuento,
                 centro_operativo: $(this).attr('data-centro_operativo'),
-                valor_inicial: $(this).attr('data-valor_inicial'),
+                valor_saldo_inicial: $(this).attr('data-valor_aplicado'),
+                valor_abonos: $(this).attr('data-valor_documento'),
+                valor_factura: $(this).attr('data-total_cop'),
             })
         })
 

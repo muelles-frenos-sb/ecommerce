@@ -222,7 +222,10 @@ class Interfaces extends CI_Controller {
                         'descuento' => $item['descuento'],
                         'cuota_numero' => $item['cuota_numero'],
                         'centro_operativo' => $item['centro_operativo'],
-                        'valor_inicial' => $item['valor_inicial'],
+                        // Datos que vienen de clientes_facturas
+                        'valor_saldo_inicial' => $item['valor_saldo_inicial'],
+                        'valor_abonos' => $item['valor_abonos'],
+                        'valor_factura' => $item['valor_factura'],
                     ];
                     
                     array_push($items_recibo, $datos_item);

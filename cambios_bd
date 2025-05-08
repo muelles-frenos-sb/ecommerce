@@ -157,3 +157,12 @@ ALTER TABLE `recibos_detalle` ADD COLUMN `centro_operativo` varchar(255) NULL AF
 
 -- 20250424 Campo para almacenar el valor inicial de la factura
 ALTER TABLE `recibos_detalle` ADD COLUMN `valor_inicial` double NULL DEFAULT NULL AFTER `unidad_inventario`;
+
+-- 20250507 Modificación en campos
+ALTER TABLE `recibos_detalle` 
+    DROP COLUMN `valor_inicial`,
+    DROP COLUMN `precio_lista_sucursal`,
+    DROP COLUMN `subtotal_lista_sucursal`,
+    ADD COLUMN `valor_saldo_inicial` double NULL COMMENT 'clientes_facturas.totalCop' AFTER `centro_operativo`,
+    ADD COLUMN `valor_abonos` double NULL COMMENT 'clientes_facturas.valorDoc' AFTER `valor_saldo_inicial`,
+    ADD COLUMN `valor_factura` double NULL COMMENT 'clientes_facturas.valorAplicado' AFTER `valor_abonos`;

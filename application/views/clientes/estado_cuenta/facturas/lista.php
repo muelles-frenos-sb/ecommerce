@@ -107,8 +107,10 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 sede: `<?php echo $factura->centro_operativo; ?>`,
                                 tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
                                 descuento_porcentaje: `<?php echo $factura->descuento_porcentaje; ?>`,
-                                valor_inicial: `<?php echo $factura->ValorAplicado; ?>`,
                                 id_sucursal: '<?php echo $factura->sucursal_id; ?>',
+                                valor_aplicado: `<?php echo $factura->ValorAplicado; // Enviado para almacenar en el detalle del recibo ?>`,
+                                valor_documento: `<?php echo $factura->valorDoc; // Enviado para almacenar en el detalle del recibo ?>`,
+                                total_cop: `<?php echo $factura->totalCop; // Enviado para almacenar en el detalle del recibo ?>`,
                             })" style="padding: 2px 5px 2px 5px;">
                         </div>
                     </td>
