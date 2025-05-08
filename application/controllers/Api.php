@@ -161,10 +161,13 @@ class Api extends RestController {
         $resultado = $this->configuracion_model->obtener("recibos_detalle", $datos);
 
         $resultado = array_map(function($item) {
-            $item->valor_inicial = number_format($item->valor_inicial, 2, '.', '');
-            $item->subtotal = number_format($item->subtotal, 2, '.', '');
-            $item->descuento = number_format($item->descuento, 2, '.', '');
-            $item->valor_pagado = number_format($item->valor_pagado, 2, '.', '');
+            $item->valor_saldo_inicial = number_format($item->valor_saldo_inicial, 2, '.', ''); // clientes_facturas.totalCop
+            $item->valor_abonos = number_format($item->valor_abonos, 2, '.', ''); // clientes_facturas.valorDoc
+            $item->valor_factura = number_format($item->valor_factura, 2, '.', ''); // clientes_facturas.valorAplicado
+            $item->valor_pagado_bruto = number_format($item->subtotal, 2, '.', '');
+            $item->valor_descuento = number_format($item->descuento, 2, '.', '');
+            $item->valor_pagado_neto = number_format($item->subtotal - $item->descuento, 2, '.', '');
+            $item->valor_saldo_final = number_format($item->valor_saldo_inicial - $item->valor_pagado_bruto, 2, '.', '');
             
             return $item;
         }, $resultado);
