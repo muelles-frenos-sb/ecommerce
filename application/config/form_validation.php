@@ -13,7 +13,7 @@ $config = [
     'recibos_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
         ['field' => 'actualizado_bot', 'label' => 'actualizado_bot', 'rules' => 'required|trim|in_list[0,1]'],
-        ['field' => 'id_tipo_recibo', 'label' => 'recibo_tipo_id', 'rules' => 'required|trim|in_list[1,2,3,4]'],
+        ['field' => 'id_tipo_recibo', 'label' => 'recibo_tipo_id', 'rules' => 'required|trim|in_list[1,2,3,4,5]'],
     ],
 
 	'recibos_detalle_get' => [
