@@ -78,6 +78,12 @@ foreach ($registros as $recibo) {
             </td>
         <?php } ?>
 
+        <?php if($datos['id_tipo_recibo'] == 3) { ?>
+            <td>
+                <?php echo $recibo->comentarios; ?>
+            </td>
+        <?php } ?>
+
         <td class="text-right"><?php echo formato_precio($recibo->valor); ?></td>
 
         <!-- Opciones -->

@@ -19,6 +19,7 @@
                 echo "<th class='text-center'>Estado</th>";
                 echo "<th class='text-center'>Creador</th>";
                 if($datos['id_tipo_recibo'] != 3) echo "<th class='text-center'>Gestionador</th>";
+                if($datos['id_tipo_recibo'] == 3) echo "<th class='text-center'>Comentarios</th>";
                 echo "<th class='text-center'>Valor</th>";
                 echo "<th class='text-center'>Opciones</th>";
                 ?>
