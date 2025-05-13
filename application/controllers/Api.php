@@ -203,6 +203,7 @@ class Api extends RestController {
             'fecha_actualizacion_bot' => $this->put('fecha_actualizacion_bot'),
             'numero_siesa' => $this->put('numero_siesa'),
             'recibo_estado_id' => $this->put('recibo_estado_id'),
+            'comentarios' => $this->put('comentarios'),
         ];
 
         $this->form_validation->set_data($datos);
