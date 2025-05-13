@@ -104,11 +104,11 @@ foreach ($registros as $recibo) {
 
         new DataTable('#tabla_recibos', {
             info: true,
-            ordering: true,
-            order: [[5, 'desc']],
+            // ordering: true,
+            // order: [[5, 'desc']],
             paging: true,
             stateSave: true,
-            scrollY: '320px',
+            scrollY: '640px',
             searching: true,
             language: {
                 decimal: ',',

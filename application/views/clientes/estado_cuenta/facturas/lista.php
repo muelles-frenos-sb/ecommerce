@@ -189,7 +189,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
             // ordering: true,
             // order: [[5, 'desc']],
             paging: true,
-            stateSave: true,
+            // stateSave: true,
             scrollY: '320px',
             searching: true,
             language: {
