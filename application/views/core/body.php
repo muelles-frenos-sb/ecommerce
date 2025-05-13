@@ -2,6 +2,7 @@
 <html lang="es" dir="ltr">
     <head>
         <?php $this->load->view('core/header'); ?>
+        <?php $this->load->view('core/schema'); ?>
     </head>
 
     <body>
