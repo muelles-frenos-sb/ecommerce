@@ -41,7 +41,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
 <div class="mt-2 mb-2">
     <button class="btn btn-success btn-md btn-block" onClick="javascript:generarReporte('excel/facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
         <i class="fa fa-file-excel"></i>
-        Decargar facturas
+        Descargar listado de facturas o estado de cuenta
     </button>
 </div>
 
