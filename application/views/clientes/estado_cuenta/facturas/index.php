@@ -6,21 +6,23 @@
 <!-- Modal que se usa para abrir la interfaz de pago de Wompi -->
 <div id="contenedor_pago_estado_cuenta"></div>
 
-<div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
+<div class="card flex-grow-1">
     <div class="card-body card-body--padding--2">
         <?php if($datos['nit_comprobante']) { ?>
-            <div class="form-row mb-4">
-                <div class="form-group col-md-4">
+            <div id="contenedor_cabecera_cliente"></div>
+
+            <div class="form-row mb-4 border border-saecondary p-3">
+                <div class="form-group col-md-2">
                     <label for="fecha_consignacion">Fecha de consignación *</label>
                     <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
                 </div>
 
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                     <label for="monto">Monto *</label>
                     <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
                 </div>
 
-                <div class="form-group col-4">
+                <div class="form-group col-md-3">
                     <label for="cuenta">Cuenta</label>
                     <select id="cuenta" class="form-control">
                         <option value="">Seleccione...</option>
@@ -28,7 +30,13 @@
                     </select>
                 </div>
 
-                <div class="input-group col-12 mt-2">
+                <div class="form-group col-md-2">
+                    <label for="referencia">Referencia (Opcional)</label>
+                    <input type='text' id="referencia" class="form-control" placeholder='Número de referencia'>
+                </div>
+
+                <div class="form-group col-md-3">
+                    <label for="estado_cuenta_archivos">Comprobante digital</label>
                     <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
                 </div>
             </div>
@@ -124,6 +132,6 @@
 
         // Datos del cliente para mostrar al inicio de la interfaz
         let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')
-        cargarInterfaz('clientes/estado_cuenta/facturas/detalle_cliente', 'contenedor_cabecera_cliente', datosCliente)
+        cargarInterfaz('clientes/estado_cuenta/facturas/detalle_cliente', 'contenedor_cabecera_titulo', datosCliente)
     })
 </script>

@@ -166,3 +166,6 @@ ALTER TABLE `recibos_detalle`
     ADD COLUMN `valor_saldo_inicial` double NULL COMMENT 'clientes_facturas.totalCop' AFTER `centro_operativo`,
     ADD COLUMN `valor_abonos` double NULL COMMENT 'clientes_facturas.valorDoc' AFTER `valor_saldo_inicial`,
     ADD COLUMN `valor_factura` double NULL COMMENT 'clientes_facturas.valorAplicado' AFTER `valor_abonos`;
+
+-- 20250514 Campo agregado
+ALTER TABLE `recibos` ADD COLUMN `referencia` varchar(50) NULL AFTER `cuenta_bancaria_id`;

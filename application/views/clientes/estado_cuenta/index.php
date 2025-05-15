@@ -1,7 +1,7 @@
 <!-- Se captura el nit si viene desde el formulario de comprobante -->
 <input type="hidden" id="nit_comprobante" value="<?php echo $this->input->get('nit'); ?>">
 
-<div class="block-header" id="contenedor_cabecera_cliente">
+<div class="block-header mt-5" id="contenedor_cabecera_titulo">
     <div class="container">
         <div class="block-header__body">
             <h1 class="block-header__title">Pagar tus facturas de una manera fácil y rápida</h1>
@@ -9,7 +9,7 @@
     </div>
 </div>
 
-<div class="block mb-5">
+<div class="block">
     <div class="container">
         <div class="card mb-lg-0" id="formulario_buscar_cliente">
             <div class="card-body card-body">
@@ -43,10 +43,10 @@
                 </form>
             </div>
         </div>
-
-        <div id="contenedor_estado_cuenta"></div>
     </div>
 </div>
+
+<div id="contenedor_estado_cuenta"></div>
 
 <script>
     var numeroDocumento = $('#estado_cuenta_numero_documento')

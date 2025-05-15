@@ -287,6 +287,7 @@
             // Se agregan los datos del comprobante al recibo
             datosRecibo.fecha_consignacion = $('#fecha_consignacion').val()
             datosRecibo.cuenta_bancaria_id = $('#cuenta').val()
+            datosRecibo.referencia = $('#referencia').val()
             datosRecibo.archivo_soporte = `1.${archivos[0].name.split('.').pop()}`
         }
 
