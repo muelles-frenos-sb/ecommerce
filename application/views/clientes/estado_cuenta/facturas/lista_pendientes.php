@@ -13,15 +13,18 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
 ]);
 ?>
 
+<!-- Si tiene alguna factura no válida para pago en línea -->
 <?php if(count($facturas_invalidas) > 0) { ?>
     <div class="alert alert-danger alert-lg alert-dismissible fade show">
         Te informamos que el número de documento consultado presenta facturas que no se pueden reflejar en este módulo. Por favor, comunícate al teléfono 604 444 7232 - Extensión 110.
     </div>
+<!-- Si no tiene facturas pendientes por pagar -->
 <?php } elseif(empty($facturas)) { ?>
     <script>
         $('#contenedor_mensaje_carga').html('')
         $('#contenedor_carrito_facturas').hide('')
     </script>
+
     <div class="alert alert-success alert-lg alert-dismissible fade show">
         <?php
         echo 'No tienes ninguna factura pendiente por pagar';
@@ -31,13 +34,6 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     </div>
 <?php } ?>
 
-<!-- <div class="alert alert-success alert-lg alert-dismissible fade show"> -->
-    <?php
-    // echo "¡Bienvenido, <b>$tercero->f200_razon_social</b>! encontramos ".number_format(count($facturas), 0, ',', '.')." facturas pendientes por pagar";
-    // if(isset($opciones['busqueda'])) echo " con la búsqueda <b>{$opciones['busqueda']}</b>";
-    ?>
-<!-- </div> -->
-
 <div class="mt-2 mb-2">
     <button class="btn btn-success btn-md btn-block" onClick="javascript:generarReporte('excel/facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
         <i class="fa fa-file-excel"></i>
@@ -46,36 +42,36 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
 </div>
 
 <style>
-    #tabla_facturas {
+    #tabla_facturas_pendientes {
         font-size: 0.8em;
         font-family: Futura;
     }
 
-    #tabla_facturas th {
+    .encabezado {
         background-color: #19287F;
         color: white;
     }
 </style>
 
 <div class="table-responsive">
-    <table class="table-striped table-bordered" id="tabla_facturas">
+    <table class="table-striped table-bordered" id="<?php echo "tabla_facturas_pendientes"; ?>">
         <thead>
             <tr>
-                <th class="text-center">
+                <th class="text-center encabezado">
                     <b><i class="fa fa-plus fa-2x"></i></b>
                 </th>
-                <th class="text-center">Sede</th>
-                <th class="text-center">Doc</th>
-                <th class="text-center">Cuota</th>
-                <th class="text-center">Fecha fact</th>
-                <th class="text-center">Fecha vcto</th>
-                <th class="text-center">Días venc</th>
-                <th class="text-center">Valor Doc</th>
-                <th class="text-center">Abonos</th>
-                <th class="text-center">Saldo</th>
-                <th class="text-center">Retenciones</th>
-                <th class="text-center">Sucursal</th>
-                <th class="text-center">Tipo crédito</th>
+                <th class="text-center encabezado">Sede</th>
+                <th class="text-center encabezado">Doc</th>
+                <th class="text-center encabezado">Cuota</th>
+                <th class="text-center encabezado">Fecha fact</th>
+                <th class="text-center encabezado">Fecha vcto</th>
+                <th class="text-center encabezado">Días venc</th>
+                <th class="text-center encabezado">Valor Doc</th>
+                <th class="text-center encabezado">Abonos</th>
+                <th class="text-center encabezado">Saldo</th>
+                <th class="text-center encabezado">Retenciones</th>
+                <th class="text-center encabezado">Sucursal</th>
+                <th class="text-center encabezado">Tipo crédito</th>
             </tr>
         </thead>
         <tbody>
@@ -100,6 +96,9 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 id: '<?php echo $factura->id; ?>',
                                 documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
                                 numero_documento: '<?php echo $factura->Cliente; ?>',
+                                fecha_documento: '<?php echo $factura->Fecha_doc_cruce; ?>',
+                                dias_vencido: '<?php echo $factura->dias_vencido; ?>',
+                                fecha_vencimiento: '<?php echo $factura->Fecha_venc; ?>',
                                 numero_cuota: '<?php echo $factura->Nro_cuota; ?>',
                                 centro_operativo: '<?php echo $factura->CentroOperaciones; ?>',
                                 documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
@@ -142,9 +141,9 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                         }
                         ?>
                     </td>
-                    <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td>
-                    <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td>
-                    <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td>
+                    <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td><!-- Valor doc -->
+                    <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td><!-- Abonos -->
+                    <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td><!-- Saldo -->
                     <td class="text-center">
                         <a href="javascript:;" onClick="javascript:cargarMovimientos({
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
@@ -184,7 +183,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
 
 <script>
     $().ready(() => {
-        new DataTable('#tabla_facturas', {
+        new DataTable('#tabla_facturas_pendientes', {
             info: true,
             // ordering: true,
             // order: [[5, 'desc']],

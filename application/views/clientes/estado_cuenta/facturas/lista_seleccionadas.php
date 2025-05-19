@@ -1,0 +1,292 @@
+<?php
+// Obtenemos las facturas del cliente que seleccionó para pagar
+$facturas = $this->clientes_model->obtener('clientes_facturas', [
+    'numero_documento' => $datos['numero_documento'],
+    'pendientes' => true,
+    'mostrar_estado_cuenta'=> true,
+]);
+?>
+
+<style>
+    #tabla_facturas_seleccionadas {
+        font-size: 0.8em;
+        font-family: Futura;
+    }
+
+    .encabezado {
+        background-color: #19287F;
+        color: white;
+    }
+</style>
+
+<div class="address-card__row" id="mensaje_inicial">
+    <div class="alert alert-primary">
+        Selecciona una o varias facturas a pagar, haciendo clic en la casilla de la columna <i class="fa fa-plus"></i>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table-bordered" id="<?php echo "tabla_facturas_seleccionadas"; ?>">
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right" id="subtotal_formato"></td>
+                <td class="text-right" id="total_descuento_formato"></td>
+                <td class="text-right" id="total_pago_formato"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+    var detalleFactura = [];
+    
+    const tablaFacturasSeleccionadas = new DataTable('#tabla_facturas_seleccionadas', {
+        info: true,
+        // ordering: true,
+        // order: [[5, 'desc']],
+        paging: true,
+        // stateSave: true,
+        scrollY: '320px',
+        searching: true,
+        language: {
+            decimal: ',',
+            thousands: '.'
+        },
+        language: {
+            url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
+        },
+        scrollX: false,
+        scrollCollapse: true,
+        // Define una configuración específica para varias columnas
+        columnDefs: [{
+            targets: [7, 8, 9], // índices de las columnas a formatear
+            className: 'dt-right',
+            render: function (datosMoneda) {
+                return new Intl.NumberFormat('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                    useGrouping: true
+                }).format(datosMoneda)
+            }
+        }],
+        columns: [
+            { title: 'Quitar' },
+            { title: 'Sede' },
+            { title: 'Doc', className: 'dt-right' },
+            { title: 'Cuota', className: 'dt-right' },
+            { title: 'Fecha fact' },
+            { title: 'Fecha vcto' },
+            { title: 'Días venc', className: 'dt-right' },
+            { title: 'Valor doc', className: 'dt-right' },
+            { title: 'Abonos', className: 'dt-right' },
+            { title: 'Saldo', className: 'dt-right'  },
+            { title: 'Sucursal' },
+            { title: 'Valor a pagar' },
+            { title: 'Descuento' },
+            { title: 'Valor final' },
+        ]
+    })
+
+    agregarFactura = datos => {
+        Swal.fire({
+            title: 'Cargando información de la factura...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        let datosConsulta = {
+            tipo: 'movimientos_contables',
+            documento_cruce: datos.documento_cruce,
+            numero_documento: datos.numero_documento,
+            id_sucursal: datos.id_sucursal,
+        }
+
+        // Se cargan los movimientos de la factura
+        consulta('obtener', datosConsulta, false)
+        .then(movimientosFactura => {
+            // Se insertan en la base de datos todos los movimientos obtenidos de la factura
+            consulta('crear', {tipo: 'clientes_facturas_movimientos', valores: movimientosFactura.detalle.Table}, false)
+            .then(() => {
+                // Se obtiene de los movimientos creados el valor bruto de ingreso ventas 19%
+                consulta('obtener', {tipo: 'cliente_factura_movimiento', f200_nit: datos.numero_documento, f350_consec_docto: datos.documento_cruce}, false)
+                .then(resultadoMovimiento => {
+                    // Se obtiene el valor bruto de ese movimiento, para calcular descuentos posteriormente
+                    valorBruto = (resultadoMovimiento.f351_valor_cr) ? resultadoMovimiento.f351_valor_cr : 0
+
+                    Swal.close()
+
+                    // Se oculta la celda
+                    $(`#factura_${datos.contador}`).hide()
+
+                    // Se oculta el mensaje inicial
+                    $('#mensaje_inicial').hide()
+
+                    let diasVencido = (datos.dias_vencido > 0) ? datos.dias_vencido : 0
+                    
+                    // Si el valor es negativo, no debe dejarse editar
+                    let desactivado = (datos.valor < 0) ? 'disabled' : ''
+
+                    tablaFacturasSeleccionadas.row.add([
+                        `<button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.contador})">
+                            <svg width="16" height="16">
+                                <path d="M2,4V2h3V1h6v1h3v2H2z M13,13c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5h10V13z" />
+                            </svg>
+                        </button>`,
+                        datos.sede,
+                        datos.documento_cruce,
+                        datos.numero_cuota,
+                        datos.fecha_documento,
+                        datos.fecha_vencimiento,
+                        diasVencido,
+                        datos.valor_aplicado, // Valor doc
+                        datos.valor_documento, // Abonos
+                        datos.total_cop, // Saldo
+                        datos.tipo_credito, // Sucursal
+                        // Valor a pagar
+                        `<input
+                            type="text"
+                            id="${datos.id}"
+                            data-id="${datos.id}"
+                            data-documento_cruce_numero="${datos.documento_cruce}"
+                            data-numero_cuota="${datos.numero_cuota}"
+                            data-centro_operativo="${datos.centro_operativo}"
+                            data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
+                            data-descuento_porcentaje="${datos.descuento_porcentaje}"
+                            data-valor_bruto="${valorBruto}"
+                            class="form-control valor_pago_factura"
+                            style="text-align: right"
+                            max="${parseFloat(datos.valor)}"
+                            value="${parseFloat(datos.valor)}"
+                            ${desactivado}
+                            data-valor_aplicado="${datos.valor_aplicado}"
+                            data-valor_documento="${datos.valor_documento}"
+                            data-total_cop="${datos.total_cop}"
+                        >`,
+                        // Descuento
+                        `<input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' style="text-align: right" disabled>`,
+                        `<input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right" disabled>`
+                        // Valor final
+                    ]).draw()
+
+                    calcularTotal()
+
+                    // Por defecto se formatea el campo
+                    $(`#${datos.id}`).val(formatearNumero(datos.valor))
+
+                    // Si el número cambia
+                    $(`.valor_pago_factura`).on('keyup', function() {
+                        // Se formatea el campo
+                        $(this).val(formatearNumero($(this).val()))
+
+                        calcularTotal()
+                    })
+
+                    mostrarAviso('exito', '!Bien! En la parte inferior podrás ver tus facturas seleccionadas para pago', 10000)
+                })
+            })
+        })
+    }
+
+    calcularTotal = () => {
+        var subtotal = 0
+        var totalDescuento = 0
+        var total = 0
+        var detalleFactura = []
+        var montoComprobante = ($("#monto").val()) ? parseFloat($("#monto").val().replace(/\./g, '')) : 0 // Monto especificado cuando se sube un comprobante
+
+        $(`.valor_pago_factura`).each(function() {
+            let valorAPagar = parseFloat($(this).val().replace(/\./g, ''))
+            let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
+            let valorTotal = parseFloat($(this).attr('max'))
+            let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
+            let valorDescuento = (valorAPagar == valorTotal) ? Math.floor(valorBruto * (porcentajeDescuento / 100)) : 0
+            
+            subtotal += valorAPagar
+            totalDescuento += valorDescuento
+            total += parseFloat($(this).val().replace(/\./g, ''))
+            total -= valorDescuento
+
+            $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento))
+            $(`#valor_completo_${$(this).attr('data-id')}`).val(formatearNumero((valorAPagar - valorDescuento)))
+
+            detalleFactura.push({
+                documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
+                cuota_numero: $(this).attr('data-numero_cuota'),
+                documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
+                subtotal: valorAPagar,
+                descuento: valorDescuento,
+                centro_operativo: $(this).attr('data-centro_operativo'),
+                valor_saldo_inicial: $(this).attr('data-valor_aplicado'),
+                valor_abonos: $(this).attr('data-valor_documento'),
+                valor_factura: $(this).attr('data-total_cop'),
+            })
+        })
+
+        // Se formatea el campo
+        $('#subtotal_formato').text(formatearNumero(subtotal))
+        $('#total_descuento_formato').text(formatearNumero(totalDescuento))
+        $('#total_pago_formato').text(formatearNumero(total))
+        $('#total_pago').val(total)
+
+        // Sección para subida de comprobante
+        $('#valor_total_seleccionadas').text(formatearNumero(total))
+
+        // Valor que falta para poder subir el comprobante
+        let valorFaltanteComprobante = montoComprobante - total
+        $('#comprobante_valor_faltante').text(formatearNumero(valorFaltanteComprobante))
+
+        return detalleFactura
+    }
+
+    removerFactura = async(id) => {
+        // El registro en el mini carrito se quita
+        $(`#id_registro_${id}`).remove()
+
+        // Se vuelve a agregar en la tabla
+        $(`#factura_${id}`).show()
+
+        calcularTotal()
+    }
+
+    vaciarCarritoEstadoCuenta = () => {
+        $('#contenedor_lista_carrito').html('')
+        $('#estado_cuenta_archivos').val('')
+        calcularTotal()
+    }
+
+    $().ready(() => {
+        $('#contenedor_mensaje_carga').html('')
+
+        $(`#monto`).on('keyup', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+
+            calcularTotal()
+        })
+
+        $('#btn_pago_en_linea').on('click', e => {
+            // Se activa el spinner
+            $('#btn_pago_en_linea').addClass('btn-loading').attr('disabled', true)
+
+            guardarReciboEstadoCuenta(true)
+            
+            // Se desactiva el spinner después de cierto tiempo
+            setTimeout(() => $('#btn_pago_en_linea').removeClass('btn-loading').attr('disabled', false), 1000)
+        })
+    })
+</script>

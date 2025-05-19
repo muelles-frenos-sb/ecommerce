@@ -2,12 +2,16 @@
 
 <input type="hidden" id="factura_tercero_razon_social" value="<?php echo $tercero->f200_razon_social; ?>">
 <input type="hidden" id="factura_tercero_documento_numero" value="<?php echo $tercero->f200_nit; ?>">
+<input type="hidden" id="total_pago">
 
 <!-- Modal que se usa para abrir la interfaz de pago de Wompi -->
 <div id="contenedor_pago_estado_cuenta"></div>
+<div id="contenedor_modal"></div>
 
+<!-- Facturas pendientes -->
 <div class="card flex-grow-1">
     <div class="card-body card-body--padding--2">
+        <!-- Si es pago con comprobante, se muestran los datos del comprobante -->
         <?php if($datos['nit_comprobante']) { ?>
             <div id="contenedor_cabecera_cliente"></div>
 
@@ -42,25 +46,43 @@
             </div>
         <?php } ?>
 
-        <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes</div>
-
+        <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes de pago</div>
         <div class="card-table">
-            <div id="contenedor_lista_facturas"></div>
+            <div id="contenedor_lista_facturas_pendientes"></div>
         </div>
     </div>
 </div>
 
-<div class="mb-3 mt-3"></div>
-
-<div class="card flex-grow-1 mb-md-0 mr-0 mr-lg-3 ml-0 ml-lg-4">
+<!-- Facturas a pagar -->
+<div class="card flex-grow-1 mt-3">
     <div class="card-body card-body--padding--2">
         <div class="tag-badge tag-badge--new badge_formulario mb-1 mt-1">Facturas seleccionadas para pago</div>
-
-        <div id="contenedor_carrito_facturas"></div>
+        <div class="card-table">
+            <div id="contenedor_lista_facturas_seleccionadas"></div>
+        </div>
     </div>
 </div>
 
-<div id="contenedor_modal"></div>
+<div class="row mt-2">
+    <div class="col-12">
+        <!-- Si trae NIT de comprobante, es la sección para vendedores -->
+        <?php if($datos['nit_comprobante']) { ?>
+            <div class="mt-2 mb-2 d-flex flex-column">
+                <!-- <input type="hidden" id="total_faltante_amortizacion" value=""> -->
+                <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>
+                <h4 class="align-self-end">Valor faltante: $<span id="comprobante_valor_faltante">0</span></h4>
+            </div>
+
+            <button class="btn btn-primary btn-lg btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Guardar pago con comprobante</button>
+        <?php } else { ?>
+            <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
+        <?php } ?>
+
+        <center>
+            <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid"alt="Opciones de pago">
+        </center>
+    </div>
+</div>
 
 <script>
     cargarProductos = async(datos) => {
@@ -117,18 +139,141 @@
         })
     }
 
-    listarFacturas = async() => {
-        let datos = {
+    cargarFacturasPedientes = async() => {
+        cargarInterfaz('clientes/estado_cuenta/facturas/lista_pendientes', 'contenedor_lista_facturas_pendientes', {
             numero_documento: '<?php echo $datos['numero_documento']; ?>',
+        })
+    }
+
+    cargarFacturasSeleccionadas = async() => {
+        cargarInterfaz('clientes/estado_cuenta/facturas/lista_seleccionadas', 'contenedor_lista_facturas_seleccionadas', {
+            numero_documento: '<?php echo $datos['numero_documento']; ?>',
+        })
+    }
+
+    guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
+        let total = parseFloat($('#total_pago').val())
+        var archivos = $('#estado_cuenta_archivos').prop('files')
+
+        if(total == 0 || isNaN(total)) {
+            mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar. Selecciona una o varias facturas para continuar el proceso.')
+            return false
         }
 
-        cargarInterfaz('clientes/estado_cuenta/facturas/lista', 'contenedor_lista_facturas', datos)
+        if(total < 0) {
+            mostrarAviso('alerta', 'El valor del pago debe ser mayor a cero.')
+            return false
+        }
+
+        // Si es un pago en línea y el monto no supera lo indicado
+        if(pagarEnLinea && total < 10000) {
+            mostrarAviso('alerta', 'Lamentamos informarte que si deseas pagar por este medio, el valor debe ser superior o igual a $10.000', 20000)
+            return false
+        }
+
+        let datosRecibo = {
+            tipo: 'recibos',
+            abreviatura: 'ec',
+            recibo_tipo_id: (pagarEnLinea) ? 2 : 3,
+            recibo_estado_id: (!pagarEnLinea) ? 3 : null,
+            razon_social: $('#factura_tercero_razon_social').val(),
+            documento_numero: $('#factura_tercero_documento_numero').val(),
+            usuario_creacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
+            email: localStorage.simonBolivar_emailContacto,
+            valor: total,
+        }
+
+        // Si no es un pago en línea, se validan campos obligatorios
+        if(!pagarEnLinea) {
+            let camposObligatorios = [
+                $('#fecha_consignacion'),
+                $('#monto'),
+                $('#cuenta'),
+            ]
+
+            if (!validarCamposObligatorios(camposObligatorios)) return false
+
+            // Si no es pago en línea y no tiene archivos
+            if(archivos.length == 0) {
+                mostrarAviso('alerta', 'Por favor selecciona los comprobantes de pago que vas a subir')
+                return false
+            }
+
+            // Si el total es diferente al monto
+            if(total !== parseFloat($('#monto').val().replace(/\./g, ''))) {
+                mostrarAviso('alerta', 'El monto indicado no es igual al valor pagado de las facturas.')
+                return false
+            }
+
+            let confirmacion = await confirmar('Guardar', `¿Validaste que toda la información está correcta?`)
+            if (!confirmacion) return false
+
+            // Se agregan los datos del comprobante al recibo
+            datosRecibo.fecha_consignacion = $('#fecha_consignacion').val()
+            datosRecibo.cuenta_bancaria_id = $('#cuenta').val()
+            datosRecibo.referencia = $('#referencia').val()
+            datosRecibo.archivo_soporte = `1.${archivos[0].name.split('.').pop()}`
+        }
+
+        let recibo = await consulta('crear', datosRecibo, false)
+        
+        // Una vez creado el recibo
+        if (recibo.resultado) {
+            // Se crean los ítems del recibo
+            let reciboItems = await consulta('crear', {
+                tipo: 'recibos_detalle_estado_cuenta',
+                recibo_id: recibo.resultado,
+                items: calcularTotal()
+            }, false)
+
+            if (reciboItems.resultado) {
+                // Si es pago en línea, redirecciona a Wompi
+                if(pagarEnLinea) cargarInterfaz('clientes/estado_cuenta/carrito/pago', 'contenedor_pago_estado_cuenta', {id: recibo.resultado})
+
+                // Si es para subir comprobante
+                if(!pagarEnLinea) {
+                    var contadorArchivos = 0
+
+                    // Se recorren los archivos
+                    $.each(archivos, (key, archivo) => {
+                        contadorArchivos++
+                        
+                        let nombre = archivo.name.split('.')[0]
+                        let extension = archivo.name.split('.').pop()
+                        let tamanio = archivo.size / 1000
+                        let nombreArchivo = `${contadorArchivos}.${extension}`
+
+                        let anexo = new FormData()
+                        anexo.append('name', archivo, nombreArchivo)
+
+                        let peticion = new XMLHttpRequest()
+                        peticion.open('POST', `${$('#site_url').val()}/interfaces/subir_comprobante/${recibo.resultado}`)
+                        peticion.send(anexo)
+                        peticion.onload = evento => {
+                            let respuesta = JSON.parse(evento.target.responseText)
+
+                            consulta('actualizar', {
+                                tipo: 'recibos',
+                                id: recibo.resultado,
+                                archivos: contadorArchivos
+                            }, false)
+                        }
+                    })
+
+                    mostrarAviso('exito', 'Comprobantes subidos exitosamente')
+
+                    // Se muestra el mensaje inicial
+                    $('#mensaje_inicial').show()
+
+                    vaciarCarritoEstadoCuenta()
+                }
+            }
+        }
     }
 
     $().ready(() => {
-        listarFacturas()
-
-        cargarInterfaz('clientes/estado_cuenta/carrito/index', 'contenedor_carrito_facturas', {numero_documento: '<?php echo $datos['numero_documento']; ?>', nit_comprobante: '<?php echo $datos['nit_comprobante']; ?>'})
+        cargarFacturasPedientes()
+        cargarFacturasSeleccionadas()
 
         // Datos del cliente para mostrar al inicio de la interfaz
         let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')
