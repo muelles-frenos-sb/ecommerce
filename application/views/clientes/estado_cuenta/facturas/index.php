@@ -63,20 +63,22 @@
     </div>
 </div>
 
-<div class="row mt-2">
+<div class="row p-4">
     <div class="col-12">
         <!-- Si trae NIT de comprobante, es la sección para vendedores -->
         <?php if($datos['nit_comprobante']) { ?>
-            <div class="mt-2 mb-2 d-flex flex-column">
+            <div class="d-flex flex-column">
                 <!-- <input type="hidden" id="total_faltante_amortizacion" value=""> -->
                 <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>
-                <h4 class="align-self-end">Valor faltante: $<span id="comprobante_valor_faltante">0</span></h4>
+                <h4 class="align-self-end">Diferencia: $<span id="comprobante_valor_faltante">0</span></h4>
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Guardar pago con comprobante</button>
         <?php } else { ?>
             <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
         <?php } ?>
+
+        <button type="button" class="btn btn-secondary btn-sm btn-block" onClick="javascript:history.back()">Consultar otro cliente</button>
 
         <center>
             <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid"alt="Opciones de pago">

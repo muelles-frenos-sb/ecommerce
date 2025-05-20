@@ -143,7 +143,22 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                     </td>
                     <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td><!-- Valor doc -->
                     <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td><!-- Abonos -->
-                    <td class="text-right"><?php echo formato_precio($factura->totalCop); ?></td><!-- Saldo -->
+                    <td class="text-right">
+                        <?php
+                        // Saldo
+                        if($factura->totalCop < 0) {
+                            echo "
+                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
+                                <div class='status-badge__body'>
+                                    <div class='status-badge__text'>".formato_precio($factura->totalCop)."</div>
+                                </div>
+                            </div>
+                            ";
+                        } else {
+                            echo formato_precio($factura->totalCop);
+                        }
+                        ?>
+                    </td>
                     <td class="text-center">
                         <a href="javascript:;" onClick="javascript:cargarMovimientos({
                             documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',

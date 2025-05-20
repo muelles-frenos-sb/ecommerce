@@ -92,12 +92,12 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
             { title: 'Días venc', className: 'dt-right' },
             { title: 'Valor doc', className: 'dt-right' },
             { title: 'Abonos', className: 'dt-right' },
-            { title: 'Saldo', className: 'dt-right'  },
+            { title: 'Saldo inicial', className: 'dt-right' },
             { title: 'Sucursal' },
             { title: 'Valor a pagar' },
             { title: 'Descuento' },
-            { title: 'Valor final' },
-        ]
+            { title: 'Valor neto a pagar' },
+        ],
     })
 
     agregarFactura = datos => {
