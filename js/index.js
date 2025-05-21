@@ -106,7 +106,7 @@ cargarMasDatos = tipo => {
 
 confirmar = (tipo, mensaje) => {
     let respuesta = Swal.fire({
-        text: mensaje,
+        html: mensaje,
         icon: 'question',
         showCancelButton: true,
         confirmButtonColor: '#d33',

@@ -201,14 +201,26 @@
                 return false
             }
 
-            // Si el total es diferente al monto
-            if(total !== parseFloat($('#monto').val().replace(/\./g, ''))) {
-                mostrarAviso('alerta', 'El monto indicado no es igual al valor pagado de las facturas.')
-                return false
-            }
+            let diferencia = total - parseFloat($('#monto').val().replace(/\./g, ''))
+            let diferenciaPositiva = (diferencia < 0) ? diferencia * -1 : diferencia    // La diferencia siempre positiva
 
-            let confirmacion = await confirmar('Guardar', `¿Validaste que toda la información está correcta?`)
-            if (!confirmacion) return false
+            // Si el total es diferente al monto descrito
+            if(diferencia !== 0) {
+                // Texto para el tipo de diferencia
+                let mensajeDiferencia = (diferencia > 0) ? 'es menor que' : 'supera'
+
+                var tipoDiferencia
+                if(diferenciaPositiva > 10000) tipoDiferencia = 'saldo a favor'     // Más de 10.000 pesos
+                if(diferenciaPositiva <= 10000) tipoDiferencia = 'aprovechamientos' // Hasta 10.000 pesos
+                if(diferenciaPositiva <= 1000) tipoDiferencia = 'ajuste al peso'    // Hasta 1.000 pesos
+
+                // Mensaje de advertencia
+                let confirmacionDiferencia = await confirmar('De acuerdo', `⚠️ El valor consignado <b>${mensajeDiferencia}</b> el total de facturas en <b>$${formatearNumero(diferenciaPositiva)}</b>. Este valor se registrará como <b>${tipoDiferencia}</b>.`)
+                if (!confirmacionDiferencia) return false
+
+                // Se agrega el valor de diferencia en un campo aparte
+                datosRecibo.valor_pagado_mayor = diferencia
+            }
 
             // Se agregan los datos del comprobante al recibo
             datosRecibo.fecha_consignacion = $('#fecha_consignacion').val()

@@ -169,3 +169,6 @@ ALTER TABLE `recibos_detalle`
 
 -- 20250514 Campo agregado
 ALTER TABLE `recibos` ADD COLUMN `referencia` varchar(50) NULL AFTER `cuenta_bancaria_id`;
+
+-- 20250520 Campo agregado para almacenar la diferencia de valores entre el pagado y el consignado
+ALTER TABLE `recibos` ADD COLUMN `valor_pagado_mayor` double NULL DEFAULT 0 AFTER `fecha_actualizacion_bot`;
