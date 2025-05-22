@@ -77,11 +77,10 @@
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Guardar pago con comprobante</button>
+            <button type="button" class="btn btn-secondary btn-sm btn-block" onClick="javascript:history.back()">Consultar otro cliente</button>
         <?php } else { ?>
             <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
         <?php } ?>
-
-        <button type="button" class="btn btn-secondary btn-sm btn-block" onClick="javascript:history.back()">Consultar otro cliente</button>
 
         <center>
             <img src="<?php echo base_url(); ?>images/banners/opciones_pago.png" class="img-fluid"alt="Opciones de pago">
