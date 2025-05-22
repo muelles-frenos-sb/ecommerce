@@ -88,7 +88,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 $total_pagado += $factura->valorDoc;
                 $total_saldo += $factura->totalCop;
             ?>
-                <tr id="factura_<?php echo $contador; ?>">
+                <tr id="factura_<?php echo $factura->id; ?>">
                     <td>
                         <div class="form-check" style="height: 13px;">
                             <input class="form-check-input" type="radio" onClick="javascript:agregarFactura({

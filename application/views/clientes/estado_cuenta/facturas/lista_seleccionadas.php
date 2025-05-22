@@ -98,6 +98,9 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
             { title: 'Descuento' },
             { title: 'Valor neto a pagar' },
         ],
+        createdRow: function (row, data, dataIndex) {
+            row.id = 'id_factura_seleccionada_' + $('#id_registro').val();
+        }
     })
 
     agregarFactura = datos => {
@@ -131,7 +134,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                     Swal.close()
 
                     // Se oculta la celda
-                    $(`#factura_${datos.contador}`).hide()
+                    $(`#factura_${datos.id}`).hide()
 
                     // Se oculta el mensaje inicial
                     $('#mensaje_inicial').hide()
@@ -141,8 +144,11 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                     // Si el valor es negativo, no debe dejarse editar
                     let desactivado = (datos.valor < 0) ? 'disabled' : ''
 
+                    // Al campo oculto se le asigna el id, para que luego sea asignado al nuevo registro en la tabla de seleccionados
+                    $('#id_registro').val(datos.id)
+
                     tablaFacturasSeleccionadas.row.add([
-                        `<button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.contador})">
+                        `<button type="button" class="vehicles-list__item-remove" onClick="removerFactura(${datos.id})">
                             <svg width="16" height="16">
                                 <path d="M2,4V2h3V1h6v1h3v2H2z M13,13c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5h10V13z" />
                             </svg>
@@ -255,7 +261,8 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
 
     removerFactura = async(id) => {
         // El registro en el mini carrito se quita
-        $(`#id_registro_${id}`).remove()
+        // $(`#id_factura_seleccionada_${id}`).remove()
+        tablaFacturasSeleccionadas.row(`#id_factura_seleccionada_${id}`).remove().draw(false)
 
         // Se vuelve a agregar en la tabla
         $(`#factura_${id}`).show()
