@@ -218,6 +218,7 @@ class Interfaces extends CI_Controller {
                         'recibo_id' => $datos['recibo_id'],
                         'documento_cruce_numero' => $item['documento_cruce_numero'],
                         'documento_cruce_tipo' => $item['documento_cruce_tipo'],
+                        'documento_cruce_fecha' => $item['documento_cruce_fecha'],
                         'subtotal' => $item['subtotal'],
                         'descuento' => $item['descuento'],
                         'cuota_numero' => $item['cuota_numero'],

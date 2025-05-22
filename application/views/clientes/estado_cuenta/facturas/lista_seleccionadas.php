@@ -172,6 +172,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                             data-numero_cuota="${datos.numero_cuota}"
                             data-centro_operativo="${datos.centro_operativo}"
                             data-documento_cruce_tipo="${datos.documento_cruce_tipo}"
+                            data-documento_cruce_fecha="${datos.documento_cruce_fecha}"
                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                             data-valor_bruto="${valorBruto}"
                             class="form-control valor_pago_factura"
@@ -234,6 +235,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                 documento_cruce_numero: $(this).attr('data-documento_cruce_numero'),
                 cuota_numero: $(this).attr('data-numero_cuota'),
                 documento_cruce_tipo: $(this).attr('data-documento_cruce_tipo'),
+                documento_cruce_fecha: $(this).attr('data-documento_cruce_fecha'),
                 subtotal: valorAPagar,
                 descuento: valorDescuento,
                 centro_operativo: $(this).attr('data-centro_operativo'),

@@ -102,6 +102,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 numero_cuota: '<?php echo $factura->Nro_cuota; ?>',
                                 centro_operativo: '<?php echo $factura->CentroOperaciones; ?>',
                                 documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
+                                documento_cruce_fecha: '<?php echo $factura->Fecha_doc_cruce; ?>',
                                 valor: `<?php echo number_format($factura->totalCop, 0, '', ''); ?>`,
                                 sede: `<?php echo $factura->centro_operativo; ?>`,
                                 tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,

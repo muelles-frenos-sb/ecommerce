@@ -229,7 +229,8 @@ Class Configuracion_model extends CI_Model {
 	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion,
                     IF(r.fecha_actualizacion_bot is NOT NULL, 1, 0) actualizado_bot,
                     cb.codigo AS cuenta_bancaria_codigo,
-                    CONCAT_WS('/', '$url_archivo', r.id, r.archivo_soporte) archivo_soporte 
+                    CONCAT_WS('/', '$url_archivo', r.id, r.archivo_soporte) archivo_soporte,
+                    ( SELECT MAX( rd.documento_cruce_fecha ) FROM recibos_detalle AS rd WHERE rd.recibo_id = r.id ) fecha_recaudo
                 FROM
                     recibos AS r
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
