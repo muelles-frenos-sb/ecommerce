@@ -14,7 +14,7 @@ class Configuracion extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->data['permisos'] = $this->verificar_permisos();
+        if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
     }
     
     function obtener() {
