@@ -1,7 +1,7 @@
 <div class="block block-sale">
     <div class="block-sale__content">
         <div class="block-sale__header">
-            <img src="<?php echo base_url(); ?>images/banners/promociones.png" alt="Promociones" height="70">
+            <img src="<?php echo base_url(); ?>images/banners/promociones.png" alt="Promociones" width="100%" class="p-2">
             <!-- <div class="block-sale__timer">
                 <div class="timer">
                     <div class="timer__part">
