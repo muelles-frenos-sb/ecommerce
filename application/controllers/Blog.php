@@ -29,6 +29,11 @@ class Blog extends MY_Controller {
         $this->load->view('core/body', $this->data);
     }
 
+    function denuncias() {
+        $this->data['contenido_principal'] = 'blog/denuncias';
+        $this->load->view('core/body', $this->data);
+    }
+
     function credito() {
         $this->data['contenido_principal'] = 'blog/credito';
         $this->load->view('core/body', $this->data);
