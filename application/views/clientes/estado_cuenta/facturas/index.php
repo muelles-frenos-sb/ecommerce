@@ -156,8 +156,9 @@
     }
 
     guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
-        let total = parseFloat($('#total_pago').val())
+        let total = parseFloat($('#total_pago').val()) // Para pagos en línea
         var archivos = $('#estado_cuenta_archivos').prop('files')
+        var monto = ($('#monto').val()) ? parseFloat($('#monto').val().replace(/\./g, '')) : 0 // Para pagos con comprobantes
 
         if(total == 0 || isNaN(total)) {
             mostrarAviso('alerta', 'No hay ninguna factura seleccionada para pagar. Selecciona una o varias facturas para continuar el proceso.')
@@ -184,7 +185,7 @@
             documento_numero: $('#factura_tercero_documento_numero').val(),
             usuario_creacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
             email: localStorage.simonBolivar_emailContacto,
-            valor: total,
+            valor: (pagarEnLinea) ? total : monto,
         }
 
         // Si no es un pago en línea, se validan campos obligatorios
@@ -203,7 +204,7 @@
                 return false
             }
 
-            let diferencia = total - parseFloat($('#monto').val().replace(/\./g, ''))
+            let diferencia = total - monto
             let diferenciaPositiva = (diferencia < 0) ? diferencia * -1 : diferencia    // La diferencia siempre positiva
 
             // Si el total es diferente al monto descrito
