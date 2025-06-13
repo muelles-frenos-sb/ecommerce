@@ -175,3 +175,21 @@ ALTER TABLE `recibos` ADD COLUMN `valor_pagado_mayor` double NULL DEFAULT 0 AFTE
 
 -- 20250521 Campo agregado
 ALTER TABLE `recibos_detalle` ADD COLUMN `documento_cruce_fecha` date NULL AFTER `cuota_numero`;
+
+-- 20250611 Se agregan tablas para las cotizaciones de productos
+CREATE TABLE `cotizaciones_solicitudes` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `fecha_creacion` datetime DEFAULT NULL,
+    `usuario_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `cotizaciones_detalle` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `cotizacion_id` int(11) DEFAULT NULL,
+    `producto_id` int(11) DEFAULT NULL,
+    `cantidad` double DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `cotizacion_id` (`cotizacion_id`),
+    CONSTRAINT `cotizaciones_detalle_ibfk_1` FOREIGN KEY (`cotizacion_id`) REFERENCES `cotizaciones_solicitudes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

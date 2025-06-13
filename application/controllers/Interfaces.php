@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model']);
     }
 
     var $ruta = './archivos/';
@@ -156,6 +156,22 @@ class Interfaces extends CI_Controller {
                     'fecha_vencimiento' => $fecha_vencimiento,
                     'codigo' => $codigo,
                 ]);
+            break;
+
+            case 'cotizaciones_solicitudes':
+                $datos_crear = [
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'usuario_id' => $this->session->userdata('usuario_id')
+                ];
+
+                // Se realiza la creación de la solicitude de cotización de productos
+                $cotizacion_solicitud_id = $this->proveedores_model->crear($tipo, $datos_crear);
+                $cotizacion_detalle = $datos['cotizacion_detalle'];
+
+                // Se asocia la cotización al listado de productos
+                foreach ($cotizacion_detalle as $index => $registro) $cotizacion_detalle[$index]['cotizacion_id'] = $cotizacion_solicitud_id;
+
+                print json_encode(['resultado' => $this->proveedores_model->insertar_batch("cotizaciones_detalle", $cotizacion_detalle)]);
             break;
             
             case 'factura_documento_contable':
