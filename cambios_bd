@@ -197,3 +197,13 @@ CREATE TABLE `cotizaciones_detalle` (
 -- 20250613 Nombre de tabla modificado
 RENAME TABLE cotizaciones_solicitudes TO proveedores_cotizaciones_solicitudes;
 RENAME TABLE cotizaciones_detalle TO proveedores_cotizaciones_solicitudes_detalle;
+
+-- 20250613 Relación de las marcas y proveedores
+CREATE TABLE `proveedores_marcas`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `proveedor_nit` varchar(100) NULL,
+  `marca_codigo` varchar(255) NULL,
+  `fecha_creacion` datetime(0) NULL DEFAULT NULL,
+  `usuario_id` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
