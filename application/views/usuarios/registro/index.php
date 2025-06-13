@@ -363,7 +363,7 @@
         })
 
         // Se consulta en Siesa el tercero
-        let consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: $('#usuario_numero_documento1').val()}, false)
+        var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: $('#usuario_numero_documento1').val()}, false)
 
         // Si no es vendedor
         if(!esVendedor) {
@@ -402,19 +402,27 @@
                 Ahora puedes <a href='${$('#site_url').val()}/sesion'>iniciar sesión haciendo clic aquí</a>
             `, 20000)
         }
-
-        // Si el tercero no existe en Siesa
-        if(!consultaTercero.codigo == 0) {
+        
+        // Si es un perfil de vendedor, va a crear el tercero en Siesa
+        if(esVendedor) {
+            // Si el tercero ya existe en Siesa
+            if(consultaTercero.codigo == 0) {
+                Swal.close()
+                mostrarAviso('alerta', `No se creó el tercero en el ERP, porque ya existe`, 20000)
+                return false
+            }
+            
             let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
             creacionTerceroSiesa.then(resultado => {
-                if(esVendedor) mostrarAviso('exito', `¡El tercero ha sido creado correctamente!`, 20000)
-                console.log(resultado)
-
                 agregarLog(51, JSON.stringify(resultado))
-            })
-        } else if(esVendedor) {
-            Swal.close()
-            mostrarAviso('alerta', `No se creó el tercero en Siesa, porque ya existe`, 20000)
+                
+                if(resultado[0].codigo == 1) {
+                    mostrarAviso('error', `No se pudo crear el tercero en el ERP: <b>${resultado[0].detalle}</b>`, 20000)
+                    return false
+                }
+
+                if(esVendedor) mostrarAviso('exito', `¡El tercero ha sido creado correctamente!`, 20000)
+            }) 
         }
     }
 
