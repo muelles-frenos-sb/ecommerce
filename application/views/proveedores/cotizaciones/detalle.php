@@ -87,7 +87,7 @@
         let cotizacionProductos = obtenerCotizacionProductos()
 
         let datos = {
-            tipo: 'cotizaciones_solicitudes',
+            tipo: 'proveedores_cotizaciones_solicitudes',
             cotizacion_detalle: cotizacionProductos
         }
 

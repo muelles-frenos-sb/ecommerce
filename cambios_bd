@@ -193,3 +193,7 @@ CREATE TABLE `cotizaciones_detalle` (
     KEY `cotizacion_id` (`cotizacion_id`),
     CONSTRAINT `cotizaciones_detalle_ibfk_1` FOREIGN KEY (`cotizacion_id`) REFERENCES `cotizaciones_solicitudes` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20250613 Nombre de tabla modificado
+RENAME TABLE cotizaciones_solicitudes TO proveedores_cotizaciones_solicitudes;
+RENAME TABLE cotizaciones_detalle TO proveedores_cotizaciones_solicitudes_detalle;

@@ -20,6 +20,7 @@ class Proveedores extends MY_Controller {
             case 'crear':
                 $this->data['contenido_principal'] = 'proveedores/cotizaciones/detalle';
                 $this->load->view('core/body', $this->data);
+            break;
         }
     }
 }

@@ -157,8 +157,8 @@ class Interfaces extends CI_Controller {
                     'codigo' => $codigo,
                 ]);
             break;
-
-            case 'cotizaciones_solicitudes':
+            
+            case 'proveedores_cotizaciones_solicitudes':
                 $datos_crear = [
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                     'usuario_id' => $this->session->userdata('usuario_id')
@@ -171,7 +171,7 @@ class Interfaces extends CI_Controller {
                 // Se asocia la cotización al listado de productos
                 foreach ($cotizacion_detalle as $index => $registro) $cotizacion_detalle[$index]['cotizacion_id'] = $cotizacion_solicitud_id;
 
-                print json_encode(['resultado' => $this->proveedores_model->insertar_batch("cotizaciones_detalle", $cotizacion_detalle)]);
+                print json_encode(['resultado' => $this->proveedores_model->insertar_batch("proveedores_cotizaciones_solicitudes_detalle", $cotizacion_detalle)]);
             break;
             
             case 'factura_documento_contable':
