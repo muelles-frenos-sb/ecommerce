@@ -241,8 +241,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-                    r.fecha_creacion DESC
-                    -- orden, r.fecha_creacion DESC
+                    r.id DESC
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
