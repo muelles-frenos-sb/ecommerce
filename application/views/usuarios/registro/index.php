@@ -3,9 +3,6 @@
         <div class="block-header__body">
             <h1 class="block-header__title">Registro de usuario</h1>
         </div>
-        <div class="alert alert-primary mb-3">
-            Regístrate para obtener grandes descuentos en toda nuestra tienda
-        </div>
     </div>
 </div>
 

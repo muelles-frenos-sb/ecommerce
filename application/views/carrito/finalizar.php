@@ -30,13 +30,6 @@ if($this->session->userdata('usuario_id')) {
 <div class="checkout block">
     <div class="container container--max--xl">
         <div class="row">
-            <!-- Si no ha iniciado sesión -->
-            <?php if(!$this->session->userdata('usuario_id')) { ?>
-                <a href="<?php echo site_url('sesion?url='.current_url()); ?>">
-                    <img src="<?php echo base_url(); ?>images/inicia_sesion.png" alt="Inicia sesión" class="mb-2" width="100%">
-                </a>
-            <?php } ?>
-
             <div class="col-12 col-lg-6 col-xl-7">
                 <div class="card mb-lg-0">
                     <div class="card-body card-body--padding--2">
@@ -107,7 +100,7 @@ if($this->session->userdata('usuario_id')) {
                             </div>
                         </div>
 
-                        <img src="<?php echo base_url(); ?>images/mensaje_flete.png?" alt="Continuar comprando" class="mb-2" width="100%">
+                        <img src="<?php echo base_url(); ?>images/mensaje_flete_gratis.png" alt="Continuar comprando" class="mb-2" width="100%">
 
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
