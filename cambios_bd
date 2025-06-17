@@ -207,3 +207,5 @@ CREATE TABLE `proveedores_marcas`  (
   `usuario_id` int NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
+
+ALTER TABLE `proveedores_cotizaciones_solicitudes_detalle` ADD COLUMN `precio` double NULL AFTER `cantidad`;

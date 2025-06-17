@@ -69,6 +69,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'proveedores_cotizaciones_solicitudes_detalle':
+                $resultado = $this->proveedores_model->actualizar_batch($tipo, $datos['cotizacion_detalle'], 'id');
+            break;
+
             default:
                 if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
 

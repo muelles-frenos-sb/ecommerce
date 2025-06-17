@@ -17,8 +17,15 @@ class Proveedores extends MY_Controller {
         // if(!in_array(['configuracion' => 'configuracion_productos_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
-            case 'crear':
-                $this->data['contenido_principal'] = 'proveedores/cotizaciones/detalle';
+            case 'solicitar':
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/solicitud';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'cotizar':
+                $this->data['cotizacion_id'] = $this->uri->segment(4);
+                $this->data['nit'] = $this->uri->segment(5);
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/cotizacion';
                 $this->load->view('core/body', $this->data);
             break;
         }

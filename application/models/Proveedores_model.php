@@ -45,6 +45,29 @@ Class Proveedores_model extends CI_Model{
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) valor'
                     ])
                     ->from('productos p')
+                    ->where("marca", "SERVICIO")
+                    ->get()
+                    ->result()
+                ;
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes_detalle':
+                return $this->db
+                    ->select([
+                        'pcsd.id',
+                        'pcsd.cotizacion_id',
+                        'pcsd.producto_id',
+                        'pcsd.cantidad',
+                        'pcsd.precio',
+                        'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
+                    ])
+                    ->from('proveedores_cotizaciones_solicitudes_detalle pcsd')
+                    ->join('productos p', 'pcsd.producto_id = p.id', 'left')
+                    ->join('proveedores_marcas pm', 'p.marca = pm.marca_codigo', 'left')
+                    ->where([
+                        'pcsd.cotizacion_id' => $datos['cotizacion_id'],
+                        'pm.proveedor_nit' => $datos['nit']
+                    ])
                     ->get()
                     ->result()
                 ;
