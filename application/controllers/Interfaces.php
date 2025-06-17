@@ -65,6 +65,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'proveedores_marcas':
+                $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             default:
                 if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
 
@@ -173,7 +177,14 @@ class Interfaces extends CI_Controller {
 
                 print json_encode(['resultado' => $this->proveedores_model->insertar_batch("proveedores_cotizaciones_solicitudes_detalle", $cotizacion_detalle)]);
             break;
-            
+
+            case 'proveedores_marcas':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id']  = $this->session->userdata('usuario_id');
+
+                print json_encode(['resultado' => $this->proveedores_model->crear($tipo, $datos)]);
+            break;
+
             case 'factura_documento_contable':
                 // Si trae cuentas contables, las agrega en la consulta
                 $datos_movimientos_contables = (isset($datos['movimientos_contables'])) ? $datos['movimientos_contables'] : null ;
@@ -449,6 +460,10 @@ class Interfaces extends CI_Controller {
 
             case 'productos_metadatos':
                 print json_encode(['resultado' => $this->productos_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'proveedores_marcas':
+                print json_encode(['resultado' => $this->proveedores_model->eliminar($tipo, $datos)]);
             break;
 
             case 'terceros_contactos':
