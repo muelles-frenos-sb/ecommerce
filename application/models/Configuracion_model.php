@@ -398,8 +398,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 GROUP BY
                     p.marca
-                ORDER BY
-                    m.orden ASC
+                $order_by
                 ";
                 
                 return $this->db->query($sql)->result();
@@ -507,6 +506,7 @@ Class Configuracion_model extends CI_Model {
 
                 if(isset($datos['f200_ind_cliente'])) $where .= " AND t.f200_ind_cliente = {$datos['f200_ind_cliente']} ";
                 if(isset($datos['nit'])) $where .= " AND t.f200_nit = '{$datos['nit']}' ";
+                if(isset($datos['f200_ind_proveedor']) && $datos['f200_ind_proveedor']) $where .= " AND t.f200_ind_proveedor = {$datos['f200_ind_proveedor']} ";
 
                 $sql =
                 "SELECT

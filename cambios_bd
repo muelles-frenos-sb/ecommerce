@@ -175,3 +175,39 @@ ALTER TABLE `recibos` ADD COLUMN `valor_pagado_mayor` double NULL DEFAULT 0 AFTE
 
 -- 20250521 Campo agregado
 ALTER TABLE `recibos_detalle` ADD COLUMN `documento_cruce_fecha` date NULL AFTER `cuota_numero`;
+
+-- 20250611 Se agregan tablas para las cotizaciones de productos
+CREATE TABLE `cotizaciones_solicitudes` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `fecha_creacion` datetime DEFAULT NULL,
+    `usuario_id` int(11) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `cotizaciones_detalle` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `cotizacion_id` int(11) DEFAULT NULL,
+    `producto_id` int(11) DEFAULT NULL,
+    `cantidad` double DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `cotizacion_id` (`cotizacion_id`),
+    CONSTRAINT `cotizaciones_detalle_ibfk_1` FOREIGN KEY (`cotizacion_id`) REFERENCES `cotizaciones_solicitudes` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20250613 Nombre de tabla modificado
+RENAME TABLE cotizaciones_solicitudes TO proveedores_cotizaciones_solicitudes;
+RENAME TABLE cotizaciones_detalle TO proveedores_cotizaciones_solicitudes_detalle;
+
+-- 20250613 Relación de las marcas y proveedores
+CREATE TABLE `proveedores_marcas`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `proveedor_nit` varchar(100) NULL,
+  `marca_codigo` varchar(255) NULL,
+  `fecha_creacion` datetime(0) NULL DEFAULT NULL,
+  `usuario_id` int NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `proveedores_cotizaciones_solicitudes_detalle` ADD COLUMN `precio` double NULL AFTER `cantidad`;
+
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (14, 'configuracion_proveedores_ver', 'Ver módulo', 2);

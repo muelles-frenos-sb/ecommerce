@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model']);
     }
 
     var $ruta = './archivos/';
@@ -63,6 +63,14 @@ class Interfaces extends CI_Controller {
             case 'productos_metadatos':
                 $datos['fecha_modificacion'] = date("Y-m-d H:i:s");
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
+            case 'proveedores_marcas':
+                $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes_detalle':
+                $resultado = $this->proveedores_model->actualizar_batch($tipo, $datos['cotizacion_detalle'], 'id');
             break;
 
             default:
@@ -158,6 +166,29 @@ class Interfaces extends CI_Controller {
                 ]);
             break;
             
+            case 'proveedores_cotizaciones_solicitudes':
+                $datos_crear = [
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'usuario_id' => $this->session->userdata('usuario_id')
+                ];
+
+                // Se realiza la creación de la solicitude de cotización de productos
+                $cotizacion_solicitud_id = $this->proveedores_model->crear($tipo, $datos_crear);
+                $cotizacion_detalle = $datos['cotizacion_detalle'];
+
+                // Se asocia la cotización al listado de productos
+                foreach ($cotizacion_detalle as $index => $registro) $cotizacion_detalle[$index]['cotizacion_id'] = $cotizacion_solicitud_id;
+
+                print json_encode(['resultado' => $this->proveedores_model->insertar_batch("proveedores_cotizaciones_solicitudes_detalle", $cotizacion_detalle)]);
+            break;
+
+            case 'proveedores_marcas':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id']  = $this->session->userdata('usuario_id');
+
+                print json_encode(['resultado' => $this->proveedores_model->crear($tipo, $datos)]);
+            break;
+
             case 'factura_documento_contable':
                 // Si trae cuentas contables, las agrega en la consulta
                 $datos_movimientos_contables = (isset($datos['movimientos_contables'])) ? $datos['movimientos_contables'] : null ;
@@ -433,6 +464,10 @@ class Interfaces extends CI_Controller {
 
             case 'productos_metadatos':
                 print json_encode(['resultado' => $this->productos_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'proveedores_marcas':
+                print json_encode(['resultado' => $this->proveedores_model->eliminar($tipo, $datos)]);
             break;
 
             case 'terceros_contactos':
