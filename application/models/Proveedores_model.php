@@ -45,7 +45,6 @@ Class Proveedores_model extends CI_Model{
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) valor'
                     ])
                     ->from('productos p')
-                    ->where("marca", "SERVICIO")
                     ->get()
                     ->result()
                 ;
