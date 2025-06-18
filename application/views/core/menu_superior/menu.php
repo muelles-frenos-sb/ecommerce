@@ -70,6 +70,22 @@
                                     </a>
                                 </li>
                             <?php } ?>
+
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_proveedores_ver'], $permisos)) { ?>
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url('proveedores/marcas/crear'); ?>" class="menu__link">
+                                        Proveedores - Marcas
+                                    </a>
+                                </li>
+                            <?php } ?>
+
+                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_proveedores_ver'], $permisos)) { ?>
+                                <li class="menu__item">
+                                    <a href="<?php echo site_url('proveedores/cotizaciones/solicitar'); ?>" class="menu__link">
+                                        Proveedores - Solicitar cotización
+                                    </a>
+                                </li>
+                            <?php } ?>
                         </ul>
                     </div>
                 </li>

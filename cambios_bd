@@ -209,3 +209,5 @@ CREATE TABLE `proveedores_marcas`  (
 );
 
 ALTER TABLE `proveedores_cotizaciones_solicitudes_detalle` ADD COLUMN `precio` double NULL AFTER `cantidad`;
+
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (14, 'configuracion_proveedores_ver', 'Ver módulo', 2);
