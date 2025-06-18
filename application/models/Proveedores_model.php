@@ -93,7 +93,9 @@ Class Proveedores_model extends CI_Model{
                     // Se recorren las palabras
                     for ($i=0; $i < count($palabras); $i++) { 
                         $filtros_having .= " (";
-                        $filtros_having .= " proveedor_nit LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " proveedor_nombre LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR proveedor_nit LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR marca_nombre LIKE '%{$palabras[$i]}%'";
                         $filtros_having .= " OR marca_codigo LIKE '%{$palabras[$i]}%'";
                         $filtros_having .= ") ";
                         
@@ -109,12 +111,18 @@ Class Proveedores_model extends CI_Model{
                 $sql =
                 "SELECT
                     pm.id,
-                    pm.proveedor_nit,
-                    pm.marca_codigo,
                     pm.fecha_creacion,
-                    pm.usuario_id
-                FROM proveedores_marcas pm
-                WHERE pm.id is NOT NULL
+                    p.f200_nit AS proveedor_nit,
+                    p.f200_razon_social AS proveedor_nombre,
+                    m.codigo AS marca_codigo,
+                    m.nombre AS marca_nombre,
+                    pm.usuario_id 
+                FROM
+                    proveedores_marcas AS pm
+                    LEFT JOIN terceros AS p ON pm.proveedor_nit = p.f200_nit
+                    LEFT JOIN marcas AS m ON pm.marca_codigo = m.codigo 
+                WHERE
+                    pm.id IS NOT NULL
                 $filtros_where
                 $filtros_having
                 $order_by

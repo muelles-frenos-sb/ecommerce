@@ -14,8 +14,10 @@
     <table class="table-striped table-bordered" id="tabla_marcas">
         <thead>
             <tr>
-                <th class="text-center">NIT</th>
+                <th class="text-center">Código</th>
                 <th class="text-center">Marca</th>
+                <th class="text-center">NIT</th>
+                <th class="text-center">Proveedor</th>
                 <th class="text-center" style="width: 200px;">Acciones</th>
             </tr>
         </thead>
@@ -32,10 +34,10 @@
                 },
             },
             columns: [
-                {
-                    data: 'proveedor_nit',
-                },
                 { data: 'marca_codigo' },
+                { data: 'marca_nombre' },
+                { data: 'proveedor_nit' },
+                { data: 'proveedor_nombre' },
                 {
                     data: null, 
                     render: (data, type, row) => {

@@ -399,8 +399,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 GROUP BY
                     p.marca
-                ORDER BY
-                    m.orden ASC
+                $order_by
                 ";
                 
                 return $this->db->query($sql)->result();

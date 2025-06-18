@@ -12,17 +12,17 @@ if(isset($id)) {
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
                     <div class="form-group col-12 col-sm-6">
-                        <label for="proveedor_nit">Proveedor nit *</label>
-                        <select id="proveedor_nit" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social<option>"; ?>
-                        </select>
-                    </div>
-                    <div class="form-group col-12 col-sm-6">
-                        <label for="codigo_marca">Código marca *</label>
+                        <label for="codigo_marca">Marca *</label>
                         <select id="codigo_marca" class="form-control">
                             <option value="">Seleccione...</option>
                             <?php foreach ($this->configuracion_model->obtener("marcas") as $marca) echo "<option value='$marca->codigo'>$marca->nombre</option>"; ?>
+                        </select>
+                    </div>
+                    <div class="form-group col-12 col-sm-6">
+                        <label for="proveedor_nit">Proveedor *</label>
+                        <select id="proveedor_nit" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social<option>"; ?>
                         </select>
                     </div>
                 </div>
