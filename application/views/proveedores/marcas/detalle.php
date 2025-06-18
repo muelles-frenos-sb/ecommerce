@@ -13,11 +13,17 @@ if(isset($id)) {
                 <div class="form-row">
                     <div class="form-group col-12 col-sm-6">
                         <label for="proveedor_nit">Proveedor nit *</label>
-                        <input type="text" class="form-control" id="proveedor_nit" value="<?php if(!empty($proveedor_marca)) echo $proveedor_marca->proveedor_nit; ?>">
+                        <select id="proveedor_nit" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social<option>"; ?>
+                        </select>
                     </div>
                     <div class="form-group col-12 col-sm-6">
                         <label for="codigo_marca">Código marca *</label>
-                        <input type="text" class="form-control" id="codigo_marca" value="<?php if(!empty($proveedor_marca)) echo $proveedor_marca->marca_codigo; ?>">
+                        <select id="codigo_marca" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($this->configuracion_model->obtener("marcas") as $marca) echo "<option value='$marca->codigo'>$marca->nombre</option>"; ?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group mb-0 pt-3 mt-3">
@@ -29,6 +35,15 @@ if(isset($id)) {
     </div>
 </div>
 <div class="block-space block-space--layout--before-footer"></div>
+
+<?php if (isset($proveedor_marca)) { ?>
+    <script>
+        $().ready(() => {
+            $('#proveedor_nit').val('<?php echo $proveedor_marca->proveedor_nit; ?>')
+            $('#codigo_marca').val('<?php echo $proveedor_marca->marca_codigo; ?>')
+        })
+    </script>
+<?php } ?>
 
 <script>
     guardarProveedoresMarcas = async () => {
@@ -52,4 +67,8 @@ if(isset($id)) {
             await consulta('actualizar', datosProveedoresMarcas)
         }
     }
+
+    $().ready(() => {
+        $('#proveedor_nit, #codigo_marca').select2()
+    })
 </script>
