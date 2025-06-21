@@ -31,27 +31,27 @@ class Proveedores extends MY_Controller {
         }
     }
 
-    function marcas() {
+    function maestro($opcion) {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
-        switch ($this->uri->segment(3)) {
+        switch ($opcion) {
             case 'ver':
-                $this->data['contenido_principal'] = 'proveedores/marcas/index';
+                $this->data['contenido_principal'] = 'proveedores/maestro/index';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'lista':
-                $this->load->view('proveedores/marcas/lista');
+                $this->load->view('proveedores/maestro/lista');
             break;
 
             case 'crear':
-                $this->data['contenido_principal'] = 'proveedores/marcas/detalle';
+                $this->data['contenido_principal'] = 'proveedores/maestro/detalle';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'editar':
                 $this->data['id'] = $this->uri->segment(4);
-                $this->data['contenido_principal'] = 'proveedores/marcas/detalle';
+                $this->data['contenido_principal'] = 'proveedores/maestro/detalle';
                 $this->load->view('core/body', $this->data);
             break;
         }

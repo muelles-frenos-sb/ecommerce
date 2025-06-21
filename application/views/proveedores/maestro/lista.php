@@ -43,12 +43,12 @@
                     render: (data, type, row) => {
                         return `
                             <div class="p-1">
-                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/marcas/editar/${data.id}">
-                                    Editar
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/maestro/editar/${data.id}">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
 
                                 <a type="button" class="btn btn-sm btn-danger" href="javascript:eliminarMarcas(${data.id})">
-                                    Eliminar
+                                    <i class="fa fa-close"></i>
                                 </a>
                             </div>
                         `

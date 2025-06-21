@@ -84,7 +84,7 @@
                                     <div class="menu__submenu">
                                         <ul class="menu">
                                             <li class="menu__item">
-                                                <a href="<?php echo site_url('proveedores/marcas/ver'); ?>" class="menu__link">
+                                                <a href="<?php echo site_url('proveedores/maestro'); ?>" class="menu__link">
                                                     Maestro
                                                 </a>
                                             </li>
