@@ -12,11 +12,10 @@ class Proveedores extends MY_Controller {
         $this->load->model(['proveedores_model']);
     }
 
-    function cotizaciones() {
+    function cotizaciones($tipo) {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
-        // if(!in_array(['configuracion' => 'configuracion_productos_ver'], $this->data['permisos'])) redirect('inicio');
 
-        switch ($this->uri->segment(3)) {
+        switch ($tipo) {
             case 'solicitar':
                 $this->data['contenido_principal'] = 'proveedores/cotizaciones/solicitud';
                 $this->load->view('core/body', $this->data);
