@@ -29,6 +29,14 @@ Class Proveedores_model extends CI_Model{
             case 'proveedores_marcas':
                 return $this->db->delete('proveedores_marcas', $datos);
             break;
+
+            case 'proveedores_cotizaciones_solicitudes':
+                return $this->db->delete('proveedores_cotizaciones_solicitudes', $datos);
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes_detalle':
+                return $this->db->delete('proveedores_cotizaciones_solicitudes_detalle', $datos);
+            break;
         }
 
         $this->db->close;
@@ -51,6 +59,24 @@ Class Proveedores_model extends CI_Model{
             break;
 
             case 'proveedores_cotizaciones_solicitudes_detalle':
+                $this->db
+                    ->select([
+                        'pcsd.id',
+                        'pcsd.cotizacion_id',
+                        'pcsd.producto_id',
+                        'pcsd.cantidad',
+                        'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
+                    ])
+                    ->from('proveedores_cotizaciones_solicitudes_detalle pcsd')
+                    ->join('productos p', 'pcsd.producto_id = p.id', 'left')
+                ;
+
+                if (isset($datos['cotizacion_id'])) $this->db->where('pcsd.cotizacion_id', $datos['cotizacion_id']); 
+
+                return $this->db->get()->result();
+            break;
+
+            case 'proveedores_maestro_solicitudes_detalle':
                 return $this->db
                     ->select([
                         'pcsd.id',
@@ -123,6 +149,62 @@ Class Proveedores_model extends CI_Model{
                     LEFT JOIN marcas AS m ON pm.marca_codigo = m.codigo 
                 WHERE
                     pm.id IS NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    $filtros_having = "HAVING";
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " (";
+                        $filtros_having .= " fecha_inicio LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR fecha_fin LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if (isset($datos['id']) && $datos['id']) $filtros_where .= " AND pcs.id = {$datos['id']} ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pcs.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    pcs.id,
+                    pcs.fecha_inicio,
+                    pcs.fecha_fin,
+                    pcs.fecha_creacion,
+                    pcs.usuario_id
+                FROM
+                    proveedores_cotizaciones_solicitudes AS pcs
+                WHERE
+                    pcs.id IS NOT NULL
                 $filtros_where
                 $filtros_having
                 $order_by

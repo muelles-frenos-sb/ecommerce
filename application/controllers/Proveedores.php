@@ -16,11 +16,6 @@ class Proveedores extends MY_Controller {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($tipo) {
-            case 'solicitar':
-                $this->data['contenido_principal'] = 'proveedores/cotizaciones/solicitud';
-                $this->load->view('core/body', $this->data);
-            break;
-
             case 'cotizar':
                 $this->data['cotizacion_id'] = $this->uri->segment(4);
                 $this->data['nit'] = $this->uri->segment(5);
@@ -51,6 +46,32 @@ class Proveedores extends MY_Controller {
             case 'editar':
                 $this->data['id'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'proveedores/maestro/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
+    function solicitudes($opcion) {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+        switch ($opcion) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'proveedores/solicitudes/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'lista':
+                $this->load->view('proveedores/maestro/lista');
+            break;
+
+            case 'crear':
+                $this->data['contenido_principal'] = 'proveedores/solicitudes/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'editar':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'proveedores/solicitudes/detalle';
                 $this->load->view('core/body', $this->data);
             break;
         }
@@ -96,15 +117,37 @@ class Proveedores extends MY_Controller {
 
                 // Se obtienen los registros
                 $resultados = $this->proveedores_model->obtener("proveedores_marcas", $datos);
+            break;
 
-                print json_encode([
-                    "draw" => $this->input->get("draw"),
-                    "recordsTotal" => $total_resultados,
-                    "recordsFiltered" => $total_resultados,
-                    "data" => $resultados
-                ]);
+            case "proveedores_cotizaciones_solicitudes":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->proveedores_model->obtener("proveedores_cotizaciones_solicitudes", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->proveedores_model->obtener("proveedores_cotizaciones_solicitudes", $datos);
             break;
         }
+
+        print json_encode([
+            "draw" => $this->input->get("draw"),
+            "recordsTotal" => $total_resultados,
+            "recordsFiltered" => $total_resultados,
+            "data" => $resultados
+        ]);
     }
 }
 /* Fin del archivo Proveedores.php */
