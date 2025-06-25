@@ -89,7 +89,7 @@
                                                 </a>
                                             </li>
                                             <li class="menu__item">
-                                                <a href="<?php echo site_url('proveedores/solicitar_precios'); ?>" class="menu__link">
+                                                <a href="<?php echo site_url('proveedores/solicitudes/ver'); ?>" class="menu__link">
                                                     Solicitudes de precios
                                                 </a>
                                             </li>
