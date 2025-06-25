@@ -22,7 +22,7 @@ if(isset($id)) {
                         <label for="proveedor_nit">Proveedor *</label>
                         <select id="proveedor_nit" class="form-control">
                             <option value="">Seleccione...</option>
-                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social<option>"; ?>
+                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social</option>"; ?>
                         </select>
                     </div>
                 </div>

@@ -209,5 +209,9 @@ CREATE TABLE `proveedores_marcas`  (
 );
 
 ALTER TABLE `proveedores_cotizaciones_solicitudes_detalle` ADD COLUMN `precio` double NULL AFTER `cantidad`;
-
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (14, 'configuracion_proveedores_ver', 'Ver módulo', 2);
+
+-- 20250620 Campos creados para saber cuánto tiempo estará disponible la cotización
+ALTER TABLE `proveedores_cotizaciones_solicitudes` 
+ADD COLUMN `fecha_inicio` date NULL AFTER `usuario_id`,
+ADD COLUMN `fecha_fin` date NULL AFTER `fecha_inicio`;

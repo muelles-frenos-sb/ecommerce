@@ -1,9 +1,25 @@
+<?php
+if (isset($id)) {
+    $solicitud = $this->proveedores_model->obtener('proveedores_cotizaciones_solicitudes', ['id' => $id]);
+    $detalle = $this->proveedores_model->obtener('proveedores_cotizaciones_solicitudes_detalle', ['cotizacion_id' => $solicitud->id]);
+    echo "<input type='hidden' id='proveedor_solicitud_id' value='$solicitud->id' />";
+}
+?>
+
 <div class="block-space block-space--layout--after-header"></div>
 <div class="block">
     <div class="container">
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
+                    <div class="form-group col-6 col-md-6">
+                        <label for="fecha_inicio">Fecha de inicio *</label>
+                        <input type="date" class="form-control" id="fecha_inicio" value="<?php if (isset($solicitud)) echo $solicitud->fecha_inicio; ?>">
+                    </div>
+                    <div class="form-group col-6 col-md-6">
+                        <label for="fecha_finalizacion">Fecha finalización *</label>
+                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php if (isset($solicitud)) echo $solicitud->fecha_fin; ?>">
+                    </div>
                     <div class="form-group col-6 col-sm-8">
                         <label for="cotizacion_producto">Producto *</label>
                         <select id="cotizacion_producto" class="form-control">
@@ -20,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="row d-none" id="contenedor_cotizacion_detalle">
+                <div class="row <?php if (!isset($detalle) || isset($detalle) && !$detalle) echo 'd-none'; ?>" id="contenedor_cotizacion_detalle">
                     <div class="table-responsive mt-3 p-3">
                         <table class="table">
                             <thead>
@@ -30,7 +46,25 @@
                                     <th scope="col">Opciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="listado_cotizacion_detalle"></tbody>
+                            <tbody id="listado_cotizacion_detalle">
+                                <?php 
+                                if (isset($detalle)) {
+                                    foreach ($detalle as $registro) { 
+                                        echo "
+                                        <tr id='listado_producto_$registro->producto_id' data-producto-id='$registro->producto_id' data-creado='true'>
+                                            <td>$registro->producto</td>
+                                            <td>$registro->cantidad</td>
+                                            <td>
+                                                <a type='button' class='btn btn-sm btn-danger' href='javascript:eliminarCotizacionProducto($registro->id, $registro->producto_id)'>
+                                                    Quitar
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        ";
+                                    }
+                                }
+                                ?>
+                            </tbody>
                         </table>
 
                         <button class="btn btn-success w-100" onclick="javascript:guardarCotizacionProductos()">Guardar</button>
@@ -59,7 +93,7 @@
 
         $contenedor.removeClass("d-none")
 
-        let productosAgregados = obtenerCotizacionProductos()
+        let productosAgregados = obtenerCotizacionProductos(true)
         let productoAgregado = productosAgregados.filter((registro) => registro.producto_id == productoId)
 
         if (productoAgregado.length > 0) {
@@ -83,28 +117,57 @@
         `)
     }
 
+    eliminarCotizacionProducto = async (id, productoId) => {
+        let eliminar = await consulta('eliminar', {tipo: 'proveedores_cotizaciones_solicitudes_detalle', id: id})
+
+        if (eliminar) {
+            quitarCotizacionProducto(productoId)
+        }
+    }
+
     guardarCotizacionProductos = async() => {
+        let id = $("#proveedor_solicitud_id").val()
+
+        let camposObligatorios = [
+            $("#fecha_inicio"),
+            $("#fecha_finalizacion")
+        ]
+
+        if (!validarCamposObligatorios(camposObligatorios)) return false
+
         let cotizacionProductos = obtenerCotizacionProductos()
 
         let datos = {
             tipo: 'proveedores_cotizaciones_solicitudes',
+            fecha_inicio: $("#fecha_inicio").val(),
+            fecha_fin: $("#fecha_finalizacion").val(),
             cotizacion_detalle: cotizacionProductos
         }
 
-        await consulta('crear', datos)
+        if (!id) {
+            await consulta('crear', datos)
+        } else {
+            datos.id = id
+            await consulta('actualizar', datos)
+        }
     }
 
-    obtenerCotizacionProductos = () => {
+    obtenerCotizacionProductos = (validar = false) => {
         let cotizacionProductos = []
 
         $("#listado_cotizacion_detalle tr").each(function () {
+            let creado = $(this).data("creado")
+            let cotizacionId = $("#proveedor_solicitud_id").val()
+
             let datos = {
                 producto_id: $(this).data("producto-id"),
                 cantidad: $(this).data("cantidad"),
                 cotizacion_id: null
             }
 
-            cotizacionProductos.push(datos)
+            if (cotizacionId) datos.cotizacion_id = cotizacionId
+
+            if (!creado || validar) cotizacionProductos.push(datos)
         })
 
         return cotizacionProductos

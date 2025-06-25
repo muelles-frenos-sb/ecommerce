@@ -84,12 +84,12 @@
                                     <div class="menu__submenu">
                                         <ul class="menu">
                                             <li class="menu__item">
-                                                <a href="<?php echo site_url('proveedores/marcas/ver'); ?>" class="menu__link">
+                                                <a href="<?php echo site_url('proveedores/maestro'); ?>" class="menu__link">
                                                     Maestro
                                                 </a>
                                             </li>
                                             <li class="menu__item">
-                                                <a href="<?php echo site_url('proveedores/cotizaciones/solicitar'); ?>" class="menu__link">
+                                                <a href="<?php echo site_url('proveedores/solicitar_precios'); ?>" class="menu__link">
                                                     Solicitudes de precios
                                                 </a>
                                             </li>

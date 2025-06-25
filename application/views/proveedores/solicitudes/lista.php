@@ -11,13 +11,12 @@
 </style>
 
 <div class="table-responsive">
-    <table class="table-striped table-bordered" id="tabla_marcas">
+    <table class="table-striped table-bordered" id="tabla_solicitudes">
         <thead>
             <tr>
-                <th class="text-center">Código</th>
-                <th class="text-center">Marca</th>
-                <th class="text-center">NIT</th>
-                <th class="text-center">Proveedor</th>
+                <th class="text-center">Id</th>
+                <th class="text-center">Fecha de inicio</th>
+                <th class="text-center">Fecha de finalización</th>
                 <th class="text-center" style="width: 200px;">Acciones</th>
             </tr>
         </thead>
@@ -26,29 +25,28 @@
 
 <script>
     $().ready(() => {
-        $("#tabla_marcas").DataTable({
+        $("#tabla_solicitudes").DataTable({
             ajax: {
                 url: `${$("#site_url").val()}proveedores/obtener_datos_tabla`,
                 data: {
-                    tipo: "proveedores_marcas",
+                    tipo: "proveedores_cotizaciones_solicitudes",
                 },
             },
             columns: [
-                { data: 'marca_codigo' },
-                { data: 'marca_nombre' },
-                { data: 'proveedor_nit' },
-                { data: 'proveedor_nombre' },
+                { data: 'id' },
+                { data: 'fecha_inicio' },
+                { data: 'fecha_fin' },
                 {
                     data: null, 
                     render: (data, type, row) => {
                         return `
                             <div class="p-1">
-                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/marcas/editar/${data.id}">
-                                    Editar
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/solicitudes/editar/${data.id}">
+                                    <i class="fa fa-pencil"></i>
                                 </a>
 
-                                <a type="button" class="btn btn-sm btn-danger" href="javascript:eliminarMarcas(${data.id})">
-                                    Eliminar
+                                <a type="button" class="btn btn-sm btn-danger" href="javascript:eliminarSolicitudes(${data.id})">
+                                    <i class="fa fa-close"></i>
                                 </a>
                             </div>
                         `

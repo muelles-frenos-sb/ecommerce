@@ -4,7 +4,7 @@ $datos = [
     'nit' => $nit
 ];
 
-$detalle = $this->proveedores_model->obtener('proveedores_cotizaciones_solicitudes_detalle', $datos);
+$detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_detalle', $datos);
 ?>
 
 <div class="block-space block-space--layout--after-header"></div>

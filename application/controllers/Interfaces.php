@@ -69,6 +69,18 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'proveedores_cotizaciones_solicitudes':
+                $datos_actualizar = [
+                    'fecha_inicio' => $datos['fecha_inicio'],
+                    'fecha_fin' => $datos['fecha_fin'] 
+                ];
+
+                // Se realiza la actualización de la solicitud de cotización de productos
+                $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos_actualizar);
+
+                $resultado = $this->proveedores_model->insertar_batch("proveedores_cotizaciones_solicitudes_detalle", $datos['cotizacion_detalle']);
+            break;
+
             case 'proveedores_cotizaciones_solicitudes_detalle':
                 $resultado = $this->proveedores_model->actualizar_batch($tipo, $datos['cotizacion_detalle'], 'id');
             break;
@@ -169,7 +181,9 @@ class Interfaces extends CI_Controller {
             case 'proveedores_cotizaciones_solicitudes':
                 $datos_crear = [
                     'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'usuario_id' => $this->session->userdata('usuario_id')
+                    'usuario_id' => $this->session->userdata('usuario_id'),
+                    'fecha_inicio' => $datos['fecha_inicio'],
+                    'fecha_fin' => $datos['fecha_fin'] 
                 ];
 
                 // Se realiza la creación de la solicitude de cotización de productos
@@ -460,6 +474,17 @@ class Interfaces extends CI_Controller {
 
             case 'perfiles_roles':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes':
+                // Se eliminan todos los productos asociados a la solicitud de cotización
+                $this->proveedores_model->eliminar("proveedores_cotizaciones_solicitudes_detalle", ['cotizacion_id' => $datos['id']]);
+
+                print json_encode(['resultado' => $this->proveedores_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'proveedores_cotizaciones_solicitudes_detalle':
+                print json_encode(['resultado' => $this->proveedores_model->eliminar($tipo, $datos)]);
             break;
 
             case 'productos_metadatos':

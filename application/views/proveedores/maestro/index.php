@@ -1,7 +1,7 @@
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Marcas proveedores</h1>
+            <h1 class="block-header__title">Maestro de proveedores</h1>
         </div>
     </div>
 </div>
@@ -9,7 +9,7 @@
 <div class="block">
     <div class="container container--max--xl">
         <div class="mb-4">
-            <a class="btn btn-success" href="<?php echo site_url('proveedores/marcas/crear'); ?>">Crear</a>
+            <a class="btn btn-success" href="<?php echo site_url('proveedores/maestro/crear'); ?>">Crear</a>
         </div>
 
         <div id="contenedor_marcas"></div>
@@ -32,7 +32,7 @@
     }
 
     listarMarcas = () => {
-        cargarInterfaz('proveedores/marcas/lista', 'contenedor_marcas')
+        cargarInterfaz('proveedores/maestro/lista', 'contenedor_marcas')
     }
 
     $().ready(() => {
