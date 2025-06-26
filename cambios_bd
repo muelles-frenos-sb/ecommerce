@@ -215,3 +215,16 @@ INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (14, 'co
 ALTER TABLE `proveedores_cotizaciones_solicitudes` 
 ADD COLUMN `fecha_inicio` date NULL AFTER `usuario_id`,
 ADD COLUMN `fecha_fin` date NULL AFTER `fecha_inicio`;
+
+-- 20250620
+ALTER TABLE `proveedores_cotizaciones_solicitudes_detalle` DROP COLUMN `precio`;
+
+-- 20250620
+CREATE TABLE `proveedores_cotizaciones_detalle` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cotizacion_id` int(11) DEFAULT NULL,
+  `producto_id` int(11) DEFAULT NULL,
+  `proveedor_nit` varchar(100) DEFAULT NULL,
+  `precio` double DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

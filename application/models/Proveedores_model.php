@@ -58,6 +58,24 @@ Class Proveedores_model extends CI_Model{
                 ;
             break;
 
+            case 'proveedores_cotizaciones_detalle':
+                $this->db
+                    ->select([
+                        'pcd.id',
+                        'pcd.cotizacion_id',
+                        'pcd.producto_id',
+                        'pcd.precio',
+                        'pcd.proveedor_nit'
+                    ])
+                    ->from('proveedores_cotizaciones_detalle pcd')
+                ;
+
+                if (isset($datos['cotizacion_id'])) $this->db->where('pcd.cotizacion_id', $datos['cotizacion_id']); 
+                if (isset($datos['nit'])) $this->db->where('pcd.proveedor_nit', $datos['nit']); 
+
+                return $this->db->get()->result();
+            break;
+
             case 'proveedores_cotizaciones_solicitudes_detalle':
                 $this->db
                     ->select([
@@ -83,7 +101,6 @@ Class Proveedores_model extends CI_Model{
                         'pcsd.cotizacion_id',
                         'pcsd.producto_id',
                         'pcsd.cantidad',
-                        'pcsd.precio',
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
                     ])
                     ->from('proveedores_marcas pm')

@@ -69,6 +69,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'proveedores_cotizaciones_detalle':
+                $resultado = $this->proveedores_model->actualizar_batch("proveedores_cotizaciones_detalle", $datos['registros'], 'id');
+            break;
+
             case 'proveedores_cotizaciones_solicitudes':
                 $datos_actualizar = [
                     'fecha_inicio' => $datos['fecha_inicio'],
@@ -177,7 +181,11 @@ class Interfaces extends CI_Controller {
                     'codigo' => $codigo,
                 ]);
             break;
-            
+
+            case 'proveedores_cotizaciones_detalle':
+                print json_encode(['resultado' => $this->proveedores_model->insertar_batch("proveedores_cotizaciones_detalle", $datos['registros'])]);
+            break;
+
             case 'proveedores_cotizaciones_solicitudes':
                 $datos_crear = [
                     'fecha_creacion' => date('Y-m-d H:i:s'),

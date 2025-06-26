@@ -4,8 +4,13 @@ $datos = [
     'nit' => $nit
 ];
 
-$detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_detalle', $datos);
+$solicitud_detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_detalle', $datos);
+$cotizacion_detalle = $this->proveedores_model->obtener('proveedores_cotizaciones_detalle', $datos);
+
+echo "<input type='hidden' id='cotizacion_id' value='$cotizacion_id'>";
+echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 ?>
+
 
 <div class="block-space block-space--layout--after-header"></div>
 <div class="block">
@@ -23,14 +28,22 @@ $detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_de
                                 </tr>
                             </thead>
                             <tbody id="listado_cotizacion_detalle">
-                                <?php foreach ($detalle as $registro) { ?>
+                                <?php 
+                                foreach ($solicitud_detalle as $registro) {
+                                    if ($cotizacion_detalle) {
+                                        $index = array_search($registro->producto_id, array_column($cotizacion_detalle, 'producto_id'));
+                                        if (gettype($index) === "integer") $cotizacion_detalle_id = $cotizacion_detalle[$index]->id;
+                                    }
+                                ?>
                                     <tr id="listado_producto_<?php echo $registro->id; ?>"
-                                        data-cotizacion-detalle-id="<?php echo $registro->id; ?>"
+                                        data-producto-id="<?php echo $registro->producto_id; ?>"
+                                        data-solicitud-detalle-id="<?php echo $registro->id; ?>"
+                                        <?php if (isset($cotizacion_detalle_id)) echo " data-cotizacion-detalle-id='$cotizacion_detalle_id' "?>
                                     />
                                         <td><?php echo $registro->producto; ?></td>
                                         <td><?php echo $registro->cantidad; ?></td>
                                         <td>
-                                            <input type="number" class="form-control" id="precio_<?php echo $registro->id; ?>">
+                                            <input type="number" class="form-control" id="precio_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->precio; ?>">
                                         </td>
                                     </tr>
                                 <?php } ?>
@@ -50,13 +63,20 @@ $detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_de
     guardarCotizacionProductos = async() => {
         let cotizacionProductos = obtenerCotizacionProductos()
 
+        let actualizar = cotizacionProductos.some(item => item.hasOwnProperty('id'))
+
         let datos = {
-            tipo: 'proveedores_cotizaciones_solicitudes_detalle',
+            tipo: 'proveedores_cotizaciones_detalle',
             id: null,
-            cotizacion_detalle: cotizacionProductos
+            registros: cotizacionProductos
         }
 
-        await consulta('actualizar', datos)
+        if (actualizar) {
+            await consulta('actualizar', datos)
+        } else {
+            await consulta('crear', datos)
+            location.reload()
+        }
     }
 
     obtenerCotizacionProductos = () => {
@@ -64,11 +84,16 @@ $detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_de
 
         $("#listado_cotizacion_detalle tr").each(function () {
             let id = $(this).data("cotizacion-detalle-id")
+            let solicitudDetalleId = $(this).data("solicitud-detalle-id")
 
             let datos = {
-                id: id,
-                precio: $(`#precio_${id}`).val()
+                cotizacion_id: $("#cotizacion_id").val(),
+                proveedor_nit: $("#proveedor_nit").val(),
+                precio: parseInt($(`#precio_${solicitudDetalleId}`).val()),
+                producto_id: $(this).data("producto-id"),
             }
+
+            if (id) datos.id = id
 
             cotizacionProductos.push(datos)
         })
