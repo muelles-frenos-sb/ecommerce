@@ -41,6 +41,10 @@
                     render: (data, type, row) => {
                         return `
                             <div class="p-1">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/cotizaciones/ver/${data.id}">
+                                    Precios
+                                </a>
+
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/solicitudes/editar/${data.id}">
                                     <i class="fa fa-pencil"></i>
                                 </a>

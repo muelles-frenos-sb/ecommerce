@@ -65,9 +65,13 @@ Class Proveedores_model extends CI_Model{
                         'pcd.cotizacion_id',
                         'pcd.producto_id',
                         'pcd.precio',
-                        'pcd.proveedor_nit'
+                        'pcd.proveedor_nit',
+                        'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
+                        't.f200_razon_social'
                     ])
                     ->from('proveedores_cotizaciones_detalle pcd')
+                    ->join('productos p', 'pcd.producto_id = p.id', 'left')
+                    ->join('terceros t', 'pcd.proveedor_nit = t.f200_nit', 'left')
                 ;
 
                 if (isset($datos['cotizacion_id'])) $this->db->where('pcd.cotizacion_id', $datos['cotizacion_id']); 

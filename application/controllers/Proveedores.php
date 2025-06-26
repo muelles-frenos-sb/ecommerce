@@ -24,6 +24,12 @@ class Proveedores extends MY_Controller {
                 $this->data['contenido_principal'] = 'proveedores/cotizaciones/cotizacion';
                 $this->load->view('core/body', $this->data);
             break;
+
+            case 'ver':
+                $this->data['cotizacion_id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/index';
+                $this->load->view('core/body', $this->data);
+            break;
         }
     }
 
