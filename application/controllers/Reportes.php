@@ -20,7 +20,7 @@ class Reportes extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model('clientes_model');
+        $this->load->model(['clientes_model', 'proveedores_model']);
     }
 
     function excel() {
@@ -28,6 +28,11 @@ class Reportes extends MY_Controller {
             case 'facturas':
                 $this->data["numero_documento"] = $this->uri->segment(4);
                 $this->load->view('reportes/excel/facturas', $this->data);
+            break;
+
+            case 'proveedores_cotizaciones_matriz':
+                $this->data["id"] = $this->uri->segment(4);
+                $this->load->view('reportes/excel/proveedores_cotizaciones_matriz', $this->data);
             break;
         }
     }

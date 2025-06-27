@@ -518,7 +518,7 @@ Class Configuracion_model extends CI_Model {
                 ORDER BY
 	                t.f200_razon_social";
 
-                if(isset($datos['id'])) {
+                if(isset($datos['id']) || isset($datos['nit'])) {
                     return $this->db->query($sql)->row();
                 } else {
                     return $this->db->query($sql)->result();

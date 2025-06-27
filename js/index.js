@@ -199,6 +199,11 @@ generarReporte = (tipo, datos) => {
             location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.numero_documento}`)
         break;
 
+        case 'excel/proveedores_cotizaciones_matriz':
+            agregarLog(61, datos.id)
+            location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.id}`)
+        break;
+
         case 'pdf/solicitud_credito':
             location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.solicitud_id}`)
         break;

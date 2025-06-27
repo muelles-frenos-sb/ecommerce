@@ -113,6 +113,16 @@ Class Productos_model extends CI_Model{
                 return $this->db->get()->result();
             break;
 
+            case 'producto':
+                unset($datos['tipo']);
+
+                return $this->db
+                    ->where($datos)
+                    ->get('productos')
+                    ->row()
+                ;
+            break;
+
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 

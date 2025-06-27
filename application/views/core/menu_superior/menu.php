@@ -73,7 +73,7 @@
 
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_proveedores_ver'], $permisos)) { ?>
                                 <li class="menu__item menu__item--has-submenu">
-                                    <a href="blog-classic-right-sidebar.html" class="menu__link">
+                                    <a href="#" class="menu__link">
                                         Proveedores
                                         <span class="menu__arrow">
                                             <svg width="6px" height="9px">

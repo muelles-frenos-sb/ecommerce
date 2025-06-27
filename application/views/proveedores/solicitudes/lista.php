@@ -42,7 +42,11 @@
                         return `
                             <div class="p-1">
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/cotizaciones/ver/${data.id}">
-                                    Precios
+                                    Ver
+                                </a>
+
+                                <a type="button" class="btn btn-sm btn-success" href="javascript:;" onClick="generarReporte('excel/proveedores_cotizaciones_matriz', {id: ${data.id}})">
+                                    <i class="fa fa-file-excel"></i>
                                 </a>
 
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/solicitudes/editar/${data.id}">

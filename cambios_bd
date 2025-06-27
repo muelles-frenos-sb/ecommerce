@@ -228,3 +228,6 @@ CREATE TABLE `proveedores_cotizaciones_detalle` (
   `precio` double DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Campo para log
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (61, 'Proveedores - Matriz de precios (Generación en Excel)')

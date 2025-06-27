@@ -231,7 +231,7 @@ Class Proveedores_model extends CI_Model{
                 $order_by
                 $limite
                 ";
-
+        
                 if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
