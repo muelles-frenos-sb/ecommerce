@@ -71,7 +71,7 @@
                                 </li>
                             <?php } ?>
 
-                            <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_proveedores_ver'], $permisos)) { ?>
+                            <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver'], $permisos)) { ?>
                                 <li class="menu__item menu__item--has-submenu">
                                     <a href="#" class="menu__link">
                                         Proveedores

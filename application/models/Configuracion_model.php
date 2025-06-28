@@ -390,7 +390,7 @@ Class Configuracion_model extends CI_Model {
                 $sql =
                 "SELECT
                     m.id, 
-                    m.codigo, 
+                    TRIM(m.codigo) codigo,
                     p.marca nombre
                 FROM
                     productos AS p
