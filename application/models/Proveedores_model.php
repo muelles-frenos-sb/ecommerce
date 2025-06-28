@@ -236,6 +236,15 @@ Class Proveedores_model extends CI_Model{
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
             break;
+
+            case 'solicitudes_disponibles':
+                return $this->db
+                    ->order_by('fecha_fin')
+                    ->where('fecha_fin >=', date('Y-m-d'))
+                    ->get('proveedores_cotizaciones_solicitudes')
+                    ->result()
+                ;
+            break;
         }
     }
 }

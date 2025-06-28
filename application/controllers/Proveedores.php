@@ -14,20 +14,29 @@ class Proveedores extends MY_Controller {
         $this->load->model(['proveedores_model']);
     }
 
-    function cotizaciones($tipo) {
+    function cotizaciones($tipo, $cotizacion_id = null, $nit = null) {
         // if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($tipo) {
+            default:
+                redirect(site_url());
+            break;
+
+            case 'index':
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
             case 'cotizar':
-                $this->data['cotizacion_id'] = $this->uri->segment(4);
-                $this->data['nit'] = $this->uri->segment(5);
-                $this->data['contenido_principal'] = 'proveedores/cotizaciones/cotizacion';
+                $this->data['cotizacion_id'] = $cotizacion_id;
+                $this->data['nit'] = $nit;
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/realizar';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'ver':
-                $this->data['cotizacion_id'] = $this->uri->segment(4);
-                $this->data['contenido_principal'] = 'proveedores/cotizaciones/index';
+                $this->data['cotizacion_id'] = $cotizacion_id;
+                $this->data['contenido_principal'] = 'proveedores/cotizaciones/ver';
                 $this->load->view('core/body', $this->data);
             break;
         }
@@ -57,6 +66,20 @@ class Proveedores extends MY_Controller {
                 $this->load->view('core/body', $this->data);
             break;
         }
+    }
+
+    function obtener() {
+        $datos = json_decode($this->input->post('datos'), true);
+        $tipo = $datos['tipo'];
+        unset($datos['tipo']);
+
+        switch ($tipo) {
+            default:
+                $resultado = $this->proveedores_model->obtener($tipo, $datos);
+                break;
+        }
+
+        print json_encode($resultado);
     }
 
     function solicitudes($opcion) {

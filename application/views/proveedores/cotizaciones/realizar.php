@@ -11,14 +11,22 @@ echo "<input type='hidden' id='cotizacion_id' value='$cotizacion_id'>";
 echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 ?>
 
-
-<div class="block-space block-space--layout--after-header"></div>
 <div class="block">
     <div class="container">
+        <div class="block-header__body">
+            <h1 class="block-header__title">Productos solicitados</h1>
+
+            
+        </div>
+
+        <div class="alert alert-primary alert-lg mb-3 alert-dismissible fade show">
+            Indícanos el precio que ofreces al lado de cada producto que tengas disponible. <!-- <a href="">Esta es la lista de marcas</a> -->
+        </div>
+
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="row" id="contenedor_cotizacion_detalle">
-                    <div class="table-responsive mt-3 p-3">
+                    <div class="table-responsive p-3">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -50,7 +58,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                             </tbody>
                         </table>
 
-                        <button class="btn btn-success w-100" onclick="javascript:guardarCotizacionProductos()">Guardar</button>
+                        <button class="btn btn-success btn-lg w-100" onclick="javascript:guardarCotizacionProductos()">Enviar cotización</button>
                     </div>
                 </div>
             </div>
@@ -71,9 +79,18 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
             registros: cotizacionProductos
         }
 
+        let datosLog = {
+            id: '<?php echo $cotizacion_id; ?>',
+            nit: '<?php echo $nit; ?>',
+        }
+
         if (actualizar) {
+            agregarLog(64, JSON.stringify(datosLog))
+
             await consulta('actualizar', datos)
         } else {
+            agregarLog(63, JSON.stringify(datosLog))
+
             await consulta('crear', datos)
             location.reload()
         }

@@ -229,5 +229,8 @@ CREATE TABLE `proveedores_cotizaciones_detalle` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Campo para log
+-- 20250627 Campos para logs
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (61, 'Proveedores - Matriz de precios (Generación en Excel)')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (62, 'Proveedores - Consulta de cotizaciones (contacto no encontrado)')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (63, 'Proveedores - Envío exitoso de cotización')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (64, 'Proveedores - Actualización exitosa de cotización')

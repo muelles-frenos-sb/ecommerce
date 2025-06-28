@@ -53,5 +53,9 @@ $route['default_controller'] = 'inicio';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 $route['denuncias'] = 'blog/denuncias';
+
+// Proveedores
 $route['proveedores/maestro'] = 'proveedores/maestro/ver';
-$route['proveedores/solicitar_precios'] = 'proveedores/cotizaciones/solicitar';
+$route['proveedores/solicitudes'] = 'proveedores/solicitudes/ver';
+$route['proveedores'] = 'proveedores/cotizaciones/index';
+$route['proveedores/cotizacion/(:num)/(:num)'] = 'proveedores/cotizaciones/cotizar/$1/$2';
