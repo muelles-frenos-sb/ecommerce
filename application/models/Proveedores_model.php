@@ -65,6 +65,7 @@ Class Proveedores_model extends CI_Model{
                         'pcd.cotizacion_id',
                         'pcd.producto_id',
                         'pcd.precio',
+                        'pcd.observacion',
                         'pcd.proveedor_nit',
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
                         't.f200_razon_social'
@@ -104,6 +105,9 @@ Class Proveedores_model extends CI_Model{
                         'pcsd.id',
                         'pcsd.cotizacion_id',
                         'pcsd.producto_id',
+                        'p.referencia producto_referencia',
+                        'p.notas producto_notas',
+                        'p.marca producto_marca',
                         'pcsd.cantidad',
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',
                     ])
@@ -115,6 +119,7 @@ Class Proveedores_model extends CI_Model{
                         'pcsd.cotizacion_id' => $datos['cotizacion_id'],
                         'pm.proveedor_nit' => $datos['nit']
                     ])
+                    ->order_by('producto_notas, producto_referencia')
                     ->get()
                     ->result()
                 ;

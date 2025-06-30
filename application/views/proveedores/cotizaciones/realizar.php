@@ -40,9 +40,13 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col">Producto</th>
-                                        <th scope="col">Cantidad</th>
-                                        <th scope="col">Precio</th>
+                                        <th scope="col" class="text-center">Id</th>
+                                        <th scope="col" class="text-center">Marca</th>
+                                        <th scope="col" class="text-center">Referencia</th>
+                                        <th scope="col" class="text-center">Descripción</th>
+                                        <th scope="col" class="text-center">Cantidad</th>
+                                        <th scope="col" class="text-center">Precio</th>
+                                        <th scope="col" class="text-center">Observación</th>
                                     </tr>
                                 </thead>
                                 <tbody id="listado_cotizacion_detalle">
@@ -58,10 +62,16 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                             data-solicitud-detalle-id="<?php echo $registro->id; ?>"
                                             <?php if (isset($cotizacion_detalle_id)) echo " data-cotizacion-detalle-id='$cotizacion_detalle_id' "?>
                                         />
-                                            <td><?php echo $registro->producto; ?></td>
-                                            <td><?php echo $registro->cantidad; ?></td>
+                                            <td><?php echo $registro->producto_id; ?></td>
+                                            <td><?php echo $registro->producto_marca; ?></td>
+                                            <td><?php echo $registro->producto_referencia; ?></td>
+                                            <td><?php echo $registro->producto_notas; ?></td>
+                                            <td class="text-center"><?php echo $registro->cantidad; ?></td>
                                             <td>
                                                 <input type="number" class="form-control" id="precio_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->precio; ?>">
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->observacion ; ?>">
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -113,6 +123,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
         $("#listado_cotizacion_detalle tr").each(function () {
             let id = $(this).data("cotizacion-detalle-id")
             let solicitudDetalleId = $(this).data("solicitud-detalle-id")
+            let observacion = $(`#observacion_${solicitudDetalleId}`).val()
 
             let datos = {
                 cotizacion_id: $("#cotizacion_id").val(),
@@ -121,7 +132,10 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                 producto_id: $(this).data("producto-id"),
             }
 
+            if(observacion != '') datos.observacion = observacion
+
             if (id) datos.id = id
+            console.log(datos)
 
             cotizacionProductos.push(datos)
         })
