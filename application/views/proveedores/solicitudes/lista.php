@@ -17,6 +17,7 @@
                 <th class="text-center">Id</th>
                 <th class="text-center">Fecha de inicio</th>
                 <th class="text-center">Fecha de finalización</th>
+                <th class="text-center">Cotizaciones recibidas</th>
                 <th class="text-center" style="width: 200px;">Acciones</th>
             </tr>
         </thead>
@@ -33,9 +34,10 @@
                 },
             },
             columns: [
-                { data: 'id' },
+                { data: 'id', className: 'text-center' },
                 { data: 'fecha_inicio' },
                 { data: 'fecha_fin' },
+                { data: 'cantidad_cotizaciones', className: 'text-center' },
                 {
                     data: null, 
                     render: (data, type, row) => {

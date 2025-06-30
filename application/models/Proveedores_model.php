@@ -226,7 +226,13 @@ Class Proveedores_model extends CI_Model{
                     pcs.fecha_inicio,
                     pcs.fecha_fin,
                     pcs.fecha_creacion,
-                    pcs.usuario_id
+                    pcs.usuario_id,
+                    (SELECT
+                        COUNT( DISTINCT pcd.proveedor_nit ) 
+                    FROM
+                        proveedores_cotizaciones_detalle AS pcd 
+                    WHERE
+                        pcd.cotizacion_id = pcs.id) cantidad_cotizaciones
                 FROM
                     proveedores_cotizaciones_solicitudes AS pcs
                 WHERE
