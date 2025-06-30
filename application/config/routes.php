@@ -58,4 +58,4 @@ $route['denuncias'] = 'blog/denuncias';
 $route['proveedores/maestro'] = 'proveedores/maestro/ver';
 $route['proveedores/solicitudes'] = 'proveedores/solicitudes/ver';
 $route['proveedores'] = 'proveedores/cotizaciones/index';
-$route['proveedores/cotizacion/(:num)/(:num)'] = 'proveedores/cotizaciones/cotizar/$1/$2';
+$route['proveedores/cotizacion/(:num)/(:num)/(:any)'] = 'proveedores/cotizaciones/cotizar/$1/$2/$3';

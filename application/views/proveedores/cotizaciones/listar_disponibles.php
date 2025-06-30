@@ -22,13 +22,17 @@ if(empty($solicitudes_disponibles)) {
                     Estas son las solicitudes de cotización que tenemos disponibles para tí: Haz clic en el botón <b>Quiero enviar mi cotización</b>:
                 </div>
 
-                <?php foreach ($solicitudes_disponibles as $solicitud) { ?>
+                <?php
+                foreach ($solicitudes_disponibles as $solicitud) {
+                    // Se crea un token a partir del NIT, para validar que la URL no sea alterada deliberadamente
+                    $token = substr(md5($solicitud->id.$datos['numero_documento']), 0, 10);
+                ?>
                     <div class="vehicles-list__body">
                         <div class="vehicles-list__item">
                             <div class="vehicles-list__item-info">
                                 <div class="vehicles-list__item-name"><h3><?php echo "Solicitud de precio #$solicitud->id"; ?></h3></div>
                                 <div class="vehicles-list__item-details"><h5><?php echo "Disponible hasta $solicitud->fecha_fin"; ?></h5></div>
-                                <a class="btn btn-success btn-md" href="<?php echo site_url("proveedores/cotizacion/$solicitud->id/{$datos['numero_documento']}") ?>">Quiero enviar mi cotización</a>
+                                <a class="btn btn-success btn-md" href="<?php echo site_url("proveedores/cotizacion/$solicitud->id/{$datos['numero_documento']}/$token") ?>">Quiero enviar mi cotización</a>
                             </div>
                         </div>
                     </div>

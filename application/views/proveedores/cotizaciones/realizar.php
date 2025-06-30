@@ -142,7 +142,6 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
             if(observacion != '') datos.observacion = observacion
 
             if (id) datos.id = id
-            console.log(datos)
 
             cotizacionProductos.push(datos)
         })

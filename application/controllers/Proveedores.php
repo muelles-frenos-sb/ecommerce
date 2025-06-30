@@ -14,7 +14,7 @@ class Proveedores extends MY_Controller {
         $this->load->model(['proveedores_model']);
     }
 
-    function cotizaciones($tipo, $cotizacion_id = null, $nit = null) {
+    function cotizaciones($tipo, $solicitud_id = null, $nit = null, $token_recibido = null) {
         // if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($tipo) {
@@ -28,14 +28,21 @@ class Proveedores extends MY_Controller {
             break;
 
             case 'cotizar':
-                $this->data['cotizacion_id'] = $cotizacion_id;
+                // Se construye el token
+                $token_valido = substr(md5($solicitud_id.$nit), 0, 10);
+
+                // Si los token no coinciden, no se puede acceder
+                if($token_valido !== $token_recibido) redirect('inicio');
+
+                $this->data['cotizacion_id'] = $solicitud_id;
                 $this->data['nit'] = $nit;
                 $this->data['contenido_principal'] = 'proveedores/cotizaciones/realizar';
                 $this->load->view('core/body', $this->data);
             break;
 
             case 'ver':
-                $this->data['cotizacion_id'] = $cotizacion_id;
+                if(!$this->session->userdata('usuario_id')) redirect('inicio');
+                $this->data['cotizacion_id'] = $solicitud_id;
                 $this->data['contenido_principal'] = 'proveedores/cotizaciones/ver';
                 $this->load->view('core/body', $this->data);
             break;
