@@ -62,9 +62,11 @@ if(isset($id)) {
 
         if(!$('#proveedor_marca_id').val()) {
             await consulta('crear', datosProveedoresMarcas)
+            agregarLog(68)
         } else {
             datosProveedoresMarcas.id = $('#proveedor_marca_id').val()
             await consulta('actualizar', datosProveedoresMarcas)
+            agregarLog(69, datosProveedoresMarcas.id)
         }
     }
 

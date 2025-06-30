@@ -66,6 +66,7 @@
         }
         
         $('#formulario_validar_proveedor').remove()
+        agregarLog(65, JSON.stringify(datosProveedor))
 
         cargarInterfaz('proveedores/cotizaciones/listar_disponibles', 'contenedor_cotizaciones_disponibles', {numero_documento: numeroDocumento.val()})
     }

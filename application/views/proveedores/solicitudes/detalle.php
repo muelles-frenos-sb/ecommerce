@@ -146,9 +146,11 @@ if (isset($id)) {
 
         if (!id) {
             await consulta('crear', datos)
+            agregarLog(66)
         } else {
             datos.id = id
             await consulta('actualizar', datos)
+            agregarLog(67, id)
         }
     }
 

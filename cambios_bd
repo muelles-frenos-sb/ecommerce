@@ -237,3 +237,10 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (64, 'Proveedores - Actualizaci
 
 -- 20250630 Campo para la observación del precio indicado en la cotización
 ALTER TABLE `proveedores_cotizaciones_detalle` ADD COLUMN `observacion` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL AFTER `precio`;
+
+-- 20250630 Tipos de logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (65, 'Proveedores - Consulta exitosa de cotizaciones');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (66, 'Proveedores - Creación de solicitud de precio');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (67, 'Proveedores - Actualización de solicitud de precio');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (68, 'Proveedores - Creación de maestro')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (69, 'Proveedores - Actualización de maestro')
