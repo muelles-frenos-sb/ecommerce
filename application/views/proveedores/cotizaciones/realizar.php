@@ -56,6 +56,8 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                             $index = array_search($registro->producto_id, array_column($cotizacion_detalle, 'producto_id'));
                                             if (gettype($index) === "integer") $cotizacion_detalle_id = $cotizacion_detalle[$index]->id;
                                         }
+
+                                        $precio_item = (isset($cotizacion_detalle_id)) ? $cotizacion_detalle[$index]->precio : 0;
                                     ?>
                                         <tr id="listado_producto_<?php echo $registro->id; ?>"
                                             data-producto-id="<?php echo $registro->producto_id; ?>"
@@ -67,13 +69,18 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                             <td><?php echo $registro->producto_referencia; ?></td>
                                             <td><?php echo $registro->producto_notas; ?></td>
                                             <td class="text-center"><?php echo $registro->cantidad; ?></td>
-                                            <td>
-                                                <input type="number" class="form-control" id="precio_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->precio; ?>">
+                                            <td width="15%">
+                                                <input type="text" class="form-control text-right" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>">
                                             </td>
-                                            <td>
+                                            <td width="15%">
                                                 <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->observacion ; ?>">
                                             </td>
                                         </tr>
+
+                                        <script>
+                                            // Por defecto se formatea el campo
+                                            $(`#precio_<?php echo $registro->id; ?>`).val(formatearNumero(<?php echo $precio_item; ?>))
+                                        </script>
                                     <?php } ?>
                                 </tbody>
                             </table>
@@ -128,7 +135,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
             let datos = {
                 cotizacion_id: $("#cotizacion_id").val(),
                 proveedor_nit: $("#proveedor_nit").val(),
-                precio: parseInt($(`#precio_${solicitudDetalleId}`).val()),
+                precio: parseFloat($(`#precio_${solicitudDetalleId}`).val().replace(/\./g, '')),
                 producto_id: $(this).data("producto-id"),
             }
 
@@ -142,4 +149,12 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 
         return cotizacionProductos
     }
+
+    $().ready(() => {
+        // Si el precio cambia
+        $(`input[id^='precio_']`).on('keyup', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+        })
+    })
 </script>

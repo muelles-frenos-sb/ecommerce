@@ -14,7 +14,6 @@ if(empty($solicitudes_disponibles)) {
 }
 ?>
 
-
 <div class="block">
     <div class="container">
         <div class="card flex-grow-1 mt-4">
