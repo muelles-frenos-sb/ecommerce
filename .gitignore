@@ -1,5 +1,4 @@
 # Directorios
-anterior/
 application/config/development/
 application/config/production/
 application/logs/
@@ -10,6 +9,8 @@ archivos/recibos/
 archivos/solicitudes_credito/
 archivos/temporales/
 frontend/
+web/
+test/
 
 # Directorios de imágenes
 images/avatars/

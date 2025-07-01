@@ -21,7 +21,12 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
         </div>
 
         <div class="card mb-lg-0">
-            <?php if(empty($solicitud_detalle)) { ?>
+            <?php
+            // echo count($solicitud_detalle);
+            // echo count($cotizacion_detalle);
+
+
+            if(empty($solicitud_detalle)) { ?>
                 <div class='container'>
                     <div class='alert alert-danger alert-lg mb-3 alert-dismissible fade show'>
                         Para la solicitud de cotización que elegiste, no hay productos disponibles de las marcas que distribuyes.
@@ -85,7 +90,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                 </tbody>
                             </table>
 
-                            <button class="btn btn-success btn-lg w-100" onclick="javascript:guardarCotizacionProductos()">Enviar cotización</button>
+                            <button class="btn btn-success btn-lg w-100" onClick="javascript:guardarCotizacionProductos()">Enviar cotización</button>
                         </div>
                     </div>
                 </div>
@@ -97,7 +102,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 
 <script>
     guardarCotizacionProductos = async() => {
-        let cotizacionProductos = obtenerCotizacionProductos()
+        let cotizacionProductos = await obtenerCotizacionProductos()
 
         let actualizar = cotizacionProductos.some(item => item.hasOwnProperty('id'))
 
@@ -113,11 +118,11 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
         }
 
         if (actualizar) {
-            agregarLog(64, JSON.stringify(datosLog))
+            agregarLog(64, JSON.stringify(datos))
 
             await consulta('actualizar', datos)
         } else {
-            agregarLog(63, JSON.stringify(datosLog))
+            agregarLog(63, JSON.stringify(datos))
 
             await consulta('crear', datos)
             location.reload()
@@ -125,14 +130,14 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
     }
 
     obtenerCotizacionProductos = () => {
-        let cotizacionProductos = []
+        var cotizacionProductos = []
 
         $("#listado_cotizacion_detalle tr").each(function () {
-            let id = $(this).data("cotizacion-detalle-id")
-            let solicitudDetalleId = $(this).data("solicitud-detalle-id")
-            let observacion = $(`#observacion_${solicitudDetalleId}`).val()
+            var id = $(this).data("cotizacion-detalle-id")
+            var solicitudDetalleId = $(this).data("solicitud-detalle-id")
+            var observacion = $(`#observacion_${solicitudDetalleId}`).val()
 
-            let datos = {
+            var datos = {
                 cotizacion_id: $("#cotizacion_id").val(),
                 proveedor_nit: $("#proveedor_nit").val(),
                 precio: parseFloat($(`#precio_${solicitudDetalleId}`).val().replace(/\./g, '')),
@@ -141,7 +146,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 
             if(observacion != '') datos.observacion = observacion
 
-            if (id) datos.id = id
+            if(id) datos.id = id
 
             cotizacionProductos.push(datos)
         })
