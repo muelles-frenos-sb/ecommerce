@@ -413,8 +413,8 @@ class Webhooks extends MY_Controller {
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
 
-            // Primero, eliminamos todos los ítems
-            $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
+            // Primero, eliminamos todos los ítems (Solo si hay inventario disponible)
+            if(!empty($inventario)) $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
 
             if(ENVIRONMENT == 'development') {
                 foreach($inventario as $item) {
