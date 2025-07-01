@@ -636,6 +636,9 @@ Class Configuracion_model extends CI_Model {
 
             // Une las tablas tercero y tercero_contacto para buscar en ambas
             case 'tercero_contacto':
+                $filtro_telefono1 = (isset($datos['numero'])) ? " AND (REPLACE(t.f015_telefono, ' ', '') = {$datos['numero']} OR REPLACE(t.f015_celular, ' ', '') = {$datos['numero']})" : "" ;
+                $filtro_telefono2 = (isset($datos['numero'])) ? " AND REPLACE(tc.numero, ' ', '') = {$datos['numero']}" : "" ;
+
                 $sql =
                 "SELECT
                     t.f015_telefono telefono,
@@ -644,8 +647,8 @@ Class Configuracion_model extends CI_Model {
                 FROM
                     terceros AS t
                 WHERE
-                    (REPLACE(t.f015_telefono, ' ', '') = {$datos['numero']} OR REPLACE(t.f015_celular, ' ', '') = {$datos['numero']})
-                    AND t.f200_nit = '{$datos['nit']}'
+                    t.f200_nit = '{$datos['nit']}'
+                    $filtro_telefono1
                 UNION
                 SELECT
                     tc.numero telefono,
@@ -655,7 +658,7 @@ Class Configuracion_model extends CI_Model {
                     terceros_contactos AS tc
                 WHERE
                     tc.nit = '{$datos['nit']}'
-                    AND REPLACE(tc.numero, ' ', '') = {$datos['numero']}";
+                    $filtro_telefono2";
 
                 return $this->db->query($sql)->row();
             break;

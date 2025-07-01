@@ -14,13 +14,13 @@
                     <!-- Número de documento -->
                     <div class="form-group col-md-6 col-sm-12">
                         <label for="proveedor_cotizacion_numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="proveedor_cotizacion_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="901492516" autofocus>
+                        <input type="number" class="form-control" id="proveedor_cotizacion_numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" autofocus>
                     </div>
 
                     <!-- Teléfono -->
                     <div class="form-group col-sm-12 col-lg-6">
-                        <label for="proveedor_cotizacion_telefono">Digita el número de celular *</label>
-                        <input type="number" class="form-control" id="proveedor_cotizacion_telefono" value="3126988690">
+                        <label for="proveedor_cotizacion_telefono">Digita el número de celular (opcional)</label>
+                        <input type="number" class="form-control" id="proveedor_cotizacion_telefono" placeholder="Opcional">
                     </div>
 
                     <div class="form-group col-sm-12 col-lg-12">
@@ -43,7 +43,7 @@
     validarProveedor = async (nit = null) => {
         let datosObligatorios = [
             numeroDocumento,
-            numeroTelefono
+            // numeroTelefono
         ]
 
         // Validación de campos obligatorios
@@ -52,7 +52,7 @@
         let datosProveedor = {
             tipo: 'tercero_contacto',
             nit: numeroDocumento.val(),
-            numero: numeroTelefono.val(),
+            // numero: numeroTelefono.val(),
         }
 
         // Se verifica que el número de teléfono exista en la base de datos
