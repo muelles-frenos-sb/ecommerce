@@ -37,6 +37,10 @@ Class Proveedores_model extends CI_Model{
             case 'proveedores_cotizaciones_solicitudes_detalle':
                 return $this->db->delete('proveedores_cotizaciones_solicitudes_detalle', $datos);
             break;
+
+            case 'proveedores_cotizaciones_detalle':
+                return $this->db->delete('proveedores_cotizaciones_detalle', $datos);
+            break;
         }
 
         $this->db->close;

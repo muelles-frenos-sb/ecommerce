@@ -12,6 +12,7 @@ $cotizacion_detalle = $this->proveedores_model->obtener('proveedores_cotizacione
 
 echo "<input type='hidden' id='cotizacion_id' value='$cotizacion_id'>";
 echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
+if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detalle' value='1'>";
 ?>
 
 <div class="block">
@@ -22,10 +23,6 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 
         <div class="card mb-lg-0">
             <?php
-            // echo count($solicitud_detalle);
-            // echo count($cotizacion_detalle);
-
-
             if(empty($solicitud_detalle)) { ?>
                 <div class='container'>
                     <div class='alert alert-danger alert-lg mb-3 alert-dismissible fade show'>
@@ -57,17 +54,17 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                 <tbody id="listado_cotizacion_detalle">
                                     <?php 
                                     foreach ($solicitud_detalle as $registro) {
-                                        if ($cotizacion_detalle) {
-                                            $index = array_search($registro->producto_id, array_column($cotizacion_detalle, 'producto_id'));
-                                            if (gettype($index) === "integer") $cotizacion_detalle_id = $cotizacion_detalle[$index]->id;
-                                        }
+                                            $index = array_search($registro->producto_id, array_column($cotizacion_detalle, "producto_id"));
+                                            
+                                            $precio_item = ($index) ? $cotizacion_detalle[$index]->precio : 0;
+                                            $observacion_item = ($index) ? $cotizacion_detalle[$index]->observacion : '';
+                                            $cotizacion_detalle_id = ($index) ? $cotizacion_detalle[$index]->id : 0;
 
-                                        $precio_item = (isset($cotizacion_detalle_id)) ? $cotizacion_detalle[$index]->precio : 0;
                                     ?>
                                         <tr id="listado_producto_<?php echo $registro->id; ?>"
                                             data-producto-id="<?php echo $registro->producto_id; ?>"
                                             data-solicitud-detalle-id="<?php echo $registro->id; ?>"
-                                            <?php if (isset($cotizacion_detalle_id)) echo " data-cotizacion-detalle-id='$cotizacion_detalle_id' "?>
+                                            <?php if (!isset($cotizacion_detalle)) echo " data-cotizacion-detalle-id='$cotizacion_detalle_id' "?>
                                         />
                                             <td><?php echo $registro->producto_id; ?></td>
                                             <td><?php echo $registro->producto_marca; ?></td>
@@ -78,7 +75,7 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
                                                 <input type="text" class="form-control text-right" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>">
                                             </td>
                                             <td width="15%">
-                                                <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php if (isset($cotizacion_detalle_id)) echo $cotizacion_detalle[$index]->observacion ; ?>">
+                                                <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php echo $observacion_item; ?>">
                                             </td>
                                         </tr>
 
@@ -104,11 +101,12 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
     guardarCotizacionProductos = async() => {
         let cotizacionProductos = await obtenerCotizacionProductos()
 
-        let actualizar = cotizacionProductos.some(item => item.hasOwnProperty('id'))
+        let actualizar = ($('#cotizacion_detalle').val()) ? true : false
 
-        let datos = {
+        var datos = {
             tipo: 'proveedores_cotizaciones_detalle',
-            id: null,
+            cotizacion_id: <?php echo $cotizacion_id; ?>,
+            proveedor_nit: <?php echo $nit; ?>,
             registros: cotizacionProductos
         }
 
@@ -119,12 +117,10 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
 
         if (actualizar) {
             agregarLog(64, JSON.stringify(datos))
-
-            await consulta('actualizar', datos)
+            let resultado = await consulta('crear', datos)
         } else {
             agregarLog(63, JSON.stringify(datos))
-
-            await consulta('crear', datos)
+            let resultado = await consulta('crear', datos)
             location.reload()
         }
     }
@@ -145,8 +141,6 @@ echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
             }
 
             if(observacion != '') datos.observacion = observacion
-
-            if(id) datos.id = id
 
             cotizacionProductos.push(datos)
         })
