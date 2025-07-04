@@ -1,5 +1,8 @@
 <?php
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 // Carga de la plantilla
 $archivo = \PhpOffice\PhpSpreadsheet\IOFactory::load('application/views/reportes/plantillas/proveedores_cotizaciones_matriz.xlsx');
@@ -20,9 +23,22 @@ $hoja->setCellValue("F1", $solicitud_cotizacion->id);
 $hoja->setCellValue("F2", $solicitud_cotizacion->fecha_inicio);
 $hoja->setCellValue("F3", $solicitud_cotizacion->fecha_fin);
 
+$color_mejor_precio = [
+    'fill' => [
+        'fillType' => Fill::FILL_SOLID,
+        'startColor' => ['rgb' => '28A745'] // Verde
+    ],
+    'font' => [
+        'color' => ['rgb' => 'FFFFFF'] // Blanco
+    ]
+];
+
 // Primero, recorremos los productos
 foreach($productos as $id_producto) {
     $columna = "D";
+    $celda_mejor_precio = null;
+    $mejor_precio = 1000000000000;
+    $mejor_precio_inicial = $mejor_precio;
 
     // Datos del producto
     $producto = $this->productos_model->obtener('producto', ['id' => $id_producto]);
@@ -45,16 +61,27 @@ foreach($productos as $id_producto) {
             return $reg->producto_id == $producto_buscado && $reg->proveedor_nit == $proveedor_buscado;
         });
 
-        // Se extrae el precio
-        $precio = (reset($resultado)->precio) ?? 0;
+        // Se extraen precio y observación
+        $precio = (reset($resultado)->precio) ?? 0 ;
+        $precio_detalle = ($precio != 0) ? '$ '.number_format($precio, 0, '', '.') : '' ;
+        $observacion = (reset($resultado)->observacion) ?? null ;
+        $observacion_detalle = ($observacion) ? "($observacion)" : '' ;
 
         $hoja->getColumnDimension($columna)->setWidth(20);
-        $hoja->setCellValue("{$columna}{$fila}", $precio);
-        $hoja->getStyle("{$columna}{$fila}")->getNumberFormat()->setFormatCode('_($* #,##0_);_($* (#,##0);_($* "-"_);_(@_)');
+        $hoja->setCellValue("{$columna}{$fila}", "$precio_detalle $observacion_detalle");
         $hoja->getStyle("{$columna}{$fila}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        // Si el precio actual del producto es más bajo que el anterior
+        if($precio > 0 && $precio < $mejor_precio) {
+            // Se almacenan la celda y el precio más bajo
+            $celda_mejor_precio = "{$columna}{$fila}";
+            $mejor_precio = $precio;
+        }
         
         $columna++;
     }
+
+    if($celda_mejor_precio) $hoja->getStyle($celda_mejor_precio)->applyFromArray($color_mejor_precio);
 
     $fila++;
 }
