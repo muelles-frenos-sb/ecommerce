@@ -138,9 +138,8 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                 proveedor_nit: $("#proveedor_nit").val(),
                 precio: parseFloat($(`#precio_${solicitudDetalleId}`).val().replace(/\./g, '')),
                 producto_id: $(this).data("producto-id"),
+                observacion: observacion,
             }
-
-            if(observacion != '') datos.observacion = observacion
 
             cotizacionProductos.push(datos)
         })
