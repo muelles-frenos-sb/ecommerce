@@ -42,6 +42,7 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                             <table class="table">
                                 <thead>
                                     <tr>
+                                        <th scope="col" class="text-center">#</th>
                                         <th scope="col" class="text-center">Id</th>
                                         <th scope="col" class="text-center">Marca</th>
                                         <th scope="col" class="text-center">Referencia</th>
@@ -52,7 +53,10 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                     </tr>
                                 </thead>
                                 <tbody id="listado_cotizacion_detalle">
-                                    <?php 
+                                    <?php
+                                    $contador = 1;
+
+                                    // Se recorren los registros que se deben diligenciar
                                     foreach ($solicitud_detalle as $registro) {
                                             $index = array_search($registro->producto_id, array_column($cotizacion_detalle, "producto_id"));
                                             
@@ -66,6 +70,7 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                             data-solicitud-detalle-id="<?php echo $registro->id; ?>"
                                             <?php if (!isset($cotizacion_detalle)) echo " data-cotizacion-detalle-id='$cotizacion_detalle_id' "?>
                                         />
+                                            <td><?php echo $contador++; ?></td>
                                             <td><?php echo $registro->producto_id; ?></td>
                                             <td><?php echo $registro->producto_marca; ?></td>
                                             <td><?php echo $registro->producto_referencia; ?></td>

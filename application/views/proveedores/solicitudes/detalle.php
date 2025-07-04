@@ -14,11 +14,11 @@ if (isset($id)) {
                 <div class="form-row">
                     <div class="form-group col-6 col-md-6">
                         <label for="fecha_inicio">Fecha de inicio *</label>
-                        <input type="date" class="form-control" id="fecha_inicio" value="<?php if (isset($solicitud)) echo $solicitud->fecha_inicio; ?>">
+                        <input type="date" class="form-control" id="fecha_inicio" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_inicio : date('Y-m-d') ; ?>">
                     </div>
                     <div class="form-group col-6 col-md-6">
                         <label for="fecha_finalizacion">Fecha finalización *</label>
-                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php if (isset($solicitud)) echo $solicitud->fecha_fin; ?>">
+                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_fin : date('Y-m-d') ; ?>">
                     </div>
                     <div class="form-group col-6 col-sm-8">
                         <label for="cotizacion_producto">Producto *</label>
@@ -32,6 +32,7 @@ if (isset($id)) {
                         <input type="number" class="form-control" id="cotizacion_cantidad">
                     </div>
                     <div class="col-12">
+                        <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
                         <button class="btn btn-primary" onclick="javascript:agregarCotizacionProducto()">Agregar</button>
                     </div>
                 </div>
@@ -67,7 +68,7 @@ if (isset($id)) {
                             </tbody>
                         </table>
 
-                        <button class="btn btn-success w-100" onclick="javascript:guardarCotizacionProductos()">Guardar</button>
+                        <button class="btn btn-success" onclick="javascript:guardarCotizacionProductos()">Guardar</button>
                     </div>
                 </div>
             </div>

@@ -242,5 +242,5 @@ ALTER TABLE `proveedores_cotizaciones_detalle` ADD COLUMN `observacion` varchar(
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (65, 'Proveedores - Consulta exitosa de cotizaciones');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (66, 'Proveedores - Creación de solicitud de precio');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (67, 'Proveedores - Actualización de solicitud de precio');
-INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (68, 'Proveedores - Creación de maestro')
-INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (69, 'Proveedores - Actualización de maestro')
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (68, 'Proveedores - Creación de maestro');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (69, 'Proveedores - Actualización de maestro');
