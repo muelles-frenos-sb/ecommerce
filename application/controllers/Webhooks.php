@@ -409,44 +409,27 @@ class Webhooks extends MY_Controller {
         
         try {
             // Inventario de la bodega por defecto
-            $inventario = $this->productos_model->obtener('productos_inventario_wms');
+            $resultado = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_principal')]));
+            $inventario = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
 
             // Primero, eliminamos todos los ítems (Solo si hay inventario disponible)
             if(!empty($inventario)) $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
 
-            if(ENVIRONMENT == 'development') {
-                foreach($inventario as $item) {
-                    $nuevo_item = [
-                        'producto_id' => $item->Producto_id,
-                        'referencia' => $item->Referencia,
-                        'bodega' => $item->Bodega,
-                        'descripcion_corta' => $item->Descripcion_corta,
-                        'unidad_inventario' => $item->Unidad_Inventario,
-                        'disponible' => $item->Disponible,
-                        'fecha_actualizacion' => $fecha_actualizacion,
-                    ];
-                    array_push($datos, $nuevo_item);
-                }
+            foreach($inventario as $item) {
+                $nuevo_item = [
+                    'producto_id' => $item->Iditem,
+                    'referencia' => $item->Referencia,
+                    'bodega' => $item->Bodega,
+                    'descripcion_corta' => $item->Descripcion_Corta,
+                    'unidad_inventario' => $item->Unidad_Inventario,
+                    'disponible' => $item->Disponible,
+                    'fecha_actualizacion' => $fecha_actualizacion,
+                ];
+                array_push($datos, $nuevo_item);
             }
 
-            if(ENVIRONMENT == 'production' || ENVIRONMENT == 'testing') {
-                foreach($inventario as $item) {
-
-                    $nuevo_item = [
-                        'producto_id' => $item['Producto_id'],
-                        'referencia' => $item['Referencia'],
-                        'bodega' => $item['Bodega'],
-                        'descripcion_corta' => $item['Descripcion_corta'],
-                        'unidad_inventario' => $item['Unidad_inventario'],
-                        'disponible' => $item['Disponible'],
-                        'fecha_actualizacion' => $fecha_actualizacion,
-                    ];
-                    array_push($datos, $nuevo_item);
-                }
-            }
-            
             $total_items = $this->productos_model->crear('productos_inventario', $datos);
 
             $tiempo_final = microtime(true);
@@ -462,10 +445,7 @@ class Webhooks extends MY_Controller {
             $this->configuracion_model->crear('logs', $respuesta);
 
             print json_encode($respuesta);
-
-            return http_response_code(200);
-
-            $this->db_wms->close();
+            $this->db->close();
 
             return http_response_code(200);
         } catch (\Throwable $th) {
