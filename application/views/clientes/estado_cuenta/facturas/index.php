@@ -2,6 +2,7 @@
 
 <input type="hidden" id="factura_tercero_razon_social" value="<?php echo $tercero->f200_razon_social; ?>">
 <input type="hidden" id="factura_tercero_documento_numero" value="<?php echo $tercero->f200_nit; ?>">
+<input type="hidden" id="total_pago">
 
 <!-- Input oculto si es un pago con comprobante -->
 <?php if($datos['nit_comprobante']) echo "<input type='hidden' id='pago_con_comprobante' value='1'>"; ?>
