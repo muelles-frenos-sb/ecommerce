@@ -2,11 +2,13 @@
 
 <input type="hidden" id="factura_tercero_razon_social" value="<?php echo $tercero->f200_razon_social; ?>">
 <input type="hidden" id="factura_tercero_documento_numero" value="<?php echo $tercero->f200_nit; ?>">
-<input type="hidden" id="total_pago">
+
+<!-- Input oculto si es un pago con comprobante -->
+<?php if($datos['nit_comprobante']) echo "<input type='hidden' id='pago_con_comprobante' value='1'>"; ?>
 
 <!-- Campo oculto para saber el id del registro pasado a la lista de facturas seleccionados -->
 <input type="hidden" id="id_registro">
-
+    
 <!-- Modal que se usa para abrir la interfaz de pago de Wompi -->
 <div id="contenedor_pago_estado_cuenta"></div>
 <div id="contenedor_modal"></div>

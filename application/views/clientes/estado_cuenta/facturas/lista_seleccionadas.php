@@ -144,6 +144,9 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                     // Si el valor es negativo, no debe dejarse editar
                     let desactivado = (datos.valor < 0) ? 'disabled' : ''
 
+                    // Si es pago con comprobante, el descuento podrá editarse
+                    let descuentoDesactivado = ($('#pago_con_comprobante').val()) ? '' : 'disabled'
+
                     // Al campo oculto se le asigna el id, para que luego sea asignado al nuevo registro en la tabla de seleccionados
                     $('#id_registro').val(datos.id)
 
@@ -184,10 +187,11 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                             data-valor_documento="${datos.valor_documento}"
                             data-total_cop="${datos.total_cop}"
                         >`,
-                        // Descuento
-                        `<input type='text' id="descuento_${datos.id}" class="form-control" placeholder='Descuento' style="text-align: right" disabled>`,
-                        `<input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right" disabled>`
+                        // Descuento. El campo se habilita cuando es un pago con comprobante
+                        `<input type='text' id="descuento_${datos.id}" class="form-control valor_descuento" placeholder='Descuento' style="text-align: right" value="0" ${descuentoDesactivado}>`,
+
                         // Valor final
+                        `<input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right" disabled>`
                     ]).draw()
 
                     calcularTotal()
@@ -195,8 +199,8 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                     // Por defecto se formatea el campo
                     $(`#${datos.id}`).val(formatearNumero(datos.valor))
 
-                    // Si el número cambia
-                    $(`.valor_pago_factura`).on('keyup', function() {
+                    // Si el valor pagado o el descuento (para pagos con comprobantes) cambia
+                    $(`.valor_pago_factura, .valor_descuento`).on('keyup', function() {
                         // Se formatea el campo
                         $(this).val(formatearNumero($(this).val()))
 
@@ -221,14 +225,24 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
             let valorBruto = parseFloat($(this).attr('data-valor_bruto'))
             let valorTotal = parseFloat($(this).attr('max'))
             let porcentajeDescuento = parseFloat($(this).attr('data-descuento_porcentaje'))
-            let valorDescuento = (valorAPagar == valorTotal) ? Math.floor(valorBruto * (porcentajeDescuento / 100)) : 0
-            
-            subtotal += valorAPagar
+
+            // Si el pago es con comprobante
+            if($('#pago_con_comprobante').val()) {
+                // El valor del descuento es lo indicado en el campo Descuento
+                valorDescuento = parseFloat($(`#descuento_${$(this).attr('data-id')}`).val().replace(/\./g, '')) || 0
+            } else {
+                // El descuento es calculado fijo
+                valorDescuento = (valorAPagar == valorTotal) ? Math.floor(valorBruto * (porcentajeDescuento / 100)) : 0
+
+                // Se muestra en el campo el valor del descuento
+                $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento))
+            }
+
             totalDescuento += valorDescuento
+            subtotal += valorAPagar
             total += parseFloat($(this).val().replace(/\./g, ''))
             total -= valorDescuento
 
-            $(`#descuento_${$(this).attr('data-id')}`).val(formatearNumero(valorDescuento))
             $(`#valor_completo_${$(this).attr('data-id')}`).val(formatearNumero((valorAPagar - valorDescuento)))
 
             detalleFactura.push({
@@ -263,7 +277,6 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
 
     removerFactura = async(id) => {
         // El registro en el mini carrito se quita
-        // $(`#id_factura_seleccionada_${id}`).remove()
         tablaFacturasSeleccionadas.row(`#id_factura_seleccionada_${id}`).remove().draw(false)
 
         // Se vuelve a agregar en la tabla
@@ -281,6 +294,8 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
     $().ready(() => {
         $('#contenedor_mensaje_carga').html('')
 
+        // Cuando el monto total sea modificado,
+        // se recalcula el total
         $(`#monto`).on('keyup', function() {
             // Se formatea el campo
             $(this).val(formatearNumero($(this).val()))
