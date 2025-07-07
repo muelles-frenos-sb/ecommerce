@@ -90,7 +90,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F350_ID_CO" => 400,
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
-            "F351_ID_AUXILIAR" => '11100504',
+            "F351_ID_AUXILIAR" => (isset($metodo_pago) && $metodo_pago == 'PSE') ? '11100504' : '11200505',
             "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
             "F351_ID_TERCERO" => '',
             "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
