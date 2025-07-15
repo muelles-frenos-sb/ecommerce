@@ -34,7 +34,8 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
             <?php if(!empty($solicitud_detalle)) { ?>
                 <div class="card-body card-body--padding--2">
                     <div class="alert alert-info alert-lg mb-3 alert-dismissible fade show">
-                        Indícanos el precio que ofreces al lado de cada producto que tengas disponible. <!-- <a href="">Esta es la lista de marcas</a> -->
+                        <li>Indícanos el precio que ofreces al lado de cada producto que tengas disponible.</li> <!-- <a href="">Esta es la lista de marcas</a> -->
+                        <li>El precio debe ser ANTES DE IVA</li>
                     </div>
 
                     <div class="row" id="contenedor_cotizacion_detalle">
