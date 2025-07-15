@@ -71,9 +71,10 @@
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
             scrollX: false,
-            scrollCollapse: true
+            scrollCollapse: true,
+            ordering: false,
+            // order: [[0, 'desc']],
         })
 
-        $('#contenedor_mensaje_carga').html('')
     })
 </script>

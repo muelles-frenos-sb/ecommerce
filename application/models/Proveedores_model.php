@@ -222,7 +222,7 @@ Class Proveedores_model extends CI_Model{
                 // Se aplican los filtros
                 if (isset($datos['id']) && $datos['id']) $filtros_where .= " AND pcs.id = {$datos['id']} ";
 
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pcs.fecha_creacion DESC";
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY pcs.fecha_inicio DESC";
 
                 $sql =
                 "SELECT
