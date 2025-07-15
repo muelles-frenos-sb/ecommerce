@@ -9,14 +9,17 @@
 <div class="block">
     <div class="container container--max--xl">
         <div class="row mb-4">
-            <div class="col-6">
+            <div class="col-3">
                 <a class="btn btn-success" href="<?php echo site_url('proveedores/solicitudes/crear'); ?>">Crear solicitud</a>
             </div>
 
-            <div class="col-6">
+            <div class="col-9">
                 <button type="button" class="btn btn-success importar">Importar desde archivo plano</button>
 
                 <a type="button" class="btn btn-info" href="<?php echo base_url().'archivos/plantillas/proveedores_importacion_solicitud_cotizacion.xlsx'; ?>" download>Descargar archivo plano</a>
+
+                <a type="button" class="btn btn-primary" href="#" onClick="javascript:copiar_enlace('<?php echo site_url('proveedores'); ?>')"><i class="fa fa-paste"></i> Copiar enlace</a>
+
                 <input type="file" class="d-none" id="importar_archivo" onchange="javascript:importarProductosMetaDatos()" accept=".xlsx,.xls,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
             </div>
         </div>

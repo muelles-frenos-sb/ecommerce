@@ -155,6 +155,19 @@ consulta = (tipo, datos, notificacion = true, mensaje = '') => {
 }
 
 /**
+ * Toma un texto de enlace y lo copia al portapapeles
+ */
+const copiar_enlace = enlace => {
+    navigator.clipboard.writeText(enlace)
+    .then(() => {
+        mostrarAviso('exito', '¡Enlace copiado al portapapeles!')
+    })
+    .catch(error => {
+        mostrarAviso('error', `Error al copiar: ${error}`)
+    });
+}
+
+/**
  * Crea en Siesa el tercero cliente
  */
  crearTerceroCliente = async(datos) => {
