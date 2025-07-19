@@ -103,6 +103,27 @@ Class Proveedores_model extends CI_Model{
                 return $this->db->get()->result();
             break;
 
+            case 'proveedores_disponibles_por_cotizacion':
+                $sql = 
+                "SELECT
+                    t.f200_razon_social AS proveedor,
+                    COUNT( p.id ) AS cantidad_productos 
+                FROM
+                    proveedores_cotizaciones_solicitudes_detalle AS pcsd
+                    LEFT JOIN productos AS p ON pcsd.producto_id = p.id
+                    LEFT JOIN marcas AS m ON p.marca = m.nombre
+                    LEFT JOIN proveedores_marcas AS pm ON m.codigo = pm.marca_codigo
+                    INNER JOIN terceros AS t ON pm.proveedor_nit = t.f200_nit 
+                WHERE
+                    pcsd.cotizacion_id = {$datos['id']} 
+                GROUP BY
+                    proveedor 
+                ORDER BY
+                    proveedor";
+
+                return $this->db->query($sql)->result();
+            break;
+
             case 'proveedores_maestro_solicitudes_detalle':
                 return $this->db
                     ->select([

@@ -78,6 +78,34 @@
         }
     }
 
+    listarProveedoresDisponibles = async solicitudId => {
+        let listado = await consulta('obtener', {
+            tipo: 'proveedores_disponibles_por_cotizacion',
+            id: solicitudId,
+        })
+
+        let html = `
+        <table style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th class='text-center' style="border-bottom: 1px solid #ccc;">Proveedor</th>
+                    <th class='text-center' style="border-bottom: 1px solid #ccc;">Productos</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${listado.resultado.map(item => `
+                    <tr>
+                        <td>${item.proveedor}</td>
+                        <td>${item.cantidad_productos}</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        `
+
+        mostrarAviso('info', html, 60000)
+    }
+
     $().ready(() => {
         listarSolicitudes()
 

@@ -17,6 +17,7 @@
                 <th class="text-center">Id</th>
                 <th class="text-center">Fecha de inicio</th>
                 <th class="text-center">Fecha de finalización</th>
+                <th class="text-center">Proveedores disponibles</th>
                 <th class="text-center">Cotizaciones recibidas</th>
                 <th class="text-center" style="width: 200px;">Acciones</th>
             </tr>
@@ -37,6 +38,17 @@
                 { data: 'id', className: 'text-center' },
                 { data: 'fecha_inicio' },
                 { data: 'fecha_fin' },
+                {
+                    data: null,
+                    className: 'text-center', 
+                    render: (data, type, row) => {
+                        return `
+                            <a type="button" class="btn btn-sm btn-info" href='#' onCLick="javascript:listarProveedoresDisponibles(${data.id})">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        `
+                    }
+                },
                 { data: 'cantidad_cotizaciones', className: 'text-center' },
                 {
                     data: null, 
