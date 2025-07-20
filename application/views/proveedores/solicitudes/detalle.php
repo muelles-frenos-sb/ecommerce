@@ -14,11 +14,11 @@ if (isset($id)) {
                 <div class="form-row">
                     <div class="form-group col-6 col-md-6">
                         <label for="fecha_inicio">Fecha de inicio *</label>
-                        <input type="date" class="form-control" id="fecha_inicio" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_inicio : date('Y-m-d') ; ?>">
+                        <input type="datetime-local" class="form-control" id="fecha_inicio" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_inicio : date('Y-m-d') ; ?>">
                     </div>
                     <div class="form-group col-6 col-md-6">
                         <label for="fecha_finalizacion">Fecha finalización *</label>
-                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_fin : date('Y-m-d') ; ?>">
+                        <input type="datetime-local" class="form-control" id="fecha_finalizacion" value="<?php echo (isset($solicitud)) ? $solicitud->fecha_fin : date('Y-m-d') ; ?>">
                     </div>
                     <div class="form-group col-6 col-sm-8">
                         <label for="cotizacion_producto">Producto *</label>

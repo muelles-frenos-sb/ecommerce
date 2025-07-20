@@ -244,3 +244,8 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (66, 'Proveedores - Creación d
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (67, 'Proveedores - Actualización de solicitud de precio');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (68, 'Proveedores - Creación de maestro');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (69, 'Proveedores - Actualización de maestro');
+
+-- 20250719 A campos de fecha se les agrega hora
+ALTER TABLE `proveedores_cotizaciones_solicitudes` 
+MODIFY COLUMN `fecha_inicio` datetime NULL DEFAULT NULL AFTER `usuario_id`,
+MODIFY COLUMN `fecha_fin` datetime NULL DEFAULT NULL AFTER `fecha_inicio`;

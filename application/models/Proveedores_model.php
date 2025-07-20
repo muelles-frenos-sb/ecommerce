@@ -275,9 +275,13 @@ Class Proveedores_model extends CI_Model{
 
             case 'solicitudes_disponibles':
                 return $this->db
-                    ->order_by('fecha_fin')
-                    ->where('fecha_fin >=', date('Y-m-d'))
-                    ->get('proveedores_cotizaciones_solicitudes')
+                    ->select([
+                        'pcs.*',
+                        'ROUND(TIMESTAMPDIFF(SECOND, NOW(), pcs.fecha_fin) / 3600) AS horas_restantes',
+                    ])
+                    ->order_by('pcs.fecha_fin')
+                    ->where('pcs.fecha_fin >=', date('Y-m-d H:i:s'))
+                    ->get('proveedores_cotizaciones_solicitudes pcs')
                     ->result()
                 ;
             break;

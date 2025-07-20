@@ -196,17 +196,20 @@ class Proveedores extends MY_Controller {
 
             // Se obtienen la fechas de inicio y fin
             $fecha_inicio = $hoja->getCell('B1')->getValue();
-            $fecha_fin = $hoja->getCell('D1')->getValue();
-            $fecha_inicio = Date::excelToDateTimeObject($fecha_inicio)->format('Y-m-d');
-            $fecha_fin = Date::excelToDateTimeObject($fecha_fin)->format('Y-m-d');
+            $fecha_fin = $hoja->getCell('B2')->getValue();
+            $hora_inicio = $hoja->getCell('D1')->getFormattedValue();
+            $hora_fin = $hoja->getCell('D2')->getFormattedValue();
 
+            $fecha_inicio = Date::excelToDateTimeObject("$fecha_inicio")->format('Y-m-d');
+            $fecha_fin = Date::excelToDateTimeObject("$fecha_fin")->format('Y-m-d');
+            
             // Se elimina la primera y segunda fila del excel
             unset($registros[0], $registros[1]);
 
             // Se organizan los datos que se almacenaran de la solicitud de cotización
             $datos = [
-                "fecha_inicio" => $fecha_inicio,
-                "fecha_fin" => $fecha_fin,
+                "fecha_inicio" => "$fecha_inicio $hora_inicio",
+                "fecha_fin" => "$fecha_fin $hora_fin",
                 "fecha_creacion" => date('Y-m-d H:i:s'),
                 "usuario_id" => $this->session->userdata('usuario_id')
             ];
