@@ -5,6 +5,7 @@ $datos = [
 ];
 
 // Se obtienen los datos de la solicitud de cotización
+$solicitud_cotizacion = $this->proveedores_model->obtener('proveedores_cotizaciones_solicitudes', ['id' => $cotizacion_id]);
 $solicitud_detalle = $this->proveedores_model->obtener('proveedores_maestro_solicitudes_detalle', $datos);
 
 // Se obtiene el detalle de la cotización, en caso de que el proveedor ya la haya hecho
@@ -31,11 +32,19 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                 </div>
             <?php } ?>
 
-            <?php if(!empty($solicitud_detalle)) { ?>
+            <?php
+            if($solicitud_cotizacion->activa == 0) { ?>
+                <div class='container'>
+                    <div class='alert alert-danger alert-lg mb-3 alert-dismissible fade show'>
+                        La cotización ya está cerrada. Haz <a href="<?php echo site_url('proveedores'); ?>">clic aquí</a> para buscar una nueva cotización.
+                    </div>
+                </div>
+            <?php } ?>
+
+            <?php if(!empty($solicitud_detalle) && $solicitud_cotizacion->activa == 1) { ?>
                 <div class="card-body card-body--padding--2">
                     <div class="alert alert-info alert-lg mb-3 alert-dismissible fade show">
-                        <li>Indícanos el precio que ofreces al lado de cada producto que tengas disponible.</li> <!-- <a href="">Esta es la lista de marcas</a> -->
-                        <li>El precio debe ser ANTES DE IVA</li>
+                        Indícanos el precio que ofreces al lado de cada producto que tengas disponible.
                     </div>
 
                     <div class="row" id="contenedor_cotizacion_detalle">
@@ -43,14 +52,14 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th scope="col" class="text-center">#</th>
-                                        <th scope="col" class="text-center">Id</th>
-                                        <th scope="col" class="text-center">Marca</th>
-                                        <th scope="col" class="text-center">Referencia</th>
-                                        <th scope="col" class="text-center">Descripción</th>
-                                        <th scope="col" class="text-center">Cantidad</th>
-                                        <th scope="col" class="text-center">Precio</th>
-                                        <th scope="col" class="text-center">Observación</th>
+                                        <th class="text-center">#</th>
+                                        <th class="text-center">Id</th>
+                                        <th class="text-center">Marca</th>
+                                        <th class="text-center">Referencia</th>
+                                        <th class="text-center">Descripción</th>
+                                        <th class="text-center">Cantidad</th>
+                                        <th class="text-center">Precio</th>
+                                        <th class="text-center">Observación</th>
                                     </tr>
                                 </thead>
                                 <tbody id="listado_cotizacion_detalle">
@@ -77,11 +86,12 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                             <td><?php echo $registro->producto_referencia; ?></td>
                                             <td><?php echo $registro->producto_notas; ?></td>
                                             <td class="text-center"><?php echo $registro->cantidad; ?></td>
-                                            <td width="15%">
-                                                <input type="text" class="form-control text-right" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>">
+                                            <td width="150">
+                                                <input type="text" class="form-control text-right" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>" style="width: 120px;">
+                                                <small style="color: grey; font-size: 0.7em">Antes de IVA</small>
                                             </td>
-                                            <td width="15%">
-                                                <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php echo $observacion_item; ?>">
+                                            <td>
+                                                <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php echo $observacion_item; ?>" style="width: 120px;">
                                             </td>
                                         </tr>
 

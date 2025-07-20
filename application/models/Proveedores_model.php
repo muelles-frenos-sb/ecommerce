@@ -252,6 +252,7 @@ Class Proveedores_model extends CI_Model{
                     pcs.fecha_fin,
                     pcs.fecha_creacion,
                     pcs.usuario_id,
+                    IF(TIMESTAMPDIFF(SECOND, NOW(), pcs.fecha_fin) > 0, 1, 0) activa,
                     (SELECT
                         COUNT( DISTINCT pcd.proveedor_nit ) 
                     FROM
