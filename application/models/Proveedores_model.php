@@ -68,7 +68,7 @@ Class Proveedores_model extends CI_Model{
                         'pcd.id',
                         'pcd.cotizacion_id',
                         'pcd.producto_id',
-                        'pcd.precio',
+                        'IF(pcd.precio > 0, pcd.precio, "") precio',
                         'pcd.observacion',
                         'pcd.proveedor_nit',
                         'CONCAT_WS(" - ", p.id, p.referencia, p.notas) producto',

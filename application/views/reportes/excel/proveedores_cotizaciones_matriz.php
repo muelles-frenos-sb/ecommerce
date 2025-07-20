@@ -61,15 +61,15 @@ foreach($productos as $id_producto) {
             return $reg->producto_id == $producto_buscado && $reg->proveedor_nit == $proveedor_buscado;
         });
 
-        // Se extraen precio y observación
-        $precio = (reset($resultado)->precio) ?? 0 ;
-        $precio_detalle = ($precio != 0) ? '$ '.number_format($precio, 0, '', '.') : '' ;
-        $observacion = (reset($resultado)->observacion) ?? null ;
-        $observacion_detalle = ($observacion) ? "($observacion)" : '' ;
+        // Se extrae el precio
+        $precio = (reset($resultado)->precio) ?? '' ;
 
+        // Estilos de fila y columna
         $hoja->getColumnDimension($columna)->setWidth(20);
-        $hoja->setCellValue("{$columna}{$fila}", "$precio_detalle $observacion_detalle");
+        $hoja->getStyle("{$columna}{$fila}")->getNumberFormat()->setFormatCode('"$"#,##0');
         $hoja->getStyle("{$columna}{$fila}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        
+        $hoja->setCellValue("{$columna}{$fila}", $precio);
 
         // Si el precio actual del producto es más bajo que el anterior
         if($precio > 0 && $precio < $mejor_precio) {
@@ -77,7 +77,15 @@ foreach($productos as $id_producto) {
             $celda_mejor_precio = "{$columna}{$fila}";
             $mejor_precio = $precio;
         }
-        
+
+        // Una nueva columna para la observación
+        $columna++;
+        $hoja->setCellValue("{$columna}{$fila}", (reset($resultado)->observacion) ?? null);
+
+        // Estilos de fila y columna
+        $hoja->getColumnDimension($columna)->setWidth(20);
+        $hoja->getStyle("{$columna}{$fila}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
         $columna++;
     }
 
