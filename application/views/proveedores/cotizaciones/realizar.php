@@ -58,7 +58,9 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                         <th class="text-center">Referencia</th>
                                         <th class="text-center">Descripción</th>
                                         <th class="text-center">Cantidad</th>
-                                        <th class="text-center">Precio</th>
+                                        <th class="text-center">Precio inicial</th>
+                                        <th class="text-center">Descuento</th>
+                                        <th class="text-center">Valor final</th>
                                         <th class="text-center">Observación</th>
                                     </tr>
                                 </thead>
@@ -69,11 +71,17 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                     // Se recorren los registros que se deben diligenciar
                                     foreach ($solicitud_detalle as $registro) {
                                             $index = array_search($registro->producto_id, array_column($cotizacion_detalle, "producto_id"));
-                                            
-                                            $precio_item = ($index) ? $cotizacion_detalle[$index]->precio : 0;
+                                        
+                                        echo "0<hr>";
+                                        print_r($cotizacion_detalle[0]);
+                                        echo "1<hr>";
+                                        print_r($cotizacion_detalle[1]);
+                                            $precio_item = ($index) ? floatval($cotizacion_detalle[$index]->precio) : 0;
+                                            $descuento_porcentaje_item = ($index) ? $cotizacion_detalle[$index]->descuento_porcentaje : 0;
+                                            $descuento_valor_item = ($index) ? $cotizacion_detalle[$index]->descuento_valor : 0;
                                             $observacion_item = ($index) ? $cotizacion_detalle[$index]->observacion : '';
+                                            $precio_total = ($index) ? $precio_item - $descuento_valor_item  : 0;
                                             $cotizacion_detalle_id = ($index) ? $cotizacion_detalle[$index]->id : 0;
-
                                     ?>
                                         <tr id="listado_producto_<?php echo $registro->id; ?>"
                                             data-producto-id="<?php echo $registro->producto_id; ?>"
@@ -86,9 +94,20 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                             <td><?php echo $registro->producto_referencia; ?></td>
                                             <td><?php echo $registro->producto_notas; ?></td>
                                             <td class="text-center"><?php echo $registro->cantidad; ?></td>
-                                            <td width="150">
-                                                <input type="text" class="form-control text-right" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>" style="width: 120px;">
+                                            <td>
+                                                <input type="text" class="form-control text-right" data-id="<?php echo $registro->id; ?>" id="precio_<?php echo $registro->id; ?>" value="<?php echo $precio_item; ?>" style="width: 120px;">
                                                 <small style="color: grey; font-size: 0.7em">Antes de IVA</small>
+                                            </td>
+                                            <td>
+                                                <input type="number" class="form-control text-right" data-id="<?php echo $registro->id; ?>" id="descuento_<?php echo $registro->id; ?>" value="<?php echo $descuento_porcentaje_item; ?>" style="width: 60px;">
+                                                <small style="color: grey; font-size: 0.7em">En porcentaje</small>
+
+                                                <!-- Almacenamiento del descuento en pesos -->
+                                                <input type="hidden" class="form-control text-right" data-id="<?php echo $registro->id; ?>" id="descuento_valor_<?php echo $registro->id; ?>" value="0">
+
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control text-right" id="precio_total_<?php echo $registro->id; ?>" value="<?php echo number_format($precio_total, 0, '', '.'); ?>" style="width: 120px;" disabled>
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control" id="observacion_<?php echo $registro->id; ?>" value="<?php echo $observacion_item; ?>" style="width: 120px;">
@@ -152,8 +171,11 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
             var datos = {
                 cotizacion_id: $("#cotizacion_id").val(),
                 proveedor_nit: $("#proveedor_nit").val(),
-                precio: parseFloat($(`#precio_${solicitudDetalleId}`).val().replace(/\./g, '')),
                 producto_id: $(this).data("producto-id"),
+                precio: parseFloat($(`#precio_${solicitudDetalleId}`).val().replace(/\./g, '')),
+                descuento_valor: parseFloat($(`#descuento_valor_${solicitudDetalleId}`).val().replace(/\./g, '')),
+                descuento_porcentaje: parseFloat($(`#descuento_${solicitudDetalleId}`).val().replace(/\./g, '')),
+                precio_final: parseFloat($(`#precio_total_${solicitudDetalleId}`).val().replace(/\./g, '')),
                 observacion: observacion,
             }
 
@@ -165,9 +187,20 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
 
     $().ready(() => {
         // Si el precio cambia
-        $(`input[id^='precio_']`).on('keyup', function() {
-            // Se formatea el campo
-            $(this).val(formatearNumero($(this).val()))
+        $(`input[id^='precio_'], input[id^='descuento_']`).on('keyup', function() {
+            let registroId = $(this).attr('data-id')
+
+            // Cálculo de valores
+            let precioInicial = parseFloat($(`#precio_${registroId}`).val().replace(/\./g, ''))
+            let descuento = parseFloat($(`#descuento_${registroId}`).val())
+            let valorDescuento = Math.floor(precioInicial * (descuento / 100))
+            let valorTotal = precioInicial - valorDescuento
+            
+            // Los valores se establecen en los campos
+            $(`#precio_${registroId}`).val(formatearNumero(precioInicial))
+            $(`#descuento_${registroId}`).val(descuento)
+            $(`#descuento_valor_${registroId}`).val(valorDescuento)
+            $(`#precio_total_${registroId}`).val(formatearNumero(valorTotal))
         })
     })
 </script>

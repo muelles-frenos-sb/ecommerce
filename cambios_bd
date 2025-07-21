@@ -249,3 +249,9 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (69, 'Proveedores - Actualizaci
 ALTER TABLE `proveedores_cotizaciones_solicitudes` 
 MODIFY COLUMN `fecha_inicio` datetime NULL DEFAULT NULL AFTER `usuario_id`,
 MODIFY COLUMN `fecha_fin` datetime NULL DEFAULT NULL AFTER `fecha_inicio`;
+
+-- 20250719 Campos para almacenar el descuento de las cotizaciones de los proveedores
+ALTER TABLE `proveedores_cotizaciones_detalle` 
+ADD COLUMN `descuento_porcentaje` double NULL AFTER `precio`,
+ADD COLUMN `precio_final` double NULL AFTER `observacion`,
+ADD COLUMN `descuento_valor` double(255) NULL AFTER `descuento_porcentaje`;
