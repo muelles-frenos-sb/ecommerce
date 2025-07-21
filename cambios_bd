@@ -254,4 +254,4 @@ MODIFY COLUMN `fecha_fin` datetime NULL DEFAULT NULL AFTER `fecha_inicio`;
 ALTER TABLE `proveedores_cotizaciones_detalle` 
 ADD COLUMN `descuento_porcentaje` double NULL AFTER `precio`,
 ADD COLUMN `precio_final` double NULL AFTER `observacion`,
-ADD COLUMN `descuento_valor` double(255) NULL AFTER `descuento_porcentaje`;
+ADD COLUMN `descuento_valor` double NULL AFTER `descuento_porcentaje`;

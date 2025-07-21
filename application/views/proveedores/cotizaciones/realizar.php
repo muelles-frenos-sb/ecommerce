@@ -71,11 +71,6 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
                                     // Se recorren los registros que se deben diligenciar
                                     foreach ($solicitud_detalle as $registro) {
                                             $index = array_search($registro->producto_id, array_column($cotizacion_detalle, "producto_id"));
-                                        
-                                        echo "0<hr>";
-                                        print_r($cotizacion_detalle[0]);
-                                        echo "1<hr>";
-                                        print_r($cotizacion_detalle[1]);
                                             $precio_item = ($index) ? floatval($cotizacion_detalle[$index]->precio) : 0;
                                             $descuento_porcentaje_item = ($index) ? $cotizacion_detalle[$index]->descuento_porcentaje : 0;
                                             $descuento_valor_item = ($index) ? $cotizacion_detalle[$index]->descuento_valor : 0;
