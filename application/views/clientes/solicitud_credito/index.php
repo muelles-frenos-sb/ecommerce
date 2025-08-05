@@ -170,7 +170,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h5>Tesorería y pagos</h5>
+                        <h5>Tesorería y pagos (opcional)</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -190,7 +190,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h5>Comercial</h5>
+                        <h5>Comercial (opcional)</h5>
                     </div>
 
                     <div class="form-group col-md-3">
@@ -210,7 +210,7 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <h5>Contabilidad</h5>
+                        <h5>Contabilidad (opcional)</h5>
                     </div>
                     <div class="form-group col-md-3">
                         <input type="text" class="form-control" id="contabilidad_nombre" placeholder="Nombre">
