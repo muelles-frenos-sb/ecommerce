@@ -196,8 +196,27 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
 
                     calcularTotal()
 
+                    /**
+                     * Esta sección calcula la última cuota, quitándole el valor de más
+                     * para que dé el mismo valor del comprobante
+                     */
+                    let valorReciente = parseFloat(datos.valor) // Valor de la última cuota seleccionada
+                    let valorFinal = parseFloat($('#total_pago').val()) // Valor acumulado de todas las facturas seleccionadas
+                    let valorFaltante = parseFloat($('#comprobante_valor_faltante').text().replace(/\./g, '')) // Valor faltante por seleccionar
+                    let valorCuotaReal = valorReciente + valorFaltante // El valor en el que va a quedar la cuota
+
+                    // Si el valor faltante es negativo (superó al monto del comprobante), se establece el nuevo valor de la cuota
+                    if(valorFaltante < 0) {
+                        datos.valor = valorCuotaReal
+                        mostrarAviso('info', `El valor a pagar de esta factura se ajustó a $${formatearNumero(valorCuotaReal)} para igualarse al monto del recibo.`, 10000)
+                    } else {
+                        mostrarAviso('exito', '!Bien! En la parte inferior podrás ver tus facturas seleccionadas para pago', 10000)
+                    }
+                    
                     // Por defecto se formatea el campo
                     $(`#${datos.id}`).val(formatearNumero(datos.valor))
+                    
+                    calcularTotal()
 
                     // Si el valor pagado o el descuento (para pagos con comprobantes) cambia
                     $(`.valor_pago_factura, .valor_descuento`).on('keyup', function() {
@@ -206,8 +225,6 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
 
                         calcularTotal()
                     })
-
-                    mostrarAviso('exito', '!Bien! En la parte inferior podrás ver tus facturas seleccionadas para pago', 10000)
                 })
             })
         })

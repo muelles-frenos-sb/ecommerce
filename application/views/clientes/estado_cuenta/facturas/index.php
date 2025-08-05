@@ -52,7 +52,21 @@
             </div>
         <?php } ?>
 
-        <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes de pago</div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-12">
+                <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes de pago</div>
+            </div>
+
+            <?php if($datos['nit_comprobante']) { ?>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="d-flex flex-column">
+                        <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>
+                        <h4 class="align-self-end">Diferencia: $<span id="comprobante_valor_faltante">0</span></h4>
+                    </div>
+                </div>
+            <?php } ?>
+        </div>
+
         <div class="card-table">
             <div id="contenedor_lista_facturas_pendientes"></div>
         </div>
@@ -73,14 +87,17 @@
     <div class="col-12">
         <!-- Si trae NIT de comprobante, es la sección para vendedores -->
         <?php if($datos['nit_comprobante']) { ?>
-            <div class="d-flex flex-column">
-                <!-- <input type="hidden" id="total_faltante_amortizacion" value=""> -->
-                <h4 class="align-self-end">Valor de facturas seleccionadas: $<span id="valor_total_seleccionadas">0</span></h4>
-                <h4 class="align-self-end">Diferencia: $<span id="comprobante_valor_faltante">0</span></h4>
-            </div>
-
             <button class="btn btn-primary btn-lg btn-block" onClick="javascript:guardarReciboEstadoCuenta()">Guardar pago con comprobante</button>
-            <button type="button" class="btn btn-secondary btn-sm btn-block" onClick="javascript:history.back()">Consultar otro cliente</button>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <button type="button" class="btn btn-info btn-sm btn-block mt-2" onClick="javascript:history.back()">Consultar otro cliente</button>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <a type="button" class="btn btn-secondary btn-sm btn-block mt-2" href="<?php echo site_url('inicio'); ?>">Volver al inicio</a>
+                </div>
+            </div>
         <?php } else { ?>
             <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
         <?php } ?>

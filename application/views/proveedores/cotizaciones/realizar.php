@@ -70,13 +70,16 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
 
                                     // Se recorren los registros que se deben diligenciar
                                     foreach ($solicitud_detalle as $registro) {
+                                            $crear = empty($cotizacion_detalle);
                                             $index = array_search($registro->producto_id, array_column($cotizacion_detalle, "producto_id"));
-                                            $precio_item = ($index) ? floatval($cotizacion_detalle[$index]->precio) : 0;
-                                            $descuento_porcentaje_item = ($index) ? $cotizacion_detalle[$index]->descuento_porcentaje : 0;
-                                            $descuento_valor_item = ($index) ? $cotizacion_detalle[$index]->descuento_valor : 0;
-                                            $observacion_item = ($index) ? $cotizacion_detalle[$index]->observacion : '';
-                                            $precio_total = ($index) ? $precio_item - $descuento_valor_item  : 0;
-                                            $cotizacion_detalle_id = ($index) ? $cotizacion_detalle[$index]->id : 0;
+                                            if (!$crear && gettype($index) != "integer") continue;
+
+                                            $precio_item = (!$crear) ? floatval($cotizacion_detalle[$index]->precio) : 0;
+                                            $descuento_porcentaje_item = (!$crear) ? $cotizacion_detalle[$index]->descuento_porcentaje : 0;
+                                            $descuento_valor_item = (!$crear) ? $cotizacion_detalle[$index]->descuento_valor : 0;
+                                            $observacion_item = (!$crear) ? $cotizacion_detalle[$index]->observacion : '';
+                                            $precio_total = (!$crear) ? $precio_item - $descuento_valor_item : 0;
+                                            $cotizacion_detalle_id = (!$crear) ? $cotizacion_detalle[$index]->id : 0;
                                     ?>
                                         <tr id="listado_producto_<?php echo $registro->id; ?>"
                                             data-producto-id="<?php echo $registro->producto_id; ?>"
