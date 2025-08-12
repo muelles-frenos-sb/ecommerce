@@ -165,7 +165,9 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                         datos.total_cop, // Saldo
                         datos.tipo_credito, // Sucursal
                         // Valor a pagar
-                        `<input
+                        `
+                        <label class="text-success" style="font-size: 0.8em">Haz un abono o paga el valor total</label>
+                        <input
                             type="text"
                             id="${datos.id}"
                             data-id="${datos.id}"
@@ -176,7 +178,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                             data-documento_cruce_fecha="${datos.documento_cruce_fecha}"
                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                             data-valor_bruto="${valorBruto}"
-                            class="form-control valor_pago_factura"
+                            class="form-control valor_pago_factura border-success"
                             style="text-align: right; width: 150px;"
                             max="${parseFloat(datos.valor)}"
                             value="${parseFloat(datos.valor)}"
