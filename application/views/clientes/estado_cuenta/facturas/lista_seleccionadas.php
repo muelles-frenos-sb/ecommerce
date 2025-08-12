@@ -55,18 +55,16 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
         info: true,
         // ordering: true,
         // order: [[5, 'desc']],
-        paging: true,
         // stateSave: true,
+        paging: true,
+        scrollX: false,
         scrollY: '320px',
         searching: true,
         language: {
+            url: '<?php echo base_url(); ?>js/dataTables_espanol.json',
             decimal: ',',
             thousands: '.'
         },
-        language: {
-            url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
-        },
-        scrollX: false,
         scrollCollapse: true,
         // Define una configuración específica para varias columnas
         columnDefs: [{
@@ -179,7 +177,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                             data-descuento_porcentaje="${datos.descuento_porcentaje}"
                             data-valor_bruto="${valorBruto}"
                             class="form-control valor_pago_factura"
-                            style="text-align: right"
+                            style="text-align: right; width: 150px;"
                             max="${parseFloat(datos.valor)}"
                             value="${parseFloat(datos.valor)}"
                             ${desactivado}
@@ -188,10 +186,9 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                             data-total_cop="${datos.total_cop}"
                         >`,
                         // Descuento. El campo se habilita cuando es un pago con comprobante
-                        `<input type='text' id="descuento_${datos.id}" class="form-control valor_descuento" placeholder='Descuento' style="text-align: right" value="0" ${descuentoDesactivado}>`,
-
+                        `<input type='text' id="descuento_${datos.id}" class="form-control valor_descuento" placeholder='Descuento' style="text-align: right; width: 150px;" value="0" ${descuentoDesactivado}>`,
                         // Valor final
-                        `<input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right" disabled>`
+                        `<input type='text' id="valor_completo_${datos.id}" class="form-control" style="text-align: right; width: 150px;" disabled>`
                     ]).draw()
 
                     calcularTotal()
