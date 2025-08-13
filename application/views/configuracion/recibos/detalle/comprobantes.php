@@ -1,7 +1,8 @@
-<?php $recibo = $this->productos_model->obtener('recibo', ['token' => $datos['token']]); ?>
+<?php $recibo = $this->configuracion_model->obtener('recibos', ['token' => $datos['token']]); ?>
 
 <div class="block">
     <div class="container container--max--xl">
+        <!-- Facturas -->
         <div class="card mb-4">
             <div class="card-header">
                 <h5 class="text-center">Facturas asociadas de <?php echo $recibo->razon_social; ?></h5>
@@ -83,18 +84,68 @@
             </div>
         </div>
 
+        <!-- Comprobantes -->
         <div class="card mb-4">
             <div class="card-header">
-                <h5 class="text-center">Comprobantes</h5>
+                <h5 class="text-center">Detalle del comprobante</h5>
             </div>
             <div class="card-divider"></div>
+
+            <div class="card-body card-body--padding--2">
+                <div class="row no-gutters">
+                    <div class="col-12">
+                        <div class="card order-success__meta">
+                            <ul class="order-success__meta-list">
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Fecha de creación:</span>
+                                    <span class="order-success__meta-value"><?php echo $recibo->fecha_creacion; ?></span>
+                                </li>
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Fecha de consignación:</span>
+                                    <span class="order-success__meta-value"><?php echo $recibo->fecha_consignacion; ?></span>
+                                </li>
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Monto:</span>
+                                    <span class="order-success__meta-value"><?php echo formato_precio($recibo->valor); ?></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="card order-success__meta">
+                            <ul class="order-success__meta-list">
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Cuenta:</span>
+                                    <span class="order-success__meta-value"><?php echo $recibo->cuenta_bancaria_nombre; ?></span>
+                                </li>
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Referencia:</span>
+                                    <span class="order-success__meta-value"><?php echo $recibo->referencia; ?></span>
+                                </li>
+                                <li class="order-success__meta-item">
+                                    <span class="order-success__meta-title">Estado:</span>
+                                    <div class="status-badge status-badge--style--<?php echo $recibo->estado_clase; ?> status-badge--has-text">
+                                        <div class="status-badge__body">
+                                            <div class="status-badge__text"><?php echo $recibo->estado; ?></div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-divider"></div>
+            
             <div class="card-table">
                 <div class="table-responsive-sm">
                     <table>
                         <thead>
                             <tr>
                                 <th>Nro.</th>
-                                <th>Nombre</th>
+                                <th>Archivo</th>
                                 <th>Opciones</th>
                             </tr>
                         </thead>

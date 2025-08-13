@@ -297,7 +297,13 @@
                         }
                     })
 
-                    mostrarAviso('exito', 'Comprobantes subidos exitosamente')
+                    let confirmacion = await confirmar('Guardar', `¿Estás seguro de guardar el recibo con comprobante?`)
+                    if(!confirmacion) return false
+
+                    mostrarAviso('exito', '¡Comprobantes subidos exitosamente!')
+
+                    limpiarFormulario()
+                    calcularTotal()
 
                     // Se muestra el mensaje inicial
                     $('#mensaje_inicial').show()

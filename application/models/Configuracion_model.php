@@ -229,6 +229,7 @@ Class Configuracion_model extends CI_Model {
 	                CONCAT_WS( ' ', ug.nombres, ug.primer_apellido ) usuario_gestion,
                     IF(r.fecha_actualizacion_bot is NOT NULL, 1, 0) actualizado_bot,
                     cb.codigo AS cuenta_bancaria_codigo,
+                    cb.nombre AS cuenta_bancaria_nombre,
                     CONCAT_WS('/', '$url_archivo', r.id, r.archivo_soporte) archivo_soporte,
                     GREATEST(
                         ( SELECT MAX( fecha_consignacion ) FROM recibos WHERE id = r.id ),

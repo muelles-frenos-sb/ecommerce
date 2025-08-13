@@ -101,6 +101,15 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
         }
     })
 
+    limpiarFormulario = () => {
+        // Se limpian los campos
+        $("#monto").val(0)
+        $("#cuenta").val('')
+        $("#referencia").val('')
+        tablaFacturasSeleccionadas.clear().draw()
+        $("#estado_cuenta_archivos").attr('value', '')
+    }
+
     agregarFactura = datos => {
         Swal.fire({
             title: 'Cargando información de la factura...',
@@ -166,7 +175,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                         datos.tipo_credito, // Sucursal
                         // Valor a pagar
                         `
-                        <label class="text-success" style="font-size: 0.8em">Haz un abono o paga el valor total</label>
+                        <label class="text-success" style="font-size: 0.8em">Puedes modificar el valor a pagar</label>
                         <input
                             type="text"
                             id="${datos.id}"
