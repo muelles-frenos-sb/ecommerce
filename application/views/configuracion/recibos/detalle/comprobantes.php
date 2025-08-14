@@ -1,5 +1,3 @@
-<?php $recibo = $this->configuracion_model->obtener('recibos', ['token' => $datos['token']]); ?>
-
 <div class="block">
     <div class="container container--max--xl">
         <!-- Facturas -->

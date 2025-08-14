@@ -1,5 +1,5 @@
 <?php
-$this->data['recibo'] = $this->productos_model->obtener('recibo', ['token' => $datos['token']]);
+$this->data['recibo'] = $this->configuracion_model->obtener('recibos', ['token' => $datos['token']]);
 $this->data['recibo_detalle'] = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $this->data['recibo']->id]);
 $this->data['wompi'] = json_decode($this->data['recibo']->wompi_datos, true);
 
