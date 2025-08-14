@@ -14,6 +14,8 @@ class Configuracion extends MY_Controller {
     function __construct() {
         parent::__construct();
 
+        $this->load->model(['productos_model']);
+
         if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
     }
     
@@ -71,6 +73,36 @@ class Configuracion extends MY_Controller {
 
                 // Se obtienen los registros
                 $resultados = $this->productos_model->obtener("productos_metadatos", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+
+            case "recibos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+                $datos["id_tipo_recibo"] = $this->input->get("id_tipo_recibo");
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->configuracion_model->obtener("recibos", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->configuracion_model->obtener("recibos", $datos);
 
                 print json_encode([
                     "draw" => $this->input->get("draw"),

@@ -182,7 +182,10 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'recibos':
-				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+                $limite = "";
+				$limite = (isset($datos['cantidad'])) ? "LIMIT {$datos['cantidad']}, {$this->config->item('cantidad_datos')}" : "" ;
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
                 $where = "WHERE r.recibo_estado_id";
                 $having = "";
                 $url_archivo = base_url().'archivos/recibos';
@@ -246,8 +249,10 @@ Class Configuracion_model extends CI_Model {
                 $having
                 ORDER BY
                     r.id DESC
-                $contador";
+                $limite";
 
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['nombre'])) {
                     return $this->db->query($sql)->row();
                 } else {
