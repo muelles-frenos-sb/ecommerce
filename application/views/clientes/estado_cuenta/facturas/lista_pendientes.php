@@ -206,7 +206,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
             searching: true,
             language: {
                 decimal: ',',
-                thousands: '.'
+                thousands: '.',
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
             scrollX: false,
