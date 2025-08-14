@@ -27,11 +27,25 @@
                 data: datos => {
                     datos.tipo = 'recibos'
                     datos.id_tipo_recibo = $('#recibo_id_tipo').val()
+
+                    // Filtros personalizados
+                    datos.filtro_fecha_creacion = $('#filtro_fecha_creacion').val()
+                    datos.filtro_numero_documento = $('#filtro_numero_documento').val()
+                    datos.filtro_nombre = $('#filtro_nombre').val()
+                    datos.filtro_forma_pago = $('#filtro_forma_pago').val()
+                    datos.filtro_recibo_siesa = $('#filtro_recibo_siesa').val()
+                    datos.filtro_estado = $('#filtro_estado').val()
+                    datos.filtro_usuario_creador = $('#filtro_usuario_creador').val()
+                    datos.filtro_comentarios = $('#filtro_comentarios').val()
+                    datos.filtro_valor = $('#filtro_valor').val()
                 },
             },
             columns: [
                 {
-                    title: 'Fecha ingreso',
+                    title: `
+                        Fecha ingreso
+                        <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
+                    `,
                     data: null,
                     render: (recibo, type, row) => {
                         return `
@@ -42,11 +56,31 @@
                     }
                 },
                 { title: 'Hora ingreso', data: 'hora' },
-                { title: 'Fecha pago', data: 'fecha_consignacion' },
-                { title: 'NIT', data: 'documento_numero' },
-                { title: 'Nombre', data: 'razon_social' },
                 {
-                    title: 'Forma pago', 
+                    title: 'Fecha pago', 
+                    data: null,
+                    visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
+                    render: (recibo, type, row) => {
+                        return `${recibo.fecha_consignacion}`
+                    }
+                },
+                { 
+                    title: `
+                        NIT
+                        <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'documento_numero' },
+                { 
+                    title: `
+                        Nombre
+                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'razon_social' },
+                {
+                    title: `
+                        Forma pago
+                        <input type="text" id="filtro_forma_pago" class="form-control form-control-sm border-secondary">
+                    `, 
                     data: null,
                     visible: ($('#recibo_id_tipo').val() != 3), // Visible si no es comprobantes
                     render: (recibo, type, row) => {
@@ -70,9 +104,17 @@
                         `
                     }
                 },
-                { title: 'Recibo Siesa', data: 'numero_siesa' },
+                { 
+                    title: `
+                        Recibo Siesa
+                        <input type="text" id="filtro_recibo_siesa" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'numero_siesa' },
                 {
-                    title: 'Estado',
+                    title: `
+                        Estado
+                        <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
+                    `,
                     data: null,
                     render: (recibo, type, row) => {
                         return `
@@ -87,7 +129,10 @@
                     }
                 },
                 {
-                    title: 'Creador', 
+                    title: `
+                        Usuario creador
+                        <input type="text" id="filtro_usuario_creador" class="form-control form-control-sm border-secondary">
+                    `, 
                     data: null,
                     visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
                     render: (recibo, type, row) => {
@@ -95,7 +140,10 @@
                     }
                 },
                 {
-                    title: 'Comentarios', 
+                    title: `
+                        Comentarios
+                        <input type="text" id="filtro_comentarios" class="form-control form-control-sm border-secondary">
+                    `, 
                     data: null,
                     visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
                     render: (recibo, type, row) => {
@@ -104,7 +152,10 @@
                     }
                 },
                 {
-                    title: 'Valor', 
+                    title: `
+                        Valor
+                        <input type="number" id="filtro_valor" class="form-control form-control-sm border-secondary">
+                    `, 
                     data: null,
                     className: 'text-right',
                     render: (recibo, type, row) => {
@@ -142,11 +193,15 @@
                 },
             ],
             columnDefs: [
-                { targets: '_all', className: 'dt-head-center' } // Todo el encabezado alineado al centro
+                { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro
             ],
             deferRender: true,
             fixedHeader: true,
             info: true,
+            initComplete: function () {
+                // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
+                $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaRecibos.draw())
+            },
             language: {
                 decimal: ',',
                 thousands: '.',
@@ -165,11 +220,5 @@
             serverSide: true,
             stateSave: false,
         })
-
-        // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
-        $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaRecibos.draw())
-
-        // Se inactiva el evento clic dentro de los campos usados para filtros personalizados
-        $('#tabla_recibos thead th').on('click', 'input, select', e => e.stopPropagation())
     })
 </script>

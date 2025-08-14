@@ -44,6 +44,17 @@ class Configuracion extends MY_Controller {
         $order = $this->input->get("order");
         $ordenar = null;
 
+        // Filtros personalizados de las columnas
+        $filtro_fecha_creacion = $this->input->get("filtro_fecha_creacion");
+        $filtro_numero_documento = $this->input->get("filtro_numero_documento");
+        $filtro_nombre = $this->input->get("filtro_nombre");
+        $filtro_forma_pago = $this->input->get("filtro_forma_pago");
+        $filtro_recibo_siesa = $this->input->get("filtro_recibo_siesa");
+        $filtro_estado = $this->input->get("filtro_estado");
+        $filtro_valor = $this->input->get("filtro_valor");
+        $filtro_usuario_creador = $this->input->get("filtro_usuario_creador");
+        $filtro_comentarios = $this->input->get("filtro_comentarios");
+
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
             $columna = $order[0]["column"];
@@ -86,9 +97,20 @@ class Configuracion extends MY_Controller {
                 // Se definen los filtros
                 $datos = [
                     "contar" => true,
-                    "busqueda" => $busqueda
+                    "busqueda" => $busqueda,
+                    "id_tipo_recibo" => $this->input->get("id_tipo_recibo")
                 ];
-                $datos["id_tipo_recibo"] = $this->input->get("id_tipo_recibo");
+
+                // Filtros personalizados
+                if(isset($filtro_fecha_creacion)) $datos['filtro_fecha_creacion'] = $filtro_fecha_creacion;
+                if(isset($filtro_numero_documento)) $datos['filtro_numero_documento'] = $filtro_numero_documento;
+                if(isset($filtro_nombre)) $datos['filtro_nombre'] = $filtro_nombre;
+                if(isset($filtro_forma_pago)) $datos['filtro_forma_pago'] = $filtro_forma_pago;
+                if(isset($filtro_recibo_siesa)) $datos['filtro_recibo_siesa'] = $filtro_recibo_siesa;
+                if(isset($filtro_estado)) $datos['filtro_estado'] = $filtro_estado;
+                if(isset($filtro_valor)) $datos['filtro_valor'] = $filtro_valor;
+                if(isset($filtro_usuario_creador)) $datos['filtro_usuario_creador'] = $filtro_usuario_creador;
+                if(isset($filtro_comentarios)) $datos['filtro_comentarios'] = $filtro_comentarios;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->configuracion_model->obtener("recibos", $datos);
