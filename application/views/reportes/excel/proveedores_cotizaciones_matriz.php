@@ -62,7 +62,7 @@ foreach($productos as $id_producto) {
         });
 
         // Se extrae el precio
-        $precio = (reset($resultado)->precio) ?? '' ;
+        $precio = (reset($resultado)->precio_final) ?? '' ;
 
         // Estilos de fila y columna
         $hoja->getColumnDimension($columna)->setWidth(20);
