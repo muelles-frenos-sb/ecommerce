@@ -6,6 +6,11 @@
     </head>
 
     <body>
+        <!-- Google TAG Manager para poder crear eventos y rastrear elementos -->
+        <noscript>
+            <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NK3HNKKP" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+        </noscript>
+
         <div id="contenedor_notificacion"></div>
 
         <input type="hidden" id="site_url" value="<?php echo site_url(); ?>">
