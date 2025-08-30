@@ -54,13 +54,17 @@
                     data: null, 
                     render: (data, type, row) => {
                         return `
-                            <div class="p-1">
+                            <div class="p-1" style="width: 250px;">
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/cotizaciones/ver/${data.id}">
                                     Ver
                                 </a>
 
                                 <a type="button" class="btn btn-sm btn-success" href="javascript:;" onClick="generarReporte('excel/proveedores_cotizaciones_matriz', {id: ${data.id}})">
                                     <i class="fa fa-file-excel"></i>
+                                </a>
+
+                                <a type="button" class="btn btn-sm btn-info" href="javascript:;" title="Archivo plano de orden de compra" onClick="generarReporte('excel/proveedores_orden_compra', {id: ${data.id}})">
+                                    <i class="fa fa-file-download"></i>
                                 </a>
 
                                 <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/solicitudes/editar/${data.id}">

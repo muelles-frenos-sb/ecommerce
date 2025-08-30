@@ -255,3 +255,6 @@ ALTER TABLE `proveedores_cotizaciones_detalle`
 ADD COLUMN `descuento_porcentaje` double NULL AFTER `precio`,
 ADD COLUMN `precio_final` double NULL AFTER `observacion`,
 ADD COLUMN `descuento_valor` double NULL AFTER `descuento_porcentaje`;
+
+-- 20250826 Tipo de log para descarga de orden de compra en Excel
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (70, 'Proveedores - Orden de compra (Generación en Excel)');

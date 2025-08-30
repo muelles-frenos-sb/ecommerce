@@ -48,6 +48,36 @@ Class Proveedores_model extends CI_Model{
 
     public function obtener($tipo, $datos = null) {
         switch ($tipo) {
+            case 'cotizaciones_mejores_precios':
+                $sql = 
+                "WITH resultado AS (
+                    SELECT
+                        producto_id,
+                        proveedor_nit,
+                        precio_final,
+                        p.referencia,
+                        ROW_NUMBER() OVER ( PARTITION BY producto_id ORDER BY precio_final ASC, proveedor_nit ASC ) AS cantidad_registros 
+                    FROM
+                        proveedores_cotizaciones_detalle 
+                        INNER JOIN productos AS p ON proveedores_cotizaciones_detalle.producto_id = p.id
+                    WHERE
+                        precio_final > 0 
+                        AND cotizacion_id = 56 
+                    ) SELECT
+                    producto_id,
+                    proveedor_nit,
+                    precio_final,
+                    referencia
+                FROM
+                    resultado 
+                WHERE
+                    cantidad_registros = 1 
+                ORDER BY
+                    proveedor_nit ASC;";
+                
+                return $this->db->query($sql)->result();
+                break;
+
             case 'productos':
                 unset($datos['tipo']);
 
@@ -102,6 +132,10 @@ Class Proveedores_model extends CI_Model{
                 ;
 
                 if (isset($datos['cotizacion_id'])) $this->db->where('pcsd.cotizacion_id', $datos['cotizacion_id']); 
+                if (isset($datos['producto_id'])) $this->db->where('pcsd.producto_id', $datos['producto_id']); 
+                
+                // Si viene el id del producto y el id de la cotización, retornará solamente un registro
+                if(isset($datos['cotizacion_id']) && isset($datos['producto_id'])) return $this->db->get()->row();
 
                 return $this->db->get()->result();
             break;

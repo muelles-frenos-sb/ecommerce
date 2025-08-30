@@ -34,6 +34,11 @@ class Reportes extends MY_Controller {
                 $this->data["id"] = $this->uri->segment(4);
                 $this->load->view('reportes/excel/proveedores_cotizaciones_matriz', $this->data);
             break;
+
+            case 'proveedores_orden_compra':
+                $this->data["id"] = $this->uri->segment(4);
+                $this->load->view('reportes/excel/proveedores_orden_compra', $this->data);
+            break;
         }
     }
 
