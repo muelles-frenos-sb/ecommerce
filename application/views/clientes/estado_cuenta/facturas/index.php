@@ -22,32 +22,50 @@
             <div id="contenedor_cabecera_cliente"></div>
 
             <div class="form-row mb-4 border border-saecondary p-3">
-                <div class="form-group col-md-2">
-                    <label for="fecha_consignacion">Fecha de consignación *</label>
-                    <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
-                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="fecha_consignacion">Fecha de consignación *</label>
+                                <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
+                            </div>
 
-                <div class="form-group col-md-2">
-                    <label for="monto">Monto *</label>
-                    <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
-                </div>
+                            <div class="form-group col-md-6">
+                                <label for="monto">Monto *</label>
+                                <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
+                            </div>
+                        </div>
 
-                <div class="form-group col-md-3">
-                    <label for="cuenta">Cuenta</label>
-                    <select id="cuenta" class="form-control">
-                        <option value="">Seleccione...</option>
-                        <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->numero - $cuenta->nombre</option>"; ?>
-                    </select>
-                </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="cuenta">Cuenta</label>
+                                <select id="cuenta" class="form-control">
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->numero - $cuenta->nombre</option>"; ?>
+                                </select>
+                            </div>
 
-                <div class="form-group col-md-2">
-                    <label for="referencia">Referencia (Opcional)</label>
-                    <input type='text' id="referencia" class="form-control" placeholder='Número de referencia'>
-                </div>
+                            <div class="form-group col-md-6">
+                                <label for="referencia">Referencia (Opcional)</label>
+                                <input type='text' id="referencia" class="form-control" placeholder='Número de referencia'>
+                            </div>
+                        </div>
 
-                <div class="form-group col-md-3">
-                    <label for="estado_cuenta_archivos">Comprobante digital</label>
-                    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+                        <label for="estado_cuenta_archivos">Comprobante digital</label>
+                        <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <div class="container mt-4">
+                                <!-- Área de pegado -->
+                                <div id="contenedor_imagen" class="border border-secondary rounded p-5 text-center bg-light" contenteditable="true" style="width:100%; height:200px; overflow:hidden;">
+                                    📋 Pega aquí una imagen (Ctrl + V)
+                                </div>
+                                <small class="form-text text-muted">Puedes copiar una imagen y pegarla directamente aquí.</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         <?php } ?>
@@ -317,6 +335,49 @@
     $().ready(() => {
         cargarFacturasPedientes()
         cargarFacturasSeleccionadas()
+
+        // Cuando se pegue una imagen en el contenedor
+        $("#contenedor_imagen").on("paste", function (event) {
+            
+            // Se toman los items
+            let items = (event.originalEvent.clipboardData || event.clipboardData).items
+
+            $.each(items, function (i, item) {
+                // Si es una imagen
+                if (item.kind === "file" && item.type.indexOf("image/") === 0) {
+                    let file = item.getAsFile()
+
+                    // Se recuperan los archivos que ya tiene el input (si es multiple)
+                    let dt = new DataTransfer()
+                    let input = $("#estado_cuenta_archivos")[0]
+
+                    // Si ya había archivos seleccionados, se conservan
+                    if (input.files.length > 0) {
+                        for (let j = 0; j < input.files.length; j++) {
+                            dt.items.add(input.files[j])
+                        }
+                    }
+
+                    // Se agrega el nuevo archivo pegado
+                    dt.items.add(file)
+
+                    // Se asigna de nuevo al input file
+                    input.files = dt.files
+
+                    // Vista previa en el área
+                    let reader = new FileReader()
+                    reader.onload = function (e) {
+                        $("#contenedor_imagen").html('<img src="' + e.target.result + '" class="img-fluid mt-2"/>')
+                    }
+                    reader.readAsDataURL(file)
+                }
+            })
+        })
+
+        $("#estado_cuenta_archivos").on("change click", function (event) {
+            // Se limpia el contenedor de imagen
+            $("#contenedor_imagen").html("📋 Pega aquí una imagen (Ctrl + V)")
+        })
 
         // Datos del cliente para mostrar al inicio de la interfaz
         let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')

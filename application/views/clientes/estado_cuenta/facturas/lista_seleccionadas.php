@@ -108,6 +108,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
         $("#referencia").val('')
         tablaFacturasSeleccionadas.clear().draw()
         $("#estado_cuenta_archivos").attr('value', '')
+        $("#contenedor_imagen").html("📋 Pega aquí una imagen (Ctrl + V)")
     }
 
     agregarFactura = datos => {
