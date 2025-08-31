@@ -62,7 +62,7 @@ Class Proveedores_model extends CI_Model{
                         INNER JOIN productos AS p ON proveedores_cotizaciones_detalle.producto_id = p.id
                     WHERE
                         precio_final > 0 
-                        AND cotizacion_id = 56 
+                        AND cotizacion_id = {$datos['id']} 
                     ) SELECT
                     producto_id,
                     proveedor_nit,

@@ -56,7 +56,7 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
         // ordering: true,
         // order: [[5, 'desc']],
         // stateSave: true,
-        paging: true,
+        paging: false,
         scrollX: false,
         scrollY: '320px',
         searching: true,

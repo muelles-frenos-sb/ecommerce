@@ -218,6 +218,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['finalizado']) && $datos['finalizado']) $where .= " AND r.wompi_status IS NOT NULL ";
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 if(isset($datos['actualizado_bot']) && trim($datos['actualizado_bot']) !== '') $having .= " HAVING actualizado_bot = {$datos['actualizado_bot']} ";
+                if(isset($datos['token']) && $datos['token']) $where .= " AND r.token = '{$datos['token']}' ";
 
                 // Filtros personalizados
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $where .= " AND DATE(r.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";

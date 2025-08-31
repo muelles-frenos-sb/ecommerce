@@ -201,7 +201,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     $().ready(() => {
         new DataTable('#tabla_facturas_pendientes', {
             info: true,
-            paging: true,
+            paging: false,
             scrollY: '320px',
             searching: true,
             language: {
