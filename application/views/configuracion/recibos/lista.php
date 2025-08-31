@@ -37,6 +37,7 @@
                     datos.filtro_estado = $('#filtro_estado').val()
                     datos.filtro_usuario_creador = $('#filtro_usuario_creador').val()
                     datos.filtro_comentarios = $('#filtro_comentarios').val()
+                    datos.filtro_observaciones = $('#filtro_observaciones').val()
                     datos.filtro_valor = $('#filtro_valor').val()
                 },
             },
@@ -149,6 +150,18 @@
                     render: (recibo, type, row) => {
                         let comentarios = recibo.comentarios || ''
                         return `${comentarios}`
+                    }
+                },
+                {
+                    title: `
+                        Observaciones
+                        <input type="text" id="filtro_observaciones" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: null,
+                    visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
+                    render: (recibo, type, row) => {
+                        let observaciones = recibo.observaciones || ''
+                        return `${observaciones}`
                     }
                 },
                 {

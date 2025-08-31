@@ -174,7 +174,38 @@
                     </table>
                 </div>
             </div>
+          
             <div class="card-divider"></div>
+
+            <div class="form-row p-4">
+                <div class="form-group col-12">
+                    <label for="comprobante_observaciones">Observaciones <span class="text-muted">(Opcional)</span></label>
+                    <textarea id="comprobante_observaciones" class="form-control" rows="3"><?php echo $recibo->observaciones; ?></textarea>
+                </div>
+
+                <div class="form-group col-12">
+                    <div class="form-check">
+                        <span class="input-check form-check-input">
+                            <span class="input-check__body">
+                                <input class="input-check__input" type="checkbox" id="comprobante_reprocesar">
+                                <span class="input-check__box"></span>
+                                <span class="input-check__icon">
+                                    <svg width="9px" height="7px">
+                                        <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
+                                    </svg>
+                                </span>
+                            </span>
+                        </span>
+                        <label class="form-check-label" for="checkout-terms">
+                            Habilitar el comprobante para ser reprocesado por el bot
+                        </label>
+                    </div>
+                </div>
+
+                <button type="button" class="btn btn-primary btn-block" onClick="javascript:guardarDatosComprobante(<?php echo $recibo->id; ?>)">
+                    Guardar cambios
+                </button>
+            </div>
         </div>
 
         <?php if(false) { ?>

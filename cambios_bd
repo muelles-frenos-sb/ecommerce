@@ -258,3 +258,6 @@ ADD COLUMN `descuento_valor` double NULL AFTER `descuento_porcentaje`;
 
 -- 20250826 Tipo de log para descarga de orden de compra en Excel
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (70, 'Proveedores - Orden de compra (Generación en Excel)');
+
+-- Campo para almacenar comentarios del usuario logueado en los recibos con comprobantes
+ALTER TABLE `recibos` ADD COLUMN `observaciones` varchar(255) NULL AFTER `comentarios`;

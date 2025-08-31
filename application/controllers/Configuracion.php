@@ -54,6 +54,7 @@ class Configuracion extends MY_Controller {
         $filtro_valor = $this->input->get("filtro_valor");
         $filtro_usuario_creador = $this->input->get("filtro_usuario_creador");
         $filtro_comentarios = $this->input->get("filtro_comentarios");
+        $filtro_observaciones = $this->input->get("filtro_observaciones");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -111,6 +112,7 @@ class Configuracion extends MY_Controller {
                 if(isset($filtro_valor)) $datos['filtro_valor'] = $filtro_valor;
                 if(isset($filtro_usuario_creador)) $datos['filtro_usuario_creador'] = $filtro_usuario_creador;
                 if(isset($filtro_comentarios)) $datos['filtro_comentarios'] = $filtro_comentarios;
+                if(isset($filtro_observaciones)) $datos['filtro_observaciones'] = $filtro_observaciones;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->configuracion_model->obtener("recibos", $datos);
