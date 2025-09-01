@@ -31,6 +31,11 @@ Class Configuracion_model extends CI_Model {
             case 'terceros_api':
                 return $this->db->insert_batch('terceros', $datos);
             break;
+            
+            case 'tercero_contacto':
+                // return $datos;
+                return $this->db->insert('terceros_contactos', $datos);
+            break;
 
             case 'terceros_contactos':
                 // return $datos;
@@ -657,8 +662,11 @@ Class Configuracion_model extends CI_Model {
 
             // Une las tablas tercero y tercero_contacto para buscar en ambas
             case 'tercero_contacto':
+                $filtros = '';
+
                 $filtro_telefono1 = (isset($datos['numero'])) ? " AND (REPLACE(t.f015_telefono, ' ', '') = {$datos['numero']} OR REPLACE(t.f015_celular, ' ', '') = {$datos['numero']})" : "" ;
                 $filtro_telefono2 = (isset($datos['numero'])) ? " AND REPLACE(tc.numero, ' ', '') = {$datos['numero']}" : "" ;
+                $filtros = (isset($datos['modulo_id'])) ? " AND tc.modulo_id = {$datos['modulo_id']}" : "" ;
 
                 $sql =
                 "SELECT
@@ -679,7 +687,8 @@ Class Configuracion_model extends CI_Model {
                     terceros_contactos AS tc
                 WHERE
                     tc.nit = '{$datos['nit']}'
-                    $filtro_telefono2";
+                    $filtro_telefono2
+                    $filtros";
 
                 return $this->db->query($sql)->row();
             break;
