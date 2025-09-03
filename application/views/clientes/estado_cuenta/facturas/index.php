@@ -22,7 +22,6 @@
             <div id="contenedor_cabecera_cliente"></div>
 
             <div class="form-row mb-4 border border-saecondary p-3">
-                <div class="row">
                     <div class="col-6">
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -59,14 +58,15 @@
                         <div class="form-group">
                             <div class="container mt-4">
                                 <!-- Área de pegado -->
-                                <div id="contenedor_imagen" class="border border-secondary rounded p-5 text-center bg-light" contenteditable="true" style="width:100%; height:200px; overflow:hidden;">
-                                    📋 Pega aquí una imagen (Ctrl + V)
+                                <div id="contenedor_imagen" class="border border-secondary rounded text-center bg-light d-flex align-items-center justify-content-center" style="width:100%; height:200px; overflow:hidden; position:relative;">
+                                    <span id="placeholder">📋 Pega aquí una imagen (Ctrl + V)</span>
+                                    <img id="preview_imagen" style="max-width:100%; max-height:100%; object-fit:contain; display:none;" />
                                 </div>
+                                
                                 <small class="form-text text-muted">Puedes copiar una imagen y pegarla directamente aquí.</small>
                             </div>
                         </div>
                     </div>
-                </div>
             </div>
         <?php } ?>
 
@@ -336,47 +336,36 @@
         cargarFacturasPedientes()
         cargarFacturasSeleccionadas()
 
+        let contenedor = $("#contenedor_imagen")
+        let placeholder = $("#placeholder")
+        let preview = $("#preview_imagen")
+        let inputArchivo = $("#estado_cuenta_archivos")
+
         // Cuando se pegue una imagen en el contenedor
-        $("#contenedor_imagen").on("paste", function (event) {
-            
-            // Se toman los items
-            let items = (event.originalEvent.clipboardData || event.clipboardData).items
+        contenedor.on("paste", function (e) {
+            let items = (e.originalEvent.clipboardData || e.clipboardData).items
 
-            $.each(items, function (i, item) {
-                // Si es una imagen
-                if (item.kind === "file" && item.type.indexOf("image/") === 0) {
-                    let file = item.getAsFile()
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf("image") !== -1) {
+                    let file = items[i].getAsFile()
+                    let url = URL.createObjectURL(file)
 
-                    // Se recuperan los archivos que ya tiene el input (si es multiple)
-                    let dt = new DataTransfer()
-                    let input = $("#estado_cuenta_archivos")[0]
+                    // Se muestra una vista previa
+                    preview.attr("src", url).show()
+                    placeholder.hide()
 
-                    // Si ya había archivos seleccionados, se conservan
-                    if (input.files.length > 0) {
-                        for (let j = 0; j < input.files.length; j++) {
-                            dt.items.add(input.files[j])
-                        }
-                    }
-
-                    // Se agrega el nuevo archivo pegado
-                    dt.items.add(file)
-
-                    // Se asigna de nuevo al input file
-                    input.files = dt.files
-
-                    // Vista previa en el área
-                    let reader = new FileReader()
-                    reader.onload = function (e) {
-                        $("#contenedor_imagen").html('<img src="' + e.target.result + '" class="img-fluid mt-2"/>')
-                    }
-                    reader.readAsDataURL(file)
+                    // Se pasa el archivo al input file
+                    let dataTransfer = new DataTransfer()
+                    dataTransfer.items.add(file)
+                    inputArchivo[0].files = dataTransfer.files
                 }
-            })
-        })
+            }
+        });
 
+        // Cuando se seleccione un archivo desde el input file, se quita la vista previa
         $("#estado_cuenta_archivos").on("change click", function (event) {
-            // Se limpia el contenedor de imagen
-            $("#contenedor_imagen").html("📋 Pega aquí una imagen (Ctrl + V)")
+            preview.attr("src", "").hide()
+            placeholder.show()
         })
 
         // Datos del cliente para mostrar al inicio de la interfaz
