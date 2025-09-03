@@ -87,7 +87,7 @@ if($this->uri->segment(4)) {
         }
 
         let totalCreados = await consulta('crear', {...datos, tipo: 'terceros_contactos'}, false)
-        Swal.close()
+        Swal.close()    
 
         mostrarAviso('exito', `Se crearon ${totalCreados.resultado} contactos exitosamente.`)
         agregarLog(37, `${totalCreados.resultado} registros`)

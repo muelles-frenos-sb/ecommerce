@@ -22,33 +22,51 @@
             <div id="contenedor_cabecera_cliente"></div>
 
             <div class="form-row mb-4 border border-saecondary p-3">
-                <div class="form-group col-md-2">
-                    <label for="fecha_consignacion">Fecha de consignación *</label>
-                    <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
-                </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="fecha_consignacion">Fecha de consignación *</label>
+                                <input type="date" class="form-control" id="fecha_consignacion" value="<?php echo date('Y-m-d'); ?>">
+                            </div>
 
-                <div class="form-group col-md-2">
-                    <label for="monto">Monto *</label>
-                    <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
-                </div>
+                            <div class="form-group col-md-6">
+                                <label for="monto">Monto *</label>
+                                <input type='text' id="monto" class="form-control" placeholder='Valor pagado' style="text-align: right">
+                            </div>
+                        </div>
 
-                <div class="form-group col-md-3">
-                    <label for="cuenta">Cuenta</label>
-                    <select id="cuenta" class="form-control">
-                        <option value="">Seleccione...</option>
-                        <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->numero - $cuenta->nombre</option>"; ?>
-                    </select>
-                </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="cuenta">Cuenta</label>
+                                <select id="cuenta" class="form-control">
+                                    <option value="">Seleccione...</option>
+                                    <?php foreach($this->configuracion_model->obtener('cuentas_bancarias') as $cuenta) echo "<option value='$cuenta->id' data-codigo='$cuenta->codigo'>$cuenta->numero - $cuenta->nombre</option>"; ?>
+                                </select>
+                            </div>
 
-                <div class="form-group col-md-2">
-                    <label for="referencia">Referencia (Opcional)</label>
-                    <input type='text' id="referencia" class="form-control" placeholder='Número de referencia'>
-                </div>
+                            <div class="form-group col-md-6">
+                                <label for="referencia">Referencia (Opcional)</label>
+                                <input type='text' id="referencia" class="form-control" placeholder='Número de referencia'>
+                            </div>
+                        </div>
 
-                <div class="form-group col-md-3">
-                    <label for="estado_cuenta_archivos">Comprobante digital</label>
-                    <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
-                </div>
+                        <label for="estado_cuenta_archivos">Comprobante digital</label>
+                        <input type="file" class="form-control" aria-label="Subir" id="estado_cuenta_archivos" multiple>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <div class="container mt-4">
+                                <!-- Área de pegado -->
+                                <div id="contenedor_imagen" class="border border-secondary rounded text-center bg-light d-flex align-items-center justify-content-center" style="width:100%; height:200px; overflow:hidden; position:relative;">
+                                    <span id="placeholder">📋 Pega aquí una imagen (Ctrl + V)</span>
+                                    <img id="preview_imagen" style="max-width:100%; max-height:100%; object-fit:contain; display:none;" />
+                                </div>
+                                
+                                <small class="form-text text-muted">Puedes copiar una imagen y pegarla directamente aquí.</small>
+                            </div>
+                        </div>
+                    </div>
             </div>
         <?php } ?>
 
@@ -317,6 +335,38 @@
     $().ready(() => {
         cargarFacturasPedientes()
         cargarFacturasSeleccionadas()
+
+        let contenedor = $("#contenedor_imagen")
+        let placeholder = $("#placeholder")
+        let preview = $("#preview_imagen")
+        let inputArchivo = $("#estado_cuenta_archivos")
+
+        // Cuando se pegue una imagen en el contenedor
+        contenedor.on("paste", function (e) {
+            let items = (e.originalEvent.clipboardData || e.clipboardData).items
+
+            for (let i = 0; i < items.length; i++) {
+                if (items[i].type.indexOf("image") !== -1) {
+                    let file = items[i].getAsFile()
+                    let url = URL.createObjectURL(file)
+
+                    // Se muestra una vista previa
+                    preview.attr("src", url).show()
+                    placeholder.hide()
+
+                    // Se pasa el archivo al input file
+                    let dataTransfer = new DataTransfer()
+                    dataTransfer.items.add(file)
+                    inputArchivo[0].files = dataTransfer.files
+                }
+            }
+        });
+
+        // Cuando se seleccione un archivo desde el input file, se quita la vista previa
+        $("#estado_cuenta_archivos").on("change click", function (event) {
+            preview.attr("src", "").hide()
+            placeholder.show()
+        })
 
         // Datos del cliente para mostrar al inicio de la interfaz
         let datosCliente = JSON.parse('<?php echo json_encode($tercero) ?>')

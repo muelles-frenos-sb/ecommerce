@@ -442,6 +442,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => [$resultado, $datos_tercero]]);
             break;
 
+            case 'tercero_contacto':
+                print json_encode(['resultado' => $this->configuracion_model->crear('tercero_contacto', $datos)]);
+            break;
+
             case 'terceros_contactos':
                 print json_encode(['resultado' => $this->configuracion_model->crear('terceros_contactos', $datos)]);
             break;

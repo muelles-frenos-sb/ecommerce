@@ -187,6 +187,28 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
         $('#total_faltante_amortizacion_formato').text(formatearNumero(faltante))
     }
 
+    /**
+     * Almacena los datos que están al final del pago con comprobante
+     */
+    guardarDatosComprobante = async (id) => {
+        let datos = {
+            tipo: 'recibos',
+            id: id,
+            observaciones: $('#comprobante_observaciones').val()
+        }
+
+        // Si se chequea el campo para reprocesar
+        if($(`#comprobante_reprocesar`).is(':checked')) {
+            datos.fecha_actualizacion_bot = null,
+            datos.recibo_estado_id = 3
+            datos.numero_siesa = null
+        }
+
+        let recibo = await consulta('actualizar', datos, false)
+        
+        if(recibo) mostrarAviso('exito', 'Los datos se han actualizado correctamente')
+    }
+
     rechazarPago = async(reciboId, confirmacion = null) => {
         // Ventana de confirmación
         if(!confirmacion) {
