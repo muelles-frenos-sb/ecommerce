@@ -185,7 +185,9 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_solicitudes_credito':
-                return $this->db
+                if(isset($datos['id'])) $this->db->where('csc.id', $datos['id']);
+                
+                $this->db
                     ->select([
                         'csc.*',
                         'd.nombre departamento',
@@ -196,9 +198,12 @@ Class Clientes_model extends CI_Model {
                     ->join('municipios m', 'csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id', 'left')
                     ->join('departamentos d', 'csc.departamento_id = d.id', 'left')
                     ->join('terceros_vendedores tv', 'csc.tercero_vendedor_id = tv.id', 'left')
-                    ->where('csc.id', $datos['id'])
-                    ->get()->row()
+                    
                 ;
+
+                if(isset($datos['id'])) return $this->db->get()->row();
+                    
+                return $this->db->get()->result();
             break;
 
             case 'clientes_solicitudes_credito_detalle':

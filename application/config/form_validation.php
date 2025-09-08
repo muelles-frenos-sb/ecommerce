@@ -25,6 +25,10 @@ $config = [
         ['field' => 'fecha_actualizacion_bot', 'label' => 'fecha de actualización bot', 'rules' => 'required|trim|fecha_completa_valida'],
     ],
 
+    'solicitudes_credito_get' => [
+		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
+    ],
+
 	'terceros_get' => [
         ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'trim'],
     ],
