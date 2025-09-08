@@ -37,6 +37,7 @@ foreach ($registros as $registro) {
         $hoja_documentos->setCellValue("F$fila_documentos", $registro->proveedor_nit); // NIT del proveedor
         $hoja_documentos->setCellValue("G$fila_documentos", ''); // Condición de pago
         $hoja_documentos->setCellValue("H$fila_documentos", 'COP'); // Moneda
+        $hoja_documentos->setCellValue("I$fila_documentos", $registro->proveedor_nombre); // Nombre del proveedor
         
         $fila_documentos++;
 

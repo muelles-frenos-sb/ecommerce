@@ -56,10 +56,12 @@ Class Proveedores_model extends CI_Model{
                         proveedor_nit,
                         precio_final,
                         p.referencia,
+                        t.f200_razon_social,
                         ROW_NUMBER() OVER ( PARTITION BY producto_id ORDER BY precio_final ASC, proveedor_nit ASC ) AS cantidad_registros 
                     FROM
                         proveedores_cotizaciones_detalle 
                         INNER JOIN productos AS p ON proveedores_cotizaciones_detalle.producto_id = p.id
+                        INNER JOIN terceros AS t ON proveedores_cotizaciones_detalle.proveedor_nit = t.f200_nit 
                     WHERE
                         precio_final > 0 
                         AND cotizacion_id = {$datos['id']} 
@@ -67,7 +69,8 @@ Class Proveedores_model extends CI_Model{
                     producto_id,
                     proveedor_nit,
                     precio_final,
-                    referencia
+                    referencia,
+                    f200_razon_social proveedor_nombre
                 FROM
                     resultado 
                 WHERE
