@@ -264,3 +264,6 @@ ALTER TABLE `recibos` ADD COLUMN `observaciones` varchar(255) NULL AFTER `coment
 
 -- 20250831 Campo para almacenar el módulo del contacto
 ALTER TABLE `terceros_contactos` ADD COLUMN `modulo_id` int NULL DEFAULT 2 AFTER `email`;
+
+-- 20250908 Valor por defecto en el número de cuota de la factura de un recibo
+ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AFTER `descuento`;
