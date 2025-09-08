@@ -87,8 +87,6 @@
             return false
         }
 
-        return
-        
         $('#formulario_validar_proveedor').remove()
         agregarLog(65, JSON.stringify(datosProveedor))
 
