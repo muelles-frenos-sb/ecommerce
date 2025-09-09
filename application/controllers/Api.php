@@ -286,6 +286,66 @@ class Api extends RestController {
     }
 
     /**
+     * Devuelve el listado con los archivos suministrados
+     * por el usuario que solicita el crédito
+     */
+    function solicitudes_credito_archivos_get() {
+        // Helper para manejo de archivos
+        $this->load->helper('file');
+
+        $datos = [
+            "solicitud_credito_id" => $this->get("solicitud_credito_id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("solicitudes_credito_archivos_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $base_url = FCPATH;
+        $ruta_archivos = "archivos/solicitudes_credito/{$datos['solicitud_credito_id']}/";
+        $ruta = $base_url.$ruta_archivos;
+
+        // Se leen los archivos
+        $lista = get_filenames($ruta);
+
+        // Si no se encuentran archivos
+        if (!$lista) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No se encontraron archivos.",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        // Arreglo para almacenar los archivos
+        $archivos = [];
+        
+        foreach ($lista as $registro) {
+            // Se crea un objeto por cada archivo encontrado
+            array_push($archivos, [
+                'nombre' => pathinfo($registro, PATHINFO_FILENAME),
+                'url' => base_url().$ruta_archivos.$registro,
+            ]);
+        }
+
+        $mensaje = "Archivos cargados correctamente.";
+        $total_registros = count($archivos);
+        $mensaje = "Se cargaron correctamente $total_registros registros";
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $archivos
+        ], RestController::HTTP_OK);
+    }
+
+    /**
      * Devuelve el listado con el detalle de la solicitud de crédito
      */
     function solicitudes_credito_detalle_get() {

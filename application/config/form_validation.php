@@ -29,6 +29,10 @@ $config = [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
     ],
 
+    'solicitudes_credito_archivos_get' => [
+        ['field' => 'solicitud_credito_id', 'label' => 'id de la solicitud de crédito', 'rules' => 'required|trim|integer|greater_than[0]'],
+    ],
+
     'solicitudes_credito_detalle_get' => [
         ['field' => 'solicitud_credito_id', 'label' => 'id de la solicitud de crédito', 'rules' => 'required|trim|integer|greater_than[0]'],
     ],
