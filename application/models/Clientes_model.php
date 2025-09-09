@@ -210,12 +210,18 @@ Class Clientes_model extends CI_Model {
                 return $this->db
                     ->select([
                         'cscd.*',
-                        'uit.nombre tipo_identificacion'
+                        'uit.nombre tipo_identificacion',
+                        "CASE cscd.formulario_tipo
+                            WHEN 1 THEN 'Socio o accionista'
+                            WHEN 2 THEN 'Beneficiario finale de socio o accionista igual o superior a 5%'
+                            WHEN 3 THEN 'Persona autorizada para brindar información'
+                        END tipo_dato",
                     ])
                     ->from('clientes_solicitudes_credito_detalle cscd')
                     ->join('usuarios_identificacion_tipos uit', 'cscd.identificacion_tipo_id = uit.id', 'left')
                     ->where($datos)
-                    ->get()->result()
+                    ->get()
+                    ->result()
                 ;
             break;
 

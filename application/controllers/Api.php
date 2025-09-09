@@ -244,7 +244,7 @@ class Api extends RestController {
     }
 
     /**
-     * Devuelve el listado de una o varias olicitudes de crédito
+     * Devuelve el listado de una o varias solicitudes de crédito
      */
     function solicitudes_credito_get() {
         $datos = [
@@ -278,6 +278,50 @@ class Api extends RestController {
             $mensaje = "$total_registros registros encontrados";
         }
        
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Devuelve el listado con el detalle de la solicitud de crédito
+     */
+    function solicitudes_credito_detalle_get() {
+        $datos = [
+            "solicitud_credito_id" => $this->get("solicitud_credito_id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("solicitudes_credito_detalle_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $resultado = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", [
+            "solicitud_id" => $datos['solicitud_credito_id'],
+        ]);
+
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No se encontraron registros.",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        $mensaje = "Registros cargados correctamente.";
+
+        if (!is_object($resultado)) {
+            $total_registros = count($resultado);
+            $mensaje = "Se cargaron correctamente $total_registros registros";
+        }
+
         $this->response([
             "error" => false,
             "mensaje" => $mensaje,
