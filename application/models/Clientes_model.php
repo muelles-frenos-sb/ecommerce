@@ -101,7 +101,7 @@ Class Clientes_model extends CI_Model {
                 }
 
                 if(isset($datos['numero_documento'])) $where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
-                if(isset($datos['pendientes'])) $where .= " AND cf.totalCop <> 0 ";
+                if(isset($datos['pendientes'])) $where .= " AND cf.totalCop <> 0 AND cf.totalCop NOT BETWEEN -1 AND 1 ";
                 if(isset($datos['id'])) $where .= " AND cf.id = {$datos['id']}";
                 if(isset($datos['Tipo_Doc_cruce'])) $where .= " AND cf.Tipo_Doc_cruce = '{$datos['Tipo_Doc_cruce']}'";
                 if(isset($datos['Nro_Doc_cruce'])) $where .= " AND cf.Nro_Doc_cruce = '{$datos['Nro_Doc_cruce']}'";
