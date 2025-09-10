@@ -877,6 +877,9 @@
             cantidad_vehiculos: $("#solicitud_cantidad_vehiculos").val(),
         }
 
+        // Si es un usuario logueado en el sistema, se agrega el id
+        if($('#sesion_usuario_id').val()) datosSolicitud.usuario_id = $('#sesion_usuario_id').val()
+
         Swal.fire({
             title: 'Estamos creando la solicitud de crédito en nuestros sistemas...',
             text: 'Por favor, espera.',

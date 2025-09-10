@@ -265,6 +265,8 @@ ALTER TABLE `recibos` ADD COLUMN `observaciones` varchar(255) NULL AFTER `coment
 -- 20250831 Campo para almacenar el módulo del contacto
 ALTER TABLE `terceros_contactos` ADD COLUMN `modulo_id` int NULL DEFAULT 2 AFTER `email`;
 
+-- 20250910 Campo para almacenar el id del usuario en la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_id` int NULL AFTER `observaciones`;
 -- 20250908 Tabla de estados para las solicitudes de crédito
 CREATE TABLE `clientes_solicitudes_credito_estados`  (
   `id` int NOT NULL AUTO_INCREMENT,
