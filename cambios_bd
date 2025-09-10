@@ -264,3 +264,21 @@ ALTER TABLE `recibos` ADD COLUMN `observaciones` varchar(255) NULL AFTER `coment
 
 -- 20250831 Campo para almacenar el módulo del contacto
 ALTER TABLE `terceros_contactos` ADD COLUMN `modulo_id` int NULL DEFAULT 2 AFTER `email`;
+
+-- 20250908 Tabla de estados para las solicitudes de crédito
+CREATE TABLE `clientes_solicitudes_credito_estados`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- 20250908 Almacenamiento del estado de la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `solicitud_credito_estado_id` int NULL AFTER `tercero_vendedor_id`;
+
+-- 20250909 Almacenamiento dedatos adicionales a la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_asignado_id` int NULL DEFAULT NULL COMMENT 'Usuario asignado para revisar la solicitud' AFTER `solicitud_credito_estado_id`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `motivo_rechazo_id` int NULL AFTER `usuario_asignado_id`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `observaciones` varchar(255) NULL AFTER `motivo_rechazo_id`;
+
+-- 20250909 Campo para diferenciar los motivos de rechazo a qué interfaz pertenecen
+ALTER TABLE `motivos_rechazo` ADD COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito' AFTER `nombre`;
