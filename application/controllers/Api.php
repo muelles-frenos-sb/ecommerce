@@ -286,6 +286,55 @@ class Api extends RestController {
     }
 
     /**
+     * Actualiza los datos de una solicitud de crédito
+     */
+    function solicitud_credito_put() {
+        // Datos para actualizar
+        $datos = [
+            'id' => $this->input->get('id'),
+            'solicitud_credito_estado_id' => $this->put('solicitud_credito_estado_id'),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run('solicitud_credito_put')) {
+            $this->response([
+                'error' => true,
+                'mensaje' => 'Parámetros inválidos.',
+                'resultado' => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        // Se obtiene los datos de la solicitud
+        $solicitud_credito = $this->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $datos['id']]);
+
+        if (empty($solicitud_credito)) {
+            $this->response([
+                'error' => false,
+                'mensaje' => "No se encontró la solicitud de crédito con id {$datos['id']}",
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        $resultado = $this->clientes_model->actualizar('clientes_solicitudes_credito', ['id' => $datos['id']], $datos);
+
+        if (!$resultado) {
+            $this->response([
+                'error' => false,
+                'mensaje' => 'No se actualizó el registro.',
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        // Respuesta exitosa
+        $this->response([
+            'error' => false,
+            'mensaje' => 'Registro actualizado correctamente.',
+            'resultado' => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
      * Devuelve el listado con los archivos suministrados
      * por el usuario que solicita el crédito
      */

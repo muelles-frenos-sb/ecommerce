@@ -1,5 +1,10 @@
 <?php 
 Class Clientes_model extends CI_Model {
+    function actualizar($tabla, $filtros, $datos){
+        return $this->db->where($filtros)->update($tabla, $datos);
+        $this->db->close;
+    }
+
     function crear($tipo, $datos){
         switch ($tipo) {
             default:
