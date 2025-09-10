@@ -209,7 +209,7 @@ class Webhooks extends MY_Controller {
                         "f431_id_lista_precio" => $recibo->lista_precio,
                         "f431_id_unidad_medida" => $item->unidad_inventario, // Valida en maestro, código de unidad de medida del movimiento
                         "f431_cant_pedida_base" => $item->cantidad,
-                        "f431_precio_unitario" => floatval($item->subtotal) - floatval($item->descuento),
+                        "f431_precio_unitario" => floatval($item->precio) - floatval($item->descuento),
                         "f431_notas" => $notas_pedido, // Notas del movimiento
                         "f431_ind_precio" => 2,
                     ]);
