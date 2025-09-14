@@ -190,25 +190,185 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_solicitudes_credito':
-                if(isset($datos['id'])) $this->db->where('csc.id', $datos['id']);
-                
-                $this->db
-                    ->select([
-                        'csc.*',
-                        'd.nombre departamento',
-                        'm.nombre municipio',
-                        'tv.nombre vendedor_nombre',
-                    ])
-                    ->from('clientes_solicitudes_credito csc')
-                    ->join('municipios m', 'csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id', 'left')
-                    ->join('departamentos d', 'csc.departamento_id = d.id', 'left')
-                    ->join('terceros_vendedores tv', 'csc.tercero_vendedor_id = tv.id', 'left')
-                    
-                ;
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
 
-                if(isset($datos['id'])) return $this->db->get()->row();
-                    
-                return $this->db->get()->result();
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    $filtros_having = "HAVING";
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " (";
+                        $filtros_having .= " nombre LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR primer_apellido LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR razon_social LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR documento_numero LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if(isset($datos['id'])) $filtros_where .= " AND csc.id = {$datos['id']} ";
+
+                // Filtros personalizados
+                if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND DATE(csc.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";
+                if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND csc.documento_numero LIKE '%{$datos['filtro_numero_documento']}%' ";
+                if (isset($datos['filtro_nombre']) && $datos['filtro_nombre']) $filtros_where .= " AND IF(csc.razon_social is NULL, CONCAT_WS(' ', csc.nombre, csc.primer_apellido, csc.segundo_apellido), csc.razon_social) LIKE '%{$datos['filtro_nombre']}%' ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    csc.id,
+                    csc.fecha_creacion,
+                    DATE(csc.fecha_creacion) fecha,
+                    TIME(csc.fecha_creacion) hora,
+                    csc.fecha_expedicion,
+                    csc.nombre,
+                    csc.primer_apellido,
+                    csc.segundo_apellido,
+                    csc.razon_social,
+                    IF(csc.razon_social is NULL, CONCAT_WS(' ', csc.nombre, csc.primer_apellido, csc.segundo_apellido), csc.razon_social) nombre_solicitante,
+                    csc.persona_tipo_id,
+                    csc.identificacion_tipo_id,
+                    csc.documento_numero,
+                    csc.departamento_id,
+                    csc.ciudad_id,
+                    csc.direccion,
+                    csc.telefono,
+                    csc.email,
+                    csc.celular,
+                    csc.representante_legal,
+                    csc.representante_legal_documento_numero,
+                    csc.representante_legal_correo,
+                    csc.email_factura_electronica,
+                    csc.tesoreria_nombre,
+                    csc.tesoreria_email,
+                    csc.tesoreria_telefono,
+                    csc.tesoreria_celular,
+                    csc.comercial_nombre,
+                    csc.comercial_email,
+                    csc.comercial_telefono,
+                    csc.comercial_celular,
+                    csc.contabilidad_nombre,
+                    csc.contabilidad_email,
+                    csc.contabilidad_telefono,
+                    csc.contabilidad_celular,
+                    csc.referencia_comercial_entidad1,
+                    csc.referencia_comercial_cel1,
+                    csc.referencia_comercial_direccion1,
+                    csc.referencia_comercial_entidad2,
+                    csc.referencia_comercial_cel2,
+                    csc.referencia_comercial_direccion2,
+                    csc.referencia_bancaria_entidad,
+                    csc.referencia_bancaria_tipo,
+                    csc.referencia_bancaria_numero,
+                    csc.reconocimiento_publico,
+                    csc.reconocimiento_publico_cual,
+                    csc.persona_expuesta,
+                    csc.persona_expuesta_cual,
+                    csc.poder_publico,
+                    csc.poder_publico_cual,
+                    csc.recursos_publicos,
+                    csc.recursos_publicos_cual,
+                    csc.ingresos_mensuales,
+                    csc.egresos_mensuales,
+                    csc.activos,
+                    csc.pasivos,
+                    csc.otros_ingresos,
+                    csc.concepto_otros_ingresos,
+                    csc.nueva,
+                    csc.cantidad_vehiculos,
+                    csc.preferencia_enlace,
+                    csc.tercero_vendedor_id,
+                    csc.id,
+                    csc.fecha_creacion,
+                    csc.fecha_expedicion,
+                    csc.nombre,
+                    csc.primer_apellido,
+                    csc.segundo_apellido,
+                    csc.razon_social,
+                    csc.persona_tipo_id,
+                    csc.identificacion_tipo_id,
+                    csc.documento_numero,
+                    csc.departamento_id,
+                    csc.ciudad_id,
+                    csc.direccion,
+                    csc.telefono,
+                    csc.email,
+                    csc.celular,
+                    csc.representante_legal,
+                    csc.representante_legal_documento_numero,
+                    csc.representante_legal_correo,
+                    csc.email_factura_electronica,
+                    csc.tesoreria_nombre,
+                    csc.tesoreria_email,
+                    csc.tesoreria_telefono,
+                    csc.tesoreria_celular,
+                    csc.comercial_nombre,
+                    csc.comercial_email,
+                    csc.comercial_telefono,
+                    csc.comercial_celular,
+                    csc.contabilidad_nombre,
+                    csc.contabilidad_email,
+                    csc.contabilidad_telefono,
+                    csc.contabilidad_celular,
+                    csc.referencia_comercial_entidad1,
+                    csc.referencia_comercial_cel1,
+                    csc.referencia_comercial_direccion1,
+                    csc.referencia_comercial_entidad2,
+                    csc.referencia_comercial_cel2,
+                    csc.referencia_comercial_direccion2,
+                    csc.referencia_bancaria_entidad,
+                    csc.referencia_bancaria_tipo,
+                    csc.referencia_bancaria_numero,
+                    csc.reconocimiento_publico,
+                    csc.reconocimiento_publico_cual,
+                    csc.persona_expuesta,
+                    csc.persona_expuesta_cual,
+                    csc.poder_publico,
+                    csc.poder_publico_cual,
+                    csc.recursos_publicos,
+                    csc.recursos_publicos_cual,
+                    csc.ingresos_mensuales,
+                    csc.egresos_mensuales,
+                    csc.activos,
+                    csc.pasivos,
+                    csc.otros_ingresos,
+                    csc.concepto_otros_ingresos,
+                    csc.nueva,
+                    csc.cantidad_vehiculos,
+                    csc.preferencia_enlace,
+                    csc.tercero_vendedor_id,
+                    d.nombre departamento,
+                    m.nombre municipio,
+                    tv.nombre vendedor_nombre
+                FROM clientes_solicitudes_credito csc
+                LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
+                LEFT JOIN departamentos d ON csc.departamento_id = d.id
+                LEFT JOIN terceros_vendedores tv ON csc.tercero_vendedor_id = tv.id
+                WHERE csc.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
             break;
 
             case 'clientes_solicitudes_credito_detalle':

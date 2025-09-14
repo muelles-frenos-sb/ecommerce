@@ -102,6 +102,12 @@
                                     </div>
                                 </li>
                             <?php } ?>
+
+                            <li class="menu__item">
+                                <a href="<?php echo site_url('clientes/credito/ver'); ?>" class="menu__link">
+                                    Solicitudes de crédito
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
