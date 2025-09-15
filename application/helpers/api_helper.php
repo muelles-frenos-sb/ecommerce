@@ -407,6 +407,27 @@ function importar_tercero_cliente($datos) {
     return $response->getBody();
 }
 
+function tcc_obtener_datos_api($tipo, $datos) {
+    $CI =& get_instance();
+    $url = $CI->config->item('api_tcc')['url'];
+
+    $client = new \GuzzleHttp\Client();
+
+    try {
+        $response = $client->post("{$url}{$tipo}", [
+            'body' => $datos,
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'AccessToken' => $CI->config->item('api_tcc')['access_token'],
+            ],
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    };
+    
+    return $response->getBody();
+}
 
 /**
  * Obtiene todos los clientes creados en Siesa

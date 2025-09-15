@@ -270,6 +270,7 @@ ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AF
 
 -- 20250910 Campo para almacenar el id del usuario en la solicitud de crédito
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_id` int NULL AFTER `observaciones`;
+
 -- 20250908 Tabla de estados para las solicitudes de crédito
 CREATE TABLE `clientes_solicitudes_credito_estados`  (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -290,3 +291,6 @@ ALTER TABLE `motivos_rechazo` ADD COLUMN `interfaz_id` int NULL DEFAULT 1 COMMEN
 
 -- 20250914 Se agrega campo para indicar fecha de envío de la firma para solicitudes de crédito
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_envio_firma` datetime(0) NULL AFTER `usuario_id`;
+
+-- 20250915 Tipo de log para recibir eventos de un envío
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (71, 'Webhook - Evento de un envío (Roa Transportes) recibido')
