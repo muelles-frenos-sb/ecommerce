@@ -20,29 +20,56 @@
                     datos.filtro_fecha_creacion = $('#filtro_fecha_creacion').val()
                     datos.filtro_numero_documento = $('#filtro_numero_documento').val()
                     datos.filtro_nombre = $('#filtro_nombre').val()
+                    datos.filtro_id = $('#filtro_id').val()
+                    datos.filtro_estado = $('#filtro_estado').val()
+                    datos.filtro_usuario_asignado = $('#filtro_usuario_asignado').val()
                 },
             },
             columns: [
                 {
                     title: `
-                        Fecha creación
+                        Id
+                        <input type="text" id="filtro_id" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'id',
+                    className: 'text-right',
+                },
+                {
+                    title: `
+                        Fecha
                         <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'fecha'
                 },
-                { title: 'Hora creación', data: 'hora' },
+                { title: 'Hora', data: 'hora' },
                 { 
                     title: `
                         NIT
                         <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
                     `,
-                    data: 'documento_numero' },
+                    data: 'documento_numero' 
+                },
                 { 
                     title: `
                         Nombre
                         <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'nombre_solicitante' },
+                    data: 'nombre_solicitante' 
+                },
+                { 
+                    title: `
+                        Estado
+                        <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'estado' 
+                },
+                { 
+                    title: `
+                        Asignado
+                        <input type="text" id="filtro_usuario_asignado" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'nombre_usuario_asignado' 
+                },
                 {
                     title: 'Opciones', 
                     data: null,

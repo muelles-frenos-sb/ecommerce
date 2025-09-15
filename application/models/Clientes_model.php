@@ -196,7 +196,7 @@ Class Clientes_model extends CI_Model {
 
                 // Búsqueda
                 $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
-                $filtros_having = "";
+                $filtros_having = "HAVING csc.id";
                 $filtros_where = "";
 
                 // Si se realiza una búsqueda
@@ -204,11 +204,9 @@ Class Clientes_model extends CI_Model {
                     // Se divide por palabras
                     $palabras = explode(" ", trim($busquedas));
 
-                    $filtros_having = "HAVING";
-
                     // Se recorren las palabras
                     for ($i=0; $i < count($palabras); $i++) { 
-                        $filtros_having .= " (";
+                        $filtros_having .= " AND (";
                         $filtros_having .= " nombre LIKE '%{$palabras[$i]}%'";
                         $filtros_having .= " OR primer_apellido LIKE '%{$palabras[$i]}%'";
                         $filtros_having .= " OR razon_social LIKE '%{$palabras[$i]}%'";
@@ -226,6 +224,9 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND DATE(csc.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";
                 if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND csc.documento_numero LIKE '%{$datos['filtro_numero_documento']}%' ";
                 if (isset($datos['filtro_nombre']) && $datos['filtro_nombre']) $filtros_where .= " AND IF(csc.razon_social is NULL, CONCAT_WS(' ', csc.nombre, csc.primer_apellido, csc.segundo_apellido), csc.razon_social) LIKE '%{$datos['filtro_nombre']}%' ";
+                if (isset($datos['filtro_id']) && $datos['filtro_id']) $filtros_where .= " AND csc.id = {$datos['filtro_id']} ";
+                if (isset($datos['filtro_estado']) && $datos['filtro_estado']) $filtros_having .= " AND estado LIKE '%{$datos['filtro_estado']}%' ";
+                if (isset($datos['filtro_usuario_asignado']) && $datos['filtro_usuario_asignado']) $filtros_having .= " AND nombre_usuario_asignado LIKE '%{$datos['filtro_usuario_asignado']}%' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
 
@@ -361,11 +362,15 @@ Class Clientes_model extends CI_Model {
                     d.nombre departamento,
                     d.codigo departamento_codigo,
                     m.nombre municipio,
-                    tv.nombre vendedor_nombre
+                    tv.nombre vendedor_nombre,
+                    csce.nombre estado,
+                    IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
                 LEFT JOIN terceros_vendedores tv ON csc.tercero_vendedor_id = tv.id
+                LEFT JOIN clientes_solicitudes_credito_estados AS csce ON csc.solicitud_credito_estado_id = csce.id
+                LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id   
                 WHERE csc.id is NOT NULL
                 $filtros_where
                 $filtros_having

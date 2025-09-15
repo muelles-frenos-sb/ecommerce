@@ -600,7 +600,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-	                u.razon_social
+	                u.razon_social 
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero']) || isset($datos['login']) || isset($datos['email'])) {
