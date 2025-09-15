@@ -287,3 +287,6 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `observaciones` varchar(25
 
 -- 20250909 Campo para diferenciar los motivos de rechazo a qué interfaz pertenecen
 ALTER TABLE `motivos_rechazo` ADD COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito' AFTER `nombre`;
+
+-- 20250914 Se agrega campo para indicar fecha de envío de la firma para solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_envio_firma` datetime(0) NULL AFTER `usuario_id`;

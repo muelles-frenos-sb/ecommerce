@@ -46,16 +46,26 @@
                 {
                     title: 'Opciones', 
                     data: null,
-                    render: (recibo, type, row) => {
+                    render: (solicitud, type, row) => {
                         let botonVer = `
                             <a type="button" class="btn btn-sm btn-danger" href="#" target="_blank">
                                 <i class="fas fa-search"></i>
                             </a>
                         `
 
+                        let botonRealizarEnvioFirmaBot = (!solicitud.fecha_envio_firma)
+                        ? `
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:realizarEnvioFirmaBot(${solicitud.id})">
+                                <i class="fas fa-search"></i>
+                            </a>
+                        ` 
+                        : ``
+
                         return `
                             <td class="p-1">
                                 ${botonVer}
+
+                                ${botonRealizarEnvioFirmaBot}
                             </td>
                         `
                     }

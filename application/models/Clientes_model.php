@@ -352,6 +352,12 @@ Class Clientes_model extends CI_Model {
                     csc.cantidad_vehiculos,
                     csc.preferencia_enlace,
                     csc.tercero_vendedor_id,
+                    csc.solicitud_credito_estado_id,
+                    csc.usuario_asignado_id,
+                    csc.motivo_rechazo_id,
+                    csc.observaciones,
+                    csc.usuario_id,
+                    csc.fecha_envio_firma,
                     d.nombre departamento,
                     m.nombre municipio,
                     tv.nombre vendedor_nombre
