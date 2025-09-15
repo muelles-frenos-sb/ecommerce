@@ -55,8 +55,8 @@
 
                         let botonRealizarEnvioFirmaBot = (!solicitud.fecha_envio_firma)
                         ? `
-                            <a type="button" class="btn btn-sm btn-primary" href="javascript:realizarEnvioFirmaBot(${solicitud.id})">
-                                <i class="fas fa-search"></i>
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:realizarEnvioFirmaBot(${solicitud.id})" title="Envío de la firma">
+                                <i class="fas fa-signature"></i>
                             </a>
                         ` 
                         : ``
