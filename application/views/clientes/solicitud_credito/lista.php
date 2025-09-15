@@ -48,7 +48,7 @@
                     data: null,
                     render: (solicitud, type, row) => {
                         let botonVer = `
-                            <a type="button" class="btn btn-sm btn-danger" href="#" target="_blank">
+                            <a type="button" class="btn btn-sm btn-danger" href="${$('#site_url').val()}/clientes/credito/ver/${solicitud.id}" target="_blank">
                                 <i class="fas fa-search"></i>
                             </a>
                         `

@@ -359,6 +359,7 @@ Class Clientes_model extends CI_Model {
                     csc.usuario_id,
                     csc.fecha_envio_firma,
                     d.nombre departamento,
+                    d.codigo departamento_codigo,
                     m.nombre municipio,
                     tv.nombre vendedor_nombre
                 FROM clientes_solicitudes_credito csc

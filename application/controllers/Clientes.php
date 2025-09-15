@@ -28,6 +28,27 @@ class Clientes extends MY_Controller {
         switch ($this->uri->segment(3)) {
             case 'ver':
                 if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+                $id = intval($this->uri->segment(4));
+
+                // Se valida si es un id válido
+                if ($id) {
+                    if (gettype($id) === "integer") {
+                        $solicitud = $this->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $id]);
+
+                        if (!empty($solicitud)) {
+                            $this->data['contenido_principal'] = 'clientes/solicitud_credito/detalle_general';
+                            $this->data['id'] = $solicitud->id;
+                            $this->load->view('core/body', $this->data);
+                            return;
+                        }
+
+                        redirect('inicio');
+                    } else {
+                        redirect('inicio');
+                    }
+                }
+
                 $this->data['contenido_principal'] = 'clientes/solicitud_credito/index';
                 $this->load->view('core/body', $this->data);
             break;
