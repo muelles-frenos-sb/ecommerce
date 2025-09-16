@@ -15,8 +15,8 @@
             <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_archivos" onClick="javascript:cargarArchivos(<?php echo $id; ?>)">
                 Archivos
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_asignar" onClick="javascript:cargarAsignarUsuario(<?php echo $id; ?>)">
-                Asignar usuario
+            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_opciones" onClick="javascript:cargarOpciones(<?php echo $id; ?>)">
+                Opciones
             </button>
         </div>
     </div>
@@ -43,12 +43,12 @@
         $("#pestana_archivos").addClass('block-zone__tabs-button--active')
     }
 
-    cargarAsignarUsuario = (id) => {
+    cargarOpciones = (id) => {
         $(".botones-tabs").removeClass('block-zone__tabs-button--active')
 
-        cargarInterfaz('clientes/solicitud_credito/asignar_usuario', 'contenedor_detalle', {id: id})
+        cargarInterfaz('clientes/solicitud_credito/opciones', 'contenedor_detalle', {id: id})
 
-        $("#pestana_asignar").addClass('block-zone__tabs-button--active')
+        $("#pestana_opciones").addClass('block-zone__tabs-button--active')
     }
 
     $().ready(() => {

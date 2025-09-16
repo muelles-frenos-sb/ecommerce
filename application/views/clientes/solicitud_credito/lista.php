@@ -137,9 +137,17 @@
                         ` 
                         : ``
 
+                        let botonAsignarUsuario = `
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        ` 
+
                         return `
                             <td class="p-1">
                                 ${botonRealizarEnvioFirmaBot}
+
+                                ${botonAsignarUsuario}
                             </td>
                         `
                     }

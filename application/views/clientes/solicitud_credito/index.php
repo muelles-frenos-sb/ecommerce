@@ -8,11 +8,16 @@
 
 <div class="w-100 p-5">
     <div id="contenedor_solicitudes_credito"></div>
+    <div id="contenedor_asignar_usuario"></div>
 </div>
 
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
+    cargarAsignarUsuario = (id) => {
+        cargarInterfaz('clientes/solicitud_credito/asignar_usuario', 'contenedor_asignar_usuario', {id: id})
+    }
+
     listarSolicitudesCredito = () => {
         cargarInterfaz('clientes/solicitud_credito/lista', 'contenedor_solicitudes_credito')
     }
