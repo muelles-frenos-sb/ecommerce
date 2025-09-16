@@ -5,13 +5,15 @@ if (isset($datos['id'])) {
 }
 ?>
 
-<div class="block-header block-header--has-breadcrumb block-header--has-title">
-    <div class="container">
-        <div class="block-header__body">
-            <h1 class="block-header__title">Solicitud de crédito</h1>
+<?php if(!isset($solicitud)) { ?>
+    <div class="block-header block-header--has-breadcrumb block-header--has-title">
+        <div class="container">
+            <div class="block-header__body">
+                <h1 class="block-header__title">Solicitud de crédito</h1>
+            </div>
         </div>
     </div>
-</div>
+<?php } ?>
 
 <div class="block">
     <div class="container">
@@ -703,12 +705,14 @@ if (isset($datos['id'])) {
             <div class="form-group mb-2 mt-2 mx-3 my-2">
                 <?php if(!isset($solicitud)) { ?>
                     <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudCredito()" id="btn_enviar_solicitud">ENVIAR SOLICITUD DE CRÉDITO</button>
-
+                    
                     <div class="address-card__row mt-2 mb-2">
                         <div class="alert alert-light mb-3">
                             Si tienes alguna inquietud o presentas inconvenientes, por favor comunícate al 604 444 7232 (extensiones 105 - 110 - 111) o a los celulares 310 297 8620 - 311 272 8428
                         </div>
                     </div>
+                <?php } else { ?>
+                    <button class="btn btn-primary btn-block mb-3" onClick="javascript:crearSolicitudCredito()" id="btn_enviar_solicitud">ACTUALIZAR DATOS DE LA SOLICITUD</button>
                 <?php } ?>
             </div>
         </div>
