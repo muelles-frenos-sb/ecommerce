@@ -18,6 +18,9 @@
     }
 
     realizarEnvioFirmaBot = async (id) => {
+        let confirmacion = await confirmar('enviar', `¿Estás seguro de realizar el envío de la firma?`)
+        if(!confirmacion) return false
+
         let datos = {
             tipo: 'clientes_solicitudes_credito',
             id: id,
