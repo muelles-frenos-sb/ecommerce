@@ -9,7 +9,7 @@
                         <label for="usuario">Usuarios *</label>
                         <select id="usuario" class="form-control">
                             <option value="">Seleccione...</option>
-                            <?php foreach ($this->configuracion_model->obtener("usuarios") as $usuario) echo "<option value='$usuario->id'>$usuario->nombre_completo</option>"; ?>
+                            <?php foreach ($this->configuracion_model->obtener("usuarios", ['perfil_id' => 5]) as $usuario) echo "<option value='$usuario->id'>$usuario->nombre_completo</option>"; ?>
                         </select>
                     </div>
                 </div>

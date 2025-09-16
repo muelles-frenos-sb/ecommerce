@@ -587,6 +587,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
                 if(isset($datos['login'])) $where .= " AND u.login = '{$datos['login']}'";
                 if(isset($datos['email'])) $where .= " AND u.email = '{$datos['email']}'";
+                if(isset($datos['perfil_id'])) $where .= " AND u.perfil_id = '{$datos['perfil_id']}'";
 
                 $sql =
                 "SELECT
