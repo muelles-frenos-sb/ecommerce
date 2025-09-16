@@ -227,6 +227,10 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['filtro_id']) && $datos['filtro_id']) $filtros_where .= " AND csc.id = {$datos['filtro_id']} ";
                 if (isset($datos['filtro_estado']) && $datos['filtro_estado']) $filtros_having .= " AND estado LIKE '%{$datos['filtro_estado']}%' ";
                 if (isset($datos['filtro_usuario_asignado']) && $datos['filtro_usuario_asignado']) $filtros_having .= " AND nombre_usuario_asignado LIKE '%{$datos['filtro_usuario_asignado']}%' ";
+                if (isset($datos['filtro_vendedor']) && $datos['filtro_vendedor']) $filtros_having .= " AND vendedor_nombre LIKE '%{$datos['filtro_vendedor']}%' ";
+                if (isset($datos['filtro_fecha_cierre']) && $datos['filtro_fecha_cierre']) $filtros_where .= " AND DATE(csc.fecha_cierre) = '{$datos['filtro_fecha_cierre']}' ";
+                if (isset($datos['filtro_motivo_rechazo']) && $datos['filtro_motivo_rechazo']) $filtros_having .= " AND motivo_rechazo LIKE '%{$datos['filtro_motivo_rechazo']}%' ";
+                if (isset($datos['filtro_cupo']) && $datos['filtro_cupo']) $filtros_where .= " AND csc.cupo_asignado = {$datos['filtro_cupo']} ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
 
@@ -236,6 +240,8 @@ Class Clientes_model extends CI_Model {
                     csc.fecha_creacion,
                     DATE(csc.fecha_creacion) fecha,
                     TIME(csc.fecha_creacion) hora,
+                    DATE(csc.fecha_cierre) fecha_cierre,
+                    TIME(csc.fecha_cierre) hora_cierre,
                     csc.fecha_expedicion,
                     csc.nombre,
                     csc.primer_apellido,
@@ -364,13 +370,17 @@ Class Clientes_model extends CI_Model {
                     m.nombre municipio,
                     tv.nombre vendedor_nombre,
                     csce.nombre estado,
-                    IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado
+                    csce.clase estado_clase,
+                    IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
+                    mr.nombre motivo_rechazo,
+                    csc.cupo_asignado
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
                 LEFT JOIN terceros_vendedores tv ON csc.tercero_vendedor_id = tv.id
                 LEFT JOIN clientes_solicitudes_credito_estados AS csce ON csc.solicitud_credito_estado_id = csce.id
-                LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id   
+                LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id
+                LEFT JOIN motivos_rechazo AS mr ON csc.motivo_rechazo_id = mr.id
                 WHERE csc.id is NOT NULL
                 $filtros_where
                 $filtros_having

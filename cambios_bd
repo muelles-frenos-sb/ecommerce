@@ -294,3 +294,8 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_envio_firma` dateti
 
 -- 20250915 Tipo de log para recibir eventos de un envío
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (71, 'Webhook - Evento de un envío (Roa Transportes) recibido')
+
+-- 20250915 Campos adicionales para las solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito_estados` ADD COLUMN `clase` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `nombre`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_cierre` datetime(0) NULL DEFAULT NULL AFTER `fecha_envio_firma`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cupo_asignado` double NULL DEFAULT 0 AFTER `fecha_cierre`;

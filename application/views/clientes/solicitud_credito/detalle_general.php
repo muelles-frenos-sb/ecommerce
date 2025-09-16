@@ -9,13 +9,13 @@
 <div class="w-100 p-5">
     <div class="block-zone__widget-header">
         <div class="block-zone__tabs">
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_formulario" onclick="javascript:cargarFormulario(<?php echo $id; ?>)">
+            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_formulario" onClick="javascript:cargarFormulario(<?php echo $id; ?>)">
                 Formulario
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_archivos" onclick="javascript:cargarArchivos(<?php echo $id; ?>)">
+            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_archivos" onClick="javascript:cargarArchivos(<?php echo $id; ?>)">
                 Archivos
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_asignar" onclick="javascript:cargarAsignarUsuario(<?php echo $id; ?>)">
+            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_asignar" onClick="javascript:cargarAsignarUsuario(<?php echo $id; ?>)">
                 Asignar usuario
             </button>
         </div>
@@ -52,6 +52,6 @@
     }
 
     $().ready(() => {
-        cargarAsignarUsuario(<?php echo $id; ?>)
+        cargarFormulario(<?php echo $id; ?>)
     })
 </script>

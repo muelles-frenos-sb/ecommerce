@@ -23,6 +23,10 @@
                     datos.filtro_id = $('#filtro_id').val()
                     datos.filtro_estado = $('#filtro_estado').val()
                     datos.filtro_usuario_asignado = $('#filtro_usuario_asignado').val()
+                    datos.filtro_vendedor = $('#filtro_vendedor').val()
+                    datos.filtro_fecha_cierre = $('#filtro_fecha_cierre').val()
+                    datos.filtro_motivo_rechazo = $('#filtro_motivo_rechazo').val()
+                    datos.filtro_cupo = $('#filtro_cupo').val()
                 },
             },
             columns: [
@@ -36,18 +40,33 @@
                 },
                 {
                     title: `
-                        Fecha
+                        Fecha creación
                         <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'fecha'
                 },
                 { title: 'Hora', data: 'hora' },
+                {
+                    title: `
+                        Fecha cierre
+                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'fecha_cierre'
+                },
+                { title: 'Hora', data: 'hora_cierre' },
                 { 
                     title: `
                         NIT
                         <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
                     `,
-                    data: 'documento_numero' 
+                    data: null,
+                    render: (solicitud, type, row) => {
+                        return `
+                            <a href="${$('#site_url').val()}/clientes/credito/ver/${solicitud.id}" target="_blank">
+                                ${solicitud.documento_numero}
+                            </a>
+                        `
+                    }
                 },
                 { 
                     title: `
@@ -58,10 +77,28 @@
                 },
                 { 
                     title: `
+                        Vendedor
+                        <input type="text" id="filtro_vendedor" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'vendedor_nombre'
+                },
+                { 
+                    title: `
                         Estado
                         <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'estado' 
+                    data: null,
+                    render: (solicitud, type, row) => {
+                        return `
+                            <div class="status-badge status-badge--style--${solicitud.estado_clase} status-badge--has-text">
+                                <div class="status-badge__body">
+                                    <div class="status-badge__text">
+                                        ${solicitud.estado}
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                    }
                 },
                 { 
                     title: `
@@ -71,15 +108,27 @@
                     data: 'nombre_usuario_asignado' 
                 },
                 {
+                    title: `
+                        Cupo asignado
+                        <input type="number" id="filtro_cupo" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: null,
+                    className: 'text-right',
+                    render: (solicitud, type, row) => {
+                        return parseFloat(solicitud.cupo_asignado).toLocaleString('es-CO')
+                    }
+                },
+                { 
+                    title: `
+                        Motivo rechazo
+                        <input type="text" id="filtro_motivo_rechazo" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'motivo_rechazo' 
+                },
+                {
                     title: 'Opciones', 
                     data: null,
                     render: (solicitud, type, row) => {
-                        let botonVer = `
-                            <a type="button" class="btn btn-sm btn-danger" href="${$('#site_url').val()}/clientes/credito/ver/${solicitud.id}" target="_blank">
-                                <i class="fas fa-search"></i>
-                            </a>
-                        `
-
                         let botonRealizarEnvioFirmaBot = (!solicitud.fecha_envio_firma)
                         ? `
                             <a type="button" class="btn btn-sm btn-primary" href="javascript:realizarEnvioFirmaBot(${solicitud.id})" title="Envío de la firma">
@@ -90,8 +139,6 @@
 
                         return `
                             <td class="p-1">
-                                ${botonVer}
-
                                 ${botonRealizarEnvioFirmaBot}
                             </td>
                         `

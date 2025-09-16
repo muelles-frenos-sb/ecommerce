@@ -93,6 +93,10 @@ class Clientes extends MY_Controller {
         $filtro_id = $this->input->get("filtro_id");
         $filtro_estado = $this->input->get("filtro_estado");
         $filtro_usuario_asignado = $this->input->get("filtro_usuario_asignado");
+        $filtro_vendedor = $this->input->get("filtro_vendedor");
+        $filtro_fecha_cierre = $this->input->get("filtro_fecha_cierre");
+        $filtro_motivo_rechazo = $this->input->get("filtro_motivo_rechazo");
+        $filtro_cupo = $this->input->get("filtro_cupo");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -117,6 +121,10 @@ class Clientes extends MY_Controller {
                 if(isset($filtro_id)) $datos['filtro_id'] = $filtro_id;
                 if(isset($filtro_estado)) $datos['filtro_estado'] = $filtro_estado;
                 if(isset($filtro_usuario_asignado)) $datos['filtro_usuario_asignado'] = $filtro_usuario_asignado;
+                if(isset($filtro_vendedor)) $datos['filtro_vendedor'] = $filtro_vendedor;
+                if(isset($filtro_fecha_cierre)) $datos['filtro_fecha_cierre'] = $filtro_fecha_cierre;
+                if(isset($filtro_motivo_rechazo)) $datos['filtro_motivo_rechazo'] = $filtro_motivo_rechazo;
+                if(isset($filtro_cupo)) $datos['filtro_cupo'] = $filtro_cupo;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);
