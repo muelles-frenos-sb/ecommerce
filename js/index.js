@@ -109,10 +109,10 @@ confirmar = (tipo, mensaje) => {
         html: mensaje,
         icon: 'question',
         showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
+        confirmButtonColor: '#218838',
+        cancelButtonColor: '#d33',
         confirmButtonText: `Si, ${tipo}`,
-        cancelButtonText: 'Cancelar'
+        cancelButtonText: 'No, cancelar'
 
     }).then((resultado) => {
         return resultado.isConfirmed
