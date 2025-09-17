@@ -588,6 +588,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
                 if(isset($datos['login'])) $where .= " AND u.login = '{$datos['login']}'";
                 if(isset($datos['email'])) $where .= " AND u.email = '{$datos['email']}'";
+                if(isset($datos['perfil_id'])) $where .= " AND u.perfil_id = '{$datos['perfil_id']}'";
 
                 $sql =
                 "SELECT
@@ -601,7 +602,7 @@ Class Configuracion_model extends CI_Model {
                 $where
                 $having
                 ORDER BY
-	                u.razon_social
+	                u.razon_social 
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero']) || isset($datos['login']) || isset($datos['email'])) {

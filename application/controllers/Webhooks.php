@@ -47,6 +47,201 @@ class Webhooks extends MY_Controller {
     }
 
     /**
+    * Función que captura los objetos JSON con los datos de las guías
+    * de Roa Transportes y almacena su información en la base de datos
+    **/
+    function envios() {
+        // Recepción de los datos que llegan
+        $post = file_get_contents('php://input');
+        $datos = json_decode($post, true);
+
+        $datos_log = [
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode($datos),
+            'log_tipo_id' => 71,
+        ];
+
+        $this->configuracion_model->crear('logs', $datos_log);
+
+        print json_encode([
+            // 'errores' => $errores,
+            'resultado' => $datos,
+            'datos_pedido' => (isset($datos_pedido)) ? $datos_pedido : [],
+            'datos_movimiento_contable' => (isset($documento_contable)) ? $documento_contable : [],
+        ]);
+        
+        return (false) ? http_response_code(400) : http_response_code(201);
+    }
+
+    function tcc($tipo) {
+        switch ($tipo) {
+            case 'consultar_liquidacion':
+                $datos = '{
+                    "tipoenvio": "1",               
+                    "idciudadorigen": "05001000",   
+                    "idciudaddestino": "11001000",  
+                    "valormercancia": "250000",
+                    "boomerang": "0",               
+                    "identificacion": "900296641",  
+                    "cuenta": "5625200",            
+                    "fecharemesa": "2025-09-12",    
+                    "idunidadnegocio": "2",         
+                    "unidades": [
+                        {
+                            "numerounidades": "1",
+                            "pesoreal": "10",
+                            "pesovolumen": "15",
+                            "alto": "40",           
+                            "largo": "40",
+                            "ancho": "20",
+                            "tipoempaque": ""
+                        }
+                    ]
+                }';
+
+                $peticion = tcc_obtener_datos_api('/tarifas/v5/consultarliquidacion', $datos);
+                $resultado = (object)json_decode($peticion, true);
+                print_r($resultado);
+                echo $resultado->idliquidacion;
+
+                if($resultado->codigoResultado != '0') {
+                    echo $resultado->idLiquidacion;
+                }
+            break;
+
+            case 'grabar_despacho':
+                $datos = '{
+                    "numerodespacho" : null, // Puede ser nulo de esta manera TCC genera el numero del despacho
+                    "fechadespacho" : "2025-09-11", // Fecha en la que se realiza el envío (YYYY-MM-DD)
+                    // Se diligencia solo si se va a solicitar la recogida
+                    "solicitudrecogida" : {
+                        "numero" : null,
+                        "fecha" : null,
+                        "ventanainicio" : null,
+                        "ventanafin" : null
+                    },
+                    "unidadnegocio" : "1",  // 1: Paqueteria; 2: Mensajeria
+                    "cuentaremitente" : "1485100", // Numero de acuerdo comercial asignado (1485100: Paquetería; 5625200: Mensajería)
+                    "sederemitente" : null, // Código de la sede del cliente desde donde será generado el despacho, el cual es acordado con TCC
+                    "primernombreremitente" : "John",
+                    "segundonombreremitente" : "Arley",
+                    "primerapellidoremitente" : "Cano",
+                    "segundoapellidoremitente" : "Salinas",
+                    "razonsocialremitente" : "John Arley Cano Salinas",
+                    "contactoremitente" : "John Arley Cano", // Nombre de la persona que se debe contactar al momento de hacer la recogida de mercancia
+                    "tipoidentificacionremitente" : "CC", // CC, NIT
+                    "identificacionremitente" : "1017177502",
+                    "direccionremitente" : "Transversal 38AA # 59A 231",
+                    "ciudadorigen" : "05360000",
+                    "telefonoremitente" : "3134587623",
+                    "emailremitente" : "johnarleycano@hotmail.com",
+                    // Máximo 100 destinatarios
+                    "destinatarios" : [
+                        {
+                            "numerocontrol" : "1",  // Consecutivo
+                            "numeroremesa" : null,  // Puede ser nulo de esta manera TCC genera el numero del despacho
+                            "numeroreferenciacliente" : null,   // Numero de referencia del pedido
+                            "tipoidentificaciondestinatario" : "CC",
+                            "identificaciondestinatario" : "1017250261",
+                            "sededestinatario" : null,  // Código de la sede del cliente destinatario
+                            "primernombredestinatario" : "Yasmin",
+                            "segundonombredestinatario" : "Daniela",
+                            "primerapellidodestinatario" : "Muñoz",
+                            "segundoapellidodestinatario" : "Marulanda",
+                            "razonsocialdestinatario" : "YASMIN DANIELA MUÑOZ MARULANDA",
+                            "contactodestinatario" : "YASMIN DANIELA MUÑOZ MARULANDA",
+                            "direcciondestinatario" : "Carera 69B # 25B - 08",
+                            "telefonodestinatario" : "3143618016",
+                            "ciudaddestino" : "05631000",
+                            "formapago" : null,
+                            "llevabodega" : null,   // Indicador si el cliente lleva la mercancia a una bodega de TCC para su despacho (SI, NO)
+                            "recogebodega" : null,  // Indicador si el cliente destinatario del despacho se acerca a una bodega de TCC a reclamar su mercancia (SI, NO)
+                            "centrocostos" : null,  // Centro de costos del remintente
+                            /*
+                            TCC Paqueteria.
+                            TISE_NORMAL_PAQ --> Tipo de servicio Normal (Paqueteria).
+                            
+                            TCC Mensajeria.
+                            TISE_NORMAL_MEN --> Tipo de servicio Normal (Mensajeria). TISE_9AM --> Tipo de servicio 9 AM .
+                            TISE_RD_NORMAL --> Tipo de servicio Radicación de Documentos. TISE_RD_DIGITAL --> Tipo de servicio Radicación de Documentos Digital.
+                            TISE_RD_MIXTO --> Tipo de servicio Radicación de Documentos Mixto.
+                            */
+                            "tiposervicio" : "TISE_NORMAL_PAQ",
+                            "observaciones" : "Prueba",
+                            "recaudoproducto" : null,   // aquí se debe llevar el valor total a recaudar al momento de realizar la entrega de la mercancía al destinatario
+                            "unidades" : [
+                                {
+                                    /*
+                                    TIPO_UND_PAQ --> Unidad Tipo Paquete
+                                    TIPO_UND_DOCB --> Unidad Tipo Fisico Normal)
+                                    TIPO_UND_BOOM_FS --> Unidad Tipo Fisico Normal)
+                                    TIPO_UND_DOCD --> Unidad Tipo Dardo 
+                                    TIPO_UND_BOOM_DGT --> Unidad Tipo Digital
+                                    TIPO_UND_BOOM_MXT --> unidad Tipo Mixto
+                                    */
+                                    "tipounidad" : "TIPO_UND_PAQ",
+                                    /*
+                                    Determina la clase de empaque, según unidad de negocio, de la seguiente forma:
+                                    
+                                    TCC Paqueteria:
+                                    CLEM_CAJA
+                                    CLEM_SOBRE
+                                    CLEM_LIO
+                                    
+                                    TCC Mensajeria:
+                                    CLEM_PEQUENA
+                                    CLEM_MEDIANA
+                                    CLEM_GRANDE
+                                    CLEM_MINI
+                                    CLEM_SOBRE_MEN
+                                    */
+                                    "claseempaque" : "CLEM_CAJA",
+                                    "tipoempaque" : null,   // Corresponde al tipo de empaque comercial acordado con el cliente
+                                    "dicecontener" : "Repuestos",
+                                    "kilosreales" : "10",   // Peso real de la unidad
+                                    "largo" : "1",  // Dado en centimetros. Si no se tiene la información debe enviarse un cero (0)
+                                    "alto" : "1",   // Dado en centimetros. Si no se tiene la información debe enviarse un cero (0)
+                                    "ancho" : "1",  // Dado en centimetros. Si no se tiene la información debe enviarse un cero (0)
+                                    // Si son enviadas las dimensiones, estas priman sobre el valor enviado en volumen, tambien si no se tiene el volumen se puede enviar Cero (0), siempre y cuando se envie el peso real(ancho (metros) * largo (metros) * alto (metros)) * 400 -> (0.4 * 0.4 * 0.3) * 400
+                                    "pesovolumen" : "10",
+                                    "valormercancia" : "1200000",
+                                    "codigobarras" : null,
+                                    "numerobolsa" : null,   // Opera solo TCC Mensajeria
+                                    "referencias" : null,   // Opera solo TCC Mensajeria
+                                    "unidadesinternas" : "1"    // Número de unidades internas contenidas
+                                }
+                            ],
+                            "documentosreferencia" : [
+                                {
+                                    "tipodocumento" : null,
+                                    "numerodocumento" : null,
+                                    "fechadocumento" : null
+                                }
+                            ]
+                        }
+                    ]
+                }';
+
+                $peticion = tcc_obtener_datos_api('/remesas/grabardespacho8', $datos);
+                $resultado = (object)json_decode($peticion, true);
+                print_r($resultado);
+            break;
+
+            case 'anular_despacho':
+                $datos = '{
+                    "numeroremesa": "446837119",    // Número de guía
+                    "fechadespacho": "2025-09-11",  // (YYYY-MM-DD)
+                    "cuentaremitente": "1485100"    // Numero de acuerdo comercial asignado (1485100: Paquetería; 5625200: Mensajería)
+                }';
+
+                $peticion = tcc_obtener_datos_api('/remesas/anulardespacho', $datos);
+                $resultado = (object)json_decode($peticion, true);
+                print_r($resultado);
+            break;
+        }
+    }
+
+    /**
     * Función que captura el objeto JSON con los datos de la transacción de Wompi
     * Y almacena el id de la transacción, para futuras consultas
     **/

@@ -60,6 +60,11 @@ class Interfaces extends CI_Controller {
         unset($datos['id']);
 
         switch($tipo) {
+            case 'clientes_solicitudes_credito':
+                if (isset($datos['fecha_envio_firma']) && $datos['fecha_envio_firma']) $datos['fecha_envio_firma'] = date("Y-m-d H:i:s");
+                $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'productos_metadatos':
                 $datos['fecha_modificacion'] = date("Y-m-d H:i:s");
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);

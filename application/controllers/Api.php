@@ -15,7 +15,7 @@ class Api extends RestController {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(["configuracion_model", "productos_model"]);
+        $this->load->model(["clientes_model", "configuracion_model", "productos_model"]);
     }
 
     /**
@@ -240,6 +240,201 @@ class Api extends RestController {
             'error' => false,
             'mensaje' => 'Registro actualizado correctamente.',
             'resultado' => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Devuelve el listado de una o varias solicitudes de crédito
+     */
+    function solicitudes_credito_get() {
+        $datos = [
+            'id' => $this->get("id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("solicitudes_credito_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $resultado = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);
+
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No se encontraron registros.",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        $mensaje = "Registros cargados correctamente.";
+
+        if (!is_object($resultado)) {
+            $total_registros = count($resultado);
+            $mensaje = "$total_registros registros encontrados";
+        }
+       
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Actualiza los datos de una solicitud de crédito
+     */
+    function solicitud_credito_put() {
+        // Datos para actualizar
+        $datos = [
+            'id' => $this->input->get('id'),
+            'solicitud_credito_estado_id' => $this->put('solicitud_credito_estado_id'),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run('solicitud_credito_put')) {
+            $this->response([
+                'error' => true,
+                'mensaje' => 'Parámetros inválidos.',
+                'resultado' => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        // Se obtiene los datos de la solicitud
+        $solicitud_credito = $this->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $datos['id']]);
+
+        if (empty($solicitud_credito)) {
+            $this->response([
+                'error' => false,
+                'mensaje' => "No se encontró la solicitud de crédito con id {$datos['id']}",
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        $resultado = $this->clientes_model->actualizar('clientes_solicitudes_credito', ['id' => $datos['id']], $datos);
+
+        if (!$resultado) {
+            $this->response([
+                'error' => false,
+                'mensaje' => 'No se actualizó el registro.',
+                'resultado' => null
+            ], RestController::HTTP_OK);
+        }
+
+        // Respuesta exitosa
+        $this->response([
+            'error' => false,
+            'mensaje' => 'Registro actualizado correctamente.',
+            'resultado' => $resultado
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Devuelve el listado con los archivos suministrados
+     * por el usuario que solicita el crédito
+     */
+    function solicitudes_credito_archivos_get() {
+        // Helper para manejo de archivos
+        $this->load->helper('file');
+
+        $datos = [
+            "solicitud_credito_id" => $this->get("solicitud_credito_id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("solicitudes_credito_archivos_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $base_url = FCPATH;
+        $ruta_archivos = "archivos/solicitudes_credito/{$datos['solicitud_credito_id']}/";
+        $ruta = $base_url.$ruta_archivos;
+
+        // Se leen los archivos
+        $lista = get_filenames($ruta);
+
+        // Si no se encuentran archivos
+        if (!$lista) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No se encontraron archivos.",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        // Arreglo para almacenar los archivos
+        $archivos = [];
+        
+        foreach ($lista as $registro) {
+            // Se crea un objeto por cada archivo encontrado
+            array_push($archivos, [
+                'nombre' => pathinfo($registro, PATHINFO_FILENAME),
+                'url' => base_url().$ruta_archivos.$registro,
+            ]);
+        }
+
+        $mensaje = "Archivos cargados correctamente.";
+        $total_registros = count($archivos);
+        $mensaje = "Se cargaron correctamente $total_registros registros";
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $archivos
+        ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Devuelve el listado con el detalle de la solicitud de crédito
+     */
+    function solicitudes_credito_detalle_get() {
+        $datos = [
+            "solicitud_credito_id" => $this->get("solicitud_credito_id"),
+        ];
+
+        $this->form_validation->set_data($datos);
+
+        if (!$this->form_validation->run("solicitudes_credito_detalle_get")) {
+            $this->response([
+                "error" => true,
+                "mensaje" => "Parámetros inválidos.",
+                "resultado" => $this->form_validation->error_array(),
+            ], RestController::HTTP_BAD_REQUEST);
+        }
+
+        $resultado = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", [
+            "solicitud_id" => $datos['solicitud_credito_id'],
+        ]);
+
+        if (!$resultado) {
+            $this->response([
+                "error" => false,
+                "mensaje" => "No se encontraron registros.",
+                "resultado" => null
+            ], RestController::HTTP_OK);
+        }
+
+        $mensaje = "Registros cargados correctamente.";
+
+        if (!is_object($resultado)) {
+            $total_registros = count($resultado);
+            $mensaje = "Se cargaron correctamente $total_registros registros";
+        }
+
+        $this->response([
+            "error" => false,
+            "mensaje" => $mensaje,
+            "resultado" => $resultado
         ], RestController::HTTP_OK);
     }
 

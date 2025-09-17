@@ -121,7 +121,7 @@
 
             let creacionTercero = consulta('crear', {tipo: 'tercero', valores: tercero.detalle.Table}, false)
             let creacionFacturas = consulta('crear', {tipo: 'clientes_facturas', valores: facturas.detalle.Table}, false)
-            
+
             Promise.all([creacionTercero, creacionFacturas])
             .then(async(resultado) => {                    
                 agregarLog(24, `Número de documento ${numeroDocumento.val()}`)

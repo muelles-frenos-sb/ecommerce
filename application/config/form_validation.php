@@ -21,8 +21,24 @@ $config = [
     ],
 
     'recibo_put' => [
-		    ['field' => 'id', 'label' => 'id', 'rules' => 'required|trim|integer|greater_than[0]', 'errors' => ['required' => 'El campo {field} debe ser enviado como parámetro en la url y es obligatorio.']],
+		['field' => 'id', 'label' => 'id', 'rules' => 'required|trim|integer|greater_than[0]', 'errors' => ['required' => 'El campo {field} debe ser enviado como parámetro en la url y es obligatorio.']],
         ['field' => 'fecha_actualizacion_bot', 'label' => 'fecha de actualización bot', 'rules' => 'required|trim|fecha_completa_valida'],
+    ],
+
+    'solicitud_credito_put' => [
+		['field' => 'id', 'label' => 'id', 'rules' => 'required|trim|integer|greater_than[0]', 'errors' => ['required' => 'El campo {field} debe ser enviado como parámetro en la url y es obligatorio.']],
+    ],
+
+    'solicitudes_credito_get' => [
+		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
+    ],
+
+    'solicitudes_credito_archivos_get' => [
+        ['field' => 'solicitud_credito_id', 'label' => 'id de la solicitud de crédito', 'rules' => 'required|trim|integer|greater_than[0]'],
+    ],
+
+    'solicitudes_credito_detalle_get' => [
+        ['field' => 'solicitud_credito_id', 'label' => 'id de la solicitud de crédito', 'rules' => 'required|trim|integer|greater_than[0]'],
     ],
 
 	'terceros_get' => [

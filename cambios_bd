@@ -267,3 +267,38 @@ ALTER TABLE `terceros_contactos` ADD COLUMN `modulo_id` int NULL DEFAULT 2 AFTER
 
 -- 20250908 Valor por defecto en el número de cuota de la factura de un recibo
 ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AFTER `descuento`;
+
+-- 20250910 Campo para almacenar el id del usuario en la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_id` int NULL AFTER `observaciones`;
+
+-- 20250908 Tabla de estados para las solicitudes de crédito
+CREATE TABLE `clientes_solicitudes_credito_estados`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- 20250908 Almacenamiento del estado de la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `solicitud_credito_estado_id` int NULL AFTER `tercero_vendedor_id`;
+
+-- 20250909 Almacenamiento dedatos adicionales a la solicitud de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_asignado_id` int NULL DEFAULT NULL COMMENT 'Usuario asignado para revisar la solicitud' AFTER `solicitud_credito_estado_id`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `motivo_rechazo_id` int NULL AFTER `usuario_asignado_id`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `observaciones` varchar(255) NULL AFTER `motivo_rechazo_id`;
+
+-- 20250909 Campo para diferenciar los motivos de rechazo a qué interfaz pertenecen
+ALTER TABLE `motivos_rechazo` ADD COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito' AFTER `nombre`;
+
+-- 20250914 Se agrega campo para indicar fecha de envío de la firma para solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_envio_firma` datetime(0) NULL AFTER `usuario_id`;
+
+-- 20250915 Tipo de log para recibir eventos de un envío
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (71, 'Webhook - Evento de un envío (Roa Transportes) recibido')
+
+-- 20250915 Campos adicionales para las solicitudes de crédito
+ALTER TABLE `clientes_solicitudes_credito_estados` ADD COLUMN `clase` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `nombre`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_cierre` datetime(0) NULL DEFAULT NULL AFTER `fecha_envio_firma`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cupo_asignado` double NULL DEFAULT 0 AFTER `fecha_cierre`;
+
+-- 20250908 Valor por defecto en el número de cuota de la factura de un recibo
+ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AFTER `descuento`;
