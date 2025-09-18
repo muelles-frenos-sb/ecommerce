@@ -105,7 +105,18 @@
                         Asignado
                         <input type="text" id="filtro_usuario_asignado" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'nombre_usuario_asignado' 
+                    data: null,
+                    render: (solicitud, type, row) => {
+                        let informacion = (solicitud.nombre_usuario_asignado != '-') 
+                        ? solicitud.nombre_usuario_asignado
+                        : `
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
+                                Asignar
+                            </a>
+                        `
+                        
+                        return informacion
+                    }
                 },
                 {
                     title: `
@@ -137,17 +148,9 @@
                         ` 
                         : ``
 
-                        let botonAsignarUsuario = `
-                            <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
-                                <i class="fas fa-user"></i>
-                            </a>
-                        ` 
-
                         return `
                             <td class="p-1">
                                 ${botonRealizarEnvioFirmaBot}
-
-                                ${botonAsignarUsuario}
                             </td>
                         `
                     }
