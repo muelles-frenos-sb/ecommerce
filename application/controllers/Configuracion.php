@@ -152,7 +152,7 @@ class Configuracion extends MY_Controller {
 
     function contactos() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
-        if(!in_array(['configuracion' => 'configuracion_usuarios_ver'], $this->data['permisos'])) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_contactos_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             case 'crear':
