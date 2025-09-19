@@ -136,16 +136,6 @@
                     `, 
                     data: 'motivo_rechazo' 
                 },
-                {
-                    title: 'Opciones', 
-                    data: null,
-                    render: (solicitud, type, row) => {
-                        return `
-                            <td class="p-1">
-                            </td>
-                        `
-                    }
-                },
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro
