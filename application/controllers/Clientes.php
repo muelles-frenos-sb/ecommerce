@@ -23,8 +23,6 @@ class Clientes extends MY_Controller {
     }
 
     function credito() {
-        if(!$this->session->userdata('usuario_id')) redirect('inicio');
-
         switch ($this->uri->segment(3)) {
             case 'ver':
                 if(!$this->session->userdata('usuario_id')) redirect('inicio');
