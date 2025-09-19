@@ -17,12 +17,21 @@ $archivos = glob($ruta_archivos, GLOB_BRACE);
                 <?php 
                 foreach ($archivos as $indice => $archivo) { 
                     $nombre = pathinfo($archivo, PATHINFO_FILENAME);
+                    $extension = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                 ?>
                     <tr>
                         <td><?php echo $indice + 1; ?></td>
                         <td><?php echo $nombre; ?></td>
                         <td>
+                            <?php if ($extension == 'pdf' || $extension == 'jpg' || $extension == 'png' || $extension == 'jpeg') { ?>
+                                <button class="btn btn-primary" title="Ver archivo" onClick="javascript:window.open('<?php echo base_url($archivo) ?>', this.target, 'width=800,height=600'); return false;">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            <?php } ?>
 
+                            <a href="<?php echo base_url($archivo); ?>" class="btn btn-primary" title="Descargar archivo" download>
+                                <i class="fas fa-download"></i>
+                            </a>
                         </td>
                     </tr>
                 <?php } ?>
