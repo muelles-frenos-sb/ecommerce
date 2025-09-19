@@ -39,6 +39,10 @@ Class Clientes_model extends CI_Model {
             case 'terceros':
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
+
+            case 'wms_pedidos':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
         }
 
         $this->db->close;
@@ -47,6 +51,10 @@ Class Clientes_model extends CI_Model {
     function eliminar($tipo, $datos){
         switch ($tipo) {
             case 'clientes_sucursales':
+                return $this->db->delete($tipo, $datos);
+            break;
+
+            case 'wms_pedidos':
                 return $this->db->delete($tipo, $datos);
             break;
         }

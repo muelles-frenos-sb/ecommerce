@@ -302,3 +302,27 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cupo_asignado` double NUL
 
 -- 20250908 Valor por defecto en el número de cuota de la factura de un recibo
 ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AFTER `descuento`;
+
+-- 20250918 Nuevos tipos de logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (72, 'WMS - Pedidos (Ejecución de script erróneo)');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (73, 'WMS - Pedidos (Ejecución de script exitoso)');
+
+CREATE TABLE `wms_pedidos`  (
+  `FechaDocumento` date NULL,
+  `NumeroDocumento` varchar(20) NULL,
+  `NIT` varchar(50) NULL,
+  `RazonSocial` varchar(255) NULL,
+  `Bodega` varchar(10) NULL,
+  `CodProducto` int NULL,
+  `CantPedida` double NULL,
+  `CantidadPendiente` double NULL,
+  `PorcentajeIva` double NULL,
+  `PorcentajeDescuento` double NULL,
+  `FechaIngresoDocumento` date NULL,
+  `HoraIngresoDocumento` time(0) NULL,
+  `IdConsecutivo` int NULL,
+  `NombreConsecutivo` varchar(100) NULL,
+  `FechaCreacion` datetime(0) NULL COMMENT 'Fecha de creación del registro'
+);
+
+ALTER TABLE `wms_pedidos` MODIFY COLUMN `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación del registro' AFTER `NombreConsecutivo`;
