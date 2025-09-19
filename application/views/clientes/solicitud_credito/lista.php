@@ -140,17 +140,8 @@
                     title: 'Opciones', 
                     data: null,
                     render: (solicitud, type, row) => {
-                        let botonRealizarEnvioFirmaBot = (!solicitud.fecha_envio_firma)
-                        ? `
-                            <a type="button" class="btn btn-sm btn-primary" href="javascript:realizarEnvioFirmaBot(${solicitud.id})" title="Envío de la firma">
-                                <i class="fas fa-signature"></i>
-                            </a>
-                        ` 
-                        : ``
-
                         return `
                             <td class="p-1">
-                                ${botonRealizarEnvioFirmaBot}
                             </td>
                         `
                     }

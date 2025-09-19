@@ -22,25 +22,6 @@
         cargarInterfaz('clientes/solicitud_credito/lista', 'contenedor_solicitudes_credito')
     }
 
-    realizarEnvioFirmaBot = async (id) => {
-        let confirmacion = await confirmar('enviar', `¿Estás seguro de realizar el envío de la firma?`)
-        if(!confirmacion) return false
-
-        let datos = {
-            tipo: 'clientes_solicitudes_credito',
-            id: id,
-            fecha_envio_firma: true
-        }
-
-        await consulta('actualizar', datos)
-
-        mostrarAviso('exito', `
-            ¡Se realizará el envío de la firma!<br><br>
-        `, 5000)
-
-        listarSolicitudesCredito()
-    }
-
     $().ready(() => {
         listarSolicitudesCredito()
     })
