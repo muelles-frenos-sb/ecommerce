@@ -429,6 +429,39 @@ Class Clientes_model extends CI_Model {
                     ->row()
                 ;
             break;
+
+            case 'wms_pedidos':
+				$limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                $filtros_where = "WHERE p.FechaDocumento IS NOT NULL ";
+                if(isset($datos['fecha_documento'])) $filtros_where .= " AND p.FechaDocumento = '{$datos['fecha_documento']}' ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY p.FechaDocumento DESC";
+                
+                $sql = 
+                "SELECT
+                    p.FechaDocumento fecha_documento,
+                    p.NumeroDocumento numero_documento,
+                    p.IdConsecutivo consecutivo_id,
+                    p.NombreConsecutivo consecutivo_nombre,
+                    p.NIT nit,
+                    p.RazonSocial rzon_social,
+                    COUNT(p.CodProducto) cantidad_productos
+                FROM
+                    wms_pedidos AS p
+                $filtros_where
+                GROUP BY
+                    p.NumeroDocumento, 
+                    p.NombreConsecutivo
+                $order_by
+                $limite";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
         }
 
         $this->db->close;

@@ -22,6 +22,17 @@ class Clientes extends MY_Controller {
         $this->consultar();
     }
 
+    function pedidos() {
+        // if(!in_array(['configuracion' => 'configuracion_recibos_ver'], $this->data['permisos'])) redirect('inicio');
+        
+        switch ($this->uri->segment(3)) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'clientes/pedidos/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function credito() {
         switch ($this->uri->segment(3)) {
             case 'ver':
@@ -105,6 +116,35 @@ class Clientes extends MY_Controller {
         }
 
         switch ($tipo) {
+            case "pedidos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    // "busqueda" => $busqueda
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+
             case "solicitudes_credito":
                 // Se definen los filtros
                 $datos = [
