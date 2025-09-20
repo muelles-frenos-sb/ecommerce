@@ -346,3 +346,15 @@ CREATE TABLE `api_cuentas_por_pagar`  (
     `fecha_creacion` varchar(255) NULL,
     PRIMARY KEY (`id`)
 );
+
+-- 20250920 Se agrega tabla para la bitacora de las solicitudes de crédito
+CREATE TABLE `clientes_solicitudes_credito_bitacora` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `solicitud_id` int(11) DEFAULT NULL,
+  `observaciones` text DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `fecha_creacion` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `solicitud_id` (`solicitud_id`),
+  CONSTRAINT `clientes_solicitudes_credito_bitacora_ibfk_1` FOREIGN KEY (`solicitud_id`) REFERENCES `clientes_solicitudes_credito` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

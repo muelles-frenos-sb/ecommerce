@@ -65,6 +65,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'clientes_solicitudes_credito_bitacora':
+                $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'productos_metadatos':
                 $datos['fecha_modificacion'] = date("Y-m-d H:i:s");
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
@@ -332,6 +336,11 @@ class Interfaces extends CI_Controller {
                 if( ! is_dir($directorio)) @mkdir($directorio, 0777);
 
                 print json_encode(['resultado' => $id]);
+            break;
+
+            case 'clientes_solicitudes_credito_bitacora':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_bitacora', $datos)]);
             break;
 
             case 'clientes_solicitudes_credito_detalle':

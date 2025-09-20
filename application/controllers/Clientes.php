@@ -185,6 +185,37 @@ class Clientes extends MY_Controller {
                     "data" => $resultados
                 ]);
             break;
+
+            case "solicitudes_credito_bitacora":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                $datos['solicitud_id'] = $this->input->get("solicitud_id");
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito_bitacora", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("clientes_solicitudes_credito_bitacora", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
         }
     }
 
