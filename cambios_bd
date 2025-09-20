@@ -358,3 +358,6 @@ CREATE TABLE `clientes_solicitudes_credito_bitacora` (
   KEY `solicitud_id` (`solicitud_id`),
   CONSTRAINT `clientes_solicitudes_credito_bitacora_ibfk_1` FOREIGN KEY (`solicitud_id`) REFERENCES `clientes_solicitudes_credito` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20250920 Campo para crear la firma
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_firma` datetime(0) NULL AFTER `fecha_envio_firma`;
