@@ -461,6 +461,37 @@ function obtener_clientes_api($datos) {
 }
 
 /**
+ * Obtiene las cuentas por pagar a terceros
+ */
+function obtener_cuentas_por_pagar_api($datos) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_CxP_General',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => "f200_id=''{$datos['numero_documento']}''",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+/**
  * Obtiene los documentos de venta de Siesa
  */
 function obtener_documentos_ventas_api($datos) {

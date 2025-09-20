@@ -326,3 +326,23 @@ CREATE TABLE `wms_pedidos`  (
 );
 
 ALTER TABLE `wms_pedidos` MODIFY COLUMN `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación del registro' AFTER `NombreConsecutivo`;
+
+-- 20250920 Tabla para almacenar las cuentas por cobrar de los terceros
+CREATE TABLE `api_cuentas_por_pagar`  (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `f353_rowid` int NULL,
+    `f353_id_cia` varchar(5) NULL,
+    `f353_id_co_cruce` varchar(5) NULL,
+    `f353_id_tipo_docto_cruce` int NULL,
+    `f353_consec_docto_cruce` int NULL,
+    `f350_id_periodo` varchar(10) NULL,
+    `f202_id_sucursal` varchar(5) NULL,
+    `f253_id` int NULL,
+    `f353_total_cr` double NULL,
+    `f353_total_db` double NULL,
+    `f353_notas` text NULL,
+    `f353_id_un_cruce` varchar(5) NULL,
+    `f253_ind_sa` int NULL,
+    `fecha_creacion` varchar(255) NULL,
+    PRIMARY KEY (`id`)
+);
