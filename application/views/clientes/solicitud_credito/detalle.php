@@ -888,7 +888,7 @@ if (isset($datos['id'])) {
             segundo_apellido: $('#solicitud_segundo_apellido').val(),
             razon_social: $('#solicitud_razon_social').val(),
             persona_tipo_id: $('#solicitud_persona_tipo').val(),
-            identificacion_tipo_id: $('#solicitud_tipo_documento option:selected').attr('data-tipo_tercero'),
+            identificacion_tipo_id: ($(`#solicitud_tipo_documento1`).is(':checked')) ? 4 : 1, // 4: CC, 1: NIT
             documento_numero: $('#solicitud_numero_documento').val(),
             departamento_id: $('#solicitud_departamento').val(),
             ciudad_id: $('#solicitud_municipio').val(),
