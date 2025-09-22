@@ -411,9 +411,9 @@
             
             let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
             creacionTerceroSiesa.then(resultado => {
-                agregarLog(82, JSON.stringify(resultado))
-                
                 if(resultado[0].codigo == 1) {
+                    agregarLog(82, JSON.stringify(resultado))
+
                     mostrarAviso('error', `No se pudo crear el tercero en el ERP: <b>${resultado[0].detalle}</b>`, 20000)
                     return false
                 }
