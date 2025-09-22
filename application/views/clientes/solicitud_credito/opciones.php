@@ -40,12 +40,19 @@
 </div>
 
 <script>
+    var solicitud = JSON.parse('<?php echo json_encode($solicitud) ?>')
+
+    var datosBitacora = {
+        tipo: 'clientes_solicitudes_credito_bitacora',
+        solicitud_id: solicitud.id,
+        usuario_id: $('#sesion_usuario_id').val()
+    }
+
     aprobarSolicitudCredito = async (id, confirmacion) => {
         if(!confirmacion) {
             cargarInterfaz('clientes/solicitud_credito/aprobacion', 'contenedor_modal_gestion_solicitud_Credito', {id: id})
             return false
         }
-        if(!confirmacion) return false
 
         if (!validarCamposObligatorios([$('#aprobacion_cupo')])) return false
 
@@ -54,10 +61,14 @@
             id: id,
             solicitud_credito_estado_id: 2,
             fecha_cierre: true,
-            cupo_asignado: parseFloat($('#aprobacion_cupo').val().replace(/\./g, '')),
+            cupo_asignado: $('#aprobacion_cupo').val(),
         }
 
         await consulta('actualizar', datos)
+
+        // Creación del registro en bitácora
+        datosBitacora.observaciones = `Solicitud aprobada`
+        await consulta('crear', datosBitacora)
 
         Swal.fire({
             title: 'Creando el tercero en el ERP...',
@@ -66,8 +77,6 @@
             showConfirmButton: false,
             allowOutsideClick: false
         })
-
-        let solicitud = JSON.parse('<?php echo json_encode($solicitud) ?>')
 
         // Se consulta en el ERP el tercero
         var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
@@ -113,6 +122,10 @@
 
             agregarLog(81, JSON.stringify(resultado))
             mostrarAviso('exito', `La solicitud ha sido aprobada y el tercero ha sido creado correctamente`, 20000)
+
+            // Creación del registro en bitácora
+            datosBitacora.observaciones = `Tercero creado en Siesa`
+            consulta('crear', datosBitacora)
         })
 
         Swal.close()
@@ -134,6 +147,10 @@
             motivo_rechazo_id: $('#motivo_rechazo_id').val(),
         }
 
+        // Creación del registro en bitácora
+        datosBitacora.observaciones = `Solicitud denegada`
+        consulta('crear', datosBitacora)
+
         await consulta('actualizar', datos)
 
         mostrarAviso('exito', `Solicitud rechazada`, 5000)
@@ -148,6 +165,10 @@
             fecha_envio_firma: true,
             id: id
         }
+
+        // Creación del registro en bitácora
+        datosBitacora.observaciones = `Enviado para firma`
+        consulta('crear', datosBitacora)
 
         await consulta('actualizar', datos)
 

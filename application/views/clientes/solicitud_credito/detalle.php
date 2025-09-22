@@ -964,6 +964,15 @@ if (isset($datos['id'])) {
         if (sociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: sociosAccionistas}, false)
         if (beneficicariosSociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: beneficicariosSociosAccionistas}, false)
 
+        // Creación del registro en bitácora
+        var datosBitacora = {
+            tipo: 'clientes_solicitudes_credito_bitacora',
+            solicitud_id: solicitudId.resultado,
+            usuario_id: $('#sesion_usuario_id').val(),
+            observaciones: `Solicitud recibida`,
+        }
+        consulta('crear', datosBitacora)
+
         mostrarAviso('exito', `¡Tu solicitud de crédito ha sido creada correctamente!`, 20000)
 
         subirArchivos(solicitudId.resultado, archivos)
