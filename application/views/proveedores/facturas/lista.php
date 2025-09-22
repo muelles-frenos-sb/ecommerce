@@ -15,7 +15,7 @@
                 url: `${$("#site_url").val()}proveedores/obtener_datos_tabla`,
                 data: datos => {
                     datos.tipo = 'api_cuentas_por_pagar'
-                    numero_documento = <?php echo $datos['numero_documento']; ?>
+                    datos.numero_documento = <?php echo $datos['numero_documento']; ?>
                 },
             },
             columns: [
@@ -48,6 +48,19 @@
                     }
                 },
                 { title: 'f353_notas', data: 'f353_notas' },
+                {
+                    title: 'Opciones',
+                    data: null, 
+                    render: (cuenta, type, row) => {
+                        return `
+                            <div class="p-1">
+                                <a type="button" class="btn btn-sm btn-danger" href="${$("#site_url").val()}reportes/pdf/comprobante_egreso/${cuenta.id}" title="Comprobante de egreso">
+                                    <i class="fa fa-file-download"></i>
+                                </a>
+                            </div>
+                        `
+                    }
+                }
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro

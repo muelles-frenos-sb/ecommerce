@@ -87,8 +87,10 @@ Class Proveedores_model extends CI_Model{
 
                 $sql =
                 "SELECT
-                    acpp.*
+                    acpp.*,
+                    t.f200_razon_social
                 FROM api_cuentas_por_pagar acpp
+                LEFT JOIN terceros t ON t.f200_id = acpp.f200_id
                 WHERE acpp.id is NOT NULL
                 $filtros_where
                 $filtros_having
