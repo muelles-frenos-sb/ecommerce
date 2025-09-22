@@ -106,6 +106,7 @@ class Clientes extends MY_Controller {
         $filtro_fecha_cierre = $this->input->get("filtro_fecha_cierre");
         $filtro_motivo_rechazo = $this->input->get("filtro_motivo_rechazo");
         $filtro_cupo = $this->input->get("filtro_cupo");
+        $filtro_ultimo_comentario = $this->input->get("filtro_ultimo_comentario");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -163,6 +164,7 @@ class Clientes extends MY_Controller {
                 if(isset($filtro_fecha_cierre)) $datos['filtro_fecha_cierre'] = $filtro_fecha_cierre;
                 if(isset($filtro_motivo_rechazo)) $datos['filtro_motivo_rechazo'] = $filtro_motivo_rechazo;
                 if(isset($filtro_cupo)) $datos['filtro_cupo'] = $filtro_cupo;
+                if(isset($filtro_ultimo_comentario)) $datos['filtro_ultimo_comentario'] = $filtro_ultimo_comentario;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);

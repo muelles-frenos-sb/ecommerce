@@ -27,6 +27,7 @@
                     datos.filtro_fecha_cierre = $('#filtro_fecha_cierre').val()
                     datos.filtro_motivo_rechazo = $('#filtro_motivo_rechazo').val()
                     datos.filtro_cupo = $('#filtro_cupo').val()
+                    datos.filtro_ultimo_comentario = $('#filtro_ultimo_comentario').val()
                 },
             },
             columns: [
@@ -135,6 +136,13 @@
                         <input type="text" id="filtro_motivo_rechazo" class="form-control form-control-sm border-secondary">
                     `, 
                     data: 'motivo_rechazo' 
+                },
+                { 
+                    title: `
+                        Último comentario
+                        <input type="text" id="filtro_ultimo_comentario" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'ultimo_comentario' 
                 },
             ],
             columnDefs: [

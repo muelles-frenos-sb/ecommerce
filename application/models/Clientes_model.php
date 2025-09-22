@@ -239,6 +239,7 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['filtro_fecha_cierre']) && $datos['filtro_fecha_cierre']) $filtros_where .= " AND DATE(csc.fecha_cierre) = '{$datos['filtro_fecha_cierre']}' ";
                 if (isset($datos['filtro_motivo_rechazo']) && $datos['filtro_motivo_rechazo']) $filtros_having .= " AND motivo_rechazo LIKE '%{$datos['filtro_motivo_rechazo']}%' ";
                 if (isset($datos['filtro_cupo']) && $datos['filtro_cupo']) $filtros_where .= " AND csc.cupo_asignado = {$datos['filtro_cupo']} ";
+                if (isset($datos['filtro_ultimo_comentario']) && $datos['filtro_ultimo_comentario']) $filtros_having .= " AND ultimo_comentario LIKE '%{$datos['filtro_ultimo_comentario']}%' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
 
@@ -257,7 +258,14 @@ Class Clientes_model extends CI_Model {
                     csce.nombre estado,
                     csce.clase estado_clase,
                     IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
-                    mr.nombre motivo_rechazo
+                    mr.nombre motivo_rechazo,
+                    (
+                        SELECT b.observaciones 
+                        FROM clientes_solicitudes_credito_bitacora AS b 
+                        WHERE b.solicitud_id = csc.id 
+                        ORDER BY b.fecha_creacion DESC LIMIT 1 
+                    ) ultimo_comentario,
+                    uit.codigo tipo_identificacion_codigo,
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
