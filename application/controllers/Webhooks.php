@@ -28,7 +28,7 @@ class Webhooks extends MY_Controller {
         // Todas las respuestas se enviarán en formato JSON
         header('Content-type: application/json');
 
-        $this->load->model(['productos_model', 'clientes_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model']);
     }
 
     function index() {
@@ -533,6 +533,57 @@ class Webhooks extends MY_Controller {
     }
 
     /**
+     * Descarga datos de la base de datos SQL Server
+     * del WMS
+     *
+     */
+    function importar_datos_wms($tabla, $fecha = null) {
+        $this->load->model(['webhooks_model']);
+
+        $tiempo_inicial = microtime(true);
+        $datos = [];
+
+        try {
+            $filtro_fecha = ($fecha) ? $fecha : date('Y-m-d') ;
+
+            switch ($tabla) {
+                case 'pedidos':
+                    // Primero, eliminamos todos los ítems
+                    $this->clientes_model->eliminar('wms_pedidos', ['FechaDocumento' => $filtro_fecha]);
+
+                    $resultado = $this->webhooks_model->obtener('wms_pedidos', ['fecha_documento' => $filtro_fecha]);
+                    $total_items = count($resultado);
+                    
+                    if(!empty($resultado)) $this->clientes_model->crear('wms_pedidos', $resultado);
+
+                    $tiempo_final = microtime(true);
+
+                    $respuesta = [
+                        'log_tipo_id' => 73,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$total_items registros actualizados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                    ];
+
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
+
+                    print json_encode($respuesta);
+                    return http_response_code(200);
+                break;
+            }
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 72,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
+
+    /**
      * Importa de Siesa los productos y su información básica
      */
     function importar_productos_detalle() {
@@ -803,6 +854,72 @@ class Webhooks extends MY_Controller {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 11,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
+
+    /**
+     * Importa de Siesa V2 las cuentas por pagar de los proveedores
+     */
+    function importar_proveedores_cuentas_por_pagar($numero_documento) {
+        $tiempo_inicial = microtime(true);
+        $total_items = 0;
+
+        try {
+            $codigo = 0;
+            $pagina = 1;
+            $items_almacenados = 0;
+
+            // Eliminamos todos los ítems asociados al proveedor
+            $this->proveedores_model->eliminar('api_cuentas_por_pagar', ['f200_id' => $numero_documento]);
+
+            // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+            while ($codigo == 0) {
+                $resultado = json_decode(obtener_cuentas_por_pagar_api(['pagina' => $pagina, 'numero_documento' => $numero_documento]));
+
+                $codigo = $resultado->codigo;
+                $nuevas_cuentas = [];
+
+                if($codigo == 0) {
+                    $cuentas = $resultado->detalle->Table;
+
+                    foreach($cuentas as $cuenta) {
+                        array_push($nuevas_cuentas, $cuenta);
+
+                        $total_items++;
+                    }
+
+                    $items_almacenados += $this->proveedores_model->insertar_batch('api_cuentas_por_pagar', $nuevas_cuentas);
+                    
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+            
+            $tiempo_final = microtime(true);
+
+            $respuesta = [
+                'log_tipo_id' => 75,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$items_almacenados registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 74,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
 

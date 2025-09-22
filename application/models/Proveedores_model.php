@@ -26,6 +26,10 @@ Class Proveedores_model extends CI_Model{
 
     function eliminar($tipo, $datos = []) {
         switch ($tipo) {
+            case 'api_cuentas_por_pagar':
+                return $this->db->delete('api_cuentas_por_pagar', $datos);
+            break;
+
             case 'proveedores_marcas':
                 return $this->db->delete('proveedores_marcas', $datos);
             break;
@@ -48,6 +52,57 @@ Class Proveedores_model extends CI_Model{
 
     public function obtener($tipo, $datos = null) {
         switch ($tipo) {
+            case 'api_cuentas_por_pagar':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "HAVING acpp.id";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR f353_rowid LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR f353_consec_docto_cruce LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if(isset($datos['id'])) $filtros_where .= " AND acpp.id = {$datos['id']} ";
+                if(isset($datos['nit'])) $filtros_where .= " AND acpp.f200_id = '{$datos['nit']}' ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY acpp.f353_fecha DESC";
+
+                $sql =
+                "SELECT
+                    acpp.*,
+                    t.f200_razon_social
+                FROM api_cuentas_por_pagar acpp
+                LEFT JOIN terceros t ON t.f200_id = acpp.f200_id
+                WHERE acpp.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
+
             case 'cotizaciones_mejores_precios':
                 $sql = 
                 "WITH resultado AS (

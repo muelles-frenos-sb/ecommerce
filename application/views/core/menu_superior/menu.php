@@ -57,6 +57,14 @@
                                                 </a>
                                             </li>
                                         <?php // } ?>
+
+                                        <?php // if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
+                                        <li class="menu__item">
+                                                <a href="<?php echo site_url('clientes/pedidos/ver'); ?>" class="menu__link">
+                                                    Pedidos
+                                                </a>
+                                            </li>
+                                        <?php // } ?>
                                     </ul>
                                 </div>
                             </li>
@@ -117,7 +125,12 @@
                                             </li>
                                             <li class="menu__item">
                                                 <a href="<?php echo site_url('proveedores'); ?>" class="menu__link">
-                                                    Cotizar
+                                                    Cotizaciones
+                                                </a>
+                                            </li>
+                                            <li class="menu__item">
+                                                <a href="<?php echo site_url('proveedores/facturas'); ?>" class="menu__link">
+                                                    Facturas
                                                 </a>
                                             </li>
                                         </ul>

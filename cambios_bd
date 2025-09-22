@@ -302,3 +302,88 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `cupo_asignado` double NUL
 
 -- 20250908 Valor por defecto en el número de cuota de la factura de un recibo
 ALTER TABLE `recibos_detalle` MODIFY COLUMN `cuota_numero` int NULL DEFAULT 0 AFTER `descuento`;
+
+-- 20250918 Nuevos tipos de logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (72, 'WMS - Pedidos (Ejecución de script erróneo)');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (73, 'WMS - Pedidos (Ejecución de script exitoso)');
+
+CREATE TABLE `wms_pedidos`  (
+  `FechaDocumento` date NULL,
+  `NumeroDocumento` varchar(20) NULL,
+  `NIT` varchar(50) NULL,
+  `RazonSocial` varchar(255) NULL,
+  `Bodega` varchar(10) NULL,
+  `CodProducto` int NULL,
+  `CantPedida` double NULL,
+  `CantidadPendiente` double NULL,
+  `PorcentajeIva` double NULL,
+  `PorcentajeDescuento` double NULL,
+  `FechaIngresoDocumento` date NULL,
+  `HoraIngresoDocumento` time(0) NULL,
+  `IdConsecutivo` int NULL,
+  `NombreConsecutivo` varchar(100) NULL,
+  `FechaCreacion` datetime(0) NULL COMMENT 'Fecha de creación del registro'
+);
+
+ALTER TABLE `wms_pedidos` MODIFY COLUMN `FechaCreacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación del registro' AFTER `NombreConsecutivo`;
+
+-- 20250920 Tabla para almacenar las cuentas por cobrar de los terceros
+CREATE TABLE `api_cuentas_por_pagar`  (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `f353_rowid` int NULL,
+    `f353_id_cia` varchar(5) NULL,
+    `f353_id_co_cruce` varchar(5) NULL,
+    `f353_id_tipo_docto_cruce` int NULL,
+    `f353_consec_docto_cruce` int NULL,
+    `f350_id_periodo` varchar(10) NULL,
+    `f202_id_sucursal` varchar(5) NULL,
+    `f253_id` int NULL,
+    `f353_total_cr` double NULL,
+    `f353_total_db` double NULL,
+    `f353_notas` text NULL,
+    `f353_id_un_cruce` varchar(5) NULL,
+    `f253_ind_sa` int NULL,
+    `fecha_creacion` varchar(255) NULL,
+    PRIMARY KEY (`id`)
+);
+
+-- 20250920 Se agrega tabla para la bitacora de las solicitudes de crédito
+CREATE TABLE `clientes_solicitudes_credito_bitacora` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `solicitud_id` int(11) DEFAULT NULL,
+  `observaciones` text DEFAULT NULL,
+  `usuario_id` int(11) DEFAULT NULL,
+  `fecha_creacion` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `solicitud_id` (`solicitud_id`),
+  CONSTRAINT `clientes_solicitudes_credito_bitacora_ibfk_1` FOREIGN KEY (`solicitud_id`) REFERENCES `clientes_solicitudes_credito` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20250920 Campo para crear la firma
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_firma` datetime(0) NULL AFTER `fecha_envio_firma`;
+
+-- 20250921 Se modifican campos de la tabla api cuentas por pagar
+ALTER TABLE `api_cuentas_por_pagar`
+ADD COLUMN `f353_nro_cuota_cruce` int NULL AFTER `f350_id_periodo`,
+ADD COLUMN `f353_fecha` date NULL AFTER `f353_nro_cuota_cruce`,
+ADD COLUMN `f353_fecha_cancelacion` date NULL AFTER `f353_fecha`,
+ADD COLUMN `f353_fecha_vcto` date NULL AFTER `f353_fecha_cancelacion`,
+ADD COLUMN `f353_fecha_dscto_pp` date NULL AFTER `f353_fecha_vcto`,
+ADD COLUMN `f200_id` varchar(20) NULL AFTER `f353_fecha_dscto_pp`,
+MODIFY COLUMN `fecha_creacion` datetime(0) NULL DEFAULT NULL AFTER `f253_ind_sa`;
+
+-- 20250921 Se agregan logs
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (74, 'Cuentas por pagar - Ejecución de script erróneo');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (75, 'Cuentas por pagar - Ejecución de script exitoso');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (76, 'Cuentas por pagar - Ejecución exitosa del webhook para importar los datos');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (77, 'Cuentas por pagar - Ocurrió un error ejecutando webhook para importar los datos');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (78, 'Cuentas por pagar - Consulta de cuentas por pagar');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (79, 'Cuentas por pagar - Consulta de cuentas por pagar (tercero no encontrado)');
+
+-- 20250922 La fecha de creación es la estampa de fecha
+ALTER TABLE `api_cuentas_por_pagar` MODIFY COLUMN `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP AFTER `f253_ind_sa`;
+
+-- Creación de nuevos tipos de logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (80, 'Tercero - Error en la creación del registro al aprobar crédito');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (81, 'Tercero - Creación exitosa del registro al aprobar crédito');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (82, 'Tercero - Error en la creación desde el formulario de registro');

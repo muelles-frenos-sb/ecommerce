@@ -439,6 +439,8 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'motivos_rechazo':
+                if(isset($datos['interfaz_id'])) $this->db->where('interfaz_id', $datos['interfaz_id']);
+
                 return $this->db
                     ->order_by('nombre')
                     ->get($tabla)

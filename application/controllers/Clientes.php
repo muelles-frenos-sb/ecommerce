@@ -22,6 +22,17 @@ class Clientes extends MY_Controller {
         $this->consultar();
     }
 
+    function pedidos() {
+        // if(!in_array(['configuracion' => 'configuracion_recibos_ver'], $this->data['permisos'])) redirect('inicio');
+        
+        switch ($this->uri->segment(3)) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'clientes/pedidos/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function credito() {
         switch ($this->uri->segment(3)) {
             case 'ver':
@@ -95,6 +106,7 @@ class Clientes extends MY_Controller {
         $filtro_fecha_cierre = $this->input->get("filtro_fecha_cierre");
         $filtro_motivo_rechazo = $this->input->get("filtro_motivo_rechazo");
         $filtro_cupo = $this->input->get("filtro_cupo");
+        $filtro_ultimo_comentario = $this->input->get("filtro_ultimo_comentario");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -105,6 +117,35 @@ class Clientes extends MY_Controller {
         }
 
         switch ($tipo) {
+            case "pedidos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    // "busqueda" => $busqueda
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+
             case "solicitudes_credito":
                 // Se definen los filtros
                 $datos = [
@@ -123,6 +164,7 @@ class Clientes extends MY_Controller {
                 if(isset($filtro_fecha_cierre)) $datos['filtro_fecha_cierre'] = $filtro_fecha_cierre;
                 if(isset($filtro_motivo_rechazo)) $datos['filtro_motivo_rechazo'] = $filtro_motivo_rechazo;
                 if(isset($filtro_cupo)) $datos['filtro_cupo'] = $filtro_cupo;
+                if(isset($filtro_ultimo_comentario)) $datos['filtro_ultimo_comentario'] = $filtro_ultimo_comentario;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);
@@ -137,6 +179,37 @@ class Clientes extends MY_Controller {
 
                 // Se obtienen los registros
                 $resultados = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+
+            case "solicitudes_credito_bitacora":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                $datos['solicitud_id'] = $this->input->get("solicitud_id");
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito_bitacora", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("clientes_solicitudes_credito_bitacora", $datos);
 
                 print json_encode([
                     "draw" => $this->input->get("draw"),

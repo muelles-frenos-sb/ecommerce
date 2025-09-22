@@ -39,6 +39,10 @@ Class Clientes_model extends CI_Model {
             case 'terceros':
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
+
+            case 'wms_pedidos':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
         }
 
         $this->db->close;
@@ -47,6 +51,10 @@ Class Clientes_model extends CI_Model {
     function eliminar($tipo, $datos){
         switch ($tipo) {
             case 'clientes_sucursales':
+                return $this->db->delete($tipo, $datos);
+            break;
+
+            case 'wms_pedidos':
                 return $this->db->delete($tipo, $datos);
             break;
         }
@@ -231,140 +239,18 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['filtro_fecha_cierre']) && $datos['filtro_fecha_cierre']) $filtros_where .= " AND DATE(csc.fecha_cierre) = '{$datos['filtro_fecha_cierre']}' ";
                 if (isset($datos['filtro_motivo_rechazo']) && $datos['filtro_motivo_rechazo']) $filtros_having .= " AND motivo_rechazo LIKE '%{$datos['filtro_motivo_rechazo']}%' ";
                 if (isset($datos['filtro_cupo']) && $datos['filtro_cupo']) $filtros_where .= " AND csc.cupo_asignado = {$datos['filtro_cupo']} ";
+                if (isset($datos['filtro_ultimo_comentario']) && $datos['filtro_ultimo_comentario']) $filtros_having .= " AND ultimo_comentario LIKE '%{$datos['filtro_ultimo_comentario']}%' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
 
                 $sql =
                 "SELECT
-                    csc.id,
-                    csc.fecha_creacion,
+                    csc.*,
                     DATE(csc.fecha_creacion) fecha,
                     TIME(csc.fecha_creacion) hora,
                     DATE(csc.fecha_cierre) fecha_cierre,
                     TIME(csc.fecha_cierre) hora_cierre,
-                    csc.fecha_expedicion,
-                    csc.nombre,
-                    csc.primer_apellido,
-                    csc.segundo_apellido,
-                    csc.razon_social,
                     IF(csc.razon_social is NULL, CONCAT_WS(' ', csc.nombre, csc.primer_apellido, csc.segundo_apellido), csc.razon_social) nombre_solicitante,
-                    csc.persona_tipo_id,
-                    csc.identificacion_tipo_id,
-                    csc.documento_numero,
-                    csc.departamento_id,
-                    csc.ciudad_id,
-                    csc.direccion,
-                    csc.telefono,
-                    csc.email,
-                    csc.celular,
-                    csc.representante_legal,
-                    csc.representante_legal_documento_numero,
-                    csc.representante_legal_correo,
-                    csc.email_factura_electronica,
-                    csc.tesoreria_nombre,
-                    csc.tesoreria_email,
-                    csc.tesoreria_telefono,
-                    csc.tesoreria_celular,
-                    csc.comercial_nombre,
-                    csc.comercial_email,
-                    csc.comercial_telefono,
-                    csc.comercial_celular,
-                    csc.contabilidad_nombre,
-                    csc.contabilidad_email,
-                    csc.contabilidad_telefono,
-                    csc.contabilidad_celular,
-                    csc.referencia_comercial_entidad1,
-                    csc.referencia_comercial_cel1,
-                    csc.referencia_comercial_direccion1,
-                    csc.referencia_comercial_entidad2,
-                    csc.referencia_comercial_cel2,
-                    csc.referencia_comercial_direccion2,
-                    csc.referencia_bancaria_entidad,
-                    csc.referencia_bancaria_tipo,
-                    csc.referencia_bancaria_numero,
-                    csc.reconocimiento_publico,
-                    csc.reconocimiento_publico_cual,
-                    csc.persona_expuesta,
-                    csc.persona_expuesta_cual,
-                    csc.poder_publico,
-                    csc.poder_publico_cual,
-                    csc.recursos_publicos,
-                    csc.recursos_publicos_cual,
-                    csc.ingresos_mensuales,
-                    csc.egresos_mensuales,
-                    csc.activos,
-                    csc.pasivos,
-                    csc.otros_ingresos,
-                    csc.concepto_otros_ingresos,
-                    csc.nueva,
-                    csc.cantidad_vehiculos,
-                    csc.preferencia_enlace,
-                    csc.tercero_vendedor_id,
-                    csc.id,
-                    csc.fecha_creacion,
-                    csc.fecha_expedicion,
-                    csc.nombre,
-                    csc.primer_apellido,
-                    csc.segundo_apellido,
-                    csc.razon_social,
-                    csc.persona_tipo_id,
-                    csc.identificacion_tipo_id,
-                    csc.documento_numero,
-                    csc.departamento_id,
-                    csc.ciudad_id,
-                    csc.direccion,
-                    csc.telefono,
-                    csc.email,
-                    csc.celular,
-                    csc.representante_legal,
-                    csc.representante_legal_documento_numero,
-                    csc.representante_legal_correo,
-                    csc.email_factura_electronica,
-                    csc.tesoreria_nombre,
-                    csc.tesoreria_email,
-                    csc.tesoreria_telefono,
-                    csc.tesoreria_celular,
-                    csc.comercial_nombre,
-                    csc.comercial_email,
-                    csc.comercial_telefono,
-                    csc.comercial_celular,
-                    csc.contabilidad_nombre,
-                    csc.contabilidad_email,
-                    csc.contabilidad_telefono,
-                    csc.contabilidad_celular,
-                    csc.referencia_comercial_entidad1,
-                    csc.referencia_comercial_cel1,
-                    csc.referencia_comercial_direccion1,
-                    csc.referencia_comercial_entidad2,
-                    csc.referencia_comercial_cel2,
-                    csc.referencia_comercial_direccion2,
-                    csc.referencia_bancaria_entidad,
-                    csc.referencia_bancaria_tipo,
-                    csc.referencia_bancaria_numero,
-                    csc.reconocimiento_publico,
-                    csc.reconocimiento_publico_cual,
-                    csc.persona_expuesta,
-                    csc.persona_expuesta_cual,
-                    csc.poder_publico,
-                    csc.poder_publico_cual,
-                    csc.recursos_publicos,
-                    csc.recursos_publicos_cual,
-                    csc.ingresos_mensuales,
-                    csc.egresos_mensuales,
-                    csc.activos,
-                    csc.pasivos,
-                    csc.otros_ingresos,
-                    csc.concepto_otros_ingresos,
-                    csc.nueva,
-                    csc.cantidad_vehiculos,
-                    csc.preferencia_enlace,
-                    csc.tercero_vendedor_id,
-                    csc.solicitud_credito_estado_id,
-                    csc.usuario_asignado_id,
-                    csc.motivo_rechazo_id,
-                    csc.observaciones,
-                    csc.usuario_id,
-                    csc.fecha_envio_firma,
                     d.nombre departamento,
                     d.codigo departamento_codigo,
                     m.nombre municipio,
@@ -373,7 +259,15 @@ Class Clientes_model extends CI_Model {
                     csce.clase estado_clase,
                     IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
                     mr.nombre motivo_rechazo,
-                    csc.cupo_asignado
+                    (
+                        SELECT b.observaciones 
+                        FROM clientes_solicitudes_credito_bitacora AS b 
+                        WHERE b.solicitud_id = csc.id 
+                        ORDER BY b.fecha_creacion DESC LIMIT 1 
+                    ) ultimo_comentario,
+                    uit.codigo tipo_identificacion_codigo,
+                    v.nombre vendedor_nombre,
+	                v.codigo vendedor_codigo
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
@@ -381,7 +275,65 @@ Class Clientes_model extends CI_Model {
                 LEFT JOIN clientes_solicitudes_credito_estados AS csce ON csc.solicitud_credito_estado_id = csce.id
                 LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id
                 LEFT JOIN motivos_rechazo AS mr ON csc.motivo_rechazo_id = mr.id
+                LEFT JOIN usuarios_identificacion_tipos AS uit ON csc.identificacion_tipo_id = uit.id
+                LEFT JOIN terceros_vendedores AS v ON csc.tercero_vendedor_id = v.id
                 WHERE csc.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
+
+            case 'clientes_solicitudes_credito_bitacora':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "HAVING cscb.id";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR observaciones LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if(isset($datos['id'])) $filtros_where .= " AND cscb.id = {$datos['id']} ";
+                if(isset($datos['solicitud_id'])) $filtros_where .= " AND cscb.solicitud_id = {$datos['solicitud_id']} ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY cscb.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    cscb.id,
+                    cscb.solicitud_id,
+                    cscb.observaciones,
+                    cscb.fecha_creacion,
+                    cscb.usuario_id,
+                    DATE(cscb.fecha_creacion) fecha,
+                    TIME(cscb.fecha_creacion) hora,
+                    IF(u.razon_social is not null, u.razon_social, '-') nombre_usuario
+                FROM clientes_solicitudes_credito_bitacora cscb
+                LEFT JOIN usuarios u ON cscb.usuario_id = u.id
+                WHERE cscb.id is NOT NULL
                 $filtros_where
                 $filtros_having
                 $order_by
@@ -420,6 +372,39 @@ Class Clientes_model extends CI_Model {
                     ->get('terceros')
                     ->row()
                 ;
+            break;
+
+            case 'wms_pedidos':
+				$limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                $filtros_where = "WHERE p.FechaDocumento IS NOT NULL ";
+                if(isset($datos['fecha_documento'])) $filtros_where .= " AND p.FechaDocumento = '{$datos['fecha_documento']}' ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY p.FechaDocumento DESC";
+                
+                $sql = 
+                "SELECT
+                    p.FechaDocumento fecha_documento,
+                    p.NumeroDocumento numero_documento,
+                    p.IdConsecutivo consecutivo_id,
+                    p.NombreConsecutivo consecutivo_nombre,
+                    p.NIT nit,
+                    p.RazonSocial rzon_social,
+                    COUNT(p.CodProducto) cantidad_productos
+                FROM
+                    wms_pedidos AS p
+                $filtros_where
+                GROUP BY
+                    p.NumeroDocumento, 
+                    p.NombreConsecutivo
+                $order_by
+                $limite";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
             break;
         }
 

@@ -62,6 +62,11 @@ class Interfaces extends CI_Controller {
         switch($tipo) {
             case 'clientes_solicitudes_credito':
                 if (isset($datos['fecha_envio_firma']) && $datos['fecha_envio_firma']) $datos['fecha_envio_firma'] = date("Y-m-d H:i:s");
+                if (isset($datos['fecha_cierre']) && $datos['fecha_cierre']) $datos['fecha_cierre'] = date("Y-m-d H:i:s");
+                $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
+            case 'clientes_solicitudes_credito_bitacora':
                 $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
@@ -334,6 +339,11 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $id]);
             break;
 
+            case 'clientes_solicitudes_credito_bitacora':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_bitacora', $datos)]);
+            break;
+
             case 'clientes_solicitudes_credito_detalle':
                 print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_detalle', $datos['valores'])]);
             break;
@@ -395,13 +405,14 @@ class Interfaces extends CI_Controller {
                     'Clientes' => [
                         [
                             "F201_ID_TERCERO" => $datos['documento_numero'],                                // Código del cliente
-                            "F201_ID_SUCURSAL" => "001",                                                    // Sucursal del cliente (Siempre va 001 por ser la primera sucursal)
+                            "F201_ID_SUCURSAL" => "001",                                                    // Sucursal del cliente (Siempre va 001 por ser la primera sucursal) 
+                            "F201_IND_ESTADO_ACTIVO" => 1,                                                   // Activo por defecto
                             "F201_DESCRIPCION_SUCURSAL" => strtoupper(substr($datos['razon_social'], 0, 35)),   // Razón social para la sucursal del cliente
                             "F201_ID_VENDEDOR" => strtoupper($datos['vendedor']),                           // Valida en maestro, código de vendedor asignado al cliente
-                            "F201_ID_COND_PAGO" => "CNT",                                                   // Valida en maestro, código de condición de pago asignada a este cliente
-                            "F201_DIAS_GRACIA" => "8",                                                      // Días de gracia otorgados al cliente
-                            "F201_CUPO_CREDITO" => "0",                                                     // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
-                            "F201_ID_TIPO_CLI" => "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
+                            "F201_ID_COND_PAGO" => (isset($datos['condiciono_pago'])) ? $datos['condiciono_pago'] : "CNT", // Valida en maestro, código de condición de pago asignada a este cliente
+                            "F201_DIAS_GRACIA" => (isset($datos['dias_gracia'])) ? $datos['dias_gracia'] : "8",                                                      // Días de gracia otorgados al cliente
+                            "F201_CUPO_CREDITO" => (isset($datos['cupo'])) ? $datos['cupo'] : "0",                                                     // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
+                            "F201_ID_TIPO_CLI" => (isset($datos['tipo_cliente'])) ? $datos['tipo_cliente'] : "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
                             "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                               // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
                             "F015_CONTACTO" => strtoupper($datos['contacto']),                              // Nombre de la persona de contacto
                             "F015_DIRECCION1" => strtoupper(substr($datos['direccion'], 0, 34)),                           // Renglón 1 de la dirección del contacto
