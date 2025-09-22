@@ -361,3 +361,21 @@ CREATE TABLE `clientes_solicitudes_credito_bitacora` (
 
 -- 20250920 Campo para crear la firma
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_firma` datetime(0) NULL AFTER `fecha_envio_firma`;
+
+-- 20250921 Se modifican campos de la tabla api cuentas por pagar
+ALTER TABLE `api_cuentas_por_pagar`
+ADD COLUMN `f353_nro_cuota_cruce` int NULL AFTER `f350_id_periodo`,
+ADD COLUMN `f353_fecha` date NULL AFTER `f353_nro_cuota_cruce`,
+ADD COLUMN `f353_fecha_cancelacion` date NULL AFTER `f353_fecha`,
+ADD COLUMN `f353_fecha_vcto` date NULL AFTER `f353_fecha_cancelacion`,
+ADD COLUMN `f353_fecha_dscto_pp` date NULL AFTER `f353_fecha_vcto`,
+ADD COLUMN `f200_id` varchar(20) NULL AFTER `f353_fecha_dscto_pp`,
+MODIFY COLUMN `fecha_creacion` datetime(0) NULL DEFAULT NULL AFTER `f253_ind_sa`;
+
+-- 20250921 Se agregan logs
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (74, 'Cuentas por pagar - Ejecución de script erróneo');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (75, 'Cuentas por pagar - Ejecución de script exitoso');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (76, 'Cuentas por pagar - Ejecución exitosa del webhook para importar los datos');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (77, 'Cuentas por pagar - Ocurrió un error ejecutando webhook para importar los datos');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (78, 'Cuentas por pagar - Consulta de cuentas por pagar');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (79, 'Cuentas por pagar - Consulta de cuentas por pagar (tercero no encontrado)');

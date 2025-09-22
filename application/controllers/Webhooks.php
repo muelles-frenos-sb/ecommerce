@@ -28,7 +28,7 @@ class Webhooks extends MY_Controller {
         // Todas las respuestas se enviarán en formato JSON
         header('Content-type: application/json');
 
-        $this->load->model(['productos_model', 'clientes_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model']);
     }
 
     function index() {
@@ -854,6 +854,95 @@ class Webhooks extends MY_Controller {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 11,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
+
+    /**
+     * Importa de Siesa V2 las cuentas por pagar de los proveedores
+     */
+    function importar_proveedores_cuentas_por_pagar($numero_documento) {
+        $tiempo_inicial = microtime(true);
+        $total_items = 0;
+
+        try {
+            $codigo = 0;
+            $pagina = 1;
+            $items_almacenados = 0;
+
+            // Eliminamos todos los ítems asociados al proveedor
+            $this->proveedores_model->eliminar('api_cuentas_por_pagar', ['f200_id' => $numero_documento]);
+
+            // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+            while ($codigo == 0) {
+                $resultado = json_decode(obtener_cuentas_por_pagar_api(['pagina' => $pagina, 'numero_documento' => $numero_documento]));//900428648 //901237244
+
+                $codigo = $resultado->codigo;
+                $nuevas_cuentas = [];
+
+                if($codigo == 0) {
+                    $cuentas = $resultado->detalle->Table;
+
+                    foreach($cuentas as $cuenta) {
+                        $nuevo_cuenta = [
+                            'f353_rowid' => $cuenta->f353_rowid,
+                            'f353_id_cia' => $cuenta->f353_id_cia,
+                            'f353_id_co_cruce' => $cuenta->f353_id_co_cruce,
+                            'f353_id_tipo_docto_cruce' => $cuenta->f353_id_tipo_docto_cruce,
+                            'f353_consec_docto_cruce' => $cuenta->f353_consec_docto_cruce,
+                            'f350_id_periodo' => $cuenta->f350_id_periodo,
+                            'f353_nro_cuota_cruce' => $cuenta->f353_nro_cuota_cruce,
+                            'f353_fecha' => $cuenta->f353_fecha,
+                            'f353_fecha_cancelacion' => $cuenta->f353_fecha_cancelacion,
+                            'f353_fecha_vcto' => $cuenta->f353_fecha_vcto,
+                            'f353_fecha_dscto_pp' => $cuenta->f353_fecha_dscto_pp,
+                            'f200_id' => $cuenta->f200_id,
+                            'f202_id_sucursal' => $cuenta->f202_id_sucursal,
+                            'f253_id' => $cuenta->f253_id,
+                            'f353_total_cr' => $cuenta->f353_total_cr,
+                            'f353_total_db' => $cuenta->f353_total_db,
+                            'f353_notas' => $cuenta->f353_notas,
+                            'f353_id_un_cruce' => $cuenta->f353_id_un_cruce,
+                            'f253_ind_sa' => $cuenta->f253_ind_sa,
+                            'fecha_creacion' => date('Y-m-d H:i:s')
+                        ];
+
+                        array_push($nuevas_cuentas, $nuevo_cuenta);
+
+                        $total_items++;
+                    }
+
+                    $items_almacenados += $this->proveedores_model->insertar_batch('api_cuentas_por_pagar', $nuevas_cuentas);
+                    
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+            
+            $tiempo_final = microtime(true);
+
+            $respuesta = [
+                'log_tipo_id' => 75,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$items_almacenados registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 74,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
             ]);
 
