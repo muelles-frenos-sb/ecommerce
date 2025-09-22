@@ -1,7 +1,7 @@
 <div class="block-header mt-5" id="contenedor_cabecera_titulo">
     <div class="container">
         <div class="block-header__body">
-            <h1 class="block-header__title">Cuentas por pagar</h1>
+            <h1 class="block-header__title">Consulta las facturas que te hemos generado en Repuestos Simón Bolívar</h1>
         </div>
     </div>
 </div>
@@ -22,7 +22,7 @@
                     </div>
 
                     <div class="form-group col-sm-12 col-lg-12">
-                        <button type="submit" class="btn btn-primary btn-block" id="btn_cuentas_por_pagar">Consultar cuentas por pagar</button>
+                        <button type="submit" class="btn btn-primary btn-block" id="btn_cuentas_por_pagar">Consultar</button>
 
                         <div class="mt-2" id="contenedor_mensaje_carga"></div>
                     </div>
@@ -40,7 +40,7 @@
     let numeroDocumento = $('#numero_documento')
     let numeroTelefono = $('#telefono')
 
-    procesarCuentasPorPagar = (numero) => {
+    procesarCuentasPorPagar = numero => {
         const opcionesPeticion = {
             method: "GET",
             redirect: "follow"
@@ -48,10 +48,16 @@
 
         $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Preparando la visualización de los datos...`)
 
+        // Ejecución del webhook que extrae los datos de la API de Siesa
         fetch(`${$("#site_url").val()}webhooks/importar_proveedores_cuentas_por_pagar/${numero}`, opcionesPeticion)
             .then(respuesta => {
                 if (!respuesta.ok) {
-                    throw new Error("Error en la petición: " + respuesta.status);
+                    $('#btn_cuentas_por_pagar').removeClass('btn-loading').attr('disabled', false)
+                    $('#contenedor_mensaje_carga').html('')
+                    mostrarAviso('alerta', 'No se encontraron resultados con el número de documento que nos indicas. Por favor, asegúrate de que el número sea correcto o no tenga dígito de verificación.', 30000)
+                    
+                    throw new Error(`Error en la petición: ${respuesta.status}`)
+                    return false
                 }
 
                 return respuesta.json()
@@ -82,27 +88,29 @@
         // Validación de campos obligatorios
         if (!validarCamposObligatorios(datosObligatorios)) return false
 
-        let datosTercero = {
-            tipo: 'terceros_local',
+        let datosContacto = {
+            tipo: 'tercero_contacto',
             nit: numeroDocumento.val(),
             numero: numeroTelefono.val(),
         }
 
         // Se verifica que el número de teléfono exista en la base de datos
-        let tercero = await consulta('obtener', datosTercero)
+        let contacto = await consulta('obtener', datosContacto)
 
-        // Si no se encontró el tercero
-        if (!tercero.resultado) {
+        // Si no se encontró el contacto
+        if(!contacto.resultado) {
             mostrarAviso('alerta', 'El número de teléfono que nos indicas no coincide con el número de documento. Por favor, verifica nuevamente o ponte en contacto con nosotros.', 30000)
-            agregarLog(79, JSON.stringify(datosTercero))
+            agregarLog(35, JSON.stringify(datosContacto))
             return false
         }
 
+        // Se activa el spinner
         $('#btn_cuentas_por_pagar').addClass('btn-loading').attr('disabled', true)
 
         agregarLog(78, `Número de documento ${numeroDocumento.val()}`)
 
-        $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Consultando los datos del proveedor...`)
+        // Mensaje mientras se consultan los datos
+        $('#contenedor_mensaje_carga').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Estamos buscando tus facturas...`)
 
         procesarCuentasPorPagar(numeroDocumento.val())
     }

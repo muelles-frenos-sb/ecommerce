@@ -59,7 +59,63 @@
 
         await consulta('actualizar', datos)
 
-        mostrarAviso('exito', `Solicitud aprobada exitosamente`, 5000)
+        Swal.fire({
+            title: 'Creando el tercero en el ERP...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        let solicitud = JSON.parse('<?php echo json_encode($solicitud) ?>')
+
+        // Se consulta en el ERP el tercero
+        var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
+
+        // Si el tercero ya existe en el ERP
+        if(consultaTercero.codigo == 0) {
+            // Se va a actualizar el tercero
+            // ----------------------------------------
+        }
+
+        let datosTerceroSiesa = {
+            responsable_iva: '48',
+            causante_iva: '01',
+            tipo_tercero: solicitud.persona_tipo_id,
+            documento_tipo: solicitud.tipo_identificacion_codigo,
+            documento_numero: solicitud.documento_numero,
+            nombres: solicitud.nombre,
+            primer_apellido: solicitud.primer_apellido,
+            segundo_apellido: solicitud.segundo_apellido,
+            razon_social: solicitud.razon_social,
+            id_departamento: solicitud.departamento_id,
+            id_ciudad: solicitud.ciudad_id,
+            direccion: solicitud.direccion,
+            contacto: solicitud.telefono,
+            email: solicitud.email,
+            telefono: solicitud.razon_social,
+            vendedor: solicitud.vendedor_codigo,
+            lista_precio: '001',
+            condiciono_pago: 'C30',
+            tipo_cliente: 'C001',
+            cupo: solicitud.cupo_asignado,
+            dias_gracia: 26,
+        }
+
+        let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
+
+        creacionTerceroSiesa.then(resultado => {
+            if(resultado[0].codigo == 1) {
+                agregarLog(80, JSON.stringify(resultado))
+                mostrarAviso('error', `No se pudo crear el tercero en el ERP: <b>${resultado[0].detalle}</b>`, 20000)
+                return false
+            }
+
+            agregarLog(81, JSON.stringify(resultado))
+            mostrarAviso('exito', `La solicitud ha sido aprobada y el tercero ha sido creado correctamente`, 20000)
+        })
+
+        Swal.close()
     }
 
     rechazarSolicitudCredito = async (id, confirmacion = null) => {

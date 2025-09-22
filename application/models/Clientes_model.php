@@ -266,6 +266,8 @@ Class Clientes_model extends CI_Model {
                         ORDER BY b.fecha_creacion DESC LIMIT 1 
                     ) ultimo_comentario,
                     uit.codigo tipo_identificacion_codigo,
+                    v.nombre vendedor_nombre,
+	                v.codigo vendedor_codigo
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
@@ -273,6 +275,8 @@ Class Clientes_model extends CI_Model {
                 LEFT JOIN clientes_solicitudes_credito_estados AS csce ON csc.solicitud_credito_estado_id = csce.id
                 LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id
                 LEFT JOIN motivos_rechazo AS mr ON csc.motivo_rechazo_id = mr.id
+                LEFT JOIN usuarios_identificacion_tipos AS uit ON csc.identificacion_tipo_id = uit.id
+                LEFT JOIN terceros_vendedores AS v ON csc.tercero_vendedor_id = v.id
                 WHERE csc.id is NOT NULL
                 $filtros_where
                 $filtros_having

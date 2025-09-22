@@ -878,7 +878,7 @@ class Webhooks extends MY_Controller {
 
             // Mientras la API de Siesa retorne código 0 (Registros encontrados)
             while ($codigo == 0) {
-                $resultado = json_decode(obtener_cuentas_por_pagar_api(['pagina' => $pagina, 'numero_documento' => $numero_documento]));//900428648 //901237244
+                $resultado = json_decode(obtener_cuentas_por_pagar_api(['pagina' => $pagina, 'numero_documento' => $numero_documento]));
 
                 $codigo = $resultado->codigo;
                 $nuevas_cuentas = [];
@@ -887,30 +887,7 @@ class Webhooks extends MY_Controller {
                     $cuentas = $resultado->detalle->Table;
 
                     foreach($cuentas as $cuenta) {
-                        $nuevo_cuenta = [
-                            'f353_rowid' => $cuenta->f353_rowid,
-                            'f353_id_cia' => $cuenta->f353_id_cia,
-                            'f353_id_co_cruce' => $cuenta->f353_id_co_cruce,
-                            'f353_id_tipo_docto_cruce' => $cuenta->f353_id_tipo_docto_cruce,
-                            'f353_consec_docto_cruce' => $cuenta->f353_consec_docto_cruce,
-                            'f350_id_periodo' => $cuenta->f350_id_periodo,
-                            'f353_nro_cuota_cruce' => $cuenta->f353_nro_cuota_cruce,
-                            'f353_fecha' => $cuenta->f353_fecha,
-                            'f353_fecha_cancelacion' => $cuenta->f353_fecha_cancelacion,
-                            'f353_fecha_vcto' => $cuenta->f353_fecha_vcto,
-                            'f353_fecha_dscto_pp' => $cuenta->f353_fecha_dscto_pp,
-                            'f200_id' => $cuenta->f200_id,
-                            'f202_id_sucursal' => $cuenta->f202_id_sucursal,
-                            'f253_id' => $cuenta->f253_id,
-                            'f353_total_cr' => $cuenta->f353_total_cr,
-                            'f353_total_db' => $cuenta->f353_total_db,
-                            'f353_notas' => $cuenta->f353_notas,
-                            'f353_id_un_cruce' => $cuenta->f353_id_un_cruce,
-                            'f253_ind_sa' => $cuenta->f253_ind_sa,
-                            'fecha_creacion' => date('Y-m-d H:i:s')
-                        ];
-
-                        array_push($nuevas_cuentas, $nuevo_cuenta);
+                        array_push($nuevas_cuentas, $cuenta);
 
                         $total_items++;
                     }

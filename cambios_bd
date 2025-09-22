@@ -379,3 +379,11 @@ INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (76, 'Cuentas por pagar - Ejecuc
 INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (77, 'Cuentas por pagar - Ocurrió un error ejecutando webhook para importar los datos');
 INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (78, 'Cuentas por pagar - Consulta de cuentas por pagar');
 INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (79, 'Cuentas por pagar - Consulta de cuentas por pagar (tercero no encontrado)');
+
+-- 20250922 La fecha de creación es la estampa de fecha
+ALTER TABLE `api_cuentas_por_pagar` MODIFY COLUMN `fecha_creacion` timestamp NULL DEFAULT CURRENT_TIMESTAMP AFTER `f253_ind_sa`;
+
+-- Creación de nuevos tipos de logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (80, 'Tercero - Error en la creación del registro al aprobar crédito');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (81, 'Tercero - Creación exitosa del registro al aprobar crédito');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (82, 'Tercero - Error en la creación desde el formulario de registro');

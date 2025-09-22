@@ -54,7 +54,7 @@
                     render: (cuenta, type, row) => {
                         return `
                             <div class="p-1">
-                                <a type="button" class="btn btn-sm btn-danger" href="${$("#site_url").val()}reportes/pdf/comprobante_egreso/${cuenta.id}" title="Comprobante de egreso">
+                                <a type="button" class="btn btn-sm btn-danger" href="${$("#site_url").val()}reportes/pdf/comprobante_egreso/${cuenta.id}" title="Descargar comprobante de egreso">
                                     <i class="fa fa-file-download"></i>
                                 </a>
                             </div>
@@ -73,7 +73,7 @@
                 thousands: '.',
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
-            ordering: false,
+            ordering: true,
             orderCellsTop: true,
             pageLength: 100,
             paging: true,

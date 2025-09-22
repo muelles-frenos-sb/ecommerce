@@ -844,6 +844,7 @@ if (isset($datos['id'])) {
             $('#vendedor_id'),
         ]
 
+        // Si es persona natural, incluir campos obligatorios
         if (!$('#solicitud_persona_tipo').val() || $('#solicitud_persona_tipo').val() == 1) {
             camposObligatorios.push(
                 $('#solicitud_nombre'),
@@ -871,13 +872,13 @@ if (isset($datos['id'])) {
         if (!validarCamposTipoRadio(camposRadioObligatorios)) return false
 
         if ($('#solicitud_persona_tipo').val() == 2 && obtenerClientesSociosAccionistas('clientes').length < 1) {
-            mostrarAviso('alerta', `¡Debe rellenar la sección de socios y/o accionistas!`, 20000)
+            mostrarAviso('alerta', `Por favor diligencia la sección de socios y/o accionistas`, 20000)
             return false
         }
 
         let archivos = validarArchivos()
         if (!archivos) {
-            mostrarAviso('alerta', `¡Debe seleccionar los archivos para poder finalizar la solicitud de crédito!`, 20000)
+            mostrarAviso('alerta', `Por favor selecciona los archivos para poder finalizar la solicitud de crédito`, 20000)
             return false
         }
 
@@ -918,7 +919,7 @@ if (isset($datos['id'])) {
             referencia_comercial_entidad2: $('#referencia_comercial_entidad2').val(),
             referencia_comercial_cel2: $('#referencia_comercial_celular2').val(),
             referencia_comercial_direccion2: $('#referencia_comercial_direccion2').val(),
-            reconocimiento_publico: ($(`#reconocimiento_publico_si`).is(':checked')) ? 1: 0,
+            reconocimiento_publico: ($(`#reconocimiento_publico_si`).is(':checked')) ? 1 : 0,
             reconocimiento_publico_cual: $('#reconocimiento_publico_cliente').val(),
             persona_expuesta: ($(`#persona_expuesta_si`).is(':checked')) ? 1: 0,
             persona_expuesta_cual: $('#persona_expuesta_cliente').val(),
