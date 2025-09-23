@@ -54,8 +54,50 @@ Class Webhooks_model extends CI_Model {
 
                 return $resultado->fetchAll(PDO::FETCH_ASSOC);
             break;
-        }
 
-        $this->db->close;
+            case 'wms_pedidos_tracking':
+                // Carga del helper de conexión de SQL Server
+                $this->load->helper('sql_server');
+                
+                // Conexión al WMS
+                $this->bd_wms = conectar_sql_server(
+                    $this->config->item('wms_url'),
+                    $this->config->item('wms_puerto'),
+                    $this->config->item('wms_base_datos'),
+                    $this->config->item('wms_usuario'),
+                    $this->config->item('wms_clave')
+                );
+
+                $filtros_where = "WHERE tr.Fecha IS NOT NULL ";
+                if(isset($datos['fecha'])) $filtros_where .= " AND CAST( tr.Fecha AS DATE ) = '{$datos['fecha']}' ";
+
+                // Si no hay conexión, se retorna un arreglo vacío
+                if (!$this->bd_wms) return [];
+
+                $sql = 
+                "SELECT
+                    tr.Id, 
+                    tr.IdConsecutivo, 
+                    tr.NroDcto, 
+                    tr.OrdenExterna, 
+                    et.Nombre Estado, 
+                    tr.Observaciones, 
+                    tr.Fecha, 
+                    tr.IdUsuario
+                FROM
+                    dbo.tbl_Tracking AS tr
+                    LEFT JOIN
+                    dbo.MT_EstadosTracking AS et
+                    ON 
+                        tr.IdEstado = et.IdEstado
+                $filtros_where
+                ORDER BY
+                    tr.Fecha DESC";
+
+                $resultado = $this->bd_wms->query($sql);
+
+                return $resultado->fetchAll(PDO::FETCH_ASSOC);
+            break;
+        }
 	}
 }

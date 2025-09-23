@@ -43,6 +43,10 @@ Class Clientes_model extends CI_Model {
             case 'wms_pedidos':
                 return $this->db->insert_batch($tipo, $datos);
             break;
+
+            case 'wms_pedidos_tracking':
+                return $this->db->insert_batch($tipo, $datos);
+            break;
         }
 
         $this->db->close;
@@ -55,6 +59,10 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'wms_pedidos':
+                return $this->db->delete($tipo, $datos);
+            break;
+
+            case 'wms_pedidos_tracking':
                 return $this->db->delete($tipo, $datos);
             break;
         }

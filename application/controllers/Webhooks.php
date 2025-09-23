@@ -571,6 +571,31 @@ class Webhooks extends MY_Controller {
                     print json_encode($respuesta);
                     return http_response_code(200);
                 break;
+
+                case 'pedidos_tracking':
+                    // Primero, eliminamos todos los ítems
+                    $this->clientes_model->eliminar('wms_pedidos_tracking', ["CAST( Fecha AS DATE ) = " => $filtro_fecha]);
+
+                    $resultado = $this->webhooks_model->obtener('wms_pedidos_tracking', ['fecha' => $filtro_fecha]);
+                    $total_items = count($resultado);
+
+                    if(!empty($resultado)) $this->clientes_model->crear('wms_pedidos_tracking', $resultado);
+
+                    $tiempo_final = microtime(true);
+
+                    $respuesta = [
+                        'log_tipo_id' => 83,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$total_items registros actualizados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                    ];
+
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
+
+                    print json_encode($respuesta);
+                    return http_response_code(200);
+                break;
             }
         } catch (\Throwable $th) {
             // Se agrega el registro en los logs
