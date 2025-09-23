@@ -1,6 +1,6 @@
 <style>
     #tabla_solicitudes_credito_bitacora tbody td {
-        font-size: 0.7em;
+        font-size: 0.9em;
         padding: 5px;
     }
 </style>
@@ -23,27 +23,23 @@
                     title: `Id`,
                     data: 'id',
                     className: 'text-right',
-                    render: (id, type, row) => {
+                    width: '70px'
+                },
+                { 
+                    title: `Creación`,
+                    data: null, 
+                    width: '100px',
+                    render: (id, type, bitacora) => {
                         return `
-                            <a href="javascript:cargarBitacoraDetalle(${id})">
-                                ${id}
+                            <a href="javascript:cargarBitacoraDetalle(${bitacora.id})">
+                                ${bitacora.fecha}
                             </a>
                         `
                     }
                 },
-                {
-                    title: `Fecha creación`,
-                    data: 'fecha'
-                },
-                { title: 'Hora', data: 'hora' },
-                { 
-                    title: `Usuario`, 
-                    data: 'nombre_usuario' 
-                },
-                { 
-                    title: `Comentarios`, 
-                    data: 'observaciones' 
-                },
+                { title: 'Hora', data: 'hora', width: '100px' },
+                { title: `Comentarios`, data: 'observaciones' },
+                { title: 'Usuario', data: 'nombre_usuario' },
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro

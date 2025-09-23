@@ -38,19 +38,20 @@
                     `,
                     data: 'id',
                     className: 'text-right',
+                    width: '70px',
                 },
                 {
                     title: `
-                        Fecha creación
-                        <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
+                        Creación
+                        <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary" style='width: 100px;'>
                     `,
                     data: 'fecha'
                 },
                 { title: 'Hora', data: 'hora' },
                 {
                     title: `
-                        Fecha cierre
-                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary">
+                        Cierre
+                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary" style='width: 100px;'>
                     `,
                     data: 'fecha_cierre'
                 },
@@ -103,7 +104,7 @@
                 },
                 { 
                     title: `
-                        Asignado
+                        Gestionador
                         <input type="text" id="filtro_usuario_asignado" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
