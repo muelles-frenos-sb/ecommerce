@@ -54,7 +54,7 @@
             return false
         }
 
-        if (!validarCamposObligatorios([$('#aprobacion_cupo')])) return false
+        if (!validarCamposObligatorios([$('#aprobacion_cupo'), $('#aprobacion_responsable_iva')])) return false
 
         let datos = {
             tipo: 'clientes_solicitudes_credito',
@@ -87,9 +87,12 @@
             // ----------------------------------------
         }
 
+        let responsableIVA = $('#aprobacion_responsable_iva option:selected').attr('data-responsable_iva')
+        let causanteIVA = $('#aprobacion_responsable_iva option:selected').attr('data-causante_iva')
+        
         let datosTerceroSiesa = {
-            responsable_iva: '48',
-            causante_iva: '01',
+            responsable_iva: responsableIVA,
+            causante_iva: causanteIVA,
             tipo_tercero: solicitud.persona_tipo_id,
             documento_tipo: solicitud.tipo_identificacion_codigo,
             documento_numero: solicitud.documento_numero,

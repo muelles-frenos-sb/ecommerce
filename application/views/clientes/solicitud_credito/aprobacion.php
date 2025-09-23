@@ -14,7 +14,18 @@
                             Una vez apruebe la solicitud, el cliente se va a crear/actualizar en el ERP Siesa
                         </div>
 
-                        <div class="form-group col-12">
+                        <div class="form-group col-lg-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="aprobacion_responsable_iva">¿Responsable de IVA? *</label>
+                                <select id="aprobacion_responsable_iva" class="form-control">
+                                    <option value="">Selecciona...</option>
+                                    <option value="0" data-responsable_iva="49" data-causante_iva="ZY">No</option>
+                                    <option value="1" data-responsable_iva="48" data-causante_iva="01">Sí</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-lg-6 col-sm-12">
                             <label for="aprobacion_cupo">Indique el cupo aprobado</label>
                             <input id="aprobacion_cupo" class="form-control" />
                         </div>
