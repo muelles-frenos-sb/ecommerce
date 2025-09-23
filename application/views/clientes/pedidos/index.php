@@ -13,7 +13,21 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    listarPedidos = () => {
+    listarPedidos = async () => {
+        Swal.fire({
+            title: 'Estamos sincronizando los pedidos con el ERP...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        // Ejecución del webhook que extrae los datos del WMS
+        await fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos`)
+            .then(respuesta => respuesta.json())
+            .then(datos => Swal.close())
+            .catch(error => console.error(error))
+
         cargarInterfaz('clientes/pedidos/lista', 'contenedor_pedidos')
     }
 
