@@ -107,6 +107,9 @@ class Clientes extends MY_Controller {
         $filtro_motivo_rechazo = $this->input->get("filtro_motivo_rechazo");
         $filtro_cupo = $this->input->get("filtro_cupo");
         $filtro_ultimo_comentario = $this->input->get("filtro_ultimo_comentario");
+        $filtro_id_consecutivo = $this->input->get("filtro_id_consecutivo");
+        $filtro_nombre_consecutivo = $this->input->get("filtro_nombre_consecutivo");
+        $filtro_numero_pedido = $this->input->get("filtro_numero_pedido");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -121,8 +124,17 @@ class Clientes extends MY_Controller {
                 // Se definen los filtros
                 $datos = [
                     "contar" => true,
-                    // "busqueda" => $busqueda
+                    "busqueda" => $busqueda
                 ];
+
+                // Filtros personalizados
+                if(isset($filtro_numero_documento)) $datos['filtro_numero_documento'] = $filtro_numero_documento;
+                if(isset($filtro_id_consecutivo)) $datos['filtro_id_consecutivo'] = $filtro_id_consecutivo;
+                if(isset($filtro_nombre_consecutivo)) $datos['filtro_nombre_consecutivo'] = $filtro_nombre_consecutivo;
+                if(isset($filtro_fecha_creacion)) $datos['filtro_fecha_creacion'] = $filtro_fecha_creacion;
+                if(isset($filtro_numero_pedido)) $datos['filtro_numero_pedido'] = $filtro_numero_pedido;
+                if(isset($filtro_nombre)) $datos['filtro_nombre'] = $filtro_nombre;
+                if(isset($filtro_estado)) $datos['filtro_estado'] = $filtro_estado;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->clientes_model->obtener("wms_pedidos", $datos);

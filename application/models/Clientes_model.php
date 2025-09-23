@@ -388,7 +388,18 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
 
                 $filtros_where = "WHERE p.FechaDocumento IS NOT NULL ";
+                $filtros_having = "HAVING p.NIT IS NOT NULL";
+                
                 if(isset($datos['fecha_documento'])) $filtros_where .= " AND p.FechaDocumento = '{$datos['fecha_documento']}' ";
+
+                // Filtros personalizados
+                if (isset($datos['filtro_numero_pedido']) && $datos['filtro_numero_pedido']) $filtros_where .= " AND p.NumeroDocumento LIKE '%{$datos['filtro_numero_pedido']}%' ";
+                if (isset($datos['filtro_id_consecutivo']) && $datos['filtro_id_consecutivo']) $filtros_where .= " AND p.IdConsecutivo LIKE '%{$datos['filtro_id_consecutivo']}%' ";
+                if (isset($datos['filtro_nombre_consecutivo']) && $datos['filtro_nombre_consecutivo']) $filtros_where .= " AND p.NombreConsecutivo LIKE '%{$datos['filtro_nombre_consecutivo']}%' ";
+                if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND p.FechaDocumento = '{$datos['filtro_fecha_creacion']}' ";
+                if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND p.NIT LIKE '%{$datos['filtro_numero_documento']}%' ";
+                if (isset($datos['filtro_nombre']) && $datos['filtro_nombre']) $filtros_where .= " AND p.RazonSocial LIKE '%{$datos['filtro_nombre']}%' ";
+                if (isset($datos['filtro_estado']) && $datos['filtro_estado']) $filtros_having .= " AND ultimo_estado LIKE '%{$datos['filtro_estado']}%' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY p.FechaDocumento DESC";
                 
@@ -419,6 +430,7 @@ Class Clientes_model extends CI_Model {
                 GROUP BY
                     p.NumeroDocumento, 
                     p.NombreConsecutivo
+                $filtros_having
                 $order_by
                 $limite";
 

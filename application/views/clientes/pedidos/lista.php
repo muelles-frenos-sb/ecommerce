@@ -15,26 +15,67 @@
                 url: `${$("#site_url").val()}clientes/obtener_datos_tabla`,
                 data: datos => {
                     datos.tipo = 'pedidos'
+
+                    // Filtros personalizados
+                    datos.filtro_numero_pedido = $('#filtro_numero_pedido').val()
+                    datos.filtro_id_consecutivo = $('#filtro_id_consecutivo').val()
+                    datos.filtro_nombre_consecutivo = $('#filtro_nombre_consecutivo').val()
+                    datos.filtro_fecha_creacion = $('#filtro_fecha_creacion').val()
+                    datos.filtro_numero_documento = $('#filtro_numero_documento').val()
+                    datos.filtro_nombre = $('#filtro_nombre').val()
+                    datos.filtro_estado = $('#filtro_estado').val()
                 },
             },
             columns: [
-                { title: 'Pedido', data: 'numero_documento' },
-                { title: 'Id Consecutivo', data: 'consecutivo_id' },
-                { title: 'Nombre Consecutivo', data: 'consecutivo_nombre' },
-                { title: 'Fecha', data: 'fecha_documento' },
-                { title: 'NIT', data: 'nit' },
-                { title: 'Nombre', data: 'rzon_social' },
+                { 
+                    title: `
+                        Pedido
+                        <input type="text" id="filtro_numero_pedido" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'numero_documento' 
+                },
+                { 
+                    title: `
+                        Id Consecutivo
+                        <input type="text" id="filtro_id_consecutivo" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'consecutivo_id' 
+                },
+                { 
+                    title: `
+                        Nombre
+                        <input type="text" id="filtro_nombre_consecutivo" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'consecutivo_nombre' 
+                },
+                { 
+                    title: `
+                        Fecha
+                        <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'fecha_documento' 
+                },
+                { 
+                    title: `
+                        NIT
+                        <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'nit' 
+                },
+                { 
+                    title: `
+                        Nombre
+                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'rzon_social' 
+                },
                 { title: 'Productos', data: 'cantidad_productos', className: 'text-right' },
-                { title: 'Estado', data: 'ultimo_estado' },
-                {
-                    title: 'Opciones', 
-                    data: null,
-                    render: (pedido, type, row) => {
-                        return `
-                            <td class="p-1">
-                            </td>
-                        `
-                    }
+                { 
+                    title: `
+                        Estado
+                        <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'ultimo_estado' 
                 },
             ],
             columnDefs: [
@@ -45,7 +86,7 @@
             info: true,
             initComplete: function () {
                 // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
-                $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaRecibos.draw())
+                $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaPedidos.draw())
             },
             language: {
                 decimal: ',',
