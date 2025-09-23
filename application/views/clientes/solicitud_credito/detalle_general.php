@@ -1,3 +1,13 @@
+<?php 
+$menu = ["detalle", "archivos", "bitacora", "opciones"];
+
+if (!$tipo) $tipo = "detalle"; 
+if (!in_array($tipo, $menu)) redirect("inico");
+
+$vista = $tipo;
+if($tipo ==="bitacora") $vista = "bitacora/index";
+?>
+
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
@@ -9,17 +19,25 @@
 <div class="w-100 p-5">
     <div class="block-zone__widget-header">
         <div class="block-zone__tabs">
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_formulario" onClick="javascript:cargarFormulario(<?php echo $id; ?>)">
-                Formulario
+            <button type="button" class="block-zone__tabs-button" id="pestana_detalle">
+                <a href="<?php echo base_url("clientes/credito/ver/$id/detalle"); ?>">
+                    Formulario
+                </a>
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_archivos" onClick="javascript:cargarArchivos(<?php echo $id; ?>)">
-                Archivos
+            <button type="button" class="block-zone__tabs-button" id="pestana_archivos">
+                <a href="<?php echo base_url("clientes/credito/ver/$id/archivos"); ?>">
+                    Archivos
+                </a>
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_bitacora" onClick="javascript:cargarBitacora(<?php echo $id; ?>)">
-                Bitácora
+            <button type="button" class="block-zone__tabs-button" id="pestana_bitacora">
+                <a href="<?php echo base_url("clientes/credito/ver/$id/bitacora"); ?>">
+                    Bitácora
+                </a>
             </button>
-            <button type="button" class="block-zone__tabs-button botones-tabs" id="pestana_opciones" onClick="javascript:cargarOpciones(<?php echo $id; ?>)">
-                Opciones
+            <button type="button" class="block-zone__tabs-button" id="pestana_opciones">
+                <a href="<?php echo base_url("clientes/credito/ver/$id/opciones"); ?>">
+                    Opciones
+                </a>
             </button>
         </div>
     </div>
@@ -30,39 +48,13 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    cargarArchivos = (id) => {
-        $(".botones-tabs").removeClass('block-zone__tabs-button--active')
+    cargarOpcionMenu = () => {
+        cargarInterfaz('clientes/solicitud_credito/<?php echo $vista; ?>', 'contenedor_detalle', {id: <?php echo $id; ?>})
 
-        cargarInterfaz('clientes/solicitud_credito/archivos', 'contenedor_detalle', {id: id})
-
-        $("#pestana_archivos").addClass('block-zone__tabs-button--active')
-    }
-
-    cargarBitacora = (id) => {
-        $(".botones-tabs").removeClass('block-zone__tabs-button--active')
-
-        cargarInterfaz('clientes/solicitud_credito/bitacora/index', 'contenedor_detalle', {id: id})
-
-        $("#pestana_bitacora").addClass('block-zone__tabs-button--active')
-    }
-
-    cargarFormulario = (id) => {
-        $(".botones-tabs").removeClass('block-zone__tabs-button--active')
-
-        cargarInterfaz('clientes/solicitud_credito/detalle', 'contenedor_detalle', {id: id})
-
-        $("#pestana_formulario").addClass('block-zone__tabs-button--active')
-    }
-
-    cargarOpciones = (id) => {
-        $(".botones-tabs").removeClass('block-zone__tabs-button--active')
-
-        cargarInterfaz('clientes/solicitud_credito/opciones', 'contenedor_detalle', {id: id})
-
-        $("#pestana_opciones").addClass('block-zone__tabs-button--active')
+        $(`#pestana_<?php echo $tipo; ?>`).addClass('block-zone__tabs-button--active')
     }
 
     $().ready(() => {
-        cargarFormulario(<?php echo $id; ?>)
+        cargarOpcionMenu()
     })
 </script>

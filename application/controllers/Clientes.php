@@ -46,8 +46,9 @@ class Clientes extends MY_Controller {
                         $solicitud = $this->clientes_model->obtener('clientes_solicitudes_credito', ['id' => $id]);
 
                         if (!empty($solicitud)) {
-                            $this->data['contenido_principal'] = 'clientes/solicitud_credito/detalle_general';
                             $this->data['id'] = $solicitud->id;
+                            $this->data['tipo'] = $this->uri->segment(5);
+                            $this->data['contenido_principal'] = 'clientes/solicitud_credito/detalle_general';
                             $this->load->view('core/body', $this->data);
                             return;
                         }
