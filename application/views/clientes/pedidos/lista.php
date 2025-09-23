@@ -25,6 +25,17 @@
                 { title: 'NIT', data: 'nit' },
                 { title: 'Nombre', data: 'rzon_social' },
                 { title: 'Productos', data: 'cantidad_productos', className: 'text-right' },
+                { title: 'Estado', data: 'ultimo_estado' },
+                {
+                    title: 'Opciones', 
+                    data: null,
+                    render: (pedido, type, row) => {
+                        return `
+                            <td class="p-1">
+                            </td>
+                        `
+                    }
+                },
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro
@@ -43,7 +54,7 @@
             },
             ordering: false,
             orderCellsTop: true,
-            pageLength: 50,
+            pageLength: 25,
             paging: true,
             processing: true,
             scrollCollapse: true,

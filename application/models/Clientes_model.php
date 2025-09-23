@@ -400,7 +400,19 @@ Class Clientes_model extends CI_Model {
                     p.NombreConsecutivo consecutivo_nombre,
                     p.NIT nit,
                     p.RazonSocial rzon_social,
-                    COUNT(p.CodProducto) cantidad_productos
+                    COUNT(p.CodProducto) cantidad_productos,
+                    (
+                        SELECT
+                            pt.Estado 
+                        FROM
+                            wms_pedidos_tracking AS pt 
+                        WHERE
+                            CAST( pt.NroDcto AS UNSIGNED ) = p.NumeroDocumento 
+                            AND CAST( pt.IdConsecutivo AS UNSIGNED ) = p.IdConsecutivo 
+                        ORDER BY
+                            pt.Fecha DESC 
+                            LIMIT 1 
+                    ) ultimo_estado 
                 FROM
                     wms_pedidos AS p
                 $filtros_where

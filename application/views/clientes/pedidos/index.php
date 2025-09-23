@@ -15,7 +15,7 @@
 <script>
     listarPedidos = async () => {
         Swal.fire({
-            title: 'Estamos sincronizando los pedidos con el ERP...',
+            title: 'Estamos sincronizando los pedidos con el WMS...',
             text: 'Por favor, espera.',
             imageUrl: `${$('#base_url').val()}images/cargando.webp`,
             showConfirmButton: false,
@@ -24,6 +24,11 @@
 
         // Ejecución del webhook que extrae los datos del WMS
         await fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos`)
+            .then(respuesta => respuesta.json())
+            .catch(error => console.error(error))
+        
+        // Ejecución del webhook que extrae los datos del WMS
+        await fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos_tracking`)
             .then(respuesta => respuesta.json())
             .then(datos => Swal.close())
             .catch(error => console.error(error))
