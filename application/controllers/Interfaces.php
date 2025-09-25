@@ -425,7 +425,7 @@ class Interfaces extends CI_Controller {
                             "F201_FECHA_INGRESO" => date('Ymd'),                                            // Fecha de ingreso AAAAMMDD
                             "f201_id_cobrador" => "",                                                       // Valida en maestro, código de cobrador asignado al cliente
                             "f015_celular" => $datos['telefono'],
-                            "F201_IND_BLOQUEO_CUPO" => 0,                                                   // Bloquear por cupo
+                            "F201_IND_BLOQUEO_CUPO" => (isset($datos['bloqueo_cupo'])) ? $datos['bloqueo_cupo'] : 0, // Bloquear por cupo
                             "F201_IND_BLOQUEO_MORA" => 1                                                    // Bloquear por mora
                         ]
                     ],
