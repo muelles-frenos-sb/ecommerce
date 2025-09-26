@@ -50,7 +50,7 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    var solicitud = JSON.parse('<?php echo json_encode($solicitud) ?>')
+    var solicitud = JSON.parse('<?php echo addslashes(json_encode($solicitud)); ?>')
 
     var datosBitacora = {
         tipo: 'clientes_solicitudes_credito_bitacora',
@@ -63,6 +63,9 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             cargarInterfaz('clientes/solicitud_credito/aprobacion', 'contenedor_modal_gestion_solicitud_Credito', {id: id})
             return false
         }
+
+        let segundaConfirmacion = await confirmar('aprobar', `¿Estás seguro de aprobar la solicitud?`)
+        if(!segundaConfirmacion) return false
 
         if (!validarCamposObligatorios([$('#aprobacion_cupo'), $('#aprobacion_responsable_iva')])) return false
 
@@ -177,6 +180,9 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
         }
         
         if (!validarCamposObligatorios([$('#motivo_rechazo_id')])) return false
+
+        let segundaConfirmacion = await confirmar('rechazar', `¿Estás seguro de rechazar la solicitud?`)
+        if(!segundaConfirmacion) return false
 
         let datos = {
             tipo: 'clientes_solicitudes_credito',
