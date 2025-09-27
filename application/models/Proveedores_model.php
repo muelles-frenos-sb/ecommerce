@@ -81,9 +81,10 @@ Class Proveedores_model extends CI_Model{
 
                 // Se aplican los filtros
                 if(isset($datos['nit'])) $filtros_where .= " AND acpp.f200_id = '{$datos['nit']}' ";
+                if(isset($datos['id'])) $filtros_where .= " AND acpp.id = '{$datos['id']}' ";
 
                 // Filtros personalizados
-                $filtros_personalizados = $datos['filtros_personalizados'];
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
                 if (isset($filtros_personalizados['fecha_documento']) && $filtros_personalizados['fecha_documento'] != '') $filtros_having .= " AND fecha = '{$filtros_personalizados['fecha_documento']}' ";
                 if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'] != '') $filtros_having .= " AND row_id LIKE '%{$filtros_personalizados['id']}%' ";
                 if (isset($filtros_personalizados['sede']) && $filtros_personalizados['sede'] != '') $filtros_having .= " AND sede LIKE '%{$filtros_personalizados['sede']}%' ";
@@ -93,13 +94,13 @@ Class Proveedores_model extends CI_Model{
                 if (isset($filtros_personalizados['valor_saldo']) && $filtros_personalizados['valor_saldo'] != '') $filtros_having .= " AND valor_saldo LIKE '%{$filtros_personalizados['valor_saldo']}%' ";
                 if (isset($filtros_personalizados['notas']) && $filtros_personalizados['notas'] != '') $filtros_having .= " AND notas LIKE '%{$filtros_personalizados['notas']}%' ";
 
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY fecha DESC";
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY valor_saldo, fecha DESC";
 
                 $sql =
                 "SELECT
                     acpp.id,
                     acpp.f353_id_co_cruce sede_codigo,
-                    acpp.f353_id_un_cruce,
+                    acpp.f353_id_un_cruce unidad_cruce,
                     acpp.f353_rowid row_id,
                     acpp.f353_consec_docto_cruce documento_cruce,
                     acpp.f353_fecha fecha,
@@ -109,7 +110,8 @@ Class Proveedores_model extends CI_Model{
                     acpp.f353_notas notas,
                     s.nombre AS sede,
                     t.f200_razon_social provedor_nombre,
-                    t.f200_nit provedor_nit
+                    t.f200_nit provedor_nit,
+                    CONCAT_WS('-',acpp.f353_id_co_cruce,'FCE',LPAD(acpp.f353_consec_docto_cruce,8,0)) numero_siesa
                 FROM api_cuentas_por_pagar acpp
                 LEFT JOIN terceros t ON t.f200_id = acpp.f200_id
                 LEFT JOIN centros_operacion AS s ON acpp.f353_id_co_cruce = s.codigo
