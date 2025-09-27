@@ -59,7 +59,7 @@ Class Proveedores_model extends CI_Model{
 
                 // Búsqueda
                 $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
-                $filtros_having = "HAVING acpp.id";
+                $filtros_having = "HAVING id";
                 $filtros_where = "";
 
                 // Si se realiza una búsqueda
@@ -80,17 +80,28 @@ Class Proveedores_model extends CI_Model{
                 }
 
                 // Se aplican los filtros
-                if(isset($datos['id'])) $filtros_where .= " AND acpp.id = {$datos['id']} ";
                 if(isset($datos['nit'])) $filtros_where .= " AND acpp.f200_id = '{$datos['nit']}' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY acpp.f353_fecha DESC";
 
                 $sql =
                 "SELECT
-                    acpp.*,
-                    t.f200_razon_social
+                    acpp.id,
+                    acpp.f353_id_co_cruce sede_codigo,
+                    acpp.f353_id_un_cruce,
+                    acpp.f353_rowid row_id,
+                    acpp.f353_consec_docto_cruce documento_cruce,
+                    acpp.f353_fecha fecha,
+                    acpp.f353_total_cr valor_documento,
+                    acpp.f353_total_db valor_abonos,
+                    (acpp.f353_total_cr - acpp.f353_total_db) valor_saldo,
+                    acpp.f353_notas notas,
+                    s.nombre AS sede,
+                    t.f200_razon_social provedor_nombre,
+                    t.f200_nit provedor_nit
                 FROM api_cuentas_por_pagar acpp
                 LEFT JOIN terceros t ON t.f200_id = acpp.f200_id
+                LEFT JOIN centros_operacion AS s ON acpp.f353_id_co_cruce = s.codigo
                 WHERE acpp.id is NOT NULL
                 $filtros_where
                 $filtros_having
@@ -111,7 +122,7 @@ Class Proveedores_model extends CI_Model{
                         proveedor_nit,
                         precio_final,
                         p.referencia,
-                        t.f200_razon_social,
+                        t.f200_razon_social provedor_nombre,
                         ROW_NUMBER() OVER ( PARTITION BY producto_id ORDER BY precio_final ASC, proveedor_nit ASC ) AS cantidad_registros 
                     FROM
                         proveedores_cotizaciones_detalle 

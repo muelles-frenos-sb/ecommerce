@@ -20,45 +20,59 @@
             },
             columns: [
                 {
-                    title: `f353_rowid`,
-                    data: 'f353_rowid',
+                    title: `Id`,
+                    data: 'row_id',
                     className: 'text-right',
                 },
                 {
-                    title: 'f353_consec_docto_cruce',
-                    data: 'f353_consec_docto_cruce',
+                    title: 'Sede',
+                    data: 'sede',
+                },
+                {
+                    title: 'Documento',
+                    data: 'documento_cruce',
                     className: 'text-right',
                 },
-                { title: 'f353_fecha', data: 'f353_fecha' },
+                { title: 'Fecha', data: 'fecha' },
                 { 
-                    title: 'f353_total_cr',
-                    data: 'f353_total_cr',
+                    title: 'Valor',
+                    data: 'valor_documento',
                     data: null,
                     className: 'text-right',
                     render: (cuenta, type, row) => {
-                        return parseFloat(cuenta.f353_total_cr).toLocaleString('es-CO')
+                        return `$${parseFloat(cuenta.valor_documento).toLocaleString('es-CO')}`
                     }
                 },
                 { 
-                    title: 'f353_total_db',
+                    title: 'Abonos',
                     data: null,
                     className: 'text-right',
                     render: (cuenta, type, row) => {
-                        return parseFloat(cuenta.f353_total_db).toLocaleString('es-CO')
+                        return `$${parseFloat(cuenta.valor_abonos).toLocaleString('es-CO')}`
                     }
                 },
-                { title: 'f353_notas', data: 'f353_notas' },
+                { 
+                    title: 'Saldo',
+                    data: null,
+                    className: 'text-right',
+                    render: (cuenta, type, row) => {
+                        return `$${parseFloat(cuenta.valor_saldo).toLocaleString('es-CO')}`
+                    }
+                },
+                { title: 'Notas', data: 'notas' },
                 {
                     title: 'Opciones',
                     data: null, 
                     render: (cuenta, type, row) => {
-                        return `
+                        return (cuenta.valor_saldo == 0)
+                        ? `
                             <div class="p-1">
                                 <a type="button" class="btn btn-sm btn-danger" href="${$("#site_url").val()}reportes/pdf/comprobante_egreso/${cuenta.id}" title="Descargar comprobante de egreso">
                                     <i class="fa fa-file-download"></i>
                                 </a>
                             </div>
                         `
+                        : ''
                     }
                 }
             ],
