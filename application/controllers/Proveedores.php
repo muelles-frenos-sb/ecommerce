@@ -137,6 +137,10 @@ class Proveedores extends MY_Controller {
         $order = $this->input->get("order");
         $ordenar = null;
 
+        // Filtros personalizados de las columnas
+        $filtos_personalizados = [];
+        $filtos_personalizados['fecha_documento'] = $this->input->get("filtro_fecha_documento");
+
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
             $columna = $order[0]["column"];
@@ -150,7 +154,8 @@ class Proveedores extends MY_Controller {
                 // Se definen los filtros
                 $datos = [
                     "contar" => true,
-                    "busqueda" => $busqueda
+                    "busqueda" => $busqueda,
+                    "filtros_personalizados" => $this->input->get('filtros_personalizados'),
                 ];
 
                 $datos['nit'] = $this->input->get("numero_documento");

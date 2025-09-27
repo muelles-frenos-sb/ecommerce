@@ -82,7 +82,18 @@ Class Proveedores_model extends CI_Model{
                 // Se aplican los filtros
                 if(isset($datos['nit'])) $filtros_where .= " AND acpp.f200_id = '{$datos['nit']}' ";
 
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY acpp.f353_fecha DESC";
+                // Filtros personalizados
+                $filtros_personalizados = $datos['filtros_personalizados'];
+                if (isset($filtros_personalizados['fecha_documento']) && $filtros_personalizados['fecha_documento'] != '') $filtros_having .= " AND fecha = '{$filtros_personalizados['fecha_documento']}' ";
+                if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'] != '') $filtros_having .= " AND row_id LIKE '%{$filtros_personalizados['id']}%' ";
+                if (isset($filtros_personalizados['sede']) && $filtros_personalizados['sede'] != '') $filtros_having .= " AND sede LIKE '%{$filtros_personalizados['sede']}%' ";
+                if (isset($filtros_personalizados['numero_documento_cruce']) && $filtros_personalizados['numero_documento_cruce'] != '') $filtros_having .= " AND documento_cruce LIKE '%{$filtros_personalizados['numero_documento_cruce']}%' ";
+                if (isset($filtros_personalizados['valor_documento']) && $filtros_personalizados['valor_documento'] != '') $filtros_having .= " AND valor_documento LIKE '%{$filtros_personalizados['valor_documento']}%' ";
+                if (isset($filtros_personalizados['valor_abonos']) && $filtros_personalizados['valor_abonos'] != '') $filtros_having .= " AND valor_abonos LIKE '%{$filtros_personalizados['valor_abonos']}%' ";
+                if (isset($filtros_personalizados['valor_saldo']) && $filtros_personalizados['valor_saldo'] != '') $filtros_having .= " AND valor_saldo LIKE '%{$filtros_personalizados['valor_saldo']}%' ";
+                if (isset($filtros_personalizados['notas']) && $filtros_personalizados['notas'] != '') $filtros_having .= " AND notas LIKE '%{$filtros_personalizados['notas']}%' ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY fecha DESC";
 
                 $sql =
                 "SELECT
