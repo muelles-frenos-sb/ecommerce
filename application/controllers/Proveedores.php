@@ -9,8 +9,6 @@ class Proveedores extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        // if(!$this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
-
         $this->load->model(['proveedores_model']);
     }
 

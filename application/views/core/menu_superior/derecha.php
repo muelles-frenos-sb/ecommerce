@@ -62,6 +62,12 @@
                         <div class="account-menu__divider"></div>
                         <ul class="account-menu__links">
                             <li><a href="<?php echo site_url('perfil/index/dashboard'); ?>">Dashboard</a></li>
+
+                            <!-- Ver facturas -->
+                            <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
+                                <li><a href="<?php echo site_url("proveedores/facturas?nit={$this->session->userdata('documento_numero')}"); ?>">Mis facturas</a></li>
+                            <?php } ?>
+                            
                             <?php if(ENVIRONMENT == 'development') { ?>
                                 <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>
                                 <li><a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a></li>

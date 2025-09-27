@@ -306,6 +306,7 @@ class Interfaces extends CI_Controller {
             case 'logs':
                 // $datos['clave'] = $this->gestionar_clave('encriptacion', $datos['login'], $datos['clave']);
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                if($this->session->userdata('usuario_id')) $datos['usuario_id'] = $this->session->userdata('usuario_id');
                 
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;

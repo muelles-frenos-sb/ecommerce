@@ -145,6 +145,15 @@
                         </a>
                     </p>
 
+                    <!-- Ver facturas -->
+                    <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
+                        <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                            <a href="<?php echo site_url("proveedores/facturas?nit={$this->session->userdata('documento_numero')}"); ?>" class="main-menu__link">
+                                Ver mis facturas
+                            </a>
+                        </li>
+                    <?php } ?>
+
                     <?php if($this->session->userdata('usuario_id')) { ?>
                         <li data-mobile-menu-item>
                             <a href="<?php echo site_url('sesion/cerrar'); ?>" data-mobile-menu-trigger>

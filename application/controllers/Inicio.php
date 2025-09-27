@@ -20,6 +20,8 @@ class Inicio extends MY_Controller {
         parent::__construct();
 
         $this->load->model(['configuracion_model']);
+        
+        if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
     }
 
     function index() {
