@@ -2,7 +2,7 @@
 <input type="hidden" id="nit_proveedor" value="<?php echo $this->input->get('nit'); ?>">
 
 <!-- Si viene NIT en la URL y es diferente al NIT de la sesión, se redirecciona al inicio -->
-<?php if($this->input->get('nit') && $this->input->get('nit') != $this->session->userdata('documento_numero')) redirect(); ?>
+<?php if(ENVIRONMENT != 'development' && $this->input->get('nit') && $this->input->get('nit') != $this->session->userdata('documento_numero')) redirect(); ?>
 
 <div class="block-header mt-5" id="contenedor_cabecera_titulo">
     <div class="container">

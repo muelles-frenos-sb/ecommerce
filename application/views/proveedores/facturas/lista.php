@@ -109,7 +109,7 @@
                         return (cuenta.valor_saldo == 0)
                         ? `
                             <div class="p-1">
-                                <a type="button" class="btn btn-sm btn-danger" href="${$("#site_url").val()}reportes/pdf/comprobante_egreso/${cuenta.id}" title="Descargar comprobante de egreso">
+                                <a type="button" class="btn btn-sm btn-danger" onClick="javascript:generarReporte('pdf/proveedores_comprobante_egreso', {id: ${cuenta.id}})" title="Descargar comprobante de egreso" style="color: white;">
                                     <i class="fa fa-file-download"></i>
                                 </a>
                             </div>

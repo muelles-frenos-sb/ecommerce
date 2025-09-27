@@ -407,3 +407,4 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (83, 'WMS - Tracking de pedidos
 INSERT INTO `perfiles` (`id`, `activo`, `es_administrador`, `descripcion`, `nombre`, `usuario_id`, `token`) VALUES (6, 1, 0, 'Proveedor', 'Proveedor', 1, 'rt8Pr0vd00f');
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (15, 'proveedores_ver_facturas', 'Ver facturas', 6);
 INSERT INTO `perfiles_roles` (`fecha_creacion`, `rol_id`, `perfil_id`, `usuario_id`) VALUES ('2025-09-27 13:08:37', 15, 6, 8408);
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (84, 'Proveedores - Comprobante de Egreso (Generación en Excel)');
