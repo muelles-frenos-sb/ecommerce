@@ -52,7 +52,7 @@
                         <div class="account-menu__divider"></div>
                         <a href="" class="account-menu__user">
                             <div class="account-menu__user-avatar">
-                                <img src="<?php echo base_url(); ?>images/avatars/avatar-4.jpg" alt="">
+                                <img src="<?php echo base_url(); ?>images/logo.png" alt="Logo">
                             </div>
                             <div class="account-menu__user-info">
                                 <div class="account-menu__user-name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('primer_apellido')}"; ?></div>
@@ -62,10 +62,12 @@
                         <div class="account-menu__divider"></div>
                         <ul class="account-menu__links">
                             <li><a href="<?php echo site_url('perfil/index/dashboard'); ?>">Dashboard</a></li>
-                            <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>
-                            <li><a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a></li>
-                            <li><a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis pedidos</a></li>
-                            <li><a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a></li>
+                            <?php if(ENVIRONMENT == 'development') { ?>
+                                <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>
+                                <li><a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a></li>
+                                <li><a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis pedidos</a></li>
+                                <li><a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a></li>
+                            <?php } ?>
                         </ul>
                         <div class="account-menu__divider"></div>
                         <ul class="account-menu__links">

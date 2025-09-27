@@ -2,20 +2,23 @@
     <div class="dashboard__profile card profile-card">
         <div class="card-body profile-card__body">
             <div class="profile-card__avatar">
-                <img src="<?php echo base_url(); ?>images/avatars/avatar-4.jpg" alt="">
+                <img src="<?php echo base_url(); ?>images/logo.png" alt="">
             </div>
-            <div class="profile-card__name"><?php echo "{$this->session->userdata('nombres')} {$this->session->userdata('apellidos')}"; ?></div>
+            <div class="profile-card__name"><?php echo "{$this->session->userdata('razon_social')}"; ?></div>
             <div class="profile-card__email"><?php echo $this->session->userdata('email'); ?></div>
-            <div class="profile-card__edit">
-                <a href="<?php echo site_url('perfil/index/editar'); ?>" class="btn btn-secondary btn-sm">Editar perfil</a>
-            </div>
+
+            <?php if(ENVIRONMENT == 'development') { ?>
+                <div class="profile-card__edit">
+                    <a href="<?php echo site_url('perfil/index/editar'); ?>" class="btn btn-secondary btn-sm">Editar perfil</a>
+                </div>
+            <?php } ?>
         </div>
     </div>
     <div class="dashboard__address card address-card address-card--featured">
         <?php if(ENVIRONMENT == 'development') { ?>
             <div class="address-card__badge tag-badge tag-badge--theme">Default</div>
             <div class="address-card__body">
-                <div class="address-card__name">Helena Garcia</div>
+                <div class="address-card__name"><?php echo "{$this->session->userdata('razon_social')}"; ?></div>
                 <div class="address-card__row">
                     Random Federation<br>
                     115302, Moscow<br>
@@ -33,29 +36,30 @@
                     <a href="">Edit Address</a>
                 </div>
             </div>
-        <?php } ?>
-    </div>
-    <div class="dashboard__orders card">
-        <div class="card-header">
-            <h5>Pedidos</h5>
         </div>
-        <div class="card-divider"></div>
-        <div class="card-table">
-            <div class="table-responsive-sm">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nro.</th>
-                            <th>Fecha</th>
-                            <th>Productos</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+    
+        <div class="dashboard__orders card">
+            <div class="card-header">
+                <h5>Pedidos</h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-table">
+                <div class="table-responsive-sm">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nro.</th>
+                                <th>Fecha</th>
+                                <th>Productos</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    <?php } ?>
 </div>
 
 <script>

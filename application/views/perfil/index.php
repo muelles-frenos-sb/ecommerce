@@ -9,30 +9,33 @@
                         <li class="perfil_dashboard account-nav__item">
                             <a href="<?php echo site_url('perfil/index/dashboard'); ?>">Dashboard</a>
                         </li>
-                        <li class="perfil_garage account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a>
-                        </li>
-                        <li class="perfil_editar account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a>
-                        </li>
-                        <li class="perfil_pedidos account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis Pedidos</a>
-                        </li>
-                        <li class="perfil_pedidos_detalle account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/pedidos_detalle'); ?>">Detalle de pedidos</a>
-                        </li>
-                        <li class="perfil_direcciones account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a>
-                        </li>
-                        <li class="perfil_editar_direccion account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/editar_direccion'); ?>">Editar Dirección</a>
-                        </li>
-                        <li class="perfil_editar_clave account-nav__item ">
-                            <a href="<?php echo site_url('perfil/index/editar_clave'); ?>">Editar Clave</a>
-                        </li>
+                        <?php if(ENVIRONMENT == 'development') { ?>
+                            <li class="perfil_garage account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a>
+                            </li>
+                            <li class="perfil_editar account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/editar'); ?>">Editar perfil</a>
+                            </li>
+                            <li class="perfil_pedidos account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/pedidos'); ?>">Mis Pedidos</a>
+                            </li>
+                            <li class="perfil_pedidos_detalle account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/pedidos_detalle'); ?>">Detalle de pedidos</a>
+                            </li>
+                            <li class="perfil_direcciones account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/direcciones'); ?>">Mis direcciones</a>
+                            </li>
+                            <li class="perfil_editar_direccion account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/editar_direccion'); ?>">Editar Dirección</a>
+                            </li>
+                            <li class="perfil_editar_clave account-nav__item ">
+                                <a href="<?php echo site_url('perfil/index/editar_clave'); ?>">Editar Clave</a>
+                            </li>
+                        <?php } ?>
                         <li class="account-nav__divider" role="presentation"></li>
+                        
                         <li class="account-nav__item ">
-                            <a href="<?php echo site_url('sesion/cerrar'); ?>">Logout</a>
+                            <a href="<?php echo site_url('sesion/cerrar'); ?>">Cerrar sesión</a>
                         </li>
                     </ul>
                 </div>
