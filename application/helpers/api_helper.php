@@ -608,12 +608,16 @@ function obtener_facturas_desde_pedido_api($datos) {
 function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
     $parametros = "f200_nit=''{$datos['numero_documento']}''";
     if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";
     if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";
     if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";
     if(isset($datos['estado'])) $parametros .= "and f350_ind_estado=''{$datos['estado']}''";
+    if(isset($datos['fecha_inicial'])) $parametros .= "and f350_fecha>=''{$datos['fecha_inicial']}''";
+    if(isset($datos['fecha_final'])) $parametros .= "and f350_fecha<=''{$datos['fecha_final']}''";
+    if(isset($datos['filtro_retenciones'])) $parametros .= "and f253_id LIKE ''2365%''";
 
     $client = new \GuzzleHttp\Client();
     try {
@@ -626,7 +630,7 @@ function obtener_movimientos_contables_api($datos) {
             'query' => [
                 'idCompania' => $CI->config->item('api_siesa')['idCompania'],
                 'descripcion' => 'API_v2_MovtosContables_General',
-                'paginacion' => 'numPag=1|tamPag=100',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
                 'parametros' => $parametros,
             ]
         ]);

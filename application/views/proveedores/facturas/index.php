@@ -4,7 +4,7 @@
 <!-- Si viene NIT en la URL y es diferente al NIT de la sesión, se redirecciona al inicio -->
 <?php if(ENVIRONMENT != 'development' && $this->input->get('nit') && $this->input->get('nit') != $this->session->userdata('documento_numero')) redirect(); ?>
 
-<div class="block-header mt-5" id="contenedor_cabecera_titulo">
+<div class="block-header mt-2" id="contenedor_cabecera_titulo">
     <div class="container">
         <div class="block-header__body">
             <h1 class="block-header__title">Consulta las facturas que te hemos generado en Repuestos Simón Bolívar</h1>

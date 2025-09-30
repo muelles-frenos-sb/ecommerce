@@ -50,9 +50,9 @@ $pdf->SetXY(172, 70);
 $pdf->Cell(30, 4, formato_precio($cuenta->valor_abonos), 0, 0, 'R'); //
 
 $pdf->SetXY(142, 76);
-$pdf->Cell(30, 4, formato_precio($cuenta->valor_documento), 1, 0, 'R'); // 
+$pdf->Cell(30, 4, formato_precio($cuenta->valor_documento), 0, 0, 'R'); // 
 
 $pdf->SetXY(172, 76);
-$pdf->Cell(30, 4, formato_precio($cuenta->valor_abonos), 1, 0, 'R'); //
+$pdf->Cell(30, 4, formato_precio($cuenta->valor_abonos), 0, 0, 'R'); //
 
 $pdf->Output("D", "Comprobante de egreso.pdf");

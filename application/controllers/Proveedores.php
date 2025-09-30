@@ -12,6 +12,19 @@ class Proveedores extends MY_Controller {
         $this->load->model(['proveedores_model']);
     }
 
+    function certificados($tipo) {
+        switch ($tipo) {
+            default:
+                redirect(site_url());
+            break;
+
+            case 'index':
+                $this->data['contenido_principal'] = 'proveedores/certificados/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function cotizaciones($tipo, $solicitud_id = null, $nit = null, $token_recibido = null) {
         // if(!$this->session->userdata('usuario_id')) redirect('inicio');
 

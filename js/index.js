@@ -222,6 +222,11 @@ generarReporte = (tipo, datos) => {
             location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.id}`)
         break;
 
+        case 'pdf/proveedores_certificado_retenciones':
+            agregarLog(90, JSON.stringify(datos))
+            location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.documento_numero}/${datos.anio}`)
+        break;
+
         case 'pdf/proveedores_comprobante_egreso':
             agregarLog(84, datos.id)
             location.assign(`${$('#site_url').val()}reportes/${tipo}/${datos.id}`)

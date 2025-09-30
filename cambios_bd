@@ -408,3 +408,11 @@ INSERT INTO `perfiles` (`id`, `activo`, `es_administrador`, `descripcion`, `nomb
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (15, 'proveedores_ver_facturas', 'Ver facturas', 6);
 INSERT INTO `perfiles_roles` (`fecha_creacion`, `rol_id`, `perfil_id`, `usuario_id`) VALUES ('2025-09-27 13:08:37', 15, 6, 8408);
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (84, 'Proveedores - Comprobante de Egreso (Generación en Excel)');
+
+-- 20290929 Nuevos logs
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (85, 'Proveedores - Ejecución de script erróneo de movimientos contables');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (86, 'Proveedores - Ejecución de script exitoso de movimientos contables');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (87, 'Proveedores - Consulta exitosa de movimientos de una factura');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (88, 'Proveedores - Ocurrió un error consultando los movimientos de una factura');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (89, 'Proveedores - Consulta de movimientos de una factura (tercero no encontrado)');
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (90, 'Proveedores - Certificado de retenciones (Generación en PDF)');

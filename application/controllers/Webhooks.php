@@ -1077,6 +1077,73 @@ class Webhooks extends MY_Controller {
             return http_response_code(400);
         }
     }
+    
+    /**
+     * Importa de Siesa los movimientos contables
+     * de un tercero
+     */
+    function importar_movimientos_contables_api($numero_documento) {
+        $tiempo_inicial = microtime(true);
+        
+        $anio_anterior = date('Y') - 1;
+        $codigo = 0;
+        $pagina = 1;
+        $total_items = 0;
+        $datos = [
+            'numero_documento' => $numero_documento,
+            'fecha_inicial' => "$anio_anterior-01-01",
+            'fecha_final' => "$anio_anterior-12-31",
+            'filtro_retenciones' => true,
+        ];
+
+        try {
+            // Eliminamos todos los ítems asociados al tercero
+            $this->clientes_model->eliminar('clientes_facturas_movimientos', ['f200_nit' => $numero_documento]);
+
+            // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+            while ($codigo == 0) {
+                $datos['pagina'] = $pagina; 
+                $resultado = json_decode(obtener_movimientos_contables_api($datos));
+                $codigo = $resultado->codigo;
+                
+                if($codigo == 0) {
+                    $movimientos = $resultado->detalle->Table;
+                    $total_items += count($movimientos);
+
+                    $this->clientes_model->crear('clientes_facturas_movimientos_proveedores', $movimientos);
+
+                    $pagina++;
+                } else {
+                    $codigo = '-1';
+                    break;
+                }
+            }
+
+            $tiempo_final = microtime(true);
+
+            $respuesta = [
+                'log_tipo_id' => 86,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => "$total_items registros actualizados",
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', $respuesta);
+
+            print json_encode($respuesta);
+            return http_response_code(200);
+        } catch (\Throwable $th) {
+            print_r($th);
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 85,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            return http_response_code(400);
+        }
+    }
 
     /**
      * Importa de Siesa los movimientos de un documento de venta

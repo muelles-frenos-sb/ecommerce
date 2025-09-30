@@ -67,6 +67,11 @@
                             <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
                                 <li><a href="<?php echo site_url("proveedores/facturas?nit={$this->session->userdata('documento_numero')}"); ?>">Mis facturas</a></li>
                             <?php } ?>
+
+                            <!-- Ver certificados tributarios -->
+                            <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_certificados'], $permisos)) { ?>
+                                <li><a href="<?php echo site_url("proveedores/certificados?nit={$this->session->userdata('documento_numero')}"); ?>">Certificados tributarios</a></li>
+                            <?php } ?>
                             
                             <?php if(ENVIRONMENT == 'development') { ?>
                                 <li><a href="<?php echo site_url('perfil/index/garage'); ?>">Garage</a></li>

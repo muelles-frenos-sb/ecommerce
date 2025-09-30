@@ -136,6 +136,14 @@
                                                     </a>
                                                 </li>
                                             <?php } ?>
+
+                                            <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_certificados'], $permisos)) { ?>
+                                                <li class="menu__item">
+                                                    <a href="<?php echo site_url("proveedores/certificados"); ?>" class="menu__link">
+                                                        Certificados tributarios
+                                                    </a>
+                                                </li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </li>

@@ -330,6 +330,27 @@ Class Proveedores_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
+            case 'provedores_movimientos_contables':
+                $filtros = '';
+                if (isset($datos['numero_documento'])) $filtros .= "AND tm.f200_nit = '{$datos['numero_documento']}'";
+                if (isset($datos['filtro_retenciones'])) $filtros .= "AND tm.f253_id LIKE '%2365%'";
+
+                $sql =
+                "SELECT
+                    tm.f253_descripcion descripcion,
+                    SUM(tm.f351_base_gravable) valor_base,
+                    SUM(tm.f351_valor_cr) valor_retenido 
+                FROM
+                    clientes_facturas_movimientos AS tm
+                WHERE
+                    1 
+                    $filtros
+                GROUP BY
+                    tm.f253_descripcion";
+
+                return $this->db->query($sql)->result();
+            break;
+
             case 'proveedores_cotizaciones_solicitudes':
                 $limite = "";
                 if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";

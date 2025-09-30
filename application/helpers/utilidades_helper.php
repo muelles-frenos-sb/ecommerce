@@ -18,6 +18,54 @@ function buscar_item_carrito($id) {
     return $encontrado;
 }
 
+function convertir_numero_a_texto($numero) {
+    $unidad = [
+        '', 'uno', 'dos', 'tres', 'cuatro', 'cinco',
+        'seis', 'siete', 'ocho', 'nueve', 'diez',
+        'once', 'doce', 'trece', 'catorce', 'quince',
+        'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve',
+        'veinte'
+    ];
+
+    $decenas = [
+        '', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta',
+        'sesenta', 'setenta', 'ochenta', 'noventa'
+    ];
+    
+    $centenas = [
+        '', 'cien', 'doscientos', 'trescientos', 'cuatrocientos',
+        'quinientos', 'seiscientos', 'setecientos', 'ochocientos',
+        'novecientos'
+    ];
+
+    if ($numero == 0) return 'cero';
+
+    if ($numero < 21) {
+        return $unidad[$numero];
+    } elseif ($numero < 100) {
+        $d = intval($numero / 10);
+        $u = $numero % 10;
+        if ($u == 0) return $decenas[$d];
+        if ($d == 2) return 'veinti' . $unidad[$u];
+        return $decenas[$d] . ' y ' . $unidad[$u];
+    } elseif ($numero < 1000) {
+        $c = intval($numero / 100);
+        $r = $numero % 100;
+        if ($numero == 100) return 'cien';
+        return $centenas[$c] . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
+    } elseif ($numero < 1000000) {
+        $miles = intval($numero / 1000);
+        $r = $numero % 1000;
+        $txtMiles = ($miles == 1 ? 'mil' : convertir_numero_a_texto($miles) . ' mil');
+        return $txtMiles . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
+    } else {
+        $millones = intval($numero / 1000000);
+        $r = $numero % 1000000;
+        $txtMillones = ($millones == 1 ? 'un millón' : convertir_numero_a_texto($millones) . ' millones');
+        return $txtMillones . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
+    }
+}
+
 function cubrir_correo($email) {
     // Dividir el correo en dos partes: antes y después de "@"
     list($usuario, $dominio) = explode('@', $email);

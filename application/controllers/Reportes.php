@@ -44,6 +44,12 @@ class Reportes extends MY_Controller {
 
     function pdf() {
         switch ($this->uri->segment(3)) {
+            case "proveedores_certificado_retenciones":
+                $this->data['numero_documento'] = $this->uri->segment(4);
+                $this->data['anio'] = $this->uri->segment(5);
+                if ($this->load->view('reportes/pdf/proveedores_certificado_retenciones', $this->data)) print json_encode(true);
+            break;
+
             case "proveedores_comprobante_egreso":
                 $this->data['id'] = $this->uri->segment(4);
                 if ($this->load->view('reportes/pdf/comprobante_egreso', $this->data)) {
