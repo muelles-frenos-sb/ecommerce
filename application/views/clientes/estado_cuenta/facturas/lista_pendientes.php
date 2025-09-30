@@ -112,6 +112,11 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 valor_documento: `<?php echo $factura->valorDoc; // Enviado para almacenar en el detalle del recibo ?>`,
                                 total_cop: `<?php echo $factura->totalCop; // Enviado para almacenar en el detalle del recibo ?>`,
                             })" style="padding: 2px 5px 2px 5px;">
+
+                            <!-- Si está pendiente por aplicar -->
+                            <?php if($factura->valor_pendiente_por_aplicar) { ?>
+                                <div class="tag-badge tag-badge--new badge_formulario mb-1 mt-1">Pendiente</div>
+                            <?php } ?>
                         </div>
                     </td>
                     <td>

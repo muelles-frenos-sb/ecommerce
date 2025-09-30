@@ -163,7 +163,19 @@ Class Clientes_model extends CI_Model {
                     DATEDIFF(date(NOW()), date(cf.Fecha_venc)) AS dias_vencido, 
                     ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id,
                     a.codigo codigo_auxiliar,
-                    co.codigo centro_operativo_codigo
+                    co.codigo centro_operativo_codigo,
+                    (
+                        SELECT
+                            rd.subtotal 
+                        FROM
+                            recibos_detalle AS rd
+                            INNER JOIN recibos AS r ON rd.recibo_id = r.id 
+                        WHERE
+                            r.recibo_estado_id = 3 
+                            AND documento_cruce_numero = cf.Nro_Doc_cruce 
+                            AND documento_numero = cf.Cliente 
+                            LIMIT 1 
+                    ) valor_pendiente_por_aplicar
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
