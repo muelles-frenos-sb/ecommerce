@@ -239,6 +239,11 @@ generarReporte = (tipo, datos) => {
 }
 
 /**
+ * Genera un string aleatorio (letras + números)
+ */
+const generarToken = () => Math.random().toString(36).substring(2, 10)
+
+/**
  * Obtiene las sucursales del API de Siesa y las almacena en la base de datos
  */
 gestionarSucursales = async(numeroDocumento) => {
@@ -343,7 +348,7 @@ listarDatos = async(elemento, datos = null) => {
     })
 }
 
-const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
+const mostrarAviso = (tipo, mensaje, tiempo = 2000, callback = null) => {
     switch (tipo) {
         case 'exito':
             titulo = 'Éxito'
@@ -372,12 +377,16 @@ const mostrarAviso = (tipo, mensaje, tiempo = 2000) => {
     }
 
     Swal.fire({
+        customClass: { confirmButton: "btn btn-primary w-xs mb-2" },
         confirmButtonText: 'Aceptar',
         icon: icono,
-        // position: 'top-end',
         html: mensaje,
         timer: tiempo,
         title: titulo,
+        timerProgressBar: true,
+        didClose: () => {
+            if (callback) callback()
+        }
     })
 }
 

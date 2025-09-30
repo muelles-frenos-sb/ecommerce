@@ -938,7 +938,10 @@ if (isset($datos['id'])) {
             fecha_expedicion: $('#solicitud_fecha_expedicion').val(),
             tercero_vendedor_id: $('#vendedor_id').val(),
             cantidad_vehiculos: $("#solicitud_cantidad_vehiculos").val(),
+            token: generarToken(),  // Token para que la solicitud sea única
         }
+
+        $('#btn_enviar_solicitud').prop("disabled", true)
 
         // Si es un usuario logueado en el sistema, se agrega el id
         if($('#sesion_usuario_id').val()) datosSolicitud.usuario_id = $('#sesion_usuario_id').val()
@@ -971,9 +974,11 @@ if (isset($datos['id'])) {
             usuario_id: $('#sesion_usuario_id').val(),
             observaciones: `Solicitud recibida`,
         }
-        consulta('crear', datosBitacora)
+        consulta('crear', datosBitacora, false)
 
-        mostrarAviso('exito', `¡Tu solicitud de crédito ha sido creada correctamente!`, 20000)
+        mostrarAviso("exito", `¡Tu solicitud de crédito ha sido creada correctamente!`, 3500, () => {
+            window.location.href = "<?php echo base_url(); ?>";
+        })
 
         subirArchivos(solicitudId.resultado, archivos)
     }
@@ -1041,8 +1046,6 @@ if (isset($datos['id'])) {
     }
 
     $().ready(async () => {
-        // $('#vendedor_id').select2({"theme": "bootstrap-5"})
-        
         // Cuando se seleccione el tipo de persona
         $('#solicitud_persona_tipo').change(() => {
             $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', false)

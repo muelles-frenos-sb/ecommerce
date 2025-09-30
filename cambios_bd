@@ -416,3 +416,6 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (87, 'Proveedores - Consulta ex
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (88, 'Proveedores - Ocurrió un error consultando los movimientos de una factura');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (89, 'Proveedores - Consulta de movimientos de una factura (tercero no encontrado)');
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (90, 'Proveedores - Certificado de retenciones (Generación en PDF)');
+
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `token` varchar(10) NULL AFTER `cupo_asignado`;
+ALTER TABLE `clientes_solicitudes_credito` ADD UNIQUE INDEX `documento_numero`(`documento_numero`, `token`) USING BTREE;
