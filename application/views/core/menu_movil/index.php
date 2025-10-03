@@ -154,6 +154,15 @@
                         </li>
                     <?php } ?>
 
+                    <!-- Pagos -->
+                    <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_recibos_ver'], $permisos)) { ?>
+                        <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
+                            <a href="<?php echo site_url("configuracion/recibos/ver/2"); ?>" class="main-menu__link">
+                                Pagos
+                            </a>
+                        </li>
+                    <?php } ?>
+
                     <?php if($this->session->userdata('usuario_id')) { ?>
                         <li data-mobile-menu-item>
                             <a href="<?php echo site_url('sesion/cerrar'); ?>" data-mobile-menu-trigger>

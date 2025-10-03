@@ -79,13 +79,6 @@
                 },
                 { 
                     title: `
-                        Vendedor
-                        <input type="text" id="filtro_vendedor" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: 'vendedor_nombre'
-                },
-                { 
-                    title: `
                         Estado
                         <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
                     `, 
@@ -101,6 +94,13 @@
                             </div>
                         `
                     }
+                },
+                { 
+                    title: `
+                        Vendedor
+                        <input type="text" id="filtro_vendedor" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'vendedor_nombre'
                 },
                 { 
                     title: `
