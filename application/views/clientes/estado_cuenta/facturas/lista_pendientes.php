@@ -60,6 +60,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 <th class="text-center encabezado">
                     <b><i class="fa fa-plus fa-2x"></i></b>
                 </th>
+                <th class="text-center encabezado">Recibo pendiente</th>
                 <th class="text-center encabezado">Sede</th>
                 <th class="text-center encabezado">Doc</th>
                 <th class="text-center encabezado">Cuota</th>
@@ -113,11 +114,16 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 total_cop: `<?php echo $factura->totalCop; // Enviado para almacenar en el detalle del recibo ?>`,
                             })" style="padding: 2px 5px 2px 5px;">
 
-                            <!-- Si está pendiente por aplicar -->
-                            <?php if($factura->valor_pendiente_por_aplicar) { ?>
-                                <div class="tag-badge tag-badge--new badge_formulario mb-1 mt-1">Pendiente</div>
-                            <?php } ?>
+                            
                         </div>
+                    </td>
+                    <td class="text-center">
+                        <!-- Si está pendiente por aplicar -->
+                        <?php if($factura->por_aplicar_archivo_pendiente) { ?>
+                            <a class="mb-2" target="_blank" onClick="window.open('<?php echo base_url()."archivos/recibos/$factura->por_aplicar_archivo_pendiente"; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        <?php } ?>
                     </td>
                     <td>
                         <?php echo $factura->centro_operativo; ?>

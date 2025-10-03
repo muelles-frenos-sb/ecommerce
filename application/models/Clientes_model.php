@@ -166,7 +166,7 @@ Class Clientes_model extends CI_Model {
                     co.codigo centro_operativo_codigo,
                     (
                         SELECT
-                            rd.subtotal 
+                            CONCAT_WS('/', r.id, r.archivo_soporte)
                         FROM
                             recibos_detalle AS rd
                             INNER JOIN recibos AS r ON rd.recibo_id = r.id 
@@ -175,7 +175,7 @@ Class Clientes_model extends CI_Model {
                             AND documento_cruce_numero = cf.Nro_Doc_cruce 
                             AND documento_numero = cf.Cliente 
                             LIMIT 1 
-                    ) valor_pendiente_por_aplicar
+                    ) por_aplicar_archivo_pendiente
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
