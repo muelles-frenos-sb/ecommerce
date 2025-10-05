@@ -77,6 +77,18 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'centros_operacion':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['id'])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
+
             case 'cliente_factura_movimiento':
                 $sql =
                 "SELECT
@@ -89,6 +101,18 @@ Class Configuracion_model extends CI_Model {
                     AND cfm.f350_consec_docto = '{$datos['f350_consec_docto']}'";
 
                 return $this->db->query($sql)->row();
+            break;
+
+            case 'comprobantes_contables_tipos':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['id'])) return $this->db->get()->row();
+                return $this->db->get()->result();
             break;
 
             case 'contactos':
@@ -176,6 +200,18 @@ Class Configuracion_model extends CI_Model {
                     ->get('cuentas_bancarias')
                     ->result()
                 ;
+            break;
+
+            case 'periodos':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['mes'])) return $this->db->get()->row();
+                return $this->db->get()->result();
             break;
 
             case 'recibo_tipo':

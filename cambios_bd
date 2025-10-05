@@ -419,3 +419,6 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (90, 'Proveedores - Certificado
 
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `token` varchar(10) NULL AFTER `cupo_asignado`;
 ALTER TABLE `clientes_solicitudes_credito` ADD UNIQUE INDEX `documento_numero`(`documento_numero`, `token`) USING BTREE;
+
+-- 20251004
+ALTER TABLE `centros_operacion` ADD COLUMN `ruta` varchar(50) NULL AFTER `estado`;
