@@ -61,3 +61,6 @@ $route['proveedores'] = 'proveedores/cotizaciones/index';
 $route['proveedores/cotizacion/(:num)/(:num)/(:any)'] = 'proveedores/cotizaciones/cotizar/$1/$2/$3';
 $route['proveedores/facturas'] = 'proveedores/facturas/index';
 $route['proveedores/certificados'] = 'proveedores/certificados/index';
+
+// Contabilidad
+$route['contabilidad/comprobantes'] = 'contabilidad/comprobantes/validacion';

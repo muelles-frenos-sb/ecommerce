@@ -14,10 +14,24 @@ class Contabilidad extends CI_Controller {
         parent::__construct();
      
         // Carga de modelos y librerías
-        $this->load->model('contabilidad_model');
+        $this->load->model(['contabilidad_model', 'productos_model']);
     }
 
     var $directorio_raiz = 'archivos/documentos_contables/';
+
+    /**
+     * Gestión de comprobantes
+     *
+     * @return void
+     */
+    function comprobantes($tipo) {
+        switch ($tipo) {
+            case 'validacion':
+                $this->data['contenido_principal'] = 'contabilidad/validacion_comprobantes/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
 
     /**
      * De cada documento contable, busca si tiene más documentos como soporte
@@ -135,6 +149,63 @@ class Contabilidad extends CI_Controller {
         return $codigo;
     }
 
+    function obtener_datos_tabla() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+
+        $tipo = $this->input->get("tipo");
+        $busqueda = $this->input->get("search")["value"];
+        $indice = $this->input->get("start");
+        $cantidad = $this->input->get("length");
+        $columns = $this->input->get("columns");
+        $order = $this->input->get("order");
+        $ordenar = null;
+
+        // Filtros personalizados de las columnas
+        // $filtro_fecha_creacion = $this->input->get("filtro_fecha_creacion");
+
+        // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
+        if ($order) {
+            $columna = $order[0]["column"];
+            $orden = $order[0]["dir"];
+            $campo = $columns[$columna]["data"];
+            if ($campo) $ordenar = "$campo $orden";
+        }
+
+        switch ($tipo) {
+            case "comprobantes_contables_validacion":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                // Filtros personalizados
+                // if(isset($filtro_fecha_creacion)) $datos['filtro_fecha_creacion'] = $filtro_fecha_creacion;
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->contabilidad_model->obtener("comprobantes_contables_validacion", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->contabilidad_model->obtener("comprobantes_contables_validacion", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+        }
+    }
+
     /**
      * Procesa la carpeta y crea los registros en base de datos
      *
@@ -144,21 +215,36 @@ class Contabilidad extends CI_Controller {
      * @param int $mes
      * @return void
      */
-    function procesar_comprobantes($id_comprobante_tipo, $anio, $id_sede, $mes) {
+    function procesar_comprobantes() {
+        $datos = json_decode($this->input->post('datos'), true);
+
         $this->contabilidad_model->eliminar('comprobantes_contables_validacion', ['fecha' => date('Y-m-d')]);
         $this->contabilidad_model->eliminar('comprobantes_contables_validacion_detalle', ['fecha' => date('Y-m-d')]);
 
         // Obtenemos los datos necesarios
-        $tipo_comprobante = $this->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => $id_comprobante_tipo]);
-        $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $id_sede]);
-        $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $mes]);
+        $tipo_comprobante = $this->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => $datos['id_comprobante_tipo']]);
+        $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $datos['id_sede']]);
+        $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $datos['mes']]);
 
-        $resultado = $this->procesar_directorio("$tipo_comprobante->ruta/$anio/$sede->ruta/$periodo->nombre_comprobante_contable", $tipo_comprobante->abreviatura);
+        $resultado = $this->procesar_directorio("$tipo_comprobante->ruta/{$datos['anio']}/$sede->ruta/$periodo->nombre_comprobante_contable", $tipo_comprobante->abreviatura);
     
-        if(!empty($resultado)) {            
-            // Se almacena en la base de datos el registros todos los documentos procesados
-            echo $this->contabilidad_model->crear('comprobantes_contables_validacion', $resultado['documento_principal']);
+        if(empty($resultado['documento_principal'])) {
+            print json_encode([
+                'error' => false,
+                'resultado' => false,
+                'mensaje' => 'No hay archivos por procesar. Por favor verifica que las carpetas tengan la estructura correcta e intenta nuevamente.',
+            ]);
+            return false;
         }
+                  
+        // Se almacena en la base de datos el registros todos los documentos procesados
+        $cantidad_documentos_procesados = $this->contabilidad_model->crear('comprobantes_contables_validacion', $resultado['documento_principal']);
+        
+        print json_encode([
+            'error' => false,
+            'resultado' => true,
+            'mensaje' => "$cantidad_documentos_procesados Documentos procesados exitosamente.",
+        ]);
     }
 
     /**
