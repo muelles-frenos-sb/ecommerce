@@ -347,6 +347,9 @@ Class Configuracion_model extends CI_Model {
                 if (isset($datos["id"]) && $datos["id"]) $this->db->where("rd.id", $datos["id"]);
                 if (isset($datos["recibo_id"]) && $datos["recibo_id"]) $this->db->where("rd.recibo_id", $datos["recibo_id"]);
 
+                if(isset($datos['documento_numero']) && $datos['documento_numero']) $this->db->where("r.documento_numero", $datos["documento_numero"]);
+                if(isset($datos['recibo_estado_id']) && $datos['recibo_estado_id']) $this->db->where("r.recibo_estado_id", $datos["recibo_estado_id"]);
+
                 if (isset($datos["id"])) return $this->db->get()->row();
                 return $this->db->get()->result();
             break;

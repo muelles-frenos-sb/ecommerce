@@ -154,6 +154,10 @@
         })
     }
 
+    cargarFacturasPorProcesar = async datos => {
+        cargarInterfaz('clientes/estado_cuenta/facturas/lista_por_procesar', 'contenedor_modal', datos)
+    }
+
     cargarMovimientos = async(datos, abrirModal = true) => {
         datos.tipo = 'movimientos_contables'
         let movimientosFactura = await consulta('obtener', datos, false)

@@ -11,6 +11,8 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     'pendientes' => true,
     'mostrar_alerta'=> true,
 ]);
+
+$facturas_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_detalle', ['documento_numero' => $datos['numero_documento'], 'recibo_estado_id' => 3]);
 ?>
 
 <!-- Si tiene alguna factura no válida para pago en línea -->
@@ -39,6 +41,14 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         <i class="fa fa-file-excel"></i>
         Descargar listado de facturas o estado de cuenta
     </button>
+
+    <!-- Si tiene facturas pendientes por aplicar -->
+    <?php if(!empty($facturas_pendientes_por_aplicar)) { ?>
+        <button class="btn btn-danger btn-md btn-block" onClick="javascript:cargarFacturasPorProcesar({numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
+            <i class="fa fa-search"></i>
+            Ver facturas pendientes por procesar en el ERP
+        </button>
+    <?php } ?>
 </div>
 
 <style>
@@ -190,6 +200,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         </tbody>
         <tfoot>
             <tr>
+                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
