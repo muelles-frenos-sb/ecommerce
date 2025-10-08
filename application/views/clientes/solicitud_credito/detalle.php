@@ -954,11 +954,11 @@ if (isset($datos['id'])) {
             allowOutsideClick: false
         })
 
-        // Se crea el usuario
+        // Se crea la solicitud de crédito
         let solicitudId = await consulta('crear', datosSolicitud, false)
+        // console.log('respuesta', solicitudId)
 
-        Swal.close()
-
+        // Se crean los terceros asociados
         let personasAutorizadas = obtenerCamposPersonasAutorizadas("personas_autorizadas", solicitudId.resultado)
         let sociosAccionistas = obtenerClientesSociosAccionistas('clientes', solicitudId.resultado)
         let beneficicariosSociosAccionistas = obtenerClientesSociosAccionistas('beneficiarios_cliente', solicitudId.resultado)
@@ -976,11 +976,10 @@ if (isset($datos['id'])) {
         }
         consulta('crear', datosBitacora, false)
 
-        mostrarAviso("exito", `¡Tu solicitud de crédito ha sido creada correctamente!`, 3500, () => {
-            window.location.href = "<?php echo base_url(); ?>";
-        })
+        await subirArchivos(solicitudId.resultado, archivos)
+        Swal.close()
 
-        subirArchivos(solicitudId.resultado, archivos)
+        mostrarAviso("exito", `¡Tu solicitud de crédito ha sido creada correctamente! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)
     }
 
     subirArchivos = async (solicitudCreditoId, archivos) => {
@@ -1002,10 +1001,12 @@ if (isset($datos['id'])) {
 
                 // Si se subieron todos los archivos se genera el reporte y envía el email
                 if (cantidadArchivos === cantidadArchivosSubidos) {
-                    await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudCreditoId}`)
+                    let creacionPDF = await obtenerPromesa(`${$("#site_url").val()}reportes/pdf/solicitud_credito/${solicitudCreditoId}`)
+                    // console.log('creacionPDF', creacionPDF)
 
                     // Se envía un correo electrónico de notificación
-                    await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudCreditoId})
+                    let email = await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudCreditoId})
+                    // console.log('Email', email)
                 }
             }
         })
