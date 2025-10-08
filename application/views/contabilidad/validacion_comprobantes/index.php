@@ -93,8 +93,9 @@
         await obtenerPromesa(`${$('#site_url').val()}contabilidad/procesar_comprobantes`, datos).then(respuesta => {
             Swal.close()
             mostrarAviso((respuesta.resultado) ? 'exito' : 'alerta', respuesta.mensaje, 20000)
+            console.log(respuesta)
 
-            tablaComprobantesContables.draw()
+            listarComprobantesContables()
 
             // Log de éxito
             //
@@ -102,7 +103,7 @@
         .catch(error => {
             Swal.close()
             mostrarAviso('error', 'Ocurrió un error al procesar las carpetas.', 20000)
-
+            console.error(error)
             // Log de error
             //
         })
