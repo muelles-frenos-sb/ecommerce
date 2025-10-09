@@ -385,22 +385,22 @@ class Interfaces extends CI_Controller {
                             "F200_NIT" => $datos['documento_numero'],                                       // Numero de documento de identificación del tercero
                             "F200_ID_TIPO_IDENT" => $datos['documento_tipo'],                               // Solo se requiere si el tipo de tercero es diferente de '0'. Valida en maestro, Tipo de identificación del tercero	
                             "F200_IND_TIPO_TERCERO" => $datos['tipo_tercero'],                              // 0' si es sin identificación, '1' si es persona natural, '2' si es persona jurídica.
-                            "F200_RAZON_SOCIAL" => mb_strtoupper(substr($datos['razon_social'], 0, 62), 'UTF-8'),                      // Solo se requiere si el tipo de tercero es persona juridica '2'.
-                            "F200_APELLIDO1" => mb_strtoupper($datos['primer_apellido'], 'UTF-8'),                      // Solo se requiere si el tercero es persona natural
-                            "F200_APELLIDO2" => mb_strtoupper($datos['segundo_apellido'], 'UTF-8'),                     // Solo se requiere si el tercero es persona natural
-                            "F200_NOMBRES" => mb_strtoupper($datos['nombres'], 'UTF-8'),                                // Solo se requiere si el tercero es persona natural
-                            "F015_CONTACTO" => mb_strtoupper($datos['contacto'], 'UTF-8'),                              // Nombre de la persona de contacto	
-                            "F015_DIRECCION1" => mb_strtoupper(substr($datos['direccion'], 0, 34), 'UTF-8'),                           // Renglón 1 de la dirección del contacto
+                            "F200_RAZON_SOCIAL" => mb_strtoupper(substr(trim($datos['razon_social']), 0, 62), 'UTF-8'),       // Solo se requiere si el tipo de tercero es persona juridica '2'.
+                            "F200_APELLIDO1" => mb_strtoupper(trim($datos['primer_apellido']), 'UTF-8'),                      // Solo se requiere si el tercero es persona natural
+                            "F200_APELLIDO2" => mb_strtoupper(trim($datos['segundo_apellido']), 'UTF-8'),                     // Solo se requiere si el tercero es persona natural
+                            "F200_NOMBRES" => mb_strtoupper(trim($datos['nombres']), 'UTF-8'),                                // Solo se requiere si el tercero es persona natural
+                            "F015_CONTACTO" => mb_strtoupper(trim($datos['contacto']), 'UTF-8'),                              // Nombre de la persona de contacto	
+                            "F015_DIRECCION1" => mb_strtoupper(substr(trim($datos['direccion']), 0, 34), 'UTF-8'),            // Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                                                        // Valida en maestro, código del país
                             "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),    // Valida en maestro, código del departamento, solo se debe usar si existe país
                             "F015_ID_CIUDAD" => str_pad($datos['id_ciudad'], 3, '0', STR_PAD_LEFT),         // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
                             "F015_TELEFONO" => "",                                  
                             "F015_COD_POSTAL" => "",                                
-                            "F015_EMAIL" => $datos['email'],                                                // Dirección de correo electrónico
+                            "F015_EMAIL" => trim($datos['email']),                                          // Dirección de correo electrónico
                             "F200_FECHA_NACIMIENTO" => date('Ymd'),                                         // El formato debe ser AAAAMMDD
-                            "F200_ID_CIIU" => "",                                                       // Valida en maestro, código de la actividad económica
-                            "F015_CELULAR" => $datos['telefono']                                            // Celular
+                            "F200_ID_CIIU" => "",                                                           // Valida en maestro, código de la actividad económica
+                            "F015_CELULAR" => trim($datos['telefono'])                                      // Celular
                         ],
                     ],
                     'Clientes' => [
@@ -409,14 +409,14 @@ class Interfaces extends CI_Controller {
                             "F201_ID_SUCURSAL" => "001",                                                    // Sucursal del cliente (Siempre va 001 por ser la primera sucursal) 
                             "F201_IND_ESTADO_ACTIVO" => 1,                                                   // Activo por defecto
                             "F201_DESCRIPCION_SUCURSAL" => mb_strtoupper(substr($datos['razon_social'], 0, 35), 'UTF-8'),   // Razón social para la sucursal del cliente
-                            "F201_ID_VENDEDOR" => mb_strtoupper($datos['vendedor'], 'UTF-8'),                           // Valida en maestro, código de vendedor asignado al cliente
-                            "F201_ID_COND_PAGO" => (isset($datos['condiciono_pago'])) ? $datos['condiciono_pago'] : "CNT", // Valida en maestro, código de condición de pago asignada a este cliente
-                            "F201_DIAS_GRACIA" => (isset($datos['dias_gracia'])) ? $datos['dias_gracia'] : "8",                                                      // Días de gracia otorgados al cliente
-                            "F201_CUPO_CREDITO" => (isset($datos['cupo'])) ? $datos['cupo'] : "0",                                                     // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
-                            "F201_ID_TIPO_CLI" => (isset($datos['tipo_cliente'])) ? $datos['tipo_cliente'] : "C005",                                                   // Valida en maestro, tipo de cliente asignado al cliente
+                            "F201_ID_VENDEDOR" => mb_strtoupper($datos['vendedor'], 'UTF-8'),                               // Valida en maestro, código de vendedor asignado al cliente
+                            "F201_ID_COND_PAGO" => (isset($datos['condiciono_pago'])) ? $datos['condiciono_pago'] : "CNT",  // Valida en maestro, código de condición de pago asignada a este cliente
+                            "F201_DIAS_GRACIA" => (isset($datos['dias_gracia'])) ? $datos['dias_gracia'] : "8",             // Días de gracia otorgados al cliente
+                            "F201_CUPO_CREDITO" => (isset($datos['cupo'])) ? $datos['cupo'] : "0",                          // Signo+15 enteros+punto+4 decimales (+000000000000000.0000), Queda en cero si es cliente corporativo. Máximo: 99999999999.9999
+                            "F201_ID_TIPO_CLI" => (isset($datos['tipo_cliente'])) ? $datos['tipo_cliente'] : "C005",        // Valida en maestro, tipo de cliente asignado al cliente
                             "F201_ID_LISTA_PRECIO" => $datos['lista_precio'],                               // Solo se requiere si tiene el sistema comercial, valida en maestro de listas de precios (TR=112)
-                            "F015_CONTACTO" => mb_strtoupper($datos['contacto'], 'UTF-8'),                              // Nombre de la persona de contacto
-                            "F015_DIRECCION1" => mb_strtoupper(substr($datos['direccion'], 0, 34), 'UTF-8'),                           // Renglón 1 de la dirección del contacto
+                            "F015_CONTACTO" => mb_strtoupper(trim($datos['contacto']), 'UTF-8'),                  // Nombre de la persona de contacto
+                            "F015_DIRECCION1" => mb_strtoupper(substr(trim($datos['direccion']), 0, 34), 'UTF-8'),// Renglón 1 de la dirección del contacto
                             "F015_DIRECCION2" => "",                                                        // Renglón 2 de la dirección del contacto
                             "F015_ID_PAIS" => "169",                                                        // Valida en maestro, código del país
                             "F015_ID_DEPTO" => str_pad($datos['id_departamento'], 2, '0', STR_PAD_LEFT),    // Valida en maestro, código del departamento, solo se debe usar si existe país
