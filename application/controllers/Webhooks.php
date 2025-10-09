@@ -428,7 +428,7 @@ class Webhooks extends MY_Controller {
                             "f430_num_docto_referencia" => $recibo->id, // Valida la orden de compra del documento
                             "f430_id_cond_pago" => "CNT", // Valida en maestro, condiciones de pago
                             "f430_notas" => $notas_pedido, // Observaciones
-                            "f430_id_tercero_vendedor" => "22222221", // Si es vacio lo trae del cliente a facturar
+                            "f430_id_tercero_vendedor" => ($recibo->tercero_vendedor_nit) ? $recibo->tercero_vendedor_nit : "22222221", // Si el cliente seleccionó vendedor, se envía en el paquete
                         ]
                     ],
                     "Movimientos" => $movimientos

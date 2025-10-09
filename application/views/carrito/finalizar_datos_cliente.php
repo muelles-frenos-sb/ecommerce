@@ -114,6 +114,14 @@ if(!empty($tercero)) {
     </select>
 </div>
 
+<div class="form-group">
+    <label for="checkout_vendedor_nit">Elige tu asesor comercial *</label>
+    <select id="checkout_vendedor_nit" class="form-control">
+        <option value="">Sin asesor comercial asignado</option>
+        <?php foreach($this->configuracion_model->obtener('vendedores') as $vendedor) echo "<option value='$vendedor->nit'>$vendedor->nombre</option>"; ?>
+    </select>
+</div>
+
 <div class="form-row">
     <div class="form-group col-md-6">
         <label for="checkout_email">Correo electrónico *</label>

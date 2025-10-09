@@ -199,6 +199,9 @@ if($this->session->userdata('usuario_id')) {
         // Se agrega la sucursal al pedido
         datosRecibo.sucursal_id = $('#checkout_sucursal').val()
 
+        // Se agrega vendedor, si lo eligió
+        if($('#checkout_vendedor_nit').val() != '') datosRecibo.tercero_vendedor_nit = $('#checkout_vendedor_nit').val()
+
         // // Si trae sucursales, se agrega a los datos
         // if(parseInt($('#cantidad_sucursales').val()) > 0) {}
 

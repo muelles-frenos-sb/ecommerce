@@ -419,3 +419,6 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (90, 'Proveedores - Certificado
 
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `token` varchar(10) NULL AFTER `cupo_asignado`;
 ALTER TABLE `clientes_solicitudes_credito` ADD UNIQUE INDEX `documento_numero`(`documento_numero`, `token`) USING BTREE;
+
+-- 20251008 Campo para almacenar el vendedor
+ALTER TABLE `recibos` ADD COLUMN `tercero_vendedor_nit` varchar(55) NULL AFTER `valor_pagado_mayor`;
