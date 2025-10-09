@@ -153,6 +153,10 @@ Class Productos_model extends CI_Model{
                         $having .= " OR p.linea LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.marca LIKE '%{$palabras[$i]}%'";
                         $having .= " OR p.grupo LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR pm.palabras_clave LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR slug LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR notas LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR pm.palabras_clave LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
                         if(($i + 1) < count($palabras)) $having .= " AND ";
                     }
