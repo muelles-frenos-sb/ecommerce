@@ -115,7 +115,7 @@
                                         </li>
 
                                         <li class="menu__item">
-                                            <a href="<?php echo site_url('logistica/garantias'); ?>" class="menu__link">
+                                            <a href="<?php echo site_url('logistica/garantias/ver'); ?>" class="menu__link">
                                                 Garantías
                                             </a>
                                         </li>

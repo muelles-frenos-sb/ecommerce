@@ -36,9 +36,37 @@ class Logistica extends MY_Controller {
      *
      * @return void
      */
-    function solicitudes_garantia($tipo) {
-        switch ($tipo) {
+    function solicitudes_garantia() {
+        switch ($this->uri->segment(3)) {
+            default:
+                $this->data['contenido_principal'] = 'logistica/solicitudes_garantia/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
             case 'ver':
+                if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+                $id = intval($this->uri->segment(4));
+
+                // Se verifica si es un id válido
+                if ($id) {
+                    if (gettype($id) === "integer") {
+                        $solicitud_garantia = $this->logistica_model->obtener("productos_solicitudes_garantia", ["id" => $id]);
+                        
+                        if (!empty($solicitud_garantia)) {
+                            $this->data['solicitud_garantia'] = $solicitud_garantia;
+                            $this->data['tipo'] = $this->uri->segment(5);
+                            $this->data['contenido_principal'] = 'logistica/solicitudes_garantia/detalle_general';
+                            $this->load->view('core/body', $this->data);
+                            return;
+                        }
+
+                        redirect('inicio');
+                    } else {
+                        redirect('inicio');
+                    }
+                }
+
                 $this->data['contenido_principal'] = 'logistica/solicitudes_garantia/index';
                 $this->load->view('core/body', $this->data);
             break;

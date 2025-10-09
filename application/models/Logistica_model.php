@@ -36,7 +36,7 @@ Class Logistica_model extends CI_Model {
                 }
 
                 // Se aplican los filtros
-                // if(isset($datos['id'])) $filtros_where .= " AND acpp.id = '{$datos['id']}' ";
+                if(isset($datos['id'])) $filtros_where .= " AND psg.id = '{$datos['id']}' ";
 
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
