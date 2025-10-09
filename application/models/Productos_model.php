@@ -171,6 +171,7 @@ Class Productos_model extends CI_Model{
                     IF(pm.slug IS NOT NULL, pm.slug, p.id) slug,
                     IF(pm.titulo IS NOT NULL, pm.titulo, p.notas) notas,
                     IF(pm.descripcion IS NOT NULL, pm.descripcion, p.descripcion_corta) descripcion_corta,
+                    pm.palabras_clave,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
                     MIN(i.bodega) bodega,

@@ -150,6 +150,25 @@ if(empty($producto)) redirect(site_url(''));
                                                 <img src="<?php echo base_url(); ?>images/continuar_compra.png" alt="Continuar comprando" class="mt-2 mb-2" width="100%">
                                             </a>
                                         </div>
+
+                                        <!-- Etiquetas del producto -->
+                                        <?php if($producto->palabras_clave) { ?>
+                                            <div class="product__tags-and-share-links">
+                                                <div class="product__tags tags tags--sm">
+                                                    <div class="tags__list">
+                                                        <?php
+                                                        $etiquetas = explode(' ', $producto->palabras_clave);
+                                                        
+                                                        // Las palabras clave se muestran como etiquetas
+                                                        foreach ($etiquetas as $etiqueta) {
+                                                            $url = site_url("productos?busqueda=$etiqueta");
+                                                            echo "<a href='{$url}'>$etiqueta</a>";
+                                                        }
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <?php } ?>
                                         
                                         <script>
                                             // Se cargan los botones para agregar y adicionar el ítem al carrito
