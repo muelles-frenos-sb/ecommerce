@@ -6,11 +6,10 @@
     </div>
 </div>
 
-<div class="w-100 p-5">
+<div class="pl-5 pr-5">
     <div id="contenedor_solicitudes_credito"></div>
     <div id="contenedor_asignar_usuario"></div>
 </div>
-
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>

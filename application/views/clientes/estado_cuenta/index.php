@@ -1,7 +1,7 @@
 <!-- Se captura el nit si viene desde el formulario de comprobante -->
 <input type="hidden" id="nit_comprobante" value="<?php echo $this->input->get('nit'); ?>">
 
-<div class="block-header mt-5" id="contenedor_cabecera_titulo">
+<div class="block-header" id="contenedor_cabecera_titulo">
     <div class="container">
         <div class="block-header__body">
             <h1 class="block-header__title">Pagar tus facturas de una manera fácil y rápida</h1>

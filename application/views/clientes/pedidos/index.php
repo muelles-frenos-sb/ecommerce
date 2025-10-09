@@ -6,10 +6,9 @@
     </div>
 </div>
 
-<div class="w-100 p-5">
+<div class="pl-5 pr-5">
     <div id="contenedor_pedidos"></div>
 </div>
-
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>

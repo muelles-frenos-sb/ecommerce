@@ -6,7 +6,7 @@
     </div>
 </div>
 
-<div class="w-100 p-5">
+<div class="pl-5 pr-5">
     <div class="block-zone__widget-header">
         <div class="block-zone__tabs">
             <?php foreach ($this->configuracion_model->obtener('recibos_tipos', ['activo' => 1]) as $recibo_tipo) { ?>
@@ -21,7 +21,6 @@
 
     <div id="contenedor_recibos"></div>
 </div>
-
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
