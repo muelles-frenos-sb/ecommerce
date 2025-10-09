@@ -884,10 +884,10 @@ if (isset($datos['id'])) {
 
         let datosSolicitud = {
             tipo: 'clientes_solicitudes_credito',
-            nombre: $('#solicitud_nombre').val(),
-            primer_apellido: $('#solicitud_primer_apellido').val(),
-            segundo_apellido: $('#solicitud_segundo_apellido').val(),
-            razon_social: $('#solicitud_razon_social').val(),
+            nombre: $('#solicitud_nombre').val().toUpperCase(),
+            primer_apellido: $('#solicitud_primer_apellido').val().toUpperCase(),
+            segundo_apellido: $('#solicitud_segundo_apellido').val().toUpperCase(),
+            razon_social: $('#solicitud_razon_social').val().toUpperCase(),
             persona_tipo_id: $('#solicitud_persona_tipo').val(),
             identificacion_tipo_id: ($(`#solicitud_tipo_documento1`).is(':checked')) ? 4 : 1, // 4: CC, 1: NIT
             documento_numero: $('#solicitud_numero_documento').val(),
