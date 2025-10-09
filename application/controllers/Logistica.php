@@ -14,7 +14,7 @@ class Logistica extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        // $this->load->model(['clientes_model']);
+        $this->load->model(['logistica_model']);
     }
 
     /**
@@ -27,6 +27,75 @@ class Logistica extends MY_Controller {
             case 'cotizacion':
                 $this->data['contenido_principal'] = 'logistica/envios/cotizacion/index';
                 $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
+    /**
+     * Gestión de solicitudes de garantía
+     *
+     * @return void
+     */
+    function solicitudes_garantia($tipo) {
+        switch ($tipo) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'logistica/solicitudes_garantia/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
+    function obtener_datos_tabla() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+
+        $tipo = $this->input->get("tipo");
+        $busqueda = $this->input->get("search")["value"];
+        $indice = $this->input->get("start");
+        $cantidad = $this->input->get("length");
+        $columns = $this->input->get("columns");
+        $order = $this->input->get("order");
+        $ordenar = null;
+
+        // Filtros personalizados de las columnas
+        $filtro_fecha_creacion = $this->input->get("filtro_fecha_creacion");
+
+        // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
+        if ($order) {
+            $columna = $order[0]["column"];
+            $orden = $order[0]["dir"];
+            $campo = $columns[$columna]["data"];
+            if ($campo) $ordenar = "$campo $orden";
+        }
+
+        switch ($tipo) {
+            case "solicitudes_garantia":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda,
+                    "filtros_personalizados" => $this->input->get('filtros_personalizados'),
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->logistica_model->obtener("productos_solicitudes_garantia", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->logistica_model->obtener("productos_solicitudes_garantia", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
             break;
         }
     }

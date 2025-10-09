@@ -64,3 +64,4 @@ $route['proveedores/certificados'] = 'proveedores/certificados/index';
 
 // Contabilidad
 $route['contabilidad/comprobantes'] = 'contabilidad/comprobantes/validacion';
+$route['logistica/garantias'] = 'logistica/solicitudes_garantia/ver';
