@@ -81,6 +81,15 @@ function cubrir_correo($email) {
     return $usuarioOculto . '@' . $dominio;
 }
 
+function formatear_tamanio($bytes) {
+    if ($bytes == 0) return "0 B";
+    
+    $unidades = ['B', 'KB', 'MB', 'GB'];
+    $i = floor(log($bytes, 1024));
+    
+    return round($bytes / pow(1024, $i), 2) . ' ' . $unidades[$i];
+}
+
 function formato_precio($valor) {
     return "$".number_format($valor, 0, ',', '.');
 }
@@ -173,6 +182,24 @@ function obtener_segmentos_url($url) {
     $segmentos = explode('/', trim($path, '/'));
 
     return $segmentos;
+}
+
+function obtener_tipo_archivo($extension) {
+    $tipos = [
+        'pdf' => 'Documento PDF',
+        'doc' => 'Documento Word',
+        'docx' => 'Documento Word',
+        'xls' => 'Hoja de cálculo Excel',
+        'xlsx' => 'Hoja de cálculo Excel',
+        'jpg' => 'Imagen JPEG',
+        'jpeg' => 'Imagen JPEG',
+        'png' => 'Imagen PNG',
+        'txt' => 'Archivo de texto',
+        'zip' => 'Archivo comprimido',
+        'rar' => 'Archivo comprimido'
+    ];
+    
+    return $tipos[$extension] ?? 'Archivo ' . strtoupper($extension);
 }
 
 function url_fotos($marca, $referencia) {

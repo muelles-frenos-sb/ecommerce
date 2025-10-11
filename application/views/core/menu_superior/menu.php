@@ -69,6 +69,26 @@
                                 </div>
                             </li>
 
+                            <li class="menu__item menu__item--has-submenu">
+                                <a href="#" class="menu__link">
+                                    Contabilidad
+                                    <span class="menu__arrow">
+                                        <svg width="6px" height="9px">
+                                            <path d="M0.3,7.4l3-2.9l-3-2.9c-0.4-0.3-0.4-0.9,0-1.3l0,0c0.4-0.3,0.9-0.4,1.3,0L6,4.5L1.6,8.7c-0.4,0.4-0.9,0.4-1.3,0l0,0C-0.1,8.4-0.1,7.8,0.3,7.4z" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                <div class="menu__submenu">
+                                    <ul class="menu">
+                                        <li class="menu__item">
+                                            <a href="<?php echo site_url('contabilidad/comprobantes'); ?>" class="menu__link">
+                                                Comprobantes
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_contactos_ver'], $permisos)) { ?>
                                 <li class="menu__item">
                                     <a href="<?php echo site_url("configuracion/contactos/ver"); ?>" class="menu__link">
@@ -76,6 +96,32 @@
                                     </a>
                                 </li>
                             <?php } ?>
+
+                            <li class="menu__item menu__item--has-submenu">
+                                <a href="#" class="menu__link">
+                                    Logística
+                                    <span class="menu__arrow">
+                                        <svg width="6px" height="9px">
+                                            <path d="M0.3,7.4l3-2.9l-3-2.9c-0.4-0.3-0.4-0.9,0-1.3l0,0c0.4-0.3,0.9-0.4,1.3,0L6,4.5L1.6,8.7c-0.4,0.4-0.9,0.4-1.3,0l0,0C-0.1,8.4-0.1,7.8,0.3,7.4z" />
+                                        </svg>
+                                    </span>
+                                </a>
+                                <div class="menu__submenu">
+                                    <ul class="menu">
+                                        <li class="menu__item">
+                                            <a href="<?php echo site_url('logistica/envios/cotizacion'); ?>" class="menu__link">
+                                                Cotizar envío con TCC
+                                            </a>
+                                        </li>
+
+                                        <li class="menu__item">
+                                            <a href="<?php echo site_url('logistica/garantias/ver'); ?>" class="menu__link">
+                                                Garantías
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
                             <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_usuarios_ver'], $permisos)) { ?>
                                 <li class="menu__item">

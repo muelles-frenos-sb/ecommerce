@@ -18,7 +18,6 @@
 
                     // Filtros personalizados
                     datos.filtro_numero_pedido = $('#filtro_numero_pedido').val()
-                    datos.filtro_id_consecutivo = $('#filtro_id_consecutivo').val()
                     datos.filtro_nombre_consecutivo = $('#filtro_nombre_consecutivo').val()
                     datos.filtro_fecha_creacion = $('#filtro_fecha_creacion').val()
                     datos.filtro_numero_documento = $('#filtro_numero_documento').val()
@@ -33,13 +32,6 @@
                         <input type="text" id="filtro_numero_pedido" class="form-control form-control-sm border-secondary">
                     `, 
                     data: 'numero_documento' 
-                },
-                { 
-                    title: `
-                        Id Consecutivo
-                        <input type="text" id="filtro_id_consecutivo" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: 'consecutivo_id' 
                 },
                 { 
                     title: `

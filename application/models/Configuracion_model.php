@@ -77,6 +77,18 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'centros_operacion':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['id'])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
+
             case 'cliente_factura_movimiento':
                 $sql =
                 "SELECT
@@ -89,6 +101,18 @@ Class Configuracion_model extends CI_Model {
                     AND cfm.f350_consec_docto = '{$datos['f350_consec_docto']}'";
 
                 return $this->db->query($sql)->row();
+            break;
+
+            case 'comprobantes_contables_tipos':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['id'])) return $this->db->get()->row();
+                return $this->db->get()->result();
             break;
 
             case 'contactos':
@@ -178,6 +202,18 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'periodos':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['mes'])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
+
             case 'recibo_tipo':
                 return $this->db
                     ->where($datos)
@@ -224,6 +260,8 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 if(isset($datos['actualizado_bot']) && trim($datos['actualizado_bot']) !== '') $having .= " HAVING actualizado_bot = {$datos['actualizado_bot']} ";
                 if(isset($datos['token']) && $datos['token']) $where .= " AND r.token = '{$datos['token']}' ";
+                if(isset($datos['documento_numero']) && $datos['documento_numero']) $where .= " AND r.documento_numero = '{$datos['documento_numero']}'";
+                if(isset($datos['recibo_estado_id']) && $datos['recibo_estado_id']) $where .= " AND r.recibo_estado_id = '{$datos['recibo_estado_id']}'";
 
                 // Filtros personalizados
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $where .= " AND DATE(r.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";

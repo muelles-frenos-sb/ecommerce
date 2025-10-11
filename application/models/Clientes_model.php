@@ -163,7 +163,19 @@ Class Clientes_model extends CI_Model {
                     DATEDIFF(date(NOW()), date(cf.Fecha_venc)) AS dias_vencido, 
                     ( SELECT cs.f201_id_sucursal FROM clientes_sucursales AS cs WHERE cs.f201_descripcion_sucursal = cf.RazonSocial_Sucursal LIMIT 1 ) sucursal_id,
                     a.codigo codigo_auxiliar,
-                    co.codigo centro_operativo_codigo
+                    co.codigo centro_operativo_codigo,
+                    (
+                        SELECT
+                            CONCAT_WS('/', r.id, r.archivo_soporte)
+                        FROM
+                            recibos_detalle AS rd
+                            INNER JOIN recibos AS r ON rd.recibo_id = r.id 
+                        WHERE
+                            r.recibo_estado_id = 3 
+                            AND documento_cruce_numero = cf.Nro_Doc_cruce 
+                            AND documento_numero = cf.Cliente 
+                            LIMIT 1 
+                    ) por_aplicar_archivo_pendiente
                 FROM
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
@@ -401,8 +413,7 @@ Class Clientes_model extends CI_Model {
                 if(isset($datos['fecha_documento'])) $filtros_where .= " AND p.FechaDocumento = '{$datos['fecha_documento']}' ";
 
                 // Filtros personalizados
-                if (isset($datos['filtro_numero_pedido']) && $datos['filtro_numero_pedido']) $filtros_where .= " AND p.NumeroDocumento LIKE '%{$datos['filtro_numero_pedido']}%' ";
-                if (isset($datos['filtro_id_consecutivo']) && $datos['filtro_id_consecutivo']) $filtros_where .= " AND p.IdConsecutivo LIKE '%{$datos['filtro_id_consecutivo']}%' ";
+                if (isset($datos['filtro_numero_pedido']) && $datos['filtro_numero_pedido']) $filtros_having .= " AND numero_documento LIKE '%{$datos['filtro_numero_pedido']}%' ";
                 if (isset($datos['filtro_nombre_consecutivo']) && $datos['filtro_nombre_consecutivo']) $filtros_where .= " AND p.NombreConsecutivo LIKE '%{$datos['filtro_nombre_consecutivo']}%' ";
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND p.FechaDocumento = '{$datos['filtro_fecha_creacion']}' ";
                 if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND p.NIT LIKE '%{$datos['filtro_numero_documento']}%' ";
@@ -414,8 +425,7 @@ Class Clientes_model extends CI_Model {
                 $sql = 
                 "SELECT
                     p.FechaDocumento fecha_documento,
-                    p.NumeroDocumento numero_documento,
-                    p.IdConsecutivo consecutivo_id,
+                    concat(p.IdConsecutivo, '-', p.NumeroDocumento + 0) numero_documento,
                     p.NombreConsecutivo consecutivo_nombre,
                     p.NIT nit,
                     p.RazonSocial rzon_social,

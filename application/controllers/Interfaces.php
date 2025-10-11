@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model']);
     }
 
     var $ruta = './archivos/';
@@ -573,6 +573,10 @@ class Interfaces extends CI_Controller {
 
             case 'recibos_cuentas_bancarias':
                 $resultado =  ['resultado' => $this->configuracion_model->obtener('recibos_cuentas_bancarias', $datos)];
+            break;
+
+            case 'tcc_liquidacion':
+                $resultado = json_decode(tcc_obtener_datos_api('tarifas/v5/consultarliquidacion', json_encode($datos)));
             break;
 
             case 'terceros':

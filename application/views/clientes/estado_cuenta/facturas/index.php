@@ -193,6 +193,10 @@
         })
     }
 
+    cargarRecibosPorProcesar = async datos => {
+        cargarInterfaz('clientes/estado_cuenta/facturas/lista_por_procesar', 'contenedor_modal', datos)
+    }
+
     guardarReciboEstadoCuenta = async(pagarEnLinea  = false) => {
         let total = parseFloat($('#total_pago').val()) // Para pagos en línea
         var archivos = $('#estado_cuenta_archivos').prop('files')

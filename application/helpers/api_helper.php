@@ -414,7 +414,7 @@ function tcc_obtener_datos_api($tipo, $datos) {
     $client = new \GuzzleHttp\Client();
 
     try {
-        $response = $client->post("{$url}{$tipo}", [
+        $response = $client->post("{$url}/{$tipo}", [
             'body' => $datos,
             'headers' => [
                 'Accept' => 'application/json',

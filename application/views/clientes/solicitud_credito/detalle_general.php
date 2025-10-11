@@ -18,7 +18,7 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
     </div>
 </div>
 
-<div class="w-100 p-5">
+<div class="pl-5 pr-5">
     <div class="block-zone__widget-header">
         <div class="block-zone__tabs">
             <button type="button" class="block-zone__tabs-button" id="pestana_detalle">
@@ -46,7 +46,6 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
 
     <div id="contenedor_detalle"></div>
 </div>
-
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>

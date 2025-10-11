@@ -11,6 +11,8 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     'pendientes' => true,
     'mostrar_alerta'=> true,
 ]);
+
+$recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_detalle', ['documento_numero' => $datos['numero_documento'], 'recibo_estado_id' => 3]);
 ?>
 
 <!-- Si tiene alguna factura no válida para pago en línea -->
@@ -39,6 +41,14 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         <i class="fa fa-file-excel"></i>
         Descargar listado de facturas o estado de cuenta
     </button>
+
+    <!-- Si tiene recibos pendientes por aplicar -->
+    <?php if(!empty($recibos_pendientes_por_aplicar)) { ?>
+        <button class="btn btn-secondary btn-md btn-block" id="btn_recibos_pendientes" onClick="javascript:cargarRecibosPorProcesar({numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
+            <i class="fa fa-search"></i>
+            Ver recibos pendientes por procesar en el ERP
+        </button>
+    <?php } ?>
 </div>
 
 <style>
@@ -60,6 +70,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 <th class="text-center encabezado">
                     <b><i class="fa fa-plus fa-2x"></i></b>
                 </th>
+                <th class="text-center encabezado">Recibo pendiente</th>
                 <th class="text-center encabezado">Sede</th>
                 <th class="text-center encabezado">Doc</th>
                 <th class="text-center encabezado">Cuota</th>
@@ -112,7 +123,17 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                                 valor_documento: `<?php echo $factura->valorDoc; // Enviado para almacenar en el detalle del recibo ?>`,
                                 total_cop: `<?php echo $factura->totalCop; // Enviado para almacenar en el detalle del recibo ?>`,
                             })" style="padding: 2px 5px 2px 5px;">
+
+                            
                         </div>
+                    </td>
+                    <td class="text-center">
+                        <!-- Si está pendiente por aplicar -->
+                        <?php if($factura->por_aplicar_archivo_pendiente) { ?>
+                            <a class="mb-2" target="_blank" onClick="window.open('<?php echo base_url()."archivos/recibos/$factura->por_aplicar_archivo_pendiente"; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        <?php } ?>
                     </td>
                     <td>
                         <?php echo $factura->centro_operativo; ?>
@@ -186,6 +207,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
                 <td></td>
                 <td></td>
                 <td></td>
+                <td></td>
                 <td class="text-right"><?php echo formato_precio($total_facturas); ?></td>
                 <td class="text-right"><?php echo formato_precio($total_pagado); ?></td>
                 <td class="text-right"><?php echo formato_precio($total_saldo); ?></td>
@@ -214,5 +236,8 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
         })
        
         $('#contenedor_mensaje_carga').html('')
+
+        if($('#pago_con_comprobante').val() != 1) $("#btn_recibos_pendientes").hide()
+            console.log($('#pago_con_comprobante').val())
     })
 </script>
