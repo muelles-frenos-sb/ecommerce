@@ -260,6 +260,8 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id_tipo_recibo'])) $where .= " AND r.recibo_tipo_id = {$datos['id_tipo_recibo']} ";
                 if(isset($datos['actualizado_bot']) && trim($datos['actualizado_bot']) !== '') $having .= " HAVING actualizado_bot = {$datos['actualizado_bot']} ";
                 if(isset($datos['token']) && $datos['token']) $where .= " AND r.token = '{$datos['token']}' ";
+                if(isset($datos['documento_numero']) && $datos['documento_numero']) $where .= " AND r.documento_numero = '{$datos['documento_numero']}'";
+                if(isset($datos['recibo_estado_id']) && $datos['recibo_estado_id']) $where .= " AND r.recibo_estado_id = '{$datos['recibo_estado_id']}'";
 
                 // Filtros personalizados
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $where .= " AND DATE(r.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";
@@ -346,9 +348,6 @@ Class Configuracion_model extends CI_Model {
 
                 if (isset($datos["id"]) && $datos["id"]) $this->db->where("rd.id", $datos["id"]);
                 if (isset($datos["recibo_id"]) && $datos["recibo_id"]) $this->db->where("rd.recibo_id", $datos["recibo_id"]);
-
-                if(isset($datos['documento_numero']) && $datos['documento_numero']) $this->db->where("r.documento_numero", $datos["documento_numero"]);
-                if(isset($datos['recibo_estado_id']) && $datos['recibo_estado_id']) $this->db->where("r.recibo_estado_id", $datos["recibo_estado_id"]);
 
                 if (isset($datos["id"])) return $this->db->get()->row();
                 return $this->db->get()->result();

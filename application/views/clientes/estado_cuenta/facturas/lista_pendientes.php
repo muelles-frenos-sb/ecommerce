@@ -12,7 +12,7 @@ $facturas_invalidas = $this->clientes_model->obtener('clientes_facturas', [
     'mostrar_alerta'=> true,
 ]);
 
-$facturas_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_detalle', ['documento_numero' => $datos['numero_documento'], 'recibo_estado_id' => 3]);
+$recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_detalle', ['documento_numero' => $datos['numero_documento'], 'recibo_estado_id' => 3]);
 ?>
 
 <!-- Si tiene alguna factura no válida para pago en línea -->
@@ -42,11 +42,11 @@ $facturas_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_
         Descargar listado de facturas o estado de cuenta
     </button>
 
-    <!-- Si tiene facturas pendientes por aplicar -->
-    <?php if(!empty($facturas_pendientes_por_aplicar)) { ?>
-        <button class="btn btn-danger btn-md btn-block" onClick="javascript:cargarFacturasPorProcesar({numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
+    <!-- Si tiene recibos pendientes por aplicar -->
+    <?php if(!empty($recibos_pendientes_por_aplicar)) { ?>
+        <button class="btn btn-secondary btn-md btn-block" id="btn_recibos_pendientes" onClick="javascript:cargarRecibosPorProcesar({numero_documento: '<?php echo $datos['numero_documento']; ?>'})">
             <i class="fa fa-search"></i>
-            Ver facturas pendientes por procesar en el ERP
+            Ver recibos pendientes por procesar en el ERP
         </button>
     <?php } ?>
 </div>
@@ -236,5 +236,8 @@ $facturas_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_
         })
        
         $('#contenedor_mensaje_carga').html('')
+
+        if($('#pago_con_comprobante').val() != 1) $("#btn_recibos_pendientes").hide()
+            console.log($('#pago_con_comprobante').val())
     })
 </script>
