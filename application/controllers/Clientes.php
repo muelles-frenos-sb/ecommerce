@@ -126,6 +126,7 @@ class Clientes extends MY_Controller {
                 $datos = [
                     'contar' => true,
                     'busqueda' => $busqueda,
+                    'filtros_personalizados' => $this->input->get('filtros_personalizados'),
                     'numero_documento' => $this->input->get('numero_documento'),
                     'pendientes' => $this->input->get('pendientes'),
                     'mostrar_estado_cuenta' => $this->input->get('mostrar_estado_cuenta'),

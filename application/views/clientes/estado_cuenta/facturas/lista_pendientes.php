@@ -77,6 +77,21 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                     datos.numero_documento = '<?php echo $datos['numero_documento']; ?>'
                     datos.pendientes = true
                     datos.mostrar_estado_cuenta = true
+
+                    // Filtros personalizados
+                    datos.filtros_personalizados = {
+                        sede: $('#filtro_sede').val(),
+                        documento_cruce: $('#filtro_documento_cruce').val(),
+                        cuota: $('#filtro_cuota').val(),
+                        fecha: $('#filtro_fecha').val(),
+                        fecha_vencimiento: $('#filtro_fecha_vencimiento').val(),
+                        dias_vencido: $('#filtro_dias_vencido').val(),
+                        valor_documento: $('#filtro_valor_valor_documento').val(),
+                        valor_abonos: $('#filtro_valor_abonos').val(),
+                        valor_saldo: $('#filtro_valor_saldo').val(),
+                        sucursal: $('#filtro_sucursal').val(),
+                        tipo_credito: $('#filtro_tipo_credito').val(),
+                    }
                 },
             },
             columns: [
@@ -135,11 +150,15 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Sede
+                        <input type="text" id="filtro_sede" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'centro_operativo'
                 },
                 { 
-                    title: `Doc`,
+                    title: `
+                        Doc
+                        <input type="text" id="filtro_documento_cruce" class="form-control form-control-sm border-secondary">
+                    `,
                     data: null,
                     className: 'text-right',
                     render: (factura, type, row) => {
@@ -155,6 +174,7 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Cuota
+                        <input type="number" id="filtro_cuota" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'Nro_cuota',
                     className: 'text-right',
@@ -162,17 +182,22 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Fecha fact
+                        <input type="date" id="filtro_fecha" class="form-control form-control-sm border-secondary" style='width: 100px;'>
                     `,
                     data: 'Fecha_doc_cruce'
                 },
                 {
                     title: `
                         Fecha Vcto
+                        <input type="date" id="filtro_fecha_vencimiento" class="form-control form-control-sm border-secondary" style='width: 100px;'>
                     `,
                     data: 'Fecha_venc'
                 },
                 { 
-                    title: `Dias venc`,
+                    title: `
+                        Dias venc
+                        <input type="number" id="filtro_dias_vencido" class="form-control form-control-sm border-secondary">
+                    `,
                     data: null,
                     className: 'text-right',
                     render: (factura, type, row) => {
@@ -189,6 +214,7 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Valor Doc
+                        <input type="number" id="filtro_valor_valor_documento" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
                     className: 'text-right',
@@ -199,25 +225,36 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Abonos
+                        <input type="number" id="filtro_valor_abonos" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
                     className: 'text-right',
                     render: (factura, type, row) => {
-                        return `$ ${Math.round(parseFloat(factura.valorDoc)).toLocaleString('es-CO')}`
+                        let saldo = `$ ${Math.round(parseFloat(factura.valorDoc)).toLocaleString('es-CO')}`
+
+                        // Si está pendiente por aplicar
+                        return (parseFloat(factura.totalCop) < 0) ? `
+                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
+                                <div class='status-badge__body'>
+                                    <div class='status-badge__text'>${saldo}</div>
+                                </div>
+                            </div>
+                        ` : 0
                     }
                 },
                 {
                     title: `
                         Saldo
+                        <input type="number" id="filtro_valor_saldo" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
                     className: 'text-right',
                     render: (factura, type, row) => {
-                        return `$ ${Math.round(parseFloat(factura.ValorAplicado)).toLocaleString('es-CO')}`
+                        return `$ ${Math.round(parseFloat(factura.totalCop)).toLocaleString('es-CO')}`
                     }
                 },
                 { 
-                    title: `Doc`,
+                    title: `Retenciones`,
                     data: null,
                     render: (factura, type, row) => {
                         return `
@@ -232,6 +269,7 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Sucursal
+                        <input type="text" id="filtro_sucursal" class="form-control form-control-sm border-secondary">
                     `,
                     data: null,
                     render: (factura, type, row) => {
@@ -241,6 +279,7 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 {
                     title: `
                         Tipo crédito
+                        <input type="text" id="filtro_tipo_credito" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'nombre_homologado'
                 },
@@ -257,6 +296,13 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
                 $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaFacturasPendientes.draw())
 
+                // Evita que al dar clic en los filtros personalizados, se aplique el ordenamiento
+                // $(`input[id^='filtro_'], select[id^='filtro_']`).on('click', e => {
+                //     e.stopPropagation()
+                //     e.stopImmediatePropagation()
+                //     return false
+                // })
+
                 // Aplicar estilos al encabezado
                 $(this.api().table().header()).find('th').css({
                     'height': '60px',
@@ -272,7 +318,7 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
                 thousands: '.',
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
-            ordering: true,
+            ordering: false,
             orderCellsTop: false,
             pageLength: 100,
             paging: true,

@@ -131,6 +131,20 @@ Class Clientes_model extends CI_Model {
                     }
                 }
 
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
+                if (isset($filtros_personalizados['sede']) && $filtros_personalizados['sede'] != '') $filtros_having .= " AND centro_operativo LIKE '%{$filtros_personalizados['sede']}%' ";
+                if (isset($filtros_personalizados['documento_cruce']) && $filtros_personalizados['documento_cruce'] != '') $filtros_where .= " AND cf.Nro_Doc_cruce LIKE '%{$filtros_personalizados['documento_cruce']}%' ";
+                if (isset($filtros_personalizados['cuota']) && $filtros_personalizados['cuota'] != '') $filtros_where .= " AND cf.Nro_cuota = '{$filtros_personalizados['cuota']}' ";
+                if (isset($filtros_personalizados['fecha']) && $filtros_personalizados['fecha'] != '') $filtros_having .= " AND Fecha_doc_cruce = '{$filtros_personalizados['fecha']}' ";
+                if (isset($filtros_personalizados['fecha_vencimiento']) && $filtros_personalizados['fecha_vencimiento'] != '') $filtros_having .= " AND Fecha_venc = '{$filtros_personalizados['fecha_vencimiento']}' ";
+                if (isset($filtros_personalizados['dias_vencido']) && $filtros_personalizados['dias_vencido'] != '') $filtros_having .= " AND dias_vencido LIKE '%{$filtros_personalizados['dias_vencido']}%' ";
+                if (isset($filtros_personalizados['valor_documento']) && $filtros_personalizados['valor_documento'] != '') $filtros_where .= " AND cf.ValorAplicado LIKE '%{$filtros_personalizados['valor_documento']}%' ";
+                if (isset($filtros_personalizados['valor_abonos']) && $filtros_personalizados['valor_abonos'] != '') $filtros_where .= " AND cf.valorDoc LIKE '%{$filtros_personalizados['valor_abonos']}%' ";
+                if (isset($filtros_personalizados['valor_saldo']) && $filtros_personalizados['valor_saldo'] != '') $filtros_where .= " AND cf.totalCop LIKE '%{$filtros_personalizados['valor_saldo']}%' ";
+                if (isset($filtros_personalizados['sucursal']) && $filtros_personalizados['sucursal'] != '') $filtros_where .= " AND cf.RazonSocial_Sucursal LIKE '%{$filtros_personalizados['sucursal']}%' ";
+                if (isset($filtros_personalizados['tipo_credito']) && $filtros_personalizados['tipo_credito'] != '') $filtros_where .= " AND a.nombre_homologado LIKE '%{$filtros_personalizados['tipo_credito']}%' ";
+
                 if(isset($datos['numero_documento'])) $filtros_where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
                 if(isset($datos['pendientes'])) $filtros_where .= " AND cf.totalCop <> 0 AND cf.totalCop NOT BETWEEN -1 AND 1 ";
                 if(isset($datos['id'])) $filtros_where .= " AND cf.id = {$datos['id']}";
