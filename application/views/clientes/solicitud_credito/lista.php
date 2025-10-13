@@ -109,15 +109,15 @@
                     `, 
                     data: null,
                     render: (solicitud, type, row) => {
-                        let informacion = (solicitud.nombre_usuario_asignado != '-') 
-                        ? solicitud.nombre_usuario_asignado
+                        let automatico = (solicitud.usuario_asignado_automaticamente == 1) ? '🕞' : ''
+
+                        return (solicitud.nombre_usuario_asignado != '-') 
+                        ? `${automatico}${solicitud.nombre_usuario_asignado}`
                         : `
                             <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
                                 Asignar
                             </a>
                         `
-                        
-                        return informacion
                     }
                 },
                 {

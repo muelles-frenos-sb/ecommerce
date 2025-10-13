@@ -4,6 +4,35 @@ Class Configuracion_model extends CI_Model {
         return $this->db->where('id', $id)->update($tabla, $datos);
     }
 
+    /**
+     * Asignar solicitud de crédito a un usuario disponible
+     *
+     * @return void
+     */
+    public function asignar_solicitud_credito() {
+        // Obtener usuarios disponibles
+        $usuarios_disponibles = $this->obtener('usuarios_disponibles');
+        
+        if (empty($usuarios_disponibles)) return false; // No hay usuarios disponibles
+        
+        // Estrategia: asignar al usuario con menos solicitudes
+        $usuario_seleccionado = $usuarios_disponibles[0];
+        
+        $datos['usuario_asignado_id'] = $usuario_seleccionado->id;
+        $datos['estado'] = 'asignada';
+        
+        // Marcar usuario como no disponible temporalmente
+        $this->marcar_usuario_no_disponible($usuario_seleccionado->id);
+        
+        // Se incrementa el contador de solicitudes
+        $this->db
+            ->set('solicitudes_atendidas', 'solicitudes_atendidas + 1', FALSE)
+            ->where('id', $usuario_seleccionado->id)
+            ->update('usuarios');
+        
+        return $usuario_seleccionado->id;
+    }
+
     function crear($tipo, $datos) {
         switch ($tipo) {
             default:
@@ -58,6 +87,61 @@ Class Configuracion_model extends CI_Model {
         }
 
         $this->db->close;
+    }
+
+    /**
+     * Liberar usuario (cuando completa una solicitud)
+     *
+     * @param int $usuario_id
+     * @return void
+     */
+    public function liberar_usuario($id_usuario) {
+        return $this->marcar_usuario_disponible($id_usuario);
+    }
+
+    /**
+     * Verifica actividad de usuarios (para limpiar inactivos)
+     *
+     * @return void
+     */
+    public function limpiar_usuarios_inactivos() {
+        return $this->db
+            ->where('fecha_ultima_actividad <', date('Y-m-d H:i:s', strtotime('-10 minutes')))
+            ->where('esta_disponible', 1)
+            ->update('usuarios', ['esta_disponible' => 0])
+        ;
+    }
+
+    /**
+     * Marcar usuario como disponible
+     *
+     * @param int $usuario_id
+     * @return void
+     */
+    public function marcar_usuario_disponible($usuario_id) {
+        $datos = [
+            'esta_disponible' => 1,
+            'fecha_ultima_actividad' => date('Y-m-d H:i:s'),
+        ];
+        $this->db->where('id', $usuario_id);
+
+        return $this->db->update('usuarios', $datos);
+    }
+
+    /**
+     * Marcar usuarios como no disponible
+     *
+     * @param int $usuario_id
+     * @return void
+     */
+    public function marcar_usuario_no_disponible($usuario_id) {
+        $datos = [
+            'esta_disponible' => 0,
+            'fecha_ultima_actividad' => date('Y-m-d H:i:s'),
+        ];
+        $this->db->where('id', $usuario_id);
+
+        return $this->db->update('usuarios', $datos);
     }
     
     /**
@@ -650,6 +734,19 @@ Class Configuracion_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'usuarios_disponibles':
+                return $this->db
+                    ->where([
+                        'estado' => 1,
+                        'esta_disponible' => 1,
+                        'fecha_ultima_actividad >=' => date('Y-m-d H:i:s', strtotime('-5 minutes'))
+                    ])
+                    ->order_by('solicitudes_atendidas') // Se asigna al que menos tiene
+                    ->get('usuarios')
+                    ->result()
+                ;
             break;
 
             case 'usuarios_identificacion_tipos':

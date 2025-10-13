@@ -329,6 +329,13 @@ class Interfaces extends CI_Controller {
             case 'clientes_solicitudes_credito':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
 
+                // Se asigna el usuario automáticamente
+                $id_usuario_asignado = $this->configuracion_model->asignar_solicitud_credito();
+                if($id_usuario_asignado) {
+                    $datos['usuario_asignado_id'] = $id_usuario_asignado;
+                    $datos['usuario_asignado_automaticamente'] = 1;
+                }
+
                 // Se obtiene el id 
                 $id = $this->clientes_model->crear('clientes_solicitudes_credito', $datos);
                 $directorio = $directorio = "./archivos/solicitudes_credito/$id/";

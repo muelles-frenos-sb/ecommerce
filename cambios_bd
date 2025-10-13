@@ -425,3 +425,20 @@ ALTER TABLE `recibos` ADD COLUMN `tercero_vendedor_nit` varchar(55) NULL AFTER `
 
 -- 20251004
 ALTER TABLE `centros_operacion` ADD COLUMN `ruta` varchar(50) NULL AFTER `estado`;
+
+-- 20251013 Campos para la asignación automática de una solicitud de crédito
+ALTER TABLE `usuarios` ADD COLUMN `esta_disponible` tinyint(1) NULL DEFAULT 0 COMMENT 'Marca si está disponible para que se le asignen solicitudes de crédito' AFTER `celular`;
+ALTER TABLE `usuarios` ADD COLUMN `fecha_ultima_actividad` datetime(0) NULL COMMENT 'Fecha de la última actividad del usuario' AFTER `esta_disponible`;
+ALTER TABLE `usuarios` ADD COLUMN `solicitudes_atendidas` int NULL DEFAULT 0 COMMENT 'Cantidad de solicitudes de crédito atendidas por el usuario' AFTER `fecha_ultima_actividad`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_asignado_automaticamente` tinyint(1) NULL DEFAULT 0 COMMENT '0: No; 1: Sí;' AFTER `usuario_asignado_id`;
+
+CREATE TABLE usuarios_disponibilidad (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    usuario_id INT,
+    esta_disponible TINYINT DEFAULT 1,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
+);
+
+INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (8, 'clientes', 'Clientes');
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (17, 'clientes_asignacion_automatica_solicitudes_credito', 'Asignación automática de solicitudes de crédito', 8);

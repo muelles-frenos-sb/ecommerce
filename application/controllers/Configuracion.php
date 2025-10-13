@@ -18,6 +18,41 @@ class Configuracion extends MY_Controller {
 
         if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
     }
+
+    /**
+     * Marca la disponibilidad de un usuario para recibir asignaciones de solicitudes de crédito
+     *
+     * @return void
+     */
+    public function marcar_disponibilidad() {
+        // Limpiar usuarios inactivos
+        $this->configuracion_model->limpiar_usuarios_inactivos();
+        
+        $id_usuario = $this->session->userdata('usuario_id');
+        
+        // Si no se ha iniciado la sesión
+        if (!$id_usuario) {
+            $this->output
+                ->set_content_type('application/json')
+                ->set_output(json_encode(array('error' => 'Usuario no autenticado')));
+            return;
+        }
+        
+        $disponible = $this->input->post('disponible');
+        
+        // Dependiendo de la disponibilidad
+        if ($disponible) {
+            $this->configuracion_model->marcar_usuario_disponible($id_usuario);
+            $respuesta = ['estado' => 'disponible'];
+        } else {
+            $this->configuracion_model->marcar_usuario_no_disponible($id_usuario);
+            $respuesta = ['estado' => 'no_disponible'];
+        }
+        
+        $this->output
+            ->set_content_type('application/json')
+            ->set_output(json_encode($respuesta));
+    }
     
     function obtener() {
         $datos = json_decode($this->input->post('datos'), true);
@@ -27,6 +62,10 @@ class Configuracion extends MY_Controller {
         switch ($tipo) {
             default:
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
+            break;
+
+            case 'usuarios_disponibles':
+                $resultado = $this->configuracion_model->obtener($tipo);
             break;
         }
 
