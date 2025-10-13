@@ -224,30 +224,11 @@ if(empty($producto)) redirect(site_url(''));
                             <div class="product__tabs product-tabs product-tabs--layout--full">
                                 <ul class="product-tabs__list">
                                     <li class="product-tabs__item product-tabs__item--active"><a href="#product-tab-specification">Especificaciones</a></li>
-                                    <li class="product-tabs__item"><a href="#product-tab-description">Descripción</a></li>
+                                    <!-- <li class="product-tabs__item"><a href="#product-tab-description">Descripción</a></li> -->
                                 </ul>
                                 <div class="product-tabs__content">
                                     <div class="product-tabs__pane product-tabs__pane--active" id="product-tab-specification">
                                         <div class="spec">
-                                            <div class="spec__section">
-                                                <h4 class="spec__section-title">General</h4>
-                                                <div class="spec__row">
-                                                    <div class="spec__name">Referencia</div>
-                                                    <div class="spec__value"><?php echo $producto->referencia; ?></div>
-                                                </div>
-                                                <div class="spec__row">
-                                                    <div class="spec__name">Marca</div>
-                                                    <div class="spec__value"><?php echo $producto->marca; ?></div>
-                                                </div>
-                                                <div class="spec__row">
-                                                    <div class="spec__name">Grupo</div>
-                                                    <div class="spec__value"><?php echo $producto->grupo; ?></div>
-                                                </div>
-                                                <div class="spec__row">
-                                                    <div class="spec__name">Línea</div>
-                                                    <div class="spec__value"><?php echo $producto->linea; ?></div>
-                                                </div>
-                                            </div>
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">Detalles técnicos</h4>
                                                 <div class="spec__row">
@@ -259,18 +240,26 @@ if(empty($producto)) redirect(site_url(''));
                                                     <div class="spec__value"><?php echo $producto->unidad_inventario; ?></div>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="spec__section">
+                                                <h4 class="spec__section-title">General</h4>
+                                                <div class="spec__row">
+                                                    <div class="spec__value"><?php echo $producto->descripcion; ?></div>
+                                                </div>
+                                            </div>
+                                            
                                             <div class="spec__disclaimer">
                                                 * La información aquí contenida puede variar al momento de la compra
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="product-tabs__pane" id="product-tab-description">
+                                    <!-- <div class="product-tabs__pane" id="product-tab-description">
                                         <div class="typography">
                                             <p>
-                                                <?php echo "$producto->descripcion_corta - $producto->notas"; ?>
+                                                <?php // echo "$producto->descripcion_corta - $producto->notas"; ?>
                                             </p>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>

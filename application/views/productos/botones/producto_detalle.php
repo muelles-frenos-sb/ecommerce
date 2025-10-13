@@ -11,7 +11,6 @@ $item = buscar_item_carrito($producto->id);
                 <div class="input-number__sub" onClick="javascript:modificarItem('remover', '<?php echo $item['rowid']; ?>', <?php echo $producto->id; ?>)"></div>
             </div>
     <?php } else { ?>
-        <div class="product__actions-item product__actions-item--addtocart">
             <button
                 class="btn btn-primary btn-lg btn-block"
                 onClick="javascript:agregarProducto({
@@ -22,7 +21,6 @@ $item = buscar_item_carrito($producto->id);
                 })">
                 <i class="fa fa-plus"></i> Agregar al carrito
             </button>
-        </div>
         <div class="product__actions-divider"></div>
     <?php } ?>
 </div>
