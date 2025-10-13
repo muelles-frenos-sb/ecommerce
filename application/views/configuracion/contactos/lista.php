@@ -4,6 +4,7 @@
             <tr class="wishlist__row wishlist__row--head">
                 <th class="wishlist__column wishlist__column--head wishlist__column--product">Tercero</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--stock">Teléfono</th>
+                <th class="wishlist__column wishlist__column--head wishlist__column--stock">Módulo</th>
                 <th class="wishlist__column wishlist__column--head wishlist__column--button"></th>
             </tr>
         </thead>

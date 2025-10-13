@@ -15,8 +15,22 @@ if($this->uri->segment(4)) {
             <div class="col-12">
                 <div class="form-row">
                     <div class="form-group col-12">
-                        <label for="contacto_datos">Ingrese los datos en cada línea (NIT, Teléfono y correo electrónico), separados por coma</label>
-                        <textarea class="form-control" id="contacto_datos" rows="10" placeholder="81100512,3135823366,juan.perez@empresa.com&#10;1017552663,3178896655,gerencia@empresa.com" autofocus></textarea>
+                        <label for="contacto_modulo_id">Selecciona el módulo al cual quieres asociar los contactos *</label>
+                        <select id="contacto_modulo_id" class="form-control">
+                            <option value="">Selecciona...</option>
+                            <?php foreach($this->configuracion_model->obtener('modulos', ['aplica_importacion_contactos' => 1]) as $modulo) echo "<option value='$modulo->id'>$modulo->descripcion</option>"; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label for="contacto_datos">Ingresa los datos en cada línea (NIT, Teléfono y correo electrónico), separados por coma</label>
+                        <div class="categories-list__item-products">
+                            Ejemplo:<br>
+                            <span>81100512, 3135823366, juan.perez@empresa.com&#10;</span><br>
+                            <span>1017552663, 3178896655, gerencia@empresa.com</span><br>
+                        </div>
+
+                        <textarea class="form-control" id="contacto_datos" rows="10" autofocus></textarea>
                     </div>
 
                     <div class="form-group mb-0">
@@ -33,6 +47,7 @@ if($this->uri->segment(4)) {
     guardarContactos = async() => {
         let camposObligatorios = [
             $('#contacto_datos'),
+            $('#contacto_modulo_id'),
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
@@ -69,6 +84,7 @@ if($this->uri->segment(4)) {
                     nit: numeroDocumento,
                     numero: telefono,
                     email: email,
+                    modulo_id: $('#contacto_modulo_id').val(),
                     fecha_creacion: '<?php echo date('Y-m-d H:i:s'); ?>',
                     usuario_id: <?php echo $this->session->userdata('usuario_id'); ?>,
                 })
@@ -91,7 +107,7 @@ if($this->uri->segment(4)) {
 
         mostrarAviso('exito', `Se crearon ${totalCreados.resultado} contactos exitosamente.`)
         agregarLog(37, `${totalCreados.resultado} registros`)
-        $('#contacto_datos').val('')
+        $('#contacto_datos, #contacto_modulo_id').val('')
     }
 
     $().ready(() => {

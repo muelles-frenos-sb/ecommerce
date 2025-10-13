@@ -132,6 +132,7 @@ Class Configuracion_model extends CI_Model {
                         $having .= " OR tc.numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.nit LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.email LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR modulo LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";
@@ -150,14 +151,16 @@ Class Configuracion_model extends CI_Model {
                     tc.nit,
                     tc.numero,
                     tc.email,
-                    t.f200_razon_social nombre
+                    t.f200_razon_social nombre,
+                    m.descripcion AS modulo
                 FROM
                     terceros_contactos AS tc
                     LEFT JOIN terceros AS t ON tc.nit = t.f200_nit
+                    LEFT JOIN modulos AS m ON tc.modulo_id = m.id
                 $where
                 $having
                 ORDER BY
-                    nombre IS NULL, nombre ASC, tc.fecha_creacion DESC
+                    tc.fecha_creacion DESC
                 $contador";
 
                 if(isset($datos['id']) || isset($datos['token']) || isset($datos['documento_numero'])) {
@@ -470,6 +473,8 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'modulos':
+                if($datos) $this->db->where($datos);
+
                 return $this->db
                     ->get($tabla)
                     ->result()
