@@ -17,7 +17,7 @@ $pdf->useTemplate($plantilla, 10, 10, 200);
 $pdf->SetFont('Courier', '', 7);
 
 $pdf->SetXY(14, 42);
-$pdf->Cell(85, 5, $cuenta->provedor_nombre, 0, 1, 'L', 0);
+$pdf->Cell(85, 5, utf8_decode($cuenta->provedor_nombre), 0, 1, 'L', 0);
 
 $pdf->SetXY(103, 42);
 $pdf->Cell(65, 5, $cuenta->provedor_nit, 0, 1, 'L', 0);
