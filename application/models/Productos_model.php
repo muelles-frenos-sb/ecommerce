@@ -324,10 +324,12 @@ Class Productos_model extends CI_Model{
                     pm.slug,
                     pm.fecha_creacion,
                     pm.fecha_modificacion,
-                    p.notas
+                    p.notas,
+                    pi.disponible
                 FROM productos_metadatos pm
                 INNER JOIN productos p ON pm.producto_id = p.id
-                WHERE pm.id is NOT NULL
+                LEFT JOIN productos_inventario AS pi ON p.id = pi.producto_id
+                WHERE pi.bodega = '{$this->config->item('bodega_principal')}'
                 $filtros_where
                 $filtros_having
                 $order_by

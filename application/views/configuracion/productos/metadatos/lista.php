@@ -16,6 +16,7 @@
             <tr>
                 <th class="text-center">Producto</th>
                 <th class="text-center">Palabras clave</th>
+                <th class="text-center">Estado</th>
                 <th class="text-center">Slug</th>
                 <th class="text-center">Acciones</th>
             </tr>
@@ -44,6 +45,23 @@
                     }
                 },
                 { data: 'palabras_clave' },
+                { 
+                    data: null,
+                    render: (data, type, row) => {
+                        console.log(data)
+                        let estadoClase = (data.disponible > 0) ? 'success' : 'failure'
+                        let estadoNombre = (data.disponible > 0) ? 'Disponible' : 'Agotado'
+
+                        return `
+                            <div class="status-badge status-badge--style--${estadoClase} product__stock status-badge--has-text">
+                                <div class="status-badge__body">
+                                    <div class="status-badge__text">${estadoNombre}</div>
+                                    <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip"></div>
+                                </div>
+                            </div>
+                        `
+                    }
+                },
                 { data: 'slug' },
                 {
                     data: null, 
