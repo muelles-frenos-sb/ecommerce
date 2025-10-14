@@ -157,7 +157,7 @@ if(empty($producto)) redirect(site_url(''));
                                                 <div class="product__tags tags tags--sm">
                                                     <div class="tags__list">
                                                         <?php
-                                                        $etiquetas = explode(' ', $producto->palabras_clave);
+                                                        $etiquetas = explode(',', $producto->palabras_clave);
                                                         
                                                         // Las palabras clave se muestran como etiquetas
                                                         foreach ($etiquetas as $etiqueta) {
