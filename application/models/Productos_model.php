@@ -126,8 +126,8 @@ Class Productos_model extends CI_Model{
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 
-                $where = "WHERE i.disponible > 0 ";
-                $having = "HAVING precio > 0";
+                $where = "WHERE (i.disponible > 0 OR pm.id)";
+                $having = "HAVING p.id IS NOT NULL";
                
                 if(!isset($datos['id'])) {
                     $marcas = $this->configuracion_model->obtener('marcas');
@@ -167,7 +167,7 @@ Class Productos_model extends CI_Model{
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
                 if(isset($datos['linea'])) $where .= " AND p.linea = '{$datos['linea']}' ";
                 if(isset($datos['bodega'])) $where .= " AND i.bodega = '{$datos['bodega']}' ";
-                // if(!isset($datos['id'])) $where .= " AND i.disponible > 0 ";
+                if(isset($datos['slug'])) $where .= " AND pm.slug = '{$datos['slug']}' ";
 
                 $sql = 
                 "SELECT
