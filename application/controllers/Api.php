@@ -294,7 +294,8 @@ class Api extends RestController {
         // Datos para actualizar
         $datos = [
             'id' => $this->input->get('id'),
-            'solicitud_credito_estado_id' => $this->put('solicitud_credito_estado_id'),
+            'solicitud_credito_estado_id' => $this->put('estado_id'),
+            'fecha_validacion_documentos' => $this->put('fecha_validacion_documentos'),
         ];
 
         $this->form_validation->set_data($datos);
@@ -331,7 +332,7 @@ class Api extends RestController {
         // Respuesta exitosa
         $this->response([
             'error' => false,
-            'mensaje' => 'Registro actualizado correctamente.',
+            'mensaje' => "Registro actualizado correctamente.",
             'resultado' => $resultado
         ], RestController::HTTP_OK);
     }

@@ -256,8 +256,8 @@ Class Clientes_model extends CI_Model {
                 // Se aplican los filtros
                 if(isset($datos['id'])) $filtros_where .= " AND csc.id = {$datos['id']} ";
                 if(isset($datos['solicitud_credito_estado_id'])) $filtros_where .= " AND csc.solicitud_credito_estado_id = {$datos['solicitud_credito_estado_id']} ";
-                $filtros_where .= (isset($datos['documentos_validados']) && $datos['documentos_validados'] == 1) ? " AND csc.fecha_validacion_documentos IS NOT NULL " : " AND csc.fecha_validacion_documentos IS NULL ";
-
+                if(isset($datos['documentos_validados'])) $filtros_having .= " AND documentos_validados = {$datos['documentos_validados']} ";
+                
                 // Filtros personalizados
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND DATE(csc.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";
                 if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND csc.documento_numero LIKE '%{$datos['filtro_numero_documento']}%' ";
@@ -297,7 +297,8 @@ Class Clientes_model extends CI_Model {
                     ) ultimo_comentario,
                     uit.codigo tipo_identificacion_codigo,
                     v.nombre vendedor_nombre,
-	                v.codigo vendedor_codigo
+	                v.codigo vendedor_codigo,
+                    IF(csc.fecha_validacion_documentos is NOT NULL, 1, 0) documentos_validados
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id

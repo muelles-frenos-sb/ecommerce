@@ -27,11 +27,13 @@ $config = [
 
     'solicitud_credito_put' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'required|trim|integer|greater_than[0]', 'errors' => ['required' => 'El campo {field} debe ser enviado como parámetro en la url y es obligatorio.']],
+		['field' => 'solicitud_credito_estado_id', 'label' => 'Id del estado de la solicitud', 'rules' => 'trim|integer|greater_than[0]|in_list[1,2,3]'],
+        ['field' => 'fecha_validacion_documentos', 'label' => 'Fecha de validación de los documentos', 'rules' => 'trim|fecha_completa_valida'],
     ],
 
     'solicitudes_credito_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
-		['field' => 'solicitud_credito_estado_id', 'label' => 'Id de la solicitud de crédito', 'rules' => 'trim|integer|greater_than[0]|in_list[1,2,3]'],
+		['field' => 'solicitud_credito_estado_id', 'label' => 'Id del estado de la solicitud', 'rules' => 'trim|integer|greater_than[0]|in_list[1,2,3]'],
 		['field' => 'documentos_validados', 'label' => 'Documentos validados', 'rules' => 'trim|integer|in_list[0,1]'],
     ],
 
