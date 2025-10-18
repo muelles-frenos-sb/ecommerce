@@ -294,7 +294,6 @@ class Api extends RestController {
         // Datos para actualizar
         $datos = [
             'id' => $this->input->get('id'),
-            'solicitud_credito_estado_id' => $this->put('estado_id'),
             'fecha_validacion_documentos' => $this->put('fecha_validacion_documentos'),
         ];
 
