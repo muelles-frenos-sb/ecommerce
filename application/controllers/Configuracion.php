@@ -266,7 +266,8 @@ class Configuracion extends MY_Controller {
                     "palabras_clave" => $registro[1],
                     "titulo" => $registro[2],
                     "descripcion" => $registro[3],
-                    "slug" => obtener_segmentos_url($registro[4])[2],
+                    "detalles_tecnicos" => $registro[4],
+                    "slug" => obtener_segmentos_url($registro[5])[2],
                     "fecha_creacion" => date("Y-m-d H:i:s")
                 ];
 

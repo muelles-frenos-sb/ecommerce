@@ -232,15 +232,10 @@ if(empty($producto)) redirect(site_url(''));
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">Detalles técnicos</h4>
                                                 <div class="spec__row">
-                                                    <div class="spec__name">Tipo de inventario</div>
-                                                    <div class="spec__value"><?php echo $producto->tipo_inventario; ?></div>
-                                                </div>
-                                                <div class="spec__row">
-                                                    <div class="spec__name">Unidad de inventario</div>
-                                                    <div class="spec__value"><?php echo $producto->unidad_inventario; ?></div>
+                                                    <div class="spec__value"><?php echo ($producto->detalles_tecnicos) ?? "Sin información"; ?></div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">General</h4>
                                                 <div class="spec__row">

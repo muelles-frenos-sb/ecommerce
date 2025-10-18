@@ -176,6 +176,7 @@ Class Productos_model extends CI_Model{
                     IF(pm.titulo IS NOT NULL, pm.titulo, p.notas) notas,
                     IF(pm.descripcion IS NOT NULL, pm.descripcion, p.descripcion_corta) descripcion_corta,
                     pm.palabras_clave,
+                    pm.detalles_tecnicos,
                     pm.descripcion descripcion,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
@@ -316,14 +317,7 @@ Class Productos_model extends CI_Model{
 
                 $sql =
                 "SELECT
-                    pm.id,
-                    pm.producto_id,
-                    pm.palabras_clave,
-                    pm.titulo,
-                    pm.descripcion,
-                    pm.slug,
-                    pm.fecha_creacion,
-                    pm.fecha_modificacion,
+                    pm.*,
                     p.notas,
                     pi.disponible
                 FROM productos_metadatos pm

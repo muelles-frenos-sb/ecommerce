@@ -16,6 +16,7 @@
             <tr>
                 <th class="text-center">Producto</th>
                 <th class="text-center">Palabras clave</th>
+                <th class="text-center">Detalles técnicos</th>
                 <th class="text-center">Estado</th>
                 <th class="text-center">Slug</th>
                 <th class="text-center">Acciones</th>
@@ -47,8 +48,14 @@
                 { data: 'palabras_clave' },
                 { 
                     data: null,
+                    render: (producto, type, row) => {
+                        return (producto.detalles_tecnicos && producto.detalles_tecnicos != '') ? `✅` : `➖`
+                    },
+                    className: 'text-center'
+                },
+                { 
+                    data: null,
                     render: (data, type, row) => {
-                        console.log(data)
                         let estadoClase = (data.disponible > 0) ? 'success' : 'failure'
                         let estadoNombre = (data.disponible > 0) ? 'Disponible' : 'Agotado'
 

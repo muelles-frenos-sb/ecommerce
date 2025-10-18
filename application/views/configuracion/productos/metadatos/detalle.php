@@ -41,6 +41,10 @@ if(isset($id)) {
                                 <label for="metadato_descripcion">Descripción * </label>
                                 <textarea rows="3" class="form-control form-control-lg" id="metadato_descripcion"><?php if(!empty($producto_metadato)) echo $producto_metadato->descripcion; ?></textarea>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label for="metadato_detalles_tecnicos">Detalles técnicos </label>
+                                <textarea rows="3" class="form-control form-control-lg" id="metadato_detalles_tecnicos"><?php if(!empty($producto_metadato)) echo $producto_metadato->detalles_tecnicos; ?></textarea>
+                            </div>
                         </div>
                         <div class="form-group mb-0 pt-3 mt-3">
                             <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
@@ -81,7 +85,8 @@ if(isset($id)) {
             titulo: $('#metadato_titulo').val(),
             slug: $('#metadato_slug').val(),
             palabras_clave: $('#metadato_palabras_clave').val(),
-            descripcion: $('#metadato_descripcion').val()
+            descripcion: $('#metadato_descripcion').val(),
+            detalles_tecnicos: $('#metadato_detalles_tecnicos').val(),
         }
 
         if(!$('#producto_metadato_id').val()) {
