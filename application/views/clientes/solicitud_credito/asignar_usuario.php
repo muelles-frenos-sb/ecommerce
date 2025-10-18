@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Asignar usuario</h4>
+                <h4 class="modal-title"><?php echo (isset($datos['reasignar'])) ? 'Reasignar solicitud' : 'Asignar solicitud' ; ?></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -46,7 +46,15 @@
             $('#usuario')
         ]
 
+        let usuarioSeleccionado = $('#usuario option:selected').text()
+
         if (!validarCamposObligatorios(camposObligatorios)) return false
+        
+        // Si el usuario que se reasigna es el mismo que ya tiene asignado
+        if($('#usuario').val() == '<?php echo $solicitud->usuario_asignado_id; ?>') {
+            mostrarAviso('alerta', `La solicitud ya está asignada a ${usuarioSeleccionado}.`, 5000)
+            return false
+        }
 
         let datos = {
             tipo: 'clientes_solicitudes_credito',
@@ -55,12 +63,19 @@
         }
 
         await consulta('actualizar', datos)
-        listarSolicitudesCredito()
+
+        // Creación del registro en bitácora
+        await consulta('crear', {
+            tipo: 'clientes_solicitudes_credito_bitacora',
+            solicitud_id: id,
+            usuario_id: $('#sesion_usuario_id').val(),
+            observaciones: ('<?php echo isset($datos['reasignar']); ?>') ? `Solicitud reasignada a ${usuarioSeleccionado}` : `Solicitud asignada a ${usuarioSeleccionado}`,
+        })
         $('#modal_asignar_usuario').modal('hide')
 
-        mostrarAviso('exito', `
-            ¡Se ha asignado el usuario correctamente!<br><br>
-        `, 5000)
+        listarSolicitudesCredito()
+
+        mostrarAviso('exito', `Se ha asignado el usuario exitosamente.`, 5000)
     }
 
     $().ready(function() {
