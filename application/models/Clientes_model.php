@@ -255,6 +255,8 @@ Class Clientes_model extends CI_Model {
 
                 // Se aplican los filtros
                 if(isset($datos['id'])) $filtros_where .= " AND csc.id = {$datos['id']} ";
+                if(isset($datos['solicitud_credito_estado_id'])) $filtros_where .= " AND csc.solicitud_credito_estado_id = {$datos['solicitud_credito_estado_id']} ";
+                $filtros_where .= (isset($datos['documentos_validados']) && $datos['documentos_validados'] == 1) ? " AND csc.fecha_validacion_documentos IS NOT NULL " : " AND csc.fecha_validacion_documentos IS NULL ";
 
                 // Filtros personalizados
                 if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND DATE(csc.fecha_creacion) = '{$datos['filtro_fecha_creacion']}' ";

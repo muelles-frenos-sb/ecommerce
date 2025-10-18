@@ -249,6 +249,8 @@ class Api extends RestController {
     function solicitudes_credito_get() {
         $datos = [
             'id' => $this->get("id"),
+            'solicitud_credito_estado_id' => $this->get('estado_id'),
+            'documentos_validados' => $this->get('documentos_validados'),
         ];
 
         $this->form_validation->set_data($datos);

@@ -428,3 +428,6 @@ ALTER TABLE `centros_operacion` ADD COLUMN `ruta` varchar(50) NULL AFTER `estado
 
 -- 20251013 Campo para contactos
 ALTER TABLE `modulos` ADD COLUMN `aplica_importacion_contactos` tinyint(1) NULL DEFAULT 0 AFTER `descripcion`;
+
+-- 20251017 Columna para el bot
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_validacion_documentos` datetime(0) NULL COMMENT 'Indica cuando completó la validación de las listas' AFTER `fecha_firma`;

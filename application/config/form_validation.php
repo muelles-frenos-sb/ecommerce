@@ -31,6 +31,8 @@ $config = [
 
     'solicitudes_credito_get' => [
 		['field' => 'id', 'label' => 'id', 'rules' => 'trim|integer|greater_than[0]'],
+		['field' => 'solicitud_credito_estado_id', 'label' => 'Id de la solicitud de crédito', 'rules' => 'trim|integer|greater_than[0]|in_list[1,2,3]'],
+		['field' => 'documentos_validados', 'label' => 'Documentos validados', 'rules' => 'trim|integer|in_list[0,1]'],
     ],
 
     'solicitudes_credito_archivos_get' => [
