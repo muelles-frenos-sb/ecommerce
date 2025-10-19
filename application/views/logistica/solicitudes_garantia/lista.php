@@ -57,6 +57,13 @@
                 },
                 { 
                     title: `
+                        Solicitante
+                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'solicitante_nombres' 
+                },
+                { 
+                    title: `
                         NIT
                         <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
                     `,
@@ -64,17 +71,10 @@
                     render: (solicitud, type, row) => {
                         return `
                             <a href="${$('#site_url').val()}/logistica/solicitudes_garantia/ver/${solicitud.id}" target="_blank">
-                                ${solicitud.documento_numero}
+                                ${solicitud.cliente_nit}
                             </a>
                         `
                     },
-                },
-                { 
-                    title: `
-                        Nombre
-                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: 'razon_social' 
                 },
                 { 
                     title: `

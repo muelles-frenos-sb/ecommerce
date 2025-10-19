@@ -188,6 +188,11 @@ class Interfaces extends CI_Controller {
                 ]);
             break;
 
+            case 'productos_solicitudes_garantia':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->logistica_model->crear($tipo, $datos)]);
+            break;
+
             case 'proveedores_cotizaciones_detalle':
                 // Primero, borramos todos los registros de ese proveedor y para esa cotización
                 $this->proveedores_model->eliminar($tipo, ['cotizacion_id' => $datos['cotizacion_id'], 'proveedor_nit' => $datos['proveedor_nit']]);
@@ -564,6 +569,10 @@ class Interfaces extends CI_Controller {
 
             case 'movimientos_contables':
                 $resultado = json_decode(obtener_movimientos_contables_api($datos));
+            break;
+
+            case 'pedidos':
+                $resultado = json_decode(obtener_pedidos_api_estandar($datos));
             break;
 
             case 'producto':

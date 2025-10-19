@@ -169,7 +169,7 @@ Class Configuracion_model extends CI_Model {
                     ->from($tabla)
                 ;
 
-                if(isset($datos['id'])) return $this->db->get()->row();
+                if(isset($datos['id']) || isset($datos['codigo'])) return $this->db->get()->row();
                 return $this->db->get()->result();
             break;
 

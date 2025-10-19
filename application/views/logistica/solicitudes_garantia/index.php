@@ -7,6 +7,8 @@
 </div>
 
 <div class="pl-5 pr-5">
+    <a class="btn btn-success mb-3" href="<?php echo site_url('logistica/garantias'); ?>">Crear solicitud</a>
+
     <div id="contenedor_solicitudes_garantia"></div>
     <div id="contenedor_asignar_usuario"></div>
 </div>

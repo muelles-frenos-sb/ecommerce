@@ -795,6 +795,38 @@ function obtener_pedidos_api($fecha = null) {
     return $response->getBody()->getContents();
 }
 
+function obtener_pedidos_api_estandar($datos) {
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $parametros = "f200_nit_pedido_fact=''{$datos['numero_documento']}''";
+    if(isset($datos['centro_operativo'])) $parametros .= " and f430_id_co=''{$datos['centro_operativo']}''";
+    if(isset($datos['tipo_documento'])) $parametros .= " and f430_id_tipo_docto=''{$datos['tipo_documento']}''";
+    if(isset($datos['documento_cruce'])) $parametros .= " and f430_consec_docto=''{$datos['documento_cruce']}''";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Ventas_Pedidos',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 /**
  * Crea un pedido en Siesa
  */

@@ -434,3 +434,6 @@ ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_asignado_automati
 
 INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (8, 'clientes', 'Clientes');
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (17, 'clientes_asignacion_automatica_solicitudes_credito', 'Asignación automática de solicitudes de crédito', 8);
+
+-- 20251018 
+ALTER TABLE `motivos_rechazo` MODIFY COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito; 3: Garantías' AFTER `nombre`;
