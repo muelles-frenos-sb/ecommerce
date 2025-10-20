@@ -398,7 +398,7 @@ class Interfaces extends CI_Controller {
                             "F015_TELEFONO" => "",                                  
                             "F015_COD_POSTAL" => "",                                
                             "F015_EMAIL" => trim($datos['email']),                                          // Dirección de correo electrónico
-                            "F200_FECHA_NACIMIENTO" => date('Ymd'),                                         // El formato debe ser AAAAMMDD
+                            "F200_FECHA_NACIMIENTO" => (isset($datos['fecha_nacimiento'])) ? $datos['fecha_nacimiento'] : date('Ymd'), // El formato debe ser AAAAMMDD
                             "F200_ID_CIIU" => "",                                                           // Valida en maestro, código de la actividad económica
                             "F015_CELULAR" => trim($datos['telefono'])                                      // Celular
                         ],
@@ -423,7 +423,7 @@ class Interfaces extends CI_Controller {
                             "F015_ID_CIUDAD" => str_pad($datos['id_ciudad'], 3, '0', STR_PAD_LEFT),         // Valida en maestro, código de la ciudad, solo se debe usar si existe depto
                             "F015_TELEFONO" => "",                                                          // Teléfono
                             "F015_EMAIL" => $datos['email'],                                                // Dirección de correo electrónico	
-                            "F201_FECHA_INGRESO" => date('Ymd'),                                            // Fecha de ingreso AAAAMMDD
+                            "F201_FECHA_INGRESO" => (isset($datos['fecha_ingreso'])) ? $datos['fecha_ingreso'] : date('Ymd'), // Fecha de ingreso AAAAMMDD
                             "f201_id_cobrador" => "",                                                       // Valida en maestro, código de cobrador asignado al cliente
                             "f015_celular" => $datos['telefono'],
                             "F201_IND_BLOQUEO_CUPO" => (isset($datos['bloqueo_cupo'])) ? $datos['bloqueo_cupo'] : 0, // Bloquear por cupo

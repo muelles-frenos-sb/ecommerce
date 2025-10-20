@@ -90,15 +90,6 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             allowOutsideClick: false
         })
 
-        // Se consulta en el ERP el tercero
-        var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
-
-        // Si el tercero ya existe en el ERP
-        if(consultaTercero.codigo == 0) {
-            // Se va a actualizar el tercero
-            // ----------------------------------------
-        }
-
         let responsableIVA = $('#aprobacion_responsable_iva option:selected').attr('data-responsable_iva')
         let causanteIVA = $('#aprobacion_responsable_iva option:selected').attr('data-causante_iva')
         
@@ -127,6 +118,16 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             bloqueo_cupo: 1,
         }
 
+        // Se consulta en el ERP el tercero
+        var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
+
+        // Si el tercero ya existe en el ERP
+        if(consultaTercero.codigo == 0) {
+            // Se actualizan los datos de la fecha de nacimiento y de ingreso
+            datosTerceroSiesa.fecha_nacimiento = consultaTercero.detalle.Table[0].f200_fecha_nacimiento
+            datosTerceroSiesa.fecha_ingreso = consultaTercero.detalle.Table[0].f200_ts
+        }
+
         let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
 
         creacionTerceroSiesa.then(resultado => {
@@ -142,9 +143,9 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             // Creación del registro en bitácora
             datosBitacora.observaciones = `Tercero creado en Siesa`
             consulta('crear', datosBitacora)
-        })
 
-        Swal.close()
+            Swal.close()
+        })
     }
 
     cargarOpcionMenu = () => {
