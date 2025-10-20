@@ -124,8 +124,8 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
         // Si el tercero ya existe en el ERP
         if(consultaTercero.codigo == 0) {
             // Se actualizan los datos de la fecha de nacimiento y de ingreso
-            datosTerceroSiesa.fecha_nacimiento = consultaTercero.detalle.Table[0].f200_fecha_nacimiento
-            datosTerceroSiesa.fecha_ingreso = consultaTercero.detalle.Table[0].f200_ts
+            datosTerceroSiesa.fecha_nacimiento = consultaTercero.detalle.Table[0].f200_fecha_nacimiento.split("T")[0].replaceAll("-", "")
+            datosTerceroSiesa.fecha_ingreso = consultaTercero.detalle.Table[0].f200_ts.split("T")[0].replaceAll("-", "")
         }
 
         let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
