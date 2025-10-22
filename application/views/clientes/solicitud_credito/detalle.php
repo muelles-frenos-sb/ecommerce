@@ -23,29 +23,53 @@ if (isset($datos['id'])) {
                     <iframe width="560" height="315" class="mt-2" src="https://www.youtube.com/embed/UzmWpRfq398?si=FmqbgPq4NSTTN3xT" title="YouTube" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </center>
             <?php } ?>
+            
             <div class="card-body card-body--padding--1">
                 <div class="form-row mb-2">
-                    <div class="col-md-3">
-                        <br>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva1" value="1" <?php if(isset($solicitud) && $solicitud->nueva == 1) echo "checked"; ?>>
-                            <label class="form-check-label" for="solicitud_nueva1">
-                                Quiero crear una solicitud nueva *
-                            </label>
+                    <div class="form-group col-md-7 col-sm-12 m-3" style="border: 1px solid #EBEBEB;">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva1" value="1" <?php if(isset($solicitud) && $solicitud->nueva == 1) echo "checked"; ?>>
+                                    <label class="form-check-label" for="solicitud_nueva1">
+                                        Quiero crear una solicitud nueva *
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva0" value="0" <?php if(isset($solicitud) && $solicitud->nueva == 0) echo "checked"; ?>>
+                                    <label class="form-check-label" for="solicitud_nueva0">
+                                        Quiero actualizar mi solicitud *
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <br>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_nueva" id="solicitud_nueva0" value="0" <?php if(isset($solicitud) && $solicitud->nueva == 0) echo "checked"; ?>>
-                            <label class="form-check-label" for="solicitud_nueva0">
-                                Quiero actualizar mi solicitud *
-                            </label>
+
+                    <div class="form-group col-md-4 col-sm-12 m-3" style="border: 1px solid #EBEBEB;">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut1" value="1">
+                                    <label class="form-check-label" for="solicitud_tiene_rut1">
+                                        Tengo RUT *
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut2" value="0">
+                                    <label class="form-check-label" for="solicitud_tiene_rut2">
+                                        NO Tengo RUT *
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-4"></div>
                 </div>
                 <div class="card-divider"></div>
+
                 <div class="tag-badge tag-badge--theme badge_formulario mb-2 mt-2">
                     DATOS BÁSICOS DEL SOLICITANTE
                 </div>
@@ -83,7 +107,7 @@ if (isset($datos['id'])) {
                     <div class="col-md-3">
                         <br>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 1) echo "checked"; ?>>
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 1) echo "checked"; ?> autocomplete="off">
                             <label class="form-check-label" for="solicitud_tipo_documento1">
                                 Cédula de ciudadanía *
                             </label>
@@ -92,7 +116,7 @@ if (isset($datos['id'])) {
                     <div class="col-md-3">
                         <br>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 2) echo "checked"; ?>>
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 2) echo "checked"; ?> autocomplete="off">
                             <label class="form-check-label" for="solicitud_tipo_documento2">
                                 Nit *
                             </label>
@@ -854,6 +878,7 @@ if (isset($datos['id'])) {
 
         let camposRadioObligatorios = [
             'solicitud_nueva',
+            'solicitud_tiene_rut',
             'solicitud_tipo_documento',
             'recursos_publicos',
             'reconocimiento_publico',
@@ -1049,7 +1074,7 @@ if (isset($datos['id'])) {
     $().ready(async () => {
         // Cuando se seleccione el tipo de persona
         $('#solicitud_persona_tipo').change(() => {
-            $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', false)
+            if(!$('#solicitud_tiene_rut1').is(':checked')) $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', false)
 
             // Si es persona natural
             if ($('#solicitud_persona_tipo').val() == 1) {
@@ -1076,6 +1101,21 @@ if (isset($datos['id'])) {
         $('.persona_natural input').keyup(() => {
             // Si es persona natural
             if ($('#solicitud_persona_tipo').val() == 1) concatenarRazonSocial()
+        })
+
+        // Cuando se seleccione si tiene RUT o no
+        $('input[name="solicitud_tiene_rut"]').change(() => {
+            // Si tiene RUT
+            if ($('#solicitud_tiene_rut1').is(':checked')) {
+                // Se bloquean los tipos de documentos
+                $("#solicitud_tipo_documento1, #solicitud_tipo_documento2").attr('disabled', true)
+
+                // Se marca checkeado el Nit
+                $("#solicitud_tipo_documento2").attr('checked', true)
+            } else {
+                // Se desbloquean los tipos de documentos
+                $("#solicitud_tipo_documento1, #solicitud_tipo_documento2").attr('disabled', false).attr('checked', false)
+            }
         })
 
         listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
