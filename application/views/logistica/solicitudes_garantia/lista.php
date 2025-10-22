@@ -78,6 +78,13 @@
                 },
                 { 
                     title: `
+                        Nombre
+                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'solicitante_nombres' 
+                },
+                { 
+                    title: `
                         Estado
                         <input type="text" id="filtro_estado" class="form-control form-control-sm border-secondary">
                     `, 

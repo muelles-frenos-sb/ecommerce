@@ -83,6 +83,58 @@ Class Logistica_model extends CI_Model {
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
             break;
+
+            case 'productos_solicitudes_garantia_bitacora':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "HAVING psgb.id";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR observaciones LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if(isset($datos['id'])) $filtros_where .= " AND psgb.id = {$datos['id']} ";
+                if(isset($datos['solicitud_id'])) $filtros_where .= " AND psgb.solicitud_id = {$datos['solicitud_id']} ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY psgb.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    psgb.*,
+                    DATE(psgb.fecha_creacion) fecha,
+                    TIME(psgb.fecha_creacion) hora,
+                    IF(u.razon_social is not null, u.razon_social, '-') nombre_usuario
+                FROM productos_solicitudes_garantia_bitacora psgb
+                LEFT JOIN usuarios u ON psgb.usuario_id = u.id
+                WHERE psgb.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
         }
     }
 }
