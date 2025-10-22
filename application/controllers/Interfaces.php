@@ -75,6 +75,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'productos_solicitudes_garantia_bitacora':
+                $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'proveedores_marcas':
                 $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
             break;
@@ -191,6 +195,11 @@ class Interfaces extends CI_Controller {
             case 'productos_solicitudes_garantia':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 print json_encode(['resultado' => $this->logistica_model->crear($tipo, $datos)]);
+            break;
+
+            case 'productos_solicitudes_garantia_bitacora':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('productos_solicitudes_garantia_bitacora', $datos)]);
             break;
 
             case 'proveedores_cotizaciones_detalle':

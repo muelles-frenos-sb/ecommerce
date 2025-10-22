@@ -1,6 +1,10 @@
 <input type="hidden" id="id_solicitud_garantia" value="<?php echo $datos['solicitud_garantia']['id']; ?>">
 
 <div class="w-100 p-5">
+    <div class="mb-4">
+        <a class="btn btn-success" href="javascript:cargarBitacoraDetalle()">Crear</a>
+    </div>
+
     <div id="contenedor_solicitudes_garantia_bitacora"></div>
     <div id="contenedor_solicitudes_garantia_bitacora_detalle"></div>
 </div>
