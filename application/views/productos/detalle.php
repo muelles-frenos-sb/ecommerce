@@ -232,14 +232,14 @@ if(empty($producto)) redirect(site_url(''));
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">Detalles técnicos</h4>
                                                 <div class="spec__row">
-                                                    <div class="spec__value"><?php echo ($producto->detalles_tecnicos) ?? "Sin información"; ?></div>
+                                                    <div class="spec__value"><?php echo ($producto->detalles_tecnicos) ? nl2br($producto->detalles_tecnicos) : "Sin información"; ?></div>
                                                 </div>
                                             </div>
 
                                             <div class="spec__section">
                                                 <h4 class="spec__section-title">General</h4>
                                                 <div class="spec__row">
-                                                    <div class="spec__value"><?php echo $producto->descripcion; ?></div>
+                                                    <div class="spec__value"><?php echo nl2br($producto->descripcion); ?></div>
                                                 </div>
                                             </div>
                                             

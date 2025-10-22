@@ -455,7 +455,7 @@ Class Configuracion_model extends CI_Model {
 
                 $sql =
                 "SELECT
-                    m.id, 
+                    ANY_VALUE(m.id), 
                     TRIM(m.codigo) codigo,
                     p.marca nombre
                 FROM
