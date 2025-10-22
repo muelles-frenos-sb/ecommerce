@@ -114,8 +114,6 @@
 
         let resultado = await consulta('obtener', datos, false)
 
-        console.log(resultado)
-        
         if(resultado.codigoResultado == 0) {
             let mensaje = `
                 <b>Id de liquidación:</b> ${resultado.idliquidacion}<br>

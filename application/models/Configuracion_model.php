@@ -142,8 +142,6 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id'])) $where .= " AND tc.id = {$datos['id']} ";
                 if(isset($datos['numero'])) $where .= " AND tc.numero = '{$datos['numero']}' ";
                 if(isset($datos['nit'])) $where .= " AND tc.nit = '{$datos['nit']}' ";
-                // if(isset($datos['token'])) $where .= " AND u.token = '{$datos['token']}'";
-                // if(isset($datos['documento_numero'])) $where .= " AND u.documento_numero = '{$datos['documento_numero']}'";
 
                 $sql =
                 "SELECT

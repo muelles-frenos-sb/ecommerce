@@ -63,7 +63,7 @@ Class Logistica_model extends CI_Model {
                     p.notas AS producto
                 FROM productos_solicitudes_garantia psg
                 LEFT JOIN productos_solicitudes_garantia_estados AS psge ON psg.producto_solicitud_garantia_estado_id = psge.id
-                LEFT JOIN terceros_vendedores AS tv ON psg.tercero_vendedor_id = tv.id
+                LEFT JOIN terceros_vendedores AS tv ON psg.vendedor_nit = tv.nit
                 LEFT JOIN productos AS p ON psg.producto_id = p.id
                 $filtros_where
                 $filtros_having

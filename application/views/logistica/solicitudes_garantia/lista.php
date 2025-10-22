@@ -64,7 +64,7 @@
                     render: (solicitud, type, row) => {
                         return `
                             <a href="${$('#site_url').val()}/logistica/solicitudes_garantia/ver/${solicitud.id}" target="_blank">
-                                ${solicitud.documento_numero}
+                                ${solicitud.vendedor_nit}
                             </a>
                         `
                     },
