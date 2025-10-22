@@ -26,6 +26,7 @@
                         estado: $('#filtro_estado').val(),
                         vendedor: $('#filtro_vendedor').val(),
                         producto: $('#filtro_producto').val(),
+                        usuario_asignado: $('#filtro_usuario_asignado').val(),
                     }
                 },
             },
@@ -107,6 +108,24 @@
                         <input type="text" id="filtro_vendedor" class="form-control form-control-sm border-secondary">
                     `, 
                     data: 'vendedor_nombre'
+                },
+                { 
+                    title: `
+                        Gestionador
+                        <input type="text" id="filtro_usuario_asignado" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: null,
+                    render: (solicitud, type, row) => {
+                        let automatico = (solicitud.usuario_asignado_automaticamente == 1) ? '🕞' : ''
+
+                        return (solicitud.nombre_usuario_asignado != '-') 
+                        ? `${automatico}${solicitud.nombre_usuario_asignado}`
+                        : `
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
+                                Asignar
+                            </a>
+                        `
+                    }
                 },
                 { 
                     title: `

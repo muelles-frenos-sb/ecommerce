@@ -15,9 +15,9 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    // cargarAsignarUsuario = (id) => {
-    //     cargarInterfaz('logistica/solicitudes_garantia/asignar_usuario', 'contenedor_asignar_usuario', {id: id})
-    // }
+    cargarAsignarUsuario = (id) => {
+        cargarInterfaz('logistica/solicitudes_garantia/asignar_usuario', 'contenedor_asignar_usuario', {id: id})
+    }
 
     listarSolicitudesGarantia = () => {
         cargarInterfaz('logistica/solicitudes_garantia/lista', 'contenedor_solicitudes_garantia')
