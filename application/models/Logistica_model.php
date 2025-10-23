@@ -52,7 +52,7 @@ Class Logistica_model extends CI_Model {
                 if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'] != '') $filtros_where .= " AND psg.id LIKE '%{$filtros_personalizados['id']}%' ";
                 if (isset($filtros_personalizados['fecha_creacion']) && $filtros_personalizados['fecha_creacion'] != '') $filtros_where .= " AND DATE(psg.fecha_creacion) = '{$filtros_personalizados['fecha_creacion']}' ";
                 if (isset($filtros_personalizados['numero_documento']) && $filtros_personalizados['numero_documento'] != '') $filtros_where .= " AND psg.documento_numero LIKE '%{$filtros_personalizados['numero_documento']}%' ";
-                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $filtros_where .= " AND psg.razon_social LIKE '%{$filtros_personalizados['nombre']}%' ";
+                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $filtros_where .= " AND psg.solicitante_nombres LIKE '%{$filtros_personalizados['nombre']}%' ";
                 if (isset($filtros_personalizados['estado']) && $filtros_personalizados['estado'] != '') $filtros_having .= " AND estado LIKE '%{$filtros_personalizados['estado']}%' ";
                 if (isset($filtros_personalizados['vendedor']) && $filtros_personalizados['vendedor'] != '') $filtros_having .= " AND vendedor_nombre LIKE '%{$filtros_personalizados['vendedor']}%' ";
                 if (isset($filtros_personalizados['producto']) && $filtros_personalizados['producto'] != '') $filtros_having .= " AND producto LIKE '%{$filtros_personalizados['producto']}%' ";
@@ -74,7 +74,7 @@ Class Logistica_model extends CI_Model {
                     p.notas AS producto,
                     IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado
                 FROM productos_solicitudes_garantia psg
-                LEFT JOIN productos_solicitudes_garantia_estados AS psge ON psg.producto_solicitud_garantia_estado_id = psge.id
+                LEFT JOIN productos_solicitudes_garantia_estados AS psge ON psg.estado_id = psge.id
                 LEFT JOIN terceros_vendedores AS tv ON psg.vendedor_nit = tv.nit
                 LEFT JOIN productos AS p ON psg.producto_id = p.id
                 LEFT JOIN usuarios AS ua ON psg.usuario_asignado_id = ua.id

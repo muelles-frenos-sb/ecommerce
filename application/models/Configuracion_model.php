@@ -627,6 +627,18 @@ Class Configuracion_model extends CI_Model {
 				return $permisos;
             break;
 
+            case 'productos_solicitudes_garantia_motivos_reclamacion':
+                if(!empty($datos)) $this->db->where($datos);
+
+                $this->db
+                    ->order_by('nombre')
+                    ->from($tabla)
+                ;
+
+                if(isset($datos['mes'])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
+
             case 'roles':
                 return $this->db
                     ->where('modulo_id', $datos)

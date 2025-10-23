@@ -89,7 +89,7 @@ if (isset($datos['solicitud_garantia'])) {
                         <label for="solicitud_motivo_id">Indicanos el motivo de la reclamación *</label>
                         <select id="solicitud_motivo_id" class="form-control">
                             <option value="">Selecciona...</option>
-                            <?php foreach($this->configuracion_model->obtener('motivos_rechazo', ['interfaz_id' => 3]) as $motivo) echo "<option value='$motivo->id'>$motivo->nombre</option>"; ?>
+                            <?php foreach($this->configuracion_model->obtener('productos_solicitudes_garantia_motivos_reclamacion') as $motivo_reclamacion) echo "<option value='$motivo_reclamacion->id'>$motivo_reclamacion->nombre</option>"; ?>
                         </select>
                     </div>
 

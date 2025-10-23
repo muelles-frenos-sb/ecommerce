@@ -110,11 +110,11 @@ function generar_llave_integridad($datos) {
 }
 
 function generar_radicado() {
-    return date('Ymd').str_pad(rand(1, 9999), 4 , '0', STR_PAD_LEFT);
+    return date('Ymd').str_pad(rand(1, 9999), 3, '0', STR_PAD_LEFT);
 }
 
 function generar_token($valor) {
-    return substr(md5($valor), 0, 10);
+    return substr(bin2hex(random_bytes(25)), 0, 10);
 }
 
 function mostrar_mensajes_estados_wompi($estado) {
