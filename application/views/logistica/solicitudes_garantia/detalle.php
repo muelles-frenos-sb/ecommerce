@@ -199,24 +199,53 @@ if (isset($datos['solicitud_garantia'])) {
         await cargarInterfaz('logistica/solicitudes_garantia/detalle_pedido', 'contenedor_detalle_pedido', {pedido: consultaPedido.detalle.Table})
 
         Swal.close()
-
-
-
-
-
-        return
     }
 
     crearSolicitudGarantia = async () => {
-        // let camposObligatorios = [
-        // ]
-        // if (!validarCamposObligatorios(camposObligatorios)) return false
+        // Primero, nos aseguramos que se identifique el pedido
+        let camposObligatoriosPedido = [
+            $('#solicitud_cliente_nit'),
+            $('#solicitud_numero_factura'),
+        ]
+        if (!validarCamposObligatorios(camposObligatoriosPedido, 'Por favor selecciona primero el pedido donde está el producto sobre el cual vas a pedir la garantía.')) return false
+
+        
+        // Si aún no se ha traido la respuesta del pedido
+        if(!$('#solicitud_vendedor_nit').val()) {
+            mostrarAviso('alerta', `Por favor selecciona primero el pedido donde está el producto sobre el cual vas a pedir la garantía.`, 20000)
+            return false
+        }
+
+        // El resto de campos obligatorios se validan
+        let camposObligatorios = [
+            $('#solicitud_tipo_solicitante'),
+            $('#solicitud_solicitante_nombres'),
+            $('#solicitud_solicitante_telefono'),
+            $('#solicitud_solicitante_email'),
+            $('#solicitud_motivo_id'),
+            $('#solicitud_producto_estado'),
+            $('#solicitud_desripcion'),
+            $('#solicitud_producto_ubicacion_actual'),
+            $('#solicitud_metodo_devolucion'),
+            $('#solicitud_producto_id'),
+            $('#solicitud_cantidad_reclamada'),
+        ]
+        if (!validarCamposObligatorios(camposObligatorios)) return false
 
         // let archivos = validarArchivos()
         // if (!archivos) {
         //     mostrarAviso('alerta', `Por favor selecciona los archivos para poder finalizar la solicitud de crédito`, 20000)
         //     return false
         // }
+        
+        // Se captura la cantidad vendida del producto seleccionado
+        let cantidadProducto = parseInt($('#solicitud_producto_id option:selected').attr('data-cantidad'))
+
+        // Si la cantidad reclamada supera la cantidad vendida del producto
+        if(parseInt($('#solicitud_cantidad_reclamada').val()) > cantidadProducto) {
+            mostrarAviso('alerta', `El producto que seleccionaste solamente tiene ${cantidadProducto} unidades. La cantidad reclamada no puede ser mayor.`, 20000)
+            return false
+        }
 
         let datosSolicitud = {
             tipo: 'productos_solicitudes_garantia',
