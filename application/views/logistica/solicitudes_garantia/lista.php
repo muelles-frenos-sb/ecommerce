@@ -27,6 +27,7 @@
                         vendedor: $('#filtro_vendedor').val(),
                         producto: $('#filtro_producto').val(),
                         usuario_asignado: $('#filtro_usuario_asignado').val(),
+                        radicado: $('#filtro_radicado').val(),
                     }
                 },
             },
@@ -38,6 +39,14 @@
                     `,
                     data: 'id',
                     className: 'text-right',
+                    width: '70px',
+                },
+                {
+                    title: `
+                        Radicado
+                        <input type="text" id="filtro_radicado" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'radicado',
                     width: '70px',
                 },
                 {

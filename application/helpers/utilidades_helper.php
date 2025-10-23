@@ -109,6 +109,10 @@ function generar_llave_integridad($datos) {
     return hash("sha256", "{$datos[0]}{$datos[1]}{$datos[2]}{$datos[3]}");
 }
 
+function generar_radicado() {
+    return date('Ymd').str_pad(rand(1, 9999), 4 , '0', STR_PAD_LEFT);
+}
+
 function generar_token($valor) {
     return substr(md5($valor), 0, 10);
 }

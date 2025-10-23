@@ -56,9 +56,10 @@ Class Logistica_model extends CI_Model {
                 if (isset($filtros_personalizados['estado']) && $filtros_personalizados['estado'] != '') $filtros_having .= " AND estado LIKE '%{$filtros_personalizados['estado']}%' ";
                 if (isset($filtros_personalizados['vendedor']) && $filtros_personalizados['vendedor'] != '') $filtros_having .= " AND vendedor_nombre LIKE '%{$filtros_personalizados['vendedor']}%' ";
                 if (isset($filtros_personalizados['producto']) && $filtros_personalizados['producto'] != '') $filtros_having .= " AND producto LIKE '%{$filtros_personalizados['producto']}%' ";
-                if (isset($datos['filtro_usuario_asignado']) && $datos['filtro_usuario_asignado']) $filtros_having .= " AND nombre_usuario_asignado LIKE '%{$datos['filtro_usuario_asignado']}%' ";
+                if (isset($filtros_personalizados['usuario_asignado']) && $filtros_personalizados['usuario_asignado'] != '') $filtros_having .= " AND nombre_usuario_asignado LIKE '%{$filtros_personalizados['usuario_asignado']}%' ";
+                if (isset($filtros_personalizados['radicado']) && $filtros_personalizados['radicado'] != '') $filtros_where .= " AND psg.radicado LIKE '%{$filtros_personalizados['radicado']}%' ";
 
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY fecha_creacion DESC";
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY psg.fecha_creacion DESC";
                 
                 $sql = 
                 "SELECT
