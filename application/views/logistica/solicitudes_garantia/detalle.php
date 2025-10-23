@@ -1,10 +1,4 @@
-<?php 
-if (isset($datos['solicitud_garantia'])) {
-    $solicitud = (object)$datos['solicitud_garantia'];
-    print_r($solicitud);
-    // $solicitud_detalle = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ['cscd.solicitud_id' => $datos['id']]);
-}
-?>
+<?php  if (isset($datos['solicitud_garantia'])) $solicitud = (object)$datos['solicitud_garantia']; ?>
 
 <?php if(!isset($solicitud)) { ?>
     <div class="block-header block-header--has-breadcrumb block-header--has-title">
@@ -35,17 +29,17 @@ if (isset($datos['solicitud_garantia'])) {
 
                     <div class="form-group col-md-8">
                         <label for="solicitud_solicitante_nombres">Nombre completo de quien solicita *</label>
-                        <input type="text" class="form-control" id="solicitud_solicitante_nombres" value="<?php if(isset($solicitud)) echo $solicitud->razon_social; ?>">
+                        <input type="text" class="form-control" id="solicitud_solicitante_nombres" value="<?php if(isset($solicitud)) echo $solicitud->solicitante_nombres; ?>">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_solicitante_telefono">Teléfono *</label>
-                        <input type="text" class="form-control" id="solicitud_solicitante_telefono" value="<?php if(isset($solicitud)) echo $solicitud->telefono; ?>">
+                        <input type="text" class="form-control" id="solicitud_solicitante_telefono" value="<?php if(isset($solicitud)) echo $solicitud->solicitante_telefono; ?>">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label for="solicitud_solicitante_email">E-mail *</label>
-                        <input type="email" class="form-control" id="solicitud_solicitante_email" value="<?php if(isset($solicitud)) echo $solicitud->email; ?>">
+                        <input type="email" class="form-control" id="solicitud_solicitante_email" value="<?php if(isset($solicitud)) echo $solicitud->solicitante_email; ?>">
                     </div>
                 </div>
 
@@ -95,7 +89,7 @@ if (isset($datos['solicitud_garantia'])) {
 
                     <div class="form-group col-lg-4">
                         <label for="solicitud_motivo_otro">Si es otro motivo, indícanos cuál</label>
-                        <input type="text" class="form-control" id="solicitud_motivo_otro" value="<?php if(isset($solicitud)) echo $solicitud->razon_social; ?>">
+                        <input type="text" class="form-control" id="solicitud_motivo_otro" value="<?php // if(isset($solicitud)) echo $solicitud->razon_social; ?>">
                     </div>
 
                     <div class="form-group col-lg-4">
@@ -152,7 +146,7 @@ if (isset($datos['solicitud_garantia'])) {
 
                     <div class="form-group col-lg-6">
                         <label for="solicitud_tipo_solucion_otro">Si es otro, indícanos cuál</label>
-                        <input type="text" class="form-control" id="solicitud_tipo_solucion_otro" value="<?php if(isset($solicitud)) echo $solicitud->razon_social; ?>">
+                        <input type="text" class="form-control" id="solicitud_tipo_solucion_otro" value="<?php // if(isset($solicitud)) echo $solicitud->razon_social; ?>">
                     </div>
                 </div>
                 
@@ -287,6 +281,15 @@ if (isset($datos['solicitud_garantia'])) {
 
         // Se crea la solicitud
         let resultado = await consulta('crear', datosSolicitud, false)
+
+        // Creación del registro en bitácora
+        var datosBitacora = {
+            tipo: 'productos_solicitudes_garantia_bitacora',
+            solicitud_id: resultado.id,
+            usuario_id: $('#sesion_usuario_id').val(),
+            observaciones: `Solicitud recibida`,
+        }
+        consulta('crear', datosBitacora, false)
 
         Swal.close()
         mostrarAviso("exito", `¡Tu solicitud de garantía ha sido creada exitosamente con el radicado <b>${resultado.radicado}</b>! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)

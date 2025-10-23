@@ -198,7 +198,7 @@ class Interfaces extends CI_Controller {
                 $datos['token'] = generar_token($datos['radicado'].$datos['fecha_creacion']);
 
                 print json_encode([
-                    'resultado' => $this->logistica_model->crear($tipo, $datos),
+                    'id' => $this->logistica_model->crear($tipo, $datos),
                     'radicado' => $datos['radicado'],
                 ]);
             break;
