@@ -197,7 +197,10 @@ class Interfaces extends CI_Controller {
                 $datos['radicado'] = generar_radicado();
                 $datos['token'] = generar_token($datos['radicado'].$datos['fecha_creacion']);
 
-                print json_encode(['resultado' => $this->logistica_model->crear($tipo, $datos)]);
+                print json_encode([
+                    'resultado' => $this->logistica_model->crear($tipo, $datos),
+                    'radicado' => $datos['radicado'],
+                ]);
             break;
 
             case 'productos_solicitudes_garantia_bitacora':

@@ -286,11 +286,10 @@ if (isset($datos['solicitud_garantia'])) {
         })
 
         // Se crea la solicitud
-        let solicitudId = await consulta('crear', datosSolicitud, false)
-        console.log(solicitudId)
+        let resultado = await consulta('crear', datosSolicitud, false)
 
         Swal.close()
-        mostrarAviso("exito", `¡Tu solicitud de garantía ha sido creada exitosamente! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)
+        mostrarAviso("exito", `¡Tu solicitud de garantía ha sido creada exitosamente con el radicado <b>${resultado.radicado}</b>! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)
     }
 
     $().ready(async () => {

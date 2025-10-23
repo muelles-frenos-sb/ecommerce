@@ -113,7 +113,7 @@ function generar_radicado() {
     return date('Ymd').str_pad(rand(1, 9999), 3, '0', STR_PAD_LEFT);
 }
 
-function generar_token($valor) {
+function generar_token() {
     return substr(bin2hex(random_bytes(25)), 0, 10);
 }
 
