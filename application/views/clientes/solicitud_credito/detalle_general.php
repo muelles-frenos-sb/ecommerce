@@ -118,14 +118,20 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             bloqueo_cupo: 1,
         }
 
-        // Se consulta en el ERP el tercero
+        // Se consulta en el ERP el tercero y el cliente
         var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
+        var consultaTerceroCliente = await consulta('obtener', {tipo: 'clientes_sucursales', numero_documento: solicitud.documento_numero}, false)
 
         // Si el tercero ya existe en el ERP
-        if(consultaTercero.codigo == 0) {
-            // Se actualizan los datos de la fecha de nacimiento y de ingreso
+        if(consultaTercero && consultaTercero.codigo == 0) {
+            // Se mantiene la fecha de nacimiento
             datosTerceroSiesa.fecha_nacimiento = consultaTercero.detalle.Table[0].f200_fecha_nacimiento.split("T")[0].replaceAll("-", "")
-            datosTerceroSiesa.fecha_ingreso = consultaTercero.detalle.Table[0].f201_fecha_ingreso.split("T")[0].replaceAll("-", "")
+        }
+
+        // Si el cliente existe en el ERP
+        if(consultaTerceroCliente && consultaTerceroCliente.codigo == 0) {
+            // Se mantiene la fecha de ingreso
+            datosTerceroSiesa.fecha_ingreso = consultaTerceroCliente.detalle.Table[0].f201_fecha_ingreso.split("T")[0].replaceAll("-", "")
         }
 
         let creacionTerceroSiesa = crearTerceroCliente(datosTerceroSiesa)
