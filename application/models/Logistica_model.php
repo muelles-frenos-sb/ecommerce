@@ -72,12 +72,20 @@ Class Logistica_model extends CI_Model {
 	                psge.clase estado_clase,
                     tv.nombre vendedor_nombre,
                     p.notas AS producto,
-                    IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado
+                    IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
+                    (
+                        SELECT b.observaciones 
+                        FROM productos_solicitudes_garantia_bitacora AS b 
+                        WHERE b.solicitud_id = psg.id 
+                        ORDER BY b.fecha_creacion DESC LIMIT 1 
+                    ) ultimo_comentario,
+                    mr.nombre AS motivo_rechazo
                 FROM productos_solicitudes_garantia psg
                 LEFT JOIN productos_solicitudes_garantia_estados AS psge ON psg.estado_id = psge.id
                 LEFT JOIN terceros_vendedores AS tv ON psg.vendedor_nit = tv.nit
                 LEFT JOIN productos AS p ON psg.producto_id = p.id
                 LEFT JOIN usuarios AS ua ON psg.usuario_asignado_id = ua.id
+                LEFT JOIN motivos_rechazo AS mr ON psg.motivo_rechazo_id = mr.id
                 $filtros_where
                 $filtros_having
                 $order_by
