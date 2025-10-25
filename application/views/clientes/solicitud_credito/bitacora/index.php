@@ -8,7 +8,6 @@
     <div id="contenedor_solicitudes_credito_bitacora"></div>
     <div id="contenedor_solicitudes_credito_bitacora_detalle"></div>
 </div>
-
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>

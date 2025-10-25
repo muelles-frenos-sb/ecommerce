@@ -98,41 +98,64 @@ Class Clientes_model extends CI_Model {
             break;
 
             case 'clientes_facturas':
-                $where = "WHERE cf.Tipo_Doc_cruce != 'CNE' ";
-                $having = "";
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
 
-                if (isset($datos['busqueda'])) {
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "HAVING cf.id";
+                $filtros_where = "WHERE cf.id";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
                     $palabras = explode(' ', trim($datos['busqueda']));
 
-                    $having = "HAVING";
-
+                    // Se recorren las palabras
                     for ($i=0; $i < count($palabras); $i++) {
-                        $having .= " (";
-                        $having .= " cf.Nro_Doc_cruce LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.RazonSocial LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.RazonSocial_Sucursal LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR centro_operativo LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR a.nombre_homologado LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.Fecha_doc_cruce LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.Fecha_venc LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.ValorAplicado LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.totalCop LIKE '%{$palabras[$i]}%'";
-                        $having .= " OR cf.valorDoc LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " cf.Nro_Doc_cruce LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cf.RazonSocial LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cf.RazonSocial_Sucursal LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR centro_operativo LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR a.nombre_homologado LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR Fecha_doc_cruce LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR Fecha_venc LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cf.ValorAplicado LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cf.totalCop LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cf.valorDoc LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
 
-                        $having .= ") ";
-                        if(($i + 1) < count($palabras)) $having .= " AND ";
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
                     }
                 }
 
-                if(isset($datos['numero_documento'])) $where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
-                if(isset($datos['pendientes'])) $where .= " AND cf.totalCop <> 0 AND cf.totalCop NOT BETWEEN -1 AND 1 ";
-                if(isset($datos['id'])) $where .= " AND cf.id = {$datos['id']}";
-                if(isset($datos['Tipo_Doc_cruce'])) $where .= " AND cf.Tipo_Doc_cruce = '{$datos['Tipo_Doc_cruce']}'";
-                if(isset($datos['Nro_Doc_cruce'])) $where .= " AND cf.Nro_Doc_cruce = '{$datos['Nro_Doc_cruce']}'";
-                if(isset($datos['Cliente'])) $where .= " AND cf.Cliente = '{$datos['Cliente']}'";
-                if(isset($datos['mostrar_estado_cuenta'])) $where .= " AND a.mostrar_estado_cuenta = 1";
-                if(isset($datos['mostrar_alerta'])) $where .= " AND a.mostrar_alerta = 1";
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
+                if (isset($filtros_personalizados['sede']) && $filtros_personalizados['sede'] != '') $filtros_having .= " AND centro_operativo LIKE '%{$filtros_personalizados['sede']}%' ";
+                if (isset($filtros_personalizados['documento_cruce']) && $filtros_personalizados['documento_cruce'] != '') $filtros_where .= " AND cf.Nro_Doc_cruce LIKE '%{$filtros_personalizados['documento_cruce']}%' ";
+                if (isset($filtros_personalizados['cuota']) && $filtros_personalizados['cuota'] != '') $filtros_where .= " AND cf.Nro_cuota = '{$filtros_personalizados['cuota']}' ";
+                if (isset($filtros_personalizados['fecha']) && $filtros_personalizados['fecha'] != '') $filtros_having .= " AND Fecha_doc_cruce = '{$filtros_personalizados['fecha']}' ";
+                if (isset($filtros_personalizados['fecha_vencimiento']) && $filtros_personalizados['fecha_vencimiento'] != '') $filtros_having .= " AND Fecha_venc = '{$filtros_personalizados['fecha_vencimiento']}' ";
+                if (isset($filtros_personalizados['dias_vencido']) && $filtros_personalizados['dias_vencido'] != '') $filtros_having .= " AND dias_vencido LIKE '%{$filtros_personalizados['dias_vencido']}%' ";
+                if (isset($filtros_personalizados['valor_documento']) && $filtros_personalizados['valor_documento'] != '') $filtros_where .= " AND cf.ValorAplicado LIKE '%{$filtros_personalizados['valor_documento']}%' ";
+                if (isset($filtros_personalizados['valor_abonos']) && $filtros_personalizados['valor_abonos'] != '') $filtros_where .= " AND cf.valorDoc LIKE '%{$filtros_personalizados['valor_abonos']}%' ";
+                if (isset($filtros_personalizados['valor_saldo']) && $filtros_personalizados['valor_saldo'] != '') $filtros_where .= " AND cf.totalCop LIKE '%{$filtros_personalizados['valor_saldo']}%' ";
+                if (isset($filtros_personalizados['sucursal']) && $filtros_personalizados['sucursal'] != '') $filtros_where .= " AND cf.RazonSocial_Sucursal LIKE '%{$filtros_personalizados['sucursal']}%' ";
+                if (isset($filtros_personalizados['tipo_credito']) && $filtros_personalizados['tipo_credito'] != '') $filtros_where .= " AND a.nombre_homologado LIKE '%{$filtros_personalizados['tipo_credito']}%' ";
+
+                if(isset($datos['numero_documento'])) $filtros_where .= " AND cf.Cliente = '{$datos['numero_documento']}' ";
+                if(isset($datos['pendientes'])) $filtros_where .= " AND cf.totalCop <> 0 AND cf.totalCop NOT BETWEEN -1 AND 1 ";
+                if(isset($datos['id'])) $filtros_where .= " AND cf.id = {$datos['id']}";
+                if(isset($datos['Tipo_Doc_cruce'])) $filtros_where .= " AND cf.Tipo_Doc_cruce = '{$datos['Tipo_Doc_cruce']}'";
+                if(isset($datos['Nro_Doc_cruce'])) $filtros_where .= " AND cf.Nro_Doc_cruce = '{$datos['Nro_Doc_cruce']}'";
+                if(isset($datos['Cliente'])) $filtros_where .= " AND cf.Cliente = '{$datos['Cliente']}'";
+                if(isset($datos['mostrar_estado_cuenta'])) $filtros_where .= " AND a.mostrar_estado_cuenta = 1";
+                if(isset($datos['mostrar_alerta'])) $filtros_where .= " AND a.mostrar_alerta = 1";
                 
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY Fecha_venc DESC, Nro_cuota, Nro_Doc_cruce";
+
                 $sql =
                 "SELECT
                     cf.id,
@@ -180,16 +203,15 @@ Class Clientes_model extends CI_Model {
                     clientes_facturas AS cf
                 LEFT JOIN centros_operacion AS co ON cf.CentroOperaciones = co.codigo
                 LEFT JOIN auxiliares AS a ON cf.Desc_auxiliar = a.nombre
-                $where
-                $having
-                ORDER BY Fecha_venc DESC, Nro_cuota, Nro_Doc_cruce";
-                
-                if (isset($datos['id']) || isset($datos['Tipo_Doc_cruce']) || isset($datos['Nro_Doc_cruce'])) {
-                    return $this->db->query($sql)->row();
-                } else {
-                    // return $sql;
-                    return $this->db->query($sql)->result();
-                }
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite";
+
+                // return $sql;
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id']) || isset($datos['Tipo_Doc_cruce']) || isset($datos['Nro_Doc_cruce'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
             break;
 
             case 'clientes_facturas_detalle':

@@ -426,11 +426,14 @@ ALTER TABLE `recibos` ADD COLUMN `tercero_vendedor_nit` varchar(55) NULL AFTER `
 -- 20251004
 ALTER TABLE `centros_operacion` ADD COLUMN `ruta` varchar(50) NULL AFTER `estado`;
 
--- 20251013 Campo para contactos
-ALTER TABLE `modulos` ADD COLUMN `aplica_importacion_contactos` tinyint(1) NULL DEFAULT 0 AFTER `descripcion`;
+-- 20251013 Campos para la asignación automática de una solicitud de crédito
+ALTER TABLE `usuarios` ADD COLUMN `esta_disponible` tinyint(1) NULL DEFAULT 0 COMMENT 'Marca si está disponible para que se le asignen solicitudes de crédito' AFTER `celular`;
+ALTER TABLE `usuarios` ADD COLUMN `fecha_ultima_actividad` datetime(0) NULL COMMENT 'Fecha de la última actividad del usuario' AFTER `esta_disponible`;
+ALTER TABLE `usuarios` ADD COLUMN `solicitudes_atendidas` int NULL DEFAULT 0 COMMENT 'Cantidad de solicitudes de crédito atendidas por el usuario' AFTER `fecha_ultima_actividad`;
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `usuario_asignado_automaticamente` tinyint(1) NULL DEFAULT 0 COMMENT '0: No; 1: Sí;' AFTER `usuario_asignado_id`;
 
--- 20251017 Columna para el bot
-ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `fecha_validacion_documentos` datetime(0) NULL COMMENT 'Indica cuando completó la validación de las listas' AFTER `fecha_firma`;
+INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (8, 'clientes', 'Clientes');
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (17, 'clientes_asignacion_automatica_solicitudes_credito', 'Asignación automática de solicitudes de crédito', 8);
 
--- 20251017 Columna para metadatos
-ALTER TABLE `productos_metadatos` ADD COLUMN `detalles_tecnicos` varchar(255) NULL AFTER `descripcion`;
+-- 20251018 
+ALTER TABLE `motivos_rechazo` MODIFY COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito; 3: Garantías' AFTER `nombre`;

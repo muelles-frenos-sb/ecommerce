@@ -9,7 +9,7 @@
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
-                    <!-- Si la solicitd todavía está en trámite y está sin fecha de envío a firma -->
+                    <!-- Si la solicitud todavía está en trámite y está sin fecha de envío a firma -->
                     <?php if($solicitud->solicitud_credito_estado_id == 1 && !$solicitud->fecha_envio_firma) { ?>
                         <div class="form-group col-lg-6 col-sm-12">
                             <button class="btn btn-primary btn-block" onClick="javascript:enviarSolicitudAFirma(<?php echo $solicitud->id; ?>)"><i class="fas fa-signature"></i> Enviar para firma</button>

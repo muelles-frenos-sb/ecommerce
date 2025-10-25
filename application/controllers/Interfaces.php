@@ -75,6 +75,15 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'productos_solicitudes_garantia':
+                if (isset($datos['fecha_cierre']) && $datos['fecha_cierre']) $datos['fecha_cierre'] = date("Y-m-d H:i:s");
+                $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
+            case 'productos_solicitudes_garantia_bitacora':
+                $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'proveedores_marcas':
                 $resultado = $this->proveedores_model->actualizar($tipo, ['id' => $id], $datos);
             break;
@@ -186,6 +195,22 @@ class Interfaces extends CI_Controller {
                     'fecha_vencimiento' => $fecha_vencimiento,
                     'codigo' => $codigo,
                 ]);
+            break;
+
+            case 'productos_solicitudes_garantia':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['radicado'] = generar_radicado();
+                $datos['token'] = generar_token($datos['radicado'].$datos['fecha_creacion']);
+
+                print json_encode([
+                    'id' => $this->logistica_model->crear($tipo, $datos),
+                    'radicado' => $datos['radicado'],
+                ]);
+            break;
+
+            case 'productos_solicitudes_garantia_bitacora':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('productos_solicitudes_garantia_bitacora', $datos)]);
             break;
 
             case 'proveedores_cotizaciones_detalle':
@@ -328,6 +353,13 @@ class Interfaces extends CI_Controller {
 
             case 'clientes_solicitudes_credito':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+
+                // Se asigna el usuario automáticamente
+                $id_usuario_asignado = $this->configuracion_model->asignar_solicitud_credito();
+                if($id_usuario_asignado) {
+                    $datos['usuario_asignado_id'] = $id_usuario_asignado;
+                    $datos['usuario_asignado_automaticamente'] = 1;
+                }
 
                 // Se obtiene el id 
                 $id = $this->clientes_model->crear('clientes_solicitudes_credito', $datos);
@@ -557,6 +589,10 @@ class Interfaces extends CI_Controller {
 
             case 'movimientos_contables':
                 $resultado = json_decode(obtener_movimientos_contables_api($datos));
+            break;
+
+            case 'pedidos':
+                $resultado = json_decode(obtener_pedidos_api_estandar($datos));
             break;
 
             case 'producto':

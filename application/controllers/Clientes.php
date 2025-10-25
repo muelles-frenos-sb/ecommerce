@@ -121,6 +121,39 @@ class Clientes extends MY_Controller {
         }
 
         switch ($tipo) {
+            case 'facturas_pendientes':
+                // Se definen los filtros
+                $datos = [
+                    'contar' => true,
+                    'busqueda' => $busqueda,
+                    'filtros_personalizados' => $this->input->get('filtros_personalizados'),
+                    'numero_documento' => $this->input->get('numero_documento'),
+                    'pendientes' => $this->input->get('pendientes'),
+                    'mostrar_estado_cuenta' => $this->input->get('mostrar_estado_cuenta'),
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("clientes_facturas", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("clientes_facturas", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+
             case "pedidos":
                 // Se definen los filtros
                 $datos = [

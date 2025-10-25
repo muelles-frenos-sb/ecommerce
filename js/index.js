@@ -465,7 +465,7 @@ const paginar = (cantidadItems, numeroPagina, itemsPorPagina) => {
     return respuesta
 }
 
-const validarCamposObligatorios = campos => {
+const validarCamposObligatorios = (campos, mensaje = null) => {
     let validacionesExitosas = campos.length
     let exito = true
 
@@ -488,7 +488,7 @@ const validarCamposObligatorios = campos => {
 
     // Si los exitosos son todos
     if(validacionesExitosas != campos.length) {
-        mostrarAviso('alerta', 'Hay campos obligatorios por diligenciar')
+        mostrarAviso('alerta', mensaje || 'Hay campos obligatorios por diligenciar')
 
         // No es exitoso
         exito = false

@@ -1,5 +1,6 @@
 <?php
-$ruta_archivos = "./archivos/solicitudes_credito/{$datos['id']}/*.*";
+$solicitud = (object)$datos['solicitud_garantia'];
+$ruta_archivos = "./archivos/solicitudes_garantia/$solicitud->anio_creacion/$solicitud->id/*.*";
 $archivos = glob($ruta_archivos, GLOB_BRACE);
 ?>
 

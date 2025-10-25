@@ -26,6 +26,8 @@
                         estado: $('#filtro_estado').val(),
                         vendedor: $('#filtro_vendedor').val(),
                         producto: $('#filtro_producto').val(),
+                        usuario_asignado: $('#filtro_usuario_asignado').val(),
+                        radicado: $('#filtro_radicado').val(),
                     }
                 },
             },
@@ -41,30 +43,30 @@
                 },
                 {
                     title: `
+                        Radicado
+                        <input type="text" id="filtro_radicado" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'radicado',
+                    width: '70px',
+                },
+                {
+                    title: `
                         Creación
                         <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary" style='width: 100px;'>
                     `,
                     data: 'fecha_creacion',
                     width: '70px',
                 },
-                {
-                    title: `
-                        Cierre
-                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary" style='width: 100px;'>
-                    `,
-                    data: 'fecha_cierre',
-                    width: '70px',
-                },
                 { 
                     title: `
-                        NIT
+                        Cliente
                         <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
                     `,
                     data: null,
                     render: (solicitud, type, row) => {
                         return `
                             <a href="${$('#site_url').val()}/logistica/solicitudes_garantia/ver/${solicitud.id}" target="_blank">
-                                ${solicitud.vendedor_nit}
+                                ${solicitud.cliente_nit}
                             </a>
                         `
                     },
@@ -72,9 +74,16 @@
                 { 
                     title: `
                         Nombre
+                        <input type="text" id="filtro_cliente_razon_social" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'cliente_razon_social'
+                },
+                { 
+                    title: `
+                        Solicitante
                         <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'razon_social' 
+                    data: 'solicitante_nombres' 
                 },
                 { 
                     title: `
@@ -103,10 +112,36 @@
                 },
                 { 
                     title: `
-                        Producto
-                        <input type="text" id="filtro_producto" class="form-control form-control-sm border-secondary">
+                        Gestionador
+                        <input type="text" id="filtro_usuario_asignado" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'producto'
+                    data: null,
+                    render: (solicitud, type, row) => {
+                        let automatico = (solicitud.usuario_asignado_automaticamente == 1) ? '🕞' : ''
+
+                        return (solicitud.nombre_usuario_asignado != '-') 
+                        ? `${automatico}${solicitud.nombre_usuario_asignado}`
+                        : `
+                            <a type="button" class="btn btn-sm btn-primary" href="javascript:cargarAsignarUsuario(${solicitud.id})" title="Asignar usuario">
+                                Asignar
+                            </a>
+                        `
+                    }
+                },
+                {
+                    title: `
+                        Cierre
+                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary" style='width: 100px;'>
+                    `,
+                    data: 'fecha_cierre',
+                    width: '70px',
+                },
+                { 
+                    title: `
+                        Último comentario
+                        <input type="text" id="filtro_ultimo_comentario" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'ultimo_comentario' 
                 },
             ],
             columnDefs: [
