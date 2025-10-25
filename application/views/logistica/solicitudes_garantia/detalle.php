@@ -50,12 +50,12 @@
                 <div class="form-row">
                     <div class="form-group col-md-5">
                         <label for="solicitud_cliente_nit">Número de documento del cliente final *</label>
-                        <input type="text" class="form-control" id="solicitud_cliente_nit" value="900649430">
+                        <input type="text" class="form-control" id="solicitud_cliente_nit" value="<?php if(isset($solicitud)) echo $solicitud->cliente_nit; ?>">
                     </div>
 
                     <div class="form-group col-md-5">
                         <label for="solicitud_numero_factura">Número de factura *</label>
-                        <input type="text" id="solicitud_numero_factura" class="form-control" placeholder="Ej: 100-CPV-135339" value="100-CPV-135339">
+                        <input type="text" id="solicitud_numero_factura" class="form-control" placeholder="Ej: 100-CPV-135339" value="<?php if(isset($solicitud)) echo $solicitud->numero_factura; ?>">
                     </div>
 
                     <div class="form-group col-md-2">
@@ -80,19 +80,6 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-lg-4">
-                        <label for="solicitud_motivo_id">Indicanos el motivo de la reclamación *</label>
-                        <select id="solicitud_motivo_id" class="form-control">
-                            <option value="">Selecciona...</option>
-                            <?php foreach($this->configuracion_model->obtener('productos_solicitudes_garantia_motivos_reclamacion') as $motivo_reclamacion) echo "<option value='$motivo_reclamacion->id'>$motivo_reclamacion->nombre</option>"; ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-lg-4">
-                        <label for="solicitud_motivo_otro">Si es otro motivo, indícanos cuál</label>
-                        <input type="text" class="form-control" id="solicitud_motivo_otro" value="<?php // if(isset($solicitud)) echo $solicitud->razon_social; ?>">
-                    </div>
-
-                    <div class="form-group col-lg-4">
                         <label for="solicitud_producto_estado">Estado del producto</label>
                         <select id="solicitud_producto_estado" class="form-control">
                             <option value="">Selecciona...</option>
@@ -103,9 +90,22 @@
                         </select>
                     </div>
 
+                    <div class="form-group col-lg-4">
+                        <label for="solicitud_motivo_id">Indicanos el motivo de la reclamación *</label>
+                        <select id="solicitud_motivo_id" class="form-control">
+                            <option value="">Selecciona...</option>
+                            <?php foreach($this->configuracion_model->obtener('productos_solicitudes_garantia_motivos_reclamacion') as $motivo_reclamacion) echo "<option value='$motivo_reclamacion->id'>$motivo_reclamacion->nombre</option>"; ?>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-lg-4">
+                        <label for="solicitud_motivo_otro">Si es otro motivo, indícanos cuál</label>
+                        <input type="text" class="form-control" id="solicitud_motivo_otro" value="<?php if(isset($solicitud)) echo $solicitud->producto_solicitud_garantia_motivo_otro; ?>">
+                    </div>
+
                     <div class="form-group col-md-12">
                         <label for="solicitud_desripcion">Danos detalle de la razón por la cual estás solicitando garantía *</label>
-                        <textarea id="solicitud_desripcion" class="form-control" rows="3"></textarea>
+                        <textarea id="solicitud_desripcion" class="form-control" rows="3"><?php if(isset($solicitud)) echo $solicitud->descripcion; ?></textarea>
                     </div>
                 </div>
 
@@ -146,50 +146,50 @@
 
                     <div class="form-group col-lg-6">
                         <label for="solicitud_tipo_solucion_otro">Si es otro, indícanos cuál</label>
-                        <input type="text" class="form-control" id="solicitud_tipo_solucion_otro" value="<?php // if(isset($solicitud)) echo $solicitud->razon_social; ?>">
+                        <input type="text" class="form-control" id="solicitud_tipo_solucion_otro" value="<?php if(isset($solicitud)) echo $solicitud->tipo_solucion_otro; ?>">
                     </div>
                 </div>
 
-                <div class="tag-badge tag-badge--theme badge_formulario mb-3 mt-2">
-                    6 - DOCUMENTOS A ADJUNTAR
-                </div>
-                <div class="form-row">
-                    <table class="table table-sm table-bordered">
-                        <thead class="thead-light">
-                            <tr>
-                                <th rowspan="2">Documentos</th>
-                            </tr>
-                            <tr>
-                                <th>Archivo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Fotos del producto *</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="archivo_fotos_producto" multiple>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Soporte de la factura (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="archivo_soporte_factura">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Guía de transporte (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="archivo_guia_transporte">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <?php if(!isset($solicitud)) { ?>
+                    <div class="tag-badge tag-badge--theme badge_formulario mb-3 mt-2">
+                        6 - DOCUMENTOS A ADJUNTAR
+                    </div>
+                    <div class="form-row">
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th rowspan="2">Documentos</th>
+                                </tr>
+                                <tr>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Fotos del producto *</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="archivo_fotos_producto" multiple>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Soporte de la factura (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="archivo_soporte_factura">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Guía de transporte (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="archivo_guia_transporte">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } ?>
                 
                 <?php if(!isset($solicitud)) { ?>
                     <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudGarantia()" id="btn_enviar_solicitud">ENVIAR SOLICITUD DE GARANTÍA</button>
-                <?php } else { ?>
-                    <button class="btn btn-primary btn-block mb-3" onClick="javascript:crearSolicitudGarantia()">ACTUALIZAR DATOS DE LA SOLICITUD</button>
                 <?php } ?>
             </div>
         </div>
@@ -197,8 +197,25 @@
 </div>
 <div class="block-space block-space--layout--before-footer"></div>
 
+<?php if(isset($solicitud)) { ?>
+    <script>
+        var solicitud = JSON.parse('<?php echo addslashes(json_encode($solicitud)); ?>')
+        
+        $().ready(async () => {
+            $("#solicitud_tipo_solicitante").val(solicitud.solicitante_tipo)
+            $("#solicitud_producto_estado").val(solicitud.producto_solicitud_garantia_estado_id)
+            $("#solicitud_motivo_id").val(solicitud.producto_solicitud_garantia_motivo_id)
+            $("#solicitud_producto_ubicacion_actual").val(solicitud.producto_ubicacion_actual)
+            $("#solicitud_metodo_devolucion").val(solicitud.producto_metodo_devolucion)
+            $("#solicitud_tipo_solucion").val(solicitud.tipo_solucion)
+
+            buscarPedido(solicitud)
+        })
+    </script>
+<?php } ?>
+
 <script>
-    buscarPedido = async () => {
+    buscarPedido = async (solicitudGarantia = null) => {
         Swal.fire({
             title: 'Estamos Buscando el pedido en nuestro sistema...',
             text: 'Por favor, espera.',
@@ -226,7 +243,7 @@
             return false
         }
 
-        await cargarInterfaz('logistica/solicitudes_garantia/detalle_pedido', 'contenedor_detalle_pedido', {pedido: consultaPedido.detalle.Table})
+        await cargarInterfaz('logistica/solicitudes_garantia/detalle_pedido', 'contenedor_detalle_pedido', {pedido: consultaPedido.detalle.Table, solicitud: solicitudGarantia})
 
         Swal.close()
     }
@@ -300,7 +317,7 @@
             tipo_solucion_otro: $('#solicitud_tipo_solucion_otro').val(),
         }
 
-        // $('#btn_enviar_solicitud').prop("disabled", true)
+        $('#btn_enviar_solicitud').prop("disabled", true)
 
         // Si es un usuario logueado en el sistema, se agrega el id
         if($('#sesion_usuario_id').val()) datosSolicitud.usuario_id = $('#sesion_usuario_id').val()

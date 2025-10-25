@@ -57,24 +57,9 @@
                     data: 'fecha_creacion',
                     width: '70px',
                 },
-                {
-                    title: `
-                        Cierre
-                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary" style='width: 100px;'>
-                    `,
-                    data: 'fecha_cierre',
-                    width: '70px',
-                },
                 { 
                     title: `
-                        Solicitante
-                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: 'solicitante_nombres' 
-                },
-                { 
-                    title: `
-                        NIT
+                        Cliente
                         <input type="text" id="filtro_numero_documento" class="form-control form-control-sm border-secondary">
                     `,
                     data: null,
@@ -89,6 +74,13 @@
                 { 
                     title: `
                         Nombre
+                        <input type="text" id="filtro_cliente_razon_social" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'cliente_razon_social'
+                },
+                { 
+                    title: `
+                        Solicitante
                         <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
                     `, 
                     data: 'solicitante_nombres' 
@@ -136,12 +128,20 @@
                         `
                     }
                 },
+                {
+                    title: `
+                        Cierre
+                        <input type="date" id="filtro_fecha_cierre" class="form-control form-control-sm border-secondary" style='width: 100px;'>
+                    `,
+                    data: 'fecha_cierre',
+                    width: '70px',
+                },
                 { 
                     title: `
-                        Producto
-                        <input type="text" id="filtro_producto" class="form-control form-control-sm border-secondary">
+                        Último comentario
+                        <input type="text" id="filtro_ultimo_comentario" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'producto'
+                    data: 'ultimo_comentario' 
                 },
             ],
             columnDefs: [

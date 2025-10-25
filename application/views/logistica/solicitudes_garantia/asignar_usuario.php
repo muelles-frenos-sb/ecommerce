@@ -45,6 +45,7 @@
         let camposObligatorios = [
             $('#usuario')
         ]
+        let usuarioSeleccionado = $('#usuario option:selected').text()
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
@@ -55,6 +56,15 @@
         }
 
         await consulta('actualizar', datos)
+
+        // Creación del registro en bitácora
+        await consulta('crear', {
+            tipo: 'productos_solicitudes_garantia_bitacora',
+            solicitud_id: id,
+            usuario_id: $('#sesion_usuario_id').val(),
+            observaciones: `Solicitud asignada a ${usuarioSeleccionado}`,
+        })
+
         listarSolicitudesGarantia()
         $('#modal_asignar_usuario').modal('hide')
 

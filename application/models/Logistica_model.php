@@ -64,6 +64,7 @@ Class Logistica_model extends CI_Model {
                 $sql = 
                 "SELECT
                     psg.*,
+                    YEAR(psg.fecha_creacion) anio_creacion,
                     DATE(psg.fecha_creacion) fecha_creacion,
                     TIME(psg.fecha_creacion) hora_creacion,
                     DATE(psg.fecha_cierre) fecha_cierre,

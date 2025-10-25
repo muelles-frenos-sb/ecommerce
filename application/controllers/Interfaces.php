@@ -75,6 +75,11 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'productos_solicitudes_garantia':
+                if (isset($datos['fecha_cierre']) && $datos['fecha_cierre']) $datos['fecha_cierre'] = date("Y-m-d H:i:s");
+                $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'productos_solicitudes_garantia_bitacora':
                 $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
             break;

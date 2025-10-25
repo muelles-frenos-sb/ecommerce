@@ -1,4 +1,6 @@
 <?php
+if(isset($datos['solicitud'])) $solicitud = (object) $datos['solicitud'];
+
 $tabla = 
 "<table class='table-striped table-bordered w-100'>
     <thead>
@@ -79,21 +81,31 @@ $tabla .= '</tbody></table>';
 
     <div class="form-group col-lg-6">
         <label for="solicitud_cantidad_reclamada">Cantidad reclamada *</label>
-        <input type="number" class="form-control" id="solicitud_cantidad_reclamada">
+        <input type="number" class="form-control" id="solicitud_cantidad_reclamada" value="<?php if(isset($solicitud)) echo $solicitud->producto_cantidad_reclamada; ?>">
     </div>
 
     <div class="form-group col-lg-6">
         <label for="solicitud_producto_serial">Número de serie del producto (opcional)</label>
-        <input type="text" class="form-control" id="solicitud_producto_serial">
+        <input type="text" class="form-control" id="solicitud_producto_serial" value="<?php if(isset($solicitud)) echo $solicitud->producto_numero_serie; ?>">
     </div>
 
     <div class="form-group col-lg-6">
         <label for="solicitud_fecha_instalacion">Fecha de instalación (opcional)</label>
-        <input type="date" class="form-control" id="solicitud_fecha_instalacion">
+        <input type="date" class="form-control" id="solicitud_fecha_instalacion" value="<?php if(isset($solicitud)) echo $solicitud->producto_fecha_instalacion; ?>">
     </div>
 
     <div class="form-group col-lg-6">
         <label for="solicitud_uso">Kilometraje o tiempo de uso (opcional)</label>
-        <input type="text" class="form-control" id="solicitud_uso">
+        <input type="text" class="form-control" id="solicitud_uso" value="<?php if(isset($solicitud)) echo $solicitud->producto_uso; ?>">
     </div>
 </div>
+
+<?php if(isset($solicitud)) { ?>
+    <script>
+        var solicitud = JSON.parse('<?php echo addslashes(json_encode($solicitud)); ?>')
+        
+        $().ready(async () => {
+            $("#solicitud_producto_id").val(solicitud.producto_id)
+        })
+    </script>
+<?php } ?>
