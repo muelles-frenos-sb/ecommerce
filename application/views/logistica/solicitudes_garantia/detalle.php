@@ -149,6 +149,42 @@
                         <input type="text" class="form-control" id="solicitud_tipo_solucion_otro" value="<?php // if(isset($solicitud)) echo $solicitud->razon_social; ?>">
                     </div>
                 </div>
+
+                <div class="tag-badge tag-badge--theme badge_formulario mb-3 mt-2">
+                    6 - DOCUMENTOS A ADJUNTAR
+                </div>
+                <div class="form-row">
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th rowspan="2">Documentos</th>
+                            </tr>
+                            <tr>
+                                <th>Archivo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Fotos del producto *</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="archivo_fotos_producto" multiple>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Soporte de la factura (Opcional)</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="archivo_soporte_factura">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Guía de transporte (Opcional)</td>
+                                <td class="text-center">
+                                    <input type="file" class="form-control archivos" id="archivo_guia_transporte">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
                 
                 <?php if(!isset($solicitud)) { ?>
                     <button class="btn btn-primary btn-block" onClick="javascript:crearSolicitudGarantia()" id="btn_enviar_solicitud">ENVIAR SOLICITUD DE GARANTÍA</button>
@@ -202,7 +238,6 @@
             $('#solicitud_numero_factura'),
         ]
         if (!validarCamposObligatorios(camposObligatoriosPedido, 'Por favor selecciona primero el pedido donde está el producto sobre el cual vas a pedir la garantía.')) return false
-
         
         // Si aún no se ha traido la respuesta del pedido
         if(!$('#solicitud_vendedor_nit').val()) {
@@ -226,11 +261,11 @@
         ]
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
-        // let archivos = validarArchivos()
-        // if (!archivos) {
-        //     mostrarAviso('alerta', `Por favor selecciona los archivos para poder finalizar la solicitud de crédito`, 20000)
-        //     return false
-        // }
+        let archivos = validarArchivos()
+        if (!archivos) {
+            mostrarAviso('alerta', `Por favor selecciona los archivos para poder finalizar la solicitud de garantía`, 20000)
+            return false
+        }
         
         // Se captura la cantidad vendida del producto seleccionado
         let cantidadProducto = parseInt($('#solicitud_producto_id option:selected').attr('data-cantidad'))
@@ -264,7 +299,6 @@
             tipo_solucion: $('#solicitud_tipo_solucion').val(),
             tipo_solucion_otro: $('#solicitud_tipo_solucion_otro').val(),
         }
-        console.table(datosSolicitud)
 
         // $('#btn_enviar_solicitud').prop("disabled", true)
 
@@ -289,10 +323,71 @@
             usuario_id: $('#sesion_usuario_id').val(),
             observaciones: `Solicitud recibida`,
         }
-        consulta('crear', datosBitacora, false)
+        
+        await consulta('crear', datosBitacora, false)
+        await subirArchivos(resultado.id, archivos)
 
         Swal.close()
         mostrarAviso("exito", `¡Tu solicitud de garantía ha sido creada exitosamente con el radicado <b>${resultado.radicado}</b>! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)
+    }
+
+    subirArchivos = async (solicitudGarantiaId, archivos) => {
+        let cantidadArchivos = archivos.length
+        let cantidadArchivosSubidos = 0
+
+        // Se recorren los archivos
+        Array.from(archivos).forEach((archivo, index) => {
+            let documento = new FormData()
+
+            documento.append(index, archivo)
+
+            let subida = new XMLHttpRequest()
+            subida.open('POST', `${$("#site_url").val()}logistica/subir/${solicitudGarantiaId}`)
+            subida.send(documento)
+            subida.onload = async evento => {
+                let respuesta = JSON.parse(evento.target.responseText)
+
+                cantidadArchivosSubidos+=1
+
+                // Si se subieron todos los archivos
+                if (cantidadArchivos === cantidadArchivosSubidos) {
+                    // Se envía un correo electrónico de notificación
+                    // let email = await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudGarantiaId})
+                }
+            }
+        })
+    }
+
+    validarArchivos = () => {
+        // Se establece la cantidad mínima de archivos para cada uno de los documentos requeridos
+        let reglas = {
+            archivo_fotos_producto: 1,
+            archivo_soporte_factura: 0,
+            archivo_guia_transporte: 0,
+        }
+
+        let archivosPorSubir = []
+        let cumpleReglas = true
+
+        // Se recorre cada input de archivo
+        $(`tr:not(.d-none) .archivos`).each(function(index, elemento) {
+            let $elemento = $(elemento)
+            let archivos = $elemento.prop('files')
+            let numeroPorRegla = reglas[$(elemento).attr('id')] // Cantidad de archivos requeridos por cada ítem
+
+            // Si no se requieren archivos o si la cantidad es menor a los requeridos
+            if (!numeroPorRegla || archivos.length >= numeroPorRegla) {
+                let archivo =  Array.from(archivos)
+                archivosPorSubir = archivosPorSubir.concat(archivo)
+
+                $elemento.removeClass("is-invalid")
+            } else {
+                $elemento.addClass("is-invalid")
+                cumpleReglas = false
+            }
+        })
+
+        return (cumpleReglas) ? archivosPorSubir : cumpleReglas
     }
 
     $().ready(async () => {
