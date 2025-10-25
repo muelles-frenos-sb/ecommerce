@@ -93,7 +93,7 @@
     }
 
     // Se inicializa el gestor de disponibilidad del usuario
-    const gestor = new GestorDisponibilidad()
+    // const gestor = new GestorDisponibilidad()
 
     cargarAsignarUsuario = (id) => {
         cargarInterfaz('clientes/solicitud_credito/asignar_usuario', 'contenedor_asignar_usuario', {id: id})

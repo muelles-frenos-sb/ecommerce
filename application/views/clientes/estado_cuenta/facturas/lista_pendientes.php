@@ -52,287 +52,192 @@ $recibos_pendientes_por_aplicar = $this->configuracion_model->obtener('recibos_d
 </div>
 
 <style>
-    #tabla_facturas_pendientes tbody td {
-        font-size: 0.7em;
-        padding: 5px;
+    #tabla_facturas_pendientes {
+        font-size: 0.8em;
+        font-family: Futura;
     }
 
-    #tabla_facturas_pendientes thead th {
+    .encabezado {
         background-color: #19287F;
         color: white;
     }
 </style>
 
 <div class="table-responsive">
-    <table class="table-striped table-bordered" id="tabla_facturas_pendientes"></table>
+    <table class="table-striped table-bordered" id="<?php echo "tabla_facturas_pendientes"; ?>">
+        <thead>
+            <tr>
+                <th class="text-center encabezado">
+                    <b><i class="fa fa-plus fa-2x"></i></b>
+                </th>
+                <th class="text-center encabezado">Recibo pendiente</th>
+                <th class="text-center encabezado">Sede</th>
+                <th class="text-center encabezado">Doc</th>
+                <th class="text-center encabezado">Cuota</th>
+                <th class="text-center encabezado">Fecha fact</th>
+                <th class="text-center encabezado">Fecha vcto</th>
+                <th class="text-center encabezado">Días venc</th>
+                <th class="text-center encabezado">Valor Doc</th>
+                <th class="text-center encabezado">Abonos</th>
+                <th class="text-center encabezado">Saldo</th>
+                <th class="text-center encabezado">Retenciones</th>
+                <th class="text-center encabezado">Sucursal</th>
+                <th class="text-center encabezado">Tipo crédito</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $total_facturas = 0;
+            $total_pagado = 0;
+            $total_saldo = 0;
+            $contador = 1;
+
+            foreach($facturas as $factura) {
+                $sucursal = explode(' ', $factura->RazonSocial_Sucursal);
+
+                $total_facturas += $factura->ValorAplicado;
+                $total_pagado += $factura->valorDoc;
+                $total_saldo += $factura->totalCop;
+            ?>
+                <tr id="factura_<?php echo $factura->id; ?>">
+                    <td>
+                        <div class="form-check" style="height: 13px;">
+                            <input class="form-check-input" type="radio" onClick="javascript:agregarFactura({
+                                contador: '<?php echo $contador; ?>',
+                                id: '<?php echo $factura->id; ?>',
+                                documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                                numero_documento: '<?php echo $factura->Cliente; ?>',
+                                fecha_documento: '<?php echo $factura->Fecha_doc_cruce; ?>',
+                                dias_vencido: '<?php echo $factura->dias_vencido; ?>',
+                                fecha_vencimiento: '<?php echo $factura->Fecha_venc; ?>',
+                                numero_cuota: '<?php echo $factura->Nro_cuota; ?>',
+                                centro_operativo: '<?php echo $factura->CentroOperaciones; ?>',
+                                documento_cruce_tipo: '<?php echo $factura->Tipo_Doc_cruce; ?>',
+                                documento_cruce_fecha: '<?php echo $factura->Fecha_doc_cruce; ?>',
+                                valor: `<?php echo number_format($factura->totalCop, 0, '', ''); ?>`,
+                                sede: `<?php echo $factura->centro_operativo; ?>`,
+                                tipo_credito: `<?php echo $factura->nombre_homologado; ?>`,
+                                descuento_porcentaje: `<?php echo $factura->descuento_porcentaje; ?>`,
+                                id_sucursal: '<?php echo $factura->sucursal_id; ?>',
+                                valor_aplicado: `<?php echo $factura->ValorAplicado; // Enviado para almacenar en el detalle del recibo ?>`,
+                                valor_documento: `<?php echo $factura->valorDoc; // Enviado para almacenar en el detalle del recibo ?>`,
+                                total_cop: `<?php echo $factura->totalCop; // Enviado para almacenar en el detalle del recibo ?>`,
+                            })" style="padding: 2px 5px 2px 5px;">
+
+                            
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <!-- Si está pendiente por aplicar -->
+                        <?php if($factura->por_aplicar_archivo_pendiente) { ?>
+                            <a class="mb-2" target="_blank" onClick="window.open('<?php echo base_url()."archivos/recibos/$factura->por_aplicar_archivo_pendiente"; ?>', this.target, 'width=800,height=600'); return false;" title="Ver comprobante" style="cursor: pointer;">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        <?php } ?>
+                    </td>
+                    <td>
+                        <?php echo $factura->centro_operativo; ?>
+                    </td>
+                    <td class="text-right">
+                        <a href="javascript:;" onClick="javascript:cargarProductos({
+                            documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                            numero_documento: '<?php echo $factura->Cliente; ?>',
+                            id_sucursal: '<?php echo $factura->sucursal_id; ?>',
+                        });"><?php echo $factura->Nro_Doc_cruce; ?></a>
+                    </td>
+                    <td class="text-right"><?php echo $factura->Nro_cuota; ?></td>
+                    <td><?php echo $factura->Fecha_doc_cruce; ?></td>
+                    <td><?php echo $factura->Fecha_venc; ?></td>
+                    <td class="text-right">
+                        <?php
+                        if($factura->dias_vencido > 0) {
+                            echo "
+                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
+                                <div class='status-badge__body'>
+                                    <div class='status-badge__text'>$factura->dias_vencido</div>
+                                </div>
+                            </div>
+                            ";
+                        } else {
+                            echo 0;
+                        }
+                        ?>
+                    </td>
+                    <td class="text-right"><?php echo formato_precio($factura->ValorAplicado);?></td><!-- Valor doc -->
+                    <td class="text-right"><?php echo formato_precio($factura->valorDoc);?></td><!-- Abonos -->
+                    <td class="text-right">
+                        <?php
+                        // Saldo
+                        if($factura->totalCop < 0) {
+                            echo "
+                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
+                                <div class='status-badge__body'>
+                                    <div class='status-badge__text'>".formato_precio($factura->totalCop)."</div>
+                                </div>
+                            </div>
+                            ";
+                        } else {
+                            echo formato_precio($factura->totalCop);
+                        }
+                        ?>
+                    </td>
+                    <td class="text-center">
+                        <a href="javascript:;" onClick="javascript:cargarMovimientos({
+                            documento_cruce: '<?php echo $factura->Nro_Doc_cruce; ?>',
+                            numero_documento: '<?php echo $factura->Cliente; ?>',
+                            id_sucursal: '<?php echo $factura->sucursal_id; ?>',
+                        });">Ver</a>
+                    </td>
+                    <td>
+                        <?php echo substr($sucursal[0], 0, 10); ?>
+                    </td>
+                    <td><?php echo $factura->nombre_homologado; ?></td>
+                </tr>
+            <?php
+                $contador++;
+            }
+            ?>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-right"><?php echo formato_precio($total_facturas); ?></td>
+                <td class="text-right"><?php echo formato_precio($total_pagado); ?></td>
+                <td class="text-right"><?php echo formato_precio($total_saldo); ?></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
 </div>
 
 <script>
-    $().ready(() => {        
-        var tablaFacturasPendientes = $("#tabla_facturas_pendientes").DataTable({
-            ajax: {
-                url: `${$("#site_url").val()}clientes/obtener_datos_tabla`,
-                data: datos => {
-                    datos.tipo = 'facturas_pendientes'
-                    datos.numero_documento = '<?php echo $datos['numero_documento']; ?>'
-                    datos.pendientes = true
-                    datos.mostrar_estado_cuenta = true
-
-                    // Filtros personalizados
-                    datos.filtros_personalizados = {
-                        sede: $('#filtro_sede').val(),
-                        documento_cruce: $('#filtro_documento_cruce').val(),
-                        cuota: $('#filtro_cuota').val(),
-                        fecha: $('#filtro_fecha').val(),
-                        fecha_vencimiento: $('#filtro_fecha_vencimiento').val(),
-                        dias_vencido: $('#filtro_dias_vencido').val(),
-                        valor_documento: $('#filtro_valor_valor_documento').val(),
-                        valor_abonos: $('#filtro_valor_abonos').val(),
-                        valor_saldo: $('#filtro_valor_saldo').val(),
-                        sucursal: $('#filtro_sucursal').val(),
-                        tipo_credito: $('#filtro_tipo_credito').val(),
-                    }
-                },
-            },
-            columns: [
-                { 
-                    title: `<i class="fa fa-plus fa-2x"></i>`,
-                    data: null,
-                    className: 'text-center',
-                    render: (factura, type, row) => {
-                        return `
-                            <div class="form-check" style="height: 20px;">
-                                <input class="form-check-input" type="radio" onClick="javascript:agregarFactura({
-                                    contador: null,
-                                    id: '${factura.id}',
-                                    documento_cruce: '${factura.Nro_Doc_cruce}',
-                                    numero_documento: '${factura.Cliente}',
-                                    fecha_documento: '${factura.Fecha_doc_cruce}',
-                                    dias_vencido: '${factura.dias_vencido}',
-                                    fecha_vencimiento: '${factura.Fecha_venc}',
-                                    numero_cuota: '${factura.Nro_cuota}',
-                                    centro_operativo: '${factura.CentroOperaciones}',
-                                    documento_cruce_tipo: '${factura.Tipo_Doc_cruce}',
-                                    documento_cruce_fecha: '${factura.Fecha_doc_cruce}',
-                                    valor: '${parseInt(factura.totalCop)}',
-                                    sede: '${factura.centro_operativo}',
-                                    tipo_credito: '${factura.nombre_homologado}',
-                                    descuento_porcentaje: '${factura.descuento_porcentaje}',
-                                    id_sucursal: '${factura.sucursal_id}',
-                                    valor_aplicado: '${factura.ValorAplicado}', // Enviado para almacenar en el detalle del recibo,
-                                    valor_documento: '${factura.valorDoc}', // Enviado para almacenar en el detalle del recibo,
-                                    total_cop: '${factura.totalCop}' // Enviado para almacenar en el detalle del recibo,
-                                })">
-                            </div>
-                        `
-                    }
-                },
-                { 
-                    title: `Recibo pendiente`,
-                    data: null,
-                    render: (factura, type, row) => {
-                        // Si está pendiente por aplicar
-                        return (factura.por_aplicar_archivo_pendiente)
-                        ? `
-                            <a
-                                class="mb-2"
-                                target="_blank"
-                                onClick="window.open('${$('base_url').val()}/archivos/recibos/${factura.por_aplicar_archivo_pendiente}', this.target, 'width=800,height=600'); return false;"
-                                title="Ver comprobante"
-                                style="cursor: pointer;"
-                            >
-                                <i class="fa fa-search"></i>
-                            </a>
-                        `
-                        : ``
-                    }
-                },
-                {
-                    title: `
-                        Sede
-                        <input type="text" id="filtro_sede" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: 'centro_operativo'
-                },
-                { 
-                    title: `
-                        Doc
-                        <input type="text" id="filtro_documento_cruce" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: null,
-                    className: 'text-right',
-                    render: (factura, type, row) => {
-                        return `
-                            <a href="javascript:;" onClick="javascript:cargarProductos({
-                                documento_cruce: '${factura.Nro_Doc_cruce}',
-                                numero_documento: '${factura.Cliente}',
-                                id_sucursal: '${factura.sucursal_id}',
-                            });">${factura.Nro_Doc_cruce}</a>
-                        `
-                    }
-                },
-                {
-                    title: `
-                        Cuota
-                        <input type="number" id="filtro_cuota" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: 'Nro_cuota',
-                    className: 'text-right',
-                },
-                {
-                    title: `
-                        Fecha fact
-                        <input type="date" id="filtro_fecha" class="form-control form-control-sm border-secondary" style='width: 100px;'>
-                    `,
-                    data: 'Fecha_doc_cruce'
-                },
-                {
-                    title: `
-                        Fecha Vcto
-                        <input type="date" id="filtro_fecha_vencimiento" class="form-control form-control-sm border-secondary" style='width: 100px;'>
-                    `,
-                    data: 'Fecha_venc'
-                },
-                { 
-                    title: `
-                        Dias venc
-                        <input type="number" id="filtro_dias_vencido" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: null,
-                    className: 'text-right',
-                    render: (factura, type, row) => {
-                        // Si está pendiente por aplicar
-                        return (parseInt(factura.dias_vencido) > 0) ? `
-                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
-                                <div class='status-badge__body'>
-                                    <div class='status-badge__text'>${factura.dias_vencido}</div>
-                                </div>
-                            </div>
-                        ` : 0
-                    }
-                },
-                {
-                    title: `
-                        Valor Doc
-                        <input type="number" id="filtro_valor_valor_documento" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: null,
-                    className: 'text-right',
-                    render: (factura, type, row) => {
-                        return `$ ${Math.round(parseFloat(factura.ValorAplicado)).toLocaleString('es-CO')}`
-                    }
-                },
-                {
-                    title: `
-                        Abonos
-                        <input type="number" id="filtro_valor_abonos" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: null,
-                    className: 'text-right',
-                    render: (factura, type, row) => {
-                        let saldo = `$ ${Math.round(parseFloat(factura.valorDoc)).toLocaleString('es-CO')}`
-
-                        // Si está pendiente por aplicar
-                        return (parseFloat(factura.totalCop) < 0) ? `
-                            <div class='status-badge status-badge--style--failure status-badge--has-text'>
-                                <div class='status-badge__body'>
-                                    <div class='status-badge__text'>${saldo}</div>
-                                </div>
-                            </div>
-                        ` : 0
-                    }
-                },
-                {
-                    title: `
-                        Saldo
-                        <input type="number" id="filtro_valor_saldo" class="form-control form-control-sm border-secondary">
-                    `, 
-                    data: null,
-                    className: 'text-right',
-                    render: (factura, type, row) => {
-                        return `$ ${Math.round(parseFloat(factura.totalCop)).toLocaleString('es-CO')}`
-                    }
-                },
-                { 
-                    title: `Retenciones`,
-                    data: null,
-                    render: (factura, type, row) => {
-                        return `
-                            <a href="javascript:;" onClick="javascript:cargarMovimientos({
-                                documento_cruce: ${factura.Nro_Doc_cruce},
-                                numero_documento: ${factura.Cliente},
-                                id_sucursal: ${factura.sucursal_id},
-                            });">Ver</a>
-                        `
-                    }
-                },
-                {
-                    title: `
-                        Sucursal
-                        <input type="text" id="filtro_sucursal" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: null,
-                    render: (factura, type, row) => {
-                        return factura.RazonSocial_Sucursal.split(' ')[0]
-                    }
-                },
-                {
-                    title: `
-                        Tipo crédito
-                        <input type="text" id="filtro_tipo_credito" class="form-control form-control-sm border-secondary">
-                    `,
-                    data: 'nombre_homologado'
-                },
-            ],
-            createdRow: function(row, data, dataIndex) {
-                // Agregar id al tr
-                $(row).attr('id', `factura_${data.id}`);
-                $(row).css('height', '40px');
-            },
-            deferRender: true,
-            fixedHeader: true,
+    $().ready(() => {
+        new DataTable('#tabla_facturas_pendientes', {
             info: true,
-            initComplete: function () {
-                // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
-                $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaFacturasPendientes.draw())
-
-                // Evita que al dar clic en los filtros personalizados, se aplique el ordenamiento
-                // $(`input[id^='filtro_'], select[id^='filtro_']`).on('click', e => {
-                //     e.stopPropagation()
-                //     e.stopImmediatePropagation()
-                //     return false
-                // })
-
-                // Aplicar estilos al encabezado
-                $(this.api().table().header()).find('th').css({
-                    'height': '60px',
-                    'background-color': '#19287F',
-                    'color': 'white',
-                    'font-weight': 'bold',
-                    'vertical-align': 'middle',
-                    'text-align': 'center'
-                })
-            },
+            paging: false,
+            scrollY: '320px',
+            searching: true,
             language: {
                 decimal: ',',
                 thousands: '.',
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
-            ordering: false,
-            orderCellsTop: false,
-            pageLength: 100,
-            paging: true,
-            processing: true,
-            scrollCollapse: true,
-            scroller: true,
             scrollX: false,
-            scrollY: '320px',
-            searching: true,
-            serverSide: true,
-            stateSave: false,
+            scrollCollapse: true,
         })
-
+       
         $('#contenedor_mensaje_carga').html('')
+
         if($('#pago_con_comprobante').val() != 1) $("#btn_recibos_pendientes").hide()
+            console.log($('#pago_con_comprobante').val())
     })
 </script>

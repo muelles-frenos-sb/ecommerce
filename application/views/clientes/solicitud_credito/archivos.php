@@ -23,7 +23,7 @@ $archivos = glob($ruta_archivos, GLOB_BRACE);
                         <td><?php echo $indice + 1; ?></td>
                         <td><?php echo $nombre; ?></td>
                         <td>
-                            <?php if ($extension == 'pdf' || $extension == 'jpg' || $extension == 'png' || $extension == 'jpeg') { ?>
+                            <?php if ($extension == 'pdf' || $extension == 'jpg' || $extension == 'png' || $extension == 'jpeg' || $extension == 'webp') { ?>
                                 <button class="btn btn-primary" title="Ver archivo" onClick="javascript:window.open('<?php echo base_url($archivo) ?>', this.target, 'width=800,height=600'); return false;">
                                     <i class="fas fa-search"></i>
                                 </button>
