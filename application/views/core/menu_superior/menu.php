@@ -194,6 +194,12 @@
                                     </div>
                                 </li>
                             <?php } ?>
+
+                            <li class="menu__item">
+                                <a href="<?php echo base_url('archivos/manual'); ?>" class="menu__link" target='_blank'>
+                                    📘 Manual de Usuario
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>
