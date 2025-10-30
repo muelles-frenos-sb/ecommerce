@@ -22,7 +22,10 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-success" onClick="javascript:guardarBitacora(<?php if(isset($bitacora)) echo $bitacora->id; ?>)">Guardar</button>
+                <?php if(!isset($bitacora)) { ?>
+                    <button class="btn btn-success" onClick="javascript:guardarBitacora(<?php if(isset($bitacora)) echo $bitacora->id; ?>)">Guardar</button>
+                <?php } ?>
+    
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
