@@ -49,6 +49,11 @@ class Blog extends MY_Controller {
         $this->load->view('core/body', $this->data);
     }
 
+    function politica_envios() {
+        $this->data['contenido_principal'] = 'blog/politica_envios';
+        $this->load->view('core/body', $this->data);
+    }
+
     function taller_aliado() {
         $this->data['contenido_principal'] = 'blog/taller_aliado';
         $this->load->view('core/body', $this->data);
@@ -56,6 +61,11 @@ class Blog extends MY_Controller {
 
     function tratamiento_datos() {
         $this->data['contenido_principal'] = 'blog/tratamiento_datos';
+        $this->load->view('core/body', $this->data);
+    }
+
+    function tratamiento_cookies() {
+        $this->data['contenido_principal'] = 'blog/tratamiento_cookies';
         $this->load->view('core/body', $this->data);
     }
 }
