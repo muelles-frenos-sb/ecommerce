@@ -5,8 +5,4 @@
 })(window,document,'https://cdn.bitrix24.es/b24455241/crm/form/loader_55.js');
 </script>
 
-<li class="main-menu__item mr-1">
-    <a href="#" class="main-menu__link">
-        Trabaja con nosotros
-    </a>
-</li>
+<a class="megamenu-links__item-link mt-2" href="#">Trabaja con nosotros</a>

@@ -27,6 +27,10 @@ body
 .block-zone__card
     cursor pointer
 
+// Título de la sección de marcas en el menú principal
+.departments__button
+    width 300px
+
 .dropcart__item-name>a:hover
     color azul_corporativo_primario
 
@@ -68,19 +72,19 @@ body
     background-color white
     cursor pointer
 
-.indicator
-    color azul_corporativo_primario
-    font-family Futura, Roboto
+// .indicator
+//     color azul_corporativo_primario
+//     font-family Futura, Roboto
 
-.indicator:hover .indicator__button, .indicator--open .indicator__button
-    background amarillo_corporativo_primario
-    height 26px
+// .indicator:hover .indicator__button, .indicator--open .indicator__button
+//     background amarillo_corporativo_primario
+//     // height 26px
 
-.indicator__icon
-    height 20px
-    padding 0
-    padding-left 20px
-    width 20px
+// .indicator__icon
+//     // height 20px
+//     padding 0
+//     padding-left 20px
+//     width 20px
 
 .main-menu__item, .section-header__title, .block-zone__tabs
     color azul_corporativo_primario
@@ -133,7 +137,11 @@ body
     color rojo_corporativo_secundario
 
 .site__body
-    margin-top 110px
+    padding-top 160px
+
+@media (max-width: 1399px)
+    .site__body
+        padding-top 50px
 
 .social-links__item--linkedin a
     background #0A66C2
