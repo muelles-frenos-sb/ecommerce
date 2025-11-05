@@ -26,7 +26,7 @@
 
                         <!-- Crédito -->
                         <li class="main-menu__item main-menu__item--submenu--megamenu main-menu__item--has-submenu">
-                            <a href="<?php echo site_url('blog/credito'); ?>" class="main-menu__link">
+                            <a href="#" class="main-menu__link">
                                 Crédito
                                 <svg width="7px" height="5px">
                                     <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
@@ -42,22 +42,22 @@
                                                         <!-- <a class="megamenu-links__item-link" href="">Opciones</a> -->
                                                         <ul class="megamenu-links">
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('clientes/credito'); ?>">Solicita crédito</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="Solicitud de crédito" href="<?php echo site_url('clientes/credito'); ?>">Solicita crédito</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="https://api.whatsapp.com/send?phone=573162694009&text=%C2%A1Hola!,%20me%20gustar%C3%ADa%20consultar%20mi%20cr%C3%A9dito%20en%20Repuestos%20Sim%C3%B3n%20Bol%C3%ADvar" target="_blank">Consulta tu cupo</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="Consulta de cupo" href="https://api.whatsapp.com/send?phone=573162694009&text=%C2%A1Hola!,%20me%20gustar%C3%ADa%20consultar%20mi%20cr%C3%A9dito%20en%20Repuestos%20Sim%C3%B3n%20Bol%C3%ADvar" target="_blank">Consulta tu cupo</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('clientes/credito'); ?>">Actualizar tus datos</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="Actualización de datos" href="<?php echo site_url('clientes/credito'); ?>">Actualizar tus datos</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('clientes'); ?>">Paga facturas</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="Paga tus facturas" href="<?php echo site_url('clientes'); ?>">Paga tus facturas</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="https://www.youtube.com/watch?v=6-oYSVOMPaY" target="_blank">¿Cómo pagar por la página web?</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="¿Cómo pagar por la página web?" href="https://www.youtube.com/watch?v=6-oYSVOMPaY" target="_blank">¿Cómo pagar por la página web?</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="https://youtu.be/UzmWpRfq398?si=XYHS-y27Wbw4ruNK" target="_blank">¿Cómo diligenciar la solicitud de crédito?</a>
+                                                                <a class="megamenu-links__item-link menu_credito" data-nombre="¿Cómo diligenciar la solicitud de crédito?" href="https://youtu.be/UzmWpRfq398?si=XYHS-y27Wbw4ruNK" target="_blank">¿Cómo diligenciar la solicitud de crédito?</a>
                                                             </li>
                                                         </ul>
                                                     </li>
@@ -71,14 +71,14 @@
 
                         <!-- Talleres aliados -->
                         <li class="main-menu__item">
-                            <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
+                            <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link menu_talleres_aliados" data-nombre="Talleres aliados">
                                 Talleres aliados
                             </a>
                         </li><!-- Talleres aliados -->
 
                         <!-- Nosotros -->
                         <li class="main-menu__item main-menu__item--submenu--megamenu main-menu__item--has-submenu">
-                            <a href="<?php echo site_url('blog/nosotros'); ?>" class="main-menu__link">
+                            <a href="#" class="main-menu__link">
                                 Nosotros
                                 <svg width="7px" height="5px">
                                     <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
@@ -94,10 +94,10 @@
                                                         <!-- <a class="megamenu-links__item-link" href="">Opciones</a> -->
                                                         <ul class="megamenu-links">
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('blog/nosotros'); ?>">Catálogos</a>
+                                                                <a class="megamenu-links__item-link menu_nosotros" data-nombre="Catálogos" href="<?php echo site_url('blog/nosotros'); ?>">Catálogos</a>
                                                             </li>
                                                             <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('blog/contacto'); ?>">Datos de contacto</a>
+                                                                <a class="megamenu-links__item-link menu_nosotros" data-nombre="Datos de contacto" href="<?php echo site_url('blog/contacto'); ?>">Datos de contacto</a>
                                                             </li>
                                                         </ul>
                                                     </li>
@@ -111,14 +111,14 @@
                         
                         <!-- Blog -->
                         <li class="main-menu__item">
-                            <a href="<?php echo site_url('blog'); ?>" class="main-menu__link">
+                            <a href="<?php echo site_url('blog'); ?>" class="main-menu__link menu_blog" data-nombre="Blog">
                                 Blog
                             </a>
                         </li><!-- Blog -->
 
                         <!-- Contacto -->
                         <li class="main-menu__item main-menu__item--submenu--megamenu main-menu__item--has-submenu">
-                            <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
+                            <a href="#" class="main-menu__link">
                                 Contacto
                                 <svg width="7px" height="5px">
                                     <path d="M0.280,0.282 C0.645,-0.084 1.238,-0.077 1.596,0.297 L3.504,2.310 L5.413,0.297 C5.770,-0.077 6.363,-0.084 6.728,0.282 C7.080,0.634 7.088,1.203 6.746,1.565 L3.504,5.007 L0.262,1.565 C-0.080,1.203 -0.072,0.634 0.280,0.282 Z" />
@@ -133,16 +133,16 @@
                                                     <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                         <!-- <a class="megamenu-links__item-link" href="">Opciones</a> -->
                                                         <ul class="megamenu-links">
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_contacto" data-nombre="Garantía">
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('logistica/garantias'); ?>">Garantía</a>
                                                             </li>
-                                                            <li class="megamenu-links__item">
-                                                                <a class="megamenu-links__item-link" href="#">PQRS</a>
+                                                            <li class="megamenu-links__item menu_contacto" data-nombre="PQRS">
+                                                                <a class="megamenu-links__item-link" href="<?php echo site_url('blog/contacto'); ?>">PQRS</a>
                                                             </li>
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_contacto" data-nombre="Cartera">
                                                                 <a class="megamenu-links__item-link" href="#">Cartera</a><br>
                                                             </li>
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_contacto" data-nombre="Trabaja con nosotros">
                                                                 <?php $this->load->view('bitrix/empleo'); ?>
                                                             </li>
                                                         </ul>
@@ -171,16 +171,16 @@
                                                 <ul class="megamenu__links megamenu-links megamenu-links--root">
                                                     <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                         <ul class="megamenu-links">
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_mas" data-nombre="Garantía">
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('logistica/garantias'); ?>">Garantía</a>
                                                             </li>
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_mas" data-nombre="Distribuidores">
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('blog/distribuidores'); ?>">Distribuidores</a><br>
                                                             </li>
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_mas" data-nombre="Denuncias">
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('denuncias'); ?>">Denuncias</a>
                                                             </li>
-                                                            <li class="megamenu-links__item">
+                                                            <li class="megamenu-links__item menu_mas" data-nombre="Trabaja con nosotros">
                                                                 <?php $this->load->view('bitrix/empleo'); ?>
                                                             </li>
                                                         </ul>
@@ -198,7 +198,7 @@
 
             <!-- Botón de pago de facturas -->
             <div class="header__navbar-phone phone">
-                <a href="<?php echo site_url('clientes'); ?>" class="phone__body" target="_blank">
+                <a href="<?php echo site_url('clientes'); ?>" class="phone__body menu_credito" data-nombre="Paga tus facturas (botón)" target="_blank">
                     <img src="<?php echo base_url(); ?>images/boton_pago.png" height="32" alt="Paga tus facturas">
                 </a>
             </div><!-- Botón de pago de facturas -->
@@ -247,15 +247,15 @@
             <div class="indicator">
                 <div class="footer-newsletter__social-links social-links">
                     <ul class="social-links__list">
-                        <li class="social-links__item social-links__item--instagram">
+                        <li class="social-links__item social-links__item--instagram menu_link_redes_sociales" data-nombre="instagram">
                             <a href="https://www.instagram.com/repuestossimonbolivar/" target="_blank"><i class="fab fa-instagram"></i></a>
                         </li>
 
-                        <li class="social-links__item social-links__item--facebook">
+                        <li class="social-links__item social-links__item--facebook menu_link_redes_sociales" data-nombre="facebook">
                             <a href="https://www.facebook.com/RepuestosSimonBolivar" target="_blank"><i class="fab fa-facebook-f"></i></a>
                         </li>
 
-                        <li class="social-links__item social-links__item--tiktok">
+                        <li class="social-links__item social-links__item--tiktok menu_link_redes_sociales" data-nombre="tiktok">
                             <a href="https://www.tiktok.com/@repuestossimonbolivar" target="_blank">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-100 -50 700 700">
                                     <path d="M448 209.9a210.1 210.1 0 0 1 -122.8-39.3V349.4A162.6 162.6 0 1 1 185 188.3V278.2a74.6 74.6 0 1 0 52.2 71.2V0l88 0a121.2 121.2 0 0 0 1.9 22.2h0A122.2 122.2 0 0 0 381 102.4a121.4 121.4 0 0 0 67 20.1z"/>
@@ -268,3 +268,21 @@
         </div>
     </div>
 </header>
+
+<script>
+    $().ready(async () => {
+        $('.menu_link_redes_sociales').click(function() {
+            agregarLog(91, JSON.stringify({
+                tipo: 'Acceso a redes sociales',
+                detalle: $(this).attr('data-nombre')
+            }))
+        })
+
+        $('.menu_credito, .menu_talleres_aliados, .menu_nosotros, .menu_blog, .menu_contacto, .menu_mas').click(function() {
+            agregarLog(91, JSON.stringify({
+                tipo: 'Acceso a menú',
+                detalle: $(this).attr('data-nombre')
+            }))
+        })
+    })
+</script>

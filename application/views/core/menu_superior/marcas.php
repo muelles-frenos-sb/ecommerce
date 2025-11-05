@@ -1,5 +1,5 @@
 <div class="departments">
-    <button class="departments__button mr-1" type="button">
+    <button class="departments__button mr-1" type="button" id="menu_marcas">
         <span class="departments__button-icon">
             <svg width="16px" height="12px">
                 <path d="M0,7L0,5L16,5L16,7L0,7ZM0,0L16,0L16,2L0,2L0,0ZM12,12L0,12L0,10L12,10L12,12Z" />
@@ -82,6 +82,13 @@
             let marcaId = $(evento.currentTarget).data("marca-id")
             cargarFiltros('grupos', `filtros_grupos_${marcaId}`, {marcaNombre: marcaNombre, marcaId: marcaId})
             cargarFiltros('lineas', `filtros_lineas_${marcaId}`, {marcaNombre: marcaNombre, marca_id: marcaId})
+        })
+
+        $('#menu_marcas').click(evento => {
+            agregarLog(91, JSON.stringify({
+                tipo: 'Búsqueda por marcas',
+                detalle: 'Clic en el menú'
+            }))
         })
     })
 </script>

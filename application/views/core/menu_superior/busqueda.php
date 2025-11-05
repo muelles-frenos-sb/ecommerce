@@ -36,6 +36,11 @@
 
         localStorage.simonBolivar_buscarProducto = $('#buscar').val()
 
+        agregarLog(91, JSON.stringify({
+            tipo: 'Búsqueda por palabra clave',
+            detalle: `Búsqueda: ${$('#buscar').val()}`
+        }))
+
         location.href = '<?php echo site_url("productos?busqueda="); ?>' + $('#buscar').val()
     })
 
@@ -43,5 +48,12 @@
         if(localStorage.simonBolivar_productosRecientes) {
             cargarInterfaz('core/menu_superior/busqueda_reciente', 'contenedor_busqueda_reciente', {productos: JSON.parse(localStorage.simonBolivar_productosRecientes)})
         }
+
+        $('#buscar').click(evento => {
+            agregarLog(91, JSON.stringify({
+                tipo: 'Búsqueda por palabra clave',
+                detalle: 'Clic en el campo'
+            }))
+        })
     })
 </script>
