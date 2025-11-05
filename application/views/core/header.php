@@ -24,7 +24,7 @@ if (isset($metadatos)) {
 }
 ?>
 
-<link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico">
+<link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico?<?php echo date('Ymdhis'); ?>">
 
 <!-- fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
