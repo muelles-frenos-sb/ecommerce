@@ -25,7 +25,7 @@
             <?php $this->load->view('core/menu_superior/index'); ?>
 
             <!-- Contenido principal de cada sitio -->
-            <div class="site__body">
+            <div class="site__body mt-3">
                 <?php $this->load->view($contenido_principal); ?>
             </div>
 

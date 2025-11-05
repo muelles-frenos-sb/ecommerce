@@ -4,7 +4,7 @@ $producto = $this->productos_model->obtener('productos', $datos);
 if(empty($producto)) redirect(site_url(''));
 ?>
 
-<div class="block-header block-header--has-breadcrumb mt-3">
+<div class="block-header block-header--has-breadcrumb">
     <div class="container">
         <div class="block-header__body">
             <nav class="breadcrumb block-header__breadcrumb" aria-label="breadcrumb">

@@ -3,7 +3,7 @@
         <div class="search__shadow"></div>
         
         <!-- Búsqueda por palabra clave -->
-        <input class="search__input" type="text" placeholder="Buscar por palabra clave o referencia">
+        <input class="search__input" type="text" placeholder="Buscar por palabra clave o referencia" id="buscar">
         
         <button class="search__button search__button--end" type="submit">
             <span class="search__button-icon">
