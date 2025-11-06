@@ -24,7 +24,7 @@ if (isset($metadatos)) {
 }
 ?>
 
-<link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico">
+<link rel="icon" type="image/png" href="<?php echo base_url(); ?>images/favicon.ico?<?php echo date('Ymdhis'); ?>">
 
 <!-- fonts -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
@@ -36,8 +36,7 @@ if (isset($metadatos)) {
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/photoswipe/default-skin/default-skin.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>vendor/select2/css/select2.min.css">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/select2.min.css" />
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css"> -->
-<link rel="stylesheet" href="<?php echo base_url(); ?>css/style.header-spaceship-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(min-width: 1200px)">
+<link rel="stylesheet" href="<?php echo base_url(); ?>css/style.header-classic-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(min-width: 1200px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.mobile-header-variant-one.css?<?php echo date('Ymdhis'); ?>" media="(max-width: 1199px)">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/style.css?<?php echo date('Ymdhis'); ?>">
 <link rel="stylesheet" href="<?php echo base_url(); ?>css/notificacion.css?<?php echo date('Ymdhis'); ?>">

@@ -24,8 +24,11 @@
             <!-- Menú superior -->
             <?php $this->load->view('core/menu_superior/index'); ?>
 
+            <!-- Menú móvil -->
+            <?php $this->load->view('core/menu_movil/index'); ?>
+
             <!-- Contenido principal de cada sitio -->
-            <div class="site__body">
+            <div class="site__body mt-3">
                 <?php $this->load->view($contenido_principal); ?>
             </div>
 
@@ -33,8 +36,7 @@
             <?php $this->load->view('core/footer'); ?>
         </div>
 
-        <!-- Menú móvil -->
-        <?php $this->load->view('core/menu_movil/index'); ?>
+        
         
         <!-- Modals -->
         <?php $this->load->view('core/modals'); ?>

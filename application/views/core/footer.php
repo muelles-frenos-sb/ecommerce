@@ -69,7 +69,8 @@
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/contacto'); ?>" class="footer-links__link">Contacto</a></li>
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/taller_aliado'); ?>" class="footer-links__link">Taller aliado</a></li>
                                 <li class="footer-links__item"><a href="<?php echo site_url('blog/tratamiento_datos'); ?>" class="footer-links__link">Política de tratamiento de datos</a></li>
-                                
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/tratamiento_cookies'); ?>" class="footer-links__link">Política de cookies</a></li>
+                                <li class="footer-links__item"><a href="<?php echo site_url('blog/politica_envios'); ?>" class="footer-links__link">Política de envíos y devoluciones</a></li>
                             </ul>
                         </div>
                     </div>

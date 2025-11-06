@@ -45,4 +45,4 @@
     <a href="<?php echo site_url("carrito/finalizar"); ?>" class="btn btn-primary">Ir a pagar</a>
 </div>
 
-<input type="hidden" id="carrito_valor" value=<?php echo $this->cart->total()*100; ?>>
+<input type="hidden" id="carrito_valor" value=<?php echo $this->cart->total() * 100; ?>>
