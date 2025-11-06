@@ -1,11 +1,12 @@
 <div class="mobile-menu">
     <div class="mobile-menu__backdrop"></div>
     <div class="mobile-menu__body">
-        <button class="mobile-menu__close" type="button">
-            <svg width="12" height="12">
-                <path d="M10.8,10.8L10.8,10.8c-0.4,0.4-1,0.4-1.4,0L6,7.4l-3.4,3.4c-0.4,0.4-1,0.4-1.4,0l0,0c-0.4-0.4-0.4-1,0-1.4L4.6,6L1.2,2.6 c-0.4-0.4-0.4-1,0-1.4l0,0c0.4-0.4,1-0.4,1.4,0L6,4.6l3.4-3.4c0.4-0.4,1-0.4,1.4,0l0,0c0.4,0.4,0.4,1,0,1.4L7.4,6l3.4,3.4 C11.2,9.8,11.2,10.4,10.8,10.8z" />
-            </svg>
-        </button>
+        <button class="mobile-menu__close" type="button"><svg width="12" height="12">
+                    <path d="M10.8,10.8L10.8,10.8c-0.4,0.4-1,0.4-1.4,0L6,7.4l-3.4,3.4c-0.4,0.4-1,0.4-1.4,0l0,0c-0.4-0.4-0.4-1,0-1.4L4.6,6L1.2,2.6
+	c-0.4-0.4-0.4-1,0-1.4l0,0c0.4-0.4,1-0.4,1.4,0L6,4.6l3.4-3.4c0.4-0.4,1-0.4,1.4,0l0,0c0.4,0.4,0.4,1,0,1.4L7.4,6l3.4,3.4
+	C11.2,9.8,11.2,10.4,10.8,10.8z" />
+                </svg>
+            </button>
         <div class="mobile-menu__panel">
             <div class="mobile-menu__panel-header">
                 <div class="mobile-menu__panel-title">Menú</div>
@@ -124,6 +125,49 @@
                         <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
                             Contacto
                         </a>
+                    </li>
+
+                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu" data-mobile-menu-item>
+                        <a href="#" data-mobile-menu-trigger>
+                            Más...
+                            <svg width="7" height="11">
+                                <path d="M0.3,10.7L0.3,10.7c0.4,0.4,0.9,0.4,1.3,0L7,5.5L1.6,0.3C1.2-0.1,0.7,0,0.3,0.3l0,0c-0.4,0.4-0.4,1,0,1.3l4,3.9l-4,3.9 C-0.1,9.8-0.1,10.4,0.3,10.7z" />
+                            </svg>
+                        </a>
+                        <div class="mobile-menu__links-panel" data-mobile-menu-panel>
+                            <div class="mobile-menu__panel mobile-menu__panel--hidden">
+                                <div class="mobile-menu__panel-header">
+                                    <button class="mobile-menu__panel-back" type="button">
+                                        <svg width="7" height="11">
+                                            <path d="M6.7,0.3L6.7,0.3c-0.4-0.4-0.9-0.4-1.3,0L0,5.5l5.4,5.2c0.4,0.4,0.9,0.3,1.3,0l0,0c0.4-0.4,0.4-1,0-1.3l-4-3.9l4-3.9C7.1,1.2,7.1,0.6,6.7,0.3z" />
+                                        </svg>
+                                    </button>
+                                    <div class="mobile-menu__panel-title">Pages</div>
+                                </div>
+                                <div class="mobile-menu__panel-body">
+                                    <ul class="mobile-menu__links">
+                                        <li data-mobile-menu-item>
+                                            <a href="<?php echo site_url('logistica/garantias'); ?>" class="" data-mobile-menu-trigger>
+                                                Garantía
+                                            </a>
+                                        </li>
+                                        <li data-mobile-menu-item>
+                                            <a href="<?php echo site_url('blog/distribuidores'); ?>" class="" data-mobile-menu-trigger>
+                                                Distribuidores
+                                            </a>
+                                        </li>
+                                        <li data-mobile-menu-item>
+                                            <a href="<?php echo site_url('denuncias'); ?>" class="" data-mobile-menu-trigger>
+                                                Denuncias
+                                            </a>
+                                        </li>
+                                        <li data-mobile-menu-item>
+                                            <?php $this->load->view('bitrix/empleo'); ?>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </li>
                     
                     <!-- Botón para pago de facturas -->

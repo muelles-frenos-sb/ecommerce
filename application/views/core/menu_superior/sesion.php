@@ -9,9 +9,9 @@
 
         <!-- Nombre de usuario o Iniciar -->
         <?php if($this->session->userdata('usuario_id')) { ?>
-            <span class="indicator__value"><?php echo $this->session->userdata('nombres'); ?></span>
+            <span class="indicator__value color_azul_corporativo_primario"><?php echo $this->session->userdata('nombres'); ?></span>
         <?php } else { ?>
-            <span class="indicator__value">Iniciar sesión</span>
+            <span class="indicator__value color_azul_corporativo_primario">Iniciar sesión</span>
         <?php } ?>
     </a>
     <div class="indicator__content">
