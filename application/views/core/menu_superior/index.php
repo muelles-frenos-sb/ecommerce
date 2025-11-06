@@ -1,8 +1,3 @@
-<div class="site__mobile-header fixed-top">
-    <!-- Botón del menú para móviles -->
-    <?php $this->load->view('core/menu_superior/movil'); ?>
-</div>
-
 <header class="site__header fixed-top">
     <div class="header">
         <div class="header__topbar-classic-bg"></div>
@@ -291,14 +286,14 @@
                 <a href="#" class="indicator__button">
                     <span class="indicator__icon">
                         <svg width="32" height="32">
-                            <circle cx="10.5" cy="27.5" r="2.5" />
-                            <circle cx="23.5" cy="27.5" r="2.5" />
-                            <path d="M26.4,21H11.2C10,21,9,20.2,8.8,19.1L5.4,4.8C5.3,4.3,4.9,4,4.4,4H1C0.4,4,0,3.6,0,3s0.4-1,1-1h3.4C5.8,2,7,3,7.3,4.3 l3.4,14.3c0.1,0.2,0.3,0.4,0.5,0.4h15.2c0.2,0,0.4-0.1,0.5-0.4l3.1-10c0.1-0.2,0-0.4-0.1-0.4C29.8,8.1,29.7,8,29.5,8H14 c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,10C28.5,20.3,27.5,21,26.4,21z" />
+                            <circle fill="#19287F" cx="10.5" cy="27.5" r="2.5" />
+                            <circle fill="#19287F" cx="23.5" cy="27.5" r="2.5" />
+                            <path fill="#19287F" d="M26.4,21H11.2C10,21,9,20.2,8.8,19.1L5.4,4.8C5.3,4.3,4.9,4,4.4,4H1C0.4,4,0,3.6,0,3s0.4-1,1-1h3.4C5.8,2,7,3,7.3,4.3 l3.4,14.3c0.1,0.2,0.3,0.4,0.5,0.4h15.2c0.2,0,0.4-0.1,0.5-0.4l3.1-10c0.1-0.2,0-0.4-0.1-0.4C29.8,8.1,29.7,8,29.5,8H14 c-0.6,0-1-0.4-1-1s0.4-1,1-1h15.5c0.8,0,1.5,0.4,2,1c0.5,0.6,0.6,1.5,0.4,2.2l-3.1,10C28.5,20.3,27.5,21,26.4,21z" />
                         </svg>
                         <span class="indicator__counter" id="carrito_total_items">0</span>
                     </span>
                     <span class="indicator__title">Tu compra</span>
-                    <span class="indicator__value" id="carrito_total">$ 0</span>
+                    <span class="indicator__value color_azul_corporativo_primario" id="carrito_total">$ 0</span>
                 </a>
 
                 <div class="indicator__content">
@@ -336,7 +331,7 @@
             <!-- Redes sociales -->
             <div class="indicator">
                 <div class="footer-newsletter__social-links social-links">
-                    <ul class="social-links__list">
+                    <ul class="social-links__list" style="margin-right: 11px;">
                         <li class="social-links__item menu_link_redes_sociales" data-nombre="instagram">
                             <a href="https://www.instagram.com/repuestossimonbolivar/" target="_blank">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
@@ -347,8 +342,8 @@
 
                         <li class="social-links__item menu_link_redes_sociales" data-nombre="facebook">
                             <a href="https://www.facebook.com/RepuestosSimonBolivar" target="_blank">
-                                <svg fill="#19287F" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                                    <path d="M576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 440 146.7 540.8 258.2 568.5L258.2 398.2L205.4 398.2L205.4 320L258.2 320L258.2 286.3C258.2 199.2 297.6 158.8 383.2 158.8C399.4 158.8 427.4 162 438.9 165.2L438.9 236C432.9 235.4 422.4 235 409.3 235C367.3 235 351.1 250.9 351.1 292.2L351.1 320L434.7 320L420.3 398.2L351 398.2L351 574.1C477.8 558.8 576 450.9 576 320z"/>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                                    <path fill="#19287F" d="M576 320C576 178.6 461.4 64 320 64C178.6 64 64 178.6 64 320C64 440 146.7 540.8 258.2 568.5L258.2 398.2L205.4 398.2L205.4 320L258.2 320L258.2 286.3C258.2 199.2 297.6 158.8 383.2 158.8C399.4 158.8 427.4 162 438.9 165.2L438.9 236C432.9 235.4 422.4 235 409.3 235C367.3 235 351.1 250.9 351.1 292.2L351.1 320L434.7 320L420.3 398.2L351 398.2L351 574.1C477.8 558.8 576 450.9 576 320z"/>
                                 </svg>
                             </a>
                         </li>
