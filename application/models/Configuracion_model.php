@@ -290,7 +290,7 @@ Class Configuracion_model extends CI_Model {
                 if(!empty($datos)) $this->db->where($datos);
 
                 $this->db
-                    ->order_by('nombre')
+                    ->order_by('codigo')
                     ->from($tabla)
                 ;
 

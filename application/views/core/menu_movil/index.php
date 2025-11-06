@@ -119,7 +119,7 @@
                                             </a>
                                         </li>
 
-                                        <?php foreach ($this->configuracion_model->obtener('marcas') as $marca) { ?>
+                                        <?php foreach ($this->configuracion_model->obtener('marcas', ['activo' => 1]) as $marca) { ?>
                                             <li data-mobile-menu-item onClick="javascript:location.href='<?php echo site_url("productos?marca=$marca->nombre"); ?>'">
                                                 <button type="button" data-mobile-menu-trigger>
                                                     <?php echo $marca->nombre; ?>
