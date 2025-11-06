@@ -186,13 +186,6 @@
                         <a href="<?php echo site_url('clientes/credito'); ?>" data-mobile-menu-trigger>
                             Crédito
                         </a>
-                    </p>
-                    
-                    <!-- Garantía -->
-                    <li class="main-menu__item main-menu__item--submenu--menu main-menu__item--has-submenu">
-                        <a href="<?php echo site_url('logistica/garantias'); ?>" class="main-menu__link">
-                            Garantía
-                        </a>
                     </li>
 
                     <li data-mobile-menu-item>
