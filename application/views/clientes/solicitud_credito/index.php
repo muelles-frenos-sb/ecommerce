@@ -56,15 +56,15 @@
             // Actualizar cada 2 minutos
             this.intervalo = setInterval(() => {
                 // Si ya se puso como disponible, refresca el estado
-                if($('#usuario_disponible').val() == 1) this.marcarDisponibilidad(true)
+                if($('#usuario_disponible').val() == 1) this.marcarDisponibilidad(true, true)
                 
                 // Se refrescan los usuarios disponibles
                 this.obtenerUsuariosDisponibles()
-            }, 120000) // 5000
+            }, 120000) // Cada 120 segundos
 
             // Marcado como no disponible al cerrar la página
             window.addEventListener('beforeunload', () => {
-                this.marcarDisponibilidad(false, true)
+                this.marcarDisponibilidad(false)
             })
         }
         
