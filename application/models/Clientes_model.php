@@ -58,6 +58,10 @@ Class Clientes_model extends CI_Model {
 
     function eliminar($tipo, $datos){
         switch ($tipo) {
+            case 'clientes_solicitudes_credito_detalle':
+                return $this->db->delete($tipo, $datos);
+            break;
+            
             case 'clientes_sucursales':
                 return $this->db->delete($tipo, $datos);
             break;
@@ -320,7 +324,8 @@ Class Clientes_model extends CI_Model {
                     uit.codigo tipo_identificacion_codigo,
                     v.nombre vendedor_nombre,
 	                v.codigo vendedor_codigo,
-                    IF(csc.fecha_validacion_documentos is NOT NULL, 1, 0) documentos_validados
+                    IF(csc.fecha_validacion_documentos is NOT NULL, 1, 0) documentos_validados,
+                    m.codigo municipio_codigo
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id

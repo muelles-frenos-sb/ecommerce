@@ -378,6 +378,9 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'clientes_solicitudes_credito_detalle':
+                // Primero, se eliminan los registros existentes para esta solicitud
+                $this->clientes_model->eliminar('clientes_solicitudes_credito_detalle', ['solicitud_id' => $datos['id_solicitud_credito']]);
+
                 print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_detalle', $datos['valores'])]);
             break;
 

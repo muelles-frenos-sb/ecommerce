@@ -2,6 +2,7 @@
 if (isset($datos['id'])) {
     $solicitud = $this->clientes_model->obtener("clientes_solicitudes_credito", ["id" => $datos['id']]);
     $solicitud_detalle = $this->clientes_model->obtener("clientes_solicitudes_credito_detalle", ['cscd.solicitud_id' => $datos['id']]);
+    echo "<input type='hidden' id='solicitud_credito_id' value='$solicitud->id' />";
 }
 ?>
 
@@ -51,7 +52,7 @@ if (isset($datos['id'])) {
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut1" value="1">
+                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut1" value="1" <?php if(isset($solicitud) && $solicitud->rut == 1) echo "checked"; ?>>
                                     <label class="form-check-label" for="solicitud_tiene_rut1">
                                         Tengo RUT *
                                     </label>
@@ -59,7 +60,7 @@ if (isset($datos['id'])) {
                             </div>
                             <div class="col-6">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut2" value="0">
+                                    <input class="form-check-input" type="radio" name="solicitud_tiene_rut" id="solicitud_tiene_rut2" value="0" <?php if(isset($solicitud) && $solicitud->rut == 0) echo "checked"; ?>>
                                     <label class="form-check-label" for="solicitud_tiene_rut2">
                                         NO Tengo RUT *
                                     </label>
@@ -107,7 +108,7 @@ if (isset($datos['id'])) {
                     <div class="col-md-3">
                         <br>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 1) echo "checked"; ?> autocomplete="off">
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento1" value="1" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 4) echo "checked"; ?> autocomplete="off">
                             <label class="form-check-label" for="solicitud_tipo_documento1">
                                 Cédula de ciudadanía *
                             </label>
@@ -116,7 +117,7 @@ if (isset($datos['id'])) {
                     <div class="col-md-3">
                         <br>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 2) echo "checked"; ?> autocomplete="off">
+                            <input class="form-check-input" type="radio" name="solicitud_tipo_documento" id="solicitud_tipo_documento2" value="2" <?php if(isset($solicitud) && $solicitud->identificacion_tipo_id == 1) echo "checked"; ?> autocomplete="off">
                             <label class="form-check-label" for="solicitud_tipo_documento2">
                                 Nit *
                             </label>
@@ -343,11 +344,9 @@ if (isset($datos['id'])) {
                 <?php } ?>
             </div>
 
-            <?php if(!isset($solicitud)) { ?>
-                <div class="form-group mx-3">
-                    <button class="btn btn-success" onClick="javascript:agregarCamposPersonaAutorizada('personas_autorizadas')">Agregar</button>
-                </div>
-            <?php } ?>
+            <div class="form-group mx-3">
+                <button class="btn btn-success" onClick="javascript:agregarCamposPersonaAutorizada('personas_autorizadas')">Agregar</button>
+            </div>
 
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1 datos_persona_juridica" id="clientes">
@@ -400,11 +399,9 @@ if (isset($datos['id'])) {
                 <?php } ?>
             </div>
 
-            <?php if(!isset($solicitud)) { ?>
-                <div class="form-group mx-3 datos_persona_juridica">
-                    <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('clientes')">Agregar</button>
-                </div>
-            <?php } ?>
+            <div class="form-group mx-3 datos_persona_juridica">
+                <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('clientes')">Agregar</button>
+            </div>
 
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1 datos_persona_juridica" id="beneficiarios_cliente">
@@ -454,11 +451,9 @@ if (isset($datos['id'])) {
                 <?php } ?>
             </div>
 
-            <?php if(!isset($solicitud)) { ?>
-                <div class="form-group mx-3 datos_persona_juridica">
-                    <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('beneficiarios_cliente')">Agregar</button>
-                </div>
-            <?php } ?>
+            <div class="form-group mx-3 datos_persona_juridica">
+                <button class="btn btn-success" onClick="javascript:agregarCamposClientesSociosAccionistas('beneficiarios_cliente')">Agregar</button>
+            </div>
 
             <div class="card-divider"></div>
             <div class="card-body card-body--padding--1">
@@ -617,79 +612,82 @@ if (isset($datos['id'])) {
             </div>
 
             <div class="card-body card-body--padding--1">
-                <div class="tag-badge tag-badge--theme badge_formulario mb-2">
-                    Documentos requeridos
-                </div>
-                <div class="container">
-                    <table class="table table-sm table-bordered">
-                        <thead class="thead-light">
-                            <tr>
-                                <th rowspan="2">Documentos</th>
-                            </tr>
-                            <tr>
-                                <th>Archivo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="documentos_juridica documentos_natural">
-                                <td>Fotocopia cédula del Representante Legal *</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="fotocopia_cedula">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica documentos_natural">
-                                <td>Fotocopia RUT *</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="fotocopia_rut">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica d-none">
-                                <td>Fotocopia Cámara de Comercio (no mayor a 30 días) *</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="fotocopia_camara_comercio">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica documentos_natural">
-                                <td>Selfie con el documento de identidad (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="selfie_documento">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica d-none">
-                                <td>Extractos bancarios últimos 3 meses (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="extractos_bancarios">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica d-none">
-                                <td>2 referencias comerciales (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="referencias_comerciales" multiple>
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica d-none">
-                                <td>Estados financieros año anterior (Opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="estados_financieros">
-                                </td>
-                            </tr>
-                            <tr class="documentos_juridica documentos_natural">
-                                <td>Declaración de renta año anterior (opcional)</td>
-                                <td class="text-center">
-                                    <input type="file" class="form-control archivos" id="declaracion_renta">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <!-- Si es una solicitud nueva -->
+                <?php  if (!isset($datos['id'])) { ?>
+                    <div class="tag-badge tag-badge--theme badge_formulario mb-2">
+                        Documentos requeridos
+                    </div>
+                    <div class="container">
+                        <table class="table table-sm table-bordered">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th rowspan="2">Documentos</th>
+                                </tr>
+                                <tr>
+                                    <th>Archivo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="documentos_juridica documentos_natural">
+                                    <td>Fotocopia cédula del Representante Legal *</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="fotocopia_cedula">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica documentos_natural">
+                                    <td>Fotocopia RUT *</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="fotocopia_rut">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica d-none">
+                                    <td>Fotocopia Cámara de Comercio (no mayor a 30 días) *</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="fotocopia_camara_comercio">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica documentos_natural">
+                                    <td>Selfie con el documento de identidad (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="selfie_documento">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica d-none">
+                                    <td>Extractos bancarios últimos 3 meses (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="extractos_bancarios">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica d-none">
+                                    <td>2 referencias comerciales (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="referencias_comerciales" multiple>
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica d-none">
+                                    <td>Estados financieros año anterior (Opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="estados_financieros">
+                                    </td>
+                                </tr>
+                                <tr class="documentos_juridica documentos_natural">
+                                    <td>Declaración de renta año anterior (opcional)</td>
+                                    <td class="text-center">
+                                        <input type="file" class="form-control archivos" id="declaracion_renta">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php } ?>
 
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <label for="vendedor_id">Elige tu asesor comercial *</label>
-                            <select id="vendedor_id" class="form-control">
-                                <option value="">Sin asesor comercial asignado</option>
-                                <?php foreach($this->configuracion_model->obtener('vendedores') as $vendedor) echo "<option value='$vendedor->id'>$vendedor->nombre</option>"; ?>
-                            </select>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="vendedor_id">Elige tu asesor comercial *</label>
+                        <select id="vendedor_id" class="form-control">
+                            <option value="">Sin asesor comercial asignado</option>
+                            <?php foreach($this->configuracion_model->obtener('vendedores') as $vendedor) echo "<option value='$vendedor->id'>$vendedor->nombre</option>"; ?>
+                        </select>
                     </div>
                 </div>
 
@@ -946,6 +944,7 @@ if (isset($datos['id'])) {
             referencia_comercial_direccion2: $('#referencia_comercial_direccion2').val(),
             reconocimiento_publico: ($(`#reconocimiento_publico_si`).is(':checked')) ? 1 : 0,
             reconocimiento_publico_cual: $('#reconocimiento_publico_cliente').val(),
+            rut: ($(`#solicitud_tiene_rut1`).is(':checked')) ? 1 : 0,
             persona_expuesta: ($(`#persona_expuesta_si`).is(':checked')) ? 1: 0,
             persona_expuesta_cual: $('#persona_expuesta_cliente').val(),
             poder_publico: ($(`#poder_publico_si`).is(':checked')) ? 1: 0,
@@ -979,32 +978,43 @@ if (isset($datos['id'])) {
             allowOutsideClick: false
         })
 
-        // Se crea la solicitud de crédito
-        let solicitudId = await consulta('crear', datosSolicitud, false)
-        // console.log('respuesta', solicitudId)
+        if(!$('#solicitud_credito_id').val()) {
+            // Se crea la solicitud de crédito
+            let solicitudId = await consulta('crear', datosSolicitud, false)
+            solicitudCreditoId = solicitudId.resultado
+
+            mensaje = `¡Tu solicitud de crédito ha sido creada correctamente! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`
+        } else {
+            datosSolicitud.id = $('#solicitud_credito_id').val()
+            solicitudCreditoId = datosSolicitud.id
+
+            mensaje = 'Solicitud actualizada correctamente'
+            
+            await consulta('actualizar', datosSolicitud)
+        }
 
         // Se crean los terceros asociados
-        let personasAutorizadas = obtenerCamposPersonasAutorizadas("personas_autorizadas", solicitudId.resultado)
-        let sociosAccionistas = obtenerClientesSociosAccionistas('clientes', solicitudId.resultado)
-        let beneficicariosSociosAccionistas = obtenerClientesSociosAccionistas('beneficiarios_cliente', solicitudId.resultado)
+        let personasAutorizadas = obtenerCamposPersonasAutorizadas("personas_autorizadas", solicitudCreditoId)
+        let sociosAccionistas = obtenerClientesSociosAccionistas('clientes', solicitudCreditoId)
+        let beneficicariosSociosAccionistas = obtenerClientesSociosAccionistas('beneficiarios_cliente', solicitudCreditoId)
 
-        if (personasAutorizadas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: personasAutorizadas}, false)
+        if (personasAutorizadas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: personasAutorizadas, id_solicitud_credito: solicitudCreditoId}, false)
         if (sociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: sociosAccionistas}, false)
         if (beneficicariosSociosAccionistas.length > 0) consulta('crear', {tipo: "clientes_solicitudes_credito_detalle", valores: beneficicariosSociosAccionistas}, false)
 
         // Creación del registro en bitácora
         var datosBitacora = {
             tipo: 'clientes_solicitudes_credito_bitacora',
-            solicitud_id: solicitudId.resultado,
+            solicitud_id: solicitudCreditoId,
             usuario_id: $('#sesion_usuario_id').val(),
             observaciones: `Solicitud recibida`,
         }
         consulta('crear', datosBitacora, false)
 
-        await subirArchivos(solicitudId.resultado, archivos)
+        await subirArchivos(solicitudCreditoId, archivos)
         Swal.close()
 
-        mostrarAviso("exito", `¡Tu solicitud de crédito ha sido creada correctamente! Te enviaremos un correo electrónico de confirmación y nos comunicaremos contigo lo más pronto posible.`, 30000)
+        mostrarAviso("exito", mensaje, 30000)
     }
 
     subirArchivos = async (solicitudCreditoId, archivos) => {
@@ -1134,7 +1144,7 @@ if (isset($datos['id'])) {
             await listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
             $("#solicitud_departamento").val('<?php echo $solicitud->departamento_codigo ?>')
             await listarDatos('solicitud_municipio', {tipo: 'municipios', departamento_id: $('#solicitud_departamento').val()})
-            $("#solicitud_municipio").val(<?php echo $solicitud->ciudad_id ?>)
+            $("#solicitud_municipio").val('<?php echo $solicitud->municipio_codigo ?>')
         })
     </script>
 <?php } ?>
