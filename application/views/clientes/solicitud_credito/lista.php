@@ -27,7 +27,8 @@
                     datos.filtro_fecha_cierre = $('#filtro_fecha_cierre').val()
                     datos.filtro_motivo_rechazo = $('#filtro_motivo_rechazo').val()
                     datos.filtro_cupo = $('#filtro_cupo').val()
-                    datos.filtro_ultimo_comentario = $('#filtro_ultimo_comentario').val()
+                    datos.filtro_ultimo_comentario = $('#filtro_ultimo_comentario').val(),
+                    datos.filtro_actualizacion = $('#filtro_actualizacion').val()
                 },
             },
             columns: [
@@ -94,6 +95,13 @@
                             </div>
                         `
                     }
+                },
+                { 
+                    title: `
+                        Actualización
+                        <input type="text" id="filtro_actualizacion" class="form-control form-control-sm border-secondary">
+                    `, 
+                    data: 'es_actualizacion' 
                 },
                 { 
                     title: `

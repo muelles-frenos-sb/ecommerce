@@ -111,6 +111,7 @@ class Clientes extends MY_Controller {
         $filtro_id_consecutivo = $this->input->get("filtro_id_consecutivo");
         $filtro_nombre_consecutivo = $this->input->get("filtro_nombre_consecutivo");
         $filtro_numero_pedido = $this->input->get("filtro_numero_pedido");
+        $filtro_actualizacion = $this->input->get("filtro_actualizacion");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -211,6 +212,7 @@ class Clientes extends MY_Controller {
                 if(isset($filtro_motivo_rechazo)) $datos['filtro_motivo_rechazo'] = $filtro_motivo_rechazo;
                 if(isset($filtro_cupo)) $datos['filtro_cupo'] = $filtro_cupo;
                 if(isset($filtro_ultimo_comentario)) $datos['filtro_ultimo_comentario'] = $filtro_ultimo_comentario;
+                if(isset($filtro_actualizacion)) $datos['filtro_actualizacion'] = $filtro_actualizacion;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->clientes_model->obtener("clientes_solicitudes_credito", $datos);
