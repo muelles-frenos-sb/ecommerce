@@ -125,8 +125,8 @@ if (isset($datos['id'])) {
                     </div>
 
                     <div class="form-group col-md-4">
-                        <label for="solicitud_numero_documento">Número de documento *</label>
-                        <input type="text" class="form-control" id="solicitud_numero_documento" value="<?php if(isset($solicitud)) echo $solicitud->documento_numero; ?>">
+                        <label for="solicitud_numero_documento">Número de documento (Sin dígito de verificación) *</label>
+                        <input type="text" class="form-control" id="solicitud_numero_documento" value="<?php if(isset($solicitud)) echo $solicitud->documento_numero; ?>" placeholder="Ej: 81100500231">
                     </div>
 
                     <div class="form-group col-md-2">
@@ -1132,6 +1132,11 @@ if (isset($datos['id'])) {
 
         $('#solicitud_departamento').change(() => {
             listarDatos('solicitud_municipio', {tipo: 'municipios', departamento_id: $('#solicitud_departamento').val()})
+        })
+
+        // Control del input para que registren solamente números
+        $(`#solicitud_numero_documento`).keyup(function() {
+            $(this).val(limpiarCadena($(this).val()))
         })
     })
 </script>
