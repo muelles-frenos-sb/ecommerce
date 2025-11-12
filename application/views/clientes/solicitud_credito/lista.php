@@ -28,7 +28,7 @@
                     datos.filtro_motivo_rechazo = $('#filtro_motivo_rechazo').val()
                     datos.filtro_cupo = $('#filtro_cupo').val()
                     datos.filtro_ultimo_comentario = $('#filtro_ultimo_comentario').val(),
-                    datos.filtro_actualizacion = $('#filtro_actualizacion').val()
+                    datos.filtro_tipo = $('#filtro_tipo').val()
                 },
             },
             columns: [
@@ -98,17 +98,18 @@
                 },
                 { 
                     title: `
-                        Actualización
-                        <input type="text" id="filtro_actualizacion" class="form-control form-control-sm border-secondary">
+                        Tipo
+                        <input type="text" id="filtro_tipo" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'es_actualizacion' 
+                    data: 'tipo' 
                 },
                 { 
                     title: `
                         Vendedor
                         <input type="text" id="filtro_vendedor" class="form-control form-control-sm border-secondary">
                     `, 
-                    data: 'vendedor_nombre'
+                    data: 'vendedor_nombre',
+                    width: '150px'
                 },
                 { 
                     title: `
@@ -130,7 +131,7 @@
                 },
                 {
                     title: `
-                        Cupo asignado
+                        Cupo
                         <input type="number" id="filtro_cupo" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,

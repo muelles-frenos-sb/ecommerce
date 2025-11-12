@@ -296,7 +296,7 @@ Class Clientes_model extends CI_Model {
                 if (isset($datos['filtro_motivo_rechazo']) && $datos['filtro_motivo_rechazo']) $filtros_having .= " AND motivo_rechazo LIKE '%{$datos['filtro_motivo_rechazo']}%' ";
                 if (isset($datos['filtro_cupo']) && $datos['filtro_cupo']) $filtros_where .= " AND csc.cupo_asignado = {$datos['filtro_cupo']} ";
                 if (isset($datos['filtro_ultimo_comentario']) && $datos['filtro_ultimo_comentario']) $filtros_having .= " AND ultimo_comentario LIKE '%{$datos['filtro_ultimo_comentario']}%' ";
-                if (isset($datos['filtro_actualizacion']) && $datos['filtro_actualizacion']) $filtros_having .= " AND es_actualizacion LIKE '%{$datos['filtro_actualizacion']}%' ";
+                if (isset($datos['filtro_tipo']) && $datos['filtro_tipo']) $filtros_having .= " AND tipo LIKE '%{$datos['filtro_tipo']}%' ";
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY csc.fecha_creacion DESC";
 
@@ -327,7 +327,7 @@ Class Clientes_model extends CI_Model {
 	                v.codigo vendedor_codigo,
                     IF(csc.fecha_validacion_documentos is NOT NULL, 1, 0) documentos_validados,
                     m.codigo municipio_codigo,
-                    IF(csc.nueva = 1, 'No', 'Sí') es_actualizacion
+                    IF(csc.nueva = 1, 'Nueva', 'Actualización') tipo
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
