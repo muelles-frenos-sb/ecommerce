@@ -105,6 +105,44 @@ function generar_codigo_OTP($longitud = 6) {
     return $codigoOTP;
 }
 
+/**
+ * Para la API del ERP, genera un rango de fechas para
+ * los filtros de parámetros
+ *
+ * @param string $campo
+ * @param integer $minutos
+ * @return string
+ */
+function generar_filtro_ultimos_minutos($campo, $minutos = 5) {
+    // Inicialización de fechas
+    $fecha_inicio = new DateTime();
+    $fecha_final = new DateTime();
+    
+    // Se restan 5 minutos a la fecha de inicio
+    $fecha_inicio->modify("-{$minutos} minutes");
+
+    // La hora de inicio se configura en el segundo 00
+    $fecha_inicio->setTime(
+        intval($fecha_inicio->format('H')),
+        intval($fecha_inicio->format('i')),
+        0
+    );
+
+    // Establecer el segundo 59 para la fecha final
+    $fecha_final->setTime(
+        intval($fecha_final->format('H')),
+        intval($fecha_final->format('i')),
+        59
+    );
+    
+    // Se establece el formato de las fechas
+    $fecha_inicio_convertido = $fecha_inicio->format('Y-m-d\TH:i:s');
+    $fecha_fin_convertido = $fecha_final->format('Y-m-d\TH:i:s');
+    
+    // Se retorna el string
+    return "$campo>=''{$fecha_inicio_convertido}'' and $campo<=''{$fecha_fin_convertido}''";
+}
+
 function generar_llave_integridad($datos) {
     return hash("sha256", "{$datos[0]}{$datos[1]}{$datos[2]}{$datos[3]}");
 }

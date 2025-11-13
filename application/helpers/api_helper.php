@@ -800,10 +800,15 @@ function obtener_pedidos_api_estandar($datos) {
     $url = $CI->config->item('base_url_produccion');
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
 
-    $parametros = "f200_nit_pedido_fact=''{$datos['numero_documento']}''";
+    $parametros = "f430_rowid IS NOT NULL";
+    if(isset($datos['numero_documento'])) $parametros .= " and f200_nit_pedido_fact=''{$datos['numero_documento']}''";
     if(isset($datos['centro_operativo'])) $parametros .= " and f430_id_co=''{$datos['centro_operativo']}''";
     if(isset($datos['tipo_documento'])) $parametros .= " and f430_id_tipo_docto=''{$datos['tipo_documento']}''";
     if(isset($datos['documento_cruce'])) $parametros .= " and f430_consec_docto=''{$datos['documento_cruce']}''";
+    if(isset($datos['estado_id'])) $parametros .= " and f430_ind_estado=''{$datos['estado_id']}''";
+    
+    // Enviaremos un filtro para que solo obtenga registros con rango de 5 minutos
+    if(isset($datos['filtro_fecha'])) $parametros .= " and ".generar_filtro_ultimos_minutos('f430_fecha_ts_aprobacion');
 
     $client = new \GuzzleHttp\Client();
     try {

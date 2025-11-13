@@ -40,6 +40,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_id();
             break;
 
+            case 'api_ventas_pedidos_batch':
+                return $this->db->insert_batch('api_ventas_pedidos', $datos);
+            break;
+
             case 'documentos_ventas_api':
                 return $this->db->insert_batch('api_ventas_documentos', $datos);
             break;
@@ -158,6 +162,14 @@ Class Configuracion_model extends CI_Model {
                     ->where($datos)
                     ->get($tabla)
                     ->result()
+                ;
+            break;
+
+            case 'api_ventas_pedidos':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->row()
                 ;
             break;
 
