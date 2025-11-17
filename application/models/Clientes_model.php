@@ -349,6 +349,28 @@ Class Clientes_model extends CI_Model {
                 return $this->db->query($sql)->result();
             break;
 
+            case 'clientes_solicitudes_credito_asignaciones':
+                $sql = 
+                "SELECT
+                    u.id,
+                    u.razon_social,
+                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 MONTH ) THEN 1 END ) AS solicitudes_asignadas_ultimo_mes,
+                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 WEEK ) THEN 1 END ) AS solicitudes_asignadas_ultima_semana,
+                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 DAY ) THEN 1 END ) AS solicitudes_asignadas_ultimo_dia 
+                FROM
+                    clientes_solicitudes_credito AS csc
+                    LEFT JOIN usuarios AS u ON csc.usuario_asignado_id = u.id 
+                WHERE
+                    csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL {$datos['meses']} MONTH ) 
+                GROUP BY
+                    usuario_asignado_id 
+                ORDER BY
+                    usuario_asignado_id ASC
+                ";
+
+                return $this->db->query($sql)->result();
+                break;
+
             case 'clientes_solicitudes_credito_bitacora':
                 $limite = "";
                 if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";

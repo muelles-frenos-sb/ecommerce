@@ -1,3 +1,5 @@
+<?php $usuarios = $this->clientes_model->obtener('clientes_solicitudes_credito_asignaciones', ['meses' => 1]); ?>
+
 <div class="block-header block-header--has-breadcrumb block-header--has-title">
     <div class="container">
         <div class="block-header__body">
@@ -18,21 +20,44 @@
 <div id="contenedor_modal_usuarios_disponibles"></div>
 
 <div class="pl-5 pr-5">
-    <a class="btn btn-primary mb-3" href="#" onClick="javascript:listarUsuariosDisponibles()">Ver <span id="usuarios_disponibles"></span> usuarios disponibles</a>
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-hover">
+                <tr>
+                    <th class="text-center"></th>
+                    <th class="text-center">Último mes</th>
+                    <th class="text-center">Última semana</th>
+                    <th class="text-center">Hoy</th>
+                <tr/>
+                <?php foreach ($usuarios as $usuario) { ?>
+                    <tr>
+                        <td class="text-center"><?php echo $usuario->razon_social; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultimo_mes; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultima_semana; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultimo_dia; ?></th>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
 
-    <!-- Botones para activarse para asignación automática de solicitudes -->
-    <?php if(isset($permisos) && in_array(['clientes' => 'clientes_asignacion_automatica_solicitudes_credito'], $permisos)) { ?>
-        <!-- Botón para marcar si está disponible -->
-        <input type="hidden" id="usuario_disponible">
-        
-        <a class="btn btn-success mb-3" href="#" id="asignacion_automatica_disponible" onClick="javascript:cambiarEstadoDisponibilidad(true)">
-            <i class="fa fa-check"></i> Marcarse disponible para recibir solicitudes
-        </a>
+        <div class="col-6">
+            <a class="btn btn-primary btn-block mb-3" href="#" onClick="javascript:listarUsuariosDisponibles()">Ver <span id="usuarios_disponibles"></span> usuarios disponibles</a>
 
-        <a class="btn btn-danger mb-3" href="#" id="asignacion_automatica_no_disponible" onClick="javascript:cambiarEstadoDisponibilidad(false)">
-            <i class="fa fa-times"></i> Marcarse NO disponible para recibir solicitudes
-        </a>
-    <?php } ?>
+            <!-- Botones para activarse para asignación automática de solicitudes -->
+            <?php if(isset($permisos) && in_array(['clientes' => 'clientes_asignacion_automatica_solicitudes_credito'], $permisos)) { ?>
+                <!-- Botón para marcar si está disponible -->
+                <input type="hidden" id="usuario_disponible">
+                
+                <a class="btn btn-success btn-block mb-3" href="#" id="asignacion_automatica_disponible" onClick="javascript:cambiarEstadoDisponibilidad(true)">
+                    <i class="fa fa-check"></i> Marcarse disponible para recibir solicitudes
+                </a>
+
+                <a class="btn btn-danger btn-block mb-3" href="#" id="asignacion_automatica_no_disponible" onClick="javascript:cambiarEstadoDisponibilidad(false)">
+                    <i class="fa fa-times"></i> Marcarse NO disponible para recibir solicitudes
+                </a>
+            <?php } ?>
+        </div>
+    </div>
     
     <div id="contenedor_solicitudes_credito"></div>
     <div id="contenedor_asignar_usuario"></div>
