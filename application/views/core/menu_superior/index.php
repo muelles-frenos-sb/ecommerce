@@ -20,35 +20,35 @@
                         </li><!-- Tienda -->
 
                         <!-- Crédito -->
-                        <li class="main-menu__item">
+                        <li class="main-menu__item menu_credito" data-nombre="Crédito">
                             <a href="<?php echo site_url('blog/credito'); ?>" class="main-menu__link">
                                 Crédito
                             </a>
                         </li><!-- Crédito -->
 
                         <!-- Talleres aliados -->
-                        <li class="main-menu__item">
-                            <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link menu_talleres_aliados" data-nombre="Talleres aliados">
+                        <li class="main-menu__item menu_talleres_aliados" data-nombre="Talleres aliados">
+                            <a href="<?php echo site_url('blog/taller_aliado'); ?>" class="main-menu__link">
                                 Talleres aliados
                             </a>
                         </li><!-- Talleres aliados -->
 
                         <!-- Garantía -->
-                        <li class="main-menu__item">
+                        <li class="main-menu__item menu_garantia" data-nombre="Garantía">
                             <a href="<?php echo site_url('logistica/garantias'); ?>" class="main-menu__link">
                                 Garantía
                             </a>
                         </li><!-- Garantía -->
 
                         <!-- Blog -->
-                        <li class="main-menu__item">
-                            <a href="<?php echo site_url('blog'); ?>" class="main-menu__link menu_blog" data-nombre="Blog">
+                        <li class="main-menu__item menu_blog" data-nombre="Blog">
+                            <a href="<?php echo site_url('blog'); ?>" class="main-menu__link">
                                 Blog
                             </a>
                         </li><!-- Blog -->
 
                         <!-- Contacto -->
-                        <li class="main-menu__item">
+                        <li class="main-menu__item menu_contacto" data-nombre="Contacto">
                             <a href="<?php echo site_url('blog/contacto'); ?>" class="main-menu__link">
                                 Contacto
                             </a>
@@ -70,7 +70,7 @@
                                                 <ul class="megamenu__links megamenu-links megamenu-links--root">
                                                     <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                         <ul class="megamenu-links">
-                                                            <li class="megamenu-links__item menu_mas" data-nombre="Denuncias">
+                                                            <li class="megamenu-links__item menu_mas" data-nombre="Nosotros">
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('blog/nosotros'); ?>">Nosotros</a>
                                                             </li>
                                                             <li class="megamenu-links__item menu_mas" data-nombre="Distribuidores">
@@ -110,7 +110,7 @@
                                                         <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                             <!-- <a class="megamenu-links__item-link" href="">Opciones</a> -->
                                                             <ul class="megamenu-links">
-                                                                <li class="menu__item menu__item--has-submenu menu_contacto mb-1" data-nombre="Garantía">
+                                                                <li class="menu__item menu__item--has-submenu mb-1">
                                                                     <a class="megamenu-links__item-link" href="#">
                                                                         Clientes
                                                                         <span class="menu__arrow">
@@ -144,7 +144,7 @@
                                                                     </div>
                                                                 </li>
 
-                                                                <li class="menu__item menu__item--has-submenu menu_contacto mb-1" data-nombre="Garantía">
+                                                                <li class="menu__item menu__item--has-submenu mb-1">
                                                                     <a class="megamenu-links__item-link" href="#">
                                                                         Contabilidad
                                                                         <span class="menu__arrow">
@@ -168,7 +168,7 @@
                                                                     <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/contactos/ver'); ?>">Contactos</a>
                                                                 </li>
 
-                                                                <li class="menu__item menu__item--has-submenu menu_contacto mb-1" data-nombre="Garantía">
+                                                                <li class="menu__item menu__item--has-submenu mb-1">
                                                                     <a class="megamenu-links__item-link" href="#">
                                                                         Logística
                                                                         <span class="menu__arrow">
@@ -195,25 +195,25 @@
                                                                 </li>
 
                                                                 <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_usuarios_ver'], $permisos)) { ?>
-                                                                    <li class="megamenu-links__item menu_mas mb-1" data-nombre="Garantía">
+                                                                    <li class="megamenu-links__item mb-1">
                                                                         <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/usuarios/ver'); ?>">Usuarios</a>
                                                                     </li>
                                                                 <?php } ?>
 
                                                                 <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
-                                                                    <li class="megamenu-links__item menu_mas mb-1" data-nombre="Garantía">
+                                                                    <li class="megamenu-links__item mb-1">
                                                                         <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/perfiles/ver'); ?>">Perfiles</a>
                                                                     </li>
                                                                 <?php } ?>
 
                                                                 <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_productos_ver'], $permisos)) { ?>
-                                                                    <li class="megamenu-links__item menu_mas mb-1" data-nombre="Garantía">
+                                                                    <li class="megamenu-links__item mb-1">
                                                                         <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/productos/ver'); ?>">Productos</a>
                                                                     </li>
                                                                 <?php } ?>
 
                                                                 <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver'], $permisos)) { ?>
-                                                                    <li class="menu__item menu__item--has-submenu menu_contacto mb-1" data-nombre="Garantía">
+                                                                    <li class="menu__item menu__item--has-submenu mb-1">
                                                                         <a class="megamenu-links__item-link" href="#">
                                                                             Proveedores
                                                                             <span class="menu__arrow">
@@ -262,7 +262,7 @@
                                                                     </li>
                                                                 <?php } ?>
 
-                                                                <li class="megamenu-links__item menu_mas mb-1" data-nombre="Garantía">
+                                                                <li class="megamenu-links__item menu_mas mb-1">
                                                                     <a class="megamenu-links__item-link" href="<?php echo base_url('archivos/manual'); ?>" target="_blank">
                                                                         📘 Manual de Usuario
                                                                     </a>
@@ -364,14 +364,7 @@
 
 <script>
     $().ready(async () => {
-        $('.menu_link_redes_sociales').click(function() {
-            agregarLog(91, JSON.stringify({
-                tipo: 'Acceso a redes sociales',
-                detalle: $(this).attr('data-nombre')
-            }))
-        })
-
-        $('.menu_credito, .menu_talleres_aliados, .menu_nosotros, .menu_blog, .menu_contacto, .menu_mas').click(function() {
+        $('.menu_link_redes_sociales .menu_credito, .menu_talleres_aliados, .menu_garantia, .menu_blog, .menu_contacto, .menu_mas').click(function() {
             agregarLog(91, JSON.stringify({
                 tipo: 'Acceso a menú',
                 detalle: $(this).attr('data-nombre')
