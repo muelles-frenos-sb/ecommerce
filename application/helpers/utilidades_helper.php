@@ -198,6 +198,13 @@ function mostrar_mensajes_estados_wompi($estado) {
     ];
 }
 
+function obtener_url_foto($ruta = '', $extensiones = ['jpg', 'jpeg', 'png', 'gif', 'webp']) {
+    foreach ($extensiones as $extension) {
+        if (verificar_existencia_foto("$ruta.$extension")) return "$ruta.$extension";
+    }
+    return false;
+}
+
 function obtener_numero_recibo_caja($recibo) {
     $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
         'numero_documento' => $recibo->documento_numero,
@@ -250,8 +257,29 @@ function url_fotos($marca, $referencia) {
     $marca_filtrada = trim($marca);
     $referencia_filtrada = str_replace('/', '_', trim($referencia));
 
-    return $url_foto_producto = "{$CI->config->item('url_fotos')}$marca_filtrada/$referencia_filtrada.jpg?".date('YmdHis');
+    $url_foto_producto = obtener_url_foto("{$CI->config->item('url_fotos')}$marca_filtrada/$referencia_filtrada");
     $url_foto_generica = "{$CI->config->item('url_fotos')}producto_generico.jpg";
    
-    return (filter_var($url_foto_producto, FILTER_VALIDATE_URL) !== false) ? $url_foto_producto : $url_foto_generica;
+    return (verificar_existencia_foto($url_foto_producto)) ? $url_foto_producto : $url_foto_generica;
+}
+
+/**
+ * Valida que la imagen se encuentre
+ *
+ * @param string $url
+ * @return void
+ */
+function verificar_existencia_foto($url) {
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+    
+    curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    return $httpCode === 200;
 }

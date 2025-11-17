@@ -35,8 +35,6 @@
             <!-- Footer -->
             <?php $this->load->view('core/footer'); ?>
         </div>
-
-        
         
         <!-- Modals -->
         <?php $this->load->view('core/modals'); ?>
