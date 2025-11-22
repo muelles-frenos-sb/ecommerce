@@ -308,6 +308,7 @@
             producto_numero_serie: $('#solicitud_producto_serial').val(),
             producto_fecha_instalacion: $('#solicitud_fecha_instalacion').val(),
             producto_uso: $('#solicitud_uso').val(),
+            producto_solicitud_garantia_motivo_id: $('#solicitud_motivo_id').val(),
             producto_solicitud_garantia_motivo_otro: $('#solicitud_motivo_otro').val(),
             producto_solicitud_garantia_estado_id: $('#solicitud_producto_estado').val(),
             descripcion: $('#solicitud_desripcion').val(),
