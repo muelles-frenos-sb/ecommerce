@@ -54,6 +54,38 @@ foreach ($registros as $registro) {
     // Posicionado sobre la hoja de movimientos
     $hoja_movimientos = $archivo->setActiveSheetIndexByName('Movimientos');
 
+    /***********************************
+     * CONSULTA DE LAS ÓRDENES DE COMPRA
+     * EXISTENTES EN EL ERP
+     **********************************/
+    $codigo = 0;
+    $pagina = 1;
+    $items = [];
+
+    // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+    while ($codigo == 0) {
+        // Se obtiene los datos de las órdenes de compra del ERP existentes antes de la fecha de creación
+        $resultado = json_decode(obtener_ordenes_compra(['pagina' => $pagina, 'fecha_final' => $solicitud->fecha_inicio, 'numero_documento' => $registro->proveedor_nit, 'id_producto'=> $registro->producto_id]));
+
+        $codigo = $resultado->codigo;
+
+        // Si es exitoso
+        if($codigo == 0) {
+            $registros = $resultado->detalle->Table;
+
+            // Se almacenan los registros en un arreglo
+            foreach($registros as $item) array_push($items, $item);
+
+            $pagina++;
+        } else {
+            $codigo = '-1';
+            break;
+        }
+    }
+    
+    // Se extraen las ultimas tres órdenes
+    $ultimas_ordenes = array_slice($items, -3);
+
     // Datos para los movimientos de la orden de compra
     $hoja_movimientos->setCellValue("A$fila_movimientos", '500'); // Centro de operación
     $hoja_movimientos->setCellValue("B$fila_movimientos", 'FOC'); // Tipo de documento
@@ -66,6 +98,11 @@ foreach ($registros as $registro) {
     $hoja_movimientos->setCellValue("I$fila_movimientos", date("Ymd", strtotime($solicitud->fecha_inicio))); // Fecha de entrega del documento
     $hoja_movimientos->setCellValue("J$fila_movimientos", $registro->precio_final); // Precio unitario
     $hoja_movimientos->setCellValue("K$fila_movimientos", $registro->referencia); // Referencia del producto
+    
+    // Últimas órdenes de compra
+    if(isset($ultimas_ordenes[0])) $hoja_movimientos->setCellValue("L$fila_movimientos", $ultimas_ordenes[0]->f421_precio_unitario); // La muestra si existe
+    if(isset($ultimas_ordenes[1])) $hoja_movimientos->setCellValue("M$fila_movimientos", $ultimas_ordenes[1]->f421_precio_unitario); // La muestra si existe
+    if(isset($ultimas_ordenes[2])) $hoja_movimientos->setCellValue("N$fila_movimientos", $ultimas_ordenes[2]->f421_precio_unitario); // La muestra si existe
 
     $fila_movimientos++;
 }

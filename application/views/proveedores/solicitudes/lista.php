@@ -59,11 +59,11 @@
                                     Ver
                                 </a>
 
-                                <a type="button" class="btn btn-sm btn-success" href="javascript:;" onClick="generarReporte('excel/proveedores_cotizaciones_matriz', {id: ${data.id}})">
+                                <a type="button" class="btn btn-sm btn-success" href="javascript:;" onClick="javascript:generarReporte('excel/proveedores_cotizaciones_matriz', {id: ${data.id}})">
                                     <i class="fa fa-file-excel"></i>
                                 </a>
 
-                                <a type="button" class="btn btn-sm btn-info" href="javascript:;" title="Archivo plano de orden de compra" onClick="generarReporte('excel/proveedores_orden_compra', {id: ${data.id}})">
+                                <a type="button" class="btn btn-sm btn-info" href="javascript:;" title="Archivo plano de orden de compra" onClick="javascript:generarReporte('excel/proveedores_orden_compra', {id: ${data.id}})">
                                     <i class="fa fa-file-download"></i>
                                 </a>
 

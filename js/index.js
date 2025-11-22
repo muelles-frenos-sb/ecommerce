@@ -206,6 +206,16 @@ formatearNumero = numero => {
  * Genera reportes en diferentes formatos
  */
 generarReporte = (tipo, datos) => {
+    // Modal de espera al generar los reportes
+    Swal.fire({
+        title: 'Procesando...',
+        text: 'Por favor espera mientras se cargan los datos.',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading()
+        }
+    })
+
     switch (tipo) {
         case 'excel/facturas':
             agregarLog(42, datos.numero_documento)
@@ -219,7 +229,7 @@ generarReporte = (tipo, datos) => {
 
         case 'excel/proveedores_orden_compra':
             agregarLog(70, datos.id)
-            location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.id}`)
+            url = `${$('#base_url').val()}reportes/${tipo}/${datos.id}`
         break;
 
         case 'pdf/proveedores_certificado_retenciones':
@@ -236,6 +246,40 @@ generarReporte = (tipo, datos) => {
             location.assign(`${$('#base_url').val()}reportes/${tipo}/${datos.solicitud_id}`)
         break;
     }
+
+    fetch(url)
+    .then(respuesta => {
+        if (!respuesta.ok) throw new Error("Error descargando archivo")
+
+        // Obtener nombre desde el servidor
+        let nombreArchivo = "";
+        const disposition = respuesta.headers.get("Content-Disposition")
+
+        if (disposition && disposition.indexOf("filename=") !== -1) {
+            const matches = disposition.match(/filename="(.+)"/)
+
+            if (matches && matches.length > 1) nombreArchivo = matches[1]
+        }
+
+        return respuesta.blob().then(blob => ({ blob, nombreArchivo }))
+    })
+    .then(({ blob, nombreArchivo }) => {
+        // Crea URL del blob
+        const urlBlob = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = urlBlob
+        a.download = nombreArchivo || "Archivo.xlsx" // fallback si no viene el nombre
+        a.click()
+        window.URL.revokeObjectURL(urlBlob)
+
+        Swal.close()
+        mostrarAviso('exito', 'Se generó el reporte')
+    })
+    .catch(error => {
+        Swal.close()
+        mostrarAviso('error', 'Hubo un problema generando el reporte')
+        console.error(error)
+    })
 }
 
 /**
