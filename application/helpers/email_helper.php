@@ -108,7 +108,7 @@ function enviar_email_factura_wompi($recibo) {
             Ahora puedes consultar el saldo de tu cartera actualizado en <a href='$url' style='color: #ffd400; text-decoration: none;'>www.repuestossimonbolivar.com</a>.<br><br>
             ",
         ],
-        'destinatarios' => $recibo->email,
+        'destinatarios' => [$recibo->email, 'publicidad@repuestossimonbolivar.com'],
     ];
 
     $CI->email_model->enviar($datos);
