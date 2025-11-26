@@ -46,7 +46,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         
         $movimiento_cxc = [
             "F_CIA" => 1,
-            "F350_ID_CO" => 400, 
+            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,
@@ -87,7 +87,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         : [[
             // Primer movimiento -> Bancos
             "F_CIA" => 1,
-            "F350_ID_CO" => 400,
+            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => (isset($metodo_pago) && $metodo_pago == 'PSE') ? '11100504' : '11200505',
@@ -121,13 +121,13 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             [
                 "F_CIA" => 1,
                 "F_CONSEC_AUTO_REG" => 1,
-                "F350_ID_CO" => 400,
+                "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
                 "F350_ID_TIPO_DOCTO" => 'FRC',
                 "F350_CONSEC_DOCTO" => 1,
                 "F350_FECHA" => date('Ymd'),
                 "F350_ID_TERCERO" => $recibo->documento_numero,
                 "F350_ID_CLASE_DOCTO" => 30,
-                "F350_IND_ESTADO" => 1,
+                "F350_IND_ESTADO" => ($recibo->recibo_tipo_id == 3) ? 0 : 1, // 0=En elaboración, 1=Aprobado, 2=Anulado
                 "F350_IND_IMPRESION" => 1,
                 "F350_NOTAS" => $notas_recibo,
                 "F350_ID_MANDATO" => '',
@@ -149,7 +149,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
         array_push($paquete_documento_contable['movimientoContable'], [
             "F_CIA" => '1',
-            "F350_ID_CO" => '400',
+            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => '41750120',
@@ -213,10 +213,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     if($recibo->wompi_datos && $errores == 0) enviar_email_factura_wompi($recibo);
 
     print json_encode([
+        'exito' => $errores < 0,
         'errores' => $errores,
         'mensaje' => $resultado_documento_contable,
         'datos' => $paquete_documento_contable,
-        'factura_cliente' => $factura_cliente
     ]);
 }
 

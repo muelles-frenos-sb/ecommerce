@@ -13,7 +13,7 @@
                         <label for="motivo_rechazo_id">Motivo del rechazo *</label>
                         <select id="motivo_rechazo_id" class="form-control">
                             <option value="">Seleccione...</option>
-                            <?php foreach($this->configuracion_model->obtener('motivos_rechazo') as $motivo_rechazo) echo "<option value='$motivo_rechazo->id'>$motivo_rechazo->nombre</option>"; ?>
+                            <?php foreach($this->configuracion_model->obtener('motivos_rechazo', ['interfaz_id' => 1]) as $motivo_rechazo) echo "<option value='$motivo_rechazo->id'>$motivo_rechazo->nombre</option>"; ?>
                         </select>
                     </div>
 

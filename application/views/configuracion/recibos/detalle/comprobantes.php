@@ -174,7 +174,6 @@
                     </table>
                 </div>
             </div>
-          
             <div class="card-divider"></div>
 
             <div class="form-row p-4">
@@ -202,9 +201,15 @@
                     </div>
                 </div>
 
-                <button type="button" class="btn btn-primary btn-block" onClick="javascript:guardarDatosComprobante(<?php echo $recibo->id; ?>)">
+                <button type="button" class="btn btn-primary btn-block col-12" onClick="javascript:guardarDatosComprobante(<?php echo $recibo->id; ?>)">
                     Guardar cambios
                 </button>
+
+                <!-- Si está por validar el comprobante -->
+                <?php if($recibo->recibo_estado_id == 3) { ?>
+                    <button class="btn btn-danger btn-block col-md-6" href="javascript:;" onClick="javascript:rechazarPago(<?php echo $recibo->id; ?>)">Rechazar pago</button>
+                    <button class="btn btn-success btn-block col-md-6" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</button>
+                <?php } ?>
             </div>
         </div>
 
@@ -236,16 +241,6 @@
                         <div class="col-4">
                             <button class="btn btn-info" href=":;" onclick="history.back()">Volver a recibos</button>
                         </div>
-
-                        <!-- Si está por validar el comprobante -->
-                        <?php if($recibo->recibo_estado_id == 3) { ?>
-                            <div class="col-4">
-                                <a class="btn btn-danger btn-block" href="javascript:;" onClick="javascript:rechazarPago(<?php echo $recibo->id; ?>)">Rechazar pago</a>
-                            </div>
-                            <div class="col-4">
-                                <a class="btn btn-success btn-block" href="javascript:;" onClick="javascript:aprobarPago(<?php echo $recibo->id; ?>)">Aprobar pago</a>
-                            </div>
-                        <?php } ?>
                     </div>
                 </div>
             </div>

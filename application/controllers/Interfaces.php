@@ -253,7 +253,7 @@ class Interfaces extends CI_Controller {
                 // Si trae cuentas contables, las agrega en la consulta
                 $datos_movimientos_contables = (isset($datos['movimientos_contables'])) ? $datos['movimientos_contables'] : null ;
                 
-                print json_encode(['resultado' => crear_documento_contable($datos['id_factura'], null, $datos_movimientos_contables)]);
+                print crear_documento_contable($datos['id_recibo'], null, $datos_movimientos_contables);
             break;
 
             case 'recibos':

@@ -45,8 +45,60 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
         cargarInterfaz('configuracion/recibos/detalle/cuenta', id, {id: id, id_recibo: reciboId, cuenta: datos})
     }
+    
+    aprobarPago = async reciboId => {
+        let confirmacion = await confirmar('aprobar', `¿Estás seguro de aprobar el pago?`)
+        if(!confirmacion) return false
 
-    aprobarPago = async(reciboId) => {
+        Swal.fire({
+            title: 'Creando documento contable en Siesa...',
+            text: 'Por favor, espera. No cierres esta ventana ni refresques la página',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        await obtenerPromesa(`${$('#site_url').val()}interfaces/crear`, {tipo: 'factura_documento_contable', 'id_recibo': reciboId})
+        .then(async pago => {
+            console.log(pago.mensaje.detalle[0])
+
+            if(!pago.error) {
+                mostrarAviso('error', `
+                    Ocurrió un error al crear el documento contable en Siesa:
+                    <pre>
+                        ${JSON.stringify(pago.mensaje.detalle[0])}
+                    </pre>
+                `, 100000)
+
+                return false
+            }
+
+            let datosRecibo = {
+                tipo: 'recibos',
+                id: reciboId,
+                recibo_estado_id: 1,
+                usuario_aprobacion_id: '<?php echo $this->session->userdata('usuario_id'); ?>',
+            }
+
+            let resultado = await consulta('actualizar', datosRecibo, false)
+
+            if(resultado) {
+                mostrarAviso('exito', 'El documento contable se asentó correctamente en Siesa.')
+
+                // setTimeout(() => {
+                //     location.href = `<?php // echo site_url("configuracion/recibos/ver/3"); ?>`;
+                // }, 1000);\
+            }
+        }).catch(error => {
+            mostrarAviso('error', 'Ocurrió un error al crear el documento contable en Siesa')
+            return false
+        })
+    }
+
+    /**
+     * Se puede usar para varias cuentas
+     */
+    aprobarPagoVariasCuentas = async reciboId => {
         // Arreglo para enviar la imputación
         var movimientosContables = []
         var cuentasRecibo = []
@@ -163,7 +215,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
                 setTimeout(() => {
                     location.href = `<?php echo site_url("configuracion/recibos/ver/3"); ?>`;
-                }, 1000);
+                }, 1000)
             }
         })
         .catch(error => {
