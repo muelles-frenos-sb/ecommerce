@@ -196,3 +196,28 @@ function enviar_email_solicitud_credito($id) {
 
     return $instancia->email_model->enviar($datos);
 }
+
+function enviar_email_solicitud_garantia($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $instancia = get_instance();
+
+    $instancia->load->model(['email_model']);
+
+    $solicitud = $instancia->logistica_model->obtener('productos_solicitudes_garantia', ['id' => $id]);
+
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $solicitud->id,
+        'asunto' => 'Solicitud de garantía recibida',
+        'cuerpo' => [
+            'titulo' => 'Hemos recibido tu solicitud de garantía',
+            'subtitulo' => "
+                Hemos recibido la solicitud de garantía de $solicitud->cliente_razon_social. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
+            ",
+        ],
+        'destinatarios' => [$solicitud->solicitante_email, 'coordinadorlogistico@repuestossimonbolivar.com'],
+        'adjuntos' => true,
+    ];
+
+    return $instancia->email_model->enviar($datos);
+}

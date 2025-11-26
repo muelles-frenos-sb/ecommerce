@@ -135,6 +135,10 @@ class Interfaces extends CI_Controller {
                 echo enviar_email_solicitud_credito($datos['id']);
             break;
 
+            case 'solicitud_garantia':
+                echo enviar_email_solicitud_garantia($datos['id']);
+            break;
+
             case 'usuario_nuevo':
                 echo enviar_email_usuario_nuevo($datos['id']);
             break;

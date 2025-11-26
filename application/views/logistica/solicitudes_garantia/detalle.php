@@ -370,7 +370,7 @@
                 // Si se subieron todos los archivos
                 if (cantidadArchivos === cantidadArchivosSubidos) {
                     // Se envía un correo electrónico de notificación
-                    // let email = await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_credito', id: solicitudGarantiaId})
+                    let email = await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'solicitud_garantia', id: solicitudGarantiaId})
                 }
             }
         })
