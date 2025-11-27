@@ -212,7 +212,8 @@ function enviar_email_solicitud_garantia($id) {
         'cuerpo' => [
             'titulo' => 'Hemos recibido tu solicitud de garantía',
             'subtitulo' => "
-                Hemos recibido la solicitud de garantía de $solicitud->cliente_razon_social. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
+                $solicitud->cliente_razon_social,<br><br>
+                Hemos recibido la solicitud de garantía con radicado $solicitud->radicado. Gracias por proporcionar tus datos. A partir de este momento vamos a revisar tu solicitud y te contactaremos a la mayor brevedad posible.<br><br>
             ",
         ],
         'destinatarios' => [$solicitud->solicitante_email, 'coordinadorlogistico@repuestossimonbolivar.com'],
