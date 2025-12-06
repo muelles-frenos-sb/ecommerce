@@ -1042,7 +1042,7 @@ class Webhooks extends MY_Controller {
 
                     foreach($registros as $item) {
                         // Antes de agregar el ítem, se consulta primero si existe el ítem ya creado
-                        $existe_item = $this->configuracion_model->obtener('api_ventas_pedidos', ['f430_rowid' => $item->f430_rowid, 'f120_id' => $item->f120_id]);
+                        $existe_item = $this->configuracion_model->obtener('erp_ventas_pedidos', ['f430_rowid' => $item->f430_rowid, 'f120_id' => $item->f120_id]);
 
                         // Si no existe todavía en la base de datos, se agrega al arreglo para que se cree
                         if(empty($existe_item)) array_push($items, $item);
@@ -1051,7 +1051,7 @@ class Webhooks extends MY_Controller {
                     }
 
                     // Si hay datos en el arreglo, se crean
-                    if(!empty($items)) $items_almacenados += $this->configuracion_model->crear('api_ventas_pedidos_batch', $items);
+                    if(!empty($items)) $items_almacenados += $this->configuracion_model->crear('erp_ventas_pedidos_batch', $items);
                     
                     $pagina++;
                 } else {

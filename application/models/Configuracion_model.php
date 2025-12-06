@@ -40,8 +40,8 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_id();
             break;
 
-            case 'api_ventas_pedidos_batch':
-                return $this->db->insert_batch('api_ventas_pedidos', $datos);
+            case 'erp_ventas_pedidos_batch':
+                return $this->db->insert_batch('erp_ventas_pedidos', $datos);
             break;
 
             case 'clientes':
@@ -149,7 +149,7 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-            case 'api_ventas_pedidos':
+            case 'erp_ventas_pedidos':
                 return $this->db
                     ->where($datos)
                     ->get($tabla)
