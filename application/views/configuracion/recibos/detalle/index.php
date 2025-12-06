@@ -60,7 +60,7 @@ $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
 
         await obtenerPromesa(`${$('#site_url').val()}interfaces/crear`, {tipo: 'factura_documento_contable', 'id_recibo': reciboId})
         .then(async pago => {
-            console.log(pago.mensaje.detalle[0])
+            console.log(pago)
 
             if(!pago.error) {
                 mostrarAviso('error', `

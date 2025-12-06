@@ -457,6 +457,7 @@ class Webhooks extends MY_Controller {
                     $this->configuracion_model->crear('logs', [
                         'log_tipo_id' => 15,
                         'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => json_encode($datos_pedido)
                     ]);
 
                     $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
