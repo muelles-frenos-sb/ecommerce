@@ -352,21 +352,21 @@ Class Clientes_model extends CI_Model {
             case 'clientes_solicitudes_credito_asignaciones':
                 $sql = 
                 "SELECT
-                    u.id,
                     u.razon_social,
-                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 MONTH ) THEN 1 END ) AS solicitudes_asignadas_ultimo_mes,
-                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 WEEK ) THEN 1 END ) AS solicitudes_asignadas_ultima_semana,
-                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL 1 DAY ) THEN 1 END ) AS solicitudes_asignadas_ultimo_dia 
+                    COUNT( csc.id ) AS total_solicitudes,
+                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_FORMAT( CURDATE(), '%Y-%m-01' ) THEN csc.id END ) AS solicitudes_asignadas_este_mes,
+                    COUNT( CASE WHEN csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL WEEKDAY( CURDATE()) DAY ) THEN csc.id END ) AS solicitudes_asignadas_esta_semana,
+                    COUNT( CASE WHEN DATE( csc.fecha_creacion ) = CURDATE() THEN csc.id END ) AS solicitudes_asignadas_hoy 
                 FROM
                     clientes_solicitudes_credito AS csc
                     LEFT JOIN usuarios AS u ON csc.usuario_asignado_id = u.id 
-                WHERE
-                    csc.fecha_creacion >= DATE_SUB( CURDATE(), INTERVAL {$datos['meses']} MONTH ) 
                 GROUP BY
-                    usuario_asignado_id 
+                    csc.usuario_asignado_id,
+                    u.razon_social 
+                HAVING
+                    solicitudes_asignadas_este_mes > 0 
                 ORDER BY
-                    usuario_asignado_id ASC
-                ";
+                    csc.usuario_asignado_id ASC;";
 
                 return $this->db->query($sql)->result();
                 break;

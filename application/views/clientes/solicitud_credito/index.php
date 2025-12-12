@@ -25,16 +25,16 @@
             <table class="table table-hover">
                 <tr>
                     <th class="text-center"></th>
-                    <th class="text-center">Último mes</th>
-                    <th class="text-center">Última semana</th>
+                    <th class="text-center">Este mes</th>
+                    <th class="text-center">Esta semana</th>
                     <th class="text-center">Hoy</th>
                 <tr/>
                 <?php foreach ($usuarios as $usuario) { ?>
                     <tr>
                         <td class="text-center"><?php echo $usuario->razon_social; ?></th>
-                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultimo_mes; ?></th>
-                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultima_semana; ?></th>
-                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_ultimo_dia; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_este_mes; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_esta_semana; ?></th>
+                        <td class="text-center"><?php echo $usuario->solicitudes_asignadas_hoy; ?></th>
                     </tr>
                 <?php } ?>
             </table>
