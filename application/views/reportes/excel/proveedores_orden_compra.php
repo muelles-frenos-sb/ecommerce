@@ -65,7 +65,13 @@ foreach ($registros as $registro) {
     // Mientras la API de Siesa retorne código 0 (Registros encontrados)
     while ($codigo == 0) {
         // Se obtiene los datos de las órdenes de compra del ERP existentes antes de la fecha de creación
-        $resultado = json_decode(obtener_ordenes_compra(['pagina' => $pagina, 'fecha_final' => $solicitud->fecha_inicio, 'numero_documento' => $registro->proveedor_nit, 'id_producto'=> $registro->producto_id]));
+        $resultado = json_decode(obtener_ordenes_compra([
+            'pagina' => $pagina,
+            'fecha_final' => $solicitud->fecha_inicio,
+            'numero_documento' => $registro->proveedor_nit,
+            'id_producto'=> $registro->producto_id,
+            'bodega'=> '00550'
+        ]));
 
         $codigo = $resultado->codigo;
 

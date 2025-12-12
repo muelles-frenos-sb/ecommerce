@@ -666,6 +666,7 @@ function obtener_ordenes_compra($datos) {
     if(isset($datos['numero_documento'])) $parametros .= " and f200_nit_prov=''{$datos['numero_documento']}''";
     if(isset($datos['id_producto'])) $parametros .= " and f120_id=''{$datos['id_producto']}''";
     if(isset($datos['fecha_final'])) $parametros .= " and f420_fecha<=''{$datos['fecha_final']}''";
+    if(isset($datos['bodega'])) $parametros .= " and f150_id=''{$datos['bodega']}''";
 
     // Enviaremos un filtro para que solo obtenga registros con rango de 5 minutos
     if(isset($datos['filtro_fecha'])) $parametros .= " and ".generar_filtro_ultimos_minutos('f420_fecha_ts_aprobacion');
