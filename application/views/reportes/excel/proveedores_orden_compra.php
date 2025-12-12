@@ -68,7 +68,6 @@ foreach ($registros as $registro) {
         $resultado = json_decode(obtener_ordenes_compra([
             'pagina' => $pagina,
             'fecha_final' => $solicitud->fecha_inicio,
-            'numero_documento' => $registro->proveedor_nit,
             'id_producto'=> $registro->producto_id,
             'bodega'=> '00550'
         ]));
