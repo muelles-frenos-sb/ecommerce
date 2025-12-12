@@ -461,41 +461,6 @@ function obtener_clientes_api($datos) {
 }
 
 /**
- * Obtiene las órdenes de compra creadas en Siesa
- */
-function obtener_ordenes_compra_api($datos = null) {
-    $CI =& get_instance();
-    $url = $CI->config->item('base_url_produccion');
-    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
-
-    $parametros = "f420_rowid IS NOT NULL";
-    
-    // Enviaremos un filtro para que solo obtenga registros con rango de 5 minutos
-    if(isset($datos['filtro_fecha'])) $parametros .= " and ".generar_filtro_ultimos_minutos('f420_fecha_ts_aprobacion');
-
-    $client = new \GuzzleHttp\Client();
-    try {
-        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
-            'headers' => [
-                'accept' => 'application/json',
-                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
-            ],
-            'query' => [
-                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-                'descripcion' => 'API_v2_Compras_Ordenes',
-                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
-                'parametros' => $parametros,
-            ]
-        ]);
-    } catch (GuzzleHttp\Exception\ClientException $e) {
-        $response = $e->getResponse();
-    }
-    
-    return $response->getBody()->getContents();
-}
-
-/**
  * Obtiene las cuentas por pagar a terceros
  */
 function obtener_cuentas_por_pagar_api($datos) {
@@ -689,6 +654,9 @@ function obtener_inventario_api($datos) {
     return $response->getBody()->getContents();
 }
 
+/**
+ * Obtiene las órdenes de compra creadas en Siesa
+ */
 function obtener_ordenes_compra($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');
@@ -698,6 +666,9 @@ function obtener_ordenes_compra($datos) {
     if(isset($datos['numero_documento'])) $parametros .= " and f200_nit_prov=''{$datos['numero_documento']}''";
     if(isset($datos['id_producto'])) $parametros .= " and f120_id=''{$datos['id_producto']}''";
     if(isset($datos['fecha_final'])) $parametros .= " and f420_fecha<=''{$datos['fecha_final']}''";
+
+    // Enviaremos un filtro para que solo obtenga registros con rango de 5 minutos
+    if(isset($datos['filtro_fecha'])) $parametros .= " and ".generar_filtro_ultimos_minutos('f420_fecha_ts_aprobacion');
 
     $client = new \GuzzleHttp\Client();
     try {

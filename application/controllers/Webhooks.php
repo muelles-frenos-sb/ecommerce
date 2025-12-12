@@ -1162,7 +1162,7 @@ class Webhooks extends MY_Controller {
 
                     // Mientras la API de Siesa retorne código 0 (Registros encontrados)
                     while ($codigo == 0) {
-                        $resultado = json_decode(obtener_ordenes_compra_api(['pagina' => $pagina, 'filtro_fecha' => false]));
+                        $resultado = json_decode(obtener_ordenes_compra(['pagina' => $pagina, 'filtro_fecha' => false]));
 
                         $codigo = $resultado->codigo;
                         $items = [];
