@@ -48,4 +48,9 @@ $config = [
 	'terceros_get' => [
         ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'trim'],
     ],
+
+	'terceros_contactos_get' => [
+        ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'required|trim|integer|greater_than[0]'],
+        ['field' => 'modulo_id', 'label' => 'Id del módulo', 'rules' => 'trim|integer|greater_than[0]'],
+    ],
 ];

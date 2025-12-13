@@ -234,6 +234,7 @@ Class Configuracion_model extends CI_Model {
                 if(isset($datos['id'])) $where .= " AND tc.id = {$datos['id']} ";
                 if(isset($datos['numero'])) $where .= " AND tc.numero = '{$datos['numero']}' ";
                 if(isset($datos['nit'])) $where .= " AND tc.nit = '{$datos['nit']}' ";
+                if(isset($datos['modulo_id'])) $where .= " AND tc.modulo_id = '{$datos['modulo_id']}' ";
 
                 $sql =
                 "SELECT
@@ -249,6 +250,7 @@ Class Configuracion_model extends CI_Model {
                     LEFT JOIN modulos AS m ON tc.modulo_id = m.id
                 $where
                 $having
+                GROUP BY tc.nit, tc.numero
                 ORDER BY
                     tc.fecha_creacion DESC
                 $contador";
