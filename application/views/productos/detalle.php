@@ -144,10 +144,18 @@ if(empty($producto)) redirect(site_url(''));
                                         <a class="btn btn-primary btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
                                             Ir a pagar
                                         </a>
-
-                                        <a href="<?php echo site_url(); ?>">
-                                            <img src="<?php echo base_url(); ?>images/continuar_compra.png" alt="Continuar comprando" class="mt-2 mb-2" width="100%">
-                                        </a>
+                                        
+                                        <ul class="shop-features__list">
+                                            <li class="shop-features__item">
+                                                <div class="shop-features__item-icon">
+                                                    <img src="<?php echo base_url(); ?>images/icons/envios_gratis.svg">
+                                                </div>
+                                                <div class="shop-features__info">
+                                                    <div class="shop-features__item-title">Envíos gratis</div>
+                                                    <div class="shop-features__item-subtitle">Tus órdenes gratis<br> en todo el Valle de Aburrá</div>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                     <!-- Etiquetas del producto -->
@@ -177,16 +185,6 @@ if(empty($producto)) redirect(site_url(''));
                             </div>
                             <div class="product__shop-features shop-features">
                                 <ul class="shop-features__list">
-                                    <li class="shop-features__item">
-                                        <div class="shop-features__item-icon">
-                                            <img src="<?php echo base_url(); ?>images/icons/envios_gratis.svg">
-                                        </div>
-                                        <div class="shop-features__info">
-                                            <div class="shop-features__item-title">Envíos gratis</div>
-                                            <div class="shop-features__item-subtitle">Tus órdenes gratis en todo el Valle de Aburrá</div>
-                                        </div>
-                                    </li>
-                                    <li class="shop-features__divider" role="presentation"></li>
                                     <li class="shop-features__item">
                                         <div class="shop-features__item-icon">
                                             <img src="<?php echo base_url(); ?>images/icons/envios_lugares.svg">
