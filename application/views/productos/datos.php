@@ -1,10 +1,27 @@
 <?php
 $productos = $this->productos_model->obtener('productos', $datos);
 
-if(empty($productos)) echo '<p>No se encontraron resultados con los filtros seleccionados</p>';
+if(empty($productos)) { ?>
+    <div class="container">
+        <div class="not-found">
+            <div class="not-found__content">
+                <h3 class="not-found__title">Sin resultados para esta búsqueda</h3>
+                <p class="not-found__text">
+                    Puede haber un error en la palabra ingresada o el repuesto aún no está visible en el catálogo
+                </p>
+                <p class="not-found__text">
+                    Manejamos <strong>más de 4.000 referencias activas</strong>, así que es probable que sí lo tengamos
+                </p>
+                <a class="btn btn-primary btn-sm mb-3" href="https://wa.me/573114914780">Contáctanos</a>
+                <p class="not-found__text">
+                    Te confirmaremos disponibilidad de inmediato
+                </p>
+            </div>
+        </div>
+    </div>
+<?php } ?>
 
-foreach($productos as $producto) {
-?>
+<?php foreach($productos as $producto) { ?>
     <div class="products-list__item">
         <div class="product-card">
             <?php
