@@ -169,7 +169,7 @@ if(empty($producto)) redirect(site_url(''));
                                                     // Las palabras clave se muestran como etiquetas
                                                     foreach ($etiquetas as $etiqueta) {
                                                         $url = site_url("productos?busqueda=$etiqueta");
-                                                        echo "<a href='{$url}'>$etiqueta</a>";
+                                                        if($etiqueta != '') echo "<a href='{$url}'>$etiqueta</a>";
                                                     }
                                                     ?>
                                                 </div>
