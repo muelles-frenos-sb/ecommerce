@@ -13,6 +13,7 @@ $cotizacion_detalle = $this->proveedores_model->obtener('proveedores_cotizacione
 
 echo "<input type='hidden' id='cotizacion_id' value='$cotizacion_id'>";
 echo "<input type='hidden' id='proveedor_nit' value='$nit'>";
+echo "<input type='hidden' id='solicitud_fecha_fin' value='$solicitud_cotizacion->fecha_fin'>";
 if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detalle' value='1'>";
 ?>
 
@@ -146,6 +147,16 @@ if(!empty($cotizacion_detalle)) echo "<input type='hidden' id='cotizacion_detall
         let datosLog = {
             id: '<?php echo $cotizacion_id; ?>',
             nit: '<?php echo $nit; ?>',
+        }
+
+        // Se valida que la fecha no haya vencido
+        const fechaActual = new Date()
+        const fechaFinSolicitud = new Date($('#solicitud_fecha_fin').val().replace(' ', 'T'));
+       
+        // Cuando ya se haya vencido la solicitud
+        if(fechaFinSolicitud < fechaActual) {
+            mostrarAviso('error', 'La solicitud de precios ya veció y no podemos recibir más cotizaciones o cambios. Muchas gracias por tu interés. Te esperamos para la siguiente solicitud de precios.', 30000)
+            return false
         }
 
         if (actualizar) {
