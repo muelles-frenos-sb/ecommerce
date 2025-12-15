@@ -421,6 +421,7 @@ Class Proveedores_model extends CI_Model{
                         'ROUND(TIMESTAMPDIFF(SECOND, NOW(), pcs.fecha_fin) / 3600) AS horas_restantes',
                     ])
                     ->order_by('pcs.fecha_fin')
+                    ->where('pcs.fecha_inicio <=', date('Y-m-d H:i:s'))
                     ->where('pcs.fecha_fin >=', date('Y-m-d H:i:s'))
                     ->get('proveedores_cotizaciones_solicitudes pcs')
                     ->result()
