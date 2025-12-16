@@ -217,7 +217,6 @@ function enviar_email_solicitud_garantia($id) {
             ",
         ],
         'destinatarios' => [$solicitud->solicitante_email, 'coordinadorlogistico@repuestossimonbolivar.com'],
-        'adjuntos' => true,
     ];
 
     return $instancia->email_model->enviar($datos);

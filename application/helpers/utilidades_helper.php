@@ -258,7 +258,7 @@ function url_fotos($marca, $referencia) {
     $referencia_filtrada = str_replace('/', '_', trim($referencia));
 
     $url_foto_producto = obtener_url_foto("{$CI->config->item('url_fotos')}$marca_filtrada/$referencia_filtrada");
-    $url_foto_generica = "{$CI->config->item('url_fotos')}producto_generico.jpg";
+    $url_foto_generica = "{$CI->config->item('url_fotos')}producto_generico.webp";
    
     return (verificar_existencia_foto($url_foto_producto)) ? $url_foto_producto : $url_foto_generica;
 }
@@ -270,16 +270,7 @@ function url_fotos($marca, $referencia) {
  * @return void
  */
 function verificar_existencia_foto($url) {
-    $ch = curl_init($url);
+    $directorio = $_SERVER['DOCUMENT_ROOT'] . parse_url($url, PHP_URL_PATH);
 
-    curl_setopt($ch, CURLOPT_NOBODY, true);
-    curl_setopt($ch, CURLOPT_HEADER, true);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 5);
-    
-    curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    
-    return $httpCode === 200;
+    return (file_exists($directorio) && is_file($directorio)) ? $url : false;
 }

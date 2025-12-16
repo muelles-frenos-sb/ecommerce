@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" dir="ltr">
+<html lang="es-CO" dir="ltr">
     <head>
         <?php $this->load->view('core/header'); ?>
         <?php $this->load->view('core/schema'); ?>

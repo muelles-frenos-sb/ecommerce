@@ -52,7 +52,7 @@ class Webhooks extends MY_Controller {
     **/
     function envios() {
         // Recepción de los datos que llegan
-        $post = file_get_contents('php://input');
+        $post = preg_replace('/(\w+):/', '"$1":', file_get_contents('php://input'));
         $datos = json_decode($post, true);
 
         $datos_log = [
