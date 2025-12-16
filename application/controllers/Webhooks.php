@@ -739,72 +739,60 @@ class Webhooks extends MY_Controller {
     }
 
     /**
-     * Importa de Siesa V2 los precios configurados
-     * de cada producto (Lista de precio 009 y 010)
+     * Importa de la API estándar del ERP Siesa 
+     * los precios configurados de cada producto 
      */
     function importar_productos_precios() {
         $tiempo_inicial = microtime(true);
         $total_items = 0;
 
         try {
+            // Filtro de la lista de precios
+            $filtro_lista_precios = $this->input->get('lista_precio');
+            $lista_precio = ($filtro_lista_precios) ? $filtro_lista_precios : $this->config->item('lista_precio');
+
+            $resultado = json_decode(obtener_precios_api(['lista_precio' => $lista_precio]));
+            $precios = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
-            $codigo = 0;
-            $pagina = 1;
-            $items_almacenados = 0;
-
-            // Eliminamos todos los ítems asociados a la lista de precio
-            $this->productos_model->eliminar('productos_precios', "lista_precio = {$this->config->item('lista_precio')}"); // Antes 009
-
-            // Mientras la API de Siesa retorne código 0 (Registros encontrados)
-            while ($codigo == 0) {
-                $resultado = json_decode(obtener_precios_api(['pagina' => $pagina]));
-                $codigo = $resultado->codigo;
-                $nuevos_precios = [];
-
-                if($codigo == 0) {
-                    $precios = $resultado->detalle->Table;
-
-                    foreach($precios as $precio) {
-                        $nuevo_precio = [
-                            'producto_id' => $precio->f120_id,
-                            'referencia' => $precio->f120_referencia,
-                            'descripcion_corta' => $precio->f120_descripcion,
-                            'lista_precio' => $precio->f126_id_lista_precio,
-                            'precio' => $precio->f126_precio_sugerido, // Precio oficial
-                            'precio_maximo' => $precio->f126_precio_maximo,
-                            'precio_minimo' => $precio->f126_precio_minimo,
-                            'precio_sugerido' => $precio->f126_precio_sugerido,
-                            'fecha_actualizacion_api' => $precio->f126_fecha_ts_actualizacion,
-                            'fecha_actualizacion' => $fecha_actualizacion,
-                        ];
-
-                        array_push($nuevos_precios, $nuevo_precio);
-
-                        $total_items++;
-                    }
-
-                    $items_almacenados += $this->productos_model->crear('productos_precios', $nuevos_precios);
-                    
-                    $pagina++;
-                } else {
-                    $codigo = '-1';
-                    break;
-                }
-            }
+            $datos = [];
             
+            // Primero, eliminamos todos los ítems de la lista de precios (Solo si hay datos disponibles para actualizar)
+            if(!empty($precios)) $this->productos_model->eliminar('productos_precios', ['lista_precio' => $lista_precio]);
+
+            foreach($precios as $precio) {
+                $nuevo_item = [
+                    'producto_id' => $precio->IdItem,
+                    'referencia' => $precio->Referencia,
+                    'descripcion_corta' => $precio->Descripcion_Corta,
+                    'lista_precio' => $precio->Lista_precio,
+                    'precio' => $precio->PrecioSugerido, // Precio oficial
+                    'precio_maximo' => $precio->PrecioMaximo,
+                    'precio_minimo' => $precio->PrecioMinimo,
+                    'precio_sugerido' => $precio->PrecioSugerido,
+                    'fecha_actualizacion' => $fecha_actualizacion,
+                ];
+                array_push($datos, $nuevo_item);
+            }
+
+            $total_items = $this->productos_model->crear('productos_precios', $datos);
+
             $tiempo_final = microtime(true);
 
             $respuesta = [
                 'log_tipo_id' => 34,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$items_almacenados registros actualizados",
-                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                'observacion' => json_encode([
+                    'lista_precio' => $lista_precio,
+                    'items' => number_format($total_items, 0, '', '.'),
+                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
+                ])
             ];
 
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', $respuesta);
 
             print json_encode($respuesta);
+            $this->db->close();
 
             return http_response_code(200);
         } catch (\Throwable $th) {
