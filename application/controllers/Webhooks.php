@@ -680,14 +680,18 @@ class Webhooks extends MY_Controller {
         $tiempo_inicial = microtime(true);
         
         try {
+            // Filtro de la bodega
+            $filtro_bodega = $this->input->get('bodega');
+            $bodega = ($filtro_bodega) ? $filtro_bodega : $this->config->item('bodega_principal');
+
             // Inventario de la bodega por defecto
-            $resultado = json_decode(obtener_inventario_api(['bodega' => $this->config->item('bodega_principal')]));
+            $resultado = json_decode(obtener_inventario_api(['bodega' => $bodega]));
             $inventario = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
 
-            // Primero, eliminamos todos los ítems (Solo si hay inventario disponible)
-            if(!empty($inventario)) $this->productos_model->eliminar('productos_inventario', 'id is  NOT NULL');
+            // Primero, eliminamos todos los ítems de la bodega (Solo si hay inventario disponible)
+            if(!empty($inventario)) $this->productos_model->eliminar('productos_inventario', ['id !=' => null, 'bodega' => $bodega]);
 
             foreach($inventario as $item) {
                 $nuevo_item = [
