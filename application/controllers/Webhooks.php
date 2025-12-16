@@ -713,8 +713,11 @@ class Webhooks extends MY_Controller {
             $respuesta = [
                 'log_tipo_id' => 6,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados",
-                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                'observacion' => json_encode([
+                    'bodega' => $bodega,
+                    'items' => number_format($total_items, 0, '', '.'),
+                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
+                ])
             ];
             
             // Se agrega el registro en los logs
