@@ -81,6 +81,20 @@ function cubrir_correo($email) {
     return $usuarioOculto . '@' . $dominio;
 }
 
+/**
+ * Función para formatear números de teléfono
+ */
+function formatear_numero_telefono($numero) {
+    // Eliminar espacios, guiones, paréntesis
+    $numero = preg_replace('/[^0-9]/', '', $numero);
+    
+    // Si no tiene código de país, se agrega
+    if (strlen($numero) == 10) $numero = "57$numero" ; // Colombia por defecto
+    
+    return $numero;
+}
+
+
 function formatear_tamanio($bytes) {
     if ($bytes == 0) return "0 B";
     

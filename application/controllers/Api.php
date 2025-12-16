@@ -15,6 +15,7 @@ class Api extends RestController {
     function __construct() {
         parent::__construct();
 
+        $this->load->library('whatsapp_api');
         $this->load->model(["clientes_model", "configuracion_model", "productos_model"]);
     }
 
@@ -523,6 +524,36 @@ class Api extends RestController {
             "mensaje" => $mensaje,
             "resultado" => $resultado
         ], RestController::HTTP_OK);
+    }
+
+    /**
+     * Envía mensajes a través de la API de Whatsapp
+     */
+    function whatsapp_post() {
+        $tipo = $this->input->get('tipo');
+        $post = file_get_contents('php://input');
+        $datos = json_decode($post, true);
+        $error = true;
+
+        $numero_telefonico = formatear_numero_telefono($datos['numero_telefonico']);
+
+        switch ($tipo) {
+            // Mensaje de prueba
+            case 'mensaje_test':
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla(
+                    $numero_telefonico,
+                    (ENVIRONMENT == 'development') ? 'hello_world' : 'actualizacion_estado',
+                    (ENVIRONMENT == 'development') ? 'en_US' : 'es_CO'
+                );
+                break;
+        }
+
+        $this->response([
+            'error' => !$peticion['status'],
+            'mensaje' => 'Prueba',
+            'resultado' => $peticion,
+            'datps' => $peticion['response']
+        ], ($peticion['status']) ? RestController::HTTP_OK : RestController::HTTP_BAD_REQUEST);
     }
 }
 /* Fin del archivo Api.php */
