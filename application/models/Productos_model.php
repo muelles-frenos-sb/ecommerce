@@ -126,7 +126,7 @@ Class Productos_model extends CI_Model{
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
                 
-                $where = "WHERE (i.disponible > 0 OR pm.id)";
+                $where = "WHERE (i.disponible > 0 OR pm.id) AND i.bodega = '{$this->config->item('bodega_principal')}'";
                 $having = "HAVING p.id IS NOT NULL";
                
                 if(!isset($datos['id'])) {
