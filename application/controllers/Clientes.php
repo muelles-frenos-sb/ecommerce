@@ -303,6 +303,17 @@ class Clientes extends MY_Controller {
             "exito" => $exito
         ]]);
     }
+
+    function ventas() {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        
+        switch ($this->uri->segment(3)) {
+            default:
+                $this->data['contenido_principal'] = 'clientes/ventas/gestion/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
 }
 /* Fin del archivo Clientes.php */
 /* Ubicación: ./application/controllers/Clientes.php */

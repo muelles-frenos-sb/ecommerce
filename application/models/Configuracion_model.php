@@ -686,7 +686,8 @@ Class Configuracion_model extends CI_Model {
 
                 $sql =
                 "SELECT
-                    t.*
+                    t.*,
+                    t.f200_razon_social nombre
                 FROM
                     terceros AS t
                 $where
@@ -785,6 +786,14 @@ Class Configuracion_model extends CI_Model {
             case 'usuarios_tipos':
                 return $this->db
                     ->get($tabla)
+                    ->result()
+                ;
+            break;
+
+            case 'clientes_sucursales':
+                return $this->db
+                    ->where($datos)
+                    ->get('clientes_sucursales')
                     ->result()
                 ;
             break;

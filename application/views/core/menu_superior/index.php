@@ -110,6 +110,12 @@
                                                         <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                             <!-- <a class="megamenu-links__item-link" href="">Opciones</a> -->
                                                             <ul class="megamenu-links">
+                                                                <?php // if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
+                                                                    <li class="megamenu-links__item mb-1">
+                                                                        <a class="megamenu-links__item-link" href="<?php echo site_url('clientes/ventas'); ?>">Ventas</a>
+                                                                    </li>
+                                                                <?php // } ?>
+
                                                                 <li class="menu__item menu__item--has-submenu mb-1">
                                                                     <a class="megamenu-links__item-link" href="#">
                                                                         Clientes

@@ -384,9 +384,28 @@ listarDatos = async(elemento, datos = null) => {
     $(`#${elemento}`).html('').append("<option value=''>Seleccione...</option>")
                                     
     let resultado = await consulta('obtener', datos)
+    var campoId
 
-    $.each(resultado, (index, registro) => {
-        let campoId = (datos.tipo == 'departamentos' || datos.tipo == 'municipios') ? registro.codigo : registro.id
+    registros = (datos.tipo == 'terceros_local' || datos.tipo == 'clientes_sucursales_local') ? resultado.resultado : resultado
+    console.log(registros)
+
+    $.each(registros, (index, registro) => {
+        // Dependiendo del tipo de solicitud, el id será distinto
+        switch (datos.tipo) {
+            case 'departamentos':
+            case 'municipios':
+                campoId = registro.codigo
+            break;
+
+            case 'cliente_sucursal':
+            case 'terceros_local':
+                campoId = registro.f200_nit
+            break;
+        
+            default:
+                campoId = registro.id
+            break;
+        }
             
         $(`#${elemento}`).append(`<option value="${campoId}" data-codigo="${registro.codigo}">${registro.nombre}</option>`)
     })

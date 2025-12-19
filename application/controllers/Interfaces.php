@@ -586,6 +586,11 @@ class Interfaces extends CI_Controller {
                 $resultado = json_decode(obtener_clientes_api($datos));
             break;
 
+            // Sucursales en la tabla clientes_sucursalesss de la base de datos
+            case 'clientes_sucursales_local':
+                $resultado =  ['resultado' => $this->configuracion_model->obtener('clientes_sucursales', $datos)];
+            break;
+
             case 'recibos':
                 $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             break;
@@ -600,6 +605,10 @@ class Interfaces extends CI_Controller {
 
             case 'pedidos':
                 $resultado = json_decode(obtener_pedidos_api_estandar($datos));
+            break;
+
+            case 'productos':
+                $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
             break;
 
             case 'producto':

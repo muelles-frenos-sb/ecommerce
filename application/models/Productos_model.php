@@ -125,8 +125,10 @@ Class Productos_model extends CI_Model{
 
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
+
+                // La primera condición permitirá mostrar todos los productos o solo los que tienen disponibilidad o metadatos
+                $where = (isset($datos['mostrar_agotados']) && $datos['mostrar_agotados']) ? "WHERE p.id " : "WHERE (i.disponible > 0 OR pm.id) ";
                 
-                $where = "WHERE (i.disponible > 0 OR pm.id) AND i.bodega = '{$this->config->item('bodega_principal')}'";
                 $having = "HAVING p.id IS NOT NULL";
                
                 if(!isset($datos['id'])) {
@@ -180,21 +182,14 @@ Class Productos_model extends CI_Model{
                     pm.descripcion descripcion,
                     i.existencia,
                     IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
-                    MIN(i.bodega) bodega,
-                    ( 
-                        SELECT 
-                        IF ( MIN( i.bodega ) = '{$this->config->item('bodega_principal')}', pp.precio, pp.precio ) 
-                        FROM 
-                            productos_precios AS pp 
-                        WHERE 
-                            pp.producto_id = p.id 
-                            AND pp.lista_precio = '{$this->config->item('lista_precio')}'
-                            ORDER BY fecha_actualizacion_api DESC 
-                        LIMIT 1 
-                    ) precio
+                    i.bodega,
+                    pp.precio, 
+                    pp.precio_minimo, 
+                    pp.precio_maximo
                 FROM
                     productos AS p
-                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id
+                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id AND i.bodega = '{$this->config->item('bodega_principal')}'
+                    LEFT JOIN productos_precios AS pp ON pp.producto_id = p.id AND pp.lista_precio = '{$this->config->item('lista_precio')}'
                     LEFT JOIN productos_metadatos AS pm ON p.id = pm.producto_id
                 $where
                 GROUP BY p.id
