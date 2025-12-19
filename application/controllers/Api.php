@@ -542,17 +542,16 @@ class Api extends RestController {
             case 'mensaje_test':
                 $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla(
                     $numero_telefonico,
-                    (ENVIRONMENT == 'development') ? 'hello_world' : 'actualizacion_estado',
-                    (ENVIRONMENT == 'development') ? 'en_US' : 'es_CO'
+                    (ENVIRONMENT != 'production') ? 'hello_world' : 'actualizacion_estado',
+                    (ENVIRONMENT != 'production') ? 'en_US' : 'es_CO'
                 );
                 break;
         }
 
         $this->response([
             'error' => !$peticion['status'],
-            'mensaje' => 'Prueba',
             'resultado' => $peticion,
-            'datps' => $peticion['response']
+            'datos' => $peticion['response']
         ], ($peticion['status']) ? RestController::HTTP_OK : RestController::HTTP_BAD_REQUEST);
     }
 }
