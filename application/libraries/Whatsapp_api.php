@@ -43,19 +43,19 @@ class Whatsapp_api {
     public function enviar_mensaje_con_plantilla($numero_telefonico, $nombre_plantilla, $lenguaje = 'es', $componentes = []) {
         $url = "https://graph.facebook.com/{$this->version_api}/{$this->identificador_numero_telefonico}/messages";
         
-        $data = [
+        $datos = [
             'messaging_product' => 'whatsapp',
             'recipient_type' => 'individual',
             'to' => $numero_telefonico,
             'type' => 'template',
             'template' => [
                 'name' => $nombre_plantilla,
-                'language' => ['code' => $lenguaje],
+                'language' => [ 'code' => $lenguaje ],
                 'components' => $componentes
             ]
         ];
         
-        return $this->enviar_peticion($url, $data);
+        return $this->enviar_peticion($url, $datos);
     }
     
     /**

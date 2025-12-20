@@ -546,6 +546,57 @@ class Api extends RestController {
                     (ENVIRONMENT != 'production') ? 'en_US' : 'es_CO'
                 );
                 break;
+            
+            // Generación de orden de compra
+            case 'proveedores_orden_compra':
+                $orden_numero = $datos['orden_numero'];
+
+                // El archivo que llega en base64 se decodifica
+                $archivo = base64_decode($datos['archivo']);
+                
+                $directorio = FCPATH . 'archivos/whatsapp/';
+                
+                $ruta_completa = "{$directorio}{$orden_numero}.pdf";
+
+                // Se crea el archivo
+                file_put_contents($ruta_completa, $archivo);
+                
+                $url = base_url()."archivos/whatsapp/$orden_numero.pdf";
+
+                $contenido = [
+                    [
+                        'type' => 'header',
+                        "parameters" => [
+                            [
+                                'type' => 'document',
+                                "document" => [
+                                    'link' => (ENVIRONMENT != 'production') ? 'https://repuestossimonbolivar.com/archivos/solicitudes_credito/3/HERNAN%20DARIO%20RUIZ%20TOBON%20OK.pdf' : $url,
+                                    'filename' => "Orden de compra $orden_numero"
+                                ],
+                            ]
+                        ]
+                    ],
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'orden_numero',
+                                "text" => $orden_numero,
+                            ]
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, $tipo, 'es', $contenido);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'mensaje' => 'Prueba',
+                    'resultado' => $url,
+                    'datos' => $peticion['response']
+                ], RestController::HTTP_OK);
+                break;
         }
 
         $this->response([
