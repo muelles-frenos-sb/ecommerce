@@ -599,7 +599,30 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'pedidos':
-                $resultado = json_decode(obtener_pedidos_api_estandar($datos));
+                $codigo = 0;
+                $pagina = 1;
+                $resultado = [];
+
+                // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+                while ($codigo == 0) {
+                    $datos['pagina'] = $pagina;
+                    $respuesta = json_decode(obtener_pedidos_api_estandar($datos));
+                    $codigo = $respuesta->codigo;
+
+                    if($codigo == 0) {
+                        $registros = $respuesta->detalle->Table;
+
+                        // Recorrido de todos los ítems para almacenarlos en un solo arreglo que se enviará como respuesta
+                        foreach($registros as $item) $resultado[] = $item;
+
+                        $pagina++;
+                    } else {
+                        $codigo = '-1';
+                        break;
+                    }
+                }
+
+                $resultado = $resultado;
             break;
 
             case 'producto':

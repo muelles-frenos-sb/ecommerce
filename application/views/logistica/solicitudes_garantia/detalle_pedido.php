@@ -1,42 +1,45 @@
 <?php
-if(isset($datos['solicitud'])) {
-    $solicitud = json_decode(json_encode($datos['solicitud']));
+$pedido_detalle = json_decode($datos['pedido']);
 
-    $tabla = 
-    "<table class='table-striped table-bordered w-100'>
-        <thead>
-            <th class='text-center'>Ítem</th>
-            <th class='text-center'>Referencia</th>
-            <th class='text-center'>Descripción</th>
-            <th class='text-center'>Cantidad comprada</th>
-        </thead>
-        <tbody>
+// Ordenamiento de los datos
+sort($pedido_detalle);
+
+if(isset($datos['solicitud']) && $datos['solicitud']) $solicitud = json_decode(json_encode($datos['solicitud']));
+
+$tabla = 
+"<table class='table-striped table-bordered w-100'>
+    <thead>
+        <th class='text-center'>Ítem</th>
+        <th class='text-center'>Referencia</th>
+        <th class='text-center'>Descripción</th>
+        <th class='text-center'>Cantidad comprada</th>
+    </thead>
+    <tbody>
+";
+
+$lista_productos = '';
+foreach ($pedido_detalle as $registro) {
+    $producto = (object) $registro;
+    $fecha_pedido = date('Y-m-d', strtotime($producto->f430_id_fecha));
+    $vendedor_nit = $producto->f200_nit_pedido_vend;
+    $vendedor_razon_social = $producto->f200_razon_social_pedido_vend;
+    $sede = $this->configuracion_model->obtener('centros_operacion', ['codigo' => $producto->f430_id_co_fact]);
+    $tercero = $producto->f200_razon_social_pedido_fact;
+
+    $tabla .= "
+        <tr>
+            <td class='text-right'>$producto->f120_id</td>
+            <td>$producto->f120_referencia</td>
+            <td>$producto->f120_descripcion</td>
+            <td class='text-right'>$producto->f431_cant1_pedida</td>
+        </tr>
     ";
 
-    $lista_productos = '';
-    foreach ($datos['pedido'] as $registro) {
-        $producto = (object) $registro;
-        $fecha_pedido = date('Y-m-d', strtotime($producto->f430_id_fecha));
-        $vendedor_nit = $producto->f200_nit_pedido_vend;
-        $vendedor_razon_social = $producto->f200_razon_social_pedido_vend;
-        $sede = $this->configuracion_model->obtener('centros_operacion', ['codigo' => $producto->f430_id_co_fact]);
-        $tercero = $producto->f200_razon_social_pedido_fact;
+    // Se agrega una opción en la lista desplegable
+    $lista_productos .= "<option value='$producto->f120_id' data-cantidad='$producto->f431_cant1_pedida'>$producto->f120_descripcion</option>";
+}
 
-        $tabla .= "
-            <tr>
-                <td class='text-right'>$producto->f120_id</td>
-                <td>$producto->f120_referencia</td>
-                <td>$producto->f120_descripcion</td>
-                <td class='text-right'>$producto->f431_cant1_pedida</td>
-            </tr>
-        ";
-
-        // Se agrega una opción en la lista desplegable
-        $lista_productos .= "<option value='$producto->f120_id' data-cantidad='$producto->f431_cant1_pedida'>$producto->f120_descripcion</option>";
-    }
-
-    $tabla .= '</tbody></table>';
-} 
+$tabla .= '</tbody></table>';
 ?>
 
 <div class="form-row">
@@ -110,3 +113,9 @@ if(isset($datos['solicitud'])) {
         })
     </script>
 <?php } ?>
+
+<script>
+    $().ready(async () => {
+        $('#solicitud_producto_id').select2()
+    })
+</script>
