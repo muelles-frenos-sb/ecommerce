@@ -430,6 +430,38 @@ function tcc_obtener_datos_api($tipo, $datos) {
 }
 
 /**
+ * Obtiene las bodegas creadas en el EPR de Siesa
+ */
+function obtener_bodegas_api($datos) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+    $parametros = "f150_rowid IS NOT NULL";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Bodegas',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+/**
  * Obtiene todos los clientes creados en Siesa
  */
 function obtener_clientes_api($datos) {

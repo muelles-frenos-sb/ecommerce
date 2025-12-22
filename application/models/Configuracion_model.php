@@ -153,6 +153,14 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'erp_bodegas':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->row()
+                ;
+            break;
+
             case 'erp_ventas_pedidos':
                 return $this->db
                     ->where($datos)
