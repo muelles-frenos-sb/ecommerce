@@ -1223,7 +1223,7 @@ class Webhooks extends MY_Controller {
 
                     // Mientras la API de Siesa retorne código 0 (Registros encontrados)
                     while ($codigo == 0) {
-                        $resultado = json_decode(obtener_bodegas_api(['pagina' => $pagina, 'estado_id' => 3, 'filtro_fecha' => true]));
+                        $resultado = json_decode(obtener_bodegas_api(['pagina' => $pagina]));
                         $codigo = $resultado->codigo;
                         $items = [];
 

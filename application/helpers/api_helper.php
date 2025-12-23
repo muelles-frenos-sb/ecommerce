@@ -430,7 +430,7 @@ function tcc_obtener_datos_api($tipo, $datos) {
 }
 
 /**
- * Obtiene las bodegas creadas en el EPR de Siesa
+ * Obtiene las bodegas creadas en el ERP de Siesa
  */
 function obtener_bodegas_api($datos) {
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
