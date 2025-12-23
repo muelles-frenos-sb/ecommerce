@@ -56,7 +56,12 @@
 
 <script>
     $().ready(async function() {
+        
         var buscarProducto = $('#buscar_producto')
+
+        $('#cliente_nit, #cliente_sucursal').select2({
+            width: '100%'
+        })
         
         Swal.fire({
             title: 'Estamos cargando los datos...',
@@ -66,6 +71,9 @@
             allowOutsideClick: false
         })
 
+        /*************************
+         * Carga de los clientes *
+         *************************/
         await listarDatos('cliente_nit', {
             tipo: 'terceros_local',
             f200_ind_cliente: true
@@ -73,11 +81,9 @@
 
         Swal.close()
 
-
-        $('#cliente_nit').select2({
-            width: '100%'
-        })
-
+        /*************************
+         ** Carga de sucursales **
+         *************************/
         $('#cliente_nit').change(async () => {
             Swal.fire({
                 title: `Estamos cargando las sucursales de ${$('#cliente_nit option:selected').text()}...`,
@@ -87,13 +93,30 @@
                 allowOutsideClick: false
             })
           
-            // await gestionarSucursales($('#cliente_nit').val())
+            // Obtenemos e insertamos las sucursales del tercero
+            await gestionarSucursales($('#cliente_nit').val())
 
-            // await listarDatos('cliente_sucursal', {
-            //     tipo: 'clientes_sucursales',
-            //     f200_nit: $('#cliente_nit').val()
-            // })
-            // Swal.close()
+            // Cargamos las sucursales del cliente en la lista desplegable
+            await listarDatos('cliente_sucursal', {
+                tipo: 'clientes_sucursales_local',
+                f200_nit: $('#cliente_nit').val()
+            })
+
+            Swal.close()
+        })
+
+        /**************************
+         **** Carga de bodegas ****
+         *************************/
+        await listarDatos('cliente_bodega', {
+            tipo: 'erp_bodegas',
+        })
+
+        /******************************
+         * Carga de listas de precios *
+         *****************************/
+        await listarDatos('cliente_lista_precio', {
+            tipo: 'erp_listas_precios',
         })
 
         $('#formulario_buscar_productos').submit(async evento => {

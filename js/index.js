@@ -387,7 +387,6 @@ listarDatos = async(elemento, datos = null) => {
     var campoId
 
     registros = (datos.tipo == 'terceros_local' || datos.tipo == 'clientes_sucursales_local') ? resultado.resultado : resultado
-    console.log(registros)
 
     $.each(registros, (index, registro) => {
         // Dependiendo del tipo de solicitud, el id será distinto
@@ -397,7 +396,10 @@ listarDatos = async(elemento, datos = null) => {
                 campoId = registro.codigo
             break;
 
-            case 'cliente_sucursal':
+            case 'clientes_sucursales_local':
+                campoId = registro.f200_id_sucursal
+            break;
+
             case 'terceros_local':
                 campoId = registro.f200_nit
             break;

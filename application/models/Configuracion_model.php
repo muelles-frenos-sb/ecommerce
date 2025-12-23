@@ -153,6 +153,33 @@ Class Configuracion_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'erp_bodegas':
+                return $this->db
+                    ->select([
+                        '*',
+                        'f150_rowid id',
+                        "CONCAT_WS(' ', f150_id, f150_descripcion) nombre"
+                    ])
+                    ->where($datos)
+                    ->order_by('f150_id')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+            
+            case 'erp_listas_precios':
+                return $this->db
+                    ->select([
+                        '*',
+                        "CONCAT_WS(' ', f112_id, f112_descripcion) nombre"
+                    ])
+                    ->where($datos)
+                    ->order_by('f112_id')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+            
             case 'erp_ventas_pedidos':
                 return $this->db
                     ->where($datos)
@@ -792,6 +819,10 @@ Class Configuracion_model extends CI_Model {
 
             case 'clientes_sucursales':
                 return $this->db
+                    ->SELECT([
+                        '*',
+                        'f201_descripcion_sucursal nombre'
+                    ])
                     ->where($datos)
                     ->get('clientes_sucursales')
                     ->result()
