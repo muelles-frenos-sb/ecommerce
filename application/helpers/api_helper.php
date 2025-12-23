@@ -579,6 +579,38 @@ function obtener_facturas_desde_pedido_api($datos) {
     return $response->getBody()->getContents();
 }
 
+/**
+ * Obtiene las liastas de precio creadas en el ERP de Siesa
+ */
+function obtener_listas_precios_api($datos) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+    $parametros = "f112_ts IS NOT NULL";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_ListasDePrecios',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 function obtener_movimientos_contables_api($datos) {
     $CI =& get_instance();
     $url = $CI->config->item('base_url_produccion');

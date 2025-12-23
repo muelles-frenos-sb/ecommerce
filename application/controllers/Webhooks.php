@@ -1277,6 +1277,73 @@ class Webhooks extends MY_Controller {
                     return http_response_code(400);
                 }
             break;
+
+            // Desde la API estándar API_v2_ListasDePrecios importa las listas de precios existentes
+            case 'importar_listas_precios':
+                $tiempo_inicial = microtime(true);
+                $total_items = 0;
+                
+                try {
+                    $codigo = 0;
+                    $pagina = 1;
+                    $items_almacenados = 0;
+
+                    // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+                    while ($codigo == 0) {
+                        $resultado = json_decode(obtener_listas_precios_api(['pagina' => $pagina]));
+                        $codigo = $resultado->codigo;
+                        $items = [];
+
+                        if($codigo == 0) {
+                            $registros = $resultado->detalle->Table;
+
+                            foreach($registros as $item) {
+                                // Antes de agregar el ítem, se consulta primero si existe el ítem en la base de datos
+                                $existe_item = $this->configuracion_model->obtener('erp_listas_precios', ['f112_descripcion' => $item->f112_descripcion]);
+
+                                // Si no existe todavía en la base de datos, se agrega al arreglo para que se cree
+                                if(empty($existe_item)) array_push($items, $item);
+
+                                $total_items++;
+                            }
+
+                            // Si hay datos en el arreglo, se crean
+                            if(!empty($items)) {
+                                $items_almacenados += $this->configuracion_model->crear('erp_listas_precios_batch', $items);
+                            }
+                            
+                            $pagina++;
+                        } else {
+                            $codigo = '-1';
+                            break;
+                        }
+                    }
+
+                    $tiempo_final = microtime(true);
+
+                    $respuesta = [
+                        'log_tipo_id' => 99,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$items_almacenados registros creados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                    ];
+
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
+
+                    print json_encode($respuesta);
+
+                    return http_response_code(200);
+                } catch (\Throwable $th) {
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', [
+                        'log_tipo_id' => 100,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                    ]);
+
+                    return http_response_code(400);
+                }
+            break;
             
             default:
                 print json_encode([

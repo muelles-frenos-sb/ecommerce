@@ -44,6 +44,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_batch('erp_bodegas', $datos);
             break;
 
+            case 'erp_listas_precios_batch':
+                return $this->db->insert_batch('erp_listas_precios', $datos);
+            break;
+
             case 'erp_compras_ordenes_batch':
                 return $this->db->insert_batch('erp_compras_ordenes', $datos);
             break;
@@ -158,6 +162,14 @@ Class Configuracion_model extends CI_Model {
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
             case 'erp_bodegas':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->row()
+                ;
+            break;
+
+            case 'erp_listas_precios':
                 return $this->db
                     ->where($datos)
                     ->get($tabla)
