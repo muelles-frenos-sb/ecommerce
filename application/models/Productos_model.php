@@ -164,6 +164,9 @@ Class Productos_model extends CI_Model{
                     }
                 }
 
+                $filtro_bodega = (isset($datos['filtro_bodega'])) ? $datos['filtro_bodega'] : $this->config->item('bodega_principal');
+                $filtro_lista_precio = (isset($datos['filtro_lista_precio'])) ? $datos['filtro_lista_precio'] : $this->config->item('lista_precio');
+
                 if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
                 if(isset($datos['grupo'])) $where .= " AND p.grupo = '{$datos['grupo']}' ";
@@ -188,8 +191,8 @@ Class Productos_model extends CI_Model{
                     pp.precio_maximo
                 FROM
                     productos AS p
-                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id AND i.bodega = '{$this->config->item('bodega_principal')}'
-                    LEFT JOIN productos_precios AS pp ON pp.producto_id = p.id AND pp.lista_precio = '{$this->config->item('lista_precio')}'
+                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id AND i.bodega = $filtro_bodega
+                    LEFT JOIN productos_precios AS pp ON pp.producto_id = p.id AND pp.lista_precio = $filtro_lista_precio
                     LEFT JOIN productos_metadatos AS pm ON p.id = pm.producto_id
                 $where
                 GROUP BY p.id

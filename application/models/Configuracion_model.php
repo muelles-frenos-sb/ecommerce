@@ -158,6 +158,7 @@ Class Configuracion_model extends CI_Model {
                     ->select([
                         '*',
                         'f150_rowid id',
+                        'LPAD(f150_id, 5, 0) codigo',
                         "CONCAT_WS(' ', f150_id, f150_descripcion) nombre"
                     ])
                     ->where($datos)
