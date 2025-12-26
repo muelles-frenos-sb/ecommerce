@@ -561,7 +561,7 @@ class Api extends RestController {
                 // Se crea el archivo
                 file_put_contents($ruta_completa, $archivo);
                 
-                $url = base_url()."archivos/whatsapp/$orden_numero.pdf";
+                $url = site_url("archivos/whatsapp/$orden_numero.pdf");
 
                 $contenido = [
                     [
