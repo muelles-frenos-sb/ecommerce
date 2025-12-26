@@ -41,7 +41,7 @@ class Contabilidad extends CI_Controller {
      * @return void
      */
     function buscar_documentos_adicionales($ruta_carpeta, $nombre_base) {
-        $documentos = [];
+        $documentos_adicionales = [];
         
         // Se escanean todos los archivos de la carpeta
         $archivos = scandir($ruta_carpeta);
@@ -52,11 +52,11 @@ class Contabilidad extends CI_Controller {
             $ruta_completa = $ruta_carpeta . '/' . $archivo;
             
             // Si no es el archivo principal, es un documento adicional
-            if (is_file($ruta_completa) && $archivo !== $nombre_base . '.pdf') {
+            if (is_file($ruta_completa) && $archivo != "$nombre_base.pdf") {
                 $extension = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                 $tipo = obtener_tipo_archivo($extension);
                 
-                $documentos[] = [
+                $documentos_adicionales[] = [
                     'directorio' => $nombre_base,
                     'archivo' => $archivo,
                     'ruta_completa' => $ruta_completa,
@@ -68,7 +68,9 @@ class Contabilidad extends CI_Controller {
             }
         }
         
-        if(!empty($documentos)) $this->contabilidad_model->crear('comprobantes_contables_validacion_detalle', $documentos);
+        if(!empty($documentos_adicionales)) $this->contabilidad_model->crear('comprobantes_contables_validacion_detalle', $documentos_adicionales);
+
+        return $documentos_adicionales;
     }
 
     /**
@@ -226,8 +228,8 @@ class Contabilidad extends CI_Controller {
         $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $datos['id_sede']]);
         $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $datos['mes']]);
 
-        $resultado = $this->procesar_directorio("$tipo_comprobante->ruta/{$datos['anio']}/$sede->ruta/$periodo->nombre_comprobante_contable", $tipo_comprobante->abreviatura);
-    
+        $resultado = $this->procesar_directorio("{$tipo_comprobante->ruta}/{$datos['anio']}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}", $tipo_comprobante->abreviatura);
+
         if(empty($resultado['documento_principal'])) {
             print json_encode([
                 'error' => false,
