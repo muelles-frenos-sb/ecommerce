@@ -597,6 +597,70 @@ class Api extends RestController {
                     'datos' => $peticion['response']
                 ], RestController::HTTP_OK);
                 break;
+
+            // Generación de una solicitud de diligencia
+            case 'logistica_diligencia':
+                $parametros = [
+                    'identificador' => (isset($datos['identificador'])) ? $datos['identificador'] : null,
+                    'solicitante' => (isset($datos['solicitante'])) ? $datos['solicitante'] : null,
+                    'observaciones' => (isset($datos['observaciones'])) ? $datos['observaciones'] : null,
+                    'tipo_solicitud' => (isset($datos['tipo_solicitud'])) ? $datos['tipo_solicitud'] : null,
+                ];
+
+                $this->form_validation->set_data($datos);
+
+                if (!$this->form_validation->run('whatsapp_logistica_diligencia_post')) {
+                    $this->response([
+                        "error" => true,
+                        "mensaje" => "Parámetros inválidos.",
+                        "resultado" => $this->form_validation->error_array(),
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+
+                $contenido = [
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'identificador',
+                                "text" => $parametros['identificador'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'solicitante',
+                                "text" => $parametros['solicitante'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'tipo_solicitud',
+                                "text" => $parametros['tipo_solicitud'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'observaciones',
+                                "text" => $parametros['observaciones'],
+                            ]
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, 'logistica_diligencia', 'es_CO', $contenido);
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'resultado' => $peticion,
+                ], RestController::HTTP_OK);
+                break;
         }
 
         $this->response([
