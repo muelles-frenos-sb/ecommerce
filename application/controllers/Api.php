@@ -545,6 +545,15 @@ class Api extends RestController {
                     (ENVIRONMENT != 'production') ? 'hello_world' : 'actualizacion_estado',
                     (ENVIRONMENT != 'production') ? 'en_US' : 'es_CO'
                 );
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
                 break;
             
             // Generación de orden de compra
@@ -590,9 +599,17 @@ class Api extends RestController {
 
                 $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, $tipo, 'es', $contenido);
 
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
                 $this->response([
                     'error' => !$peticion['status'],
-                    'mensaje' => 'Prueba',
                     'resultado' => $url,
                     'datos' => $peticion['response']
                 ], RestController::HTTP_OK);
