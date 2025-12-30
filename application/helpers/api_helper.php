@@ -175,7 +175,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F351_ID_TERCERO" => $recibo->documento_numero,
             "F351_VALOR_DB" => number_format($descuento, 0, '', ''),
             "F351_NRO_DOCTO_BANCO" => 0,
-            "F351_NOTAS" => "Recibo $recibo->id",
+            "F351_NOTAS" => "PAGO FACTURA $factura_cliente->doccruce",
             "F351_VALOR_CR" => 0,
             "F351_VALOR_DB_ALT" => 0,
             "F351_VALOR_CR_ALT" => 0,
@@ -183,6 +183,8 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F351_DOCTO_BANCO" => '',
         ]);
     }
+
+    // return $paquete_documento_contable;
 
     $resultado_documento_contable = json_decode(importar_documento_contable_api($paquete_documento_contable));
     $codigo_resultado_documento_contable = $resultado_documento_contable->codigo;

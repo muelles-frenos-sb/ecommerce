@@ -33,6 +33,7 @@ class Reportes extends MY_Controller {
         $fila_inicial = 3;
         $fecha_creacion = date('Y-m-d H:i:s');
         $valor_total = 0;
+        $descuento_total = 0;
 
         try {
             // Cargar el archivo Excel usando IOFactory
@@ -103,6 +104,7 @@ class Reportes extends MY_Controller {
                     // Formato de campos
                     $hoja->getStyle("G{$fila}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
                     $hoja->getStyle("R{$fila}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
+                    $hoja->getStyle("Q{$fila}")->getNumberFormat()->setFormatCode(NumberFormat::FORMAT_NUMBER);
 
                     // Captura de los datos de las celdas
                     $tercero_nit = $hoja->getCell("D{$fila}")->getValue();
@@ -115,6 +117,7 @@ class Reportes extends MY_Controller {
                     $documento_cruce_tipo = $hoja->getCell("AF{$fila}")->getValue();
                     $documento_cruce_numero = $hoja->getCell("AG{$fila}")->getValue();
                     $centro_operativo = $hoja->getCell("AE{$fila}")->getValue();
+                    $descuento_valor = $hoja->getCell("Q{$fila}")->getValue();
                     
                     // Cuando el tercero es uno diferente
                     if($tercero_nit != $ultimo_tercero) {
@@ -142,7 +145,6 @@ class Reportes extends MY_Controller {
                 $recibo_detalle = [
                     'precio' => $pago_valor,
                     'subtotal' => $pago_valor + $ajuste_retenciones_subtotal,
-                    // 'descuento' => ,
                     'cuota_numero' => $cuota,
                     'documento_cruce_numero' => $documento_cruce_numero,
                     'documento_cruce_tipo' =>  $documento_cruce_tipo,
@@ -151,11 +153,15 @@ class Reportes extends MY_Controller {
                     // 'valor_abonos' => ,
                     // 'valor_factura' => ,
                 ];
+                
+                // Se agrega descuento (si la tiene)
+                $recibo_detalle['descuento'] = $descuento_valor;
 
                 // Se agrega la fecha de consignación (si la tiene)
                 if($fecha_pago) $recibo_detalle['documento_cruce_fecha'] = $fecha_pago;
 
-                // Sumatoria del total del pago
+                // Sumatoria de totales
+                $descuento_total += $descuento_valor;
                 $valor_total += $pago_valor + $ajuste_retenciones_subtotal;
 
                 // Almacenamiento del detalle del recibo en el arreglo
@@ -163,7 +169,7 @@ class Reportes extends MY_Controller {
             }
 
             // Se agrega el total de los pagos al arreglo del recibo
-            $recibo['valor'] = $valor_total;
+            $recibo['valor'] = $valor_total - $descuento_total;
 
             // Se crea el recibo en la base de datos
             $id_recibo = $this->configuracion_model->crear('recibos', $recibo);
