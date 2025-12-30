@@ -81,6 +81,9 @@ Class Productos_model extends CI_Model{
                         'YEAR(r.fecha_creacion) anio',
                         'LPAD(MONTH(r.fecha_creacion), 2, 0) mes',
                         'LPAD(DAY(r.fecha_creacion), 2, 0) dia',
+                        'YEAR(r.fecha_consignacion) anio_consignacion',
+                        'LPAD(MONTH(r.fecha_consignacion), 2, 0) mes_consignacion',
+                        'LPAD(DAY(r.fecha_consignacion), 2, 0) dia_consignacion',
                         "(
                         SELECT
                             CONCAT_WS(' - ', m.nombre, d.nombre ) 

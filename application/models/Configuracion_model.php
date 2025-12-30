@@ -52,6 +52,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_batch('clientes', $datos);
             break;
 
+            case 'recibos_detalle_batch':
+                return $this->db->insert_batch('recibos_detalle', $datos);
+            break;
+
             case 'terceros':
                 $this->db->insert('usuarios', $datos);
                 return $this->db->insert_id();

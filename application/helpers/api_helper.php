@@ -17,6 +17,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $metodo_pago = $wompi['payment_method_type'];
         $notas_recibo = "Pago a través de Wompi. Referencia $recibo->wompi_transaccion_id. Medio: $metodo_pago";
         if($metodo_pago == 'CARD') $notas_recibo .= ' ('.$wompi['payment_method']['extra']['name'].')';
+    // Si es un pago con archivo plano
+    } else if ($recibo->recibo_tipo_id == 5) {
+        // Las observaciones se traen del recibo
+        $notas_recibo = $recibo->observaciones;
     } else {
         $notas_recibo = "Recibo cargado desde la página web por el cliente";
     }
@@ -28,6 +32,20 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     $descuento = 0;
     $mes_recibo = str_pad($recibo->mes, 2, '0', STR_PAD_LEFT);
     $dia_recibo = str_pad($recibo->dia, 2, '0', STR_PAD_LEFT);
+
+    /**
+     * Centro operativo
+     * 100: Si la fecha de recaudo es del mismo mes o estamos en fecha posterior al día 5 del mes
+     * 500: En los días 1 a 5 del mes, cuando la fecha de recaudo sea de meses anteriores 
+     */
+    $centro_operativo = 400; // eCommerce (por defecto)
+
+    // Si es pago con importación de archivo plano
+    if($recibo->recibo_tipo_id == 5) {
+        if($recibo->mes_consignacion == date('m')) $centro_operativo = 100; // Si el mes de consignación es este mes
+        if($recibo->dia_consignacion >= 6) $centro_operativo = 100; // Si el día de consignación es a partir del día 6
+        if($recibo->mes_consignacion != date('m') && $recibo->dia_consignacion <= 5) $centro_operativo = 500; // Si el mes de consignación es diferente al actual y el día está entre 1 y 5
+    }
 
     // Se recorre cada ítem
     foreach ($items as $item) {
@@ -46,7 +64,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         
         $movimiento_cxc = [
             "F_CIA" => 1,
-            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
+            "F350_ID_CO" => $centro_operativo,
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,
@@ -87,7 +105,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         : [[
             // Primer movimiento -> Bancos
             "F_CIA" => 1,
-            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
+            "F350_ID_CO" => $centro_operativo,
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => (isset($metodo_pago) && $metodo_pago == 'PSE') ? '11100504' : '11200505',
@@ -121,7 +139,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             [
                 "F_CIA" => 1,
                 "F_CONSEC_AUTO_REG" => 1,
-                "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
+                "F350_ID_CO" => $centro_operativo,
                 "F350_ID_TIPO_DOCTO" => 'FRC',
                 "F350_CONSEC_DOCTO" => 1,
                 "F350_FECHA" => date('Ymd'),
@@ -149,7 +167,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         // Segundo movimiento -> Auxiliar del recibo (Usar para retenciones y descuentos)
         array_push($paquete_documento_contable['movimientoContable'], [
             "F_CIA" => '1',
-            "F350_ID_CO" => ($recibo->recibo_tipo_id == 3) ? 100 : 400, // Si es un recibo con comprobante, va al centro operativo 100
+            "F350_ID_CO" => $centro_operativo,
             "F350_ID_TIPO_DOCTO" => 'FRC',
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => '41750120',
