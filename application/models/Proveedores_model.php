@@ -134,6 +134,7 @@ Class Proveedores_model extends CI_Model{
                         producto_id,
                         proveedor_nit,
                         precio_final,
+                        observacion,
                         p.referencia,
                         t.f200_razon_social,
                         ROW_NUMBER() OVER ( PARTITION BY producto_id ORDER BY precio_final ASC, proveedor_nit ASC ) AS cantidad_registros 
@@ -148,6 +149,7 @@ Class Proveedores_model extends CI_Model{
                     producto_id,
                     proveedor_nit,
                     precio_final,
+                    observacion,
                     referencia,
                     f200_razon_social proveedor_nombre
                 FROM
