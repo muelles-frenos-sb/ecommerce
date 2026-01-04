@@ -2,6 +2,8 @@
 // Se obtiene un arreglo con todos los productos destacados que se van a mostrar al inicio
 $productos = $this->productos_model->obtener('productos_destacados');
 $productos_promocion = $this->productos_model->obtener('productos_promocion');
+$productos_mas_vendidos = $this->productos_model->obtener('productos_mas_vendidos');
+
 $cantidad_productos = count($productos);
 $cantidad_productos_por_bloque = intval($cantidad_productos / 8);
 $posicion = 0;
@@ -9,7 +11,7 @@ $posicion = 0;
 /****************************************************************************************
  **************************************** Slider ****************************************
  ****************************************************************************************/
-$this->load->view('inicio/slider');
+// $this->load->view('inicio/slider');
 
 /****************************************************************************************
  ************************************* Promociones **************************************
@@ -33,14 +35,21 @@ $this->load->view('inicio/buscar_repuestos');
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
- ******************************** Productos destacados **********************************
+ ******************************* Productos más vendidos *********************************
  ****************************************************************************************/
-$this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
-$posicion += $cantidad_productos_por_bloque;
-$this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
-$this->data['productos'] = $productos;
-$this->load->view('inicio/productos_destacados', $this->data);
+$this->data['productos'] = $productos_mas_vendidos;
+$this->load->view('inicio/productos_mas_vendidos', $this->data);
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
+
+/****************************************************************************************
+ ************************ Productos destacados (deshabilitado) **************************
+ ****************************************************************************************/
+// $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
+// $posicion += $cantidad_productos_por_bloque;
+// $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
+// $this->data['productos'] = $productos;
+// $this->load->view('inicio/productos_destacados', $this->data);
+// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  *********************** Bloque de marcas y productos destacados ************************

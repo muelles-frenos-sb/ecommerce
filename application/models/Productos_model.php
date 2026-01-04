@@ -230,6 +230,10 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
+            case 'productos_mas_vendidos':
+                return $this->db->get($tipo)->result();
+            break;
+
             case 'productos_promocion':
                 $sql = 
                 "SELECT
