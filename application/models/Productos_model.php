@@ -323,6 +323,7 @@ Class Productos_model extends CI_Model{
                 "SELECT
                     pm.*,
                     p.notas,
+                    p.referencia,
                     pi.disponible
                 FROM productos_metadatos pm
                 INNER JOIN productos p ON pm.producto_id = p.id

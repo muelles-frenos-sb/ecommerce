@@ -14,7 +14,8 @@
     <table class="table-striped table-bordered" id="tabla_productos_metadatos">
         <thead>
             <tr>
-                <th class="text-center">Producto</th>
+                <th class="text-center">Referencia</th>
+                <th class="text-center">Nombre</th>
                 <th class="text-center">Palabras clave</th>
                 <th class="text-center">Detalles técnicos</th>
                 <th class="text-center">Estado</th>
@@ -35,6 +36,9 @@
                 },
             },
             columns: [
+                {
+                    data: 'referencia',
+                },
                 {
                     data: 'notas',
                     render: (data, type, row) => {
