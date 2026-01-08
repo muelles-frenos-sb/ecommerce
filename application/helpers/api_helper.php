@@ -218,6 +218,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $CI->configuracion_model->crear('logs', [
             'log_tipo_id' => 20,
             'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode($paquete_documento_contable),
         ]);
 
         $respuesta['documento_contable'] = $resultado_documento_contable;
