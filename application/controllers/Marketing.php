@@ -39,6 +39,94 @@ class Marketing extends MY_Controller {
         }
     }
 
+    private function importar_campanias_contactos($archivo) {
+        try {
+            $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
+            $hoja   = $excel->getActiveSheet();
+            $registros = $hoja->toArray();
+
+            // Se elimina la primera fila (encabezados)
+            unset($registros[0]);
+
+            $detalle = [];
+
+            foreach ($registros as $registro) {
+
+                // Validar que existan datos
+                if (empty($registro[0]) && empty($registro[1])) {
+                    continue;
+                }
+
+                $datos_insertar = [
+                    "nit"      => trim($registro[0]),
+                    "telefono" => trim($registro[1])
+                ];
+
+                $detalle[] = $datos_insertar;
+            }
+
+            // Inserción batch
+            if (!empty($detalle)) {
+                $this->marketing_model->insertar_batch(
+                    "marketing_campanias_contactos",
+                    $detalle
+                );
+            }
+
+            return [
+                "exito" => true,
+                "mensaje" => "Se subió y se importaron correctamente los contactos de las campañas"
+            ];
+
+        } catch (Exception $e) {
+
+            log_message(
+                'error',
+                'Error al importar los datos de los contactos de las campañas: ' . $e->getMessage()
+            );
+
+            return [
+                "exito" => false,
+                "mensaje" => "No se subieron ni se importaron correctamente los contactos de las campañas"
+            ];
+        }
+    }
+
+    function importar_campanias() {
+        $exito = false;
+        $mensaje = "";
+
+        $directorio = "archivos/temporales/";
+
+        if(!is_dir($directorio)) @mkdir($directorio, 0777);
+
+        $archivo = $_FILES['archivo'];
+        $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+        $nombre_archivo = bin2hex(random_bytes(8)).".$extension";
+
+        if (move_uploaded_file($archivo['tmp_name'], $directorio.$nombre_archivo)) {
+            $exito = true;
+            $mensaje = "El archivo subió correctamente.";
+        } else {
+            $mensaje = "Ha ocurrido un error subiendo el archivo.";
+        }
+
+        if ($exito) {
+            $resultado = $this->importar_campanias_contactos($directorio.$nombre_archivo);
+            $exito = $resultado["exito"];
+            $mensaje = $resultado["mensaje"];
+        }
+
+        unlink($directorio.$nombre_archivo);
+
+        $respuesta = [
+            "exito" => $exito,
+            "mensaje" => $mensaje
+        ];
+
+        print json_encode($respuesta);
+    }
+
     function obtener_datos_tabla() {
         if (!$this->input->is_ajax_request()) redirect('inicio');
 
