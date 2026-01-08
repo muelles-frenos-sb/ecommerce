@@ -10,7 +10,7 @@
 
 <script>
     $().ready(async () => {
-        let = tablaSolicitudesCredito = $("#tabla_solicitudes_credito").DataTable({
+        let tablaSolicitudesCredito = $("#tabla_solicitudes_credito").DataTable({
             ajax: {
                 url: `${$("#site_url").val()}clientes/obtener_datos_tabla`,
                 data: datos => {

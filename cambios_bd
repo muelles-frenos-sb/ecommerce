@@ -459,3 +459,11 @@ CREATE TABLE `marketing_campanias_contactos`  (
   `fecha_envio` datetime(0) NULL,
   PRIMARY KEY (`id`)
 );
+
+-- 20260108 Nuevos registros para roles y accesos
+INSERT INTO `modulos` (`id`, `nombre`, `descripcion`, `aplica_importacion_contactos`) VALUES (9, 'comercial', 'Comercial', 1);
+INSERT INTO `modulos` (`id`, `nombre`, `descripcion`, `aplica_importacion_contactos`) VALUES (10, 'marketing', 'Marketing', 1);
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (18, 'comercial_ventas_ver', 'Ver ventas', 9);
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (19, 'marketing_ver', 'Ver módulo', 10);
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (20, 'marketing_campanias_ver', 'Ver campañas de marketing', 10);
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (21, 'marketing_campanias_gestionar', 'Gestionar campañas de marketing', 10);

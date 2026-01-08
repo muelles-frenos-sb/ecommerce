@@ -8,20 +8,24 @@
 
 <div class="block">
     <div class="container container--max--xl">
-        <div class="row mb-4">
-            <div class="col-3">
-                <a class="btn btn-success" href="<?php echo site_url('marketing/campanias/crear'); ?>">Crear campaña</a>
+        <?php if(isset($permisos) && in_array(['marketing' => 'marketing_campanias_gestionar'], $permisos)) { ?>
+            <div class="row mb-4">
+                <div class="col-3">
+                    <a class="btn btn-success" href="<?php echo site_url('marketing/campanias/crear'); ?>">Crear campaña</a>
+                </div>
+
+                <div class="col-9 text-right">
+                    <button type="button" class="btn btn-success importar">Importar desde archivo plano</button>
+
+                    <a type="button" class="btn btn-info" href="<?php echo base_url().'archivos/plantillas/marketing_importacion_campanias_contactos.xlsx'; ?>" download>Descargar archivo plano</a>
+
+                    <input type="file" class="d-none" id="importar_archivo" onchange="javascript:importarCampanias()" accept=".xlsx,.xls,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                </div>
             </div>
-
-            <div class="col-9 text-right">
-                <button type="button" class="btn btn-success importar">Importar desde archivo plano</button>
-
-                <a type="button" class="btn btn-info" href="<?php echo base_url().'archivos/plantillas/marketing_importacion_campanias_contactos.xlsx'; ?>" download>Descargar archivo plano</a>
-
-                <input type="file" class="d-none" id="importar_archivo" onchange="javascript:importarCampanias()" accept=".xlsx,.xls,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
-            </div>
-        </div>
-    <div id="contenedor_campanias"></div>
+        <?php } ?>
+        
+        <div id="contenedor_campanias"></div>
+    </div>
 </div>
 
 <div class="block-space block-space--layout--before-footer"></div>
