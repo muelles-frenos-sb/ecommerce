@@ -279,9 +279,9 @@ $facturas = $this->clientes_model->obtener('clientes_facturas', [
                 subtotal: valorAPagar,
                 descuento: valorDescuento,
                 centro_operativo: $(this).attr('data-centro_operativo'),
-                valor_saldo_inicial: $(this).attr('data-valor_aplicado'),
+                valor_saldo_inicial: $(this).attr('data-total_cop'),
                 valor_abonos: $(this).attr('data-valor_documento'),
-                valor_factura: $(this).attr('data-total_cop'),
+                valor_factura: $(this).attr('data-valor_aplicado'),
             })
         })
 

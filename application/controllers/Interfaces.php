@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model']);
     }
 
     var $ruta = './archivos/';
@@ -67,6 +67,10 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'clientes_solicitudes_credito_bitacora':
+                $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
+            case 'marketing_campanias':
                 $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
@@ -199,6 +203,19 @@ class Interfaces extends CI_Controller {
                     'fecha_vencimiento' => $fecha_vencimiento,
                     'codigo' => $codigo,
                 ]);
+            break;
+
+            case 'marketing_campanias':
+                $datos_crear = [
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'usuario_id' => $this->session->userdata('usuario_id'),
+                    'fecha_inicio' => $datos['fecha_inicio'],
+                    'fecha_finalizacion' => $datos['fecha_finalizacion'],
+                    'nombre' => $datos['nombre'],
+                    'descripcion' => $datos['descripcion']
+                ];
+
+                print json_encode(['resultado' => $this->proveedores_model->crear("marketing_campanias", $datos_crear)]);
             break;
 
             case 'productos_solicitudes_garantia':
@@ -604,7 +621,30 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'pedidos':
-                $resultado = json_decode(obtener_pedidos_api_estandar($datos));
+                $codigo = 0;
+                $pagina = 1;
+                $resultado = [];
+
+                // Mientras la API de Siesa retorne código 0 (Registros encontrados)
+                while ($codigo == 0) {
+                    $datos['pagina'] = $pagina;
+                    $respuesta = json_decode(obtener_pedidos_api_estandar($datos));
+                    $codigo = $respuesta->codigo;
+
+                    if($codigo == 0) {
+                        $registros = $respuesta->detalle->Table;
+
+                        // Recorrido de todos los ítems para almacenarlos en un solo arreglo que se enviará como respuesta
+                        foreach($registros as $item) $resultado[] = $item;
+
+                        $pagina++;
+                    } else {
+                        $codigo = '-1';
+                        break;
+                    }
+                }
+
+                $resultado = $resultado;
             break;
 
             case 'productos':

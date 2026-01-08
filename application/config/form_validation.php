@@ -53,4 +53,11 @@ $config = [
         ['field' => 'nit', 'label' => 'NIT del tercero', 'rules' => 'required|trim|integer|greater_than[0]'],
         ['field' => 'modulo_id', 'label' => 'Id del módulo', 'rules' => 'trim|integer|greater_than[0]'],
     ],
+
+	'whatsapp_logistica_diligencia_post' => [
+        ['field' => 'identificador', 'label' => 'Identificador de la diligencia', 'rules' => 'required|trim'],
+        ['field' => 'solicitante', 'label' => 'Solicitante de la diligencia', 'rules' => 'required|trim'],
+        ['field' => 'tipo_solicitud', 'label' => 'Tipo de solicitud', 'rules' => 'required|trim'],
+        ['field' => 'observaciones', 'label' => 'Id del módulo', 'rules' => 'required|trim'],
+    ],
 ];

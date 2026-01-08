@@ -231,6 +231,10 @@ Class Productos_model extends CI_Model{
                 return $this->db->query($sql)->result();
             break;
 
+            case 'productos_mas_vendidos':
+                return $this->db->get($tipo)->result();
+            break;
+
             case 'productos_promocion':
                 $sql = 
                 "SELECT
@@ -320,6 +324,7 @@ Class Productos_model extends CI_Model{
                 "SELECT
                     pm.*,
                     p.notas,
+                    p.referencia,
                     pi.disponible
                 FROM productos_metadatos pm
                 INNER JOIN productos p ON pm.producto_id = p.id

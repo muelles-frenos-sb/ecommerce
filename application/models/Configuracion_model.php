@@ -40,6 +40,14 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_id();
             break;
 
+            case 'erp_bodegas_batch':
+                return $this->db->insert_batch('erp_bodegas', $datos);
+            break;
+
+            case 'erp_listas_precios_batch':
+                return $this->db->insert_batch('erp_listas_precios', $datos);
+            break;
+
             case 'erp_compras_ordenes_batch':
                 return $this->db->insert_batch('erp_compras_ordenes', $datos);
             break;

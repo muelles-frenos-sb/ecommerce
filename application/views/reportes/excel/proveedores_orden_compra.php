@@ -109,6 +109,15 @@ foreach ($registros as $registro) {
     if(isset($ultimas_ordenes[1])) $hoja_movimientos->setCellValue("M$fila_movimientos", $ultimas_ordenes[1]->f421_precio_unitario); // La muestra si existe
     if(isset($ultimas_ordenes[2])) $hoja_movimientos->setCellValue("N$fila_movimientos", $ultimas_ordenes[2]->f421_precio_unitario); // La muestra si existe
 
+    $hoja_movimientos->setCellValue("O$fila_movimientos", $registro->observacion); // Observaciones del ítem
+    
+    // Carga del nombre del proveedor de la última compra
+    $proveedor_ultima_compra = null;
+    if(isset($ultimas_ordenes[0])) $proveedor_ultima_compra = $ultimas_ordenes[0]->f200_razon_social_prov;
+    if(isset($ultimas_ordenes[1])) $proveedor_ultima_compra = $ultimas_ordenes[1]->f200_razon_social_prov;
+    if(isset($ultimas_ordenes[2])) $proveedor_ultima_compra = $ultimas_ordenes[2]->f200_razon_social_prov;
+    if($proveedor_ultima_compra) $hoja_movimientos->setCellValue("P$fila_movimientos", $proveedor_ultima_compra); // Lo muestra si existe
+
     $fila_movimientos++;
 }
 

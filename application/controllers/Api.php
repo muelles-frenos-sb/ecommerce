@@ -542,17 +542,148 @@ class Api extends RestController {
             case 'mensaje_test':
                 $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla(
                     $numero_telefonico,
-                    (ENVIRONMENT == 'development') ? 'hello_world' : 'actualizacion_estado',
-                    (ENVIRONMENT == 'development') ? 'en_US' : 'es_CO'
+                    (ENVIRONMENT != 'production') ? 'hello_world' : 'actualizacion_estado',
+                    (ENVIRONMENT != 'production') ? 'en_US' : 'es_CO'
                 );
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+                break;
+            
+            // Generación de orden de compra
+            case 'proveedores_orden_compra':
+                $orden_numero = $datos['orden_numero'];
+
+                // El archivo que llega en base64 se decodifica
+                $archivo = base64_decode($datos['archivo']);
+                
+                $directorio = FCPATH . 'archivos/whatsapp/';
+                
+                $ruta_completa = "{$directorio}{$orden_numero}.pdf";
+
+                // Se crea el archivo
+                file_put_contents($ruta_completa, $archivo);
+                
+                $url = site_url("archivos/whatsapp/$orden_numero.pdf");
+
+                $contenido = [
+                    [
+                        'type' => 'header',
+                        "parameters" => [
+                            [
+                                'type' => 'document',
+                                "document" => [
+                                    'link' => (ENVIRONMENT != 'production') ? 'https://repuestossimonbolivar.com/archivos/solicitudes_credito/3/HERNAN%20DARIO%20RUIZ%20TOBON%20OK.pdf' : $url,
+                                    'filename' => "Orden de compra $orden_numero"
+                                ],
+                            ]
+                        ]
+                    ],
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'orden_numero',
+                                "text" => $orden_numero,
+                            ]
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, $tipo, 'es', $contenido);
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'resultado' => $url,
+                    'datos' => $peticion['response']
+                ], RestController::HTTP_OK);
+                break;
+
+            // Generación de una solicitud de diligencia
+            case 'logistica_diligencia':
+                $parametros = [
+                    'identificador' => (isset($datos['identificador'])) ? $datos['identificador'] : null,
+                    'solicitante' => (isset($datos['solicitante'])) ? $datos['solicitante'] : null,
+                    'observaciones' => (isset($datos['observaciones'])) ? $datos['observaciones'] : null,
+                    'tipo_solicitud' => (isset($datos['tipo_solicitud'])) ? $datos['tipo_solicitud'] : null,
+                ];
+
+                $this->form_validation->set_data($datos);
+
+                if (!$this->form_validation->run('whatsapp_logistica_diligencia_post')) {
+                    $this->response([
+                        "error" => true,
+                        "mensaje" => "Parámetros inválidos.",
+                        "resultado" => $this->form_validation->error_array(),
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+
+                $contenido = [
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'identificador',
+                                "text" => $parametros['identificador'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'solicitante',
+                                "text" => $parametros['solicitante'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'tipo_solicitud',
+                                "text" => $parametros['tipo_solicitud'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'observaciones',
+                                "text" => $parametros['observaciones'],
+                            ]
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, 'logistica_diligencia', 'es_CO', $contenido);
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'resultado' => $peticion,
+                ], RestController::HTTP_OK);
                 break;
         }
 
         $this->response([
             'error' => !$peticion['status'],
-            'mensaje' => 'Prueba',
             'resultado' => $peticion,
-            'datps' => $peticion['response']
+            'datos' => $peticion['response']
         ], ($peticion['status']) ? RestController::HTTP_OK : RestController::HTTP_BAD_REQUEST);
     }
 }

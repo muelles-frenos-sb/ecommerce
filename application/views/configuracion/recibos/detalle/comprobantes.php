@@ -51,7 +51,7 @@
                                     <td><?php echo $factura_cliente->Fecha_doc_cruce; ?></td>
                                     
                                     <!-- Valor documento -->
-                                    <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado); ?></td>
+                                    <td class="text-right"><?php echo formato_precio($item->valor_saldo_inicial); ?></td>
                                     
                                     <!-- Valor descuento -->
                                     <td class="text-right"><?php echo formato_precio($item->descuento); ?></td>
@@ -60,7 +60,7 @@
                                     <td class="text-right"><?php echo formato_precio($item->subtotal - $item->descuento); ?></td>
                                     
                                     <!-- Valor saldo -->
-                                    <td class="text-right"><?php echo formato_precio($factura_cliente->ValorAplicado - $item->subtotal); ?></td>
+                                    <td class="text-right"><?php echo formato_precio($item->valor_saldo_inicial - $item->subtotal); ?></td>
                                     
                                     <!-- Sucursal -->
                                     <td><?php echo $factura_cliente->nombre_homologado; ?></td>

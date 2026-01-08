@@ -450,6 +450,38 @@ function tcc_obtener_datos_api($tipo, $datos) {
 }
 
 /**
+ * Obtiene las bodegas creadas en el ERP de Siesa
+ */
+function obtener_bodegas_api($datos) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+    $parametros = "f150_rowid IS NOT NULL";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Bodegas',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+/**
  * Obtiene todos los clientes creados en Siesa
  */
 function obtener_clientes_api($datos) {
@@ -558,6 +590,38 @@ function obtener_facturas_desde_pedido_api($datos) {
                 'descripcion' => 'API_v2_Ventas_Facturas_DesdePedido',
                 'paginacion' => 'numPag=1|tamPag=100',
                 'parametros' => "f200_nit_fact=''{$datos['numero_documento']}'' and f350_consec_docto=''{$datos['documento_cruce']}'' and f461_id_sucursal_fact=''$sucursal''",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
+/**
+ * Obtiene las liastas de precio creadas en el ERP de Siesa
+ */
+function obtener_listas_precios_api($datos) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+    $parametros = "f112_ts IS NOT NULL";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_ListasDePrecios',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {

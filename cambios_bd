@@ -437,3 +437,25 @@ INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (17, 'cl
 
 -- 20251018 
 ALTER TABLE `motivos_rechazo` MODIFY COLUMN `interfaz_id` int NULL DEFAULT 1 COMMENT '1: Pago con comprobantes; 2: Solicitudes de crédito; 3: Garantías' AFTER `nombre`;
+
+-- 20260107 Se agrega tabla para marketing campañas
+CREATE TABLE `marketing_campanias`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `fecha_creacion` datetime(0) NULL,
+  `usuario_id` int NULL,
+  `fecha_inicio` date NULL,
+  `fecha_finalizacion` date NULL,
+  `nombre` varchar(100) NULL,
+  `descripcion` varchar(255) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- 20260107 Se agrega tabla para marketing campañas contactos
+CREATE TABLE `marketing_campanias_contactos`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `campania_id` int NULL,
+  `telefono` varchar(75) NULL,
+  `nit` varchar(255) NULL,
+  `fecha_envio` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);

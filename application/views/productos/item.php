@@ -33,7 +33,7 @@
                 <!-- <div class="tag-badge tag-badge--new">new</div>
                 <div class="tag-badge tag-badge--hot">hot</div> -->
             </div>
-            <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>"><?php echo substr($producto->notas, 0, 50); ?></a>
+            <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>"><?php echo substr($producto->notas, 0, 75); ?></a>
         </div>
     </div>
     <div class="product-card__features">

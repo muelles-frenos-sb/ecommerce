@@ -170,6 +170,26 @@
                                                                     </div>
                                                                 </li>
 
+                                                                <li class="menu__item menu__item--has-submenu mb-1">
+                                                                    <a class="megamenu-links__item-link" href="#">
+                                                                        Marketing
+                                                                        <span class="menu__arrow">
+                                                                            <svg width="6px" height="9px">
+                                                                                <path d="M0.3,7.4l3-2.9l-3-2.9c-0.4-0.3-0.4-0.9,0-1.3l0,0c0.4-0.3,0.9-0.4,1.3,0L6,4.5L1.6,8.7c-0.4,0.4-0.9,0.4-1.3,0l0,0C-0.1,8.4-0.1,7.8,0.3,7.4z" />
+                                                                            </svg>
+                                                                        </span>
+                                                                    </a>
+                                                                    <div class="menu__submenu">
+                                                                        <ul class="menu">
+                                                                            <li class="menu__item">
+                                                                                <a href="<?php echo site_url('marketing/campanias/ver'); ?>" class="menu__link">
+                                                                                    Campañas
+                                                                                </a>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </li>
+
                                                                 <li class="megamenu-links__item menu_mas mb-1" data-nombre="Garantía">
                                                                     <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/contactos/ver'); ?>">Contactos</a>
                                                                 </li>

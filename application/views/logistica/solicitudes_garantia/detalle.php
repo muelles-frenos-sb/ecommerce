@@ -243,7 +243,7 @@
             return false
         }
 
-        await cargarInterfaz('logistica/solicitudes_garantia/detalle_pedido', 'contenedor_detalle_pedido', {pedido: consultaPedido.detalle.Table, solicitud: solicitudGarantia})
+        await cargarInterfaz('logistica/solicitudes_garantia/detalle_pedido', 'contenedor_detalle_pedido', {pedido: JSON.stringify(consultaPedido), solicitud: solicitudGarantia})
 
         Swal.close()
     }
@@ -409,6 +409,5 @@
     }
 
     $().ready(async () => {
-
     })
 </script>
