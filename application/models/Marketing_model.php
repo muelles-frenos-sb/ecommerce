@@ -1,6 +1,36 @@
 <?php 
 
 Class Marketing_model extends CI_Model {
+    function actualizar($tabla, $condiciones, $datos){
+        return $this->db->where($condiciones)->update($tabla, $datos);
+        $this->db->close;
+    }
+
+    function actualizar_batch($tabla, $datos, $campo) {
+        return $this->db->update_batch($tabla, $datos, $campo);
+    }
+
+    function insertar_batch($tabla, $datos) {
+        return $this->db->insert_batch($tabla, $datos);
+    }
+    
+    function crear($tipo, $datos) {
+        switch ($tipo) {
+            default:
+                $this->db->insert($tipo, $datos);
+                return $this->db->insert_id();
+            break;
+        }
+    }
+    
+    function eliminar($tipo, $datos) {
+        switch ($tipo) {
+            default:
+                return $this->db->delete($tipo, $datos);
+            break;
+        }
+    }
+
     function obtener($tabla, $datos = null) {
 		switch ($tabla) {
             case 'marketing_campanias':

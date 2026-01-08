@@ -9,7 +9,9 @@
 <div class="block">
     <div class="container container--max--xl">
         <div class="row mb-4">
-        </div>
+            <div class="col-3">
+                <a class="btn btn-success" href="<?php echo site_url('marketing/campanias/crear'); ?>">Crear campaña</a>
+            </div>
     <div id="contenedor_campanias"></div>
 </div>
 

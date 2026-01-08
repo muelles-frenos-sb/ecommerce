@@ -63,6 +63,19 @@
                     data: 'cantidad_envios',
                     className: 'dt-body-right'
                 },
+                {
+                    title: 'Acciones',
+                    data: null, 
+                    render: (data, type, row) => {
+                        return `
+                            <div class="p-1" style="width: 80px;">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}marketing/campanias/editar/${data.id}">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </div>
+                        `
+                    }
+                }
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro

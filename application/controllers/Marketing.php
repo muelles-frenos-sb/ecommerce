@@ -21,6 +21,17 @@ class Marketing extends MY_Controller {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
+            case 'crear':
+                $this->data['contenido_principal'] = 'marketing/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'editar':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'marketing/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
             case 'ver':
                 $this->data['contenido_principal'] = 'marketing/index';
                 $this->load->view('core/body', $this->data);
