@@ -206,16 +206,10 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'marketing_campanias':
-                $datos_crear = [
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'usuario_id' => $this->session->userdata('usuario_id'),
-                    'fecha_inicio' => $datos['fecha_inicio'],
-                    'fecha_finalizacion' => $datos['fecha_finalizacion'],
-                    'nombre' => $datos['nombre'],
-                    'descripcion' => $datos['descripcion']
-                ];
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
 
-                print json_encode(['resultado' => $this->proveedores_model->crear("marketing_campanias", $datos_crear)]);
+                print json_encode(['resultado' => $this->proveedores_model->crear("marketing_campanias", $datos)]);
             break;
 
             case 'productos_solicitudes_garantia':

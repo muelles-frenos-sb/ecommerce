@@ -60,8 +60,7 @@ if (isset($id)) {
         if (id) {
             datos.id = id
             await consulta('actualizar', datos)
-        } 
-        else {
+        } else {
             await consulta('crear', datos)
         }
     }
