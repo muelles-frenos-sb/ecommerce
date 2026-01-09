@@ -621,9 +621,10 @@ class Webhooks extends MY_Controller {
             $productos = ($codigo_producto == 0) ? $resultado_productos->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
+            $total_items = 0;
 
-            // Primero, eliminamos todos los productos
-            if($this->productos_model->eliminar('productos', 'id is  NOT NULL')) {
+            // Si encontró datos
+            if($codigo_producto != 1) {
                 foreach($productos as $producto) {
                     $nuevo_producto = [
                         'id' => $producto->IdItem,
@@ -641,32 +642,43 @@ class Webhooks extends MY_Controller {
 
                     array_push($datos, $nuevo_producto);
                 }
-        
-                $total_items = $this->productos_model->crear('productos', $datos);
 
-                $tiempo_final = microtime(true);
-
-                $respuesta = [
-                    'log_tipo_id' => 4,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => "$total_items registros actualizados",
-                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
-                ];
-
-                // Se agrega el registro en los logs
-                $this->configuracion_model->crear('logs', $respuesta);
-
-                print json_encode($respuesta);
-
-                return http_response_code(200);
+                // Si hay datos, se borran los registros anteriores
+                if(!empty($datos)) {
+                    $this->productos_model->eliminar('productos', 'id is  NOT NULL');
+                    $total_items = $this->productos_model->crear('productos', $datos);
+                } 
             }
 
+            $tiempo_final = microtime(true);
+
+            $resultado = [
+                'items' => number_format($total_items, 0, '', '.'),
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
+            ];
+
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 4,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => json_encode($resultado)
+            ]);
+
+            print json_encode($resultado);
+
             $this->db->close();
+
+            return http_response_code(200);
         } catch (\Throwable $th) {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 5,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            print json_encode([
+                'error' => true,
+                'descripcion' => 'Ocurrió un error al ejecutar el script'
             ]);
 
             return http_response_code(400);
@@ -707,9 +719,10 @@ class Webhooks extends MY_Controller {
                 }
             
                 // Si hay datos, se borran los registros anteriores
-                if(!empty($datos)) $this->productos_model->eliminar('productos_inventario', ['id !=' => null, 'bodega' => $bodega]);
-            
-                $total_items = $this->productos_model->crear('productos_inventario', $datos);
+                if(!empty($datos)) {
+                    $this->productos_model->eliminar('productos_inventario', ['id !=' => null, 'bodega' => $bodega]);
+                    $total_items = $this->productos_model->crear('productos_inventario', $datos);
+                }
             }
 
             $tiempo_final = microtime(true);
@@ -787,9 +800,10 @@ class Webhooks extends MY_Controller {
                 }
 
                 // Primero, eliminamos todos los ítems de la lista de precios (Solo si hay datos disponibles para actualizar)
-                if(!empty($datos)) $this->productos_model->eliminar('productos_precios', ['lista_precio' => $lista_precio]);
-
-                $total_items = $this->productos_model->crear('productos_precios', $datos);
+                if(!empty($datos)) {
+                    $this->productos_model->eliminar('productos_precios', ['lista_precio' => $lista_precio]);
+                    $total_items = $this->productos_model->crear('productos_precios', $datos);
+                }
             }
 
             $tiempo_final = microtime(true);
@@ -870,9 +884,10 @@ class Webhooks extends MY_Controller {
                 }
 
                 // Si hay datos, se borran los registros anteriores
-                if(!empty($datos)) $this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha]);
-                
-                $total_items = $this->productos_model->crear('productos_pedidos', $datos);
+                if(!empty($datos)) {
+                    $this->productos_model->eliminar('productos_pedidos', ["fecha_documento" => $filtro_fecha]);
+                    $total_items = $this->productos_model->crear('productos_pedidos', $datos);
+                }
             }
 
             $tiempo_final = microtime(true);
