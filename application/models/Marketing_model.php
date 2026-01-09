@@ -35,68 +35,55 @@ Class Marketing_model extends CI_Model {
 		switch ($tabla) {
             case 'marketing_campanias':
                 $limite = "";
-                if (isset($datos['cantidad']) && isset($datos['indice'])) {
-                    $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
-                }
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
 
+                // Búsquedas
                 $where  = "WHERE mc.id IS NOT NULL";
-                $having = "HAVING mc.id IS NOT NULL";
+                $having = "HAVING mc.id";
 
                 // Filtros personalizados
-                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
 
                 // Filtros where
-                if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'])  $where .= " AND mc.id LIKE '%{$filtros_personalizados['id']}%' ";
-
-                if (isset($filtros_personalizados['fecha_inicio']) && $filtros_personalizados['fecha_inicio']) $where .= " AND DATE(mc.fecha_inicio) = '{$filtros_personalizados['fecha_inicio']}' ";
-
+                if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'] != '') $where .= " AND mc.id LIKE '%{$filtros_personalizados['id']}%' ";
+                if (isset($filtros_personalizados['fecha_inicio']) && $filtros_personalizados['fecha_inicio'] != '') $where .= " AND DATE(mc.fecha_inicio) = '{$filtros_personalizados['fecha_inicio']}' ";
                 if (isset($filtros_personalizados['fecha_finalizacion']) && $filtros_personalizados['fecha_finalizacion'] != '') $where .= " AND DATE(mc.fecha_finalizacion) = '{$filtros_personalizados['fecha_finalizacion']}' ";
 
-                // HAVING (campos calculados)
-                if (isset($filtros_personalizados['cantidad_contactos']) && $filtros_personalizados['cantidad_contactos'] != '') $having .= " AND COUNT(DISTINCT mcc.id) = {$filtros_personalizados['cantidad_contactos']} ";
+                // Filtros having
+                if (isset($filtros_personalizados['cantidad_contactos']) && $filtros_personalizados['cantidad_contactos'] != '') $having .= " AND cantidad_contactos = {$filtros_personalizados['cantidad_contactos']} ";
+                if (isset($filtros_personalizados['cantidad_envios']) && $filtros_personalizados['cantidad_envios'] != '') $having .= " AND cantidad_envios = {$filtros_personalizados['cantidad_envios']} ";
 
-                if (isset($filtros_personalizados['cantidad_envios']) && $filtros_personalizados['cantidad_envios'] != '') {
-                    $having .= "
-                        AND SUM(
-                            CASE 
-                                WHEN mcc.fecha_envio IS NOT NULL THEN 1 
-                                ELSE 0 
-                            END
-                        ) = {$filtros_personalizados['cantidad_envios']}
-                    ";
-                }
-
-                // Búsqueda general
+                // Si se realiza una búsqueda
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
+                    // Se divide por palabras
                     $palabras = explode(' ', trim($datos['busqueda']));
 
-                    foreach ($palabras as $palabra) {
-                        $having .= " AND (
-                            mc.id LIKE '%{$palabra}%'
-                            OR mc.fecha_inicio LIKE '%{$palabra}%'
-                            OR mc.fecha_finalizacion LIKE '%{$palabra}%'
-                            OR COUNT(DISTINCT mcc.id) LIKE '%{$palabra}%'
-                            OR SUM(
-                                CASE 
-                                    WHEN mcc.fecha_envio IS NOT NULL THEN 1 
-                                    ELSE 0 
-                                END
-                            ) LIKE '%{$palabra}%'
-                        )";
+                    // Se recorren las palabras
+                    for ($i = 0; $i < count($palabras); $i++) {
+                        $having .= " AND (";
+                        $having .= " mc.id LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR mc.fecha_inicio LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR mc.fecha_finalizacion LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cantidad_contactos LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR cantidad_envios LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+
+                        if (($i + 1) < count($palabras)) $having .= " AND ";
                     }
                 }
 
+                // Ordenamiento
                 $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY mc.id DESC";
 
-                $sql = 
-                    " SELECT
+                $sql = " SELECT
                         mc.*,
                         COUNT(DISTINCT mcc.id) AS cantidad_contactos,
-                        SUM(
-                            CASE 
-                                WHEN mcc.fecha_envio IS NOT NULL THEN 1 
-                                ELSE 0 
-                            END
+                        (
+                            SELECT COUNT(*)
+                            FROM marketing_campanias_contactos mcc2
+                            WHERE mcc2.campania_id = mc.id
+                            AND mcc2.fecha_envio IS NOT NULL
                         ) AS cantidad_envios
                     FROM marketing_campanias mc
                     LEFT JOIN marketing_campanias_contactos mcc
@@ -108,14 +95,8 @@ Class Marketing_model extends CI_Model {
                     $limite
                 ";
 
-                if (isset($datos['contar']) && $datos['contar']) {
-                    return $this->db->query($sql)->num_rows();
-                }
-
-                if (isset($datos['id'])) {
-                    return $this->db->query($sql)->row();
-                }
-
+                if (isset($datos['contar']) && $datos['contar'])  return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
             break;
         }
