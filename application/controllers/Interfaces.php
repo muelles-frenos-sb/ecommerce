@@ -645,6 +645,10 @@ class Interfaces extends CI_Controller {
                 $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
             break;
 
+            case 'producto_bodegas_disponibles':
+                $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
+            break;
+
             case 'producto':
                 $resultado =  ['resultado' => $this->productos_model->obtener('productos', $datos)];
             break;

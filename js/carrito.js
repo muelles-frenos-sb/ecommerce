@@ -30,6 +30,7 @@ const actualizarCarrito = (productoId = null) => {
         $('#carrito_total_items, #carrito_movil_total_items, #carrito_movil2_total_items').text(resultado.total_items)
         
         cargarInterfaz('core/menu_superior/carrito_detalle', 'contenedor_carrito_detalle')
+        cargarInterfaz('clientes/ventas/gestion/carrito', 'contenedor_resultado_carrito')
     })
 
     if(productoId) {
@@ -47,6 +48,7 @@ const cargarBotones = async(tipo, productoId) => {
 const listarCarrito = () => {
     cargarInterfaz('carrito/datos', 'contenedor_carrito_compras')
     cargarInterfaz('carrito/totales', 'contenedor_carrito_compras_totales')
+    cargarInterfaz('clientes/ventas/gestion/carrito', 'contenedor_resultado_carrito')
 }
 
 const vaciarCarrito = async() => {

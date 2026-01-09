@@ -1,50 +1,66 @@
-<div class="block-header block-header--has-breadcrumb block-header--has-title">
-    <div class="container">
-        <div class="block-header__body">
-            <h1 class="block-header__title">Módulo de ventas</h1>
-        </div>
-    </div>
-</div>
+<div class="pl-3 pr-3 mt-4">
+    <div class="row">
+        <!-- Sección 1: Filtros -->
+        <div class="col-3">
+            <div class="card">
+                <h2 class="pr-4 pl-4 pt-4">Módulo de ventas</h2>
+                <div class="card-divider"></div>
 
-<div class="pl-5 pr-5">
-    <div class="card mb-lg-0">
-        <div class="card-body card-body--padding--1">
-            <div class="form-row">
-                <div class="col-lg-3 col-sm-12">
-                    <label for="cliente_nit">Cliente *</label>
-                    <select id="cliente_nit" class="form-control"></select>
+                <div class="card-body card-body--padding--1">
+                    <div class="form-row">
+                        <div class="col-12 p-2">
+                            <label for="cliente_nit">Cliente *</label>
+                            <select id="cliente_nit" class="form-control"></select>
+                        </div>
+
+                        <div class="col-12 p-2">
+                            <label for="cliente_sucursal">Sucursal *</label>
+                            <select id="cliente_sucursal" class="form-control"></select>
+                        </div>
+
+                        <div class="col-12 p-2">
+                            <label for="cliente_bodega">Bodega *</label>
+                            <select id="cliente_bodega" class="form-control"></select>
+                        </div>
+
+                        <div class="col-12 p-2">
+                            <label for="cliente_lista_precio">Lista de precios *</label>
+                            <select id="cliente_lista_precio" class="form-control"></select>
+                        </div>
+                    </div>
                 </div>
+                <div class="card-divider"></div>
 
-                <div class="col-lg-3 col-sm-12">
-                    <label for="cliente_sucursal">Sucursal *</label>
-                    <select id="cliente_sucursal" class="form-control"></select>
-                </div>
+                <div class="card-body card-body--padding--1" id="formulario_buscar_productos">
+                    <form class="form-row mb-2">
+                        <div class="form-group col-lg-12">
+                            <label for="buscar_producto">Buscar por nombre, referencia, marca... *</label>
+                            <input type="text" class="form-control" id="buscar_producto">
+                        </div>
 
-                <div class="col-lg-3 col-sm-12">
-                    <label for="cliente_bodega">Bodega *</label>
-                    <select id="cliente_bodega" class="form-control"></select>
-                </div>
+                        <button type="submit" class="btn btn-primary btn-block" id="btn_buscar_producto">Buscar</button>
+                    </form>
 
-                <div class="col-lg-3 col-sm-12">
-                    <label for="cliente_lista_precio">Lista de precios *</label>
-                    <select id="cliente_lista_precio" class="form-control"></select>
+                    <div class="mt-2" id="contenedor_mensaje_producto"></div>
                 </div>
             </div>
         </div>
-        <div class="card-divider"></div>
 
-        <div class="card-body card-body--padding--1" id="formulario_buscar_productos">
-            <form class="form-row mb-2">
-                <div class="form-group col-lg-12">
-                    <label for="buscar_producto">Producto *</label>
-                    <input type="text" class="form-control" id="buscar_producto" placeholder="Buscar por nombre, referencia, marca...">
+        <!-- Sección 2: Tablas -->
+        <div class="col-9">
+            <!-- Resumen del pedido -->
+            <div class="card">
+                <div class="card-body card-body--padding--1">
+                    <div id="contenedor_resultado_carrito" style="height: 20vh;"></div>
                 </div>
+            </div>
+            <div class="card-divider"></div>
 
-                <button type="submit" class="btn btn-primary btn-block" id="btn_buscar_producto">Buscar producto</button>
-            </form>
-
-            <div id="contenedor_resultado_productos">
-                <div class="mt-2" id="contenedor_mensaje_producto"></div>
+            <!-- Resultados de búsqueda -->
+            <div class="card">
+                <div class="card-body card-body--padding--1">
+                    <div id="contenedor_resultado_productos" style="height: 40vh;"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -56,9 +72,9 @@
     $().ready(async function() {        
         var buscarProducto = $('#buscar_producto')
 
-        $('#cliente_nit, #cliente_sucursal').select2({
-            width: '100%'
-        })
+        $('#cliente_nit, #cliente_sucursal, #cliente_bodega, #cliente_lista_precio').select2({ width: '100%' })
+
+        cargarInterfaz('clientes/ventas/gestion/carrito', 'contenedor_resultado_carrito')
         
         Swal.fire({
             title: 'Estamos cargando los datos...',
@@ -138,21 +154,18 @@
             // Mensaje mientras se consultan los datos
             $('#contenedor_mensaje_producto').html(`<button class='btn btn-muted btn-loading btn-xs btn-icon'></button> Buscando coincidencias con ${buscarProducto.val()}...`)
 
-            let datosBusqueda = {
-                tipo: 'productos',
-                busqueda: buscarProducto.val(),
-                filtro_bodega: $('#cliente_bodega option:selected').attr('data-codigo').padStart(5, '0') || '00550',
-                filtro_lista_precio: $('#cliente_lista_precio').val().padStart(3, '0') ?? '003',
-                mostrar_agotados: true,
-            }
-            console.log(datosBusqueda)
-
-            let productos = await consulta('obtener', datosBusqueda)
-
             $('#btn_buscar_producto').removeClass('btn-loading').attr('disabled', false)
 
+            let datos = {
+                tipo: 'productos',
+                busqueda: $('#buscar_producto').val(),
+                filtro_bodega: $('#cliente_bodega option:selected').attr('data-codigo') || '00550',
+                filtro_lista_precio: $('#cliente_lista_precio').val() || '003',
+                mostrar_agotados: true,
+            }
+
             // Se carga la lista de terceros encontrados
-            cargarInterfaz('clientes/ventas/gestion/productos', 'contenedor_resultado_productos', JSON.stringify(productos))
+            cargarInterfaz('clientes/ventas/gestion/productos', 'contenedor_resultado_productos', datos)
         })
     })
 </script>

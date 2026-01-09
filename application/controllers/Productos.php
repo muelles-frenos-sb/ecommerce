@@ -71,6 +71,57 @@ class Productos extends MY_Controller {
         $this->data['contenido_principal'] = 'productos/detalle';
         $this->load->view('core/body', $this->data);
     }
+
+    function obtener_datos_tabla() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+
+        $tipo = $this->input->get("tipo");
+        // $busqueda = $this->input->get("search")["value"];
+        $indice = $this->input->get("start");
+        $cantidad = $this->input->get("length");
+        $columns = $this->input->get("columns");
+        $order = $this->input->get("order");
+        $ordenar = null;
+
+        // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
+        if ($order) {
+            $columna = $order[0]["column"];
+            $orden = $order[0]["dir"];
+            $campo = $columns[$columna]["data"];
+            if ($campo) $ordenar = "$campo $orden";
+        }
+
+        switch ($tipo) {
+            case 'productos':
+                // Se definen los filtros
+                $datos = [
+                    'contar' => true,
+                    // 'busqueda' => $busqueda,
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->productos_model->obtener('productos', $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->productos_model->obtener('productos', $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+        }
+    }
 }
 /* Fin del archivo Productos.php */
 /* Ubicación: ./application/controllers/Productos.php */

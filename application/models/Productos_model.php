@@ -126,6 +126,37 @@ Class Productos_model extends CI_Model{
                 ;
             break;
 
+            // De un producto específico, devuelve todas las bodegas en donde tenga disponibilidad
+            case 'producto_bodegas_disponibles':
+                return $this->db
+                    ->select([
+                        'bodega codigo',
+                        'disponible',
+                    ])
+                    ->where($datos)
+                    ->where('disponible >', 0)
+                    ->group_by('bodega')
+                    ->get('productos_inventario')
+                    ->result()
+                ;
+            break;
+            
+            // De una lista de precios específica, devuelve todas las listas en donde tenga precio configurado
+            case 'producto_listas_precio_disponibles':
+                return $this->db
+                    ->select([
+                        'lista_precio',
+                        'precio',
+                    ])
+                    ->where($datos)
+                    ->where('precio >', 0)
+                    ->group_by('lista_precio')
+                    ->order_by('precio', 'DESC')
+                    ->get('productos_precios')
+                    ->result()
+                ;
+            break;
+
             case 'productos':
 				$limite = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
 
@@ -167,8 +198,12 @@ Class Productos_model extends CI_Model{
                     }
                 }
 
-                $filtro_bodega = (isset($datos['filtro_bodega'])) ? $datos['filtro_bodega'] : $this->config->item('bodega_principal');
-                $filtro_lista_precio = (isset($datos['filtro_lista_precio'])) ? $datos['filtro_lista_precio'] : $this->config->item('lista_precio');
+                $filtro_bodega = (isset($datos['filtro_bodega'])) ? "AND i.bodega = {$datos['filtro_bodega']}" : "AND i.bodega = {$this->config->item('bodega_principal')}";
+                $filtro_lista_precio = (isset($datos['filtro_lista_precio'])) ? "AND pp.lista_precio = {$datos['filtro_lista_precio']}" : "AND pp.lista_precio = {$this->config->item('lista_precio')}";
+
+                // Cuando no se requiere que filtre por una bodega o lista de precio especifica (ejemplo: carrito)
+                if(isset($datos['omitir_bodega'])) $filtro_bodega = "";
+                if(isset($datos['omitir_lista_precio'])) $filtro_lista_precio = "";
 
                 if(isset($datos['id'])) $where .= " AND p.id = {$datos['id']} ";
                 if(isset($datos['marca'])) $where .= " AND p.marca = '{$datos['marca']}' ";
@@ -194,8 +229,8 @@ Class Productos_model extends CI_Model{
                     pp.precio_maximo
                 FROM
                     productos AS p
-                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id AND i.bodega = $filtro_bodega
-                    LEFT JOIN productos_precios AS pp ON pp.producto_id = p.id AND pp.lista_precio = $filtro_lista_precio
+                    LEFT JOIN productos_inventario AS i ON p.id = i.producto_id $filtro_bodega
+                    LEFT JOIN productos_precios AS pp ON pp.producto_id = p.id $filtro_lista_precio
                     LEFT JOIN productos_metadatos AS pm ON p.id = pm.producto_id
                 $where
                 GROUP BY p.id
