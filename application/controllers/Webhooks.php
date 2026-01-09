@@ -751,47 +751,54 @@ class Webhooks extends MY_Controller {
             $filtro_lista_precios = $this->input->get('lista_precio');
             $lista_precio = ($filtro_lista_precios) ? $filtro_lista_precios : $this->config->item('lista_precio');
 
-            $resultado = json_decode(obtener_precios_api(['lista_precio' => $lista_precio]));
+            $resultado = json_decode(obtener_preciwos_api(['lista_precio' => $lista_precio]));
+            $codigo_resultado = $resultado->codigo;
             $precios = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
-            
-            // Primero, eliminamos todos los ítems de la lista de precios (Solo si hay datos disponibles para actualizar)
-            if(!empty($precios)) $this->productos_model->eliminar('productos_precios', ['lista_precio' => $lista_precio]);
+            $total_items = 0;
 
-            foreach($precios as $precio) {
-                $nuevo_item = [
-                    'producto_id' => $precio->IdItem,
-                    'referencia' => $precio->Referencia,
-                    'descripcion_corta' => $precio->Descripcion_Corta,
-                    'lista_precio' => $precio->Lista_precio,
-                    'precio' => $precio->PrecioSugerido, // Precio oficial
-                    'precio_maximo' => $precio->PrecioMaximo,
-                    'precio_minimo' => $precio->PrecioMinimo,
-                    'precio_sugerido' => $precio->PrecioSugerido,
-                    'fecha_actualizacion' => $fecha_actualizacion,
-                ];
-                array_push($datos, $nuevo_item);
+            // Si encontró datos
+            if($codigo_resultado != 1) {
+                foreach($precios as $precio) {
+                    $nuevo_item = [
+                        'producto_id' => $precio->IdItem,
+                        'referencia' => $precio->Referencia,
+                        'descripcion_corta' => $precio->Descripcion_Corta,
+                        'lista_precio' => $precio->Lista_precio,
+                        'precio' => $precio->PrecioSugerido, // Precio oficial
+                        'precio_maximo' => $precio->PrecioMaximo,
+                        'precio_minimo' => $precio->PrecioMinimo,
+                        'precio_sugerido' => $precio->PrecioSugerido,
+                        'fecha_actualizacion' => $fecha_actualizacion,
+                    ];
+
+                    array_push($datos, $nuevo_item);
+                }
+
+                // Primero, eliminamos todos los ítems de la lista de precios (Solo si hay datos disponibles para actualizar)
+                if(!empty($datos)) $this->productos_model->eliminar('productos_precios', ['lista_precio' => $lista_precio]);
+
+                $total_items = $this->productos_model->crear('productos_precios', $datos);
             }
-
-            $total_items = $this->productos_model->crear('productos_precios', $datos);
 
             $tiempo_final = microtime(true);
 
-            $respuesta = [
-                'log_tipo_id' => 34,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => json_encode([
-                    'lista_precio' => $lista_precio,
-                    'items' => number_format($total_items, 0, '', '.'),
-                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
-                ])
+            $resultado = [
+                'lista_precio' => $lista_precio,
+                'items' => number_format($total_items, 0, '', '.'),
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
             ];
 
             // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', $respuesta);
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 34,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => json_encode($resultado)
+            ]);
 
-            print json_encode($respuesta);
+            print json_encode($resultado);
+
             $this->db->close();
 
             return http_response_code(200);
@@ -800,6 +807,11 @@ class Webhooks extends MY_Controller {
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 33,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            print json_encode([
+                'error' => true,
+                'descripcion' => 'Ocurrió un error al ejecutar el script'
             ]);
 
             return http_response_code(400);
