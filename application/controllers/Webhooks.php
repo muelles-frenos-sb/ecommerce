@@ -854,20 +854,25 @@ class Webhooks extends MY_Controller {
             }
 
             $tiempo_final = microtime(true);
+
+            $resultado = [
+                'fecha' => $filtro_fecha,
+                'items' => number_format($total_items, 0, '', '.'),
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
+            ];
             
-            $respuesta = [
+            // Se agrega el registro en los logs
+            $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 10,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => "$total_items registros actualizados",
-                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
-            ];
+                'observacion' => json_encode($resultado)
+            ]);
 
-            // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', $respuesta);
-
-            print json_encode($respuesta);
+            print json_encode($resultado);
 
             $this->db->close();
+
+            return http_response_code(200);
         } catch (\Throwable $error) {
             // Se agrega el registro en los logs
             $this->configuracion_model->crear('logs', [
