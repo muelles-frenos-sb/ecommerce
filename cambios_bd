@@ -467,3 +467,11 @@ INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (18, 'co
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (19, 'marketing_ver', 'Ver módulo', 10);
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (20, 'marketing_campanias_ver', 'Ver campañas de marketing', 10);
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (21, 'marketing_campanias_gestionar', 'Gestionar campañas de marketing', 10);
+
+-- 20260108 Se agrega relación entre las tablas marketing_campanias y marketing_casmpanias_contactos
+ALTER TABLE `marketing_campanias_contactos` 
+ADD CONSTRAINT `marketing_campanias_contactos_ibfk_1` FOREIGN KEY (`campania_id`) REFERENCES `ecommerce`.`marketing_campanias` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- 20260108 Se agrega campo de fecha de creación en la tabla marketing_ca,panias_contactos
+ALTER TABLE `marketing_campanias_contactos` 
+ADD COLUMN `fecha_creacion` datetime(0) NULL AFTER `id`;

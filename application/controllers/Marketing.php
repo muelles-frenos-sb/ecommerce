@@ -39,7 +39,7 @@ class Marketing extends MY_Controller {
         }
     }
 
-    private function importar_campanias_contactos($archivo) {
+    private function importar_campanias_contactos($archivo, $campania_id) {
         try {
             $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
             $hoja   = $excel->getActiveSheet();
@@ -51,60 +51,65 @@ class Marketing extends MY_Controller {
             $detalle = [];
 
             foreach ($registros as $registro) {
-
                 // Validar que existan datos
                 if (empty($registro[0]) && empty($registro[1])) {
                     continue;
                 }
 
-                $datos_insertar = [
-                    "nit"      => trim($registro[0]),
-                    "telefono" => trim($registro[1])
+                $detalle[] = [
+                    "fecha_creacion" => date('Y-m-d H:i:s'),
+                    "campania_id" => $campania_id, 
+                    "nit"         => trim($registro[0]),
+                    "telefono"    => trim($registro[1])
                 ];
-
-                $detalle[] = $datos_insertar;
             }
 
             // Inserción batch
-            if (!empty($detalle)) {
-                $this->marketing_model->insertar_batch(
-                    "marketing_campanias_contactos",
-                    $detalle
-                );
-            }
+            if (!empty($detalle)) $this->marketing_model->insertar_batch("marketing_campanias_contactos", $detalle);
 
             return [
                 "exito" => true,
-                "mensaje" => "Se subió y se importaron correctamente los contactos de las campañas"
+                "mensaje" => "Se subieron e importaron correctamente los contactos de la campaña"
             ];
 
         } catch (Exception $e) {
 
             log_message(
                 'error',
-                'Error al importar los datos de los contactos de las campañas: ' . $e->getMessage()
+                'Error al importar contactos de campaña: ' . $e->getMessage()
             );
 
             return [
                 "exito" => false,
-                "mensaje" => "No se subieron ni se importaron correctamente los contactos de las campañas"
+                "mensaje" => "No se subieron ni importaron correctamente los contactos de la campaña"
             ];
         }
     }
+
 
     function importar_campanias() {
         $exito = false;
         $mensaje = "";
 
+        $campania_id = $this->input->post('campania_id');
+
+        if (!$campania_id) {
+            print json_encode([
+                "exito" => false,
+                "mensaje" => "No se recibió la campaña"
+            ]);
+            return;
+        }
+
         $directorio = "archivos/temporales/";
 
-        if(!is_dir($directorio)) @mkdir($directorio, 0777);
+        if (!is_dir($directorio)) @mkdir($directorio, 0777);
 
         $archivo = $_FILES['archivo'];
         $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
-        $nombre_archivo = bin2hex(random_bytes(8)).".$extension";
+        $nombre_archivo = bin2hex(random_bytes(8)) . ".$extension";
 
-        if (move_uploaded_file($archivo['tmp_name'], $directorio.$nombre_archivo)) {
+        if (move_uploaded_file($archivo['tmp_name'], $directorio . $nombre_archivo)) {
             $exito = true;
             $mensaje = "El archivo subió correctamente.";
         } else {
@@ -112,19 +117,20 @@ class Marketing extends MY_Controller {
         }
 
         if ($exito) {
-            $resultado = $this->importar_campanias_contactos($directorio.$nombre_archivo);
+            $resultado = $this->importar_campanias_contactos(
+                $directorio . $nombre_archivo,
+                $campania_id
+            );
             $exito = $resultado["exito"];
             $mensaje = $resultado["mensaje"];
         }
 
-        unlink($directorio.$nombre_archivo);
+        unlink($directorio . $nombre_archivo);
 
-        $respuesta = [
+        print json_encode([
             "exito" => $exito,
             "mensaje" => $mensaje
-        ];
-
-        print json_encode($respuesta);
+        ]);
     }
 
     function obtener_datos_tabla() {
@@ -137,13 +143,6 @@ class Marketing extends MY_Controller {
         $columns = $this->input->get("columns");
         $order = $this->input->get("order");
         $ordenar = null;
-
-        // Filtros personalizados de las columnas
-        $filtro_id = $this->input->get("filtro_id");
-        $filtro_fecha_inicio = $this->input->get("filtro_fecha_inicio");
-        $filtro_fecha_finalizacion = $this->input->get("filtro_fecha_finalizacion");
-        $filtro_cantidad_contactos = $this->input->get("filtro_cantidad_contactos");
-        $filtro_cantidad_envios = $this->input->get("filtro_cantidad_envios");
 
         // Si en la tabla se aplico un orden se obtiene el campo por el que se ordena
         if ($order) {
@@ -159,14 +158,8 @@ class Marketing extends MY_Controller {
                 $datos = [
                     "contar" => true,
                     "busqueda" => $busqueda,
+                    "filtros_personalizados" => $this->input->get("filtros_personalizados"),
                 ];
-
-                // Filtros personalizados
-                if(isset($filtro_id)) $datos['filtro_id'] = $filtro_id;
-                if(isset($filtro_fecha_inicio)) $datos['filtro_fecha_inicio'] = $filtro_fecha_inicio;
-                if(isset($filtro_fecha_finalizacion)) $datos['filtro_fecha_finalizacion'] = $filtro_fecha_finalizacion;
-                if(isset($filtro_cantidad_contactos)) $datos['filtro_cantidad_contactos'] = $filtro_cantidad_contactos;
-                if(isset($filtro_cantidad_envios)) $datos['filtro_cantidad_envios'] = $filtro_cantidad_envios;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->marketing_model->obtener("marketing_campanias", $datos);

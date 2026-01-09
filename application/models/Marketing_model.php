@@ -39,34 +39,35 @@ Class Marketing_model extends CI_Model {
                     $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
                 }
 
-                $where  = "WHERE 1=1";
-                $having = "HAVING 1=1";
+                $where  = "WHERE mc.id IS NOT NULL";
+                $having = "HAVING mc.id IS NOT NULL";
 
-                // FILTROS WHERE
-                if (isset($datos['id']) && $datos['id']) $where .= " AND mc.id = {$datos['id']} ";
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
 
-                if (isset($datos['filtro_id']) && $datos['filtro_id']) $where .= " AND mc.id = {$datos['filtro_id']} ";
+                // Filtros where
+                if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'])  $where .= " AND mc.id LIKE '%{$filtros_personalizados['id']}%' ";
 
-                if (isset($datos['filtro_fecha_inicio']) && $datos['filtro_fecha_inicio']) $where .= " AND DATE(mc.fecha_inicio) = '{$datos['filtro_fecha_inicio']}' ";
+                if (isset($filtros_personalizados['fecha_inicio']) && $filtros_personalizados['fecha_inicio']) $where .= " AND DATE(mc.fecha_inicio) = '{$filtros_personalizados['fecha_inicio']}' ";
 
-                if (isset($datos['filtro_fecha_finalizacion']) && $datos['filtro_fecha_finalizacion']) $where .= " AND DATE(mc.fecha_finalizacion) = '{$datos['filtro_fecha_finalizacion']}' ";
+                if (isset($filtros_personalizados['fecha_finalizacion']) && $filtros_personalizados['fecha_finalizacion'] != '') $where .= " AND DATE(mc.fecha_finalizacion) = '{$filtros_personalizados['fecha_finalizacion']}' ";
 
-                // FILTROS HAVING
-                if (isset($datos['filtro_cantidad_contactos']) && $datos['filtro_cantidad_contactos']) $having .= " AND COUNT(DISTINCT mcc.id) = {$datos['filtro_cantidad_contactos']} ";
+                // HAVING (campos calculados)
+                if (isset($filtros_personalizados['cantidad_contactos']) && $filtros_personalizados['cantidad_contactos'] != '') $having .= " AND COUNT(DISTINCT mcc.id) = {$filtros_personalizados['cantidad_contactos']} ";
 
-                if (isset($datos['filtro_cantidad_envios']) && $datos['filtro_cantidad_envios']) {
+                if (isset($filtros_personalizados['cantidad_envios']) && $filtros_personalizados['cantidad_envios'] != '') {
                     $having .= "
                         AND SUM(
                             CASE 
                                 WHEN mcc.fecha_envio IS NOT NULL THEN 1 
                                 ELSE 0 
                             END
-                        ) = {$datos['filtro_cantidad_envios']}
+                        ) = {$filtros_personalizados['cantidad_envios']}
                     ";
                 }
 
-                // BÚSQUEDA GLOBAL
-                if (!empty($datos['busqueda'])) {
+                // Búsqueda general
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
 
                     foreach ($palabras as $palabra) {
@@ -85,8 +86,10 @@ Class Marketing_model extends CI_Model {
                     }
                 }
 
+                $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY mc.id DESC";
+
                 $sql = 
-                    "SELECT
+                    " SELECT
                         mc.*,
                         COUNT(DISTINCT mcc.id) AS cantidad_contactos,
                         SUM(
@@ -95,25 +98,25 @@ Class Marketing_model extends CI_Model {
                                 ELSE 0 
                             END
                         ) AS cantidad_envios
-                    FROM marketing_campanias AS mc
-                    LEFT JOIN marketing_campanias_contactos AS mcc
+                    FROM marketing_campanias mc
+                    LEFT JOIN marketing_campanias_contactos mcc
                         ON mcc.campania_id = mc.id
                     $where
                     GROUP BY mc.id
                     $having
-                    ORDER BY mc.id DESC
+                    $order_by
                     $limite
                 ";
 
-                if (!empty($datos['contar'])) {
+                if (isset($datos['contar']) && $datos['contar']) {
                     return $this->db->query($sql)->num_rows();
                 }
 
                 if (isset($datos['id'])) {
                     return $this->db->query($sql)->row();
-                } else {
-                    return $this->db->query($sql)->result();
                 }
+
+                return $this->db->query($sql)->result();
             break;
         }
     }

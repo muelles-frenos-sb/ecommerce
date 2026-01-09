@@ -71,7 +71,7 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'marketing_campanias':
-                $resultado = $this->clientes_model->actualizar($tipo, ['id' => $id], $datos);
+                $resultado = $this->marketing_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
             case 'productos_metadatos':
@@ -209,7 +209,7 @@ class Interfaces extends CI_Controller {
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');
 
-                print json_encode(['resultado' => $this->proveedores_model->crear("marketing_campanias", $datos)]);
+                print json_encode(['resultado' => $this->marketing_model->crear("marketing_campanias", $datos)]);
             break;
 
             case 'productos_solicitudes_garantia':

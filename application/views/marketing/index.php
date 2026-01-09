@@ -15,11 +15,7 @@
                 </div>
 
                 <div class="col-9 text-right">
-                    <button type="button" class="btn btn-success importar">Importar desde archivo plano</button>
-
                     <a type="button" class="btn btn-info" href="<?php echo base_url().'archivos/plantillas/marketing_importacion_campanias_contactos.xlsx'; ?>" download>Descargar archivo plano</a>
-
-                    <input type="file" class="d-none" id="importar_archivo" onchange="javascript:importarCampanias()" accept=".xlsx,.xls,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                 </div>
             </div>
         <?php } ?>
@@ -31,37 +27,6 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    importarCampanias = () => {
-        Swal.fire({
-            title: 'Estamos subiendo el archivo y importando las campañas en nuestros sistemas...',
-            text: 'Por favor, espera.',
-            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
-            showConfirmButton: false,
-            allowOutsideClick: false
-        })
-
-        let archivo = $('#importar_archivo').prop('files')[0]
-        let documento = new FormData()
-        documento.append("archivo", archivo)
-
-        let subida = new XMLHttpRequest()
-        subida.open('POST', `${$("#site_url").val()}marketing/importar_campanias`)
-        subida.send(documento)
-        subida.onload = evento => {
-            let respuesta = JSON.parse(evento.target.responseText)
-
-            Swal.close()
-
-            if (respuesta.exito) {
-                listarCampanias()
-                mostrarAviso('exito', `¡${respuesta.mensaje}!`, 20000)
-                return false
-            } 
-
-            mostrarAviso('error', `¡${respuesta.mensaje}!`, 20000)
-        }
-    }
-
     listarCampanias = () => {
         // Si no hay valor en la búsqueda, pero si en loca storage, lo pone
         if($("#buscar_campania").val() == "" && localStorage.simonBolivar_busquedaCampania) $("#buscar_campania").val(localStorage.simonBolivar_busquedaCampania)
@@ -85,7 +50,5 @@
 
             listarCampanias()
         })
-
-        $(".importar").click(() => $("#importar_archivo").trigger('click'))
     })
 </script>

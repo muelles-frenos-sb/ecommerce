@@ -8,21 +8,66 @@
 <!-- Inicialización de la tabla -->
 <table class="table-striped table-bordered" id="tabla_campanias"></table>
 
+<!-- Input file oculto -->
+<input type="file" class="d-none" id="importar_archivo" onchange="importarCampanias()" accept=".xlsx,.xls,.csv">
+
 <script>
+    // Se usa el mismo patrón del index
+    let campania_id = null
+
+    const seleccionarCampania = (id) => {
+        campania_id = id
+        $("#importar_archivo").val(null).trigger('click')
+    }
+
+    importarCampanias = () => {
+        Swal.fire({
+            title: 'Estamos subiendo el archivo y importando las campañas en nuestros sistemas...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        let archivo = $('#importar_archivo').prop('files')[0]
+        let documento = new FormData()
+
+        documento.append("archivo", archivo)
+        documento.append("campania_id", campania_id)
+
+        let subida = new XMLHttpRequest()
+        subida.open('POST', `${$("#site_url").val()}marketing/importar_campanias`)
+        subida.send(documento)
+
+        subida.onload = evento => {
+            let respuesta = JSON.parse(evento.target.responseText)
+            Swal.close()
+
+            if (respuesta.exito) {
+                tablaCampanias.ajax.reload(null, false)
+                mostrarAviso('exito', `¡${respuesta.mensaje}!`, 20000)
+                return false
+            }
+
+            mostrarAviso('error', `¡${respuesta.mensaje}!`, 20000)
+        }
+    }
+
     $().ready(async () => {
-        var tablaCampanias = $("#tabla_campanias").DataTable({
+        tablaCampanias = $("#tabla_campanias").DataTable({
             ajax: {
                 url: `${$("#site_url").val()}marketing/obtener_datos_tabla`,
                 data: datos => {
                     datos.tipo = 'campanias'
 
-                    // Filtros personalizados
-                    datos.filtro_id = $('#filtro_id').val()
-                    datos.filtro_fecha_inicio = $('#filtro_fecha_inicio').val()
-                    datos.filtro_fecha_finalizacion = $('#filtro_fecha_finalizacion').val()
-                    datos.filtro_cantidad_contactos = $('#filtro_cantidad_contactos').val()
-                    datos.filtro_cantidad_envios = $('#filtro_cantidad_envios').val()
-                },
+                    datos.filtros_personalizados = {
+                        id: $('#filtro_id').val(),
+                        fecha_inicio: $('#filtro_fecha_inicio').val(),
+                        fecha_finalizacion: $('#filtro_fecha_finalizacion').val(),
+                        cantidad_contactos: $('#filtro_cantidad_contactos').val(),
+                        cantidad_envios: $('#filtro_cantidad_envios').val(),
+                    }
+                }
             },
             columns: [
                 { 
@@ -68,10 +113,17 @@
                     data: null, 
                     render: (data, type, row) => {
                         return `
-                            <div class="p-1" style="width: 80px;">
-                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}marketing/campanias/editar/${data.id}">
+                            <div class="p-1" style="width: 100px;">
+                                <a class="btn btn-sm btn-primary"
+                                href="${$("#site_url").val()}marketing/campanias/editar/${data.id}">
                                     <i class="fa fa-pencil"></i>
                                 </a>
+
+                                <button class="btn btn-sm btn-success"
+                                        title="Importar contactos"
+                                        onclick="seleccionarCampania(${data.id})">
+                                    <i class="fa fa-upload"></i>
+                                </button>
                             </div>
                         `
                     }
@@ -105,5 +157,7 @@
             serverSide: true,
             stateSave: false,
         })
+
+        $(".importar").click(() => $("#importar_archivo").trigger('click'))
     })
 </script>
