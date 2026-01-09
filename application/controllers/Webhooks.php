@@ -683,47 +683,52 @@ class Webhooks extends MY_Controller {
             // Filtro de la bodega
             $filtro_bodega = $this->input->get('bodega');
             $bodega = ($filtro_bodega) ? $filtro_bodega : $this->config->item('bodega_principal');
-
-            // Inventario de la bodega por defecto
             $resultado = json_decode(obtener_inventario_api(['bodega' => $bodega]));
+            $codigo_resultado = $resultado->codigo;
             $inventario = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
             $datos = [];
+            $total_items = 0;
 
-            // Primero, eliminamos todos los ítems de la bodega (Solo si hay inventario disponible)
-            if(!empty($inventario)) $this->productos_model->eliminar('productos_inventario', ['id !=' => null, 'bodega' => $bodega]);
+            // Si encontró datos
+            if($codigo_resultado != 1) {
+                foreach($inventario as $item) {
+                    $nuevo_item = [
+                        'producto_id' => $item->Iditem,
+                        'referencia' => $item->Referencia,
+                        'bodega' => $item->Bodega,
+                        'descripcion_corta' => $item->Descripcion_Corta,
+                        'unidad_inventario' => $item->Unidad_Inventario,
+                        'disponible' => $item->Disponible,
+                        'fecha_actualizacion' => $fecha_actualizacion,
+                    ];
 
-            foreach($inventario as $item) {
-                $nuevo_item = [
-                    'producto_id' => $item->Iditem,
-                    'referencia' => $item->Referencia,
-                    'bodega' => $item->Bodega,
-                    'descripcion_corta' => $item->Descripcion_Corta,
-                    'unidad_inventario' => $item->Unidad_Inventario,
-                    'disponible' => $item->Disponible,
-                    'fecha_actualizacion' => $fecha_actualizacion,
-                ];
-                array_push($datos, $nuevo_item);
+                    array_push($datos, $nuevo_item);
+                }
+            
+                // Si hay datos, se borran los registros anteriores
+                if(!empty($datos)) $this->productos_model->eliminar('productos_inventario', ['id !=' => null, 'bodega' => $bodega]);
+            
+                $total_items = $this->productos_model->crear('productos_inventario', $datos);
             }
 
-            $total_items = $this->productos_model->crear('productos_inventario', $datos);
-
             $tiempo_final = microtime(true);
-            
-            $respuesta = [
-                'log_tipo_id' => 6,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => json_encode([
-                    'bodega' => $bodega,
-                    'items' => number_format($total_items, 0, '', '.'),
-                    'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
-                ])
+
+            $resultado = [
+                'bodega' => $bodega,
+                'items' => number_format($total_items, 0, '', '.'),
+                'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos"
             ];
             
             // Se agrega el registro en los logs
-            $this->configuracion_model->crear('logs', $respuesta);
+            $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 6,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => json_encode($resultado)
+            ]);
 
-            print json_encode($respuesta);
+            print json_encode($resultado);
+
             $this->db->close();
 
             return http_response_code(200);
@@ -732,6 +737,11 @@ class Webhooks extends MY_Controller {
             $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 7,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
+            ]);
+
+            print json_encode([
+                'error' => true,
+                'descripcion' => 'Ocurrió un error al ejecutar el script'
             ]);
 
             return http_response_code(400);
