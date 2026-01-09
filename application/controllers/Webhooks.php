@@ -773,8 +773,7 @@ class Webhooks extends MY_Controller {
             // Filtro de la lista de precios
             $filtro_lista_precios = $this->input->get('lista_precio');
             $lista_precio = ($filtro_lista_precios) ? $filtro_lista_precios : $this->config->item('lista_precio');
-
-            $resultado = json_decode(obtener_preciwos_api(['lista_precio' => $lista_precio]));
+            $resultado = json_decode(obtener_precios_api(['lista_precio' => $lista_precio]));
             $codigo_resultado = $resultado->codigo;
             $precios = ($resultado->codigo == 0) ? $resultado->detalle->Table : 0 ;
             $fecha_actualizacion = date('Y-m-d H:i:s');
