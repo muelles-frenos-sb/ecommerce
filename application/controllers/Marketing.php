@@ -17,6 +17,8 @@ class Marketing extends MY_Controller {
         $this->load->model(['marketing_model']);
     }
 
+    var $ruta = './archivos/';
+
     function campanias() {
         if(!$this->session->userdata('usuario_id')) redirect('inicio');
 
@@ -183,5 +185,50 @@ class Marketing extends MY_Controller {
                 ]);
             break;
         }
+    }
+
+    public function eliminar_imagen() {
+        if (!$this->input->is_ajax_request()) redirect('inicio');
+        $id_campania = $this->input->post('id');
+
+        if (!$id_campania) {
+            echo json_encode(['resultado' => false, 'mensaje' => 'ID de campaña no recibido']);
+            return;
+        }
+
+        $directorio = "{$this->ruta}campanias/$id_campania/";
+
+        if (!is_dir($directorio)) {
+            echo json_encode(['resultado' => true, 'mensaje' => 'No existe carpeta de imagen']);
+            return;
+        }
+
+        // Buscar imágenes
+        $archivos = glob($directorio . "*.{jpg,jpeg,png}", GLOB_BRACE);
+        if (!empty($archivos)) {
+            foreach ($archivos as $archivo) {
+                @unlink($archivo);
+            }
+        }
+
+        echo json_encode(['resultado' => true]);
+    }
+
+    function subir_imagen() {
+        $id_campania = $this->uri->segment(3);
+        $directorio = "{$this->ruta}campanias/$id_campania/";
+
+        if (!is_dir($directorio)) {
+            mkdir($directorio, 0777, true);
+        }
+
+        $archivo = $_FILES['name'];
+        $resultado = false;
+
+        if (move_uploaded_file($archivo['tmp_name'], $directorio.$archivo['name'])) {
+            $resultado = true;
+        }
+
+        print json_encode(['resultado' => $resultado]);
     }
 }

@@ -42,6 +42,8 @@ Class Marketing_model extends CI_Model {
                 $where  = "WHERE mc.id IS NOT NULL";
                 $having = "HAVING mc.id";
 
+                if(isset($datos['id'])) $where .= " AND mc.id = {$datos['id']} ";
+
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
 

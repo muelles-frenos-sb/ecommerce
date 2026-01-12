@@ -475,3 +475,13 @@ ADD CONSTRAINT `marketing_campanias_contactos_ibfk_1` FOREIGN KEY (`campania_id`
 -- 20260108 Se agrega campo de fecha de creación en la tabla marketing_ca,panias_contactos
 ALTER TABLE `marketing_campanias_contactos` 
 ADD COLUMN `fecha_creacion` datetime(0) NULL AFTER `id`;
+
+-- 20260112 Se configura tabla marketing_campañas para recibir emojis en los campos
+ALTER TABLE `marketing_campanias`
+CONVERT TO CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+-- 20260112 Se agregan campos en la tabla marketing_campanias
+ALTER TABLE `marketing_campanias` 
+ADD COLUMN `nombre_plantilla_whatsapp` TEXT NULL AFTER `descripcion`,
+ADD COLUMN `mensaje` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL AFTER `nombre_plantilla_whatsapp`;

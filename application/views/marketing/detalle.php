@@ -2,6 +2,20 @@
 if (isset($id)) {
     $campania = $this->marketing_model->obtener('marketing_campanias', ['id' => $id]);
     echo "<input type='hidden' id='campania_id' value='$campania->id' />";
+
+    // Carpeta donde se guardan las imágenes
+    $carpeta = "./archivos/campanias/{$campania->id}/";
+    
+    // Se valida si existe la carpeta
+    if (is_dir($carpeta)) {
+        // Obtener todos los archivos jpg o png
+        $archivos = glob($carpeta . "*.{jpg,jpeg,png}", GLOB_BRACE);
+
+        if (!empty($archivos)) {
+            // Tomamos el primer archivo encontrado
+            $ruta_imagen = base_url("archivos/campanias/{$campania->id}/" . basename($archivos[0]));
+        }
+    }
 }
 ?>
 
@@ -27,6 +41,40 @@ if (isset($id)) {
                         <label for="campania_descripcion">Descripción </label>
                         <input type="text" class="form-control" id="campania_descripcion" value="<?php echo (isset($campania) ? $campania->descripcion : '')?>">
                     </div>
+
+                    <div class="form-group col-12 col-md-6">
+                        <label for="campania_imagen">Imagen (jpg o png)</label>
+                        <input type="file" class="form-control" id="campania_imagen" accept="image/png, image/jpeg">
+
+                        <!-- Vista previa -->
+                        <div class="text-center mt-2">
+                            <?php if (!empty($ruta_imagen)) { ?>
+                                <img id="vista_previa" src="<?php echo $ruta_imagen ?>" style="max-width:200px; max-height:200px; border-radius:6px; border:1px solid #ddd; padding:4px;">
+                                <div class="mt-2">
+                                    <button type="button" id="eliminar_imagen" class="btn btn-sm btn-outline-danger" title="Eliminar imagen">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            <?php } else { ?>
+                                <img id="vista_previa" src="" class="d-none" style="max-width:200px; max-height:200px; border-radius:6px; border:1px solid #ddd; padding:4px;">
+                                <div class="mt-2">
+                                    <button type="button" id="eliminar_imagen" class="btn btn-sm btn-outline-danger d-none" title="Eliminar imagen">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-12 col-md-6">
+                        <label for="plantilla_whatsapp">Nombre plantilla WhatsApp *</label>
+                        <input type="text" class="form-control" id="plantilla_whatsapp" value="<?php echo (isset($campania) ? $campania->nombre_plantilla_whatsapp : '') ?>">
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label for="mensaje_campania">Mensaje de la campaña *</label>
+                        <textarea class="form-control" id="mensaje_campania" rows="5" placeholder="Escribe aquí el mensaje de WhatsApp. Puedes usar emojis 😊🚚✨" ><?php echo (isset($campania) ? $campania->mensaje : '') ?></textarea>
+                    </div>
                 </div>
 
                 <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
@@ -38,13 +86,19 @@ if (isset($id)) {
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
-    guardarCampania = async() => {
+    // Si ya hay una imagen cargada, eliminarImagen debe ser false
+    let eliminarImagen = <?php echo (!empty($ruta_imagen)) ? 'false' : 'true'; ?>;
+
+    guardarCampania = async () => {
         let id = $("#campania_id").val()
+        let archivo = $('#campania_imagen').prop('files')
 
         let camposObligatorios = [
             $("#fecha_inicio"),
             $("#fecha_finalizacion"),
-            $("#campania_nombre")
+            $("#campania_nombre"),
+            $('#plantilla_whatsapp'),
+            $('#mensaje_campania')
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
@@ -54,14 +108,117 @@ if (isset($id)) {
             fecha_inicio: $("#fecha_inicio").val(),
             fecha_finalizacion: $("#fecha_finalizacion").val(),
             nombre: $("#campania_nombre").val(),
-            descripcion: $("#campania_descripcion").val()
+            descripcion: $("#campania_descripcion").val(),
+            nombre_plantilla_whatsapp: $('#plantilla_whatsapp').val(),
+            mensaje: $('#mensaje_campania').val()
         }
 
+        // Crear o actualizar campaña
         if (id) {
             datos.id = id
-            await consulta('actualizar', datos)
+            await consulta('actualizar', datos, false)
         } else {
-            await consulta('crear', datos)
+            let respuesta = await consulta('crear', datos, false)
+            id = respuesta.resultado
+            $("#campania_id").val(id)
+        }
+
+        // Subir imagen solo si existe y no fue eliminada
+        if (archivo.length > 0 && !eliminarImagen) {
+            let extension = archivo[0].name.split('.').pop()
+            let nombreArchivo = `imagen.${extension}`
+
+            let imagen = new FormData()
+            imagen.append('name', archivo[0], nombreArchivo)
+
+            let peticion = new XMLHttpRequest()
+            peticion.open('POST', `${$('#site_url').val()}marketing/subir_imagen/${id}`)
+            peticion.send(imagen)
+
+            peticion.onload = () => {
+                let respuesta = JSON.parse(peticion.responseText)
+
+                if (!respuesta.resultado) {
+                    mostrarAviso('alerta', 'La campaña se guardó, pero la imagen no pudo subirse')
+                    return
+                }
+
+                mostrarAviso('exito', 'Campaña guardada correctamente')
+            }
+        } else {
+            mostrarAviso('exito', 'Campaña guardada correctamente')
         }
     }
+
+    // Vista previa de imagen
+    $("#campania_imagen").on("change", function () {
+        const archivo = this.files[0]
+        if (!archivo) return
+        const extensionesPermitidas = ['image/jpeg', 'image/png']
+
+        if (!extensionesPermitidas.includes(archivo.type)) {
+            mostrarAviso('alerta', 'Solo se permiten imágenes JPG o PNG')
+            this.value = ''
+            $("#vista_previa").addClass('d-none')
+            $("#eliminar_imagen").addClass('d-none')
+            return
+        }
+
+        const url = URL.createObjectURL(archivo)
+        $("#vista_previa").attr("src", url).removeClass('d-none')
+        $("#eliminar_imagen").removeClass('d-none')
+
+        eliminarImagen = false
+    })
+
+    // Eliminar imagen seleccionada
+    $("#eliminar_imagen").on("click", function () {
+        // Se agrega confirmación antes de eliminarla
+        Swal.fire({
+            title: '¿Eliminar imagen?',
+            text: 'Esta acción eliminará la imagen seleccionada',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (!result.isConfirmed) return
+            let id = $("#campania_id").val()
+
+            // Si la campaña ya existe, eliminar en servidor
+            if (id) {
+                $.ajax({
+                    url: `${$('#site_url').val()}marketing/eliminar_imagen`,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { id: id },
+                    success: function (respuesta) {
+
+                        if (!respuesta.resultado) {
+                            Swal.fire(
+                                'Error',
+                                'No se pudo eliminar la imagen',
+                                'error'
+                            )
+                            return
+                        }
+
+                        Swal.fire(
+                            'Eliminada',
+                            'La imagen fue eliminada correctamente',
+                            'success'
+                        )
+                    }
+                })
+            }
+
+            // Limpieza visual
+            $("#campania_imagen").val('')
+            $("#vista_previa").attr("src", "").addClass('d-none')
+            $("#eliminar_imagen").addClass('d-none')
+            eliminarImagen = true
+        })
+    })
 </script>
