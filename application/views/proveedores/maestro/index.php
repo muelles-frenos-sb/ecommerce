@@ -10,6 +10,12 @@
     <div class="container container--max--xl">
         <div class="mb-4">
             <a class="btn btn-success" href="<?php echo site_url('proveedores/maestro/crear'); ?>">Crear</a>
+
+            <button class="btn btn-success btn-md"
+                onClick="javascript:generarReporte('excel/proveedores_maestro_marcas')">
+                <i class="fa fa-file-excel"></i>
+                Descargar listado de maestro de proveedores
+            </button>
         </div>
 
         <div id="contenedor_marcas"></div>
