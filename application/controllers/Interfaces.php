@@ -681,6 +681,10 @@ class Interfaces extends CI_Controller {
             case 'tercero_contacto':
                 $resultado =  ['resultado' => $this->configuracion_model->obtener('tercero_contacto', $datos)];
             break;
+
+            case 'whatsapp_plantillas':
+                $resultado =  ['resultado' => $this->whatsapp_api->obtener_plantillas()];
+            break;
         }
 
         print json_encode($resultado);

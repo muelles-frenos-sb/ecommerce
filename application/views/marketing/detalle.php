@@ -25,25 +25,35 @@ if (isset($id)) {
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
-                    <div class="form-group col-6 col-md-6">
-                        <label for="fecha_inicio">Fecha de inicio *</label>
-                        <input type="date" class="form-control" id="fecha_inicio" value="<?php echo (isset($campania)) ? $campania->fecha_inicio : date('Y-m-d') ; ?>">
-                    </div>
-                    <div class="form-group col-6 col-md-6">
-                        <label for="fecha_finalizacion">Fecha finalización *</label>
-                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php echo (isset($campania)) ? $campania->fecha_finalizacion : date('Y-m-d') ; ?>">
-                    </div>
-                    <div class="form-group col-6 col-md-6">
+                    <div class="form-group col-lg-8">
                         <label for="campania_nombre">Nombre *</label>
                         <input type="text" class="form-control" id="campania_nombre" value="<?php echo (isset($campania) ? $campania->nombre : '')?>">
                     </div>
-                    <div class="form-group col-6 col-md-6">
-                        <label for="campania_descripcion">Descripción </label>
-                        <input type="text" class="form-control" id="campania_descripcion" value="<?php echo (isset($campania) ? $campania->descripcion : '')?>">
+
+                    <div class="form-group col-lg-4">
+                        <label for="plantilla_whatsapp">Plantilla de WhatsApp *</label>
+                        <select id="plantilla_whatsapp" class="form-control">
+                            <option value="">Selecciona...</option>
+                        </select>
                     </div>
 
-                    <div class="form-group col-12 col-md-6">
-                        <label for="campania_imagen">Imagen (jpg o png)</label>
+                    <div class="form-group col-lg-3">
+                        <label for="fecha_inicio">Fecha de inicio *</label>
+                        <input type="date" class="form-control" id="fecha_inicio" value="<?php echo (isset($campania)) ? $campania->fecha_inicio : date('Y-m-d') ; ?>">
+                    </div>
+
+                    <div class="form-group col-lg-3">
+                        <label for="fecha_finalizacion">Fecha finalización *</label>
+                        <input type="date" class="form-control" id="fecha_finalizacion" value="<?php echo (isset($campania)) ? $campania->fecha_finalizacion : date('Y-m-d') ; ?>">
+                    </div>
+                    
+                    <div class="form-group col-lg-6">
+                        <label for="campania_descripcion">Descripción</label>
+                        <input type="text" class="form-control" id="campania_descripcion" value="<?php echo (isset($campania) ? $campania->descripcion : '')?>" placeholder="Opcional">
+                    </div>
+
+                    <div class="form-group col-lg-12">
+                        <label for="campania_imagen">Imagen (opcional)</label>
                         <input type="file" class="form-control" id="campania_imagen" accept="image/png, image/jpeg">
 
                         <!-- Vista previa -->
@@ -66,14 +76,9 @@ if (isset($id)) {
                         </div>
                     </div>
 
-                    <div class="form-group col-12 col-md-6">
-                        <label for="plantilla_whatsapp">Nombre plantilla WhatsApp *</label>
-                        <input type="text" class="form-control" id="plantilla_whatsapp" value="<?php echo (isset($campania) ? $campania->nombre_plantilla_whatsapp : '') ?>">
-                    </div>
-
-                    <div class="form-group col-12">
-                        <label for="mensaje_campania">Mensaje de la campaña *</label>
-                        <textarea class="form-control" id="mensaje_campania" rows="5" placeholder="Escribe aquí el mensaje de WhatsApp. Puedes usar emojis 😊🚚✨" ><?php echo (isset($campania) ? $campania->mensaje : '') ?></textarea>
+                    <div class="form-group col-lg-12">
+                        <label for="mensaje_campania">Mensaje que se enviará</label>
+                        <textarea class="form-control" id="mensaje_campania" rows="5" disabled></textarea>
                     </div>
                 </div>
 
@@ -98,7 +103,6 @@ if (isset($id)) {
             $("#fecha_finalizacion"),
             $("#campania_nombre"),
             $('#plantilla_whatsapp'),
-            $('#mensaje_campania')
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
@@ -110,7 +114,6 @@ if (isset($id)) {
             nombre: $("#campania_nombre").val(),
             descripcion: $("#campania_descripcion").val(),
             nombre_plantilla_whatsapp: $('#plantilla_whatsapp').val(),
-            mensaje: $('#mensaje_campania').val()
         }
 
         // Crear o actualizar campaña
@@ -150,75 +153,103 @@ if (isset($id)) {
         }
     }
 
-    // Vista previa de imagen
-    $("#campania_imagen").on("change", function () {
-        const archivo = this.files[0]
-        if (!archivo) return
-        const extensionesPermitidas = ['image/jpeg', 'image/png']
+    listarPlantillasWhatsapp = async () => {
+        var registros = await consulta('obtener', {
+            tipo: 'whatsapp_plantillas'
+        })
+        
+        let plantillas = registros.resultado?.response?.data
 
-        if (!extensionesPermitidas.includes(archivo.type)) {
-            mostrarAviso('alerta', 'Solo se permiten imágenes JPG o PNG')
-            this.value = ''
-            $("#vista_previa").addClass('d-none')
-            $("#eliminar_imagen").addClass('d-none')
-            return
+        for(plantilla in plantillas) {
+            let nombre = plantillas[plantilla].name
+            let mensaje = plantillas[plantilla].components[1].text
+            
+            $(`#plantilla_whatsapp`).append(`<option value="${nombre}" data-mensaje="${mensaje}">${nombre}</option>`)
         }
 
-        const url = URL.createObjectURL(archivo)
-        $("#vista_previa").attr("src", url).removeClass('d-none')
-        $("#eliminar_imagen").removeClass('d-none')
+        if($('#campania_id')) {
+            $(`#plantilla_whatsapp`).val('<?php echo $campania->nombre_plantilla_whatsapp; ?>')
+            actualizarMensajePlantilla()
+        } 
+    }
 
-        eliminarImagen = false
-    })
+    $().ready(() => {
+        actualizarMensajePlantilla = () => $('#mensaje_campania').text($("#plantilla_whatsapp option:selected").attr('data-mensaje'))
 
-    // Eliminar imagen seleccionada
-    $("#eliminar_imagen").on("click", function () {
-        // Se agrega confirmación antes de eliminarla
-        Swal.fire({
-            title: '¿Eliminar imagen?',
-            text: 'Esta acción eliminará la imagen seleccionada',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (!result.isConfirmed) return
-            let id = $("#campania_id").val()
+        listarPlantillasWhatsapp()
 
-            // Si la campaña ya existe, eliminar en servidor
-            if (id) {
-                $.ajax({
-                    url: `${$('#site_url').val()}marketing/eliminar_imagen`,
-                    type: 'POST',
-                    dataType: 'json',
-                    data: { id: id },
-                    success: function (respuesta) {
+        $("#plantilla_whatsapp").change(() => actualizarMensajePlantilla())
 
-                        if (!respuesta.resultado) {
-                            Swal.fire(
-                                'Error',
-                                'No se pudo eliminar la imagen',
-                                'error'
-                            )
-                            return
-                        }
+        // Vista previa de imagen
+        $("#campania_imagen").on("change", function () {
+            const archivo = this.files[0]
+            if (!archivo) return
+            const extensionesPermitidas = ['image/jpeg', 'image/png']
 
-                        Swal.fire(
-                            'Eliminada',
-                            'La imagen fue eliminada correctamente',
-                            'success'
-                        )
-                    }
-                })
+            if (!extensionesPermitidas.includes(archivo.type)) {
+                mostrarAviso('alerta', 'Solo se permiten imágenes JPG o PNG')
+                this.value = ''
+                $("#vista_previa").addClass('d-none')
+                $("#eliminar_imagen").addClass('d-none')
+                return
             }
 
-            // Limpieza visual
-            $("#campania_imagen").val('')
-            $("#vista_previa").attr("src", "").addClass('d-none')
-            $("#eliminar_imagen").addClass('d-none')
-            eliminarImagen = true
+            const url = URL.createObjectURL(archivo)
+            $("#vista_previa").attr("src", url).removeClass('d-none')
+            $("#eliminar_imagen").removeClass('d-none')
+
+            eliminarImagen = false
+        })
+
+        // Eliminar imagen seleccionada
+        $("#eliminar_imagen").on("click", function () {
+            // Se agrega confirmación antes de eliminarla
+            Swal.fire({
+                title: '¿Eliminar imagen?',
+                text: 'Esta acción eliminará la imagen seleccionada',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (!result.isConfirmed) return
+                let id = $("#campania_id").val()
+
+                // Si la campaña ya existe, eliminar en servidor
+                if (id) {
+                    $.ajax({
+                        url: `${$('#site_url').val()}marketing/eliminar_imagen`,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: { id: id },
+                        success: function (respuesta) {
+
+                            if (!respuesta.resultado) {
+                                Swal.fire(
+                                    'Error',
+                                    'No se pudo eliminar la imagen',
+                                    'error'
+                                )
+                                return
+                            }
+
+                            Swal.fire(
+                                'Eliminada',
+                                'La imagen fue eliminada correctamente',
+                                'success'
+                            )
+                        }
+                    })
+                }
+
+                // Limpieza visual
+                $("#campania_imagen").val('')
+                $("#vista_previa").attr("src", "").addClass('d-none')
+                $("#eliminar_imagen").addClass('d-none')
+                eliminarImagen = true
+            })
         })
     })
 </script>

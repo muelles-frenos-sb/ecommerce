@@ -488,3 +488,6 @@ ADD COLUMN `mensaje` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL 
 
 -- 20260113 Log para mensajes recibidos desde Whatsapp
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (102, 'Webhooks - Mensaje de Whatsapp recibido')
+
+-- 20260113 Campo eliminado
+ALTER TABLE `marketing_campanias` DROP COLUMN `mensaje`;

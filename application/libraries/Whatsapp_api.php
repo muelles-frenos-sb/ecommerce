@@ -110,4 +110,15 @@ class Whatsapp_api {
             'error' => $error
         ];
     }
+
+    /**
+     * Obtiene las plantillas creadas
+     *
+     * @return void
+     */
+    public function obtener_plantillas() {
+        $url = "https://graph.facebook.com/{$this->version_api}/{$this->identificador_cuenta_whatsapp_business}/message_templates";
+        
+        return $this->enviar_peticion($url, null, 'GET');
+    }
 }

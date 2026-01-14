@@ -4,6 +4,8 @@ application/config/production/
 application/logs/
 application/vendor/
 application/views/productos_/
+archivos/campanias/
+archivos/fotos_/
 archivos/fotos/
 archivos/recibos/
 archivos/solicitudes_credito/
