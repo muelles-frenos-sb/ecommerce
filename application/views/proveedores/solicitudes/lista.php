@@ -55,7 +55,7 @@
                     render: (data, type, row) => {
                         return `
                             <div class="p-1" style="width: 250px;">
-                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/cotizaciones/ver/${data.id}">
+                                <a type="button" class="btn btn-sm btn-primary" href="${$("#site_url").val()}proveedores/cotizaciones/ver/${data.id}" target="_blank">
                                     Ver
                                 </a>
 

@@ -5,10 +5,6 @@
     }
 </style>
 
-<div class="mb-4">
-    <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
-</div>
-
 <div class="table-responsive">
     <table class="table table-striped table-bordered w-100" id="tabla_cotizaciones"></table>
 </div>
