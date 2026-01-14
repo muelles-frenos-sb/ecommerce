@@ -200,7 +200,10 @@ class Whatsapp extends MY_Controller {
         // Log en base de datos
         $this->configuracion_model->crear('logs', [
             'fecha_creacion' => date('Y-m-d H:i:s'),
-            'observacion' => $texto,
+            'observacion' => json_encode([
+                'remitente' => $remitente,
+                'mensaje' => $texto
+            ]),
             'log_tipo_id' => 102,
         ]);
         
