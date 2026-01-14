@@ -35,7 +35,7 @@
             <div class="form-group col-12">
                 <label for="certificado_anio">Selecciona el año *</label>
                 <select id="certificado_anio" class="form-control">
-                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
                 </select>
             </div>
 
