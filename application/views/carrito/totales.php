@@ -26,6 +26,6 @@
         </tfoot>
     </table>
     <a class="btn btn-primary btn-xl btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
-        Ir a pagar
+        Finalizar pedido
     </a>
 </div>
