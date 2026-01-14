@@ -5,6 +5,7 @@ class Whatsapp_api {
     
     private $token;
     private $identificador_numero_telefonico;
+    private $identificador_cuenta_whatsapp_business;
     private $version_api = 'v22.0'; // Actualiza según tu versión
     private $ci;
     
@@ -15,6 +16,7 @@ class Whatsapp_api {
         $this->ci->config->load('whatsapp', TRUE);
         $this->token = $this->ci->config->item('whatsapp_token', 'whatsapp');
         $this->identificador_numero_telefonico = $this->ci->config->item('identificador_numero_telefonico', 'whatsapp');
+        $this->identificador_cuenta_whatsapp_business = $this->ci->config->item('identificador_cuenta_whatsapp_business', 'whatsapp');
     }
     
     /**
@@ -81,12 +83,14 @@ class Whatsapp_api {
     /**
      * Método principal para enviar solicitudes
      */
-    private function enviar_peticion($url, $datos) {
+    private function enviar_peticion($url, $datos = null, $tipo = 'POST') {
         $peticion = curl_init();
         
         curl_setopt($peticion, CURLOPT_URL, $url);
-        curl_setopt($peticion, CURLOPT_POST, true);
-        curl_setopt($peticion, CURLOPT_POSTFIELDS, json_encode($datos));
+
+        if($tipo == 'POST') curl_setopt($peticion, CURLOPT_POST, true);
+        
+        if($datos) curl_setopt($peticion, CURLOPT_POSTFIELDS, json_encode($datos));
         curl_setopt($peticion, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($peticion, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $this->token,

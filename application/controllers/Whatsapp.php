@@ -18,7 +18,6 @@ class Whatsapp extends MY_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->library('whatsapp_api');
         $this->config->load('whatsapp', TRUE);
     }
 

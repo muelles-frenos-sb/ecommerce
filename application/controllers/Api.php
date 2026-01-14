@@ -15,7 +15,6 @@ class Api extends RestController {
     function __construct() {
         parent::__construct();
 
-        $this->load->library('whatsapp_api');
         $this->load->model(["clientes_model", "configuracion_model", "productos_model"]);
     }
 

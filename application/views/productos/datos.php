@@ -12,7 +12,7 @@ if(empty($productos)) { ?>
                 <p class="not-found__text">
                     Manejamos <strong>más de 4.000 referencias activas</strong>, así que es probable que sí lo tengamos
                 </p>
-                <a class="btn btn-primary btn-sm mb-3" href="https://wa.me/573114914780">Contáctanos</a>
+                <a class="btn btn-primary btn-xl mb-3" href="https://wa.me/573114914780">Contáctanos</a>
                 <p class="not-found__text">
                     Te confirmaremos disponibilidad de inmediato
                 </p>

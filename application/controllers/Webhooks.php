@@ -13,7 +13,7 @@ error_reporting(E_ALL);
  * @author: 	John Arley Cano Salinas
  * Fecha: 		31 de agosto de 2023
  * Programa:  	E-Commerce | Módulo de recepción de Webhooks
- *            	Gestión de pedidos, prductos y clientes
+ *            	Gestión de pedidos, productos y clientes
  * Email: 		johnarleycano@hotmail.com
  */
 class Webhooks extends MY_Controller {
