@@ -201,7 +201,7 @@ class Whatsapp extends MY_Controller {
         $this->configuracion_model->crear('logs', [
             'fecha_creacion' => date('Y-m-d H:i:s'),
             'observacion' => $texto,
-            'log_tipo_id' => 101,
+            'log_tipo_id' => 102,
         ]);
         
         // Proceso de comandos

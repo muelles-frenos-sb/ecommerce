@@ -485,3 +485,6 @@ COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `marketing_campanias` 
 ADD COLUMN `nombre_plantilla_whatsapp` TEXT NULL AFTER `descripcion`,
 ADD COLUMN `mensaje` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL AFTER `nombre_plantilla_whatsapp`;
+
+-- 20260113 Log para mensajes recibidos desde Whatsapp
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (102, 'Webhooks - Mensaje de Whatsapp recibido')
