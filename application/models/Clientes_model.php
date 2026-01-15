@@ -91,6 +91,14 @@ Class Clientes_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'clientes_informe_retenciones':
+                $sql = $this->db->where($datos)->get($tabla);
+
+                // Si viene NIT se devuelve solo un registro
+                if (isset($datos['nit'])) return $sql->row();
+                return $sql->result();
+            break;
+
             case 'cliente_factura':
                 unset($datos['tipo']);
                 

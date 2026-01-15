@@ -491,3 +491,21 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (102, 'Webhooks - Mensaje de Wh
 
 -- 20260113 Campo eliminado
 ALTER TABLE `marketing_campanias` DROP COLUMN `mensaje`;
+
+-- 20260115 Se crea tabla para almacenar información para informes de las retenciones de los clientes
+CREATE TABLE `clientes_informe_retenciones`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `anio` year NULL,
+  `nit` varchar(100) NULL COMMENT 'Nit del tercero',
+  `razon_social` varchar(255) NULL,
+  `vendedor` varchar(255) NULL,
+  `valor_retencion_fuente` double NULL,
+  `valor_retencion_iva` double NULL,
+  `valor_retencion_ica` double NULL,
+  `fecha_creacion` datetime(0) NULL,
+  `fecha_actualizacion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- 20260115 Se agrega tipo de log para la importación de la información de la retencion de los clientes
+INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (103, 'Webhook - Importación informe de retenciones de clientes')
