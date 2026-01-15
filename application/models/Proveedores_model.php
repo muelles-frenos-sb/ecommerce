@@ -274,6 +274,8 @@ Class Proveedores_model extends CI_Model{
                             FROM proveedores_cotizaciones_detalle pcd
                             WHERE pcd.cotizacion_id = {$datos['id']}
                             AND pcd.proveedor_nit = t.f200_nit
+                            AND pcd.precio_final IS NOT NULL
+                            AND pcd.precio_final > 0
                         ) AS cantidad_productos_cotizados
                     FROM proveedores_cotizaciones_solicitudes_detalle pcsd
                         LEFT JOIN productos AS p ON pcsd.producto_id = p.id
