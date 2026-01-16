@@ -42,7 +42,7 @@
 </div>
 <div class="dropcart__actions">
     <a href="<?php echo site_url('carrito/ver'); ?>" class="btn btn-secondary">Ver carrito</a>
-    <a href="<?php echo site_url("carrito/finalizar"); ?>" class="btn btn-primary">Ir a pagar</a>
+    <a href="<?php echo site_url("carrito/finalizar"); ?>" class="btn btn-primary">Finalizar pedido</a>
 </div>
 
 <input type="hidden" id="carrito_valor" value=<?php echo $this->cart->total() * 100; ?>>

@@ -225,23 +225,71 @@ Class Proveedores_model extends CI_Model{
             break;
 
             case 'proveedores_disponibles_por_cotizacion':
-                $sql = 
-                "SELECT
-                    t.f200_razon_social AS proveedor,
-                    COUNT( p.id ) AS cantidad_productos 
-                FROM
-                    proveedores_cotizaciones_solicitudes_detalle AS pcsd
-                    LEFT JOIN productos AS p ON pcsd.producto_id = p.id
-                    LEFT JOIN marcas AS m ON p.marca = m.nombre
-                    LEFT JOIN proveedores_marcas AS pm ON m.codigo = pm.marca_codigo
-                    INNER JOIN terceros AS t ON pm.proveedor_nit = t.f200_nit 
-                WHERE
-                    pcsd.cotizacion_id = {$datos['id']} 
-                GROUP BY
-                    proveedor 
-                ORDER BY
-                    proveedor";
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
 
+                // Búsqueda
+                $busquedas = isset($datos['busqueda']) ? trim($datos['busqueda']) : null;
+
+                $filtros_where  = "WHERE pcsd.cotizacion_id = {$datos['id']}";
+                $filtros_having = "HAVING proveedor IS NOT NULL";
+
+                // Búsqueda general
+                if ($busquedas && $busquedas != "") {
+                    $palabras = explode(" ", $busquedas);
+
+                    for ($i = 0; $i < count($palabras); $i++) {
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " proveedor LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cantidad_productos LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR cantidad_productos_cotizados LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ")";
+                    }
+                }
+
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
+
+                if (isset($filtros_personalizados['proveedor']) && $filtros_personalizados['proveedor'] != '') {
+                    $proveedor = $this->db->escape_like_str($filtros_personalizados['proveedor']);
+                    $filtros_having .= " AND proveedor LIKE '%{$proveedor}%'";
+                }
+
+                if (isset($filtros_personalizados['productos_disponibles']) && $filtros_personalizados['productos_disponibles'] != '') $filtros_having .= " AND cantidad_productos = {$filtros_personalizados['productos_disponibles']}";
+
+                if (isset($filtros_personalizados['productos_cotizados']) && $filtros_personalizados['productos_cotizados'] != '') $filtros_having .= " AND cantidad_productos_cotizados = {$filtros_personalizados['productos_cotizados']}";
+
+                // Filtros WHERE
+                if (isset($datos['id'])) $filtros_where .= " AND pcsd.cotizacion_id = {$datos['id']} ";
+
+                $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY proveedor ASC";
+
+                $sql = 
+                    "SELECT
+                        t.f200_razon_social AS proveedor,
+                        COUNT(DISTINCT p.id) AS cantidad_productos,
+                        (
+                            SELECT COUNT(DISTINCT pcd.producto_id)
+                            FROM proveedores_cotizaciones_detalle pcd
+                            WHERE pcd.cotizacion_id = {$datos['id']}
+                            AND pcd.proveedor_nit = t.f200_nit
+                            AND pcd.precio_final IS NOT NULL
+                            AND pcd.precio_final > 0
+                        ) AS cantidad_productos_cotizados
+                    FROM proveedores_cotizaciones_solicitudes_detalle pcsd
+                        LEFT JOIN productos AS p ON pcsd.producto_id = p.id
+                        LEFT JOIN marcas AS m ON p.marca = m.nombre
+                        LEFT JOIN proveedores_marcas AS pm ON m.codigo = pm.marca_codigo
+                        INNER JOIN terceros AS t ON pm.proveedor_nit = t.f200_nit
+                    $filtros_where
+                    GROUP BY proveedor
+                    $filtros_having
+                    $order_by
+                    $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
                 return $this->db->query($sql)->result();
             break;
 

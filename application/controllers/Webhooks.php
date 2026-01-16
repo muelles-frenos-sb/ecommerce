@@ -1,4 +1,7 @@
 <?php
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
+
 date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido');
@@ -33,6 +36,98 @@ class Webhooks extends MY_Controller {
 
     function index() {
         redirect('inicio');
+    }
+
+    /**
+     * Lee un archivo de Excel con las retenciones de los clientes
+     * y crea o actualiza los registros en la base de datos
+     *
+     * @return void
+     */
+    function importar_retenciones_clientes() {
+        $errores = 0;
+        $resultado = [];
+
+        $inicio = microtime(true);
+        $fecha_inicio = date('Y-m-d H:i:s');
+
+        // Ruta
+        $archivo_excel = $this->config->item('ruta_informe_retenciones');
+
+        if (!file_exists($archivo_excel)) {
+            $errores++;
+            $resultado[] = 'El archivo de informe de retenciones no existe en la ruta configurada';
+        }
+
+        $procesados = 0;
+        $anio = date('Y') - 1;
+
+        if ($errores === 0) {
+            try {
+                $spreadsheet = IOFactory::load($archivo_excel);
+                $hoja = $spreadsheet->getActiveSheet();
+                $ultima_fila = $hoja->getHighestRow();
+
+                for ($fila = 2; $fila <= $ultima_fila; $fila++) {
+
+                    $nit = trim($hoja->getCell('A' . $fila)->getValue());
+
+                    if (!$nit || !is_numeric($nit)) continue;
+
+                    $datos = [
+                        'anio' => $anio,
+                        'nit' => $nit,
+                        'razon_social' => trim($hoja->getCell("B$fila")->getValue()),
+                        'vendedor' => trim($hoja->getCell("C$fila")->getValue()),
+                        'valor_retencion_fuente' => (float) $hoja->getCell("D$fila")->getValue(),
+                        'valor_retencion_iva' => (float) $hoja->getCell("E$fila")->getValue(),
+                        'valor_retencion_ica' => (float) $hoja->getCell("F$fila")->getValue(),
+                    ];
+
+                    // Validar si existe 
+                    $existe = $this->clientes_model->obtener('clientes_informe_retenciones', ['anio' => $anio,'nit'=> $nit]);
+
+                    if ($existe) {
+                        $datos['fecha_actualizacion'] = date('Y-m-d H:i:s');
+                        $this->clientes_model->actualizar('clientes_informe_retenciones', ['id' => $existe->id], $datos);
+                    } else {
+                        $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                        $this->clientes_model->crear('clientes_informe_retenciones', $datos);
+                    }
+
+                    $procesados++;
+                }
+            } catch (Exception $e) {
+                $errores++;
+                $resultado[] = 'Error al procesar el archivo: ' . $e->getMessage();
+            }
+        }
+
+        $fin = microtime(true);
+        $fecha_fin = date('Y-m-d H:i:s');
+
+        // Log del proceso
+        $this->configuracion_model->crear('logs', [
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode([
+                'inicio' => $fecha_inicio,
+                'fin' => $fecha_fin,
+                'registros_procesados' => $procesados
+            ]),
+            'log_tipo_id' => 103
+        ]);
+
+        $resultado[] = [
+            'registros_procesados' => $procesados,
+            'tiempo_ejecucion' => round($fin - $inicio, 2) . ' segundos'
+        ];
+
+        print json_encode([
+            'errores' => $errores,
+            'resultado' => $resultado,
+        ]);
+
+        return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
 
     function email_test($id) {

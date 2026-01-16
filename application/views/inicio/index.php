@@ -11,7 +11,7 @@ $posicion = 0;
 /****************************************************************************************
  **************************************** Slider ****************************************
  ****************************************************************************************/
-// $this->load->view('inicio/slider');
+$this->load->view('inicio/slider');
 
 /****************************************************************************************
  ************************************* Promociones **************************************
@@ -40,16 +40,6 @@ echo "<div class='block-space block-space--layout--divider-nl'></div>";
 $this->data['productos'] = $productos_mas_vendidos;
 $this->load->view('inicio/productos_mas_vendidos', $this->data);
 echo "<div class='block-space block-space--layout--divider-nl'></div>";
-
-/****************************************************************************************
- ************************ Productos destacados (deshabilitado) **************************
- ****************************************************************************************/
-// $this->data['desde'] = $posicion;   // Posición del arreglo donde comenzará
-// $posicion += $cantidad_productos_por_bloque;
-// $this->data['hasta'] = $posicion;  // Posición del arreglo donde terminará
-// $this->data['productos'] = $productos;
-// $this->load->view('inicio/productos_destacados', $this->data);
-// echo "<div class='block-space block-space--layout--divider-nl'></div>";
 
 /****************************************************************************************
  *********************** Bloque de marcas y productos destacados ************************

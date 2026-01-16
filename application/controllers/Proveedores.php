@@ -210,6 +210,30 @@ class Proveedores extends MY_Controller {
                 $resultados = $this->proveedores_model->obtener("proveedores_marcas", $datos);
             break;
 
+            case "proveedores_cotizaciones_detalle":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda,
+                    "id" => $this->input->get('cotizacion_id'),
+                    "filtros_personalizados" => $this->input->get('filtros_personalizados'),
+                ];
+                
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->proveedores_model->obtener("proveedores_disponibles_por_cotizacion", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->proveedores_model->obtener("proveedores_disponibles_por_cotizacion", $datos);
+            break;
+
             case "proveedores_cotizaciones_solicitudes":
                 // Se definen los filtros
                 $datos = [
