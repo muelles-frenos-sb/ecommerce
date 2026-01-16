@@ -183,7 +183,7 @@
                     </li>
 
                     <li data-mobile-menu-item>
-                        <a href="<?php echo site_url('clientes/credito'); ?>" data-mobile-menu-trigger>
+                        <a href="<?php echo site_url('blog/credito'); ?>" target="_blank" data-mobile-menu-trigger>
                             Crédito
                         </a>
                     </li>
