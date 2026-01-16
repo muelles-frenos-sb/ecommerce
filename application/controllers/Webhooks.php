@@ -38,6 +38,12 @@ class Webhooks extends MY_Controller {
         redirect('inicio');
     }
 
+    /**
+     * Lee un archivo de Excel con las retenciones de los clientes
+     * y crea o actualiza los registros en la base de datos
+     *
+     * @return void
+     */
     function importar_retenciones_clientes() {
         $errores = 0;
         $resultado = [];
@@ -68,30 +74,29 @@ class Webhooks extends MY_Controller {
 
                     if (!$nit || !is_numeric($nit)) continue;
 
-                    $data = [
+                    $datos = [
                         'anio' => $anio,
                         'nit' => $nit,
-                        'razon_social' => trim($hoja->getCell('B' . $fila)->getValue()),
-                        'vendedor' => trim($hoja->getCell('C' . $fila)->getValue()),
-                        'valor_retencion_fuente' => (float) $hoja->getCell('D' . $fila)->getValue(),
-                        'valor_retencion_iva' => (float) $hoja->getCell('E' . $fila)->getValue(),
-                        'valor_retencion_ica' => (float) $hoja->getCell('F' . $fila)->getValue(),
-                        'fecha_actualizacion' => date('Y-m-d H:i:s')
+                        'razon_social' => trim($hoja->getCell("B$fila")->getValue()),
+                        'vendedor' => trim($hoja->getCell("C$fila")->getValue()),
+                        'valor_retencion_fuente' => (float) $hoja->getCell("D$fila")->getValue(),
+                        'valor_retencion_iva' => (float) $hoja->getCell("E$fila")->getValue(),
+                        'valor_retencion_ica' => (float) $hoja->getCell("F$fila")->getValue(),
                     ];
 
                     // Validar si existe 
                     $existe = $this->clientes_model->obtener('clientes_informe_retenciones', ['anio' => $anio,'nit'=> $nit]);
 
                     if ($existe) {
-                        $this->clientes_model->actualizar('clientes_informe_retenciones', ['id' => $existe->id], $data);
+                        $datos['fecha_actualizacion'] = date('Y-m-d H:i:s');
+                        $this->clientes_model->actualizar('clientes_informe_retenciones', ['id' => $existe->id], $datos);
                     } else {
-                        $data['fecha_creacion'] = date('Y-m-d H:i:s');
-                        $this->clientes_model->crear('clientes_informe_retenciones', $data);
+                        $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                        $this->clientes_model->crear('clientes_informe_retenciones', $datos);
                     }
 
                     $procesados++;
                 }
-
             } catch (Exception $e) {
                 $errores++;
                 $resultado[] = 'Error al procesar el archivo: ' . $e->getMessage();
@@ -120,8 +125,6 @@ class Webhooks extends MY_Controller {
         print json_encode([
             'errores' => $errores,
             'resultado' => $resultado,
-            'datos_pedido' => [],
-            'datos_movimiento_contable' => []
         ]);
 
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
