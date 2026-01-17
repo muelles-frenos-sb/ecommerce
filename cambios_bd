@@ -492,6 +492,9 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (102, 'Webhooks - Mensaje de Wh
 -- 20260113 Campo eliminado
 ALTER TABLE `marketing_campanias` DROP COLUMN `mensaje`;
 
+-- 20260114 Rol agregado
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (22, 'inicio_ver_dashboard_credito', 'Ver dashboard para venta a crédito', 1)
+
 -- 20260115 Se crea tabla para almacenar información para informes de las retenciones de los clientes
 CREATE TABLE `clientes_informe_retenciones`  (
   `id` int NOT NULL AUTO_INCREMENT,
