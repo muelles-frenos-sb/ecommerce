@@ -27,7 +27,7 @@ if (isset($id)) {
                 <div class="form-row">
                     <div class="form-group col-lg-8">
                         <label for="campania_nombre">Nombre *</label>
-                        <input type="text" class="form-control" id="campania_nombre" value="<?php echo (isset($campania) ? $campania->nombre : '')?>">
+                        <input type="text" class="form-control" id="campania_nombre" value="<?php echo (isset($campania) ? $campania->nombre : ''); ?>">
                     </div>
 
                     <div class="form-group col-lg-4">
@@ -167,8 +167,8 @@ if (isset($id)) {
             $(`#plantilla_whatsapp`).append(`<option value="${nombre}" data-mensaje="${mensaje}">${nombre}</option>`)
         }
 
-        if($('#campania_id')) {
-            $(`#plantilla_whatsapp`).val('<?php echo $campania->nombre_plantilla_whatsapp; ?>')
+        if($('#campania_id').val()) {
+            $(`#plantilla_whatsapp`).val('<?php // echo $campania->nombre_plantilla_whatsapp; ?>')
             actualizarMensajePlantilla()
         } 
     }
