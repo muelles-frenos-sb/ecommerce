@@ -39,6 +39,8 @@
                     datos.filtro_comentarios = $('#filtro_comentarios').val()
                     datos.filtro_observaciones = $('#filtro_observaciones').val()
                     datos.filtro_valor = $('#filtro_valor').val()
+                    datos.filtro_telefono = $('#filtro_telefono').val()
+                    datos.filtro_token = $('#filtro_token').val()
                 },
             },
             columns: [
@@ -175,6 +177,20 @@
                         return parseFloat(recibo.valor).toLocaleString('es-CO')
                     }
                 },
+                { 
+                    title: `
+                        Teléfono
+                        <input type="text" id="filtro_telefono" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'telefono',
+                    visible: ($('#recibo_id_tipo').val() == 1)},
+                { 
+                    title: `
+                        Número de recibo
+                        <input type="text" id="filtro_token" class="form-control form-control-sm border-secondary">
+                    `,
+                    data: 'token',
+                    visible: ($('#recibo_id_tipo').val() == 1)},
                 {
                     title: 'Opciones', 
                     data: null,
