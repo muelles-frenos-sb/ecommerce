@@ -161,13 +161,19 @@ class Api extends RestController {
         $resultado = $this->configuracion_model->obtener("recibos_detalle", $datos);
 
         $resultado = array_map(function($item) {
+            // Si la diferencia en el valor de la factura y el valor pagado es +/- 1 peso, vamos a tener en cuenta la diferencia
+            // para que el saldo final quede en cero  
+            $diferencia = $item->valor_saldo_inicial - $item->subtotal;
+            $valor_diferencia = ($diferencia > -1 && $diferencia < 1 && $diferencia != 0) ? $diferencia : 0 ;
+
             $item->valor_saldo_inicial = number_format($item->valor_saldo_inicial, 2, '.', ''); // clientes_facturas.totalCop
             $item->valor_abonos = number_format($item->valor_abonos, 2, '.', ''); // clientes_facturas.valorDoc
             $item->valor_factura = number_format($item->valor_factura, 2, '.', ''); // clientes_facturas.valorAplicado
-            $item->valor_pagado_bruto = number_format($item->subtotal, 2, '.', '');
+            $item->valor_pagado_bruto = number_format($item->subtotal + $valor_diferencia, 2, '.', '');
             $item->valor_descuento = number_format($item->descuento, 2, '.', '');
-            $item->valor_pagado_neto = number_format($item->subtotal - $item->descuento, 2, '.', '');
+            $item->valor_pagado_neto = number_format($item->subtotal - $item->descuento + $valor_diferencia, 2, '.', '');
             $item->valor_saldo_final = number_format($item->valor_saldo_inicial - $item->valor_pagado_bruto, 2, '.', '');
+            $item->valor_ajuste_peso = $valor_diferencia ;
             
             return $item;
         }, $resultado);
