@@ -2,7 +2,7 @@
     <div class="container container--max--xl">
         <div class="row">
             <!-- Estado del cliente -->
-            <div class="col-lg-8 order-md-2">
+            <div class="col-lg-8 order-md-2 order-lg-1">
                 <div class="row">
                     <div class="col-2">
                         <div class="semaforo mt-3">
@@ -21,7 +21,7 @@
             </div><!-- Estado del cliente -->
 
             <!-- Cupo disponible -->
-            <div class="col-lg-4 order-md-3">
+            <div class="col-lg-4 order-md-3 order-lg-2">
                 <div class="block-reviews__title text-right">Cupo disponible</div>
                 <div class="block-reviews__subtitle text-right">
                     <b>$ <span id="cupo_disponible">-</span></b>
@@ -29,12 +29,12 @@
             </div><!-- Cupo disponible -->
 
             <!-- Banner -->
-            <div class="col-lg-8 order-md-1">
+            <div class="col-lg-8 order-md-1 order-lg-3">
                 <img src="<?php echo base_url(); ?>archivos/banners/inicio/dashboard_credito.webp" width="100%">
             </div><!-- Banner -->
 
             <!-- Pedidos -->
-            <div class="col-lg-4 text-left order-md-4">
+            <div class="col-lg-4 text-left order-md-4 order-lg-4">
                 <div class="block-reviews__subtitle text-left mb-2">Mis pedidos:</div>
                 <div class="wishlist" id="contenedor_pedidos"></div>
             </div><!-- Pedidos -->
