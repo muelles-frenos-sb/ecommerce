@@ -85,14 +85,14 @@ class Webhooks extends MY_Controller {
                     ];
 
                     // Validar si existe 
-                    $existe = $this->clientes_model->obtener('clientes_informe_retenciones', ['anio' => $anio,'nit'=> $nit]);
+                    $existe = $this->clientes_model->obtener('clientes_retenciones_informe', ['anio' => $anio,'nit'=> $nit]);
 
                     if ($existe) {
                         $datos['fecha_actualizacion'] = date('Y-m-d H:i:s');
-                        $this->clientes_model->actualizar('clientes_informe_retenciones', ['id' => $existe->id], $datos);
+                        $this->clientes_model->actualizar('clientes_retenciones_informe', ['id' => $existe->id], $datos);
                     } else {
                         $datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                        $this->clientes_model->crear('clientes_informe_retenciones', $datos);
+                        $this->clientes_model->crear('clientes_retenciones_informe', $datos);
                     }
 
                     $procesados++;

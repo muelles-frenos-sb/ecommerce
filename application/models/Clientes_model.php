@@ -91,7 +91,7 @@ Class Clientes_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-            case 'clientes_informe_retenciones':
+            case 'clientes_retenciones_informe':
                 $sql = $this->db->where($datos)->get($tabla);
 
                 // Si viene NIT se devuelve solo un registro

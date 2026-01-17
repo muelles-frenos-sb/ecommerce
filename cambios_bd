@@ -512,3 +512,6 @@ CREATE TABLE `clientes_informe_retenciones`  (
 
 -- 20260115 Se agrega tipo de log para la importación de la información de la retencion de los clientes
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (103, 'Webhook - Importación informe de retenciones de clientes')
+
+-- 20260116 Se ajusta nombre de la tabla clientes_informe_retenciones por clientes_retenciones_informe
+RENAME TABLE clientes_informe_retenciones TO clientes_retenciones_informe;
