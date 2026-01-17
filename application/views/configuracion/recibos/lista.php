@@ -118,11 +118,14 @@
                     `,
                     data: null,
                     render: (recibo, type, row) => {
+                        // El nombre de estado aprobado se cambia si es para comprobantes
+                        let estado = ($('#recibo_id_tipo').val() == 3 && recibo.recibo_estado_id == 1) ? 'Cargado en Siesa' : recibo.estado
+
                         return `
                             <div class="status-badge status-badge--style--${recibo.estado_clase} status-badge--has-text">
                                 <div class="status-badge__body">
                                     <div class="status-badge__text">
-                                        ${recibo.estado}
+                                        ${estado}
                                     </div>
                                 </div>
                             </div>
