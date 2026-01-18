@@ -515,3 +515,112 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (103, 'Webhook - Importación i
 
 -- 20260116 Se ajusta nombre de la tabla clientes_informe_retenciones por clientes_retenciones_informe
 RENAME TABLE clientes_informe_retenciones TO clientes_retenciones_informe;
+
+CREATE TABLE importaciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero_orden_compra VARCHAR(50) NOT NULL,
+    razon_social VARCHAR(255),
+    pais_origen VARCHAR(100),
+    fecha_estimada_llegada DATE,
+    moneda_preferida VARCHAR(10),
+    valor_total DECIMAL(18, 2),
+    valor_trm DECIMAL(18, 2),
+    valor_total_cop DECIMAL(18, 2),
+    requiere_anticipo BOOLEAN,
+    condiciones_pago TEXT,
+    contacto_principal VARCHAR(255),
+    email_contacto VARCHAR(255),
+    telefono_contacto VARCHAR(50),
+    direccion TEXT,
+    notas_internas TEXT,
+    bl_awb VARCHAR(100),
+    impuestos_dian DECIMAL(18, 2),
+    fecha_ingreso_siesa DATE
+);
+-- Ejemplo 1: Importación de Electrónica desde China
+INSERT INTO importaciones (
+    numero_orden_compra,
+    razon_social,
+    pais_origen,
+    fecha_estimada_llegada,
+    moneda_preferida,
+    valor_total,
+    valor_trm,
+    valor_total_cop,
+    requiere_anticipo,
+    condiciones_pago,
+    contacto_principal,
+    email_contacto,
+    telefono_contacto,
+    direccion,
+    notas_internas,
+    bl_awb,
+    impuestos_dian,
+    fecha_ingreso_siesa
+) VALUES (
+    'ORD-2026-001',           -- numero_orden_compra
+    'Shenzhen Tech Solutions',-- razon_social
+    'China',                  -- pais_origen
+    '2026-03-15',             -- fecha_estimada_llegada
+    'USD',                    -- moneda_preferida
+    15000.00,                 -- valor_total
+    4100.50,                  -- valor_trm
+    61507500.00,              -- valor_total_cop (15000 * 4100.50)
+    1,                        -- requiere_anticipo (1 = Sí, 0 = No)
+    '30% anticipo, 70% contra entrega BL', -- condiciones_pago
+    'Li Wei',                 -- contacto_principal
+    'sales@shenzhentech.com', -- email_contacto
+    '+86 139 0000 1234',      -- telefono_contacto
+    'No. 5 Keji Road, Nanshan District, Shenzhen', -- direccion
+    'Contenedor compartido. Revisar calidad de pantallas.', -- notas_internas
+    'COSU63829104',           -- bl_awb
+    11685000.00,              -- impuestos_dian (aprox 19%)
+    '2026-01-18'              -- fecha_ingreso_siesa
+);
+
+-- Ejemplo 2: Importación de Repuestos desde USA
+INSERT INTO importaciones (
+    numero_orden_compra,
+    razon_social,
+    pais_origen,
+    fecha_estimada_llegada,
+    moneda_preferida,
+    valor_total,
+    valor_trm,
+    valor_total_cop,
+    requiere_anticipo,
+    condiciones_pago,
+    contacto_principal,
+    email_contacto,
+    telefono_contacto,
+    direccion,
+    notas_internas,
+    bl_awb,
+    impuestos_dian,
+    fecha_ingreso_siesa
+) VALUES (
+    'ORD-2026-002',
+    'Global Auto Parts LLC',
+    'Estados Unidos',
+    '2026-02-10',
+    'USD',
+    5200.00,
+    4050.00,
+    21060000.00,
+    0,                        -- No requiere anticipo
+    'Crédito 30 días',
+    'John Smith',
+    'jsmith@globalautoparts.com',
+    '+1 305 555 7890',
+    '1200 Brickell Ave, Miami, FL 33131',
+    'Envío aéreo prioritario. Urgente para cliente VIP.',
+    'AWB-8829102',
+    4001400.00,
+    '2026-01-19'
+);
+
+ALTER TABLE importaciones 
+ADD COLUMN fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP AFTER id;
+
+ALTER TABLE importaciones 
+ADD COLUMN estado VARCHAR(50) DEFAULT 'En Tránsito' AFTER fecha_estimada_llegada;

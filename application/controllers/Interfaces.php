@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model', 'importaciones_model', 'configuracion_model']);
     }
 
     var $ruta = './archivos/';
