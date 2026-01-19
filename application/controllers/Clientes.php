@@ -33,6 +33,15 @@ class Clientes extends MY_Controller {
         }
     }
 
+    function certificados_tributarios() {        
+        switch ($this->uri->segment(3)) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'clientes/certificados_tributarios/index';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
+
     function credito() {
         switch ($this->uri->segment(3)) {
             case 'ver':
@@ -122,6 +131,36 @@ class Clientes extends MY_Controller {
         }
 
         switch ($tipo) {
+            case "clientes_retenciones_informe":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda,
+                    "filtros_personalizados" => $this->input->get("filtros_personalizados"),
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->clientes_model->obtener("clientes_retenciones_informe", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->clientes_model->obtener("clientes_retenciones_informe", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+            break;
+            
             case 'facturas_pendientes':
                 // Se definen los filtros
                 $datos = [
