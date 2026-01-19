@@ -7,30 +7,55 @@ class Importaciones_model extends CI_Model{
     // FUNCIONES DE ESCRITURA (UPDATE, INSERT, DELETE)
     // --------------------------------------------------------------------
 
-    function actualizar($tabla, $condiciones, $datos){
-        return $this->db->where($condiciones)->update($tabla, $datos);
+   // --------------------------------------------------------------------
+    // 2. CREAR (Guardar nuevo)
+    // --------------------------------------------------------------------
+    public function crear($datos, $retornar_id = true) {
+        // Limpiamos el array de datos por si viene basura del JS
+        $datos_limpios = $this->limpiar_datos($datos);
+
+        $this->db->insert('importaciones', $datos_limpios);
+        
+        $resultado = $this->db->affected_rows() > 0;
+        
+        if ($retornar_id && $resultado) {
+            return ['resultado' => true, 'id' => $this->db->insert_id()];
+        }
+        
+        return $resultado;
     }
 
-    function crear($tipo, $datos){
-        switch ($tipo) {
-            case 'importaciones':
-                $this->db->insert('importaciones', $datos);
-                return $this->db->insert_id();
-            break;
-
-            default:
-                $this->db->insert($tipo, $datos);
-                return $this->db->insert_id();
-            break;
-        }
+    // --------------------------------------------------------------------
+    // 3. ACTUALIZAR (Editar existente)
+    // --------------------------------------------------------------------
+    public function actualizar($tabla, $condiciones, $datos) {
+        // Limpiamos datos
+        $datos_limpios = $this->limpiar_datos($datos);
+        
+        $this->db->where($condiciones);
+        $this->db->update($tabla, $datos_limpios);
+        
+        return $this->db->affected_rows() >= 0; // >= 0 porque a veces guardas sin cambios y cuenta como éxito
     }
 
-    function eliminar($tipo, $datos = []){
-        switch ($tipo) {
-            case 'importaciones':
-                return $this->db->delete('importaciones', $datos);
-            break;
-        }
+    // --------------------------------------------------------------------
+    // 4. ELIMINAR
+    // --------------------------------------------------------------------
+    public function eliminar($tabla, $condiciones) {
+        $this->db->where($condiciones);
+        $this->db->delete($tabla);
+        return $this->db->affected_rows() > 0;
+    }
+
+    // --------------------------------------------------------------------
+    // AUXILIAR: Limpieza de datos
+    // --------------------------------------------------------------------
+    private function limpiar_datos($datos) {
+        // Si el JS envía 'tipo' o 'contador', lo quitamos porque no son columnas de BD
+        if(isset($datos['tipo'])) unset($datos['tipo']);
+        if(isset($datos['contador'])) unset($datos['contador']);
+        
+        return $datos;
     }
 
     // --------------------------------------------------------------------

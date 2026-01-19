@@ -38,6 +38,23 @@ class Importaciones extends MY_Controller
         $this->load->view('importaciones/datos', $this->data);
     }
 
+    public function crear() {
+        
+        $this->data['contenido_principal'] = 'importaciones/crear_editar';
+        $this->load->view('core/body', $this->data);
+
+    }
+
+    // --------------------------------------------------------------------
+    // 3. EDITAR (Muestra el formulario con datos)
+    // --------------------------------------------------------------------
+    public function editar($id_importacion) {
+        
+        
+        $this->data['contenido_principal'] = 'importaciones/crear_editar';
+        $this->load->view('core/body', $this->data);
+    }
+
     // Función para obtener datos específicos (JSON)
     function obtener()
     {
@@ -120,6 +137,50 @@ class Importaciones extends MY_Controller
                     "data" => $resultados
                 ]);
                 break;
+        }
+    }
+
+    public function guardar() {
+        // 1. Seguridad: Solo permitir peticiones AJAX
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        // 2. Recibimos todos los datos del formulario
+        $datos = $this->input->post();
+        
+        // Extraemos el ID para saber si es edición
+        $id = $this->input->post('id'); // Este campo viene del hidden en la vista
+        
+        // Quitamos el ID del array de datos para que no intente guardarlo como columna
+        unset($datos['id']);
+        unset($datos['tipo']); // Si venía 'tipo', lo quitamos, ya no lo necesitamos
+
+        $resultado = false;
+
+        // 3. Lógica de Decisión
+        if (!empty($id)) {
+            // === MODO EDICIÓN ===
+            // No tocamos fecha_creacion en edición
+            $resultado = $this->importaciones_model->actualizar('importaciones', ['id' => $id], $datos);
+        } else {
+            // === MODO CREACIÓN ===
+            $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+            // Asignamos usuario si tienes sistema de sesión
+            if($this->session->userdata('usuario_id')) {
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
+            }
+            
+            
+            $resultado = $this->importaciones_model->crear($datos);
+        }
+
+        // 4. Respuesta JSON
+        header('Content-Type: application/json');
+        if ($resultado) {
+            echo json_encode(['status' => 'success', 'mensaje' => 'Importación guardada correctamente.']);
+        } else {
+            echo json_encode(['status' => 'error', 'mensaje' => 'No se pudieron guardar los datos. Verifique e intente nuevamente.']);
         }
     }
 }

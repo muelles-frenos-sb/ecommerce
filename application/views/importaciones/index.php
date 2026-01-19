@@ -29,9 +29,9 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
 
 <div class="container mb-4">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 col-md-9 mb-2 mb-md-0">
             <div class="input-group">
-                <input type="text" class="form-control form-control-lg" id="filtro_busqueda_importacion" placeholder="Buscar por Orden #, Proveedor, BL o País..." name="search">
+                <input type="text" class="form-control form-control-lg" id="filtro_busqueda_importacion" placeholder="Buscar por Orden #, Proveedor, BL o País...">
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button" onclick="listarImportaciones()">
                         <i class="fas fa-search"></i> Buscar
@@ -39,9 +39,14 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
                 </div>
             </div>
         </div>
+
+        <div class="col-12 col-md-3">
+            <a href="<?php echo site_url('importaciones/crear'); ?>" class="btn btn-success btn-lg btn-block">
+                <i class="fas fa-plus-circle"></i> Nueva Importación
+            </a>
+        </div>
     </div>
 </div>
-
 <div class="block-split">
     <div class="container">
         <div class="block-split__row row no-gutters">
