@@ -409,6 +409,8 @@ Class Configuracion_model extends CI_Model {
                 if (isset($datos['filtro_usuario_creador']) && $datos['filtro_usuario_creador']) $where .= " AND (uc.nombres LIKE '%{$datos['filtro_usuario_creador']}%') AND uc.primer_apellido LIKE '%{$datos['filtro_usuario_creador']}%' ";
                 if (isset($datos['filtro_comentarios']) && $datos['filtro_comentarios']) $where .= " AND r.comentarios LIKE '%{$datos['filtro_comentarios']}%' ";
                 if (isset($datos['filtro_observaciones']) && $datos['filtro_observaciones']) $where .= " AND r.observaciones LIKE '%{$datos['filtro_observaciones']}%' ";
+                if (isset($datos['filtro_telefono']) && $datos['filtro_telefono']) $where .= " AND r.telefono LIKE '%{$datos['filtro_telefono']}%' ";
+                if (isset($datos['filtro_token']) && $datos['filtro_token']) $where .= " AND r.token LIKE '%{$datos['filtro_token']}%' ";
 
                 $sql =
                 "SELECT
