@@ -298,4 +298,99 @@ class Marketing extends MY_Controller
             echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
         }
     }
+
+    public function ejecutar_envio_masivo() {
+        // 1. Validar petición AJAX
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        // Aumentamos el tiempo de ejecución por si son muchos contactos
+        set_time_limit(0); 
+
+        $campania_id = $this->input->post('campania_id');
+        
+        // 2. Obtener datos de la campaña
+        $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
+
+        if (!$campania) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Campaña no encontrada']);
+            return;
+        }
+
+        // 3. VALIDACIÓN: Verificar vigencia de la campaña
+        $fecha_actual = date('Y-m-d');
+        if ($campania->fecha_finalizacion < $fecha_actual) {
+            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: '.$campania->fecha_finalizacion.'). No se pueden enviar más mensajes.']);
+            return;
+        }
+
+        $plantilla = $campania->nombre_plantilla_whatsapp;
+        if (empty($plantilla)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'La campaña no tiene plantilla asignada.']);
+            return;
+        }
+
+        // 4. Obtener contactos PENDIENTES (fecha_envio IS NULL)
+        $contactos = $this->db->get_where('marketing_campanias_contactos', [
+            'campania_id' => $campania_id,
+            'fecha_envio' => NULL 
+        ])->result();
+
+        if (empty($contactos)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'No hay contactos pendientes de envío en esta campaña.']);
+            return;
+        }
+
+        $enviados = 0;
+        $errores = 0;
+
+        // 5. Bucle de envío "Uno a Uno"
+        foreach ($contactos as $contacto) {
+            // Asumo que la columna del teléfono se llama 'numero' o 'telefono'. Ajusta según tu BD.
+            $telefono_destino = $contacto->telefono; // O $contacto->telefono
+
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
+                $telefono_destino, 
+                $plantilla, 
+                'es', 
+                [] // Variables de la plantilla si las hubiera
+            );
+
+            if ($resultado) {
+                // ÉXITO: Actualizamos la fecha de envío
+                $this->db->where('id', $contacto->id);
+                $this->db->update('marketing_campanias_contactos', [
+                    'fecha_envio' => date('Y-m-d H:i:s')
+                ]);
+                $enviados++;
+            } else {
+                $errores++;
+            }
+            $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
+        }
+
+        $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'campania_id' => $campania_id,
+                        'total_entregados' => $enviados,
+                        'total_no_entregados' => $errores,
+                    ]),
+                ]);
+
+        // 6. Respuesta final
+        echo json_encode([
+            'exito' => true, 
+            'mensaje' => "Proceso finalizado. Enviados: $enviados. Fallidos: $errores."
+        ]);
+    }
 }
