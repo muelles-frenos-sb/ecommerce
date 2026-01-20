@@ -624,3 +624,31 @@ ADD COLUMN fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP AFTER id;
 
 ALTER TABLE importaciones 
 ADD COLUMN estado VARCHAR(50) DEFAULT 'En Tránsito' AFTER fecha_estimada_llegada;
+
+-- 20260119 Tabla para almacenar tareas de la validación del archivo digital
+CREATE TABLE `comprobantes_contables_tareas`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `comprobante_contable_tipo_id` int NULL DEFAULT NULL COMMENT 'Tipo de comprobante contable',
+  `centro_operacion_id` int NULL DEFAULT NULL COMMENT 'Sede',
+  `anio` int NULL DEFAULT NULL,
+  `mes` tinyint NULL DEFAULT NULL,
+  `consecutivo_inicial` int NULL DEFAULT NULL,
+  `consecutivo_final` int NULL DEFAULT NULL,
+  `fecha_creacion` datetime(0) NULL DEFAULT NULL,
+  `usuario_id` int NULL DEFAULT NULL,
+  `fecha_inicio_ejecucion` datetime(0) NULL,
+  `fecha_fin_ejecucion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `comprobantes_contables_tareas_detalle`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `ruta` varchar(255) NULL,
+  `consecutivo_numero` int NULL,
+  `consecutivo_existe` tinyint(1) NULL,
+  `comprobante_existe` tinyint(1) NULL,
+  `comprobante_coincide` tinyint NULL,
+  `cantidad_soportes` int NULL,
+  `fecha_creacion` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
+  PRIMARY KEY (`id`)
+);

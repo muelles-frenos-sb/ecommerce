@@ -17,8 +17,6 @@ class Contabilidad extends CI_Controller {
         $this->load->model(['contabilidad_model', 'productos_model']);
     }
 
-    var $directorio_raiz = 'archivos/documentos_contables/';
-
     /**
      * Gestión de comprobantes
      *
@@ -52,7 +50,8 @@ class Contabilidad extends CI_Controller {
             $ruta_completa = $ruta_carpeta . '/' . $archivo;
             
             // Si no es el archivo principal, es un documento adicional
-            if (is_file($ruta_completa) && $archivo != "$nombre_base.pdf") {
+            // if (is_file($ruta_completa) && $archivo != "$nombre_base.pdf") {
+            if ($archivo != "$nombre_base.pdf") {
                 $extension = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                 $tipo = obtener_tipo_archivo($extension);
                 
@@ -63,7 +62,7 @@ class Contabilidad extends CI_Controller {
                     'fecha' => date('Y-m-d'),
                     'tipo' => $tipo,
                     'tamanio' => filesize($ruta_completa),
-                    // 'tamanio_formateado' => formatear_tamanio(filesize($ruta_completa))
+                    'tamanio_formateado' => formatear_tamanio(filesize($ruta_completa))
                 ];
             }
         }
@@ -82,11 +81,11 @@ class Contabilidad extends CI_Controller {
      * @return void
      */
     function extraer_texto($pdf_path, $tipo, $pagina = 1) {
-        // Verificar que el archivo existe
-        if (!file_exists($pdf_path)) {
-            echo "Archivo PDF no encontrado: $pdf_path";
-            throw new Exception("Archivo PDF no encontrado: $pdf_path");
-        }
+        // // Verificar que el archivo existe
+        // if (!file_exists($pdf_path)) {
+        //     echo "Archivo PDF no encontrado: $pdf_path";
+        //     // throw new Exception("Archivo PDF no encontrado: $pdf_path");
+        // }
         
         // Cargar PDF Parser si está disponible
         if (class_exists('Smalot\PdfParser\Parser')) {
@@ -102,7 +101,7 @@ class Contabilidad extends CI_Controller {
             $pagina_actual = $paginas[$pagina - 1];
             
             // Obtener todo el texto de la página
-            $texto_completo = $pagina_actual->getText();
+            $texto_completo = trim($pagina_actual->getText());
             // echo "$texto_completo<hr>";
 
             // En PDF Parser no hay acceso directo a coordenadas del texto
@@ -111,7 +110,8 @@ class Contabilidad extends CI_Controller {
             $texto_en_area = '';
             
             foreach ($lineas as $linea) {
-                $patron = '/\d{3}-'.$tipo.'-\d{8}/';
+                $patron = '/\d{3}-'.$tipo.'-\d{8}/'; // Con guión
+                // $patron = '/\d{3}'.$tipo.'\d{8}/'; // Sin guuión
 
                 // Buscar el patrón específico que necesitas
                 if (preg_match($patron, $linea, $coincidencias)) {
@@ -120,9 +120,9 @@ class Contabilidad extends CI_Controller {
                 }
             }
             
-            return $texto_en_area ?: 'Texto no encontrado';
+            return $texto_en_area ?: false;
         } else {
-            throw new Exception("Se requiere PDF Parser: composer require smalot/pdfparser");
+            // throw new Exception("Se requiere PDF Parser: composer require smalot/pdfparser");
         }
     }
 
@@ -217,35 +217,64 @@ class Contabilidad extends CI_Controller {
      * @param int $mes
      * @return void
      */
-    function procesar_comprobantes() {
-        $datos = json_decode($this->input->post('datos'), true);
+    function validar_comprobantes() {
+        // Obtenemos la primera tarea pendiente
+        $tarea = $this->contabilidad_model->obtener('comprobantes_contables_tareas', ['fecha_inicio_ejecucion' => NULL]);
 
-        $this->contabilidad_model->eliminar('comprobantes_contables_validacion', ['fecha' => date('Y-m-d')]);
-        $this->contabilidad_model->eliminar('comprobantes_contables_validacion_detalle', ['fecha' => date('Y-m-d')]);
+        $tipo_comprobante = $this->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => $tarea->comprobante_contable_tipo_id]);
+        $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $tarea->centro_operacion_id]);
+        $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $tarea->mes]);
 
-        // Obtenemos los datos necesarios
-        $tipo_comprobante = $this->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => $datos['id_comprobante_tipo']]);
-        $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $datos['id_sede']]);
-        $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $datos['mes']]);
+        $carpeta_base = "{$this->config->item('ruta_archivo_digitalizado')}{$tipo_comprobante->ruta}/{$tarea->anio}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
 
-        $resultado = $this->procesar_directorio("{$tipo_comprobante->ruta}/{$datos['anio']}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}", $tipo_comprobante->abreviatura);
+        $consecutivo_inicial = intval($tarea->consecutivo_inicial);
+        $consecutivo_final = intval($tarea->consecutivo_final);
 
-        if(empty($resultado['documento_principal'])) {
-            print json_encode([
-                'error' => false,
-                'resultado' => false,
-                'mensaje' => 'No hay archivos por procesar. Por favor verifica que las carpetas tengan la estructura correcta e intenta nuevamente.',
-            ]);
-            return false;
+        $resultado = [];
+
+        // Recorremos cada consecutivo para validar los datos
+        for ($consecutivo = $consecutivo_inicial; $consecutivo <= $consecutivo_final; $consecutivo ++) {
+            $ruta_comprobante = "{$carpeta_base}/{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";    // archivos/documentos_contables/01.RECIBOS DE CAJA/2026/1.ITAGUI/1.ENERO/100FRC71892/
+            $nombre_comprobante = "{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";
+            $ruta_pdf = "$ruta_comprobante/$nombre_comprobante.pdf";
+
+            $consecutivo_existe = is_dir($ruta_comprobante);
+            $comprobante_existe = ($consecutivo_existe) ? file_exists($ruta_pdf) : false ;
+
+            // Buscar el código formateado en el PDF
+            $comprobante_coincide = ($comprobante_existe) ? $this->extraer_texto($ruta_pdf, $tipo_comprobante->abreviatura) : false ;
+
+            $datos = [
+                'ruta' => $ruta_comprobante,
+                'consecutivo_numero' => $consecutivo,
+                'consecutivo_existe' => $consecutivo_existe,
+                'comprobante_existe' => $comprobante_existe,
+                'comprobante_coincide' => $comprobante_coincide,
+            ];
+
+            $this->contabilidad_model->crear('comprobantes_contables_tareas_detalle', $datos);
+
+            $resultado[] = $datos;
         }
+
+        // $this->contabilidad_model->eliminar('comprobantes_contables_validacion', ['fecha' => date('Y-m-d'), 'directorio' => $carpeta_base]);
+        // $this->contabilidad_model->eliminar('comprobantes_contables_validacion_detalle', ['fecha' => date('Y-m-d'), 'directorio' => $carpeta_base]);
+
+        // if(empty($resultado['documento_principal'])) {
+        //     print json_encode([
+        //         'error' => false,
+        //         'resultado' => false,
+        //         'mensaje' => 'No hay archivos por procesar. Por favor verifica que las carpetas tengan la estructura correcta e intenta nuevamente.',
+        //     ]);
+        //     return false;
+        // }
                   
-        // Se almacena en la base de datos el registros todos los documentos procesados
-        $cantidad_documentos_procesados = $this->contabilidad_model->crear('comprobantes_contables_validacion', $resultado['documento_principal']);
+        // // Se almacena en la base de datos el registros todos los documentos procesados
+        // $cantidad_documentos_procesados = $this->contabilidad_model->crear('comprobantes_contables_validacion', $resultado['documento_principal']);
         
         print json_encode([
             'error' => false,
-            'resultado' => true,
-            'mensaje' => "$cantidad_documentos_procesados Documentos procesados exitosamente.",
+            'resultado' => $resultado,
         ]);
     }
 
@@ -258,51 +287,38 @@ class Contabilidad extends CI_Controller {
      * @return void
      */
     function procesar_directorio($carpeta, $tipo, $pagina = 1) {
-        $carpeta_base = $this->directorio_raiz . $carpeta;
-
-        // Verificar que la carpeta base existe
-        if (!is_dir($carpeta_base)) {
-            throw new Exception("Carpeta base no encontrada: $carpeta_base");
-        }
-
         $resultado = [];
         $resultado_documentos_adicionales = [];
         
-        // Escanear todas las subcarpetas
-        $subcarpetas = scandir($carpeta_base);
+        // Escaneamos todas las subcarpetas
+        $subcarpetas = scandir($carpeta);
         
         foreach ($subcarpetas as $subcarpeta) {
             if ($subcarpeta === '.' || $subcarpeta === '..') continue;
-            // echo "$subcarpeta<hr>";
             
-            $ruta_subcarpeta = $carpeta_base . '/' . $subcarpeta;
+            $ruta_subcarpeta = $carpeta . '/' . $subcarpeta;
 
             $patron = '/^\d{3}'.$tipo.'\d+$/';
 
             // Verificar que es una carpeta y tiene el formato de código
-            if (is_dir($ruta_subcarpeta) && preg_match($patron, str_replace('-', '', $subcarpeta))) {
-                // echo "$subcarpeta<hr>";
-
+            if (preg_match($patron, str_replace('-', '', $subcarpeta)) && filetype($ruta_subcarpeta) === 'dir') {
                 // Buscar documentos adicionales
                 $documentos_adicionales = $this->buscar_documentos_adicionales($ruta_subcarpeta, $subcarpeta);
 
                 if(!empty($documentos_adicionales)) array_push($resultado_documentos_adicionales, $documentos_adicionales);
                 
                 // Buscar el archivo PDF dentro de la subcarpeta
-                $ruta_pdf = $ruta_subcarpeta . '/' . $subcarpeta . '.pdf';
+                $ruta_pdf = "$ruta_subcarpeta/$subcarpeta.pdf";
                 
                 if (file_exists($ruta_pdf)) {
-                    // echo "$ruta_pdf<hr>";
-
                     // Formatear el código: 100FRC52378 -> 100-FRC-00052378
                     $codigo_formateado = $this->formatear_codigo($subcarpeta, $tipo);
-                    // echo "$codigo_formateado<hr>";
                     
                     // Buscar el código formateado en el PDF
                     $codigo_encontrado = $this->extraer_texto($ruta_pdf, $tipo, $pagina);
                     
                     $resultado[] = [
-                        'directorio' => $subcarpeta,
+                        'directorio' => $carpeta,
                         'archivo' => $subcarpeta . '.pdf',
                         'fecha' => date('Y-m-d'),
                         'ruta_completa' => $ruta_pdf,

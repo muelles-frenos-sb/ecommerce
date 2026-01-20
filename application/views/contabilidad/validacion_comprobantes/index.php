@@ -20,17 +20,8 @@
                         </select>
                     </div>
 
-                    <!-- Año -->
-                    <div class="col-lg-3 col-sm-12">
-                        <label for="comprobante_anio">Año *</label>
-                        <select id="comprobante_anio" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="2025" selected>2025</option>
-                        </select>
-                    </div>
-
                     <!-- Centro operativo -->
-                    <div class="col-lg-3 col-sm-12">
+                    <div class="col-lg-2 col-sm-12">
                         <label for="comprobante_sede_id">Sede *</label>
                         <select id="comprobante_sede_id" class="form-control">
                             <option value="">Seleccione...</option>
@@ -38,13 +29,35 @@
                         </select>
                     </div>
 
+                    <!-- Año -->
+                    <div class="col-lg-1 col-sm-12">
+                        <label for="comprobante_anio">Año *</label>
+                        <select id="comprobante_anio" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <option value="2026" selected>2026</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+
                     <!-- Mes -->
-                    <div class="col-lg-3 col-sm-12">
+                    <div class="col-lg-2 col-sm-12">
                         <label for="comprobante_mes">Mes *</label>
                         <select id="comprobante_mes" class="form-control">
                             <option value="">Seleccione...</option>
                             <?php foreach($this->configuracion_model->obtener('periodos', ['nombre_comprobante_contable !=' => 'NULL']) as $mes) echo "<option value='$mes->id'>$mes->nombre</option>"; ?>
                         </select>
+                    </div>
+
+                    <!-- Consecutivo inicial -->
+                    <div class="col-lg-2 col-sm-12">
+                        <label for="comprobante_consecutivo_inicial">Consecutivo inicial *</label>
+                        <input type="number" class="form-control" id="comprobante_consecutivo_inicial" value="71303">
+                    </div>
+
+                    <!-- Consecutivo final -->
+                    <div class="col-lg-2 col-sm-12">
+                        <label for="comprobante_consecutivo_final">Consecutivo final *</label>
+                        <input type="number" class="form-control" id="comprobante_consecutivo_final" value="72016">
                     </div>
 
                     <div class="col-lg-12 mt-3">
@@ -67,46 +80,48 @@
             $('#comprobante_anio'),
             $('#comprobante_sede_id'),
             $('#comprobante_mes'),
+            $('#comprobante_consecutivo_inicial'),
+            $('#comprobante_consecutivo_final'),
         ]
 
         // Validación de campos obligatorios
         if (!validarCamposObligatorios(datosObligatorios)) return false
 
         let datos = {
-            id_comprobante_tipo: $('#comprobante_tipo_id').val(),
+            tipo: 'comprobantes_contables_tareas',
+            comprobante_contable_tipo_id: $('#comprobante_tipo_id').val(),
             anio: $('#comprobante_anio').val(),
-            id_sede: $('#comprobante_sede_id').val(),
+            centro_operacion_id: $('#comprobante_sede_id').val(),
             mes: $('#comprobante_mes').val(),
+            consecutivo_inicial: $('#comprobante_consecutivo_inicial').val(),
+            consecutivo_final: $('#comprobante_consecutivo_final').val(),
         }
 
-        // Log de inicio de la validación
-        //
+        let confirmacion = await confirmar('continuar', `¿Está seguro de programar la tarea para validar los comprobantes?`)
+        if(!confirmacion) return
 
-        Swal.fire({
-            title: 'Hemos iniciado la validación de los comprobantes contables...',
-            text: 'Por favor, espera.',
-            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
-            showConfirmButton: false,
-            allowOutsideClick: false
-        })
+        await consulta('crear', datos)
 
-        await obtenerPromesa(`${$('#site_url').val()}contabilidad/procesar_comprobantes`, datos).then(respuesta => {
-            Swal.close()
-            mostrarAviso((respuesta.resultado) ? 'exito' : 'alerta', respuesta.mensaje, 20000)
-            console.log(respuesta)
+        mostrarAviso("exito", `Se ha creado la tarea programada exitosamente. En cuanto finalice la revisión, enviaremos una notificación.`, 30000)
 
-            listarComprobantesContables()
 
-            // Log de éxito
-            //
-        })
-        .catch(error => {
-            Swal.close()
-            mostrarAviso('error', 'Ocurrió un error al procesar las carpetas.', 20000)
-            console.error(error)
-            // Log de error
-            //
-        })
+        // await obtenerPromesa(`${$('#site_url').val()}contabilidad/procesar_comprobantes`, datos).then(respuesta => {
+        //     Swal.close()
+        //     mostrarAviso((respuesta.resultado) ? 'exito' : 'alerta', respuesta.mensaje, 20000)
+        //     console.log(respuesta)
+
+        //     listarComprobantesContables()
+
+        //     // Log de éxito
+        //     //
+        // })
+        // .catch(error => {
+        //     Swal.close()
+        //     mostrarAviso('error', 'Ocurrió un error al procesar las carpetas.', 20000)
+        //     console.error(error)
+        //     // Log de error
+        //     //
+        // })
     }
 
     const listarComprobantesContables = () => {
@@ -114,6 +129,10 @@
     }
 
     $().ready(() => {
+        $('#comprobante_tipo_id').val(1)
+        $('#comprobante_sede_id').val(1)
+        $('#comprobante_mes').val(1)
+
         listarComprobantesContables()
 
         $('#formulario_validacion_comprobantes').submit(async(evento) => {
