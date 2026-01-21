@@ -259,6 +259,9 @@ Class Clientes_model extends CI_Model {
                 // Búsquedas
                 $where  = "WHERE cri.id IS NOT NULL";
 
+                if(isset($datos['nit'])) $where .= " AND cri.nit = {$datos['nit']} ";
+                if(isset($datos['anio'])) $where .= " AND cri.anio = {$datos['anio']} ";
+
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
 
