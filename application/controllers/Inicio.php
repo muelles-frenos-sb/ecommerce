@@ -25,7 +25,13 @@ class Inicio extends MY_Controller {
     }
 
     function index() {
-        $this->data['contenido_principal'] = 'inicio/index';
+        // Cuando tenga rol de cliente crédito, cargará el dashboard correspondiente
+        $contenido = 
+        (isset($this->data['permisos']) && in_array(['inicio' => 'inicio_ver_dashboard_credito'], $this->data['permisos'])) 
+        ? 'inicio/credito/index'
+        : 'inicio/contado/index';
+
+        $this->data['contenido_principal'] = $contenido;
         $this->load->view('core/body', $this->data);
     }
 }

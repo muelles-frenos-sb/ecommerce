@@ -91,14 +91,6 @@ Class Clientes_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
-            case 'clientes_informe_retenciones':
-                $sql = $this->db->where($datos)->get($tabla);
-
-                // Si viene NIT se devuelve solo un registro
-                if (isset($datos['nit'])) return $sql->row();
-                return $sql->result();
-            break;
-
             case 'cliente_factura':
                 unset($datos['tipo']);
                 
@@ -257,6 +249,65 @@ Class Clientes_model extends CI_Model {
                 } else {
                     return $this->db->query($sql)->result();
                 }
+            break;
+
+            case 'clientes_retenciones_informe':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsquedas
+                $where  = "WHERE cri.id IS NOT NULL";
+
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
+
+                // Filtros where
+                if (isset($filtros_personalizados['nit']) && $filtros_personalizados['nit'] != '') $where .= " AND cri.nit LIKE '%{$filtros_personalizados['nit']}%' ";
+                if (isset($filtros_personalizados['razon_social']) && $filtros_personalizados['razon_social'] != '') $where .= " AND cri.razon_social LIKE '%{$filtros_personalizados['razon_social']}%' ";
+                if (isset($filtros_personalizados['vendedor']) && $filtros_personalizados['vendedor'] != '') $where .= " AND cri.vendedor LIKE '%{$filtros_personalizados['vendedor']}%' ";
+                if (isset($filtros_personalizados['fuente']) && $filtros_personalizados['fuente'] != '') $where .= " AND cri.valor_retencion_fuente LIKE '%{$filtros_personalizados['fuente']}%' ";
+                if (isset($filtros_personalizados['iva']) && $filtros_personalizados['iva'] != '') $where .= " AND cri.valor_retencion_iva LIKE '%{$filtros_personalizados['iva']}%' ";
+                if (isset($filtros_personalizados['ica']) && $filtros_personalizados['ica'] != '') $where .= " AND cri.valor_retencion_ica LIKE '%{$filtros_personalizados['ica']}%' ";
+                if (isset($filtros_personalizados['fecha_actualizacion']) && $filtros_personalizados['fecha_actualizacion'] != '') $where .= " AND DATE(cri.fecha_actualizacion) = '{$filtros_personalizados['fecha_actualizacion']}' ";
+
+                // Si se realiza búsqueda genral
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+                    $where .= " AND (";
+
+                    foreach ($palabras as $i => $palabra) {
+
+                        if ($i > 0) $where .= " OR ";
+
+                        $where .= " ( cri.nit LIKE '%{$palabra}%'
+                            OR cri.razon_social LIKE '%{$palabra}%'
+                            OR cri.vendedor LIKE '%{$palabra}%'
+                            OR cri.valor_retencion_fuente LIKE '%{$palabra}%'
+                            OR cri.valor_retencion_iva LIKE '%{$palabra}%'
+                            OR cri.valor_retencion_ica LIKE '%{$palabra}%'
+                        )";
+                    }
+
+                    $where .= ")";
+                }
+
+                // Ordenamiento
+                $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY cri.razon_social ASC";
+
+                $sql = " SELECT
+                        cri.*
+                    FROM clientes_retenciones_informe cri
+                    $where
+                    $order_by
+                    $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar'])  return $this->db->query($sql)->num_rows();
+
+                // Si viene NIT se devuelve solo un registro
+                if (isset($datos['nit'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
             break;
 
             case 'clientes_solicitudes_credito':

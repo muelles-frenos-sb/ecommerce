@@ -27,6 +27,16 @@ Class Contabilidad_model extends CI_Model {
 
     function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'comprobantes_contables_tareas':
+                unset($datos['tipo']);
+
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->row()
+                ;
+            break;
+
             case 'comprobantes_contables_validacion':
                 $limite = "";
                 if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";

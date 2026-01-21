@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model', 'importaciones_model', 'configuracion_model', 'contabilidad_model']);
     }
 
     var $ruta = './archivos/';
@@ -203,6 +203,12 @@ class Interfaces extends CI_Controller {
                     'fecha_vencimiento' => $fecha_vencimiento,
                     'codigo' => $codigo,
                 ]);
+            break;
+
+            case 'comprobantes_contables_tareas':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
+                print json_encode(['resultado' => $this->contabilidad_model->crear($tipo, $datos)]);
             break;
 
             case 'marketing_campanias':

@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set('America/Bogota');
 
-defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido');
+defined('BASEPATH') or exit('El acceso directo a este archivo no está permitido');
 
 /**
  * @author: 	Laura Isabel Flórez Ramírez
@@ -10,8 +10,10 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
  *            	Gestión de marketing del sistema
  * Email: 		lauraisabelflorezramirez@gmail.com
  */
-class Marketing extends MY_Controller {
-    function __construct() {
+class Marketing extends MY_Controller
+{
+    function __construct()
+    {
         parent::__construct();
 
         $this->load->model(['marketing_model']);
@@ -19,29 +21,31 @@ class Marketing extends MY_Controller {
 
     var $ruta = './archivos/';
 
-    function campanias() {
-        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+    function campanias()
+    {
+        if (!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             case 'crear':
                 $this->data['contenido_principal'] = 'marketing/detalle';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
 
             case 'editar':
                 $this->data['id'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'marketing/detalle';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
 
             case 'ver':
                 $this->data['contenido_principal'] = 'marketing/index';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
         }
     }
 
-    private function importar_campanias_contactos($archivo, $campania_id) {
+    private function importar_campanias_contactos($archivo, $campania_id)
+    {
         try {
             $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
             $hoja   = $excel->getActiveSheet();
@@ -60,7 +64,7 @@ class Marketing extends MY_Controller {
 
                 $detalle[] = [
                     "fecha_creacion" => date('Y-m-d H:i:s'),
-                    "campania_id" => $campania_id, 
+                    "campania_id" => $campania_id,
                     "nit"         => trim($registro[0]),
                     "telefono"    => trim($registro[1])
                 ];
@@ -73,7 +77,6 @@ class Marketing extends MY_Controller {
                 "exito" => true,
                 "mensaje" => "Se subieron e importaron correctamente los contactos de la campaña"
             ];
-
         } catch (Exception $e) {
 
             log_message(
@@ -89,7 +92,8 @@ class Marketing extends MY_Controller {
     }
 
 
-    function importar_campanias() {
+    function importar_campanias()
+    {
         $exito = false;
         $mensaje = "";
 
@@ -135,7 +139,8 @@ class Marketing extends MY_Controller {
         ]);
     }
 
-    function obtener_datos_tabla() {
+    function obtener_datos_tabla()
+    {
         if (!$this->input->is_ajax_request()) redirect('inicio');
 
         $tipo = $this->input->get("tipo");
@@ -183,11 +188,12 @@ class Marketing extends MY_Controller {
                     "recordsFiltered" => $total_resultados,
                     "data" => $resultados
                 ]);
-            break;
+                break;
         }
     }
 
-    public function eliminar_imagen() {
+    public function eliminar_imagen()
+    {
         if (!$this->input->is_ajax_request()) redirect('inicio');
         $id_campania = $this->input->post('id');
 
@@ -214,7 +220,8 @@ class Marketing extends MY_Controller {
         echo json_encode(['resultado' => true]);
     }
 
-    function subir_imagen() {
+    function subir_imagen()
+    {
         $id_campania = $this->uri->segment(3);
         $directorio = "{$this->ruta}campanias/$id_campania/";
 
@@ -225,10 +232,165 @@ class Marketing extends MY_Controller {
         $archivo = $_FILES['name'];
         $resultado = false;
 
-        if (move_uploaded_file($archivo['tmp_name'], $directorio.$archivo['name'])) {
+        if (move_uploaded_file($archivo['tmp_name'], $directorio . $archivo['name'])) {
             $resultado = true;
         }
 
         print json_encode(['resultado' => $resultado]);
+    }
+
+    public function enviar_prueba_whatsapp()
+    {
+        // 1. Validar que sea AJAX
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        $campania_id = $this->input->post('campania_id');
+        $numero_telefonico = $this->input->post('telefono');
+
+        // 2. Obtener datos de la campaña (necesitamos el nombre de la plantilla)
+        $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
+       
+        if (!$campania) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Campaña no encontrada']);
+            return;
+        }
+
+        $nombre_plantilla = $campania->nombre_plantilla_whatsapp;
+
+        // Validar que tenga plantilla configurada
+        if (empty($nombre_plantilla)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Esta campaña no tiene una plantilla de WhatsApp asignada.']);
+            return;
+        }
+
+        try {
+            // 3. Preparar contenido
+            // NOTA: Si tu plantilla requiere variables (ej: {{1}}, {{2}}), debes definirlas aquí.
+            // Como es una prueba, enviamos un array vacío o datos dummy si es necesario.
+            $contenido = []; // O los parámetros que requiera tu plantilla
+
+            // 4. Llamada a la API (La línea que me pasaste)
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
+                $numero_telefonico,
+                $nombre_plantilla,
+                'es',
+                $contenido
+            );
+
+            // Asumiendo que tu librería whatsapp_api devuelve TRUE o una estructura con 'error'
+            // Ajusta esta condición según lo que retorne tu librería exactamente.
+            if ($resultado) {
+                echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
+                  $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
+            } else {
+                echo json_encode(['exito' => false, 'mensaje' => 'La API de WhatsApp rechazó el envío.']);
+            }
+        } catch (Exception $e) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
+        }
+    }
+
+    public function ejecutar_envio_masivo() {
+        // 1. Validar petición AJAX
+        if (!$this->input->is_ajax_request()) {
+            show_404();
+        }
+
+        // Aumentamos el tiempo de ejecución por si son muchos contactos
+        set_time_limit(0); 
+
+        $campania_id = $this->input->post('campania_id');
+        
+        // 2. Obtener datos de la campaña
+        $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
+
+        if (!$campania) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Campaña no encontrada']);
+            return;
+        }
+
+        // 3. VALIDACIÓN: Verificar vigencia de la campaña
+        $fecha_actual = date('Y-m-d');
+        if ($campania->fecha_finalizacion < $fecha_actual) {
+            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: '.$campania->fecha_finalizacion.'). No se pueden enviar más mensajes.']);
+            return;
+        }
+
+        $plantilla = $campania->nombre_plantilla_whatsapp;
+        if (empty($plantilla)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'La campaña no tiene plantilla asignada.']);
+            return;
+        }
+
+        // 4. Obtener contactos PENDIENTES (fecha_envio IS NULL)
+        $contactos = $this->db->get_where('marketing_campanias_contactos', [
+            'campania_id' => $campania_id,
+            'fecha_envio' => NULL 
+        ])->result();
+
+        if (empty($contactos)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'No hay contactos pendientes de envío en esta campaña.']);
+            return;
+        }
+
+        $enviados = 0;
+        $errores = 0;
+
+        // 5. Bucle de envío "Uno a Uno"
+        foreach ($contactos as $contacto) {
+            // Asumo que la columna del teléfono se llama 'numero' o 'telefono'. Ajusta según tu BD.
+            $telefono_destino = $contacto->telefono; // O $contacto->telefono
+
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
+                $telefono_destino, 
+                $plantilla, 
+                'es', 
+                [] // Variables de la plantilla si las hubiera
+            );
+
+            if ($resultado) {
+                // ÉXITO: Actualizamos la fecha de envío
+                $this->db->where('id', $contacto->id);
+                $this->db->update('marketing_campanias_contactos', [
+                    'fecha_envio' => date('Y-m-d H:i:s')
+                ]);
+                $enviados++;
+            } else {
+                $errores++;
+            }
+            $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
+        }
+
+        $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'campania_id' => $campania_id,
+                        'total_entregados' => $enviados,
+                        'total_no_entregados' => $errores,
+                    ]),
+                ]);
+
+        // 6. Respuesta final
+        echo json_encode([
+            'exito' => true, 
+            'mensaje' => "Proceso finalizado. Enviados: $enviados. Fallidos: $errores."
+        ]);
     }
 }
