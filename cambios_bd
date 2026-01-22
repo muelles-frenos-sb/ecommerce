@@ -659,3 +659,25 @@ ALTER TABLE `comprobantes_contables_tareas_detalle` ADD COLUMN `comprobante_cont
 -- 20260121 Tablas eliminadas
 DROP TABLE comprobantes_contables_validacion;
 DROP TABLE comprobantes_contables_validacion_detalle;
+
+-- Creación de la tabla clientes_retenciones_detalle
+CREATE TABLE `clientes_retenciones_detalle`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `anio` year(4) NULL,
+  `monto` double NULL,
+  `nit` varchar(100) NULL,
+  `observacion` text NULL,
+  `tipo_retencion` varchar(100) NULL,
+  `fecha_creacion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- Para agregar la relación entre las tablas clientes_retenciones_informe y clientes_retenciones_detalle
+-- Primero agregar el índice único en la tabla padre (clientes_retenciones_informe) en los campos que se van a referenciar en la llave foránea
+  ALTER TABLE clientes_retenciones_informe ADD UNIQUE KEY idx_nit_anio (nit, anio);
+
+-- Segundo crear la clave foránea en la tabla hija (clientes_retenciones_detalle)
+ALTER TABLE `clientes_retenciones_detalle`
+ADD CONSTRAINT `clientes_retenciones_detalle_ibfk_1`
+FOREIGN KEY (`nit`, `anio`) 
+REFERENCES `clientes_retenciones_informe`(`nit`, `anio`);

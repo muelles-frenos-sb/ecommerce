@@ -127,6 +127,10 @@ class Interfaces extends CI_Controller {
         $datos = json_decode($this->input->post('datos'), true);
 
         switch ($datos['tipo']) {
+            case 'certificado_retencion':
+                echo enviar_email_certificado_retencion($datos['id']);
+            break;
+
             case 'clave_cambiada':
                 echo enviar_email_clave_cambiada($datos['id']);
             break;
@@ -184,6 +188,11 @@ class Interfaces extends CI_Controller {
             // Datos obtenidos del API de Siesa - Movimientos contables General
             case 'clientes_facturas_movimientos':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
+            case 'clientes_retenciones_detalle':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_retenciones_detalle', $datos)]);
             break;
 
             // Datos obtenidos del API de Siesa - Clientes

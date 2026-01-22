@@ -251,6 +251,26 @@ Class Clientes_model extends CI_Model {
                 }
             break;
 
+            case 'clientes_retenciones_detalle':
+                // Búsquedas
+                $where  = "WHERE crd.id IS NOT NULL";
+
+                if(isset($datos['id'])) $where .= " AND crd.id = {$datos['id']} ";
+                if(isset($datos['nit'])) $where .= " AND crd.nit = '{$datos['nit']}' ";
+
+                $sql = " SELECT
+                        crd.*,
+                        cri.razon_social
+                    FROM clientes_retenciones_detalle crd
+                    LEFT JOIN clientes_retenciones_informe cri ON cri.nit = crd.nit
+                    $where
+                ";
+
+                // Si viene id se devuelve solo un registro
+                if (isset($datos['id']) || isset($datos['nit'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
+
             case 'clientes_retenciones_informe':
                 $limite = "";
                 if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
