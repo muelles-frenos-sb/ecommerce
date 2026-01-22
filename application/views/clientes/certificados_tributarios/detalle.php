@@ -120,9 +120,12 @@
                 let email =  obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'certificado_retencion', id: id})
 
                 mostrarAviso('exito', 'El certificado se guardó correctamente')
+
+                setTimeout(() => { history.back()}, 1500) // retorna a la página anterior
             }
         } else {
             mostrarAviso('exito', 'El certificado se guardó correctamente')
+            setTimeout(() => { history.back()}, 1500) // retorna a la página anterior
         }
     }
 

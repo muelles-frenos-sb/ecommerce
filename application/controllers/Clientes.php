@@ -343,22 +343,20 @@ class Clientes extends MY_Controller {
         // Obtener extensión del archivo
         $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
         
-        // Limpiar razón social para usarla en el nombre del archivo
-        $razon_social = preg_replace('/[^A-Za-z0-9_-]/', '_', $cliente->razon_social);
-        $razon_social = trim($razon_social, '_');
-        
-        // Construir nombre según especificación: nit_razon_social_monto
-        // Formatear el monto: si tiene decimales los muestra, si no, no los agrega
+        // Limpiar razón social SIN quitar espacios
+        $razon_social = preg_replace('/[^A-Za-z0-9 ]/', '', $cliente->razon_social);
+        $razon_social = trim($razon_social);
+
+        // Formatear monto
         $monto = floatval($certificado->monto);
-        
-        // Si el monto es entero (sin decimales)
+
         if ($monto == intval($monto)) {
             $monto_formateado = intval($monto);
         } else {
-            // Si tiene decimales, formatear con 2 decimales y reemplazar el punto por guion bajo
             $monto_formateado = str_replace('.', '_', number_format($monto, 2, '.', ''));
         }
-        
+
+        // Construir nombre del archivo
         $nombre_archivo = "{$cliente->nit}_{$razon_social}_{$monto_formateado}.{$extension}";
 
         // Subir archivo
