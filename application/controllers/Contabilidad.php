@@ -238,7 +238,7 @@ class Contabilidad extends MY_Controller {
         $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $tarea->centro_operacion_id]);
         $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $tarea->mes]);
 
-        $carpeta_base = "{$this->config->item('ruta_archivo_digitalizado')}{$tipo_comprobante->ruta}/{$tarea->anio}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
+        $carpeta_base = "{$this->config->item('ruta_archivo_digitalizado')}/{$tipo_comprobante->ruta}/{$tarea->anio}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
 
         $consecutivo_inicial = intval($tarea->consecutivo_inicial);
         $consecutivo_final = intval($tarea->consecutivo_final);
@@ -247,6 +247,8 @@ class Contabilidad extends MY_Controller {
 
         // Recorremos cada consecutivo para validar los datos
         for ($consecutivo = $consecutivo_inicial; $consecutivo <= $consecutivo_final; $consecutivo ++) {
+            $documentos_adicionales = [];
+
             $ruta_comprobante = "{$carpeta_base}/{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";    // archivos/documentos_contables/01.RECIBOS DE CAJA/2026/1.ITAGUI/1.ENERO/100FRC71892/
             $nombre_comprobante = "{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";
             $ruta_pdf = "$ruta_comprobante/$nombre_comprobante.pdf";
@@ -257,7 +259,7 @@ class Contabilidad extends MY_Controller {
             // Buscar el código formateado en el PDF
             $comprobante_coincide = ($comprobante_existe) ? $this->extraer_texto($ruta_pdf, $tipo_comprobante->abreviatura) : false ;
 
-            $documentos_adicionales = $this->buscar_documentos_adicionales($ruta_comprobante, $nombre_comprobante);
+            if ($consecutivo_existe) $documentos_adicionales = $this->buscar_documentos_adicionales($ruta_comprobante, $nombre_comprobante);
 
             $datos = [
                 'comprobante_contables_tarea_id' => $tarea->id,
@@ -266,7 +268,7 @@ class Contabilidad extends MY_Controller {
                 'consecutivo_existe' => $consecutivo_existe,
                 'comprobante_existe' => $comprobante_existe,
                 'comprobante_coincide' => $comprobante_coincide,
-                'cantidad_soportes' => count($comprobante_coincide),
+                'cantidad_soportes' => count($documentos_adicionales),
             ];
 
             $this->contabilidad_model->crear('comprobantes_contables_tareas_detalle', $datos);
