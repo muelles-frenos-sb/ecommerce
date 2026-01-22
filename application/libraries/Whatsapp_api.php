@@ -63,17 +63,47 @@ class Whatsapp_api {
     /**
      * Envía un mensaje con imagen
      */
-    public function enviar_mensaje_con_imagen($numero_telefonico, $url_imagen, $texto = '') {
+    public function enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, $lenguaje = 'es', $url_imagen) {
         $url = "https://graph.facebook.com/{$this->version_api}/{$this->identificador_numero_telefonico}/messages";
+
+        $componentes = [];
+
+        // HEADER con imagen
+        $componentes[] = [
+            'type' => 'header',
+            'parameters' => [
+                [
+                    'type' => 'image',
+                    'image' => [
+                        'link' => $url_imagen
+                    ]
+                ]
+            ]
+        ];
+
+        // BODY con parámetros dinámicos
+        if (!empty($parametros)) {
+            $componentes[] = [
+                'type' => 'body',
+                'parameters' => array_map(function ($valor) {
+                    return [
+                        'type' => 'text',
+                        'text' => $valor
+                    ];
+                }, $parametros)
+            ];
+        }
         
         $datos = [
             'messaging_product' => 'whatsapp',
-            'recipient_type' => 'individual',
             'to' => $numero_telefonico,
-            'type' => 'image',
-            'image' => [
-                'link' => $url_imagen,
-                'caption' => $texto
+            'type' => 'template',
+            'template' => [
+                'name' => $nombre_plantilla,
+                'language' => [
+                    'code' => $lenguaje
+                ],
+                'components' => $componentes
             ]
         ];
         

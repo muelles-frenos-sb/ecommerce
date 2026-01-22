@@ -42,7 +42,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info" onclick="ejecutarEnvioPrueba()">
+                <button type="button" class="btn btn-info" onClick="ejecutarEnvioPrueba()">
                     <i class="fa fa-paper-plane"></i> Enviar Prueba
                 </button>
             </div>

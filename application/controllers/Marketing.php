@@ -272,12 +272,15 @@ class Marketing extends MY_Controller
             $contenido = []; // O los parámetros que requiera tu plantilla
 
             // 4. Llamada a la API (La línea que me pasaste)
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
-                $numero_telefonico,
-                $nombre_plantilla,
-                'es',
-                $contenido
-            );
+            // $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
+            //     $numero_telefonico,
+            //     $nombre_plantilla,
+            //     'es_CO',
+            //     $contenido
+            // );
+
+            // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'marketing_campana_baterias_enero_2026', 'es_CO', 'https://repuestossimonbolivar.com/archivos/campanias/imagen.jpg');
 
             // Asumiendo que tu librería whatsapp_api devuelve TRUE o una estructura con 'error'
             // Ajusta esta condición según lo que retorne tu librería exactamente.
