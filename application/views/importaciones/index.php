@@ -75,6 +75,8 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
     </div>
 </div>
 
+<div class="block-space block-space--layout--before-footer"></div>
+
 <script>
     function listarImportaciones() {
         // 1. Capturamos el input de forma segura

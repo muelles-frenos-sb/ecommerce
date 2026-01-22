@@ -256,7 +256,7 @@
                                                                             <ul class="menu">
                                                                                 <li class="menu__item">
                                                                                     <a href="<?php echo site_url('proveedores/maestro'); ?>" class="menu__link">
-                                                                                        Maestro
+                                                                                        Maestro de marcas
                                                                                     </a>
                                                                                 </li>
 
@@ -265,12 +265,14 @@
                                                                                         Solicitudes de precios
                                                                                     </a>
                                                                                 </li>
+                                                                                <hr>
 
                                                                                 <li class="menu__item">
-                                                                                    <a href="<?php echo site_url('proveedores'); ?>" class="menu__link">
-                                                                                        Cotizaciones
+                                                                                    <a href="<?php echo site_url('importaciones'); ?>" class="menu__link">
+                                                                                        Importaciones
                                                                                     </a>
                                                                                 </li>
+                                                                                <hr>
 
                                                                                 <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
                                                                                     <li class="menu__item">
