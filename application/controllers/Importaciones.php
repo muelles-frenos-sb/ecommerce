@@ -10,14 +10,10 @@ defined('BASEPATH') or exit('El acceso directo a este archivo no está permitido
 class Importaciones extends MY_Controller
 {
 
-    function __construct()
-    {
+    public function __construct() {
         parent::__construct();
-        // Intenta ponerlo con la primera mayúscula si te falla en minúscula
         $this->load->model('importaciones_model');
-
-        // Opcional: Si quieres usar un nombre corto:
-        // $this->load->model('Importaciones_model', 'imp_model');
+        $this->load->model('importaciones_pagos_model');
     }
 
     // Carga la vista principal (el contenedor)

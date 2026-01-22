@@ -10,16 +10,14 @@ class Importaciones_model extends CI_Model{
    // --------------------------------------------------------------------
     // 2. CREAR (Guardar nuevo)
     // --------------------------------------------------------------------
-    public function crear($datos, $retornar_id = true) {
+    public function crear($datos) {
         // Limpiamos el array de datos por si viene basura del JS
-        $datos_limpios = $this->limpiar_datos($datos);
-
-        $this->db->insert('importaciones', $datos_limpios);
+        $this->db->insert('importaciones', $datos);
         
         $resultado = $this->db->affected_rows() > 0;
         
-        if ($retornar_id && $resultado) {
-            return ['resultado' => true, 'id' => $this->db->insert_id()];
+        if ($resultado) {
+            return ['resultado' => $this->db->insert_id()];
         }
         
         return $resultado;
@@ -130,11 +128,13 @@ class Importaciones_model extends CI_Model{
             break;
 
             // HELPER: Obtener lista única de Países para llenar el select de filtros
-            case 'lista_paises':
+            case 'importaciones_pagos':
                 $this->db->distinct();
-                $this->db->select('pais_origen');
-                $this->db->order_by('pais_origen', 'ASC');
-                return $this->db->get('importaciones')->result();
+                $this->db->select('id');
+                 $this->db->where('importacion_id', $datos['importacion_id']);
+                $this->db->order_by('id', 'DESC');
+                $this->db->limit(1);
+                return $this->db->get('importaciones_pagos')->result();
             break;
 
             // HELPER: Obtener lista única de Proveedores para llenar el select de filtros
