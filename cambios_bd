@@ -652,3 +652,10 @@ CREATE TABLE `comprobantes_contables_tareas_detalle`  (
   `fecha_creacion` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`)
 );
+
+-- 20260121 Campo aregado
+ALTER TABLE `comprobantes_contables_tareas_detalle` ADD COLUMN `comprobante_contable_tarea_id` int NULL AFTER `id`;
+
+-- 20260121 Tablas eliminadas
+DROP TABLE comprobantes_contables_validacion;
+DROP TABLE comprobantes_contables_validacion_detalle;

@@ -61,7 +61,7 @@
                     </div>
 
                     <div class="col-lg-12 mt-3">
-                        <button type="submit" class="btn btn-primary btn-block">Realizar validación</button>
+                        <button type="submit" class="btn btn-primary btn-block">Programar tarea</button>
                     </div>
                 </form>
 
@@ -71,6 +71,7 @@
         </div>
     </div>
 </div>
+<div id="contenedor_modal"></div>
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
@@ -104,6 +105,7 @@
 
         mostrarAviso("exito", `Se ha creado la tarea programada exitosamente. En cuanto finalice la revisión, enviaremos una notificación.`, 30000)
 
+        listarComprobantesContables()
 
         // await obtenerPromesa(`${$('#site_url').val()}contabilidad/procesar_comprobantes`, datos).then(respuesta => {
         //     Swal.close()
@@ -122,6 +124,10 @@
         //     // Log de error
         //     //
         // })
+    }
+
+    cargarConsecutivos = async datos => {
+        cargarInterfaz('contabilidad/validacion_comprobantes/consecutivos_detalle', 'contenedor_modal', datos)
     }
 
     const listarComprobantesContables = () => {
