@@ -120,10 +120,12 @@ if (isset($id)) {
         if (id) {
             datos.id = id
             await consulta('actualizar', datos, false)
+            agregarLog(105, `Campaña con id: ${id}`)
         } else {
             let respuesta = await consulta('crear', datos, false)
             id = respuesta.resultado
             $("#campania_id").val(id)
+            agregarLog(104, `Campaña con id: ${id}`)
         }
 
         // Subir imagen solo si existe y no fue eliminada
