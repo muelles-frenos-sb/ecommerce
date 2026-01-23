@@ -6,7 +6,7 @@
             ajax: {
                 url: `${$("#site_url").val()}contabilidad/obtener_datos_tabla`,
                 data: datos => {
-                    datos.tipo = 'comprobantes_contables_validacion'
+                    datos.tipo = 'comprobantes_contables_tareas'
                 },
             },
             columns: [
@@ -15,30 +15,105 @@
                         Id
                     `,
                     data: 'id',
-                    className: 'text-right',
+                    className: 'dt-right',
+                },
+                { 
+                    title: `
+                        Rango
+                    `,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `
+                            ${tarea.consecutivo_inicial}-${tarea.consecutivo_final}
+                        `
+                    },
+                },
+                {
+                    title: `
+                        Tipo
+                    `,
+                    data: 'tipo_comprobante',
+                },
+                {
+                    title: `
+                        Sede
+                    `,
+                    data: 'centro_operativo',
+                },
+                {
+                    title: `
+                        Año
+                    `,
+                    data: 'anio',
                     width: '70px',
                 },
                 {
                     title: `
-                        Documento
+                        Mes
                     `,
-                    data: 'directorio',
+                    data: 'mes',
                 },
                 {
                     title: `
-                        Documento validado
+                        Consecutivos encontrados
                     `,
-                    data: 'validado',
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `
+                            <a href="javascript:;" onClick="javascript:cargarConsecutivos({ consecutivo_existe: 1 }); ">${tarea.consecutivo_existe}</a>
+                        `
+                    },
+                    className: 'dt-right',
+                    width: '70px',
+                },
+                {
+                    title: `
+                        Consecutivos faltantes
+                    `,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `
+                            <a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contables_tarea_id: ${tarea.id}, consecutivo_existe: 0 }); ">${tarea.consecutivo_no_existe}</a>
+                        `
+                    },
+                    className: 'dt-right',
+                    width: '70px',
+                },
+                {
+                    title: `
+                        Comprobantes encontrados
+                    `,
+                    data: 'comprobante_coincide',
+                    className: 'dt-right',
+                    width: '70px',
+                },
+                {
+                    title: `
+                        Comprobantes faltantes
+                    `,
+                    data: 'comprobante_no_coincide',
+                    className: 'dt-right',
+                    width: '70px',
+                },
+                {
+                    title: `
+                        Minutos
+                    `,
+                    data: 'tiempo_ejecucion_minutos',
+                    className: 'dt-right',
                     width: '70px',
                 },
                 {
                     title: `
                         Soportes
                     `,
-                    data: 'documentos_adicionales',
-                    className: 'text-right',
+                    data: 'cantidad_soportes',
+                    className: 'dt-right',
                     width: '70px',
                 },
+
+                
+
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro

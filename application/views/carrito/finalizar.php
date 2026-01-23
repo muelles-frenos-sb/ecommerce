@@ -23,7 +23,7 @@ if($this->session->userdata('usuario_id')) {
                     <li class="breadcrumb__title-safe-area" role="presentation"></li>
                 </ol>
             </nav>
-            <h1 class="block-header__title">Proceso de pago</h1>
+            <h1 class="block-header__title">Confirmación de datos del pedido</h1>
         </div>
     </div>
 </div>

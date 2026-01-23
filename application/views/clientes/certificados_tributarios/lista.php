@@ -98,6 +98,20 @@
                     `,
                     data: 'fecha_actualizacion'
                 },
+                {
+                    title: 'Acciones',
+                    data: null, 
+                    orderable: false,
+                    render: (data, type, row) => {
+                        return `
+                            <div class="dt-buttons-gap">
+                                <a class="btn btn-sm btn-success" href="${$("#site_url").val()}clientes/certificados_tributarios/crear/${data.nit}" title="Subir certificado de retención">
+                                    <i class="fa fa-upload"></i>
+                                </a>
+                            </div>
+                        `
+                    }
+                }
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro

@@ -861,6 +861,15 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'paises':
+                return $this->db
+                    ->where($datos)
+                    ->order_by('nombre')
+                    ->get('paises')
+                    ->result()
+                ;
+            break;
+
             case 'municipios':
                 return $this->db
                     ->where($datos)

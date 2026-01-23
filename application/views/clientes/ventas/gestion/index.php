@@ -51,6 +51,9 @@
             <!-- Resumen del pedido -->
             <div class="card">
                 <div class="card-body card-body--padding--1">
+                    <div class="tag-badge tag-badge--new badge_formulario badge_formulario_azul">
+                        RESUMEN DEL PEDIDO
+                    </div>
                     <div id="contenedor_resultado_carrito" style="height: 20vh;"></div>
                 </div>
             </div>
@@ -59,6 +62,9 @@
             <!-- Resultados de búsqueda -->
             <div class="card">
                 <div class="card-body card-body--padding--1">
+                    <div class="tag-badge tag-badge--new badge_formulario badge_formulario_azul">
+                        Búsqueda
+                    </div>
                     <div id="contenedor_resultado_productos" style="height: 40vh;"></div>
                 </div>
             </div>

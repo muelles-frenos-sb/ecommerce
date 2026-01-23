@@ -1,6 +1,41 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+function enviar_email_certificado_retencion($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $CI = get_instance();
+
+    $CI->load->model(['email_model']);
+
+    $certificado = $CI->clientes_model->obtener('clientes_retenciones_detalle', ['id' => $id]);
+    $contactos = $CI->configuracion_model->obtener('contactos', ['nit' => $certificado->nit]);
+
+    $destinatarios = [];
+
+    foreach ($contactos as $contacto) {
+        if (!empty($contacto->email)) {
+            $destinatarios[] = $contacto->email;
+        }
+    }
+
+    $url = site_url('sesion');
+    
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $certificado->id,
+        'asunto' => 'Se ha subido un certificado de retención'. $certificado->tipo_retencion,
+        'cuerpo' => [
+            'titulo' => '¡La subida del certificado ha sido exitosa!',
+            'subtitulo' => "
+                Hola, $certificado->razon_social, se ha subido un certificado correspondiente a la retención $certificado->tipo_retencion.
+            ",
+        ],
+        'destinatarios' => $destinatarios,
+    ];
+
+    return $CI->email_model->enviar($datos);
+}
+
 function enviar_email_clave_cambiada($id) {
     // Se obtiene una referencia del objeto Controlador
     $CI = get_instance();

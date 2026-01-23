@@ -146,6 +146,13 @@ if (isset($id)) {
                     return
                 }
 
+                // Se agrega el nombre de la imagen en la campaña
+                consulta('actualizar', {
+                    id: id,
+                    tipo: 'marketing_campanias',
+                    nombre_imagen: nombreArchivo,
+                })
+
                 mostrarAviso('exito', 'Campaña guardada correctamente')
             }
         } else {

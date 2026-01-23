@@ -38,7 +38,13 @@ class Clientes extends MY_Controller {
             case 'ver':
                 $this->data['contenido_principal'] = 'clientes/certificados_tributarios/index';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
+            
+            case 'crear':
+                $this->data['nit'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'clientes/certificados_tributarios/detalle';
+                $this->load->view('core/body', $this->data);
+                break;
         }
     }
 
@@ -306,6 +312,65 @@ class Clientes extends MY_Controller {
                 ]);
             break;
         }
+    }
+
+    function subir_certificado() {
+        $id = $this->uri->segment(3);
+        $exito = false;
+
+        // Se consulta información del certificado para construir el nombre del archivo
+        $certificado = $this->clientes_model->obtener('clientes_retenciones_detalle', ['id' => $id]);
+
+        if (!$certificado) {
+            print json_encode(['resultado' => false, 'mensaje' => 'Certificado no encontrado']);
+            return;
+        }
+
+        // Se consulta información del cliente información del cliente
+        $cliente = $this->clientes_model->obtener('clientes_retenciones_informe', ['nit' => $certificado->nit]);
+
+        if (!$cliente) {
+            print json_encode(['resultado' => false, 'mensaje' => 'Cliente no encontrado']);
+            return;
+        }
+
+        // Crear directorio si no existe
+        $directorio = "./archivos/certificados_retencion/$id/";
+        if (!is_dir($directorio)) @mkdir($directorio, 0777, true);
+
+        $archivo = $_FILES['archivo'];
+        
+        // Obtener extensión del archivo
+        $extension = pathinfo($archivo['name'], PATHINFO_EXTENSION);
+        
+        // Limpiar razón social SIN quitar espacios
+        $razon_social = preg_replace('/[^A-Za-z0-9 ]/', '', $cliente->razon_social);
+        $razon_social = trim($razon_social);
+
+        // Formatear monto
+        $monto = floatval($certificado->monto);
+
+        if ($monto == intval($monto)) {
+            $monto_formateado = intval($monto);
+        } else {
+            $monto_formateado = str_replace('.', '_', number_format($monto, 2, '.', ''));
+        }
+
+        // Construir nombre del archivo
+        $nombre_archivo = "{$cliente->nit}_{$razon_social}_{$monto_formateado}.{$extension}";
+
+        // Subir archivo
+        if (move_uploaded_file($archivo['tmp_name'], $directorio . $nombre_archivo)) {
+            $exito = true;
+            $mensaje = "El archivo <b>{$nombre_archivo}</b> se subió correctamente.";
+        } else {
+            $mensaje = "Ha ocurrido un error subiendo el archivo.";
+        }
+
+        print json_encode(['resultado' => [
+            "mensaje" => $mensaje,
+            "exito" => $exito
+        ]]);
     }
 
     function subir() {

@@ -9,12 +9,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * Programa:  	Simón Bolívar | Módulo de Contabilidad
  * Email: 		johnarleycano@hotmail.com
  */
-class Contabilidad extends CI_Controller {
+class Contabilidad extends MY_Controller {
     function __construct() {
         parent::__construct();
      
         // Carga de modelos y librerías
         $this->load->model(['contabilidad_model', 'productos_model']);
+
+        if($this->session->userdata('usuario_id')) $this->data['permisos'] = $this->verificar_permisos();
     }
 
     /**
@@ -50,8 +52,8 @@ class Contabilidad extends CI_Controller {
             $ruta_completa = $ruta_carpeta . '/' . $archivo;
             
             // Si no es el archivo principal, es un documento adicional
-            // if (is_file($ruta_completa) && $archivo != "$nombre_base.pdf") {
-            if ($archivo != "$nombre_base.pdf") {
+            if (is_file($ruta_completa) && $archivo != "$nombre_base.pdf") {
+            // if ($archivo != "$nombre_base.pdf") {
                 $extension = strtolower(pathinfo($archivo, PATHINFO_EXTENSION));
                 $tipo = obtener_tipo_archivo($extension);
                 
@@ -66,8 +68,6 @@ class Contabilidad extends CI_Controller {
                 ];
             }
         }
-        
-        if(!empty($documentos_adicionales)) $this->contabilidad_model->crear('comprobantes_contables_validacion_detalle', $documentos_adicionales);
 
         return $documentos_adicionales;
     }
@@ -174,7 +174,7 @@ class Contabilidad extends CI_Controller {
         }
 
         switch ($tipo) {
-            case "comprobantes_contables_validacion":
+            case "comprobantes_contables_tareas":
                 // Se definen los filtros
                 $datos = [
                     "contar" => true,
@@ -185,7 +185,7 @@ class Contabilidad extends CI_Controller {
                 // if(isset($filtro_fecha_creacion)) $datos['filtro_fecha_creacion'] = $filtro_fecha_creacion;
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
-                $total_resultados = $this->contabilidad_model->obtener("comprobantes_contables_validacion", $datos);
+                $total_resultados = $this->contabilidad_model->obtener("comprobantes_contables_tareas", $datos);
 
                 // Se quita campo para solo contar los registros
                 unset($datos["contar"]);
@@ -196,7 +196,7 @@ class Contabilidad extends CI_Controller {
                 if ($ordenar) $datos["ordenar"] = $ordenar;
 
                 // Se obtienen los registros
-                $resultados = $this->contabilidad_model->obtener("comprobantes_contables_validacion", $datos);
+                $resultados = $this->contabilidad_model->obtener("comprobantes_contables_tareas", $datos);
 
                 print json_encode([
                     "draw" => $this->input->get("draw"),
@@ -219,13 +219,26 @@ class Contabilidad extends CI_Controller {
      */
     function validar_comprobantes() {
         // Obtenemos la primera tarea pendiente
-        $tarea = $this->contabilidad_model->obtener('comprobantes_contables_tareas', ['fecha_inicio_ejecucion' => NULL]);
+        $resultado = $this->contabilidad_model->obtener('comprobantes_contables_tareas', ['fecha_inicio_ejecucion' => 0]);
+
+        if(empty($resultado[0])) {
+            print json_encode([
+                'error' => false,
+                'resultado' => 'Ninguna tarea encontrada',
+            ]);
+            return;
+        }
+
+        $tarea = $resultado[0];
+
+        // Marcamos la fecha de inicio de la tarea
+        $this->contabilidad_model->actualizar('comprobantes_contables_tareas', ['id' => $tarea->id], ['fecha_inicio_ejecucion' => DATE('Y-m-d H:i:s')]);
 
         $tipo_comprobante = $this->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => $tarea->comprobante_contable_tipo_id]);
         $sede = $this->configuracion_model->obtener('centros_operacion', ['id' => $tarea->centro_operacion_id]);
         $periodo = $this->configuracion_model->obtener('periodos', ['mes' => $tarea->mes]);
 
-        $carpeta_base = "{$this->config->item('ruta_archivo_digitalizado')}{$tipo_comprobante->ruta}/{$tarea->anio}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
+        $carpeta_base = "{$this->config->item('ruta_archivo_digitalizado')}/{$tipo_comprobante->ruta}/{$tarea->anio}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
 
         $consecutivo_inicial = intval($tarea->consecutivo_inicial);
         $consecutivo_final = intval($tarea->consecutivo_final);
@@ -234,6 +247,8 @@ class Contabilidad extends CI_Controller {
 
         // Recorremos cada consecutivo para validar los datos
         for ($consecutivo = $consecutivo_inicial; $consecutivo <= $consecutivo_final; $consecutivo ++) {
+            $documentos_adicionales = [];
+
             $ruta_comprobante = "{$carpeta_base}/{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";    // archivos/documentos_contables/01.RECIBOS DE CAJA/2026/1.ITAGUI/1.ENERO/100FRC71892/
             $nombre_comprobante = "{$sede->codigo}{$tipo_comprobante->abreviatura}{$consecutivo}";
             $ruta_pdf = "$ruta_comprobante/$nombre_comprobante.pdf";
@@ -244,21 +259,22 @@ class Contabilidad extends CI_Controller {
             // Buscar el código formateado en el PDF
             $comprobante_coincide = ($comprobante_existe) ? $this->extraer_texto($ruta_pdf, $tipo_comprobante->abreviatura) : false ;
 
+            if ($consecutivo_existe) $documentos_adicionales = $this->buscar_documentos_adicionales($ruta_comprobante, $nombre_comprobante);
+
             $datos = [
+                'comprobante_contables_tarea_id' => $tarea->id,
                 'ruta' => $ruta_comprobante,
                 'consecutivo_numero' => $consecutivo,
                 'consecutivo_existe' => $consecutivo_existe,
                 'comprobante_existe' => $comprobante_existe,
                 'comprobante_coincide' => $comprobante_coincide,
+                'cantidad_soportes' => count($documentos_adicionales),
             ];
 
             $this->contabilidad_model->crear('comprobantes_contables_tareas_detalle', $datos);
 
             $resultado[] = $datos;
         }
-
-        // $this->contabilidad_model->eliminar('comprobantes_contables_validacion', ['fecha' => date('Y-m-d'), 'directorio' => $carpeta_base]);
-        // $this->contabilidad_model->eliminar('comprobantes_contables_validacion_detalle', ['fecha' => date('Y-m-d'), 'directorio' => $carpeta_base]);
 
         // if(empty($resultado['documento_principal'])) {
         //     print json_encode([
@@ -269,9 +285,9 @@ class Contabilidad extends CI_Controller {
         //     return false;
         // }
                   
-        // // Se almacena en la base de datos el registros todos los documentos procesados
-        // $cantidad_documentos_procesados = $this->contabilidad_model->crear('comprobantes_contables_validacion', $resultado['documento_principal']);
-        
+        // Marcamos la fecha de finalización de la tarea
+        $this->contabilidad_model->actualizar('comprobantes_contables_tareas', ['id' => $tarea->id], ['fecha_fin_ejecucion' => DATE('Y-m-d H:i:s')]);
+
         print json_encode([
             'error' => false,
             'resultado' => $resultado,

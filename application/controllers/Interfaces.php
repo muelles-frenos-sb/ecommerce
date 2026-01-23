@@ -19,7 +19,7 @@ class Interfaces extends CI_Controller {
     function __construct() {
         parent::__construct();
 
-        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model', 'importaciones_model', 'configuracion_model', 'contabilidad_model']);
+        $this->load->model(['productos_model', 'clientes_model', 'proveedores_model', 'logistica_model', 'marketing_model', 'importaciones_model', 'configuracion_model', 'contabilidad_model', 'importaciones_pagos_model']);
     }
 
     var $ruta = './archivos/';
@@ -52,7 +52,6 @@ class Interfaces extends CI_Controller {
     function actualizar() {
         // Se obtienen los datos que llegan por POST
         $datos = json_decode($this->input->post('datos'), true);
-
         $id = $datos['id'];
         $tipo = $datos['tipo'];
 
@@ -127,6 +126,10 @@ class Interfaces extends CI_Controller {
         $datos = json_decode($this->input->post('datos'), true);
 
         switch ($datos['tipo']) {
+            case 'certificado_retencion':
+                echo enviar_email_certificado_retencion($datos['id']);
+            break;
+
             case 'clave_cambiada':
                 echo enviar_email_clave_cambiada($datos['id']);
             break;
@@ -184,6 +187,11 @@ class Interfaces extends CI_Controller {
             // Datos obtenidos del API de Siesa - Movimientos contables General
             case 'clientes_facturas_movimientos':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
+            case 'clientes_retenciones_detalle':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->clientes_model->crear('clientes_retenciones_detalle', $datos)]);
             break;
 
             // Datos obtenidos del API de Siesa - Clientes
@@ -279,6 +287,17 @@ class Interfaces extends CI_Controller {
                 unset($datos['abreviatura']);
                 
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
+            break;
+             case 'importaciones':
+                //$datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                unset($datos['usuario_id']);
+                print json_encode(['resultado' => $this->importaciones_model->crear($datos)]);
+            break;
+
+            case 'importaciones_pagos':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                
+                print json_encode(['resultado' => $this->importaciones_pagos_model->crear($datos)]);
             break;
 
             case 'recibos_cuentas_bancarias':
