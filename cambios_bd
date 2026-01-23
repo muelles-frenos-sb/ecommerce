@@ -681,3 +681,6 @@ ALTER TABLE `clientes_retenciones_detalle`
 ADD CONSTRAINT `clientes_retenciones_detalle_ibfk_1`
 FOREIGN KEY (`nit`, `anio`) 
 REFERENCES `clientes_retenciones_informe`(`nit`, `anio`);
+
+-- Campo para almacenar el nombre de la imagen de la campaña
+ALTER TABLE `marketing_campanias` ADD COLUMN `nombre_imagen` varchar(255) NULL AFTER `nombre_plantilla_whatsapp`;

@@ -91,7 +91,6 @@ class Marketing extends MY_Controller
         }
     }
 
-
     function importar_campanias()
     {
         $exito = false;
@@ -279,8 +278,10 @@ class Marketing extends MY_Controller
             //     $contenido
             // );
 
+            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url().'archivos/campanias/$campania->id/$campania->nombre_imagen' : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg' ;
+
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'marketing_campana_baterias_enero_2026', 'es_CO', 'https://repuestossimonbolivar.com/archivos/campanias/imagen.jpg');
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen);
 
             // Asumiendo que tu librería whatsapp_api devuelve TRUE o una estructura con 'error'
             // Ajusta esta condición según lo que retorne tu librería exactamente.
@@ -350,15 +351,10 @@ class Marketing extends MY_Controller
 
         // 5. Bucle de envío "Uno a Uno"
         foreach ($contactos as $contacto) {
-            // Asumo que la columna del teléfono se llama 'numero' o 'telefono'. Ajusta según tu BD.
-            $telefono_destino = $contacto->telefono; // O $contacto->telefono
+            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url().'archivos/campanias/$campania->id/$campania->nombre_imagen' : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg' ;
 
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
-                $telefono_destino, 
-                $plantilla, 
-                'es', 
-                [] // Variables de la plantilla si las hubiera
-            );
+            // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen);
 
             if ($resultado) {
                 // ÉXITO: Actualizamos la fecha de envío
