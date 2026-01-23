@@ -12,16 +12,13 @@ class Importaciones extends MY_Controller
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('importaciones_model');
-        $this->load->model('importaciones_pagos_model');
+        $this->load->model(['importaciones_model', 'importaciones_pagos_model']);
     }
 
     // Carga la vista principal (el contenedor)
     function index()
     {
         $this->data['contenido_principal'] = 'importaciones/index';
-        $datos = $this->input->post();
-
         $this->load->view('core/body', $this->data);
     }
 
@@ -35,7 +32,6 @@ class Importaciones extends MY_Controller
     }
 
     public function crear() {
-        
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
 
@@ -45,8 +41,6 @@ class Importaciones extends MY_Controller
     // 3. EDITAR (Muestra el formulario con datos)
     // --------------------------------------------------------------------
     public function editar($id_importacion) {
-        
-        
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
     }
@@ -163,10 +157,7 @@ class Importaciones extends MY_Controller
             // === MODO CREACIÓN ===
             $datos['fecha_creacion'] = date('Y-m-d H:i:s');
             // Asignamos usuario si tienes sistema de sesión
-            if($this->session->userdata('usuario_id')) {
-                $datos['usuario_id'] = $this->session->userdata('usuario_id');
-            }
-            
+            if($this->session->userdata('usuario_id')) $datos['usuario_id'] = $this->session->userdata('usuario_id');
             
             $resultado = $this->importaciones_model->crear($datos);
         }

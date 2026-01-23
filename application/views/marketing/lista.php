@@ -33,7 +33,7 @@
                     <input type="hidden" id="id_campania_prueba">
                     <div class="form-group">
                         <label for="telefono_prueba" class="font-weight-bold">Número de teléfono destino:</label>
-                        <input type="number" class="form-control form-control-lg" id="telefono_prueba" placeholder="Ej: 584121234567" required>
+                        <input type="number" class="form-control form-control-lg" id="telefono_prueba" placeholder="Ej: 573135662211" required>
                         <small class="text-muted">
                             <i class="fa fa-info-circle"></i> Ingresa el número con el código de país (sin el +).
                         </small>
@@ -209,6 +209,7 @@
                         fecha_finalizacion: $('#filtro_fecha_finalizacion').val(),
                         cantidad_contactos: $('#filtro_cantidad_contactos').val(),
                         cantidad_envios: $('#filtro_cantidad_envios').val(),
+                        nombre: $('#filtro_nombre').val(),
                     }
                 }
             },
@@ -218,6 +219,13 @@
                     data: 'id',
                     className: 'dt-body-right',
                     width: '5%'
+                },
+                { 
+                    title: `
+                        Nombre
+                        <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary mt-1">
+                    `,
+                    data: 'nombre',
                 },
                 { 
                     title: `Inicio <br><input type="date" id="filtro_fecha_inicio" class="form-control form-control-sm border-secondary mt-1">`,

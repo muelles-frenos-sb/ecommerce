@@ -51,6 +51,7 @@ Class Marketing_model extends CI_Model {
                 if (isset($filtros_personalizados['id']) && $filtros_personalizados['id'] != '') $where .= " AND mc.id LIKE '%{$filtros_personalizados['id']}%' ";
                 if (isset($filtros_personalizados['fecha_inicio']) && $filtros_personalizados['fecha_inicio'] != '') $where .= " AND DATE(mc.fecha_inicio) = '{$filtros_personalizados['fecha_inicio']}' ";
                 if (isset($filtros_personalizados['fecha_finalizacion']) && $filtros_personalizados['fecha_finalizacion'] != '') $where .= " AND DATE(mc.fecha_finalizacion) = '{$filtros_personalizados['fecha_finalizacion']}' ";
+                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $where .= " AND mc.nombre LIKE '%{$filtros_personalizados['nombre']}%' ";
 
                 // Filtros having
                 if (isset($filtros_personalizados['cantidad_contactos']) && $filtros_personalizados['cantidad_contactos'] != '') $having .= " AND cantidad_contactos = {$filtros_personalizados['cantidad_contactos']} ";
