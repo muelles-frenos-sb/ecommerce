@@ -63,7 +63,7 @@ if(empty($importaciones)) { ?>
                     </td>
 
                     <td>
-                        <?php echo date('d/m/Y', strtotime($item->fecha_creacion)); ?>
+                        <?php echo $item->fecha_creacion; ?>
                     </td>
 
                     <td>
@@ -83,7 +83,16 @@ if(empty($importaciones)) { ?>
                     </td>
 
                     <td>
-                        <?php echo date('d/m/Y', strtotime($item->fecha_estimada_llegada)); ?>
+                        <?php 
+                            $fecha = $item->fecha_estimada_llegada; 
+
+                            if ($fecha == null || $fecha == '0000-00-00' || empty($fecha)) {
+                                echo "-";
+                            } else {
+                                // Si es válida, la formateamos
+                                echo date('d/m/Y', strtotime($fecha));
+                            }
+                            ?>
                     </td>
 
                     <td>
