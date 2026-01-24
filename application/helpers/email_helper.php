@@ -23,7 +23,7 @@ function enviar_email_certificado_retencion($id) {
     $datos = [
         'pedido_completo' => '',
         'id' => $certificado->id,
-        'asunto' => 'Se ha subido un certificado de retención'. $certificado->tipo_retencion,
+        'asunto' => 'Se ha subido un certificado de retención '. $certificado->tipo_retencion,
         'cuerpo' => [
             'titulo' => '¡La subida del certificado ha sido exitosa!',
             'subtitulo' => "
@@ -34,6 +34,65 @@ function enviar_email_certificado_retencion($id) {
     ];
 
     return $CI->email_model->enviar($datos);
+}
+
+function enviar_email_masivo_notificacion_certificados($nit)
+{
+    $CI = get_instance();
+    $CI->load->model(['email_model', 'clientes_model', 'configuracion_model']);
+
+    // Buscar cliente
+    $cliente = $CI->db->get_where('clientes_retenciones_informe', ['nit' => $nit])->row();
+    if (!$cliente) {
+        return ['exito' => false, 'error' => 'CLIENTE_NO_EXISTE'];
+    }
+
+    // Buscar contactos
+    $contactos = $CI->configuracion_model->obtener('contactos', ['nit' => $nit]);
+    if (!$contactos) {
+        return ['exito' => false, 'error' => 'SIN_CONTACTOS'];
+    }
+
+    // Filtrar correos válidos
+    $destinatarios = [];
+    foreach ($contactos as $contacto) {
+        if (!empty($contacto->email) && filter_var($contacto->email, FILTER_VALIDATE_EMAIL)) {
+            $destinatarios[] = $contacto->email;
+        }
+    }
+
+    if (empty($destinatarios)) {
+        return ['exito' => false, 'error' => 'SIN_CONTACTOS_EMAIL'];
+    }
+
+    $url = site_url('sesion');
+
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $nit,
+        'asunto' => 'Certificados de retención disponibles para carga',
+        'cuerpo' => [
+            'titulo' => 'Ya puedes subir tus certificados de retención',
+            'subtitulo' => "
+                Hola, {$cliente->razon_social}.<br><br>
+                Ya puedes subir tus certificados tributarios en el portal.<br><br>
+                <a href='{$url}'>Ingresar</a>
+            ",
+        ],
+        'destinatarios' => $destinatarios,
+    ];
+
+    // Enviar email
+    $envio = $CI->email_model->enviar($datos);
+
+    if (!$envio) {
+        return [
+            'exito' => false,
+            'error' => 'ERROR_ENVIO_EMAIL'
+        ];
+    }
+
+    return ['exito' => true];
 }
 
 function enviar_email_clave_cambiada($id) {

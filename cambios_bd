@@ -537,6 +537,10 @@ CREATE TABLE importaciones (
     impuestos_dian DECIMAL(18, 2),
     fecha_ingreso_siesa DATE
 );
+
+ALTER TABLE importaciones
+ADD COLUMN porcentaje_anticipo DECIMAL(5,2) DEFAULT 0 COMMENT 'Porcentaje de anticipo (0-100)',
+ADD COLUMN usuario_id INT(11) NULL COMMENT 'ID del usuario que creó/modificó';
 -- Ejemplo 1: Importación de Electrónica desde China
 INSERT INTO importaciones (
     numero_orden_compra,
@@ -684,6 +688,20 @@ REFERENCES `clientes_retenciones_informe`(`nit`, `anio`);
 
 -- 20260122 Campo para almacenar el nombre de la imagen de la campaña
 ALTER TABLE `marketing_campanias` ADD COLUMN `nombre_imagen` varchar(255) NULL AFTER `nombre_plantilla_whatsapp`;
+
+-- Se agregan logs para el módulo de marketing - campañas
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (104, 'Marketing - Creación de campaña');
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (105, 'Marketing - Edición de campaña');
+
+-- Se agrega log para el excel de proveedores maestro de marcas
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (106, 'Reportes - Se generó el excel: Proveedores maestro de marcas');
+
+-- Se agrega campo de fecha de envio para controlar el envio masivo de la notificación
+ALTER TABLE `clientes_retenciones_informe` 
+ADD COLUMN `fecha_envio` datetime(0) NULL AFTER `fecha_actualizacion`;
+
+-- Log para controlar la información de envio de la notificacion masiva de llos certificados 
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (107, 'Webhook - Envío de notificación email para subida de certificados de retenciones habilitada');
 
 -- 20260122 Tabla para los pagos las importaciones
 CREATE TABLE importaciones_pagos  (

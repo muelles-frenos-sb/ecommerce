@@ -234,6 +234,7 @@ generarReporte = (tipo, datos) => {
 
         case 'excel/proveedores_maestro_marcas':
             url = `${$('#base_url').val()}reportes/${tipo}`
+            agregarLog(106)
         break;
 
         case 'pdf/proveedores_certificado_retenciones':

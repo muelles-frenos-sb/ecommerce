@@ -1,4 +1,6 @@
 <?php
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 // Carga de la plantilla
 $archivo = \PhpOffice\PhpSpreadsheet\IOFactory::load('application/views/reportes/plantillas/proveedores_orden_compra.xlsx');
 
@@ -91,6 +93,19 @@ foreach ($registros as $registro) {
     // Se extraen las ultimas tres órdenes
     $ultimas_ordenes = array_slice($items, -3);
 
+    // Precio última compra real (la más reciente disponible)
+    // Inicializa la variable con null (por defecto no hay precio)
+    $precio_ultima_compra = null;
+
+    // Si existe la posición 0 del arreglo, toma ese precio
+    if(isset($ultimas_ordenes[0])) $precio_ultima_compra = $ultimas_ordenes[0]->f421_precio_unitario;
+
+    // Solo si aún NO se ha asignado un precio (sigue siendo null) y existe la posición 1, toma ese precio
+    if($precio_ultima_compra === null && isset($ultimas_ordenes[1])) $precio_ultima_compra = $ultimas_ordenes[1]->f421_precio_unitario;
+
+    // Solo si todavía NO hay precio y existe la posición 2, toma ese precio
+    if($precio_ultima_compra === null && isset($ultimas_ordenes[2])) $precio_ultima_compra = $ultimas_ordenes[2]->f421_precio_unitario;
+
     // Datos para los movimientos de la orden de compra
     $hoja_movimientos->setCellValue("A$fila_movimientos", '500'); // Centro de operación
     $hoja_movimientos->setCellValue("B$fila_movimientos", 'FOC'); // Tipo de documento
@@ -117,6 +132,9 @@ foreach ($registros as $registro) {
     if(isset($ultimas_ordenes[1])) $proveedor_ultima_compra = $ultimas_ordenes[1]->f200_razon_social_prov;
     if(isset($ultimas_ordenes[2])) $proveedor_ultima_compra = $ultimas_ordenes[2]->f200_razon_social_prov;
     if($proveedor_ultima_compra) $hoja_movimientos->setCellValue("P$fila_movimientos", $proveedor_ultima_compra); // Lo muestra si existe
+
+    // Si el precio unitarios es mayor o igual al 20% se pinta la celda N de color naranja claro
+    if($precio_ultima_compra && $registro->precio_final >= ($precio_ultima_compra * 1.2)) $hoja_movimientos->getStyle("N$fila_movimientos")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFD966'); // naranja claro
 
     $fila_movimientos++;
 }

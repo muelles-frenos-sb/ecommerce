@@ -39,6 +39,71 @@ class Webhooks extends MY_Controller {
     }
 
     /**
+     * Envía notificaciones por correo electrónico a los clientes que tienen
+     * certificados tributarios pendientes de carga, y registra el resultado
+     * del proceso (enviados y fallidos).
+     *
+     * - Obtiene los clientes sin fecha de envío registrada.
+     * - Envía el correo usando el helper de email masivo.
+     * - Actualiza la fecha de envío cuando el correo se envía correctamente.
+     * - Genera un log detallado con el estado de cada cliente.
+     * - Retorna un JSON con el resumen del proceso y el detalle del log.
+     *
+     * @return void
+     */
+    public function envio_certificados_masivo()
+    {
+        set_time_limit(0);
+
+        $this->load->helper('email');
+
+        // Obtener solo pendientes (sin fecha_envio)
+        $clientes = $this->clientes_model->obtener('clientes_retenciones_informe', ['existe_fecha_envio' => true]);
+
+        if (empty($clientes)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'No hay clientes pendientes']);
+            return;
+        }
+
+        $enviados = 0;
+        $fallidos = 0;
+        $log = [];
+
+        foreach ($clientes as $cliente) {
+            $resultado = enviar_email_masivo_notificacion_certificados($cliente->nit);
+
+            // Se valida si el envio fue exitoso
+            if (isset($resultado['exito']) && $resultado['exito'] === true) {
+
+                // Marcar como enviado
+                $this->db->where('nit', $cliente->nit)
+                    ->update('clientes_retenciones_informe', [
+                        'fecha_envio' => date('Y-m-d H:i:s')
+                    ]);
+
+                $log[] = [
+                    'nit' => $cliente->nit,
+                    'estado' => 'ENVIADO'
+                ];
+                $enviados++;
+            } else {
+                $log[] = [
+                    'nit'   => $cliente->nit,
+                    'estado'=> 'FALLIDO',
+                    'error' => $resultado['error'] ?? 'DESCONOCIDO'
+                ];
+                $fallidos++;
+            }
+        }
+
+        echo json_encode([
+            'exito'   => true,
+            'mensaje' => "Proceso terminado. Enviados: $enviados | Fallidos: $fallidos",
+            'log'     => $log
+        ]);
+    }
+
+    /**
      * Lee un archivo de Excel con las retenciones de los clientes
      * y crea o actualiza los registros en la base de datos
      *
