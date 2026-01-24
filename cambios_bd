@@ -720,3 +720,16 @@ CREATE TABLE importaciones_pagos  (
     usuario_id int NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE `importaciones_pagos_origen_recursos`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NULL,
+  `fecha_creacion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `importaciones_pagos` 
+CHANGE COLUMN `origen_recursos` `origen_recursos_id` int(11) NULL DEFAULT NULL COMMENT '1: Recursos propios' AFTER `valor_cop`;
+
+ALTER TABLE `importaciones_pagos` 
+ADD CONSTRAINT `importaciones_pagos_ibfk_1` FOREIGN KEY (`origen_recursos_id`) REFERENCES `importaciones_pagos_origen_recursos` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
