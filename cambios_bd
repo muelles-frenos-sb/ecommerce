@@ -691,3 +691,10 @@ INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (105, 'Marketing - Edición de c
 
 -- Se agrega log para el excel de proveedores maestro de marcas
 INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (106, 'Reportes - Se generó el excel: Proveedores maestro de marcas');
+
+-- Se agrega campo de fecha de envio para controlar el envio masivo de la notificación
+ALTER TABLE `clientes_retenciones_informe` 
+ADD COLUMN `fecha_envio` datetime(0) NULL AFTER `fecha_actualizacion`;
+
+-- Log para controlar la información de envio de la notificacion masiva de llos certificados 
+INSERT INTO `logs_tipos`(`id`, `nombre`) VALUES (107, 'Webhook - Envío de notificación email para subida de certificados de retenciones habilitada');

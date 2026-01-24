@@ -281,6 +281,7 @@ Class Clientes_model extends CI_Model {
 
                 if(isset($datos['nit'])) $where .= " AND cri.nit = {$datos['nit']} ";
                 if(isset($datos['anio'])) $where .= " AND cri.anio = {$datos['anio']} ";
+                if (isset($datos['existe_fecha_envio'])) $where .= " AND (cri.fecha_envio IS NULL OR cri.fecha_envio = '') ";
 
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
