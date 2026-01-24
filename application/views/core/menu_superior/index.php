@@ -80,7 +80,7 @@
                                                                 <a class="megamenu-links__item-link" href="<?php echo site_url('denuncias'); ?>">Denuncias</a>
                                                             </li>
                                                             <li class="megamenu-links__item menu_mas" data-nombre="Trabaja con nosotros">
-                                                                <a class="megamenu-links__item-link" href="https://forms.office.com/r/XLcnbb3XcV">Trabaja con nosotros</a>
+                                                                <a class="megamenu-links__item-link" href="https://forms.office.com/r/XLcnbb3XcV" target="_blank">Trabaja con nosotros</a>
                                                             </li>
                                                         </ul>
                                                     </li>

@@ -183,7 +183,7 @@
                     </li>
 
                     <li data-mobile-menu-item>
-                        <a href="<?php echo site_url('blog/credito'); ?>" target="_blank" data-mobile-menu-trigger>
+                        <a href="<?php echo site_url('blog/credito'); ?>" data-mobile-menu-trigger>
                             Crédito
                         </a>
                     </li>
@@ -266,6 +266,14 @@
                         <li data-mobile-menu-item>
                             <a href="<?php echo site_url("proveedores/facturas?nit={$this->session->userdata('documento_numero')}"); ?>" data-mobile-menu-trigger>
                                 Ver mis facturas
+                            </a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if($this->session->userdata('usuario_id')) { ?>
+                        <li data-mobile-menu-item>
+                            <a href="<?php echo site_url("proveedores/certificados?nit={$this->session->userdata('documento_numero')}"); ?>" data-mobile-menu-trigger>
+                                Generar certificados tributarios
                             </a>
                         </li>
                     <?php } ?>
