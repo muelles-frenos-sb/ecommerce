@@ -262,7 +262,7 @@ class Contabilidad extends MY_Controller {
             if ($consecutivo_existe) $documentos_adicionales = $this->buscar_documentos_adicionales($ruta_comprobante, $nombre_comprobante);
 
             $datos = [
-                'comprobante_contables_tarea_id' => $tarea->id,
+                'comprobante_contable_tarea_id' => $tarea->id,
                 'ruta' => $ruta_comprobante,
                 'consecutivo_numero' => $consecutivo,
                 'consecutivo_existe' => $consecutivo_existe,
