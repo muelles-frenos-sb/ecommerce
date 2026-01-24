@@ -105,7 +105,7 @@
                     render: (data, type, row) => {
                         return `
                             <div class="dt-buttons-gap">
-                                <a class="btn btn-sm btn-success" href="${$("#site_url").val()}clientes/certificados_tributarios/crear/${data.nit}" title="Subir certificado de retención">
+                                <a class="btn btn-sm btn-success" href="${$("#site_url").val()}clientes/certificados_tributarios/crear/${data.nit}" title="Subir certificado de retención" target="_blank">
                                     <i class="fa fa-upload"></i>
                                 </a>
                             </div>
@@ -130,7 +130,7 @@
             },
             ordering: false,
             orderCellsTop: true,
-            pageLength: 100,
+            pageLength: 25,
             paging: true,
             processing: true,
             scrollCollapse: true,
