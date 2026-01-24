@@ -166,10 +166,15 @@ if (isset($id)) {
         })
         
         let plantillas = registros.resultado?.response?.data
+        console.log(plantillas)
 
         for(plantilla in plantillas) {
             let nombre = plantillas[plantilla].name
-            let mensaje = plantillas[plantilla].components[1].text
+            let componentes = plantillas[plantilla].components
+
+            for(componente in componentes) {
+                if(componentes[componente].type == 'BODY') var mensaje = componentes[componente].text
+            }
             
             $(`#plantilla_whatsapp`).append(`<option value="${nombre}" data-mensaje="${mensaje}">${nombre}</option>`)
         }
