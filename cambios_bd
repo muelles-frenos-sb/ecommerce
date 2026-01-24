@@ -537,6 +537,10 @@ CREATE TABLE importaciones (
     impuestos_dian DECIMAL(18, 2),
     fecha_ingreso_siesa DATE
 );
+
+ALTER TABLE importaciones
+ADD COLUMN porcentaje_anticipo DECIMAL(5,2) DEFAULT 0 COMMENT 'Porcentaje de anticipo (0-100)',
+ADD COLUMN usuario_id INT(11) NULL COMMENT 'ID del usuario que creó/modificó';
 -- Ejemplo 1: Importación de Electrónica desde China
 INSERT INTO importaciones (
     numero_orden_compra,
