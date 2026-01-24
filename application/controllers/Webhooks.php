@@ -57,6 +57,9 @@ class Webhooks extends MY_Controller {
 
         $this->load->helper('email');
 
+        // Obtener límite configurado
+        $limite = $this->config->item('cantidad_datos');
+
         // Obtener solo pendientes (sin fecha_envio)
         $clientes = $this->clientes_model->obtener('clientes_retenciones_informe', ['existe_fecha_envio' => true]);
 
@@ -68,8 +71,12 @@ class Webhooks extends MY_Controller {
         $enviados = 0;
         $fallidos = 0;
         $log = [];
+        $contador = 0;
 
         foreach ($clientes as $cliente) {
+            // Controlar cantidad máxima
+            if ($contador >= $limite) break;
+
             $resultado = enviar_email_masivo_notificacion_certificados($cliente->nit);
 
             // Se valida si el envio fue exitoso
@@ -94,6 +101,8 @@ class Webhooks extends MY_Controller {
                 ];
                 $fallidos++;
             }
+
+            $contador++;
         }
 
         echo json_encode([
