@@ -250,16 +250,14 @@ Class Configuracion_model extends CI_Model {
             case 'contactos':
                 // Filtro contador
 				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;
-                $having = "";
+                $having = "HAVING id";
                 $where = "WHERE tc.id";
 
                 if (isset($datos['busqueda'])) {
                     $palabras = explode(' ', trim($datos['busqueda']));
         
-                    $having = "HAVING";
-        
                     for ($i=0; $i < count($palabras); $i++) {
-                        $having .= " (";
+                        $having .= " AND (";
                         $having .= " nombre LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.numero LIKE '%{$palabras[$i]}%'";
                         $having .= " OR tc.nit LIKE '%{$palabras[$i]}%'";
@@ -290,7 +288,6 @@ Class Configuracion_model extends CI_Model {
                     LEFT JOIN modulos AS m ON tc.modulo_id = m.id
                 $where
                 $having
-                GROUP BY tc.nit, tc.numero
                 ORDER BY
                     tc.fecha_creacion DESC
                 $contador";
