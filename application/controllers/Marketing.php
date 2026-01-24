@@ -367,13 +367,13 @@ class Marketing extends MY_Controller
                 $errores++;
             }
             $this->configuracion_model->crear('logs', [
-                    'log_tipo_id' => 101,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => json_encode([
-                        'tipo' => 'Envio WhatsApp',
-                        'resultado' => $resultado
-                    ]),
-                ]);
+                'log_tipo_id' => 101,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => json_encode([
+                    'tipo' => 'Envio WhatsApp',
+                    'resultado' => $resultado
+                ]),
+            ]);
         }
 
         $this->configuracion_model->crear('logs', [

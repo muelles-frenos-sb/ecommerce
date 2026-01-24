@@ -682,5 +682,23 @@ ADD CONSTRAINT `clientes_retenciones_detalle_ibfk_1`
 FOREIGN KEY (`nit`, `anio`) 
 REFERENCES `clientes_retenciones_informe`(`nit`, `anio`);
 
--- Campo para almacenar el nombre de la imagen de la campaña
+-- 20260122 Campo para almacenar el nombre de la imagen de la campaña
 ALTER TABLE `marketing_campanias` ADD COLUMN `nombre_imagen` varchar(255) NULL AFTER `nombre_plantilla_whatsapp`;
+
+-- 20260122 Tabla para los pagos las importaciones
+CREATE TABLE importaciones_pagos  (
+    id int NOT NULL AUTO_INCREMENT,
+    importacion_id int NULL,
+    estado_id tinyint(1) NULL DEFAULT 0 COMMENT '0: Pagado; 1: Pendiente por pagar',
+    fecha varchar(255) NULL COMMENT 'Fecha del pago',
+    observaciones varchar(255) NULL,
+    factura_numero varchar(50) NULL,
+    valor_moneda_extranjera double NULL,
+    valor_trm double NULL COMMENT 'Valor de TRM al momento',
+    valor_cop double NULL COMMENT 'Monto del pago',
+    origen_recursos tinyint(1) NULL COMMENT '1: Recursos propios',
+    cuenta_bancaria_id int NULL COMMENT 'Tabla cuentas_bancarias',
+    fecha_creacion datetime(0) NULL,
+    usuario_id int NULL,
+    PRIMARY KEY (id)
+);
