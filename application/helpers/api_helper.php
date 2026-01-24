@@ -21,6 +21,8 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     } else if ($recibo->recibo_tipo_id == 5) {
         // Las observaciones se traen del recibo
         $notas_recibo = $recibo->observaciones;
+    } else if ($recibo->recibo_tipo_id == 3) {
+        $notas_recibo = "PAGO DEL DIA $recibo->fecha_consignacion";
     } else {
         $notas_recibo = "Recibo cargado desde la página web por el cliente";
     }
@@ -40,8 +42,8 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
      */
     $centro_operativo = 400; // eCommerce (por defecto)
 
-    // Si es pago con importación de archivo plano
-    if($recibo->recibo_tipo_id == 5) {
+    // Si es pago con importación de archivo plano o con comprobantes
+    if($recibo->recibo_tipo_id == 5 || $recibo->recibo_tipo_id == 3) {
         if($recibo->mes_consignacion == date('m')) $centro_operativo = 100; // Si el mes de consignación es este mes
         if($recibo->dia_consignacion >= 6) $centro_operativo = 100; // Si el día de consignación es a partir del día 6
         if($recibo->mes_consignacion != date('m') && $recibo->dia_consignacion <= 5) $centro_operativo = 500; // Si el mes de consignación es diferente al actual y el día está entre 1 y 5
