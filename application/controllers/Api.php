@@ -563,46 +563,46 @@ class Api extends RestController {
             
             // Generación de orden de compra
             case 'proveedores_orden_compra':
-                $orden_numero = $datos['orden_numero'];
+                $parametros = [
+                    'orden_numero' => (isset($datos['orden_numero'])) ? $datos['orden_numero'] : null,
+                    'proveedor' => (isset($datos['proveedor'])) ? $datos['proveedor'] : null,
+                    'url' => (isset($datos['url'])) ? $datos['url'] : null,
+                ];
 
-                // El archivo que llega en base64 se decodifica
-                $archivo = base64_decode($datos['archivo']);
-                
-                $directorio = FCPATH . 'archivos/whatsapp/';
-                
-                $ruta_completa = "{$directorio}{$orden_numero}.pdf";
+                $this->form_validation->set_data($parametros);
 
-                // Se crea el archivo
-                file_put_contents($ruta_completa, $archivo);
-                
-                $url = site_url("archivos/whatsapp/$orden_numero.pdf");
+                if (!$this->form_validation->run('whatsapp_proveedores_orden_compra')) {
+                    $this->response([
+                        "error" => true,
+                        "mensaje" => "Parámetros inválidos.",
+                        "resultado" => $this->form_validation->error_array(),
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
 
                 $contenido = [
-                    [
-                        'type' => 'header',
-                        "parameters" => [
-                            [
-                                'type' => 'document',
-                                "document" => [
-                                    'link' => (ENVIRONMENT != 'production') ? 'https://repuestossimonbolivar.com/archivos/solicitudes_credito/3/HERNAN%20DARIO%20RUIZ%20TOBON%20OK.pdf' : $url,
-                                    'filename' => "Orden de compra $orden_numero"
-                                ],
-                            ]
-                        ]
-                    ],
                     [
                         'type' => 'body',
                         "parameters" => [
                             [
                                 'type' => 'text',
                                 'parameter_name' => 'orden_numero',
-                                "text" => $orden_numero,
+                                "text" => $parametros['orden_numero'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'proveedor',
+                                "text" => $parametros['proveedor'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'url',
+                                "text" => $parametros['url'],
                             ]
                         ]
                     ]
                 ];
 
-                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, $tipo, 'es', $contenido);
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, 'proveedor_orden_compra', 'es_CO', $contenido);
 
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 101,
@@ -629,7 +629,7 @@ class Api extends RestController {
                     'tipo_solicitud' => (isset($datos['tipo_solicitud'])) ? $datos['tipo_solicitud'] : null,
                 ];
 
-                $this->form_validation->set_data($datos);
+                $this->form_validation->set_data($parametros);
 
                 if (!$this->form_validation->run('whatsapp_logistica_diligencia_post')) {
                     $this->response([

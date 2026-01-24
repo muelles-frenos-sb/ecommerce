@@ -60,4 +60,10 @@ $config = [
         ['field' => 'tipo_solicitud', 'label' => 'Tipo de solicitud', 'rules' => 'required|trim'],
         ['field' => 'observaciones', 'label' => 'Id del módulo', 'rules' => 'required|trim'],
     ],
+
+    'whatsapp_proveedores_orden_compra' => [
+        ['field' => 'orden_numero', 'label' => 'Numero de orden de compra', 'rules' => 'required|trim'],
+        ['field' => 'proveedor', 'label' => 'Nombre del proveedor', 'rules' => 'required|trim'],
+        ['field' => 'url', 'label' => 'URL', 'rules' => 'required|trim'],
+    ]
 ];
