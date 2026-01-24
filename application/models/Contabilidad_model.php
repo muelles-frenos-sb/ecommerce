@@ -62,11 +62,11 @@ Class Contabilidad_model extends CI_Model {
                     s.nombre AS centro_operativo,
                     cct.anio,
                     p.nombre AS mes,
-                    ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contables_tarea_id = cct.id AND cctd.consecutivo_existe = 1 ) consecutivo_existe,
-                    ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contables_tarea_id = cct.id AND cctd.consecutivo_existe = 0 ) consecutivo_no_existe,
-                    ( SELECT COUNT( cctd.comprobante_coincide ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contables_tarea_id = cct.id AND cctd.comprobante_coincide = 1 ) comprobante_coincide,
-                    ( SELECT COUNT( cctd.comprobante_coincide ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contables_tarea_id = cct.id AND cctd.comprobante_coincide = 0 ) comprobante_no_coincide,
-                    ( SELECT SUM( cctd.cantidad_soportes ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contables_tarea_id = cct.id ) cantidad_soportes,
+                    ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.consecutivo_existe = 1 ) consecutivo_existe,
+                    ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.consecutivo_existe = 0 ) consecutivo_no_existe,
+                    ( SELECT COUNT( cctd.comprobante_coincide ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.comprobante_coincide = 1 ) comprobante_coincide,
+                    ( SELECT COUNT( cctd.comprobante_coincide ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.comprobante_coincide = 0 ) comprobante_no_coincide,
+                    ( SELECT SUM( cctd.cantidad_soportes ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id ) cantidad_soportes,
                     TIMESTAMPDIFF(MINUTE, fecha_inicio_ejecucion, fecha_fin_ejecucion) tiempo_ejecucion_minutos
                 FROM
                     comprobantes_contables_tareas AS cct
