@@ -133,8 +133,8 @@ foreach ($registros as $registro) {
     if(isset($ultimas_ordenes[2])) $proveedor_ultima_compra = $ultimas_ordenes[2]->f200_razon_social_prov;
     if($proveedor_ultima_compra) $hoja_movimientos->setCellValue("P$fila_movimientos", $proveedor_ultima_compra); // Lo muestra si existe
 
-    // Si el precio unitarios es mayor o igual al 20% se pinta la celda N de color naranja claro
-    if($precio_ultima_compra && $registro->precio_final >= ($precio_ultima_compra * 1.2)) $hoja_movimientos->getStyle("N$fila_movimientos")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFD966'); // naranja claro
+    // Si el precio unitarios es mayor o igual al 20% se pinta la celda J de color naranja claro
+    if($precio_ultima_compra && $registro->precio_final >= ($precio_ultima_compra * 1.2)) $hoja_movimientos->getStyle("J$fila_movimientos")->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)->getStartColor()->setRGB('FFD966'); // naranja claro
 
     $fila_movimientos++;
 }
