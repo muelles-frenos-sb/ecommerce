@@ -314,11 +314,19 @@ class Clientes extends MY_Controller {
         }
     }
 
+    /**
+     * subir_certificado
+     * 
+     * Función encargada de subir el certificado de retención de un cliente, 
+     * construyendo automáticamente el nombre del archivo con el NIT, razón social 
+     * y monto del certificado. Crea el directorio si no existe y retorna un JSON 
+     * con el resultado del proceso.
+     *
+     * @return void
+     */
     function subir_certificado() {
         $id = $this->uri->segment(3);
-        $tipo_retencion = $this->uri->segment(4);
         $exito = false;
-        $anio = date('Y') - 1; // Año anterior
 
         // Se consulta información del certificado para construir el nombre del archivo
         $certificado = $this->clientes_model->obtener('clientes_retenciones_detalle', ['id' => $id]);
@@ -337,8 +345,7 @@ class Clientes extends MY_Controller {
         }
 
         // Crear directorio si no existe
-        $directorio = "{$this->config->item('ruta_archivo_digitalizado')}/15. CERTIFICADOS DE RETENCION/$anio/$tipo_retencion";
-
+        $directorio = "./archivos/certificados_retencion/$id/";
         if (!is_dir($directorio)) @mkdir($directorio, 0777, true);
 
         $archivo = $_FILES['archivo'];
@@ -363,7 +370,7 @@ class Clientes extends MY_Controller {
         $nombre_archivo = "{$cliente->nit}_{$razon_social}_{$monto_formateado}.{$extension}";
 
         // Subir archivo
-        if (move_uploaded_file($archivo['tmp_name'], "$directorio/$nombre_archivo")) {
+        if (move_uploaded_file($archivo['tmp_name'], $directorio . $nombre_archivo)) {
             $exito = true;
             $mensaje = "El archivo <b>{$nombre_archivo}</b> se subió correctamente.";
         } else {

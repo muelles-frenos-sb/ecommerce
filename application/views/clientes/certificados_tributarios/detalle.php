@@ -10,6 +10,9 @@
 
 <div class="block">
     <div class="container">
+        <div class="block-header__body">
+            <h1 class="block-header__title">Certificados de retención de <?php echo $cliente->razon_social; ?></h1>
+        </div>
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
 
@@ -19,9 +22,9 @@
                         <label for="tipo_retencion">Tipo de retención *</label>
                         <select class="form-control" id="tipo_retencion" name="tipo_retencion" required>
                             <option value="" disabled selected>Seleccione tipo de retención</option>
-                            <option value="FUENTE" data-directorio="RETEFUENTE">Retención en la fuente</option>
-                            <option value="IVA" data-directorio="RETEIVA">IVA</option>
-                            <option value="ICA" data-directorio="RETEICA">ICA</option>
+                            <option value="IVA">IVA</option>
+                            <option value="ICA">ICA</option>
+                            <option value="FUENTE">Retención en la fuente</option>
                         </select>
                     </div>
 
@@ -104,7 +107,7 @@
             let peticion = new XMLHttpRequest()
             peticion.open(
                 'POST',
-                `${$('#site_url').val()}clientes/subir_certificado/${id}/${$("#tipo_retencion option:selected").attr('data-directorio')}`
+                `${$('#site_url').val()}clientes/subir_certificado/${id}`
             )
             peticion.send(formData)
 
