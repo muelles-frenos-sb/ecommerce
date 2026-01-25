@@ -1,4 +1,6 @@
 <?php
+$datos['omitir_bodega'] = true;
+$datos['omitir_lista_precio'] = true;
 if(isset($datos['id'])) $producto = $this->productos_model->obtener('productos', $datos);
 
 $descripcion = '';
@@ -8,8 +10,6 @@ $imagen = base_url().'images/logo.png';
 if(isset($datos['id'])) $imagen = url_fotos($producto->marca, $producto->referencia);
 if(isset($datos['titulo'])) $titulo = $datos['titulo'];
 if(isset($datos['id'])) $descripcion = $producto->notas;
-
-
 ?>
 
 <div class="notification">

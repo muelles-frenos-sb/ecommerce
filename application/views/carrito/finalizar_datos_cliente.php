@@ -27,7 +27,7 @@ if(!empty($tercero)) {
 <div class="form-row">
     <div class="form-group col-12">
         <div class="tag-badge tag-badge--new badge_formulario badge_formulario_azul mb-2 mt-2">
-            DATOS DEL PAGO
+            DATOS DE FACTURACIÓN
         </div>
     </div>
 

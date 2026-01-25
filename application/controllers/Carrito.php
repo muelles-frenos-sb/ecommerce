@@ -33,13 +33,17 @@ class Carrito extends MY_Controller {
         $precio = $datos['precio'];
         $nombre = $datos['nombre'];
         $unidad_inventario = $datos['unidad_inventario'];
+        $lista_precio = (isset($datos['lista_precio'])) ? $datos['lista_precio']: '' ;
 
         print json_encode(['resultado' => $this->cart->insert([
             'id'      => $id,
             'qty'     => 1,
             'price'   => $precio,
             'name'    => preg_replace('/[^a-zA-Z0-9\-_\.]/', '-', $nombre),
-            'options' => ['unidad_inventario' => $unidad_inventario]
+            'options' => [
+                'unidad_inventario' => $unidad_inventario,
+                'lista_precio' => $lista_precio,
+            ]
         ])]);
     }
 
@@ -52,13 +56,18 @@ class Carrito extends MY_Controller {
         $this->load->view('core/body', $this->data);
     }
 
-    function modificar_item($tipo, $row_id) {
+    function modificar_item($tipo, $row_id, $precio = '') {
         $item = $this->cart->get_item($row_id);
 
-        $datos = array(
+        // Modificación de cantidades
+        if($tipo == 'agregar') $item['qty'] += 1;
+        if($tipo == 'eliminar') $item['qty'] -= 1;
+
+        $datos = [
             'rowid' => $row_id,
-            'qty'   => ($tipo == 'agregar') ? $item['qty'] + 1 : $item['qty'] - 1,
-        );
+            'qty'   => $item['qty'],
+            'price' => ($precio != '') ? $precio : $item['price'],
+        ];
         
         print json_encode(['resultado' => $this->cart->update($datos)]);
     }

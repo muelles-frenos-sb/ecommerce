@@ -1,6 +1,9 @@
 <?php foreach ($this->cart->contents() as $item) {
-    $datos = ['id' => $item['id']];
-    $producto = $this->productos_model->obtener('productos', $datos);
+    $producto = $this->productos_model->obtener('productos', [
+        'id' => $item['id'],
+        'omitir_bodega' => true,
+        'omitir_lista_precio' => true,
+    ]);
 ?>
     <tr class="cart-table__row">
         <td class="cart-table__column cart-table__column--image">

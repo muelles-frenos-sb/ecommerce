@@ -18,7 +18,7 @@ if($this->session->userdata('usuario_id')) {
                         <a href="<?php echo site_url('carrito/ver'); ?>" class="breadcrumb__item-link">Carrito de compras</a>
                     </li>
                     <li class="breadcrumb__item breadcrumb__item--current breadcrumb__item--last" aria-current="page">
-                        <span class="breadcrumb__item-link">Pago</span>
+                        <span class="breadcrumb__item-link">Finalizar pedido</span>
                     </li>
                     <li class="breadcrumb__title-safe-area" role="presentation"></li>
                 </ol>
@@ -36,7 +36,7 @@ if($this->session->userdata('usuario_id')) {
                         <div class="form-row">
                             <div class="form-group col-12">
                                 <label for="checkout_documento_numero">Número de documento *</label>
-                                <input type="number" class="form-control" id="checkout_documento_numero" value="<?php if(ENVIRONMENT == 'development') echo '1039448943'; ?>" autofocus>
+                                <input type="number" class="form-control" id="checkout_documento_numero" autofocus>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-block" id="btn_validar_documento">Validar datos</button>
@@ -58,8 +58,11 @@ if($this->session->userdata('usuario_id')) {
                             </thead>
                             <tbody class="checkout__totals-products">
                                 <?php foreach ($this->cart->contents() as $item) {
-                                    $datos = ['id' => $item['id']];
-                                    $producto = $this->productos_model->obtener('productos', $datos);    
+                                    $producto = $this->productos_model->obtener('productos', [
+                                        'id' => $item['id'],
+                                        'omitir_bodega' => true,
+                                        'omitir_lista_precio' => true,
+                                    ]);    
                                 ?>
                                     <tr>
                                         <td><?php echo $producto->notas; ?> x <?php echo $item['qty']; ?></td>
@@ -99,12 +102,25 @@ if($this->session->userdata('usuario_id')) {
                                 </label>
                             </div>
                         </div>
+                        <hr>
 
-                        <img src="<?php echo base_url(); ?>images/mensaje_flete_gratis.png" alt="Continuar comprando" class="mb-2" width="100%">
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <div class="block-features__item-icon">
+                                    <img src="<?php echo base_url(); ?>images/icons/envios_gratis.svg">
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="block-features__item-info">
+                                    <div class="block-features__item-title">Envíos gratis</div>
+                                    <div class="block-features__item-subtitle">Tus órdenes gratis en todo el Valle de Aburrá</div>
+                                </div>
+                            </div>
+                        </div>
 
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
-                            Realizar pago seguro
+                            Finalizar pedido
                         </button>
                     </div>
                 </div>
@@ -284,7 +300,7 @@ if($this->session->userdata('usuario_id')) {
             $('#checkout_documento_numero').val($('#sesion_documento_numero').val())
 
             // Carga los datos del cliente
-            cargarDatosCliente()
+            // cargarDatosCliente()
         }
     })
 </script>

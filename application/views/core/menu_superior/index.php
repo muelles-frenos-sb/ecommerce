@@ -334,7 +334,7 @@
                     <span class="indicator__value color_azul_corporativo_primario" id="carrito_total">$ 0</span>
                 </a>
 
-                <div class="indicator__content">
+                <div class="indicator__content" style="max-height: 80vh; overflow-y: auto;">
                     <div class="dropcart" id="contenedor_carrito_detalle"></div>
                 </div>
             </div><!-- Carrito de compras -->

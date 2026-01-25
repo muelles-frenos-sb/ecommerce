@@ -1,7 +1,10 @@
 <ul class="dropcart__list">
     <?php foreach ($this->cart->contents() as $item) {
-        $datos = ['id' => $item['id']];
-        $producto = $this->productos_model->obtener('productos', $datos);
+        $producto = $this->productos_model->obtener('productos', [
+            'id' => $item['id'],
+            'omitir_bodega' => true,
+            'omitir_lista_precio' => true]
+        );
     ?>
         <li class="dropcart__item">
             <div class="dropcart__item-image image image--type--product">

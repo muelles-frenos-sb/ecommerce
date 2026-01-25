@@ -5,7 +5,7 @@
     }
 </style>
 
-<?php  $productos = $this->productos_model->obtener('productos', $datos); ?>
+<?php $productos = $this->productos_model->obtener('productos', $datos); ?>
 
 <div class="table-responsive">
     <table class="table-bordered" id="tabla_productos_encontrados">
@@ -18,13 +18,14 @@
                 <th class="text-center">Stock</th>
                 <th class="text-center">Lista</th>
                 <th class="text-center">Precio unitario</th>
-                <!-- <th class="text-center">Cantidad</th> -->
-                <!-- <th class="text-center">Subtotal</th> -->
                 <th class="text-center"></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach($productos as $producto) { ?>
+            <?php foreach($productos as $producto) {
+                $precios_disponibles = $this->productos_model->obtener('producto_listas_precio_disponibles', ['producto_id' => $producto->id]);
+                $inventario_disponible = $this->productos_model->obtener('producto_bodegas_disponibles', ['producto_id' => $producto->id]);
+            ?>
                 <tr>
                     <td id="producto_id"><?php echo $producto->id; ?></td>
 
@@ -39,7 +40,7 @@
                         <!-- Se cargan las bodegas donde el producto tiene disponibilidad -->
                         <select id="<?php echo "producto_{$producto->id}_bodega"; ?>" onChange="javascript:actualizarDisponibilidad(<?php echo $producto->id; ?>)" class="form-control">
                             <?php
-                            foreach($this->productos_model->obtener('producto_bodegas_disponibles', ['producto_id' => $producto->id]) as $bodega) {
+                            foreach($inventario_disponible as $bodega) {
                                 echo "<option value='$bodega->codigo' data-disponibilidad='$bodega->disponible'>$bodega->codigo ($bodega->disponible)</option>";
                             }
                             ?>
@@ -54,23 +55,18 @@
                         <!-- Se cargan las listas donde el producto tiene disponibilidad -->
                         <select id="<?php echo "producto_{$producto->id}_lista_precio"; ?>" onChange="javascript:actualizarPrecioUnitario(<?php echo $producto->id; ?>)" class="form-control">
                             <?php
-                            foreach($this->productos_model->obtener('producto_listas_precio_disponibles', ['producto_id' => $producto->id]) as $lista) {
+                            foreach($precios_disponibles as $lista) {
                                 echo "<option value='$lista->lista_precio' data-precio='$lista->precio'>$lista->lista_precio (".formato_precio($lista->precio).")</option>";
                             }
+
+                            // Si hay inventario disponible, se habilita la lista personalizada
+                            if(!empty($inventario_disponible)) echo "<option value='005' data-precio='0'>005 (PERSONALIZADA)</option>";
                             ?>
                         </select>
                     </td>
 
                     <!-- Precio unitario -->
                     <td class="text-center" id="<?php echo "producto_{$producto->id}_precio"; ?>" data-precio_unitario="<?php echo $producto->precio; ?>">-</td>
-
-                    <!-- Cantidad -->
-                    <!-- <td class="text-center">
-                        <input type="number" id="<?php // echo "producto_{$producto->id}_cantidad"; ?>" value="1">
-                    </td> -->
-
-                    <!-- Subtotal -->
-                    <!-- <td class="text-center" id="<?php // echo "producto_{$producto->id}_subtotal"; ?>" data-subtotal="0">-</td> -->
 
                     <!-- Agregar -->
                     <td class="text-center">
@@ -81,6 +77,7 @@
                                 producto_id: <?php echo $producto->id ?>,
                                 referencia: '<?php echo $producto->referencia; ?>',
                                 unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
+                                precio_personalizado: true,
                             })"
                             class="btn btn-success pl-3 pr-3">
                             +
@@ -115,24 +112,17 @@
         let bodegaSeleccionada = $(`#producto_${datos.producto_id}_bodega option:selected`).val()
         let listaPrecioSeleccionada = $(`#producto_${datos.producto_id}_lista_precio option:selected`).val()
 
-        if(!bodegaSeleccionada || !listaPrecioSeleccionada) {
-            return
-        }
+        if(!bodegaSeleccionada || !listaPrecioSeleccionada) return
 
         let precio = $(`#producto_${datos.producto_id}_precio`).attr('data-precio_unitario')
-
-        console.log({
-            id: datos.producto_id,
-            precio: parseFloat(precio),
-            referencia: datos.referencia,
-            unidad_inventario: datos.unidad_inventario,
-        })
 
         agregarProducto({
             id: datos.producto_id,
             precio: parseFloat(precio),
             referencia: datos.referencia,
             unidad_inventario: datos.unidad_inventario,
+            unidad_inventario: datos.unidad_inventario,
+            lista_precio: listaPrecioSeleccionada,
         })
 
         cargarInterfaz('clientes/ventas/gestion/carrito', 'contenedor_resultado_carrito')
@@ -179,7 +169,7 @@
             scrollCollapse: true,
             scroller: true,
             scrollX: false,
-            scrollY: '300px',
+            scrollY: '215px',
             searching: false,
             stateSave: false,
         })

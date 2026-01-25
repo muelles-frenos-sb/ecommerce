@@ -1,12 +1,15 @@
 const agregarProducto = async datos => {
-    let {id, precio, referencia, unidad_inventario} = datos
+    let {id, precio, referencia, unidad_inventario, lista_precio} = datos
 
-    obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, {
+    let datosCarrito = {
         id: id,
         precio: precio,
         nombre: referencia,
         unidad_inventario: unidad_inventario,
-    })
+        lista_precio: lista_precio,
+    }
+
+    obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, datosCarrito)
     .then(resultado => {
         mostrarNotificacion({
             tipo: 'carrito_nuevo_producto',
@@ -73,13 +76,14 @@ const eliminarProducto = async(rowId) => {
     })
 }
 
-const modificarItem = async(tipo, rowId, productoId) => {
-    obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item/${tipo}/${rowId}`)
+const modificarItem = async(tipo, rowId, productoId, precio = '') => {
+    obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item/${tipo}/${rowId}/${precio}`)
     .then(resultado => {
         mostrarNotificacion({
             tipo: 'carrito_nuevo_producto',
             id: productoId,
         })
+
         actualizarCarrito(productoId)
         listarCarrito()
     })

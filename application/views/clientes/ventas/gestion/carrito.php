@@ -1,26 +1,27 @@
-<div class="table-responsive">
-    <table class="table-bordered" id="tabla_productos_carrito">
+<div class="table-responsive" style="max-height: 270px; overflow-y: auto;">
+    <table class="table-bordered" id="tabla_productos_carrito" width="100%">
         <thead>
             <tr>
-                <th class="text-center"></th>
-                <th class="text-center"></th>
-                <th class="text-center"></th>
-                <th class="text-center"></th>
-                <th class="text-center"></th>
-                <th class="text-center"></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($this->cart->contents() as $item) {
-                $datos = ['id' => $item['id']];
-                $datos['omitir_bodega'] = true;
-                $datos['omitir_lista_precio'] = true;
-                $producto = $this->productos_model->obtener('productos', $datos);
+                $producto = $this->productos_model->obtener('productos', [
+                    'id' => $item['id'],
+                    'omitir_bodega' => true,
+                    'omitir_lista_precio' => true,
+                ]);
             ?>
                 <tr class="cart-table__row">
                     <td class="cart-table__column cart-table__column--image">
                         <div class="image image--type--product">
-                            <a href="product-full.html" class="image__body">
+                            <a href="<?php echo site_url("productos/ver/$producto->id"); ?>" class="image__body" target="_blank">
                                 <img class="image__tag" src="<?php echo url_fotos($producto->marca, $producto->referencia); ?>">
                             </a>
                         </div>
@@ -29,7 +30,14 @@
                         <a href="" class="cart-table__product-name"><?php echo $producto->notas; ?></a>
                     </td>
                     <td class="cart-table__column cart-table__column--price" data-title="Precio">
-                        <?php echo formato_precio($item['price']); ?>
+                        <!-- Si la lista de precios es F005 (Personalizada) -->
+                        <?php if(isset($item['options']['lista_precio']) && $item['options']['lista_precio'] == '005') { ?>
+                            <!-- Posibilidad de editar el precio -->
+                            <input type="text" class="form-control" id="ventas_carrito_precio_<?php echo $item['id']; ?>" data-row_id="<?php echo $item['rowid']; ?>" data-id="<?php echo $producto->id; ?>" value="<?php echo $item['price']; ?>" placeholder="$0">
+                        <?php } else { ?>
+                            <!-- Precio sin edición -->
+                            <?php echo formato_precio($item['price']); ?>
+                        <?php } ?>
                     </td>
                     <td class="cart-table__column cart-table__column--quantity" data-title="Cantidad">
                         <div class="cart-table__quantity input-number">
@@ -53,7 +61,17 @@
 </div>
 
 <script>
-    $().ready(() => {
+    $().ready(() => {        
+        $(`input[id^='ventas_carrito_precio_']`).on('blur', function() {
+            // Se formatea el campo
+            $(this).val(formatearNumero($(this).val()))
+
+            // Se obtiene el precio sin formato
+            let precio = parseFloat($(this).val().replace(/\./g, ''))
+            
+            modificarItem('precio', $(this).attr('data-row_id'), $(this).attr('data-id'), precio)
+        })
+
         new DataTable('#tabla_productos_carrito', {
             deferRender: true,
             fixedHeader: true,
@@ -69,9 +87,9 @@
             paging: false,
             processing: true,
             scrollCollapse: true,
-            scroller: true,
+            // scroller: true,
             scrollX: false,
-            scrollY: '300px',
+            // scrollY: '300px',
             searching: false,
             stateSave: false,
         })
