@@ -73,6 +73,9 @@
         })
         $('#modal_asignar_usuario').modal('hide')
 
+        // Notificación al usuario
+        await obtenerPromesa(`${$('#site_url').val()}interfaces/enviar_email`, {tipo: 'asignacion_credito', id: id})
+
         listarSolicitudesCredito()
 
         mostrarAviso('exito', `Se ha asignado el usuario exitosamente.`, 5000)

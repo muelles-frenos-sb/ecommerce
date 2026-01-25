@@ -126,6 +126,10 @@ class Interfaces extends CI_Controller {
         $datos = json_decode($this->input->post('datos'), true);
 
         switch ($datos['tipo']) {
+            case 'asignacion_credito':
+                echo enviar_email_asignacion_credito($datos['id']);
+            break;
+
             case 'certificado_retencion':
                 echo enviar_email_certificado_retencion($datos['id']);
             break;
@@ -404,6 +408,9 @@ class Interfaces extends CI_Controller {
                 // Se obtiene el id 
                 $id = $this->clientes_model->crear('clientes_solicitudes_credito', $datos);
                 $directorio = $directorio = "./archivos/solicitudes_credito/$id/";
+
+                // Notificación al usuario
+                if($id_usuario_asignado) enviar_email_asignacion_credito($id);
 
                 // Valida que el directorio exista. Si no existe,lo crea con el id obtenido,
                 // asigna los permisos correspondientes

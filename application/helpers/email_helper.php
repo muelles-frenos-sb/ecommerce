@@ -1,6 +1,34 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+function enviar_email_asignacion_credito($id) {
+    // Se obtiene una referencia del objeto Controlador
+    $CI = get_instance();
+
+    $CI->load->model(['clientes_model', 'email_model']);
+
+    $solicitud = $CI->clientes_model->obtener("clientes_solicitudes_credito", ["id" => $id]);
+    $url = site_url("clientes/credito/ver/$id");
+
+    $datos = [
+        'pedido_completo' => '',
+        'id' => $solicitud->id,
+        'asunto' => 'Solicitud de crédito asignada',
+        'cuerpo' => [
+            'titulo' => "
+                Solicitud asignada
+            ",
+            'subtitulo' => "
+                Te ha llegado una solicitud de crédito a nombre de <b>$solicitud->razon_social</b>. Por favor, revísalo para darle trámite a este lo antes posible.<br><br>
+                Haz <a href='$url' style='color: #ffd400; text-decoration: none;'>clic aquí</a> para ingresar a la solicitud
+            ",
+        ],
+        'destinatarios' => $solicitud->email_usuario_asignado,
+    ];
+
+    $CI->email_model->enviar($datos);
+}
+
 function enviar_email_certificado_retencion($id) {
     // Se obtiene una referencia del objeto Controlador
     $CI = get_instance();

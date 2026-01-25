@@ -398,6 +398,7 @@ Class Clientes_model extends CI_Model {
                     csce.nombre estado,
                     csce.clase estado_clase,
                     IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
+                    ua.email AS email_usuario_asignado,
                     mr.nombre motivo_rechazo,
                     (
                         SELECT b.observaciones 
