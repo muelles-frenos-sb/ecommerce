@@ -33,10 +33,7 @@
                     <input type="hidden" id="id_campania_prueba">
                     <div class="form-group">
                         <label for="telefono_prueba" class="font-weight-bold">Número de teléfono destino:</label>
-                        <input type="number" class="form-control form-control-lg" id="telefono_prueba" placeholder="Ej: 573135662211" required>
-                        <small class="text-muted">
-                            <i class="fa fa-info-circle"></i> Ingresa el número con el código de país (sin el +).
-                        </small>
+                        <input type="number" class="form-control form-control-lg" id="telefono_prueba" placeholder="Ej: 3206335588" value="<?php print_r($this->session->userdata('celular')); ?>" required>
                     </div>
                 </form>
             </div>
@@ -99,7 +96,6 @@
     // ==========================================
     const abrirModalPrueba = (id) => {
         $('#id_campania_prueba').val(id)
-        $('#telefono_prueba').val('')
         $('#modal_prueba_whatsapp').modal('show')
         // Auto-focus al input
         setTimeout(() => { $('#telefono_prueba').focus() }, 500)

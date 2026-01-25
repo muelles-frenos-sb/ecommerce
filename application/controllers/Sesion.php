@@ -43,6 +43,7 @@ class Sesion extends MY_Controller {
 			'segundo_apellido' => $usuario->segundo_apellido,
 			'razon_social' => $usuario->razon_social,
 			'email' => $usuario->email,
+			'celular' => $usuario->celular,
 			'documento_numero' => $usuario->documento_numero,
             'codigo_vendedor' => (!empty($vendedor)) ? $vendedor->codigo : 0,
 		];

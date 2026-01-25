@@ -82,7 +82,7 @@ function cubrir_correo($email) {
 }
 
 /**
- * Función para formatear números de teléfono
+ * Formatear números de teléfono para adicionar el prefijo del país
  */
 function formatear_numero_telefono($numero) {
     // Eliminar espacios, guiones, paréntesis
@@ -93,7 +93,6 @@ function formatear_numero_telefono($numero) {
     
     return $numero;
 }
-
 
 function formatear_tamanio($bytes) {
     if ($bytes == 0) return "0 B";

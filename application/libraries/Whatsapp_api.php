@@ -28,7 +28,7 @@ class Whatsapp_api {
         $data = [
             'messaging_product' => 'whatsapp',
             'recipient_type' => 'individual',
-            'to' => $numero_telefonico,
+            'to' => formatear_numero_telefono($numero_telefonico),
             'type' => 'text',
             'text' => [
                 'preview_url' => false,
@@ -48,7 +48,7 @@ class Whatsapp_api {
         $datos = [
             'messaging_product' => 'whatsapp',
             'recipient_type' => 'individual',
-            'to' => $numero_telefonico,
+            'to' => formatear_numero_telefono($numero_telefonico),
             'type' => 'template',
             'template' => [
                 'name' => $nombre_plantilla,
@@ -96,7 +96,7 @@ class Whatsapp_api {
         
         $datos = [
             'messaging_product' => 'whatsapp',
-            'to' => $numero_telefonico,
+            'to' => formatear_numero_telefono($numero_telefonico),
             'type' => 'template',
             'template' => [
                 'name' => $nombre_plantilla,
