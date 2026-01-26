@@ -67,3 +67,9 @@ if (isset($metadatos)) {
 <script src="<?php echo base_url(); ?>vendor/sweetalert2/sweetalert2.all.min.js"></script>
 <script src="<?php echo base_url(); ?>js/carrito.js?<?php echo date('Ymdhis'); ?>"></script>
 <script src="<?php echo base_url(); ?>js/index.js?<?php echo date('Ymdhis'); ?>"></script>
+
+
+<!-- Calculador de cupo de crédito de los clientes -->
+<?php if($this->session->userdata('usuario_id')) { ?>
+    <script src="<?php echo base_url(); ?>js/clienteCalculadorCupo.js?<?php echo date('Ymdhis'); ?>"></script>
+<?php } ?>
