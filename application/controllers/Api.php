@@ -683,6 +683,57 @@ class Api extends RestController {
                     'resultado' => $peticion,
                 ], RestController::HTTP_OK);
                 break;
+
+            case 'clientes_asignacion_solicitud_credito':
+                $parametros = [
+                    'nombre_cliente' => (isset($datos['nombre_cliente'])) ? $datos['nombre_cliente'] : null,
+                    'url' => (isset($datos['url'])) ? $datos['url'] : null,
+                ];
+
+                $this->form_validation->set_data($parametros);
+
+                if (!$this->form_validation->run('whatsapp_clientes_asignacion_solicitud_credito')) {
+                    $this->response([
+                        "error" => true,
+                        "mensaje" => "Parámetros inválidos.",
+                        "resultado" => $this->form_validation->error_array(),
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+
+                $contenido = [
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'nombre_cliente',
+                                "text" => $parametros['nombre_cliente'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'url',
+                                "text" => $parametros['url'],
+                            ],
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, 'clientes__asignacion_solicitud_credito', 'es_CO', $contenido);
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'resultado' => $peticion,
+                ], RestController::HTTP_OK);
+                break;
         }
 
         $this->response([
