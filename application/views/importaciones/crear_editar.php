@@ -3,25 +3,30 @@
 $id_importacion = $this->uri->segment(3); 
 $titulo = "Nueva Importación";
 $importacion = null;
-$data_pago = null; // Variable para almacenar el pago si existe
+$data_pago = null; 
 
 if($id_importacion) {
-    // Usamos el modelo cargado para la importación
+    // Cargar datos de la importación
     $importacion = $this->importaciones_model->obtener('importaciones', ['id' => $id_importacion]);
     
     if($importacion) {
         $titulo = "Editar Importación #" . str_pad($importacion->id, 3, '0', STR_PAD_LEFT);
         
-        // --- NUEVO: BUSCAR SI YA TIENE UN PAGO DE ANTICIPO ---
-        // Asumimos que buscas un pago asociado a esta importación. 
-        // Si tienes múltiples pagos, esto traerá el primero que encuentre.
+        // Cargar datos del pago de anticipo si existe (Traemos solo el último)
+        $this->db->limit(1);
+        $this->db->order_by('id', 'DESC');
         $data_pago = $this->importaciones_model->obtener('importaciones_pagos', ['importacion_id' => $importacion->id]);
+        
+        // Ajuste por si el modelo devuelve array en lugar de objeto directo
+        if(is_array($data_pago) && !empty($data_pago)) {
+            $data_pago = $data_pago[0];
+        }
     }
 }
 ?>
 
 <input type="hidden" id="importacion_id" value="<?php echo ($importacion) ? $importacion->id : ''; ?>" />
-<input type="hidden" id="pago_id" value="<?php echo ($data_pago) ? $data_pago[0]->id : ''; ?>" />
+<input type="hidden" id="pago_id" value="<?php echo ($data_pago) ? $data_pago->id : ''; ?>" />
 
 <div class="card">
     <div class="card-header">
@@ -30,6 +35,7 @@ if($id_importacion) {
     <div class="card-divider"></div>
     <div class="card-body card-body--padding--2">
         <form class="row">
+            
             <div class="col-12 mb-3">
                 <div class="tag-badge tag-badge--new badge_formulario mb-3">
                     Información del Proveedor y Orden
@@ -37,31 +43,44 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-4">
-                <label for="numero_orden_compra">Número Orden de Compra *</label>
-                <input type="text" class="form-control" id="numero_orden_compra" value="<?php echo ($importacion) ? $importacion->numero_orden_compra : ''; ?>" autofocus>
+                <label for="nit_proveedor_search" class="text-primary font-weight-bold">NIT / ID (Validación Anticipo)</label>
+                <input type="text" class="form-control" id="nit_proveedor_search" 
+                       placeholder="Ingrese NIT para validar..." autocomplete="off">
+                <small class="text-muted">El sistema buscará si este NIT requiere anticipo.</small>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="razon_social">Proveedor (Razón Social) *</label>
-                <input type="text" class="form-control" id="razon_social" value="<?php echo ($importacion) ? $importacion->razon_social : ''; ?>" placeholder="Nombre del proveedor">
+                <input type="text" class="form-control" id="razon_social" 
+                       value="<?php echo ($importacion) ? $importacion->razon_social : ''; ?>" 
+                       placeholder="Escriba el nombre del proveedor">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="numero_orden_compra">Número Orden de Compra *</label>
+                <input type="text" class="form-control" id="numero_orden_compra" 
+                       value="<?php echo ($importacion) ? $importacion->numero_orden_compra : ''; ?>" autofocus>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="contacto_principal">Contacto Principal</label>
-                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
+                <input type="text" class="form-control" id="contacto_principal" 
+                       value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email_contacto">Email de Contacto</label>
-                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
+                <input type="email" class="form-control" id="email_contacto" 
+                       value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="telefono_contacto">Teléfono de Contacto</label>
-                <input type="text" class="form-control" id="telefono_contacto" value="<?php echo ($importacion) ? $importacion->telefono_contacto : ''; ?>">
+                <input type="text" class="form-control" id="telefono_contacto" 
+                       value="<?php echo ($importacion) ? $importacion->telefono_contacto : ''; ?>">
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-12">
                 <label for="direccion">Dirección Física</label>
                 <textarea class="form-control" id="direccion" rows="1" placeholder="Dirección completa..."><?php echo ($importacion) ? $importacion->direccion : ''; ?></textarea>
             </div>
@@ -74,7 +93,8 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="pais_origen">País de Origen *</label>
-                <select id="pais_origen" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
+                <select id="pais_origen" class="form-control" 
+                        data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
                     <option value="">Cargando países...</option>
                 </select>
             </div>
@@ -130,7 +150,8 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="valor_total">Valor Total (Moneda Extranjera) *</label>
-                <input type="number" step="0.01" class="form-control" id="valor_total" value="<?php echo ($importacion) ? $importacion->valor_total : ''; ?>" placeholder="0.00">
+                <input type="number" step="0.01" class="form-control" id="valor_total" 
+                       value="<?php echo ($importacion) ? $importacion->valor_total : ''; ?>" placeholder="0.00">
             </div>
 
             <div class="form-group col-md-3">
@@ -149,29 +170,6 @@ if($id_importacion) {
                 <label for="impuestos_dian">Impuestos DIAN</label>
                 <input type="number" step="0.01" class="form-control" id="impuestos_dian" 
                        value="<?php echo ($importacion) ? $importacion->impuestos_dian : ''; ?>" placeholder="0.00">
-            </div>
-
-            <div class="col-12 mt-2">
-                <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                        <?php 
-                            $tiene_anticipo = ($importacion && ($importacion->requiere_anticipo == 1 || $importacion->porcentaje_anticipo > 0)) ? 'checked' : ''; 
-                        ?>
-                        <input type="checkbox" class="custom-control-input" id="requiere_anticipo" onchange="toggleAnticipo()" <?php echo $tiene_anticipo; ?>>
-                        <label class="custom-control-label font-weight-bold" for="requiere_anticipo">¿Requiere Anticipo?</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group col-md-3" id="divalorPorcentajeentaje_anticipo" style="display: none;">
-                <label for="porcentaje_anticipo">Porcentaje Anticipo (%)</label>
-                <div class="input-group">
-                    <input type="number" step="0.01" min="0" max="100" class="form-control" id="porcentaje_anticipo" 
-                           value="<?php echo ($importacion) ? $importacion->porcentaje_anticipo : ''; ?>" placeholder="Ej: 30">
-                    <div class="input-group-append">
-                        <span class="input-group-text">%</span>
-                    </div>
-                </div>
             </div>
 
             <div class="col-12 mt-3">
@@ -195,28 +193,18 @@ if($id_importacion) {
             </div>
 
             <div class="col-12 text-right mt-3">
-                <a class="btn btn-secondary btn-block" href="<?php echo site_url("importaciones"); ?>">Cancelar</a>
-                <button type="button" class="btn btn-primary btn-block" href="#" onClick="javascript:guardarImportacion()" id="btn_enviar_solicitud">GUARDAR DATOS</button>
+                <a class="btn btn-secondary" href="<?php echo site_url("importaciones"); ?>">Cancelar</a>
+                <button type="button" class="btn btn-primary" onclick="guardarImportacion()">
+                    <i class="fas fa-save"></i> GUARDAR DATOS
+                </button>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function toggleAnticipo() {
-        const check = document.getElementById('requiere_anticipo');
-        const divPorcentaje = document.getElementById('divalorPorcentajeentaje_anticipo');
-        
-        if (check.checked) {
-            divPorcentaje.style.display = 'block';
-            document.getElementById('porcentaje_anticipo').focus();
-        } else {
-            divPorcentaje.style.display = 'none';
-        }
-    }
-
     guardarImportacion = async () => {
-        // 1. Validar campos obligatorios
+        // 1. Validar campos visuales obligatorios
         let camposObligatorios = [
             $('#numero_orden_compra'),
             $('#razon_social'),
@@ -227,30 +215,55 @@ if($id_importacion) {
 
         if (!validarCamposObligatorios(camposObligatorios)) return false;
 
-        Swal.fire({
-            title: 'Guardando...',
-            didOpen: () => { Swal.showLoading() }
-        });
+        Swal.fire({ title: 'Procesando...', text: 'Validando reglas de negocio...', didOpen: () => { Swal.showLoading() } });
 
-        // 2. Obtener valores
+        // =========================================================
+        // A. LÓGICA AUTOMÁTICA DE ANTICIPO (Busca por NIT)
+        // =========================================================
+        let nitBuscar = $('#nit_proveedor_search').val();
+        let porcentajeAutomatico = 0;
+        let requiereAnticipoAuto = 0; // 0 = No, 1 = Si
+
+        // Si el usuario escribió un NIT, verificamos en el maestro
+        if(nitBuscar && nitBuscar.length > 0) {
+            try {
+                // Hacemos una petición AJAX síncrona (esperamos respuesta)
+                // Asegúrate de tener la función buscar_configuracion_anticipo en tu controlador
+                const configAnticipo = await new Promise((resolve) => {
+                    $.post('<?php echo site_url("importaciones/buscar_configuracion_anticipo"); ?>', 
+                           { nit: nitBuscar }, 
+                           (data) => {
+                               try { resolve(JSON.parse(data)); } catch(e) { resolve(null); }
+                           }
+                    );
+                });
+
+                // Si encontramos datos en el maestro
+                if (configAnticipo && parseFloat(configAnticipo.porcentaje) > 0) {
+                    porcentajeAutomatico = parseFloat(configAnticipo.porcentaje);
+                    requiereAnticipoAuto = 1;
+                    console.log(`Sistema: Anticipo automático detectado para NIT ${nitBuscar}: ${porcentajeAutomatico}%`);
+                }
+
+            } catch (e) {
+                console.warn("No se pudo validar el NIT, se guardará sin anticipo automático.", e);
+            }
+        }
+        // =========================================================
+
+        // 2. Preparar datos
         let valorTotal = parseFloat($('#valor_total').val()) || 0;
-        let valorCOP   = parseFloat($('#valor_total_cop').val()) || 0;
-        let valorImpuestos = parseFloat($('#impuestos_dian').val()) || 0;
-        let valorTRM   = parseFloat($('#valor_trm').val()) || 0;
+        let fechaSiesa = $('#fecha_ingreso_siesa').val() || null;
 
-        let requiereAnticipo = $('#requiere_anticipo').is(':checked');
-        let valorPorcentaje  = requiereAnticipo ? (parseFloat($('#porcentaje_anticipo').val()) || 0) : 0;
-        
-        let fechaSiesa = $('#fecha_ingreso_siesa').val();
-        if(fechaSiesa === "") fechaSiesa = null;
-
-        // 3. Objeto Principal (Importación)
         var datos = {
             id: $('#importacion_id').val(),
             tipo: 'importaciones', 
             
+            // Datos básicos
             numero_orden_compra: $('#numero_orden_compra').val(),
-            razon_social:        $('#razon_social').val(),
+            razon_social:        $('#razon_social').val(), 
+            // NOTA: El NIT de búsqueda NO se guarda en la tabla importaciones, solo sirvió para la lógica
+            
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     
             telefono_contacto:   $('#telefono_contacto').val(),  
@@ -264,83 +277,71 @@ if($id_importacion) {
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
-            valor_total_cop:     valorCOP,
-            impuestos_dian:      valorImpuestos, 
-            valor_trm:           valorTRM,                          
+            valor_total_cop:     parseFloat($('#valor_total_cop').val()) || 0,
+            impuestos_dian:      parseFloat($('#impuestos_dian').val()) || 0, 
+            valor_trm:           parseFloat($('#valor_trm').val()) || 0,
             
-            requiere_anticipo:   requiereAnticipo ? 1 : 0, 
-            porcentaje_anticipo: valorPorcentaje,
+            // --- ASIGNACIÓN AUTOMÁTICA ---
+            requiere_anticipo:   requiereAnticipoAuto, 
+            porcentaje_anticipo: porcentajeAutomatico,
+            
             condiciones_pago:    $('#condiciones_pago').val(),   
             notas_internas:      $('#notas_internas').val()
         }
 
         let idImportacion = $('#importacion_id').val();
-        let pagoIdExistente = $('#pago_id').val(); // Capturamos ID del pago si existe
+        let pagoIdExistente = $('#pago_id').val();
 
         try {
-            // ===========================
-            // PASO 1: GUARDAR IMPORTACIÓN
-            // ===========================
-            
+            // 3. Guardar la Importación
             let respuestaImp = null;
-
-            // === EDICIÓN DE IMPORTACIÓN ===
             if (idImportacion && idImportacion !== "") {
                 await consulta('actualizar', datos);
-                respuestaImp = { resultado: { resultado: idImportacion } }; // Simulamos estructura de respuesta
-            } 
-            // === CREACIÓN DE IMPORTACIÓN ===
-            else {
+                respuestaImp = { resultado: { resultado: idImportacion } };
+            } else {
                 datos.fecha_creacion = '<?php echo date("Y-m-d H:i:s"); ?>';
                 datos.usuario_id = '<?php echo $this->session->userdata("usuario_id"); ?>';
                 respuestaImp = await consulta('crear', datos, false);
-                // Asignamos el nuevo ID para usarlo abajo
                 idImportacion = respuestaImp.resultado.resultado; 
             }
 
-            // ===========================================
-            // PASO 2: GESTIÓN INTELIGENTE DE PAGOS/ANTICIPO
-            // ===========================================
-            
-            if (requiereAnticipo && valorPorcentaje > 0 && idImportacion) {
+            // 4. Lógica de Pago Automático (Si el sistema decidió que lleva anticipo)
+            if (requiereAnticipoAuto === 1 && porcentajeAutomatico > 0 && idImportacion) {
                 
-                let montoAnticipo = valorTotal * (valorPorcentaje / 100);
+                let montoAnticipo = valorTotal * (porcentajeAutomatico / 100);
                 
-                // Objeto base del pago
                 let datosPago = {
                     tipo: 'importaciones_pagos',
                     importacion_id: idImportacion,
-                    estado_id: 1, // Pendiente
-                    observaciones: 'Anticipo (' + valorPorcentaje + '%) - Valor Total Imp: ' + valorTotal,
+                    estado_id: 1, // 1 = Pendiente
+                    observaciones: 'Anticipo generado automáticamente por Maestro (' + porcentajeAutomatico + '%)',
                     valor_moneda_extranjera: montoAnticipo
                 };
 
-                // CASO A: SI YA EXISTE UN PAGO -> LO ACTUALIZAMOS
                 if (pagoIdExistente && pagoIdExistente !== "") {
-                    console.log("Actualizando pago existente ID:", pagoIdExistente);
                     datosPago.id = pagoIdExistente;
-                    // Opcional: Agregar fecha de actualización o usuario que edita
                     await consulta('actualizar', datosPago, false);
-                } 
-                // CASO B: NO EXISTE PAGO -> LO CREAMOS
-                else {
-                    console.log("Creando nuevo pago de anticipo");
+                } else {
                     datosPago.fecha_creacion = '<?php echo date("Y-m-d H:i:s"); ?>';
                     datosPago.usuario_id = '<?php echo $this->session->userdata("usuario_id"); ?>';
                     await consulta('crear', datosPago, false);
                 }
+                
+                Swal.close();
+                mostrarAviso('exito', 'Importación guardada. Anticipo del '+porcentajeAutomatico+'% generado.');
+            } else {
+                Swal.close();
+                mostrarAviso('exito', 'Importación guardada correctamente.');
             }
 
-            Swal.close();
-            mostrarAviso('exito', 'Datos guardados correctamente.');
-            
+            // 5. Redireccionar
             setTimeout(() => {
                 window.location.href = '<?php echo site_url("importaciones"); ?>';
             }, 1500);
 
         } catch(error) {
             Swal.close();
-            console.error("ERROR CRÍTICO:", error);
+            console.error("ERROR:", error);
             alert("Error al procesar: " + error);
         }
     }
@@ -351,6 +352,5 @@ if($id_importacion) {
         } catch (e) {
             console.warn("Error cargando países", e);
         }
-        toggleAnticipo();
     });
 </script>

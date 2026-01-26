@@ -10,7 +10,8 @@ defined('BASEPATH') or exit('El acceso directo a este archivo no está permitido
 class Importaciones extends MY_Controller
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model(['importaciones_model', 'importaciones_pagos_model']);
     }
@@ -26,21 +27,34 @@ class Importaciones extends MY_Controller
     {
         $datos = $this->input->post();
         // Esto asegura que 'busqueda' llegue al modelo
-        
+
         $this->data['importaciones'] = $this->importaciones_model->obtener('importaciones', $datos);
         $this->load->view('importaciones/datos', $this->data);
     }
 
-    public function crear() {
+    public function crear()
+    {
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
+    }
 
+    public function buscar_configuracion_anticipo()
+    {
+        $nit = $this->input->post('nit');
+
+        // Busca en la tabla maestra por NIT
+        $this->db->where('nit', $nit);
+        $resultado = $this->db->get('importaciones_maestro_anticipos')->row();
+
+        // Devuelve los datos (porcentaje, etc) o null si no existe
+        echo json_encode($resultado);
     }
 
     // --------------------------------------------------------------------
     // 3. EDITAR (Muestra el formulario con datos)
     // --------------------------------------------------------------------
-    public function editar($id_importacion) {
+    public function editar($id_importacion)
+    {
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
     }
@@ -56,29 +70,30 @@ class Importaciones extends MY_Controller
         print json_encode($resultado);
     }
 
-    function maestro($opcion = 'ver') {
-        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+    function maestro($opcion = 'ver')
+    {
+        if (!$this->session->userdata('usuario_id')) redirect('inicio');
 
         switch ($opcion) {
             case 'ver':
                 $this->data['contenido_principal'] = 'importaciones/maestro/index';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
 
             case 'lista':
                 $this->load->view('importaciones/maestro/lista');
-            break;
+                break;
 
             case 'crear':
                 $this->data['contenido_principal'] = 'importaciones/maestro/detalle';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
 
             case 'editar':
                 $this->data['id'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'importaciones/maestro/detalle';
                 $this->load->view('core/body', $this->data);
-            break;
+                break;
         }
     }
     // Pantalla de detalle/edición de una importación
@@ -169,9 +184,9 @@ class Importaciones extends MY_Controller
 
                 // Se obtienen los registros
                 $resultados = $this->importaciones_model->obtener("importaciones_maestro_anticipos", $datos);
-            break;
+                break;
         }
-         print json_encode([
+        print json_encode([
             "draw" => $this->input->get("draw"),
             "recordsTotal" => $total_resultados,
             "recordsFiltered" => $total_resultados,
@@ -179,7 +194,8 @@ class Importaciones extends MY_Controller
         ]);
     }
 
-    public function guardar() {
+    public function guardar()
+    {
         // 1. Seguridad: Solo permitir peticiones AJAX
         if (!$this->input->is_ajax_request()) {
             show_404();
@@ -187,10 +203,10 @@ class Importaciones extends MY_Controller
 
         // 2. Recibimos todos los datos del formulario
         $datos = $this->input->post();
-        
+
         // Extraemos el ID para saber si es edición
         $id = $this->input->post('id'); // Este campo viene del hidden en la vista
-        
+
         // Quitamos el ID del array de datos para que no intente guardarlo como columna
         unset($datos['id']);
         unset($datos['tipo']); // Si venía 'tipo', lo quitamos, ya no lo necesitamos
@@ -206,8 +222,8 @@ class Importaciones extends MY_Controller
             // === MODO CREACIÓN ===
             $datos['fecha_creacion'] = date('Y-m-d H:i:s');
             // Asignamos usuario si tienes sistema de sesión
-            if($this->session->userdata('usuario_id')) $datos['usuario_id'] = $this->session->userdata('usuario_id');
-            
+            if ($this->session->userdata('usuario_id')) $datos['usuario_id'] = $this->session->userdata('usuario_id');
+
             $resultado = $this->importaciones_model->crear($datos);
         }
 
