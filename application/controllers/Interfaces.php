@@ -294,7 +294,6 @@ class Interfaces extends CI_Controller {
             break;
              case 'importaciones':
                 //$datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                unset($datos['usuario_id']);
                 print json_encode(['resultado' => $this->importaciones_model->crear($datos)]);
             break;
 

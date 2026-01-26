@@ -747,3 +747,13 @@ CREATE TABLE importaciones_maestro_anticipos (
 INSERT INTO importaciones_maestro_anticipos (nit, proveedor, porcentaje) VALUES 
 ('900123456-1', 'Proveedor Tecnológico China Ltd', 30.00),
 ('811000222-5', 'Logística Global USA', 50.00);
+
+ALTER TABLE importaciones 
+ADD COLUMN usuario_id INT(11) NULL COMMENT 'ID del usuario que registró la importación',
+ADD CONSTRAINT fk_importaciones_usuario 
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) 
+    ON DELETE SET NULL ON UPDATE CASCADE;
+
+
+ALTER TABLE importaciones_maestro_anticipos 
+DROP COLUMN proveedor;
