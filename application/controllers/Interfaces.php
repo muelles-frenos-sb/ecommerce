@@ -565,6 +565,11 @@ class Interfaces extends CI_Controller {
 
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;
+
+            case 'importaciones_maestro_anticipos':
+                
+                print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
+            break;
         }
     }
 
@@ -606,6 +611,10 @@ class Interfaces extends CI_Controller {
             break;
 
             case 'terceros_contactos':
+                print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'importaciones_maestro_anticipos':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;
         }

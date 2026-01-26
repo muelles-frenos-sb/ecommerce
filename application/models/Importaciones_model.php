@@ -140,6 +140,11 @@ class Importaciones_model extends CI_Model{
             // HELPER: Obtener lista única de Proveedores para llenar el select de filtros
             case 'importaciones_maestro_anticipos':
 
+                if(isset($datos['id'])) {
+                    $this->db->where('id', $datos['id']);
+                    return $this->db->get('importaciones_maestro_anticipos')->row(); // Retorna un solo objeto
+                }
+
                 if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
                     $palabras = explode(' ', trim($datos['busqueda']));
                     

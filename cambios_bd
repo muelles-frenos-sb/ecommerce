@@ -733,3 +733,17 @@ CHANGE COLUMN `origen_recursos` `origen_recursos_id` int(11) NULL DEFAULT NULL C
 
 ALTER TABLE `importaciones_pagos` 
 ADD CONSTRAINT `importaciones_pagos_ibfk_1` FOREIGN KEY (`origen_recursos_id`) REFERENCES `importaciones_pagos_origen_recursos` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+CREATE TABLE importaciones_maestro_anticipos (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  nit VARCHAR(50) NOT NULL COMMENT 'NIT o Identificación del proveedor',
+  proveedor VARCHAR(255) NOT NULL COMMENT 'Nombre o Razón Social',
+  porcentaje DECIMAL(5,2) DEFAULT 0 COMMENT 'Porcentaje fijo de anticipo (ej: 30.00)',
+  fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY unique_nit (nit)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO importaciones_maestro_anticipos (nit, proveedor, porcentaje) VALUES 
+('900123456-1', 'Proveedor Tecnológico China Ltd', 30.00),
+('811000222-5', 'Logística Global USA', 50.00);

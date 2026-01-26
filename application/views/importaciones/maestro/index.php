@@ -11,11 +11,7 @@
         <div class="mb-4">
             <a class="btn btn-success" href="<?php echo site_url('importaciones/maestro/crear'); ?>">Crear</a>
 
-            <button class="btn btn-success btn-md"
-                onClick="javascript:generarReporte('excel/importaciones_maestro_anticipos')">
-                <i class="fa fa-file-excel"></i>
-                Descargar listado de anticipos
-            </button>
+            
         </div>
 
         <div id="contenedor_anticipos"></div>
@@ -27,13 +23,9 @@
 <script>
     eliminarAnticipo = async (id) => {
         let confirmacion = await confirmar('Eliminar', `¿Está seguro de eliminar este registro de anticipo?`)
-        
         if (confirmacion) {
             // AQUÍ se conecta con la tabla que creamos en SQL
-            let eliminar = await consulta('eliminar', {
-                tipo: 'importaciones_maestro_anticipo', 
-                id: id
-            })
+            let eliminar = await consulta('eliminar', {tipo: 'importaciones_maestro_anticipos', id: id})
 
             if (eliminar) {
                 listarAnticipos()

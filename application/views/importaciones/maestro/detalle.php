@@ -1,7 +1,13 @@
 <?php
+// 1. Lógica de carga para EDICIÓN
 if(isset($id)) {
-    $proveedor_marca = $this->proveedores_model->obtener('proveedores_marcas', ['id' => $id]);
-    echo "<input type='hidden' id='proveedor_marca_id' value='$proveedor_marca->id' />";
+    // Usamos el modelo para buscar en la nueva tabla
+    $anticipo = $this->importaciones_model->obtener('importaciones_maestro_anticipos', ['id' => $id]);
+    
+    // Guardamos el ID oculto si existe
+    if($anticipo) {
+        echo "<input type='hidden' id='anticipo_id' value='$anticipo->id' />";
+    }
 }
 ?>
 
@@ -9,26 +15,43 @@ if(isset($id)) {
 <div class="block">
     <div class="container">
         <div class="card mb-lg-0">
+            <div class="card-header">
+                <h5><?php echo isset($anticipo) ? 'Editar Anticipo' : 'Nuevo Anticipo Proveedor'; ?></h5>
+            </div>
             <div class="card-body card-body--padding--2">
+                
                 <div class="form-row">
-                    <div class="form-group col-12 col-sm-6">
-                        <label for="codigo_marca">Marca *</label>
-                        <select id="codigo_marca" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($this->configuracion_model->obtener("marcas") as $marca) echo "<option value='$marca->codigo'>$marca->nombre</option>"; ?>
-                        </select>
+                    
+                    <div class="form-group col-12 col-md-4">
+                        <label for="nit">NIT / Identificación *</label>
+                        <input type="text" class="form-control" id="nit" 
+                               placeholder="Ej: 900.123.456-1">
                     </div>
-                    <div class="form-group col-12 col-sm-6">
-                        <label for="proveedor_nit">Proveedor *</label>
-                        <select id="proveedor_nit" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_proveedor" => 1]) as $tercero) echo "<option value='$tercero->f200_nit'>$tercero->f200_razon_social</option>"; ?>
-                        </select>
+
+                    <div class="form-group col-12 col-md-4">
+                        <label for="proveedor">Nombre Proveedor (Razón Social) *</label>
+                        <input type="text" class="form-control" id="proveedor" 
+                               placeholder="Nombre de la empresa">
                     </div>
+
+                    <div class="form-group col-12 col-md-4">
+                        <label for="porcentaje">Porcentaje Anticipo (%) *</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="porcentaje" 
+                                   step="0.01" min="0" max="100" placeholder="Ej: 30">
+                            <div class="input-group-append">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="form-group mb-0 pt-3 mt-3">
-                    <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
-                    <button class="btn btn-success" onClick="javascript:guardarProveedoresMarcas()">Guardar datos</button>
+
+                <div class="form-group mb-0 pt-3 mt-3 text-right">
+                    <button class="btn btn-secondary" onClick="javascript:history.back()">Cancelar / Volver</button>
+                    <button class="btn btn-success" onClick="javascript:guardarAnticipo()">
+                        <i class="fas fa-save"></i> Guardar Datos
+                    </button>
                 </div>
             </div>
         </div>
@@ -36,41 +59,63 @@ if(isset($id)) {
 </div>
 <div class="block-space block-space--layout--before-footer"></div>
 
-<?php if (isset($proveedor_marca)) { ?>
+<?php if (isset($anticipo) && $anticipo) { ?>
     <script>
         $().ready(() => {
-            $('#proveedor_nit').val('<?php echo $proveedor_marca->proveedor_nit; ?>')
-            $('#codigo_marca').val('<?php echo $proveedor_marca->marca_codigo; ?>')
+            $('#nit').val('<?php echo $anticipo->nit; ?>');
+            $('#proveedor').val('<?php echo $anticipo->proveedor; ?>');
+            $('#porcentaje').val('<?php echo $anticipo->porcentaje; ?>');
         })
     </script>
 <?php } ?>
 
 <script>
-    guardarProveedoresMarcas = async () => {
+    guardarAnticipo = async () => {
+        // 1. Validar campos obligatorios
         let camposObligatorios = [
-            $('#proveedor_nit'),
-            $('#codigo_marca')
+            $('#nit'),
+            $('#proveedor'),
+            $('#porcentaje')
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
-        let datosProveedoresMarcas = {
-            tipo: 'proveedores_marcas',
-            proveedor_nit: $('#proveedor_nit').val(),
-            marca_codigo: $('#codigo_marca').val()
+        // 2. Construir objeto para enviar a la BD
+        let datos = {
+            tipo: 'importaciones_maestro_anticipos', // Nombre exacto de la tabla
+            nit: $('#nit').val(),
+            proveedor: $('#proveedor').val(),
+            porcentaje: parseFloat($('#porcentaje').val()) || 0
         }
 
-        if(!$('#proveedor_marca_id').val()) {
-            await consulta('crear', datosProveedoresMarcas)
-            agregarLog(68)
-        } else {
-            datosProveedoresMarcas.id = $('#proveedor_marca_id').val()
-            await consulta('actualizar', datosProveedoresMarcas)
-            agregarLog(69, datosProveedoresMarcas.id)
+        // 3. Detectar si es Creación o Actualización
+        let idExistente = $('#anticipo_id').val();
+
+        try {
+            if (!idExistente) {
+                // === CREAR ===
+                await consulta('crear', datos);
+                // Opcional: Limpiar campos tras guardar si deseas
+                // $('#nit, #proveedor, #porcentaje').val('');
+            } else {
+                // === ACTUALIZAR ===
+                datos.id = idExistente;
+                await consulta('actualizar', datos);
+            }
+            
+            // Redirigir a la lista después de guardar
+            setTimeout(() => {
+                 // Ajusta esta ruta si tu controlador usa otro nombre para la lista
+                 window.location.href = '<?php echo site_url("importaciones/maestro"); ?>';
+            }, 1000);
+
+        } catch (error) {
+            console.error("Error al guardar:", error);
         }
     }
 
+    // Ya no inicializamos select2 porque son inputs normales
     $().ready(() => {
-        $('#proveedor_nit, #codigo_marca').select2()
+        $('#nit').focus(); // Poner el cursor en el primer campo
     })
 </script>
