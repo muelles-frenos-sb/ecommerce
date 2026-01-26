@@ -250,7 +250,7 @@ class Marketing extends MY_Controller
 
         // 2. Obtener datos de la campaña (necesitamos el nombre de la plantilla)
         $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
-       
+
         if (!$campania) {
             echo json_encode(['exito' => false, 'mensaje' => 'Campaña no encontrada']);
             return;
@@ -278,7 +278,7 @@ class Marketing extends MY_Controller
             //     $contenido
             // );
 
-            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url()."archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg' ;
+            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen);
@@ -287,7 +287,7 @@ class Marketing extends MY_Controller
             // Ajusta esta condición según lo que retorne tu librería exactamente.
             if ($resultado) {
                 echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
-                  $this->configuracion_model->crear('logs', [
+                $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 101,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                     'observacion' => json_encode([
@@ -303,17 +303,18 @@ class Marketing extends MY_Controller
         }
     }
 
-    public function ejecutar_envio_masivo() {
+    public function ejecutar_envio_masivo()
+    {
         // 1. Validar petición AJAX
         if (!$this->input->is_ajax_request()) {
             show_404();
         }
 
         // Aumentamos el tiempo de ejecución por si son muchos contactos
-        set_time_limit(0); 
+        set_time_limit(0);
 
         $campania_id = $this->input->post('campania_id');
-        
+
         // 2. Obtener datos de la campaña
         $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
 
@@ -325,7 +326,7 @@ class Marketing extends MY_Controller
         // 3. VALIDACIÓN: Verificar vigencia de la campaña
         $fecha_actual = date('Y-m-d');
         if ($campania->fecha_finalizacion < $fecha_actual) {
-            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: '.$campania->fecha_finalizacion.'). No se pueden enviar más mensajes.']);
+            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: ' . $campania->fecha_finalizacion . '). No se pueden enviar más mensajes.']);
             return;
         }
 
@@ -338,7 +339,7 @@ class Marketing extends MY_Controller
         // 4. Obtener contactos PENDIENTES (fecha_envio IS NULL)
         $contactos = $this->db->get_where('marketing_campanias_contactos', [
             'campania_id' => $campania_id,
-            'fecha_envio' => NULL 
+            'fecha_envio' => NULL
         ])->result();
 
         if (empty($contactos)) {
@@ -351,22 +352,29 @@ class Marketing extends MY_Controller
 
         // 5. Bucle de envío "Uno a Uno"
         foreach ($contactos as $contacto) {
-            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url().'archivos/campanias/$campania->id/$campania->nombre_imagen' : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg' ;
+            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . 'archivos/campanias/$campania->id/$campania->nombre_imagen' : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen);
+            $envio_exitoso = false;
 
-            if ($resultado) {
-                // ÉXITO: Actualizamos la fecha de envío
+            if (is_array($resultado)) {
+                
+                $http_code = isset($resultado['http_code']) ? $resultado['http_code'] : 0;
+                $has_error_in_response = isset($resultado['response']['error']);
+
+                if ($http_code == 200 && !$has_error_in_response) {
+                    $envio_exitoso = true;
+                }
+            }
+
+            if ($envio_exitoso) {
                 $this->db->where('id', $contacto->id);
                 $this->db->update('marketing_campanias_contactos', [
                     'fecha_envio' => date('Y-m-d H:i:s')
                 ]);
                 $enviados++;
-            } else {
-                $errores++;
-            }
-            $this->configuracion_model->crear('logs', [
+                $this->configuracion_model->crear('logs', [
                 'log_tipo_id' => 101,
                 'fecha_creacion' => date('Y-m-d H:i:s'),
                 'observacion' => json_encode([
@@ -374,21 +382,34 @@ class Marketing extends MY_Controller
                     'resultado' => $resultado
                 ]),
             ]);
+            } else {
+                $errores++;
+
+               $this->configuracion_model->crear('logs', [
+                'log_tipo_id' => 101,
+                'fecha_creacion' => date('Y-m-d H:i:s'),
+                'observacion' => json_encode([
+                    'tipo' => 'Error Envio WhatsApp',
+                    'resultado' => $resultado
+                ]),
+            ]);
+            }
+            
         }
 
         $this->configuracion_model->crear('logs', [
-                    'log_tipo_id' => 101,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => json_encode([
-                        'campania_id' => $campania_id,
-                        'total_entregados' => $enviados,
-                        'total_no_entregados' => $errores,
-                    ]),
-                ]);
+            'log_tipo_id' => 101,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode([
+                'campania_id' => $campania_id,
+                'total_entregados' => $enviados,
+                'total_no_entregados' => $errores,
+            ]),
+        ]);
 
         // 6. Respuesta final
         echo json_encode([
-            'exito' => true, 
+            'exito' => true,
             'mensaje' => "Proceso finalizado. Enviados: $enviados. Fallidos: $errores."
         ]);
     }
