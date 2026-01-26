@@ -138,11 +138,21 @@ class Importaciones_model extends CI_Model{
             break;
 
             // HELPER: Obtener lista única de Proveedores para llenar el select de filtros
-            case 'lista_proveedores':
-                $this->db->distinct();
-                $this->db->select('razon_social');
-                $this->db->order_by('razon_social', 'ASC');
-                return $this->db->get('importaciones')->result();
+            case 'importaciones_maestro_anticipos':
+
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+                    
+                    $this->db->group_start(); // Abrimos paréntesis para el OR
+                    foreach ($palabras as $palabra) {
+                        $this->db->like('id', $palabra);
+                        $this->db->or_like('nit', $palabra); // Proveedor
+                        $this->db->or_like('porcentaje', $palabra);       // Documento transporte
+                    }
+                    $this->db->group_end(); // Cerramos paréntesis
+                }
+                $this->db->order_by('id', 'ASC');
+                return $this->db->get('importaciones_maestro_anticipos')->result();
             break;
 
             // HELPER: Obtener lista única de Monedas

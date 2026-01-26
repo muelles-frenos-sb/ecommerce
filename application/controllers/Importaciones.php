@@ -55,6 +55,32 @@ class Importaciones extends MY_Controller
 
         print json_encode($resultado);
     }
+
+    function maestro($opcion = 'ver') {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+
+        switch ($opcion) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'importaciones/maestro/index';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'lista':
+                $this->load->view('importaciones/maestro/lista');
+            break;
+
+            case 'crear':
+                $this->data['contenido_principal'] = 'importaciones/maestro/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+
+            case 'editar':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'importaciones/maestro/detalle';
+                $this->load->view('core/body', $this->data);
+            break;
+        }
+    }
     // Pantalla de detalle/edición de una importación
     function ver()
     {
@@ -93,6 +119,8 @@ class Importaciones extends MY_Controller
         $cantidad = $this->input->get("length");
         $columns = $this->input->get("columns");
         $order = $this->input->get("order");
+        $busqueda = $this->input->get("search")["value"];
+
         $ordenar = null;
 
         if ($order) {
@@ -120,14 +148,35 @@ class Importaciones extends MY_Controller
 
                 $resultados = $this->importaciones_model->obtener('importaciones', $datos);
 
-                print json_encode([
-                    "draw" => $this->input->get("draw"),
-                    "recordsTotal" => $total_resultados,
-                    "recordsFiltered" => $total_resultados,
-                    "data" => $resultados
-                ]);
                 break;
+
+            case "importaciones_maestro_anticipos":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    'busqueda' => $this->input->get("search")["value"]
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->importaciones_model->obtener("importaciones_maestro_anticipos", $datos);
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->importaciones_model->obtener("importaciones_maestro_anticipos", $datos);
+            break;
         }
+         print json_encode([
+            "draw" => $this->input->get("draw"),
+            "recordsTotal" => $total_resultados,
+            "recordsFiltered" => $total_resultados,
+            "data" => $resultados
+        ]);
     }
 
     public function guardar() {
