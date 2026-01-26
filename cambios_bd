@@ -757,3 +757,11 @@ ADD CONSTRAINT fk_importaciones_usuario
 
 ALTER TABLE importaciones_maestro_anticipos 
 DROP COLUMN proveedor;
+
+-- 20260126 Se crea tabla para los tipos de banners
+CREATE TABLE `banners_tipos`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NULL,
+  `fecha_creacion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);

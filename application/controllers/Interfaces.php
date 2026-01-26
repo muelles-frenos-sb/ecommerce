@@ -223,6 +223,11 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->contabilidad_model->crear($tipo, $datos)]);
             break;
 
+            case 'banners_tipos':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->marketing_model->crear("banners_tipos", $datos)]);
+            break;
+
             case 'marketing_campanias':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');
@@ -292,7 +297,8 @@ class Interfaces extends CI_Controller {
                 
                 print json_encode(['resultado' => $this->productos_model->crear($tipo, $datos)]);
             break;
-             case 'importaciones':
+
+            case 'importaciones':
                 //$datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 print json_encode(['resultado' => $this->importaciones_model->crear($datos)]);
             break;

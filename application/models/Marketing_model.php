@@ -101,7 +101,60 @@ Class Marketing_model extends CI_Model {
                 if (isset($datos['contar']) && $datos['contar'])  return $this->db->query($sql)->num_rows();
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
-            break;
+                break;
+
+            case 'banners_tipos':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsquedas
+                $where  = "WHERE bt.id IS NOT NULL";
+                $having = "HAVING bt.id";
+
+                if(isset($datos['id'])) $where .= " AND bt.id = {$datos['id']} ";
+
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados']: [];
+
+                // Filtros where
+                if (isset($filtros_personalizados['fecha_creacion']) && $filtros_personalizados['fecha_creacion'] != '') $where .= " AND DATE(bt.fecha_creacion) = '{$filtros_personalizados['fecha_creacion']}' ";
+                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $where .= " AND bt.nombre LIKE '%{$filtros_personalizados['nombre']}%' ";
+
+                // Si se realiza una búsqueda
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
+                    // Se divide por palabras
+                    $palabras = explode(' ', trim($datos['busqueda']));
+
+                    // Se recorren las palabras
+                    for ($i = 0; $i < count($palabras); $i++) {
+                        $having .= " AND (";
+                        $having .= " bt.id LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR bt.fecha_creacion LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR bt.nombre LIKE '%{$palabras[$i]}%'";
+                        $having .= ") ";
+
+                        if (($i + 1) < count($palabras)) $having .= " AND ";
+                    }
+                }
+
+                // Ordenamiento
+                $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY bt.nombre ASC";
+
+                $sql = " SELECT
+                        bt.*
+                    FROM banners_tipos bt
+                    $where
+                    GROUP BY bt.id
+                    $having
+                    $order_by
+                    $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar'])  return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+                break;
         }
     }
 }
