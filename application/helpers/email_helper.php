@@ -64,8 +64,7 @@ function enviar_email_certificado_retencion($id) {
     return $CI->email_model->enviar($datos);
 }
 
-function enviar_email_masivo_notificacion_certificados($nit)
-{
+function enviar_email_masivo_notificacion_certificados($nit) {
     $CI = get_instance();
     $CI->load->model(['email_model', 'clientes_model', 'configuracion_model']);
 

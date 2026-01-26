@@ -278,6 +278,11 @@
                                                                                         Importaciones
                                                                                     </a>
                                                                                 </li>
+                                                                                <li class="menu__item">
+                                                                                    <a href="<?php echo site_url('importaciones_pagos/ver'); ?>" class="menu__link">
+                                                                                        Pagos
+                                                                                    </a>
+                                                                                </li>
                                                                                 <hr>
 
                                                                                 <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
