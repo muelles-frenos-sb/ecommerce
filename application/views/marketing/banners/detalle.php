@@ -5,12 +5,15 @@
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
-                    <div class="form-group col-lg-6">
-                        <label for="banner_tipo_nombre">Nombre del tipo de banner *</label>
-                        <input type="text" class="form-control" id="banner_tipo_nombre" value="">
+                    <div class="form-group col-md-6">
+                        <label for="banner_tipo_id">Tipo de banner *</label>
+                        <select id="banner_tipo_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach($this->marketing_model->obtener('marketing_banners_tipos') as $banner_tipo) echo "<option value='$banner_tipo->id'>$banner_tipo->nombre </option>"; ?>
+                        </select>
                     </div>
 
-                    <div class="form-group col-lg-12">
+                    <div class="form-group col-lg-6">
                         <label for="banner_tipo_archivo"> Archivo (PDF, Word o Excel) *</label>
                         <input type="file" class="form-control" id="banner_tipo_archivo" accept=".pdf,.doc,.docx,.xls,.xlsx">
                         <div class="mt-2">
@@ -38,15 +41,15 @@
         let archivos = $("#banner_tipo_archivo").prop("files")
 
         let camposObligatorios = [
-            $("#banner_tipo_nombre"),
+            $("#banner_tipo_id"),
             $("#banner_tipo_archivo")
         ]
 
         if (!validarCamposObligatorios(camposObligatorios)) return
 
         let datos = {
-            tipo: 'banners_tipos',
-            nombre: $("#banner_tipo_nombre").val(),
+            tipo: 'marketing_banners',
+            banner_tipo_id: $("#banner_tipo_id").val(),
         }
         
         // Crear registro

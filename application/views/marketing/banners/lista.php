@@ -1,7 +1,8 @@
 <style>
     #tabla_banners tbody td {
-        font-size: 0.7em;
-        padding: 5px;
+        font-size: 0.9em;
+        padding: 8px;
+        vertical-align: middle;
     }
 </style>
 
@@ -28,7 +29,7 @@
                         Tipo de banner
                         <input type="text" id="filtro_nombre" class="form-control form-control-sm border-secondary">
                     `,
-                    data: 'nombre',
+                    data: 'banner_tipo_nombre',
                 },
                 { 
                     title: `

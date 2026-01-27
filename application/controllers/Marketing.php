@@ -188,6 +188,36 @@ class Marketing extends MY_Controller
                     "data" => $resultados
                 ]);
                 break;
+
+            case "banners":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda,
+                    "filtros_personalizados" => $this->input->get("filtros_personalizados"),
+                ];
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->marketing_model->obtener("marketing_banners", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->marketing_model->obtener("marketing_banners", $datos);
+
+                print json_encode([
+                    "draw" => $this->input->get("draw"),
+                    "recordsTotal" => $total_resultados,
+                    "recordsFiltered" => $total_resultados,
+                    "data" => $resultados
+                ]);
+                break;
         }
     }
 

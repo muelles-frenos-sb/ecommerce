@@ -223,9 +223,9 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->contabilidad_model->crear($tipo, $datos)]);
             break;
 
-            case 'banners_tipos':
+            case 'marketing_banners':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
-                print json_encode(['resultado' => $this->marketing_model->crear("banners_tipos", $datos)]);
+                print json_encode(['resultado' => $this->marketing_model->crear("marketing_banners", $datos)]);
             break;
 
             case 'marketing_campanias':
