@@ -34,50 +34,49 @@ if($id_importacion) {
     </div>
     <div class="card-divider"></div>
     <div class="card-body card-body--padding--2">
-        <form class="row">
-            
+        <div class="row">
             <div class="col-12 mb-3">
                 <div class="tag-badge tag-badge--new badge_formulario mb-3">
                     Información del Proveedor y Orden
                 </div>
             </div>
 
+            <div class="form-group col-md-3">
+                <label for="numero_orden_compra">Número Orden de Compra *</label>
+                <input type="text" class="form-control" id="numero_orden_compra" value="<?php echo ($importacion) ? $importacion->numero_orden_compra : ''; ?>" autofocus>
+            </div>
+
+            <div class="form-group col-md-1">
+                <label>&nbsp;</label>
+                <button class="btn btn-primary btn-block" href="javascript:;" onClick="javascript:buscarOrdenCompra()">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+
             <div class="form-group col-md-4">
-                <label for="nit_proveedor_search" class="text-primary font-weight-bold">NIT / ID (Validación Anticipo)</label>
-                <input type="text" class="form-control" id="nit_proveedor_search" 
-                       placeholder="Ingrese NIT para validar..." autocomplete="off">
-                <small class="text-muted">El sistema buscará si este NIT requiere anticipo.</small>
+                <label for="nit_proveedor_search" class="text-primary">NIT (Validación Anticipo)</label>
+                <input type="text" class="form-control" id="nit_proveedor_search" autocomplete="off" value="<?php echo ($importacion) ? $importacion->nit : ''; ?>" disabled>
+                <small class="text-muted">El sistema buscará si este proveedor requiere anticipo.</small>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="razon_social">Proveedor (Razón Social) *</label>
-                <input type="text" class="form-control" id="razon_social" 
-                       value="<?php echo ($importacion) ? $importacion->razon_social : ''; ?>" 
-                       placeholder="Escriba el nombre del proveedor">
-            </div>
-
-            <div class="form-group col-md-4">
-                <label for="numero_orden_compra">Número Orden de Compra *</label>
-                <input type="text" class="form-control" id="numero_orden_compra" 
-                       value="<?php echo ($importacion) ? $importacion->numero_orden_compra : ''; ?>" autofocus>
+                <input type="text" class="form-control" id="razon_social" value="<?php echo ($importacion) ? $importacion->razon_social : ''; ?>" disabled>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="contacto_principal">Contacto Principal</label>
-                <input type="text" class="form-control" id="contacto_principal" 
-                       value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
+                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email_contacto">Email de Contacto</label>
-                <input type="email" class="form-control" id="email_contacto" 
-                       value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
+                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="telefono_contacto">Teléfono de Contacto</label>
-                <input type="text" class="form-control" id="telefono_contacto" 
-                       value="<?php echo ($importacion) ? $importacion->telefono_contacto : ''; ?>">
+                <input type="text" class="form-control" id="telefono_contacto" value="<?php echo ($importacion) ? $importacion->telefono_contacto : ''; ?>">
             </div>
 
             <div class="form-group col-md-12">
@@ -105,16 +104,13 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="fecha_ingreso_siesa">Fecha Ingreso SIESA</label>
-                <input type="date" class="form-control" id="fecha_ingreso_siesa" 
-                       value="<?php echo ($importacion && $importacion->fecha_ingreso_siesa) ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : ''; ?>">
+                <input type="date" class="form-control" id="fecha_ingreso_siesa" value="<?php echo ($importacion && $importacion->fecha_ingreso_siesa) ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : ''; ?>">
                 <small class="form-text text-muted">Opcional</small>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="bl_awb">BL / AWB</label>
-                <input type="text" class="form-control" id="bl_awb" 
-                       value="<?php echo ($importacion) ? $importacion->bl_awb : ''; ?>" 
-                       placeholder="Bill of Lading / Air Waybill">
+                <input type="text" class="form-control" id="bl_awb" value="<?php echo ($importacion) ? $importacion->bl_awb : ''; ?>" placeholder="Bill of Lading / Air Waybill">
             </div>
 
             <div class="form-group col-md-3">
@@ -141,26 +137,22 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="valor_total">Valor Total (Moneda Extranjera) *</label>
-                <input type="number" step="0.01" class="form-control" id="valor_total" 
-                       value="<?php echo ($importacion) ? $importacion->valor_total : ''; ?>" placeholder="0.00">
+                <input type="number" step="0.01" class="form-control" id="valor_total" value="<?php echo ($importacion) ? $importacion->valor_total : ''; ?>" placeholder="0.00">
             </div>
 
             <div class="form-group col-md-3">
                 <label for="valor_trm">Valor TRM</label>
-                <input type="number" step="0.01" class="form-control" id="valor_trm" 
-                       value="<?php echo ($importacion) ? $importacion->valor_trm : ''; ?>" placeholder="0.00">
+                <input type="number" step="0.01" class="form-control" id="valor_trm" value="<?php echo ($importacion) ? $importacion->valor_trm : ''; ?>" placeholder="0.00">
             </div>
 
             <div class="form-group col-md-3">
                 <label for="valor_total_cop">Valor Aprox (COP)</label>
-                <input type="number" step="0.01" class="form-control" id="valor_total_cop" 
-                       value="<?php echo ($importacion) ? $importacion->valor_total_cop : ''; ?>" placeholder="0">
+                <input type="number" step="0.01" class="form-control" id="valor_total_cop" value="<?php echo ($importacion) ? $importacion->valor_total_cop : ''; ?>" placeholder="0">
             </div>
 
             <div class="form-group col-md-3">
                 <label for="impuestos_dian">Impuestos DIAN</label>
-                <input type="number" step="0.01" class="form-control" id="impuestos_dian" 
-                       value="<?php echo ($importacion) ? $importacion->impuestos_dian : ''; ?>" placeholder="0.00">
+                <input type="number" step="0.01" class="form-control" id="impuestos_dian" value="<?php echo ($importacion) ? $importacion->impuestos_dian : ''; ?>" placeholder="0.00">
             </div>
 
             <div class="col-12 mt-3">
@@ -185,15 +177,51 @@ if($id_importacion) {
 
             <div class="col-12 text-right mt-3">
                 <a class="btn btn-secondary" href="<?php echo site_url("importaciones"); ?>">Cancelar</a>
-                <button type="button" class="btn btn-primary" onclick="guardarImportacion()">
+                <button type="button" class="btn btn-primary" onClick="guardarImportacion()">
                     <i class="fas fa-save"></i> GUARDAR DATOS
                 </button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
 <script>
+    buscarOrdenCompra = async () => {
+        Swal.fire({
+            title: 'Estamos Buscando la orden de compra en el ERP...',
+            text: 'Por favor, espera.',
+            imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+            showConfirmButton: false,
+            allowOutsideClick: false
+        })
+
+        let estructuraOrdenCompra = $('#numero_orden_compra').val().split('-')
+
+        let datosOrdenCompra = {
+            tipo: 'ordenes_compra',
+            centro_operativo: estructuraOrdenCompra[0],
+            tipo_documento: estructuraOrdenCompra[1],
+            numero_orden: estructuraOrdenCompra[2],
+        }
+
+        // Se consulta en el ERP el pedido
+        var resultadoOrdenCompra = await consulta('obtener', datosOrdenCompra)
+
+        // Si no se encontró el pedido
+        if(resultadoOrdenCompra.codigo == 1) {
+            mostrarAviso('alerta', `La orden de compra ${$('#numero_orden_compra').val()} no se encontró en el ERP. Por favor, verifica nuevamente o ponte en contacto con nosotros.`, false)
+            return false
+        }
+
+        let ordenCompra = resultadoOrdenCompra.detalle.Table[0]
+
+        // Ponemos los valores en los campos requeridos
+        $('#nit_proveedor_search').val(ordenCompra.f200_nit_prov)
+        $('#razon_social').val(ordenCompra.f200_razon_social_prov)
+
+        Swal.close()
+    }
+
     guardarImportacion = async () => {
         // 1. Validar campos visuales obligatorios
         let camposObligatorios = [
@@ -222,10 +250,10 @@ if($id_importacion) {
                 // Asegúrate de tener la función buscar_configuracion_anticipo en tu controlador
                 const configAnticipo = await new Promise((resolve) => {
                     $.post('<?php echo site_url("importaciones/buscar_configuracion_anticipo"); ?>', 
-                           { nit: nitBuscar }, 
-                           (data) => {
-                               try { resolve(JSON.parse(data)); } catch(e) { resolve(null); }
-                           }
+                        { nit: nitBuscar }, 
+                        (data) => {
+                            try { resolve(JSON.parse(data)); } catch(e) { resolve(null); }
+                        }
                     );
                 });
 

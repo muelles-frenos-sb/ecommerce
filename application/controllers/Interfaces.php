@@ -664,6 +664,10 @@ class Interfaces extends CI_Controller {
                 $resultado = json_decode(obtener_movimientos_contables_api($datos));
             break;
 
+            case 'ordenes_compra':
+                $resultado = json_decode(obtener_ordenes_compra($datos));
+            break;
+
             case 'pedidos':
                 $codigo = 0;
                 $pagina = 1;

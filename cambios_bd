@@ -783,3 +783,6 @@ ADD COLUMN `orden` int NULL DEFAULT NULL COMMENT 'Orden en que se van a mostrar'
 ADD COLUMN `clase` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Clase para definir el color del estado' AFTER `orden`,
 MODIFY COLUMN `clase` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Clase para definir el color del estado' AFTER `orden`,
 MODIFY COLUMN `fecha_creacion` datetime NULL DEFAULT NULL AFTER `nombre`;
+
+-- Campo para almacenar el NIT
+ALTER TABLE `importaciones` ADD COLUMN `nit` varchar(100) NULL AFTER `numero_orden_compra`;
