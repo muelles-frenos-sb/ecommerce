@@ -21,23 +21,6 @@ class Marketing extends MY_Controller
 
     var $ruta = './archivos/';
 
-    function banners()
-    {
-        if (!$this->session->userdata('usuario_id')) redirect('inicio');
-
-        switch ($this->uri->segment(3)) {
-            case 'crear':
-                $this->data['contenido_principal'] = 'marketing/banners/detalle';
-                $this->load->view('core/body', $this->data);
-                break;
-
-            case 'ver':
-                $this->data['contenido_principal'] = 'marketing/banners/index';
-                $this->load->view('core/body', $this->data);
-                break;
-        }
-    }
-
     function campanias()
     {
         if (!$this->session->userdata('usuario_id')) redirect('inicio');
@@ -205,36 +188,6 @@ class Marketing extends MY_Controller
                     "data" => $resultados
                 ]);
                 break;
-
-            case "banners":
-                // Se definen los filtros
-                $datos = [
-                    "contar" => true,
-                    "busqueda" => $busqueda,
-                    "filtros_personalizados" => $this->input->get("filtros_personalizados"),
-                ];
-
-                // De acuerdo a los filtros se obtienen el número de registros filtrados
-                $total_resultados = $this->marketing_model->obtener("banners_tipos", $datos);
-
-                // Se quita campo para solo contar los registros
-                unset($datos["contar"]);
-
-                // Se agregan campos para limitar y ordenar
-                $datos["indice"] = $indice;
-                $datos["cantidad"] = $cantidad;
-                if ($ordenar) $datos["ordenar"] = $ordenar;
-
-                // Se obtienen los registros
-                $resultados = $this->marketing_model->obtener("banners_tipos", $datos);
-
-                print json_encode([
-                    "draw" => $this->input->get("draw"),
-                    "recordsTotal" => $total_resultados,
-                    "recordsFiltered" => $total_resultados,
-                    "data" => $resultados
-                ]);
-                break;
         }
     }
 
@@ -266,61 +219,6 @@ class Marketing extends MY_Controller
         echo json_encode(['resultado' => true]);
     }
 
-    /**
-     * subir_banner
-     * 
-     * Sube un archivo de banner en la ruta:
-     * archivos/banners/{id}/banner.ext
-     */
-    public function subir_banner()
-    {
-        $id = $this->uri->segment(3);
-        $exito = false;
-
-        if (!$id) {
-            echo json_encode(['resultado' => false, 'mensaje' => 'ID de banner no recibido']);
-            return;
-        }
-
-        if (!isset($_FILES['archivo'])) {
-            echo json_encode(['resultado' => false, 'mensaje' => 'No se recibió archivo']);
-            return;
-        }
-
-        // Crear directorio si no existe
-        $directorio = "./archivos/banners/$id/";
-        if (!is_dir($directorio)) mkdir($directorio, 0777, true);
-
-        $archivo = $_FILES['archivo'];
-
-        // Nombre ya viene desde JS como banner.pdf, banner.docx, etc
-        $nombre_archivo = $archivo['name'];
-
-        // Subir archivo
-        if (move_uploaded_file($archivo['tmp_name'], $directorio . $nombre_archivo)) {
-            $exito = true;
-            $mensaje = "Archivo subido correctamente";
-        } else {
-            $mensaje = "Error al subir el archivo";
-        }
-
-        print json_encode(['resultado' => [
-            "mensaje" => $mensaje,
-            "exito" => $exito
-        ]]);
-    }
-
-    /**
-     * subir_imagen
-     * 
-     * Función encargada de subir la imagen de una campaña de marketing.
-     * Crea automáticamente el directorio de la campaña si no existe y 
-     * guarda el archivo en la ruta definida en la propiedad $this->ruta.
-     * 
-     * Retorna un JSON indicando si la subida fue exitosa o no.
-     *
-     * @return void
-     */
     function subir_imagen()
     {
         $id_campania = $this->uri->segment(3);
@@ -481,7 +379,8 @@ class Marketing extends MY_Controller
                 'fecha_creacion' => date('Y-m-d H:i:s'),
                 'observacion' => json_encode([
                     'tipo' => 'Envio WhatsApp',
-                    'resultado' => $resultado
+                    'resultado' => $resultado,
+                    'campania_id' => $campania_id
                 ]),
             ]);
             } else {
@@ -492,7 +391,8 @@ class Marketing extends MY_Controller
                 'fecha_creacion' => date('Y-m-d H:i:s'),
                 'observacion' => json_encode([
                     'tipo' => 'Error Envio WhatsApp',
-                    'resultado' => $resultado
+                    'resultado' => $resultado,
+                    'campania_id' => $campania_id
                 ]),
             ]);
             }
