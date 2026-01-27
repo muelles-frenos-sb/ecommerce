@@ -73,12 +73,19 @@ class Importaciones_model extends CI_Model
             // CASO PRINCIPAL: Obtener listado o detalle de importaciones
             case 'importaciones':
                 // 1. Preparación de filtros básicos
-                $this->db->select('*');
-                $this->db->from('importaciones');
+                $this->db
+                    ->select([
+                        'i.*',
+                        'ie.nombre estado',
+                        'ie.clase estado_clase'
+                    ])
+                    ->from('importaciones i')
+                    ->join('importaciones_estados ie', 'i.importacion_estado_id = ie.id', 'LEFT')
+                ;
 
                 // 2. Filtro por ID (Para ver detalle único)
                 if (isset($datos['id'])) {
-                    $this->db->where('id', $datos['id']);
+                    $this->db->where('i.id', $datos['id']);
                     return $this->db->get()->row(); // Retorna un solo objeto
                 }
 
@@ -88,24 +95,24 @@ class Importaciones_model extends CI_Model
 
                     $this->db->group_start(); // Abrimos paréntesis para el OR
                     foreach ($palabras as $palabra) {
-                        $this->db->like('numero_orden_compra', $palabra);
-                        $this->db->or_like('razon_social', $palabra); // Proveedor
-                        $this->db->or_like('bl_awb', $palabra);       // Documento transporte
-                        $this->db->or_like('notas_internas', $palabra);
-                        $this->db->or_like('pais_origen', $palabra);
+                        $this->db->like('i.numero_orden_compra', $palabra);
+                        $this->db->or_like('i.razon_social', $palabra); // Proveedor
+                        $this->db->or_like('i.bl_awb', $palabra);       // Documento transporte
+                        $this->db->or_like('i.notas_internas', $palabra);
+                        $this->db->or_like('i.pais_origen', $palabra);
                     }
                     $this->db->group_end(); // Cerramos paréntesis
                 }
 
                 // 4. Filtros Específicos (Dropdowns)
                 if (isset($datos['pais_origen']) && $datos['pais_origen'] != '') {
-                    $this->db->where('pais_origen', $datos['pais_origen']);
+                    $this->db->where('i.pais_origen', $datos['pais_origen']);
                 }
                 if (isset($datos['moneda_preferida']) && $datos['moneda_preferida'] != '') {
-                    $this->db->where('moneda_preferida', $datos['moneda_preferida']);
+                    $this->db->where('i.moneda_preferida', $datos['moneda_preferida']);
                 }
                 if (isset($datos['razon_social']) && $datos['razon_social'] != '') {
-                    $this->db->where('razon_social', $datos['razon_social']);
+                    $this->db->where('i.razon_social', $datos['razon_social']);
                 }
 
                 // 5. Ordenamiento
@@ -113,7 +120,7 @@ class Importaciones_model extends CI_Model
                     $this->db->order_by($datos['ordenar_por'], 'DESC');
                 } else {
                     // Por defecto: Las llegadas más lejanas primero (o cambio a DESC para ver lo más reciente creado)
-                    $this->db->order_by('fecha_estimada_llegada', 'DESC');
+                    $this->db->order_by('i.fecha_estimada_llegada', 'DESC');
                 }
 
                 // 6. Si solo queremos contar (para paginación)

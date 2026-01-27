@@ -765,3 +765,21 @@ CREATE TABLE `banners_tipos`  (
   `fecha_creacion` datetime(0) NULL,
   PRIMARY KEY (`id`)
 );
+
+-- 20260126 Tabla para los estados de las importaciones
+CREATE TABLE `importaciones_estados`  (
+  `id` int NOT NULL,
+  `nombre` varchar(100) NULL,
+  `fecha_creacion` datetime(0) NULL,
+  PRIMARY KEY (`id`)
+);
+
+-- Los estados de las importaciones se cargan desde una tabla
+ALTER TABLE `importaciones` CHANGE COLUMN `estado` `importacion_estado_id` int NULL DEFAULT 1 AFTER `fecha_estimada_llegada`;
+
+-- Nuevos campos
+ALTER TABLE `importaciones_estados` 
+ADD COLUMN `orden` int NULL DEFAULT NULL COMMENT 'Orden en que se van a mostrar' AFTER `nombre`,
+ADD COLUMN `clase` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Clase para definir el color del estado' AFTER `orden`,
+MODIFY COLUMN `clase` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Clase para definir el color del estado' AFTER `orden`,
+MODIFY COLUMN `fecha_creacion` datetime NULL DEFAULT NULL AFTER `nombre`;

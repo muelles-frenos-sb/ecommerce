@@ -9,7 +9,6 @@ defined('BASEPATH') or exit('El acceso directo a este archivo no está permitido
  */
 class Importaciones extends MY_Controller
 {
-
     public function __construct()
     {
         parent::__construct();

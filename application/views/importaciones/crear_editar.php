@@ -93,16 +93,14 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="pais_origen">País de Origen *</label>
-                <select id="pais_origen" class="form-control" 
-                        data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
+                <select id="pais_origen" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
                     <option value="">Cargando países...</option>
                 </select>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="fecha_estimada_llegada">Fecha Estimada Llegada</label>
-                <input type="date" class="form-control" id="fecha_estimada_llegada" 
-                       value="<?php echo ($importacion) ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada)) : ''; ?>">
+                <input type="date" class="form-control" id="fecha_estimada_llegada" value="<?php echo ($importacion) ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada)) : ''; ?>">
             </div>
 
             <div class="form-group col-md-3">
@@ -120,16 +118,9 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
-                <label for="estado">Estado Actual</label>
-                <select id="estado" class="form-control">
-                    <?php 
-                    $estados = ['En Tránsito', 'Nacionalizado', 'Entregado', 'Cancelado', 'En Bodega Miami'];
-                    foreach($estados as $est) {
-                        $defecto = (!$importacion && $est == 'En Tránsito') ? 'selected' : '';
-                        $selected = ($importacion && $importacion->estado == $est) ? 'selected' : $defecto;
-                        echo "<option value='$est' $selected>$est</option>";
-                    }
-                    ?>
+                <label for="estado_id">Estado Actual</label>
+                <select id="estado_id" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->importacion_estado_id : ''; ?>">
+                    <option value="">Cargando estados...</option>
                 </select>
             </div>
 
@@ -273,7 +264,7 @@ if($id_importacion) {
             fecha_estimada_llegada: $('#fecha_estimada_llegada').val(),
             fecha_ingreso_siesa:    fechaSiesa,                  
             bl_awb:              $('#bl_awb').val(),
-            estado:              $('#estado').val(),
+            importacion_estado_id:  $('#estado_id').val(),
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
@@ -349,6 +340,7 @@ if($id_importacion) {
     $(document).ready(async function() {
         try {
             await listarDatos('pais_origen', { tipo: 'paises' }, $('#pais_origen').data('valor-actual'));
+            await listarDatos('estado_id', { tipo: 'importaciones_estados' }, $('#estado_id').data('valor-actual'));
         } catch (e) {
             console.warn("Error cargando países", e);
         }

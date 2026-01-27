@@ -4,11 +4,6 @@ $id_importacion = $id;
 $importacion = $this->importaciones_model->obtener('importaciones', ['id' => $id_importacion]);
 
 if(empty($importacion)) redirect(site_url('importaciones'));
-
-// Lógica de color según estado
-$clase_estado = 'info';
-if($importacion->estado == 'Entregado' || $importacion->estado == 'Nacionalizado') $clase_estado = 'success';
-if($importacion->estado == 'Cancelado') $clase_estado = 'failure';
 ?>
 
 <div class="block-header block-header--has-breadcrumb">
@@ -40,7 +35,7 @@ if($importacion->estado == 'Cancelado') $clase_estado = 'failure';
                     <div class="card-body card-body--padding--2">
                         <div class="d-flex justify-content-between align-items-center mb-4">
                             <h1 class="h3 mb-0">Detalle de Importación</h1>
-                            <span class="status-badge status-badge--style--<?php echo $clase_estado; ?> p-2">
+                            <span class="status-badge <?php echo $importacion->estado_clase; ?> p-2">
                                 <?php echo $importacion->estado; ?>
                             </span>
                         </div>

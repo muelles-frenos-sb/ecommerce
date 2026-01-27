@@ -33,27 +33,6 @@ if(empty($importaciones)) { ?>
                 <?php foreach($importaciones as $item) { 
                     // 1. Formato de ID (IMP-001)
                     $id_formateado = 'IMP-' . str_pad($item->id, 3, '0', STR_PAD_LEFT);
-
-                    // 2. Colores de estado (Estilo Badge)
-                    $estado_clase = 'badge-secondary'; // Por defecto
-                    $estado_texto = $item->estado;
-
-                    switch (strtolower($item->estado)) {
-                        case 'en tránsito':
-                        case 'en transito':
-                        case 'pago anticipo':
-                        case 'negociación':
-                        case 'negociacion':
-                            $estado_clase = 'badge-warning text-dark'; // Amarillo
-                            break;
-                        case 'nacionalizado':
-                        case 'entregado':
-                            $estado_clase = 'badge-success'; // Verde
-                            break;
-                        case 'cancelado':
-                            $estado_clase = 'badge-danger'; // Rojo
-                            break;
-                    }
                 ?>
                 <tr>
                     <td class="font-weight-bold text-primary">
@@ -96,8 +75,8 @@ if(empty($importaciones)) { ?>
                     </td>
 
                     <td>
-                        <span class="badge <?php echo $estado_clase; ?> p-2" style="font-size: 0.85rem; border-radius: 20px; width: 100px; display: inline-block; text-align: center;">
-                            <?php echo $estado_texto; ?>
+                        <span class="badge <?php echo $item->estado_clase; ?> p-2" style="font-size: 0.85rem; border-radius: 20px; width: 100%; display: inline-block; text-align: center;">
+                            <?php echo $item->estado; ?>
                         </span>
                     </td>
 

@@ -334,6 +334,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'importaciones_estados':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'periodos':
                 if(!empty($datos)) $this->db->where($datos);
 
