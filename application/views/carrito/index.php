@@ -44,14 +44,6 @@
                             <tr>
                                 <td colspan="6">
                                     <div class="cart-table__actions">
-                                        <!-- <form class="cart-table__coupon-form form-row">
-                                            <div class="form-group mb-0 col flex-grow-1">
-                                                <input type="text" class="form-control form-control-sm" placeholder="Coupon Code">
-                                            </div>
-                                            <div class="form-group mb-0 col-auto">
-                                                <button type="button" class="btn btn-sm btn-primary">Apply Coupon</button>
-                                            </div>
-                                        </form> -->
                                         <div class="cart-table__update-button">
                                             <a class="btn btn-sm btn-primary" href="#" onClick="javascript:vaciarCarrito()">Vaciar carrito</a>
                                         </div>

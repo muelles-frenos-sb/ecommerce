@@ -61,7 +61,7 @@ class Carrito extends MY_Controller {
 
         // Modificación de cantidades
         if($tipo == 'agregar') $item['qty'] += 1;
-        if($tipo == 'eliminar') $item['qty'] -= 1;
+        if($tipo == 'remover') $item['qty'] -= 1;
 
         $datos = [
             'rowid' => $row_id,

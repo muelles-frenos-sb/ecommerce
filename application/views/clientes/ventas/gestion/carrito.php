@@ -43,7 +43,7 @@
                         <div class="cart-table__quantity input-number">
                             <input class="form-control input-number__input" type="number" min="1" value="<?php echo $item['qty']; ?>" disabled>
                             <div class="input-number__add" onClick="javascript:modificarItem('agregar', '<?php echo $item['rowid']; ?>')"></div>
-                            <div class="input-number__sub" onClick="javascript:modificarItem('eliminar', '<?php echo $item['rowid']; ?>')"></div>
+                            <div class="input-number__sub" onClick="javascript:modificarItem('remover', '<?php echo $item['rowid']; ?>')"></div>
                         </div>
                     </td>
                     <td class="cart-table__column cart-table__column--total" data-title="Subtotal"><?php echo formato_precio($item['subtotal']); ?></td>
