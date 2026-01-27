@@ -274,6 +274,11 @@
                                                                                 <hr>
 
                                                                                 <li class="menu__item">
+                                                                                    <a href="<?php echo site_url('importaciones/maestro'); ?>" class="menu__link">
+                                                                                        Maestro de anticipos
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="menu__item">
                                                                                     <a href="<?php echo site_url('importaciones'); ?>" class="menu__link">
                                                                                         Importaciones
                                                                                     </a>
