@@ -67,6 +67,12 @@ $config = [
         ['field' => 'url', 'label' => 'URL', 'rules' => 'required|trim'],
     ],
 
+    'whatsapp_proveedores_orden_compra_aprobada' => [
+        ['field' => 'orden_compra', 'label' => 'Numero de orden de compra', 'rules' => 'required|trim'],
+        ['field' => 'proveedor', 'label' => 'Nombre del proveedor', 'rules' => 'required|trim'],
+        ['field' => 'url', 'label' => 'URL', 'rules' => 'required|trim'],
+    ],
+
     'whatsapp_clientes_asignacion_solicitud_credito' => [
         ['field' => 'nombre_cliente', 'label' => 'Nombre del cliente', 'rules' => 'required|trim'],
         ['field' => 'url', 'label' => 'URL', 'rules' => 'required|trim'],

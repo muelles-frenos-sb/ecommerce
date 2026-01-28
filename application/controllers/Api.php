@@ -620,6 +620,65 @@ class Api extends RestController {
                 ], RestController::HTTP_OK);
                 break;
 
+            // Orden de compra aprobada
+            case 'proveedores_orden_compra_aprobada':
+                $parametros = [
+                    'orden_compra' => (isset($datos['orden_compra'])) ? $datos['orden_compra'] : null,
+                    'proveedor' => (isset($datos['proveedor'])) ? $datos['proveedor'] : null,
+                    'url' => (isset($datos['url'])) ? $datos['url'] : null,
+                ];
+
+                $this->form_validation->set_data($parametros);
+
+                if (!$this->form_validation->run('whatsapp_proveedores_orden_compra_aprobada')) {
+                    $this->response([
+                        "error" => true,
+                        "mensaje" => "Parámetros inválidos.",
+                        "resultado" => $this->form_validation->error_array(),
+                    ], RestController::HTTP_BAD_REQUEST);
+                }
+
+                $contenido = [
+                    [
+                        'type' => 'body',
+                        "parameters" => [
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'orden_compra',
+                                "text" => $parametros['orden_compra'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'proveedor',
+                                "text" => $parametros['proveedor'],
+                            ],
+                            [
+                                'type' => 'text',
+                                'parameter_name' => 'url',
+                                "text" => $parametros['url'],
+                            ]
+                        ]
+                    ]
+                ];
+
+                $peticion = $this->whatsapp_api->enviar_mensaje_con_plantilla($numero_telefonico, 'confirmacion_orden_compra', 'es_CO', $contenido);
+
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => $tipo,
+                        'resultado' => $peticion
+                    ]),
+                ]);
+
+                $this->response([
+                    'error' => !$peticion['status'],
+                    'resultado' => $peticion,
+                    'datos' => $peticion['response']
+                ], RestController::HTTP_OK);
+                break;
+
             // Generación de una solicitud de diligencia
             case 'logistica_diligencia':
                 $parametros = [
