@@ -21,7 +21,7 @@ $lista_productos = '';
 foreach ($pedido_detalle as $registro) {
     $producto = (object) $registro;
     $fecha_pedido = date('Y-m-d', strtotime($producto->f430_id_fecha));
-    $vendedor_nit = $producto->f200_nit_pedido_vend;
+    $vendedor_nit = $producto->f200_id_pedido_vend;
     $vendedor_razon_social = $producto->f200_razon_social_pedido_vend;
     $sede = $this->configuracion_model->obtener('centros_operacion', ['codigo' => $producto->f430_id_co_fact]);
     $tercero = $producto->f200_razon_social_pedido_fact;
