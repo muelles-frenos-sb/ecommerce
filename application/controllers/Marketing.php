@@ -385,8 +385,6 @@ class Marketing extends MY_Controller
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen);
 
-            // Asumiendo que tu librería whatsapp_api devuelve TRUE o una estructura con 'error'
-            // Ajusta esta condición según lo que retorne tu librería exactamente.
             if ($resultado) {
                 echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
                 $this->configuracion_model->crear('logs', [
@@ -454,7 +452,7 @@ class Marketing extends MY_Controller
 
         // 5. Bucle de envío "Uno a Uno"
         foreach ($contactos as $contacto) {
-            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . 'archivos/campanias/$campania->id/$campania->nombre_imagen' : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen);
@@ -477,24 +475,24 @@ class Marketing extends MY_Controller
                 ]);
                 $enviados++;
                 $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 101,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => json_encode([
-                    'tipo' => 'Envio WhatsApp',
-                    'resultado' => $resultado
-                ]),
-            ]);
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
             } else {
                 $errores++;
 
                $this->configuracion_model->crear('logs', [
-                'log_tipo_id' => 101,
-                'fecha_creacion' => date('Y-m-d H:i:s'),
-                'observacion' => json_encode([
-                    'tipo' => 'Error Envio WhatsApp',
-                    'resultado' => $resultado
-                ]),
-            ]);
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Error Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
             }
             
         }
