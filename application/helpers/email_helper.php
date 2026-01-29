@@ -312,7 +312,7 @@ function enviar_email_solicitud_credito($id) {
             ",
         ],
         'destinatarios' => [$solicitud->email, 'analistacartera@repuestossimonbolivar.com', 'carteramyfsimonbolivar@gmail.com'],
-        'adjuntos' => true,
+        'adjuntos' => false,
     ];
 
     return $instancia->email_model->enviar($datos);
