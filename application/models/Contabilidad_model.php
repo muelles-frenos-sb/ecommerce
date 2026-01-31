@@ -61,7 +61,7 @@ Class Contabilidad_model extends CI_Model {
                     ct.nombre AS tipo_comprobante,
                     s.nombre AS centro_operativo,
                     cct.anio,
-                    p.nombre AS mes,
+                    p.nombre AS mes_nombre,
                     ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.consecutivo_existe = 1 ) consecutivo_existe,
                     ( SELECT COUNT( cctd.consecutivo_existe ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.consecutivo_existe = 0 ) consecutivo_no_existe,
                     ( SELECT COUNT( cctd.comprobante_coincide ) FROM comprobantes_contables_tareas_detalle AS cctd WHERE cctd.comprobante_contable_tarea_id = cct.id AND cctd.comprobante_coincide = 1 ) comprobante_coincide,

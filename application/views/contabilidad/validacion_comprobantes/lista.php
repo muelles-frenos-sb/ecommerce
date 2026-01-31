@@ -21,10 +21,11 @@
                     title: `
                         Rango
                     `,
+                    width: '150px',
                     data: null,
                     render: (tarea, type, row) => {
                         return `
-                            ${tarea.consecutivo_inicial}-${tarea.consecutivo_final}
+                            ${tarea.consecutivo_inicial} - ${tarea.consecutivo_final}
                         `
                     },
                 },
@@ -33,6 +34,7 @@
                         Tipo
                     `,
                     data: 'tipo_comprobante',
+                    width: '320px',
                 },
                 {
                     title: `
@@ -51,7 +53,7 @@
                     title: `
                         Mes
                     `,
-                    data: 'mes',
+                    data: 'mes_nombre',
                 },
                 {
                     title: `
@@ -130,7 +132,7 @@
                 thousands: '.',
                 url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
             },
-            ordering: true,
+            ordering: false,
             orderCellsTop: true,
             pageLength: 25,
             paging: true,
