@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title"><?php echo "----"; ?></h4>
+                <h4 class="modal-title">Detalle de la validación</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -13,16 +13,24 @@
                 <div class="block">
                     <div class="container">
                         <div class="table-responsive">
-                            <table class="table-striped table-bordered" id="tabla_facturas" width="100%">
+                            <table class="table-striped table-bordered" id="tabla_comprobantes_detalle" width="100%">
                                 <thead>
                                     <tr>
                                         <th class="text-center">Consecutivo</th>
+                                        <th class="text-center">¿Existe?</th>
+                                        <th class="text-center">¿Tiene comprobante?</th>
+                                        <th class="text-center">¿Comprobante correcto?</th>
+                                        <th class="text-center">Soportes</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach($consecutivos as $consecutivo) { ?>
+                                    <?php foreach($consecutivos as $registro) { ?>
                                         <tr>
-                                            <td class="text-right"><?php echo $consecutivo->ruta; ?></td>
+                                            <td class="text-center"><?php echo $registro->consecutivo_numero; ?></td>
+                                            <td class="text-center"><?php echo ($registro->consecutivo_existe) ? 'Sí' : 'No' ; ?></td>
+                                            <td class="text-center"><?php echo ($registro->comprobante_existe) ? 'Sí' : 'No' ; ?></td>
+                                            <td class="text-center"><?php echo ($registro->comprobante_coincide) ? 'Sí' : 'No' ; ?></td>
+                                            <td class="text-center"><?php echo $registro->cantidad_soportes; ?></td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
@@ -43,6 +51,28 @@
         $('#modal_consecutivos').modal({
             backdrop: 'static',
             keyboard: true
+        })
+
+        var tablaRecibos = $("#tabla_comprobantes_detalle").DataTable({
+            deferRender: true,
+            fixedHeader: false,
+            info: true,
+            language: {
+                decimal: ',',
+                thousands: '.',
+                url: '<?php echo base_url(); ?>js/dataTables_espanol.json'
+            },
+            ordering: false,
+            pageLength: 100,
+            paging: true,
+            processing: true,
+            scrollCollapse: true,
+            scroller: true,
+            // scrollX: false,
+            // scrollY: false,
+            searching: true,
+            serverSide: false,
+            stateSave: false,
         })
     })
 </script>

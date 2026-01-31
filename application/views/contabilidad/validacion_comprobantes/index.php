@@ -6,69 +6,67 @@
     </div>
 </div>
 
-<div class="block">
-    <div class="container">
-        <div class="card mb-lg-0" id="formulario_validacion_comprobantes">
-            <div class="card-body">
-                <form class="row">
-                    <!-- Tipo de comprobante -->
-                    <div class="col-lg-3 col-sm-12">
-                        <label for="comprobante_tipo_id">Tipo de comprobante *</label>
-                        <select id="comprobante_tipo_id" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach($this->configuracion_model->obtener('comprobantes_contables_tipos') as $tipo_comprobante) echo "<option value='$tipo_comprobante->id'  >$tipo_comprobante->nombre</option>"; ?>
-                        </select>
-                    </div>
+<div class="block pl-5 pr-5">
+    <div class="card mb-lg-0" id="formulario_validacion_comprobantes">
+        <div class="card-body">
+            <form class="row">
+                <!-- Tipo de comprobante -->
+                <div class="col-lg-3 col-sm-12">
+                    <label for="comprobante_tipo_id">Tipo de comprobante *</label>
+                    <select id="comprobante_tipo_id" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($this->configuracion_model->obtener('comprobantes_contables_tipos') as $tipo_comprobante) echo "<option value='$tipo_comprobante->id'  >$tipo_comprobante->nombre</option>"; ?>
+                    </select>
+                </div>
 
-                    <!-- Centro operativo -->
-                    <div class="col-lg-2 col-sm-12">
-                        <label for="comprobante_sede_id">Sede *</label>
-                        <select id="comprobante_sede_id" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach($this->configuracion_model->obtener('centros_operacion', ['ruta !=' => 'NULL']) as $sede) echo "<option value='$sede->id'>$sede->codigo - $sede->nombre</option>"; ?>
-                        </select>
-                    </div>
+                <!-- Centro operativo -->
+                <div class="col-lg-2 col-sm-12">
+                    <label for="comprobante_sede_id">Sede *</label>
+                    <select id="comprobante_sede_id" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($this->configuracion_model->obtener('centros_operacion', ['ruta !=' => 'NULL']) as $sede) echo "<option value='$sede->id'>$sede->codigo - $sede->nombre</option>"; ?>
+                    </select>
+                </div>
 
-                    <!-- Año -->
-                    <div class="col-lg-1 col-sm-12">
-                        <label for="comprobante_anio">Año *</label>
-                        <select id="comprobante_anio" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <option value="2026" selected>2026</option>
-                            <option value="2025">2025</option>
-                        </select>
-                    </div>
+                <!-- Año -->
+                <div class="col-lg-1 col-sm-12">
+                    <label for="comprobante_anio">Año *</label>
+                    <select id="comprobante_anio" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <option value="2026" selected>2026</option>
+                        <option value="2025">2025</option>
+                    </select>
+                </div>
 
-                    <!-- Mes -->
-                    <div class="col-lg-2 col-sm-12">
-                        <label for="comprobante_mes">Mes *</label>
-                        <select id="comprobante_mes" class="form-control">
-                            <option value="">Seleccione...</option>
-                            <?php foreach($this->configuracion_model->obtener('periodos', ['nombre_comprobante_contable !=' => 'NULL']) as $mes) echo "<option value='$mes->id'>$mes->nombre</option>"; ?>
-                        </select>
-                    </div>
+                <!-- Mes -->
+                <div class="col-lg-2 col-sm-12">
+                    <label for="comprobante_mes">Mes *</label>
+                    <select id="comprobante_mes" class="form-control">
+                        <option value="">Seleccione...</option>
+                        <?php foreach($this->configuracion_model->obtener('periodos', ['nombre_comprobante_contable !=' => 'NULL']) as $mes) echo "<option value='$mes->id'>$mes->nombre</option>"; ?>
+                    </select>
+                </div>
 
-                    <!-- Consecutivo inicial -->
-                    <div class="col-lg-2 col-sm-12">
-                        <label for="comprobante_consecutivo_inicial">Consecutivo inicial *</label>
-                        <input type="number" class="form-control" id="comprobante_consecutivo_inicial" value="71303">
-                    </div>
+                <!-- Consecutivo inicial -->
+                <div class="col-lg-2 col-sm-12">
+                    <label for="comprobante_consecutivo_inicial">Consecutivo inicial *</label>
+                    <input type="number" class="form-control" id="comprobante_consecutivo_inicial">
+                </div>
 
-                    <!-- Consecutivo final -->
-                    <div class="col-lg-2 col-sm-12">
-                        <label for="comprobante_consecutivo_final">Consecutivo final *</label>
-                        <input type="number" class="form-control" id="comprobante_consecutivo_final" value="72016">
-                    </div>
+                <!-- Consecutivo final -->
+                <div class="col-lg-2 col-sm-12">
+                    <label for="comprobante_consecutivo_final">Consecutivo final *</label>
+                    <input type="number" class="form-control" id="comprobante_consecutivo_final">
+                </div>
 
-                    <div class="col-lg-12 mt-3">
-                        <button type="submit" class="btn btn-primary btn-block">Programar tarea</button>
-                    </div>
-                </form>
+                <div class="col-lg-12 mt-3">
+                    <button type="submit" class="btn btn-primary btn-block">Programar tarea</button>
+                </div>
+            </form>
 
-            </div>
-
-            <div class="card-body" id="contenedor_comprobantes_contables"></div>
         </div>
+
+        <div class="card-body" id="contenedor_comprobantes_contables"></div>
     </div>
 </div>
 <div id="contenedor_modal"></div>
@@ -126,7 +124,7 @@
         // })
     }
 
-    cargarConsecutivos = async datos => {
+    cargarConsecutivos = async (datos = null) => {
         cargarInterfaz('contabilidad/validacion_comprobantes/consecutivos_detalle', 'contenedor_modal', datos)
     }
 
@@ -135,9 +133,7 @@
     }
 
     $().ready(() => {
-        $('#comprobante_tipo_id').val(1)
-        $('#comprobante_sede_id').val(1)
-        $('#comprobante_mes').val(1)
+        $('#comprobante_mes').val(<?php echo date('m'); ?>)
 
         listarComprobantesContables()
 

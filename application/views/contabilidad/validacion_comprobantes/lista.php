@@ -11,111 +11,95 @@
             },
             columns: [
                 {
-                    title: `
-                        Id
-                    `,
+                    title: `Id`,
                     data: 'id',
                     className: 'dt-right',
                 },
                 { 
-                    title: `
-                        Rango
-                    `,
+                    title: `Rango`,
                     width: '150px',
                     data: null,
                     render: (tarea, type, row) => {
-                        return `
-                            ${tarea.consecutivo_inicial} - ${tarea.consecutivo_final}
-                        `
+                        return `${tarea.consecutivo_inicial} - ${tarea.consecutivo_final}`
                     },
                 },
                 {
-                    title: `
-                        Tipo
-                    `,
+                    title: `Tipo`,
                     data: 'tipo_comprobante',
                     width: '320px',
                 },
                 {
-                    title: `
-                        Sede
-                    `,
+                    title: `Sede`,
                     data: 'centro_operativo',
                 },
                 {
-                    title: `
-                        Año
-                    `,
+                    title: `Año`,
                     data: 'anio',
                     width: '70px',
                 },
                 {
-                    title: `
-                        Mes
-                    `,
+                    title: `Mes`,
                     data: 'mes_nombre',
                 },
                 {
-                    title: `
-                        Consecutivos encontrados
-                    `,
+                    title: `Total`,
+                    className: 'dt-right',
                     data: null,
                     render: (tarea, type, row) => {
-                        return `
-                            <a href="javascript:;" onClick="javascript:cargarConsecutivos({ consecutivo_existe: 1 }); ">${tarea.consecutivo_existe}</a>
-                        `
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contable_tarea_id: ${tarea.id} }); ">${tarea.cantidad_comprobantes}</a>`
+                    },
+                },
+                {
+                    title: `Existentes`,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ consecutivo_existe: 1 }); ">${tarea.consecutivo_existe}</a>`
                     },
                     className: 'dt-right',
                     width: '70px',
                 },
                 {
-                    title: `
-                        Consecutivos faltantes
-                    `,
+                    title: `Faltantes`,
                     data: null,
                     render: (tarea, type, row) => {
-                        return `
-                            <a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contables_tarea_id: ${tarea.id}, consecutivo_existe: 0 }); ">${tarea.consecutivo_no_existe}</a>
-                        `
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contable_tarea_id: ${tarea.id}, consecutivo_existe: 0 }); ">${tarea.consecutivo_no_existe}</a>`
                     },
                     className: 'dt-right',
                     width: '70px',
                 },
                 {
-                    title: `
-                        Comprobantes encontrados
-                    `,
-                    data: 'comprobante_coincide',
+                    title: `Comprobantes encontrados`,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contable_tarea_id: ${tarea.id}, comprobante_coincide: 1 }); ">${tarea.comprobante_coincide}</a>`
+                    },
                     className: 'dt-right',
                     width: '70px',
                 },
                 {
-                    title: `
-                        Comprobantes faltantes
-                    `,
-                    data: 'comprobante_no_coincide',
+                    title: `Comprobantes faltantes`,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contable_tarea_id: ${tarea.id}, comprobante_coincide: 0 }); ">${tarea.comprobante_no_coincide}</a>`
+                    },
                     className: 'dt-right',
                     width: '70px',
                 },
                 {
-                    title: `
-                        Minutos
-                    `,
+                    title: `Soportes`,
+                    data: null,
+                    render: (tarea, type, row) => {
+                        return `<a href="javascript:;" onClick="javascript:cargarConsecutivos({ comprobante_contable_tarea_id: ${tarea.id} }); ">${tarea.cantidad_soportes}</a>`
+                    },
+                    className: 'dt-right',
+                    width: '70px',
+                },
+                {
+                    title: `Minutos`,
                     data: 'tiempo_ejecucion_minutos',
                     className: 'dt-right',
                     width: '70px',
                 },
-                {
-                    title: `
-                        Soportes
-                    `,
-                    data: 'cantidad_soportes',
-                    className: 'dt-right',
-                    width: '70px',
-                },
-
-                
-
             ],
             columnDefs: [
                 { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro
