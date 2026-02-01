@@ -1,4 +1,14 @@
+<?php $permisos = $this->configuracion_model->obtener('permisos'); ?>
+
 <div class="card-body card-body--padding--2">
+    <?php if(isset($permisos) && in_array(['pedidos' => 'pedidos_credito_gestionar'], $permisos)) { ?>
+        <!-- Cupo disponible -->
+        <div class="color_azul_corporativo_primario"><b>Cupo disponible</b></div>
+        <div class="block-reviews__subtitle color_azul_corporativo_primario text-right">
+            <span id="valor_cupo_disponible">Calculando...</span>
+        </div><!-- Cupo disponible -->
+    <?php } ?>
+
     <h3 class="card-title">Resumen</h3>
     <table class="cart__totals-table">
         <thead>
@@ -10,12 +20,7 @@
         <tbody>
             <tr>
                 <th>Envío</th>
-                <td>
-                    $ 0
-                    <!-- <div>
-                        <a href="">Calculate shipping</a>
-                    </div> -->
-                </td>
+                <td>$ 0</td>
             </tr>
         </tbody>
         <tfoot>
@@ -25,7 +30,35 @@
             </tr>
         </tfoot>
     </table>
+    
+    <?php if(isset($permisos) && in_array(['pedidos' => 'pedidos_credito_gestionar'], $permisos)) { ?>
+        <!-- Cupo después de pedido -->
+        <div class="color_azul_corporativo_primario"><b>Cupo después de este pedido</b></div>
+        <div class="block-reviews__subtitle color_azul_corporativo_primario text-right">
+            <span id="valor_nuevo_cupo">0</span>
+        </div><!-- Cupo después de pedido -->
+    <?php } ?>
+
     <a class="btn btn-primary btn-xl btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
         Finalizar pedido
     </a>
 </div>
+
+<script>
+    $().ready(() => {
+        let nit = '<?php echo $this->session->userdata('documento_numero'); ?>'
+
+        const cupo = new ClienteCalculadorCupo(nit)
+
+        cupo.calcularValorCupoRestante()
+            .then(resultado => {
+                let valorNuevoCupo = (resultado.valorCupoRestante - parseFloat(<?php echo $this->cart->total(); ?>))
+                valorNuevoCupo = (valorNuevoCupo > 0 ) ? valorNuevoCupo : 0
+
+                $('#valor_cupo_disponible').text(`$ ${formatearNumero(resultado.valorCupoRestante)}`)
+                $('#valor_nuevo_cupo').text(`$ ${formatearNumero(valorNuevoCupo)}`)
+            }).catch((error) => {
+                console.log(error)  
+            })
+    })
+</script>
