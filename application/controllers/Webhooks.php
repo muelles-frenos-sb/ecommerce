@@ -77,7 +77,7 @@ class Webhooks extends MY_Controller {
             // Controlar cantidad máxima
             if ($contador >= $limite) break;
 
-            $resultado = enviar_email_masivo_notificacion_certificados($cliente->nit);
+            $resultado = enviar_email_masivo_notificacion_certificados($cliente);
 
             // Se valida si el envio fue exitoso
             if (isset($resultado['exito']) && $resultado['exito'] === true) {
