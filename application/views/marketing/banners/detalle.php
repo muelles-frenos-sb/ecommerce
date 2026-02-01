@@ -14,8 +14,8 @@
                     </div>
 
                     <div class="form-group col-lg-6">
-                        <label for="banner_tipo_archivo"> Archivo (PDF, Word o Excel) *</label>
-                        <input type="file" class="form-control" id="banner_tipo_archivo" accept=".pdf,.doc,.docx,.xls,.xlsx">
+                        <label for="banner_tipo_archivo"> Iamgen (Formato WEBP) *</label>
+                        <input type="file" class="form-control" id="banner_tipo_archivo" accept=".webp">
                         <div class="mt-2">
                             <span id="nombre_archivo" class="text-muted d-none"></span>
                             <button type="button" id="eliminar_archivo" class="btn btn-sm btn-outline-danger d-none" title="Eliminar archivo">
@@ -65,7 +65,6 @@
 
         // Subir archivo
         if (archivos.length > 0 && !eliminarArchivo) {
-
             let archivo = archivos[0]
             let extension = archivo.name.split('.').pop().toLowerCase()
             let nombreArchivo = `banner.${extension}`
@@ -104,10 +103,10 @@
             if (!archivo) return
 
             const extension = archivo.name.split('.').pop().toLowerCase()
-            const extensionesPermitidas = ['pdf', 'doc', 'docx', 'xls', 'xlsx']
+            const extensionesPermitidas = ['webp']
 
             if (!extensionesPermitidas.includes(extension)) {
-                mostrarAviso( 'alerta', 'Solo se permiten archivos PDF, Word o Excel')
+                mostrarAviso( 'alerta', 'Solo se permiten archivos webp')
 
                 this.value = ''
                 $("#nombre_archivo").addClass('d-none').text('')

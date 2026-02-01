@@ -10,7 +10,7 @@
     <div class="container container--max--xl">
         <div class="row mb-4">
             <div class="col-3">
-                <a class="btn btn-success" href="<?php echo site_url('marketing/banners/crear'); ?>">Crear Banner</a>
+                <a class="btn btn-success" href="<?php echo site_url('marketing/banners/crear'); ?>">Subir imagen</a>
             </div>
         </div>
         
