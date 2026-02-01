@@ -113,52 +113,60 @@ class Webhooks extends MY_Controller {
 
     /**
      * Lee un archivo de Excel con las retenciones de los clientes
-     * y crea o actualiza los registros en la base de datos
-     *
+     * y crea o actualiza los registros en la base de datos.
+     * También procesa los contactos adicionales (celular y email)
+     * 
      * @return void
      */
-    function importar_retenciones_clientes() {
+    function importar_retenciones_clientes()
+    {
         $errores = 0;
         $resultado = [];
-
         $inicio = microtime(true);
         $fecha_inicio = date('Y-m-d H:i:s');
 
         // Ruta
         $archivo_excel = $this->config->item('ruta_informe_retenciones');
-
+        
         if (!file_exists($archivo_excel)) {
             $errores++;
             $resultado[] = 'El archivo de informe de retenciones no existe en la ruta configurada';
         }
 
         $procesados = 0;
+        $contactos_creados = 0;
+        $contactos_omitidos = 0;
         $anio = date('Y') - 1;
 
         if ($errores === 0) {
             try {
                 $spreadsheet = IOFactory::load($archivo_excel);
-                $hoja = $spreadsheet->getActiveSheet();
+                
+                // Cargar la hoja específica "retenciones"
+                $hoja = $spreadsheet->getSheetByName('retenciones');
+                
+                if (!$hoja) throw new Exception('No se encontró la hoja "retenciones" en el archivo Excel');
+                
                 $ultima_fila = $hoja->getHighestRow();
 
                 for ($fila = 2; $fila <= $ultima_fila; $fila++) {
-
                     $nit = trim($hoja->getCell('A' . $fila)->getValue());
-
+                    
                     if (!$nit || !is_numeric($nit)) continue;
 
+                    // Datos para la tabla clientes_retenciones_informe
                     $datos = [
                         'anio' => $anio,
                         'nit' => $nit,
                         'razon_social' => trim($hoja->getCell("B$fila")->getValue()),
                         'vendedor' => trim($hoja->getCell("C$fila")->getValue()),
                         'valor_retencion_fuente' => (float) $hoja->getCell("D$fila")->getValue(),
-                        'valor_retencion_iva' => (float) $hoja->getCell("E$fila")->getValue(),
-                        'valor_retencion_ica' => (float) $hoja->getCell("F$fila")->getValue(),
+                        'valor_retencion_ica' => (float) $hoja->getCell("E$fila")->getValue(),
+                        'valor_retencion_iva' => (float) $hoja->getCell("F$fila")->getValue(),
                     ];
 
-                    // Validar si existe 
-                    $existe = $this->clientes_model->obtener('clientes_retenciones_informe', ['anio' => $anio,'nit'=> $nit]);
+                    // Validar si existe el registro de retención
+                    $existe = $this->clientes_model->obtener('clientes_retenciones_informe', [ 'anio' => $anio, 'nit' => $nit]);
 
                     if ($existe) {
                         $datos['fecha_actualizacion'] = date('Y-m-d H:i:s');
@@ -169,6 +177,71 @@ class Webhooks extends MY_Controller {
                     }
 
                     $procesados++;
+
+                    // Procesar contactos adicionales
+                    $celular_adicional = trim($hoja->getCell("J$fila")->getValue());
+                    $email_adicional = trim($hoja->getCell("K$fila")->getValue());
+
+                    // Validar datos
+                    $tiene_celular = !empty($celular_adicional) && is_numeric($celular_adicional);
+                    $tiene_email = !empty($email_adicional) && filter_var($email_adicional, FILTER_VALIDATE_EMAIL);
+
+                    // Si tiene al menos uno de los dos, procesar
+                    if ($tiene_celular || $tiene_email) {
+                        
+                        // Preparar los datos base del contacto
+                        $datos_contacto = [
+                            'nit' => $nit,
+                            'modulo_id' => 8,
+                            'fecha_creacion' => date('Y-m-d H:i:s')
+                        ];
+
+                        // Agregar el número si existe
+                        if ($tiene_celular) $datos_contacto['numero'] = $celular_adicional;
+
+                        // Agregar el email si existe
+                        if ($tiene_email) $datos_contacto['email'] = $email_adicional;
+
+                        // Verificar si ya existe un contacto con estos datos exactos
+                        $debe_crear = true;
+                        
+                        // Si tiene ambos, verificar que no exista la combinación
+                        if ($tiene_celular && $tiene_email) {
+                            $existe_combinacion = $this->db
+                                ->where('nit', $nit)
+                                ->where('numero', $celular_adicional)
+                                ->where('email', $email_adicional)
+                                ->where('modulo_id', 8)
+                                ->get('terceros_contactos')
+                                ->row();
+                            
+                            if ($existe_combinacion) {
+                                $debe_crear = false;
+                            }
+                        }
+
+                        // Si solo tiene celular, verificar que no exista el número
+                        elseif ($tiene_celular) {
+                            $existe_numero = $this->configuracion_model->obtener('contactos', ['nit' => $nit,'numero' => $celular_adicional, 'modulo_id' => 8]);
+                            
+                            if ($existe_numero) $debe_crear = false;
+                        }
+
+                        // Si solo tiene email, verificar que no exista el email
+                        elseif ($tiene_email) {
+                            $existe_email = $this->configuracion_model->obtener('contactos', ['nit' => $nit, 'email' => $email_adicional, 'modulo_id' => 8 ]);
+                            
+                            if ($existe_email) $debe_crear = false;
+                        }
+
+                        // Crear el contacto con TODOS los datos que tenga
+                        if ($debe_crear) {
+                            $this->configuracion_model->crear('tercero_contacto', $datos_contacto);
+                            $contactos_creados++;
+                        } else {
+                            $contactos_omitidos++;
+                        }
+                    }
                 }
             } catch (Exception $e) {
                 $errores++;
@@ -185,13 +258,17 @@ class Webhooks extends MY_Controller {
             'observacion' => json_encode([
                 'inicio' => $fecha_inicio,
                 'fin' => $fecha_fin,
-                'registros_procesados' => $procesados
+                'registros_procesados' => $procesados,
+                'contactos_creados' => $contactos_creados,
+                'contactos_omitidos' => $contactos_omitidos
             ]),
             'log_tipo_id' => 103
         ]);
 
         $resultado[] = [
             'registros_procesados' => $procesados,
+            'contactos_creados' => $contactos_creados,
+            'contactos_omitidos' => $contactos_omitidos,
             'tiempo_ejecucion' => round($fin - $inicio, 2) . ' segundos'
         ];
 
