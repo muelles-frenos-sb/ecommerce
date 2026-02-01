@@ -64,21 +64,17 @@ function enviar_email_certificado_retencion($id) {
     return $CI->email_model->enviar($datos);
 }
 
-function enviar_email_masivo_notificacion_certificados($nit) {
+function enviar_email_masivo_notificacion_certificados($cliente) {
     $CI = get_instance();
-    $CI->load->model(['email_model', 'clientes_model', 'configuracion_model']);
+    $CI->load->model(['email_model', 'configuracion_model']);
+    $CI->load->helper('url');
 
-    // Buscar cliente
-    $cliente = $CI->db->get_where('clientes_retenciones_informe', ['nit' => $nit])->row();
-    if (!$cliente) {
-        return ['exito' => false, 'error' => 'CLIENTE_NO_EXISTE'];
-    }
+    // Validación básica
+    if (empty($cliente) || empty($cliente->nit)) return ['exito' => false, 'error' => 'CLIENTE_INVALIDO'];
 
-    // Buscar contactos
-    $contactos = $CI->configuracion_model->obtener('contactos', ['nit' => $nit]);
-    if (!$contactos) {
-        return ['exito' => false, 'error' => 'SIN_CONTACTOS'];
-    }
+    // Buscar contactos por NIT
+    $contactos = $CI->configuracion_model->obtener('contactos', ['nit' => $cliente->nit]);
+    if (!$contactos) return ['exito' => false, 'error' => 'SIN_CONTACTOS'];
 
     // Filtrar correos válidos
     $destinatarios = [];
@@ -88,37 +84,94 @@ function enviar_email_masivo_notificacion_certificados($nit) {
         }
     }
 
-    if (empty($destinatarios)) {
-        return ['exito' => false, 'error' => 'SIN_CONTACTOS_EMAIL'];
-    }
+    if (empty($destinatarios)) return ['exito' => false, 'error' => 'SIN_CONTACTOS_EMAIL'];
 
+    // Fecha en español
+    setlocale(LC_TIME, 'es_ES.UTF-8', 'spanish');
+    $fecha = strftime('%d de %B de %Y');
+
+    // URL del portal
     $url = site_url('sesion');
 
+    // Preparar imagen en base64
+    $imagen_firma = '';
+    $ruta_firma = FCPATH . 'archivos/general/firma_contadora.png';
+
+    // Debug: verificar si el archivo existe
+    if (file_exists($ruta_firma)) {
+        $contenido_imagen = file_get_contents($ruta_firma);
+        if ($contenido_imagen !== false) {
+            $imagen_base64 = base64_encode($contenido_imagen);
+            $imagen_firma = "<img src='data:image/png;base64,{$imagen_base64}' style='max-width:200px;height:auto;' alt='Firma'><br>";
+        }
+    }
+
+    // Construcción del correo
     $datos = [
         'pedido_completo' => '',
-        'id' => $nit,
-        'asunto' => 'Certificados de retención disponibles para carga',
+        'id' => $cliente->nit,
+
+        'asunto' => 'Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año ' . $cliente->anio,
+
         'cuerpo' => [
-            'titulo' => 'Ya puedes subir tus certificados de retención',
+            // TÍTULO
+            'titulo' =>
+                'SOLICITUD CERTIFICADOS DE RETENCIÓN ' . $cliente->anio .
+                ' A NOMBRE DE MUELLES Y FRENOS SIMÓN BOLÍVAR NIT 900296641-6',
+
+            // TODO el contenido va en subtitulo
             'subtitulo' => "
-                Hola, {$cliente->razon_social}.<br><br>
-                Ya puedes subir tus certificados tributarios en el portal.<br><br>
-                <a href='{$url}'>Ingresar</a>
+                Itagüí; {$fecha}<br><br>
+
+                Señores: {$cliente->razon_social} NIT: {$cliente->nit}<br>
+                <b>Asunto:</b> Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año {$cliente->anio}<br><br>
+
+                Apreciados Señores,<br><br>
+
+                De acuerdo con lo establecido en el artículo 381 del estatuto tributario y tratándose del asunto en referencia,
+                solicitamos de manera cordial expedir los certificados de retención en la fuente, RETEIVA y RETEICA
+                por el año gravable {$cliente->anio} generados a nombre de
+                MUELLES Y FRENOS SIMÓN BOLÍVAR NIT 900296641.<br><br>
+
+                Los valores registrados en nuestra contabilidad son:<br><br>
+
+                <b>RETENCIÓN EN LA FUENTE:</b> " . ($cliente->valor_retencion_fuente > 0
+                    ? number_format($cliente->valor_retencion_fuente, 0, ',', '.')
+                    : '0') . "<br>
+                <b>RETEIVA:</b> " . ($cliente->valor_retencion_iva > 0
+                    ? number_format($cliente->valor_retencion_iva, 0, ',', '.')
+                    : '0') . "<br>
+                <b>RETEICA:</b> " . ($cliente->valor_retencion_ica > 0
+                    ? number_format($cliente->valor_retencion_ica, 0, ',', '.')
+                    : '0') . "<br><br>
+
+                Por favor cargar los certificados en la plataforma <a href='{$url}'>url</a> o enviarlos a los correos
+                cartera3@repuestossimonbolivar.com con copia a aux.contable@muellesyfrenossb.com.
+                En caso tal de presentar diferencia en los valores expuestos por nosotros,
+                por favor enviar también el auxiliar en Excel para realizar la respectiva conciliación.<br><br>
+
+                Agradecemos su colaboración para suministrarnos dicha información en la mayor brevedad posible.<br><br>
+
+                Recuerde que según el Decreto 2229 de diciembre 22 de 2023, en el 2025 los agentes de retención tendrán plazo
+                para expedir certificados de retención del año gravable 2024 hasta el 31 de marzo
+                (último día hábil de marzo).<br><br>
+
+                Atentamente;<br><br>
+
+                {$imagen_firma}
+                Nora Isabel Castro Vargas<br>
+                Contadora<br><br>
+                <b>MUELLES Y FRENOS SIMÓN BOLÍVAR</b>
             ",
         ],
+
         'destinatarios' => $destinatarios,
     ];
 
-    // Enviar email
+    // Envío
     $envio = $CI->email_model->enviar($datos);
 
-    if (!$envio) {
-        return [
-            'exito' => false,
-            'error' => 'ERROR_ENVIO_EMAIL'
-        ];
-    }
-
+    if (!$envio) return ['exito' => false, 'error' => 'ERROR_ENVIO_EMAIL'];
     return ['exito' => true];
 }
 
