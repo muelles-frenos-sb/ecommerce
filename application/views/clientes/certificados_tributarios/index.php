@@ -80,8 +80,8 @@
 
                 if (respuesta.exito && Array.isArray(respuesta.log)) {
                     resultado_log.total = respuesta.log.length
-                    resultado_log.enviados = respuesta.log.filter(l => l.estado === 'ENVIADO').length
-                    resultado_log.fallidos = respuesta.log.filter(l => l.estado === 'FALLIDO').length
+                    resultado_log.enviados = respuesta.log.filter(l => l.estado === false).length
+                    resultado_log.fallidos = respuesta.log.filter(l => l.estado === false).length
                     resultado_log.detalle = respuesta.log
 
                     Swal.fire({

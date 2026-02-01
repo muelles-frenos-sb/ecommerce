@@ -51,7 +51,7 @@ function enviar_email_certificado_retencion($id) {
     $datos = [
         'pedido_completo' => '',
         'id' => $certificado->id,
-        'asunto' => 'Se ha subido un certificado de retención '. $certificado->tipo_retencion,
+        'asunto' => "Se ha subido un certificado de retención $certificado->tipo_retencion",
         'cuerpo' => [
             'titulo' => '¡La subida del certificado ha sido exitosa!',
             'subtitulo' => "
