@@ -73,6 +73,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->marketing_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'marketing_banners':
+                $resultado = $this->marketing_model->actualizar($tipo, ['banner_tipo_id' => $id], $datos);
+            break;
+
             case 'productos_metadatos':
                 $datos['fecha_modificacion'] = date("Y-m-d H:i:s");
                 $resultado = $this->productos_model->actualizar($tipo, ['id' => $id], $datos);

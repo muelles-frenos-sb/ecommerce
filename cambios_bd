@@ -807,3 +807,7 @@ ALTER TABLE `importaciones` ADD COLUMN `nit` varchar(100) NULL AFTER `numero_ord
 
 -- 20260128 Rol creado
 INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'pedidos_credito_gestionar', 'Activo para pedidos a crédito', 4);
+
+-- 20260201 Se agrega campo para guardar el nombre del archivo en los banners
+ALTER TABLE `marketing_banners` 
+ADD COLUMN `nombre_archivo` varchar(255) NULL AFTER `banner_tipo_id`;

@@ -10,6 +10,24 @@
 <table class="table-striped table-bordered" id="tabla_banners"></table>
 
 <script>
+    function verImagen(id, nombreArchivo) {
+        let url = `${$("#site_url").val()}archivos/banners/${id}/${nombreArchivo}`
+
+        let imagen = new Image()
+        imagen.onload = () => {
+            Swal.fire({
+                title: 'Vista previa',
+                imageUrl: url,
+                showCloseButton: true,
+                showConfirmButton: false
+            })
+        }
+        imagen.onerror = () => {
+            mostrarAviso('alerta', 'La imagen no se encontró')
+        }
+        imagen.src = url
+    }
+
     $().ready(async () => {
         tablaBanners = $("#tabla_banners").DataTable({
             ajax: {
@@ -37,6 +55,21 @@
                         <input type="date" id="filtro_fecha_creacion" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'fecha_creacion'
+                },
+                {
+                    title: 'Acciones',
+                    data: null,
+                    orderable: false,
+                    className: 'text-center',
+                    render: (data) => {
+                        return `
+                            <button class="btn btn-sm btn-primary"
+                                title="Visualizar imagen"
+                                onclick="verImagen(${data.id}, '${data.nombre_archivo}')">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        `
+                    }
                 }
             ],
             columnDefs: [

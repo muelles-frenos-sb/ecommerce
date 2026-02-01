@@ -1,3 +1,6 @@
+<?php
+$marketing_banners = $this->marketing_model->obtener('marketing_banners');
+?>
 <div class="block-space block-space--layout--after-header"></div>
 
 <div class="block">
@@ -35,6 +38,9 @@
 <div class="block-space block-space--layout--before-footer"></div>
 
 <script>
+    // Se trae el arreglo de datos en un json
+    const marketingBanners = <?php echo json_encode($marketing_banners) ?>;
+    
     let eliminarArchivo = false
 
     async function guardarBanner() {
@@ -47,30 +53,47 @@
 
         if (!validarCamposObligatorios(camposObligatorios)) return
 
+        let bannerTipoId = $("#banner_tipo_id").val()
+
+        // Nombre original del archivo
+        let nombreArchivo = null
+        if (archivos.length > 0) nombreArchivo = archivos[0].name
+
+        // Buscar si ya existe banner para este tipo
+        let bannerExistente = marketingBanners.find(
+            b => b.banner_tipo_id == bannerTipoId
+        )
+
         let datos = {
             tipo: 'marketing_banners',
-            banner_tipo_id: $("#banner_tipo_id").val(),
-        }
-        
-        // Crear registro
-        let respuesta = await consulta('crear', datos, false)
-        
-        // Valida que se haya creado con éxito
-        if (!respuesta || !respuesta.resultado) {
-            mostrarAviso('alerta', 'Error al crear el tipo de banner')
-            return
+            banner_tipo_id: bannerTipoId,
+            nombre_archivo: nombreArchivo
         }
 
-        let id = respuesta.resultado
+        let id = null
+
+        // Crear o actualizar
+        if (bannerExistente) {
+            datos.id = bannerTipoId // Existente en el arreglo de marketing_banners
+            await consulta('actualizar', datos, false)
+            id = bannerExistente.id
+        } else {
+            let respuesta = await consulta('crear', datos, false)
+
+            if (!respuesta || !respuesta.resultado) {
+                mostrarAviso('alerta', 'Error al crear el banner')
+                return
+            }
+
+            id = respuesta.resultado
+        }
 
         // Subir archivo
         if (archivos.length > 0 && !eliminarArchivo) {
             let archivo = archivos[0]
-            let extension = archivo.name.split('.').pop().toLowerCase()
-            let nombreArchivo = `banner.${extension}`
 
             let formData = new FormData()
-            formData.append('archivo', archivo, nombreArchivo)
+            formData.append('archivo', archivo)
 
             let peticion = new XMLHttpRequest()
             peticion.open(
@@ -88,16 +111,16 @@
                 }
 
                 mostrarAviso('exito', 'El banner se guardó correctamente')
-
-                setTimeout(() => { history.back()}, 1500) // retorna a la página anterior
+                setTimeout(() => history.back(), 1500)
             }
         } else {
             mostrarAviso('exito', 'El banner se guardó correctamente')
-            setTimeout(() => { history.back()}, 1500) // retorna a la página anterior
+            setTimeout(() => history.back(), 1500)
         }
     }
 
     $(document).ready(function () {
+
         $("#banner_tipo_archivo").on("change", function () {
             const archivo = this.files[0]
             if (!archivo) return
@@ -106,7 +129,7 @@
             const extensionesPermitidas = ['webp']
 
             if (!extensionesPermitidas.includes(extension)) {
-                mostrarAviso( 'alerta', 'Solo se permiten archivos webp')
+                mostrarAviso('alerta', 'Solo se permiten archivos webp')
 
                 this.value = ''
                 $("#nombre_archivo").addClass('d-none').text('')
@@ -114,7 +137,9 @@
                 return
             }
 
-            $("#nombre_archivo").text(`Archivo seleccionado: ${archivo.name}`).removeClass('d-none')
+            $("#nombre_archivo")
+                .text(`Archivo seleccionado: ${archivo.name}`)
+                .removeClass('d-none')
 
             $("#eliminar_archivo").removeClass('d-none')
             eliminarArchivo = false
@@ -132,12 +157,13 @@
             }).then((result) => {
                 if (!result.isConfirmed) return
 
-                $("#certificado_archivo").val('')
+                $("#banner_tipo_archivo").val('')
                 $("#nombre_archivo").addClass('d-none').text('')
                 $("#eliminar_archivo").addClass('d-none')
 
                 eliminarArchivo = true
             })
         })
+
     })
 </script>
