@@ -784,6 +784,24 @@ ADD COLUMN `clase` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL D
 MODIFY COLUMN `clase` varchar(25) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Clase para definir el color del estado' AFTER `orden`,
 MODIFY COLUMN `fecha_creacion` datetime NULL DEFAULT NULL AFTER `nombre`;
 
+-- 20260127 Se ajusta nombre de la tabla banners_tipos por marketing_baners_tipos
+RENAME TABLE banners_tipos TO marketing_banners_tipos;
+
+-- 20260127 Se agregan los valores de los tipos de banners
+INSERT INTO `marketing_banners_tipos` (`id`, `nombre`, `fecha_creacion`) VALUES (1, 'Sesión - Login', NOW());
+INSERT INTO `marketing_banners_tipos` (`id`, `nombre`, `fecha_creacion`) VALUES (2, 'Inicio - Dashboard de clientes crédito', NOW());
+INSERT INTO `marketing_banners_tipos` (`id`, `nombre`, `fecha_creacion`) VALUES (3, 'Inicio - Marcas', NOW());
+INSERT INTO `marketing_banners_tipos` (`id`, `nombre`, `fecha_creacion`) VALUES (4, 'Inicio - Grupos', NOW());
+INSERT INTO `marketing_banners_tipos` (`id`, `nombre`, `fecha_creacion`) VALUES (5, 'Inicio - Líneas', NOW());
+
+CREATE TABLE `marketing_banners`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `banner_tipo_id` int NULL,
+  `fecha_creacion` datetime(0) NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `marketing_banners_ibfk_1` FOREIGN KEY (`banner_tipo_id`) REFERENCES `ecommerce`.`marketing_banners_tipos` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
 -- Campo para almacenar el NIT
 ALTER TABLE `importaciones` ADD COLUMN `nit` varchar(100) NULL AFTER `numero_orden_compra`;
 
