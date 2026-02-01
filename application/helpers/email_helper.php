@@ -70,11 +70,11 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
     $CI->load->helper('url');
 
     // Validación básica
-    if (empty($cliente) || empty($cliente->nit)) return ['exito' => false, 'error' => 'CLIENTE_INVALIDO'];
+    if (empty($cliente) || empty($cliente->nit)) return ['exito' => false, 'error' => 'Cliente no válido'];
 
     // Buscar contactos por NIT
     $contactos = $CI->configuracion_model->obtener('contactos', ['nit' => $cliente->nit]);
-    if (!$contactos) return ['exito' => false, 'error' => 'SIN_CONTACTOS'];
+    if (!$contactos) return ['exito' => false, 'mensaje' => 'Sin datos de contacto'];
 
     // Filtrar correos válidos
     $destinatarios = [];
@@ -84,14 +84,14 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
         }
     }
 
-    if (empty($destinatarios)) return ['exito' => false, 'error' => 'SIN_CONTACTOS_EMAIL'];
+    if (empty($destinatarios)) return ['exito' => false, 'error' => 'Sin emails de contacto'];
 
     // Fecha en español
     setlocale(LC_TIME, 'es_ES.UTF-8', 'spanish');
     $fecha = strftime('%d de %B de %Y');
 
     // URL del portal
-    $url = site_url('sesion');
+    $url = site_url("clientes/certificados_tributarios/crear/$cliente->nit");
 
     // Preparar imagen en base64
     $imagen_firma = '';
@@ -111,41 +111,34 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
         'pedido_completo' => '',
         'id' => $cliente->nit,
 
-        'asunto' => 'Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año ' . $cliente->anio,
+        'asunto' => "Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año $cliente->anio",
 
         'cuerpo' => [
             // TÍTULO
-            'titulo' =>
-                'SOLICITUD CERTIFICADOS DE RETENCIÓN ' . $cliente->anio .
-                ' A NOMBRE DE MUELLES Y FRENOS SIMÓN BOLÍVAR NIT 900296641-6',
+            'titulo' => "SOLICITUD CERTIFICADOS DE RETENCIÓN $cliente->anio A NOMBRE DE MUELLES Y FRENOS SIMÓN BOLÍVAR NIT 900296641-6",
 
             // TODO el contenido va en subtitulo
             'subtitulo' => "
-                Itagüí; {$fecha}<br><br>
+                Itagüí, $fecha<br><br>
 
-                Señores: {$cliente->razon_social} NIT: {$cliente->nit}<br>
-                <b>Asunto:</b> Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año {$cliente->anio}<br><br>
+                Señores: $cliente->razon_social<br>
+                NIT: $cliente->nit<br>
+                <b>Asunto:</b> Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año $cliente->anio<br><br>
 
                 Apreciados Señores,<br><br>
 
                 De acuerdo con lo establecido en el artículo 381 del estatuto tributario y tratándose del asunto en referencia,
                 solicitamos de manera cordial expedir los certificados de retención en la fuente, RETEIVA y RETEICA
-                por el año gravable {$cliente->anio} generados a nombre de
+                por el año gravable $cliente->anio generados a nombre de
                 MUELLES Y FRENOS SIMÓN BOLÍVAR NIT 900296641.<br><br>
 
                 Los valores registrados en nuestra contabilidad son:<br><br>
 
-                <b>RETENCIÓN EN LA FUENTE:</b> " . ($cliente->valor_retencion_fuente > 0
-                    ? number_format($cliente->valor_retencion_fuente, 0, ',', '.')
-                    : '0') . "<br>
-                <b>RETEIVA:</b> " . ($cliente->valor_retencion_iva > 0
-                    ? number_format($cliente->valor_retencion_iva, 0, ',', '.')
-                    : '0') . "<br>
-                <b>RETEICA:</b> " . ($cliente->valor_retencion_ica > 0
-                    ? number_format($cliente->valor_retencion_ica, 0, ',', '.')
-                    : '0') . "<br><br>
+                <b>RETENCIÓN EN LA FUENTE:</b> " . formato_precio($cliente->valor_retencion_fuente) . "<br>
+                <b>RETEIVA:</b> " . formato_precio($cliente->valor_retencion_iva) . "<br>
+                <b>RETEICA:</b> " . formato_precio($cliente->valor_retencion_ica) . "<br><br>
 
-                Por favor cargar los certificados en la plataforma <a href='{$url}'>url</a> o enviarlos a los correos
+                Por favor <a href='$url' style='color: #ffd400; text-decoration: none;'>cargar los certificados en la plataforma</a> o enviarlos a los correos
                 cartera3@repuestossimonbolivar.com con copia a aux.contable@muellesyfrenossb.com.
                 En caso tal de presentar diferencia en los valores expuestos por nosotros,
                 por favor enviar también el auxiliar en Excel para realizar la respectiva conciliación.<br><br>
@@ -171,7 +164,8 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
     // Envío
     $envio = $CI->email_model->enviar($datos);
 
-    if (!$envio) return ['exito' => false, 'error' => 'ERROR_ENVIO_EMAIL'];
+    if (!$envio) return ['exito' => false, 'mensaje' => 'Error al enviar el email'];
+
     return ['exito' => true];
 }
 

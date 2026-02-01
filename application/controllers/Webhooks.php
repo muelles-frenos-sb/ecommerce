@@ -55,8 +55,6 @@ class Webhooks extends MY_Controller {
     {
         set_time_limit(0);
 
-        $this->load->helper('email');
-
         // Obtener límite configurado
         $limite = $this->config->item('cantidad_datos');
 
@@ -70,7 +68,7 @@ class Webhooks extends MY_Controller {
 
         $enviados = 0;
         $fallidos = 0;
-        $log = [];
+        $logs = [];
         $contador = 0;
 
         foreach ($clientes as $cliente) {
@@ -80,24 +78,25 @@ class Webhooks extends MY_Controller {
             $resultado = enviar_email_masivo_notificacion_certificados($cliente);
 
             // Se valida si el envio fue exitoso
-            if (isset($resultado['exito']) && $resultado['exito'] === true) {
-
+            if (isset($resultado['exito']) && $resultado['exito']) {
                 // Marcar como enviado
-                $this->db->where('nit', $cliente->nit)
+                $this->db
+                    ->where('nit', $cliente->nit)
                     ->update('clientes_retenciones_informe', [
                         'fecha_envio' => date('Y-m-d H:i:s')
-                    ]);
+                    ])
+                ;
 
-                $log[] = [
+                $logs[] = [
                     'nit' => $cliente->nit,
-                    'estado' => 'ENVIADO'
+                    'enviado' => true
                 ];
                 $enviados++;
             } else {
-                $log[] = [
+                $logs[] = [
                     'nit'   => $cliente->nit,
-                    'estado'=> 'FALLIDO',
-                    'error' => $resultado['error'] ?? 'DESCONOCIDO'
+                    'enviado'=> false,
+                    'mensaje' => $resultado['mensaje'] ?? 'Desconocido'
                 ];
                 $fallidos++;
             }
@@ -108,7 +107,7 @@ class Webhooks extends MY_Controller {
         echo json_encode([
             'exito'   => true,
             'mensaje' => "Proceso terminado. Enviados: $enviados | Fallidos: $fallidos",
-            'log'     => $log
+            'log'     => $logs
         ]);
     }
 
