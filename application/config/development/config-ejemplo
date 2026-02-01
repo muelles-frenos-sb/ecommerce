@@ -8,7 +8,7 @@ $config['base_url'] = '';   // http://localhost/proyecto
 $config['base_url_blog'] = ''; // https://repuestossimonbolivar.com/web/blog-de-repuestos-simon-bolivar
 $config['url_fotos'] = ''; // http://localhost/proyecto/archivos/fotos/
 $config['url_wordpress'] = ''; // https://repuestossimonbolivar.com/web
-$config['ruta_archivo_digitalizado'] = ''; // archivos/documentos_contables/
+$config['ruta_archivo_digitalizado'] = ''; // archivos/documentos_contables
 $config['ruta_informe_retenciones'] = '';   // Ruta del directorio donde está el informe de retenciones de clientes
 
 /***************************************

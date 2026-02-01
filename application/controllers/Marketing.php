@@ -368,19 +368,6 @@ class Marketing extends MY_Controller
         }
 
         try {
-            // 3. Preparar contenido
-            // NOTA: Si tu plantilla requiere variables (ej: {{1}}, {{2}}), debes definirlas aquí.
-            // Como es una prueba, enviamos un array vacío o datos dummy si es necesario.
-            $contenido = []; // O los parámetros que requiera tu plantilla
-
-            // 4. Llamada a la API (La línea que me pasaste)
-            // $resultado = $this->whatsapp_api->enviar_mensaje_con_plantilla(
-            //     $numero_telefonico,
-            //     $nombre_plantilla,
-            //     'es_CO',
-            //     $contenido
-            // );
-
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');

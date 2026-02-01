@@ -38,7 +38,7 @@ Class Email_model extends CI_Model {
         $this->email->message($mensaje);
 
         // Si tiene archivos adjuntos
-        if(isset($datos['adjuntos'])) {
+        if(isset($datos['adjuntos']) && $datos['adjuntos']) {
             $directorio = "./archivos/solicitudes_credito/{$datos['id']}/";
 
             $archivos = directory_map($directorio);
