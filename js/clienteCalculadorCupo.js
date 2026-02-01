@@ -2,17 +2,21 @@
  * clase se se encarga de calcular el cupo de un cliente,
  * basado en los parámetros indicados como regla de negocio
  */
-class Cliente_calculador_cupo {
+class ClienteCalculadorCupo {
     constructor(numeroDocumento) {
-        this.numeroDocumento = numeroDocumento     // NIT
-        this.cupoTotal = 0                         // Cupo asignado al cliente
-        this.valorCarteraRegular = 0               // Facturas del módulo pagos con cuota = 0
-        this.valorCarteraCuotas = 0                // Facturas que correspondan a una cuota y cuotas donde el mes sea menor o igual al mes actual
-        this.ValorPedidosNoFacturados = 0          // Pedidos no facturados del cliente
-        this.valorFacturasLlantas = 0              // Facturas en llantas (Good Year y en el nombre contiene llantas) hasta por 10 millones
-        this.valorLimiteLlantas = 10000000         // Valor límite para la cartera de llantas
-        this.valorCupoRestante = 0                 // Valor del cupo faltante
-        this.facturasPendientes = []               // Almacena las facturas pendientes de pago                      
+        this.numeroDocumento = numeroDocumento      // NIT
+        this.cupoTotal = 0                          // Cupo asignado al cliente
+        this.valorCarteraRegular = 0                // Facturas del módulo pagos con cuota = 0
+        this.valorCarteraCuotas = 0                 // Facturas que correspondan a una cuota y cuotas donde el mes sea menor o igual al mes actual
+        this.ValorPedidosNoFacturados = 0           // Pedidos no facturados del cliente
+        this.valorFacturasLlantas = 0               // Facturas en llantas (Good Year y en el nombre contiene llantas) hasta por 10 millones
+        this.valorLimiteLlantas = 10000000          // Valor límite para la cartera de llantas
+        this.valorCupoRestante = 0                  // Valor del cupo faltante
+        this.facturasPendientes = []                // Almacena las facturas pendientes de pago
+        this.porcentajeCupoRestante = 0             // Porcentaje del cupo restante
+        this.imagenCupoRestante = ''                // Ícono para mostrar indicador de estado del cupo
+        this.estadoTitulo = ''
+        this.estadosubtitulo = ''
         this.fechaActual = new Date()
     }
 
@@ -33,6 +37,9 @@ class Cliente_calculador_cupo {
             
             // 6. Calcular cupo restante
             this.calcularCupoFinal()
+
+            // 7. Calcular estado de la cartera
+            await this.calcularEstadoCartera()
             
             return this.obtenerResultado()
         } catch (error) {
@@ -55,7 +62,7 @@ class Cliente_calculador_cupo {
             let cliente = resultado.detalle.Table[0]
             this.cupoTotal = parseFloat(cliente.f201_cupo_credito)
 
-            console.log(`Cupo total obtenido: $${this.cupoTotal.toLocaleString()}`)
+            // console.log(`Cupo total obtenido: $${this.cupoTotal.toLocaleString()}`)
         } catch (error) {
             return {
                 exito: false,
@@ -86,7 +93,7 @@ class Cliente_calculador_cupo {
                 .filter(factura => factura.Nro_cuota == 0)
                 .reduce((total, factura) => total + parseFloat(factura.totalCop), 0)
                 
-            console.log(`Cartera normal calculada: $${this.valorCarteraRegular.toLocaleString()}`)
+            // console.log(`Cartera regular calculada: $${this.valorCarteraRegular.toLocaleString()}`)
         } catch (error) {
             return {
                 exito: false,
@@ -108,7 +115,7 @@ class Cliente_calculador_cupo {
                 .filter(factura => parseInt(factura.Nro_cuota) > 0 && parseInt(factura.mes_vencimiento) <= mesActual)
                 .reduce((total, factura) => total + parseFloat(factura.totalCop), 0)
                 
-            console.log(`Cartera a cuotas calculada: $${this.valorCarteraCuotas.toLocaleString()}`)
+            // console.log(`Cartera a cuotas calculada: $${this.valorCarteraCuotas.toLocaleString()}`)
         } catch (error) {
             return {
                 exito: false,
@@ -128,7 +135,35 @@ class Cliente_calculador_cupo {
             - this.ValorPedidosNoFacturados 
             + this.valorFacturasLlantas
         
-        console.log(`Cupo restante calculado: $${this.valorCupoRestante.toLocaleString()}`)
+        this.valorCupoRestante = (this.valorCupoRestante > 0) ? this.valorCupoRestante : 0
+
+        // console.log(`Cupo restante calculado: $${this.valorCupoRestante.toLocaleString()}`)
+    }
+
+    calcularEstadoCartera = async () => {
+        // Cálculo del porcentaje de cupo restante
+        this.porcentajeCupoRestante = parseFloat(((this.valorCupoRestante / this.cupoTotal) * 100).toFixed(2))
+        
+        // Cartera al día
+        if(this.porcentajeCupoRestante < 100) {
+            this.imagenCupoRestante = 'cartera_al_dia.svg'
+            this.estadoTitulo = 'Tu cartera se encuentra al día'
+            this.estadosubtitulo = 'Puedes comprar y usar tu cupo con normalidad'
+        }
+
+        // Cartera en riesgo
+        if(this.porcentajeCupoRestante <= 60) {
+            this.imagenCupoRestante = 'cartera_riesgo.svg'
+            this.estadoTitulo = 'Tu cartera se encuentra en seguimiento'
+            this.estadosubtitulo = 'Te recomendamos regularizar tus pagos para evitar restricciones'
+        }
+
+        // Cartera con restricciones
+        if(this.porcentajeCupoRestante <= 30) {
+            this.imagenCupoRestante = 'cartera_negativa.svg'
+            this.estadoTitulo = 'Tu cartera se encuentra con restricciones'
+            this.estadosubtitulo = 'Para continuar con pedidos a crédito, es necesario regularizar tu cartera'
+        }
     }
 
     /**
@@ -143,6 +178,10 @@ class Cliente_calculador_cupo {
             valorCarteraRegular: this.valorCarteraRegular,
             valorCarteraCuotas: this.valorCarteraCuotas,
             valorCupoRestante: this.valorCupoRestante,
+            porcentajeCupoRestante: this.porcentajeCupoRestante,
+            imagenCupoRestante: this.imagenCupoRestante,
+            estadoTitulo: this.estadoTitulo,
+            estadoSubtitulo: this.estadosubtitulo,
             formula: `Cupo restante = ${this.cupoTotal} - ${this.valorCarteraRegular} - ${this.valorCarteraCuotas} - ${this.ValorPedidosNoFacturados} + ${this.valorFacturasLlantas}`
         }
     }

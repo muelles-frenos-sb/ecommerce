@@ -786,3 +786,6 @@ MODIFY COLUMN `fecha_creacion` datetime NULL DEFAULT NULL AFTER `nombre`;
 
 -- Campo para almacenar el NIT
 ALTER TABLE `importaciones` ADD COLUMN `nit` varchar(100) NULL AFTER `numero_orden_compra`;
+
+-- 20260128 Rol creado
+INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'pedidos_credito_gestionar', 'Activo para pedidos a crédito', 4);

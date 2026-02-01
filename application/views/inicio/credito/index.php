@@ -5,16 +5,12 @@
             <div class="col-lg-8 order-md-2 order-lg-1">
                 <div class="row">
                     <div class="col-2">
-                        <div class="semaforo mt-3">
-                            <div class="item-semaforo">
-                                <div class="circulo verde"></div>
-                            </div>
-                        </div>
+                        <img src="" id="imagen_cupo_restante"  height="100px">
                     </div>
                     <div class="col-10">
-                        <div class="block-reviews__title text-left">Tu cartera se encuentra al día</div>
-                        <div class="block-reviews__subtitle text-left">
-                            Puedes comprar y usar tu cupo con normalidad
+                        <div class="block-reviews__title text-left" id="titulo">Consultando el estado de tu cartera...</div>
+                        <div class="block-reviews__subtitle text-left" id="subtitulo">
+                            Espera...
                         </div>
                     </div>
                 </div>
@@ -47,16 +43,17 @@
 <script>
     $().ready(async () => {
         let nit = '<?php echo $this->session->userdata('documento_numero'); ?>'
-        nit = '811007434'
-        
-        consulta('obtener', {tipo: 'clientes_sucursales', numero_documento: nit}, false)
-        .then(consultaSucursales => {
-            if(consultaSucursales.codigo != 0) return
-            
-            let cliente = consultaSucursales.detalle.Table[0]
-            let cupo = parseFloat(cliente.f201_cupo_credito)
-            $('#cupo_disponible').text(formatearNumero(cupo))
-        })
+
+        cupo.calcularValorCupoRestante()
+            .then(resultado => {
+                $('#cupo_disponible').text(formatearNumero(resultado.valorCupoRestante))
+                $('#imagen_cupo_restante').attr('src', `${$('#base_url').val()}/images/icons/${resultado.imagenCupoRestante}`)
+                $('#titulo').text(resultado.estadoTitulo)
+                $('#subtitulo').text(resultado.estadoSubtitulo)
+                
+            }).catch((error) => {
+                console.log(error)  
+            })
 
         cargarInterfaz('inicio/credito/pedidos', 'contenedor_pedidos', {nit: nit})
     })

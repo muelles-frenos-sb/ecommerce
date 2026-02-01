@@ -22,12 +22,12 @@
         })
 
         // Ejecución del webhook que extrae los datos del WMS
-         fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos`)
+        fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos`)
             .then(respuesta => respuesta.json())
             .catch(error => console.error(error))
         
         // Ejecución del webhook que extrae los datos del WMS
-         fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos_tracking`)
+        fetch(`${$("#site_url").val()}webhooks/importar_datos_wms/pedidos_tracking`)
             .then(respuesta => respuesta.json())
             .then(datos => Swal.close())
             .catch(error => console.error(error))
