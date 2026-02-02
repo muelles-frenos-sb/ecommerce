@@ -7,11 +7,7 @@ defined('BASEPATH') OR exit('El acceso directo a este archivo no está permitido
 class Correos_model extends CI_Model {
     
     // Configuración de Microsoft Graph API
-    private $client_id = '32a50b3f-b29f-4e84-8768-88c5b7d16ec7';
-    private $client_secret = 'zKe8Q~78u5KENsBHBtKN_z6JZNUsqAzfsFealaF5';
-    private $tenant_id = 'e5b459bb-3dbe-4999-a52e-cbf1ceddb166';
-    private $scope = 'https://graph.microsoft.com/.default';
-    private $email_usuario = 'tienda@repuestossimonbolivar.com';
+   
     
     /**
      * Obtiene el token de acceso de Microsoft Graph API
