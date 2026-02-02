@@ -811,3 +811,10 @@ INSERT INTO `roles` (`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'pe
 -- 20260201 Se agrega campo para guardar el nombre del archivo en los banners
 ALTER TABLE `marketing_banners` 
 ADD COLUMN `nombre_archivo` varchar(255) NULL AFTER `banner_tipo_id`;
+-- Nuevos campos
+ALTER TABLE `recibos_detalle`  ADD COLUMN `lista_precio` varchar(5) NULL COMMENT 'Lista de precio para ventas a crédito' AFTER `valor_factura`;
+ALTER TABLE `recibos` ADD COLUMN `tipo_cliente` varchar(5) NULL AFTER `tercero_vendedor_nit`;
+
+-- 20260130 Relaciones creadas
+ALTER TABLE `comprobantes_contables_tareas_detalle` ADD FOREIGN KEY (`comprobante_contable_tarea_id`) REFERENCES `comprobantes_contables_tareas` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `comprobantes_contables_tareas` ADD FOREIGN KEY (`comprobante_contable_tipo_id`) REFERENCES `comprobantes_contables_tipos` (`id`) ON DELETE RESTRICT;

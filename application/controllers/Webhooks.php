@@ -490,39 +490,44 @@ class Webhooks extends MY_Controller {
     * Función que captura el objeto JSON con los datos de la transacción de Wompi
     * Y almacena el id de la transacción, para futuras consultas
     **/
-    function pedido() {
-        $post = file_get_contents('php://input');
-        $datos = json_decode($post, true)['data']['transaction'];
+    function pedido($referencia = null) {
+        // Si trae referencia, es un pago a crédito
+        if($referencia) {
+           $datos_pago = [ 'reference' => $referencia ];
+        } else {
+            $post = file_get_contents('php://input');
+            $datos_pago = json_decode($post, true)['data']['transaction'];
+        }
 
         $datos_log = [
             'fecha_creacion' => date('Y-m-d H:i:s'),
-            'observacion' => $datos['reference'],
+            'observacion' => $datos_pago['reference'],
         ];
 
         // Tomamos las iniciales de la referencia para saber qué tipo de documento va a guardar
-        $tipo_documento = explode("-", $datos['reference']);
+        $tipo_documento = explode("-", $datos_pago['reference']);
 
         // Si es pedido, se ejecuta la gestión de un pedido
-        if($tipo_documento[0] == 'pe') {
+        if($tipo_documento[0] == 'pe' || $tipo_documento[0] == 'pc') {
             // Se agrega log
             $datos_log['log_tipo_id'] = 50;
             $this->configuracion_model->crear('logs', $datos_log);
 
-            $this->gestionar_pedido($datos);
+            $this->gestionar_pedido($datos_pago);
         // Si es el pago de una factura del estado de cuenta, se ejecuta la gestión de un pedido
-        }elseif($tipo_documento[0] == 'ec') {
+        } elseif($tipo_documento[0] == 'ec') {
             // Se agrega log
             $datos_log['log_tipo_id'] = 14;
             $this->configuracion_model->crear('logs', $datos_log);
 
-            $this->gestionar_estado_cuenta($datos);
+            $this->gestionar_estado_cuenta($datos_pago);
         // Para el resto de las transacciones de Wompi
         } else {
             // Se agrega log
             $datos_log['log_tipo_id'] = 56;
             $this->configuracion_model->crear('logs', $datos_log);
 
-            $this->gestionar_otras_transacciones_wompi($datos);
+            $this->gestionar_otras_transacciones_wompi($datos_pago);
         }
     }
 
@@ -583,16 +588,19 @@ class Webhooks extends MY_Controller {
         return ($errores > 0) ? http_response_code(400) : http_response_code(200);
     }
 
-    function gestionar_pedido($datos) {
+    function gestionar_pedido($datos = null) {
         $errores = 0;
         $resultado = [];
+        
+        $token = $datos['reference'];
+        $id_transaccion = (isset($datos['id'])) ? $datos['id'] : null ;
+        $estado_transaccion = (isset($datos['status'])) ? $datos['status'] : null ;
 
-        $wompi_reference = $datos['reference'];
-        $wompi_transaction_id = $datos['id'];
-        $wompi_status = $datos['status'];
+        // Tomamos las iniciales de la referencia para saber qué tipo de documento va a guardar
+        $tipo_documento = explode("-", $datos['reference']);
 
         // Se obtienen todos los datos del recibo
-        $recibo = $this->productos_model->obtener('recibo', ['token' => $wompi_reference]);
+        $recibo = $this->productos_model->obtener('recibo', ['token' => $token]);
 
         // Si se vuelve a ejecutar el wehbook, se ve mensaje
         if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
@@ -600,12 +608,12 @@ class Webhooks extends MY_Controller {
         // Si no ha sido actualizado por el webhook
         if($recibo->actualizado_webhook == 0) {
             // Tabla, condiciones, datos
-            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $wompi_reference], [
-                'actualizado_webhook' => 1,
-                'wompi_transaccion_id' => $wompi_transaction_id,
-                'wompi_status' => $wompi_status,
-                'wompi_datos' => json_encode($datos),
-                'recibo_estado_id' => ($datos['status'] == 'APPROVED') ? 1 : 2,
+            $actualizar_recibo = $this->productos_model->actualizar('recibos', ['token' => $token], [
+                // 'actualizado_webhook' => 1,
+                'wompi_transaccion_id' => $id_transaccion,
+                'wompi_status' => $estado_transaccion,
+                'wompi_datos' => (isset($datos['id'])) ? json_encode($datos) : null ,
+                'recibo_estado_id' => ($estado_transaccion == 'APPROVED') ? 1 : 2,
             ]);
 
             // Se actualiza el recibo con el id de la transacción
@@ -615,7 +623,7 @@ class Webhooks extends MY_Controller {
             }
 
             // Se obtienen todos los datos del recibo
-            $recibo = $this->productos_model->obtener('recibo', ['wompi_transaccion_id' => $wompi_transaction_id]);
+            $recibo = $this->productos_model->obtener('recibo', ['token' => $token]);
 
             // Si no existe el recibo
             if(empty($recibo)) {
@@ -623,12 +631,15 @@ class Webhooks extends MY_Controller {
                 $errores++;
             }
 
-            // Si el pago fue aprobado
-            if($wompi_status == 'APPROVED') {
+            // Si es un pedido a crédito o el pago a contado fue aprobado
+            if($tipo_documento[0] == 'pc' || $estado_transaccion == 'APPROVED') {
                 // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
-                enviar_email_pedido($recibo);
+                // enviar_email_pedido($recibo);
 
-                $notas_pedido = substr("- Pedido $recibo->id eCommerce | Referencia Wompi: $wompi_reference | ID de Transacción Wompi: $wompi_transaction_id - Dirección de entrega: $recibo->direccion_envio | Tel: $recibo->telefono | $recibo->email_factura_electronica | $recibo->ubicacion_envio | $recibo->comentarios", 0, 254);
+                // $tipo_pedido = ($tipo_documento[0] == 'pc') ? "CPV" : "CPE" ;
+                $tipo_pedido = "CPE";
+
+                $notas_pedido = substr("- Pedido $recibo->id eCommerce | Referencia: $token | ID de Transacción: $id_transaccion - Dirección de entrega: $recibo->direccion_envio | Tel: $recibo->telefono | $recibo->email_factura_electronica | $recibo->ubicacion_envio | $recibo->comentarios", 0, 254);
 
                 $recibo_detalle = $this->productos_model->obtener('recibos_detalle', ['rd.recibo_id' => $recibo->id]);
                 
@@ -636,8 +647,8 @@ class Webhooks extends MY_Controller {
                 foreach($recibo_detalle as $item) {
                     array_push($movimientos, [
                         "f431_id_co" => "400", // Valida en maestro, código de centro de operación del documento
-                        "f431_id_tipo_docto" => "CPE", // Valida en maestro, código de tipo de documento, tipo de documento del pedido
-                        "f431_consec_docto" => $recibo->id, // Numero de documento del pedido
+                        "f431_id_tipo_docto" => $tipo_pedido, // Valida en maestro, código de tipo de documento, tipo de documento del pedido
+                        "f431_consec_docto" => 1, // Numero de documento del pedido
                         "f431_nro_registro" => $item->id, // Numero de registro del movimiento
                         "f431_id_item" => $item->producto_id, // Codigo, es obligatorio si no va referencia ni codigo de barras
                         "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
@@ -646,7 +657,7 @@ class Webhooks extends MY_Controller {
                         "f431_id_un_movto" => "", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
                         "f431_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                         "f431_num_dias_entrega" => 0,
-                        "f431_id_lista_precio" => $recibo->lista_precio,
+                        "f431_id_lista_precio" => ($item->lista_precio) ? $item->lista_precio : $recibo->lista_precio,
                         "f431_id_unidad_medida" => $item->unidad_inventario, // Valida en maestro, código de unidad de medida del movimiento
                         "f431_cant_pedida_base" => $item->cantidad,
                         "f431_precio_unitario" => floatval($item->precio) - floatval($item->descuento),
@@ -659,14 +670,14 @@ class Webhooks extends MY_Controller {
                     "Pedidos" => [
                         [
                             "f430_id_co" => "400",  // Valida en maestro, código de centro de operación del documento
-                            "f430_id_tipo_docto" => "CPE",  // Valida en maestro, código de tipo de documento
-                            "f430_consec_docto" => $recibo->id, // Numero de documento
+                            "f430_id_tipo_docto" => $tipo_pedido,  // Valida en maestro, código de tipo de documento
+                            "f430_consec_docto" => 1, // Numero de documento
                             "f430_id_fecha" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                             "f430_id_tercero_fact" => $recibo->documento_numero, // Valida en maestro, código de tercero cliente
                             "f430_id_sucursal_fact" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a facturar
                             "f430_id_tercero_rem" => $recibo->documento_numero, // Valida en maestro , codigo del tercero del cliente a despachar
                             "f430_id_sucursal_rem" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a despachar
-                            "f430_id_tipo_cli_fact" => "C001", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
+                            "f430_id_tipo_cli_fact" => "C005", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
                             "f430_id_co_fact" => "400", // Valida en maestro, código de centro de operación del documento
                             "f430_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                             "f430_num_dias_entrega" => 0, // Valida Nro de dias en que se estima, la entrega del pedido
@@ -690,7 +701,7 @@ class Webhooks extends MY_Controller {
                     $this->configuracion_model->crear('logs', [
                         'log_tipo_id' => 18,
                         'fecha_creacion' => date('Y-m-d H:i:s'),
-                        'observacion' => $detalle_resultado_pedido
+                        'observacion' => json_encode($detalle_resultado_pedido)
                     ]);
 
                     $errores++;
@@ -705,13 +716,17 @@ class Webhooks extends MY_Controller {
                         'observacion' => json_encode($datos_pedido)
                     ]);
 
-                    $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
-                    array_push($resultado, $documento_contable);
+                    // Si es un pedido a contado, se crea el documento contable
+                    if((isset($datos['id']))) {
+                        $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
+                        array_push($resultado, $documento_contable);
+                    }
                 }
             }
         }
 
         print json_encode([
+            'exito' => ($errores == 0),
             'errores' => $errores,
             'resultado' => $resultado,
             'datos_pedido' => (isset($datos_pedido)) ? $datos_pedido : [],

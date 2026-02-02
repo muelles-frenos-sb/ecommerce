@@ -330,6 +330,7 @@ class Interfaces extends CI_Controller {
                         'unidad_inventario' => $item['options']['unidad_inventario'],
                         'precio' => $item['price'],
                         'subtotal' => $item['subtotal'],
+                        'lista_precio' => $item['options']['lista_precio'],
                     ];
                     
                     array_push($items_recibo, $datos_item);
@@ -656,9 +657,13 @@ class Interfaces extends CI_Controller {
                 $resultado =  ['resultado' => $this->configuracion_model->obtener('clientes_sucursales', $datos)];
             break;
 
-            case 'recibos':
+            case 'recibo':
                 $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             break;
+
+            // case 'recibos':
+            //     $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
+            // break;
 
             case 'facturas_desde_pedido':
                 $resultado = json_decode(obtener_facturas_desde_pedido_api($datos));

@@ -110,7 +110,7 @@ if(!empty($tercero)) {
     <select id="checkout_sucursal" class="form-control form-control-select2">
         <option value="">Seleccione...</option>
         <?php if(empty($sucursales)) echo "<option value='001'>Principal</option>" ?>
-        <?php foreach($sucursales as $sucursal) echo "<option value='$sucursal->f201_id_sucursal'>$sucursal->f201_descripcion_sucursal</option>"; ?>
+        <?php foreach($sucursales as $sucursal) echo "<option value='$sucursal->f201_id_sucursal' data-tipo_cliente='$sucursal->f201_id_tipo_cli'>$sucursal->f201_descripcion_sucursal</option>"; ?>
     </select>
 </div>
 

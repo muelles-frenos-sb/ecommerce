@@ -84,6 +84,14 @@ if($this->session->userdata('usuario_id')) {
                                 </tr>
                             </tfoot>
                         </table>
+
+                        <?php
+                        // Cupo del cliente
+                        if(isset($this->data['permisos']) && in_array(['pedidos' => 'pedidos_credito_gestionar'], $this->data['permisos'])) {
+                            $this->load->view('carrito/cupo');
+                        }
+                        ?>
+
                         <div class="checkout__agree form-group">
                             <div class="form-check">
                                 <span class="input-check form-check-input">
@@ -119,6 +127,26 @@ if($this->session->userdata('usuario_id')) {
                         </div>
 
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
+
+                        <?php if(isset($this->data['permisos']) && in_array(['pedidos' => 'pedidos_credito_gestionar'], $this->data['permisos'])) { ?>
+                            <div class="form-check mb-3">
+                                <span class="input-check form-check-input">
+                                    <span class="input-check__body">
+                                        <input class="input-check__input" type="checkbox" id="checkout_venta_credito">
+                                        <span class="input-check__box"></span>
+                                        <span class="input-check__icon">
+                                            <svg width="9px" height="7px">
+                                                <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </span>
+                                <label class="form-check-label" for="checkout_venta_credito">
+                                    Venta a crédito
+                                </label>
+                            </div>
+                        <?php } ?>
+
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
                             Finalizar pedido
                         </button>
@@ -146,7 +174,7 @@ if($this->session->userdata('usuario_id')) {
         cargarInterfaz('carrito/finalizar_datos_cliente', 'contenedor_datos_cliente', {numero_documento: $.trim($('#checkout_documento_numero').val())})
     }
 
-    guardarFactura = async() => {
+    guardarFactura = async() => {        
         let total = parseFloat($('#pedido_total_pago').val())
         
         // Alerta cuando no hay ítems en el carrito
@@ -194,7 +222,7 @@ if($this->session->userdata('usuario_id')) {
         let datosRecibo = {
             tipo: 'recibos',
             documento_numero: $('#checkout_documento_numero').val(),
-            abreviatura: 'pe',
+            abreviatura: ($(`#checkout_venta_credito`).is(':checked')) ? 'pc' : 'pe',
             nombres: $('#checkout_nombres').val(),
             primer_apellido: $('#checkout_primer_apellido').val(),
             segundo_apellido: $('#checkout_segundo_apellido').val(),
@@ -212,17 +240,15 @@ if($this->session->userdata('usuario_id')) {
             lista_precio: '<?php echo $this->config->item('lista_precio'); ?>',
         }
 
-        // Se agrega la sucursal al pedido
+        // Se agregan datos de la sucursal al pedido
         datosRecibo.sucursal_id = $('#checkout_sucursal').val()
+        datosRecibo.tipo_cliente = $('#checkout_sucursal option:selected').data('tipo_cliente')
 
         // Se agrega vendedor, si lo eligió
         if($('#checkout_vendedor_nit').val() != '') datosRecibo.tercero_vendedor_nit = $('#checkout_vendedor_nit').val()
 
-        // // Si trae sucursales, se agrega a los datos
-        // if(parseInt($('#cantidad_sucursales').val()) > 0) {}
-
         // Se crean las sucursales del tercero en la base de datos
-        await gestionarSucursales($('#checkout_documento_numero').val())
+        let sucursales = await gestionarSucursales($('#checkout_documento_numero').val())
 
         // Se obtienen los datos de la sucursal seleccionada para extraer la lista de precio
         let sucursal = await consulta('obtener', {tipo: 'cliente_sucursal', f200_nit: $('#checkout_documento_numero').val()}, false)
@@ -234,10 +260,13 @@ if($this->session->userdata('usuario_id')) {
             // Se crean los ítems de la factura
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado, lista_precio: datosRecibo.lista_precio}, false)
 
-            if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
+            // Si es pedido a contado, se abre modal de Wompi
+            if(!$(`#checkout_venta_credito`).is(':checked')) {
+                if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
+            }
 
-            // Si el tercero no existe aun, se va a crear
-            if(!$('#api_tercero_id').val()) {
+            // Si el tercero cliente no existe (sin sucursales), se va a crear
+            if($('#cantidad_sucursales').val() == 0) {
                 let datosTerceroSiesa = {
                     responsable_iva: $('#checkout_responsable_iva option:selected').attr('data-responsable_iva'), // Sí, No
                     causante_iva: $('#checkout_responsable_iva option:selected').attr('data-causante_iva'), // Sí, No
@@ -281,11 +310,43 @@ if($this->session->userdata('usuario_id')) {
                 //     }
                 // }
 
-                creacionTercero = crearTerceroCliente(datosTerceroSiesa)
-                creacionTercero.then(resultado => {
+                await crearTerceroCliente(datosTerceroSiesa)
+                .then(resultado => {
                     console.log(resultado)
 
                     agregarLog(52, JSON.stringify(resultado))
+                })
+            }
+
+            if($(`#checkout_venta_credito`).is(':checked')) {
+                Swal.fire({
+                    title: 'Estamos creando el pedido en el ERP...',
+                    text: 'Por favor, espera.',
+                    imageUrl: `${$('#base_url').val()}images/cargando.webp`,
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                })
+
+                let reciboCompleto = await consulta('obtener', { tipo: 'recibo', id: recibo.resultado })
+
+                if(!reciboCompleto.resultado) {
+                    mostrarAviso('error', `Ocurrió un error al crear el pedido`, 30000)
+                    return
+                }
+
+                // Ejecución del webhook que envía el pedido al ERP
+                await fetch(`${$("#site_url").val()}webhooks/pedido/${reciboCompleto.resultado.token}`)
+                .then(respuesta => respuesta.json())
+                .then(resultadoPedido => {
+                    if(!resultadoPedido.exito) {
+                        mostrarAviso('error', `Ocurrió un error al crear el pedido: ${JSON.parse(resultadoPedido.resultado)}`, 30000)
+                        return 
+                    }
+                    mostrarAviso('exito', `¡El pedido se creó correctamente en el ERP!`, 20000)
+                })
+                .catch(error => {
+                    mostrarAviso('error', `Ocurrió un error al crear el pedido`, 30000)
+                    return
                 })
             }
         }
@@ -297,10 +358,10 @@ if($this->session->userdata('usuario_id')) {
         // Si es un usuario logueado
         if($('#sesion_documento_numero').val() != '') {
             // Pone el número de documento del usuario por defecto
-            $('#checkout_documento_numero').val($('#sesion_documento_numero').val())
+            // $('#checkout_documento_numero').val($('#sesion_documento_numero').val())
 
             // Carga los datos del cliente
-            // cargarDatosCliente()
+            cargarDatosCliente()
         }
     })
 </script>
