@@ -95,6 +95,30 @@ class Importaciones extends MY_Controller
                 break;
         }
     }
+
+    function bitacora($opcion = 'ver')
+    {
+        if (!$this->session->userdata('usuario_id')) redirect('inicio');
+
+        switch ($opcion) {
+            case 'ver':
+                $this->data['contenido_principal'] = 'importaciones/bitacora/index';
+                $this->load->view('core/body', $this->data);
+                break;
+
+            case 'lista':
+                $this->load->view('importaciones/bitacora/lista');
+                break;
+
+            case 'detalle':
+                $datos = $this->input->post('datos');
+                $this->data['datos'] = $datos;
+                $this->load->view('importaciones/bitacora/detalle', $this->data);
+                break;
+
+            
+        }
+    }
     // Pantalla de detalle/edición de una importación
     function ver()
     {
@@ -184,6 +208,32 @@ class Importaciones extends MY_Controller
                 // Se obtienen los registros
                 $resultados = $this->importaciones_model->obtener("importaciones_maestro_anticipos", $datos);
                 break;
+
+            case "importaciones_bitacora":
+                // Se definen los filtros
+                $datos = [
+                    "contar" => true,
+                    "busqueda" => $busqueda
+                ];
+
+                $datos['importacion_id'] = $this->input->get("importacion_id");
+
+                // De acuerdo a los filtros se obtienen el número de registros filtrados
+                $total_resultados = $this->importaciones_model->obtener("importaciones_bitacora", $datos);
+
+                // Se quita campo para solo contar los registros
+                unset($datos["contar"]);
+
+                // Se agregan campos para limitar y ordenar
+                $datos["indice"] = $indice;
+                $datos["cantidad"] = $cantidad;
+                if ($ordenar) $datos["ordenar"] = $ordenar;
+
+                // Se obtienen los registros
+                $resultados = $this->importaciones_model->obtener("importaciones_bitacora", $datos);
+
+            break;
+            
         }
         print json_encode([
             "draw" => $this->input->get("draw"),

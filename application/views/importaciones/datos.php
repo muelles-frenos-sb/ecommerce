@@ -1,10 +1,9 @@
 <?php
 // Usamos el modelo para traer datos de la tabla 'importaciones'
 $importaciones = $this->importaciones_model->obtener('importaciones', $datos);
-// Si no cargaste el modelo en el autoload, descomenta esto:
-// $CI =& get_instance(); $CI->load->model('importaciones_model');
 
-if(empty($importaciones)) { ?>
+
+if (empty($importaciones)) { ?>
     <div class="text-center p-5">
         <div class="mb-3">
             <i class="fas fa-box-open fa-3x text-muted"></i>
@@ -30,40 +29,40 @@ if(empty($importaciones)) { ?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach($importaciones as $item) { 
+                <?php foreach ($importaciones as $item) {
                     // 1. Formato de ID (IMP-001)
                     $id_formateado = 'IMP-' . str_pad($item->id, 3, '0', STR_PAD_LEFT);
                 ?>
-                <tr>
-                    <td class="font-weight-bold text-primary">
-                        <a href="<?php echo site_url('importaciones/ver/'.$item->id); ?>">
-                            <?php echo $id_formateado; ?>
-                        </a>
-                    </td>
+                    <tr>
+                        <td class="font-weight-bold text-primary">
+                            <a href="<?php echo site_url('importaciones/ver/' . $item->id); ?>">
+                                <?php echo $id_formateado; ?>
+                            </a>
+                        </td>
 
-                    <td>
-                        <?php echo $item->fecha_creacion; ?>
-                    </td>
+                        <td>
+                            <?php echo $item->fecha_creacion; ?>
+                        </td>
 
-                    <td>
-                        <?php echo $item->razon_social; ?>
-                    </td>
+                        <td>
+                            <?php echo $item->razon_social; ?>
+                        </td>
 
-                    <td>
-                        <?php echo $item->numero_orden_compra; ?>
-                    </td>
+                        <td>
+                            <?php echo $item->numero_orden_compra; ?>
+                        </td>
 
-                    <td class="font-weight-bold">
-                        <?php echo $item->moneda_preferida . ' ' . number_format($item->valor_total, 0, ',', '.'); ?>
-                    </td>
+                        <td class="font-weight-bold">
+                            <?php echo $item->moneda_preferida . ' ' . number_format($item->valor_total, 0, ',', '.'); ?>
+                        </td>
 
-                    <td class="text-muted">
-                        $ <?php echo number_format($item->valor_total_cop, 0, ',', '.'); ?>
-                    </td>
+                        <td class="text-muted">
+                            $ <?php echo number_format($item->valor_total_cop, 0, ',', '.'); ?>
+                        </td>
 
-                    <td>
-                        <?php 
-                            $fecha = $item->fecha_estimada_llegada; 
+                        <td>
+                            <?php
+                            $fecha = $item->fecha_estimada_llegada;
 
                             if ($fecha == null || $fecha == '0000-00-00' || empty($fecha)) {
                                 echo "-";
@@ -72,28 +71,34 @@ if(empty($importaciones)) { ?>
                                 echo date('d/m/Y', strtotime($fecha));
                             }
                             ?>
-                    </td>
+                        </td>
 
-                    <td>
-                        <span class="badge <?php echo $item->estado_clase; ?> p-2" style="font-size: 0.85rem; border-radius: 20px; width: 100%; display: inline-block; text-align: center;">
-                            <?php echo $item->estado; ?>
-                        </span>
-                    </td>
+                        <td>
+                            <span class="badge <?php echo $item->estado_clase; ?> p-2" style="font-size: 0.85rem; border-radius: 20px; width: 100%; display: inline-block; text-align: center;">
+                                <?php echo $item->estado; ?>
+                            </span>
+                        </td>
 
-                    <td class="text-right">
-                        <div class="btn-group" role="group">
-                            <a href="<?php echo site_url('importaciones/ver/'.$item->id); ?>" class="btn btn-sm btn-light text-secondary" title="Ver Detalle">
-                                <i class="far fa-eye"></i>
-                            </a>
-                            <a href="<?php echo site_url('importaciones/editar/'.$item->id); ?>" class="btn btn-sm btn-light text-primary" title="Editar">
-                                <i class="fas fa-pencil-alt"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-light text-danger" onclick="confirmarEliminar(<?php echo $item->id; ?>)" title="Eliminar">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
+                        <td class="text-right">
+                            <div class="btn-group" role="group">
+                                 <a href="<?php echo site_url('importaciones/ver/' . $item->id . '#bitacoras'); ?>" 
+                                    class="btn btn-sm btn-light text-primary shadow-sm"
+                                    title="Ver Detalle de Bitácora">
+                                    <i class="fas fa-eye"></i>
+                               
+                                </a>
+                                <a href="<?php echo site_url('importaciones/ver/' . $item->id); ?>" class="btn btn-sm btn-light text-secondary" title="Ver Detalle">
+                                    <i class="far fa-eye"></i>
+                                </a>
+                                <a href="<?php echo site_url('importaciones/editar/' . $item->id); ?>" class="btn btn-sm btn-light text-primary" title="Editar">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-light text-danger" onclick="confirmarEliminar(<?php echo $item->id; ?>)" title="Eliminar">
+                                    <i class="far fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
                 <?php } ?>
             </tbody>
         </table>
@@ -107,8 +112,22 @@ if(empty($importaciones)) { ?>
 <script>
     // Script simple para eliminar (puedes moverlo a tu archivo JS global)
     function confirmarEliminar(id) {
-        if(confirm('¿Estás seguro de eliminar la importación IMP-' + String(id).padStart(3, '0') + '?')) {
+        if (confirm('¿Estás seguro de eliminar la importación IMP-' + String(id).padStart(3, '0') + '?')) {
             window.location.href = '<?php echo site_url("importaciones/eliminar/"); ?>' + id;
         }
     }
+
+    cargarBitacoraDetalle = (id = null) => {
+        cargarInterfaz('/bitacora/detalle', 'contenedor_importaciones_bitacora', {
+            id: id
+        })
+    }
+
+    listarImportacionesBitacora = () => {
+        cargarInterfaz('importaciones/bitacora/lista', 'contenedor_importaciones_bitacora')
+    }
+
+    $().ready(() => {
+        listarImportacionesBitacora()
+    })
 </script>

@@ -11,10 +11,11 @@ class Importaciones_model extends CI_Model
     // --------------------------------------------------------------------
     // 2. CREAR (Guardar nuevo)
     // --------------------------------------------------------------------
-    public function crear($datos)
+    public function crear($datos, $tabla = 'importaciones')
     {
         // Limpiamos el array de datos por si viene basura del JS
-        $this->db->insert('importaciones', $datos);
+        $this->db->insert($tabla, $datos);
+
 
         $resultado = $this->db->affected_rows() > 0;
 
@@ -185,6 +186,60 @@ class Importaciones_model extends CI_Model
                 $this->db->select('moneda_preferida');
                 return $this->db->get('importaciones')->result();
                 break;
+
+            case 'importaciones_bitacora':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsqueda
+                $busquedas = (isset($datos['busqueda'])) ? $datos['busqueda'] : null ;
+                $filtros_having = "HAVING psgb.id";
+                $filtros_where = "";
+
+                // Si se realiza una búsqueda
+                if($busquedas && $busquedas != ""){
+                    // Se divide por palabras
+                    $palabras = explode(" ", trim($busquedas));
+
+                    // Se recorren las palabras
+                    for ($i=0; $i < count($palabras); $i++) { 
+                        $filtros_having .= " AND (";
+                        $filtros_having .= " id LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= " OR observaciones LIKE '%{$palabras[$i]}%'";
+                        $filtros_having .= ") ";
+                        
+                        if(($i + 1) < count($palabras)) $filtros_having .= " AND ";
+                    }
+                }
+
+                // Se aplican los filtros
+                if(isset($datos['id'])) $filtros_where .= " AND psgb.id = {$datos['id']} ";
+                if(isset($datos['importacion_id'])) $filtros_where .= " AND psgb.importacion_id = {$datos['importacion_id']} ";
+
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY psgb.fecha_creacion DESC";
+
+                $sql =
+                "SELECT
+                    psgb.*,
+                    DATE(psgb.fecha_creacion) fecha,
+                    TIME(psgb.fecha_creacion) hora,
+                    u.nombres as nombre_usuario                
+                FROM importaciones_bitacora psgb
+                LEFT JOIN usuarios u ON psgb.usuario_id = u.id
+                WHERE psgb.id is NOT NULL
+                $filtros_where
+                $filtros_having
+                $order_by
+                $limite
+                ";
+
+                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+                return $this->db->query($sql)->result();
+            break;
+
+            
         }
 
         $this->db->close();

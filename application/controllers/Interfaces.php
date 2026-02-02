@@ -580,6 +580,11 @@ class Interfaces extends CI_Controller {
                 
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
+
+             case 'importaciones_bitacora':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                print json_encode(['resultado' => $this->importaciones_model->crear($datos, 'importaciones_bitacora')]);
+            break;
         }
     }
 

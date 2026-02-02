@@ -2,8 +2,7 @@
     
     <div class="products-list__content" id="contenedor_importaciones">
         <?php 
-            // Cargamos la vista de datos pasando las variables disponibles
-            // Si $importaciones ya existe en el controlador, pasará automáticamente.
+           
             $this->load->view("importaciones/datos"); 
         ?>
     </div>
