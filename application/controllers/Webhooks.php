@@ -59,33 +59,101 @@ class Webhooks extends MY_Controller {
         $limite = $this->config->item('cantidad_datos');
 
         // Obtener solo pendientes (sin fecha_envio)
-        $clientes = $this->clientes_model->obtener('clientes_retenciones_informe', ['existe_fecha_envio' => true]);
+        $clientes = $this->clientes_model->obtener(
+            'clientes_retenciones_informe',
+            ['existe_fecha_envio' => true]
+        );
 
         if (empty($clientes)) {
-            echo json_encode(['exito' => false, 'mensaje' => 'No hay clientes pendientes']);
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'No hay clientes pendientes'
+            ]);
             return;
         }
 
+        //Se consulta de excel la lista de emails excluidos
+        $emails_bloqueados = [];
+        $nits_excluidos = [];
+
+        $archivo_excel = $this->config->item('ruta_informe_retenciones');
+
+        try {
+            $spreadsheet = IOFactory::load($archivo_excel);
+
+            // Hoja bd_no enviar columna D: email
+            $hoja_no_enviar = $spreadsheet->getSheetByName('bd_no enviar');
+            if ($hoja_no_enviar) {
+                $ultima_fila = $hoja_no_enviar->getHighestRow();
+                for ($i = 2; $i <= $ultima_fila; $i++) {
+                    $email = trim($hoja_no_enviar->getCell("D$i")->getValue());
+                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                        $emails_bloqueados[] = strtolower($email);
+                    }
+                }
+            }
+
+            // Hoja retenciones columna M: excluir(si)
+            $hoja_retenciones = $spreadsheet->getSheetByName('retenciones');
+            if ($hoja_retenciones) {
+                $ultima_fila = $hoja_retenciones->getHighestRow();
+                for ($i = 2; $i <= $ultima_fila; $i++) {
+                    $nit = trim($hoja_retenciones->getCell("A$i")->getValue());
+                    $excluir = trim($hoja_retenciones->getCell("M$i")->getValue());
+
+                    if ($nit && preg_match('/^si$/i', $excluir)) $nits_excluidos[] = $nit;
+                }
+            }
+
+        } catch (Exception $e) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'Error leyendo archivo de exclusiones: ' . $e->getMessage()
+            ]);
+            return;
+        }
+
+        // Se realiza el envio masivo
         $enviados = 0;
         $fallidos = 0;
         $logs = [];
         $contador = 0;
 
         foreach ($clientes as $cliente) {
-            // Controlar cantidad máxima
             if ($contador >= $limite) break;
 
+            $email_cliente = strtolower(trim($cliente->email ?? ''));
+
+            // Se excluye el nit de la columna M
+            if (in_array($cliente->nit, $nits_excluidos)) {
+                $logs[] = [
+                    'nit' => $cliente->nit,
+                    'enviado' => false,
+                    'mensaje' => 'Excluido por columna M (retenciones)'
+                ];
+                continue;
+            }
+
+            // Excluir emails encontrados en la hoja bd_no enviar
+            if ($email_cliente && in_array($email_cliente, $emails_bloqueados)) {
+                $logs[] = [
+                    'nit' => $cliente->nit,
+                    'enviado' => false,
+                    'mensaje' => 'Email en lista bd_no enviar'
+                ];
+                continue;
+            }
+
+            // Se envia al helper para construir el email
             $resultado = enviar_email_masivo_notificacion_certificados($cliente);
 
-            // Se valida si el envio fue exitoso
             if (isset($resultado['exito']) && $resultado['exito']) {
                 // Marcar como enviado
                 $this->db
                     ->where('nit', $cliente->nit)
                     ->update('clientes_retenciones_informe', [
                         'fecha_envio' => date('Y-m-d H:i:s')
-                    ])
-                ;
+                    ]);
 
                 $logs[] = [
                     'nit' => $cliente->nit,
@@ -94,9 +162,9 @@ class Webhooks extends MY_Controller {
                 $enviados++;
             } else {
                 $logs[] = [
-                    'nit'   => $cliente->nit,
-                    'enviado'=> false,
-                    'mensaje' => $resultado['mensaje'] ?? 'Desconocido'
+                    'nit' => $cliente->nit,
+                    'enviado' => false,
+                    'mensaje' => $resultado['mensaje'] ?? 'Error desconocido'
                 ];
                 $fallidos++;
             }
@@ -105,9 +173,9 @@ class Webhooks extends MY_Controller {
         }
 
         echo json_encode([
-            'exito'   => true,
+            'exito' => true,
             'mensaje' => "Proceso terminado. Enviados: $enviados | Fallidos: $fallidos",
-            'log'     => $logs
+            'log' => $logs
         ]);
     }
 
