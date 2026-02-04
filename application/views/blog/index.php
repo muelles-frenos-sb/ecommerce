@@ -1,1 +1,0 @@
-<object frameborder="0" data="<?php echo $this->config->item('url_wordpress').'?p=2166'; ?>"  style="width:100%;height:100vh;"></object>
