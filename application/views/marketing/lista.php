@@ -162,7 +162,7 @@
     const duplicarCampania = (id) => {
         Swal.fire({
             title: '¿Duplicar campaña?',
-            text: 'Se creará una copia con los contactos pendientes.',
+            text: 'Se creará una copia con los contactos de la campaña.',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Sí, duplicar',

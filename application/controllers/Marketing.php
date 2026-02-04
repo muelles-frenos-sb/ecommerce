@@ -78,70 +78,74 @@ class Marketing extends MY_Controller
 
         if (!$id_campania) {
             echo json_encode([
-                'exito' => false,
-                'mensaje' => 'ID de campaña inválido'
+                "exito" => false,
+                "mensaje" => "ID de campaña inválido"
             ]);
             return;
         }
 
-        // Se obtiene la información de la campaña
-        $campania = $this->marketing_model->obtener('marketing_campanias', ['id' => $id_campania]);
+        // Obtener campaña original
+        $campania = $this->marketing_model->obtener( "marketing_campanias", ["id" => $id_campania]);
 
         if (!$campania) {
             echo json_encode([
-                'exito' => false,
-                'mensaje' => 'La campaña no existe'
+                "exito" => false,
+                "mensaje" => "La campaña no existe"
             ]);
             return;
         }
 
-        $fecha_creacion = date('Y-m-d H:i:s');
+        // Variables reutilizables
+        $fecha_creacion = date("Y-m-d H:i:s");
+        $nombre_nuevo   = "$campania->nombre - copia $fecha_creacion";
 
-        // Crear campaña duplicada según los datos de la original
+        // Crear nueva campaña
         $nueva_campania = [
-            'fecha_creacion' => $fecha_creacion,
-            'usuario_id' => $campania->usuario_id,
-            'fecha_inicio' => $campania->fecha_inicio,
-            'fecha_finalizacion' => $campania->fecha_finalizacion,
-            'nombre' => $campania->nombre . ' - copia ' . date('Ymd_His'),
-            'descripcion' => $campania->descripcion,
-            'nombre_plantilla_whatsapp' => $campania->nombre_plantilla_whatsapp,
-            'nombre_imagen' => $campania->nombre_imagen
+            "fecha_creacion" => $fecha_creacion,
+            "usuario_id" => $campania->usuario_id,
+            "fecha_inicio" => $campania->fecha_inicio,
+            "fecha_finalizacion" => $campania->fecha_finalizacion,
+            "nombre" => $nombre_nuevo,
+            "descripcion" => $campania->descripcion,
+            "nombre_plantilla_whatsapp" => $campania->nombre_plantilla_whatsapp,
+            "nombre_imagen" => $campania->nombre_imagen
         ];
 
-        $nuevo_id = $this->marketing_model->crear('marketing_campanias', $nueva_campania);
+        $nuevo_id = $this->marketing_model->crear(
+            "marketing_campanias",
+            $nueva_campania
+        );
 
         if (!$nuevo_id) {
             echo json_encode([
-                'exito' => false,
-                'mensaje' => 'No se pudo crear la campaña'
+                "exito" => false,
+                "mensaje" => "No se pudo crear la campaña"
             ]);
             return;
         }
 
-        // Obtener contactos PENDIENTES
-        $contactos = $this->marketing_model->obtener('marketing_campanias_contactos', ['campania_id' => $id_campania, 'solo_pendientes' => true]);
+        // Obtener TODOS los contactos 
+        $contactos = $this->marketing_model->obtener("marketing_campanias_contactos", ["campania_id" => $id_campania]);
 
-        // Duplicar contactos
         if (!empty($contactos)) {
             $batch = [];
 
-            foreach ($contactos as $c) {
+            foreach ($contactos as $contacto) {
                 $batch[] = [
-                    'fecha_creacion' => $fecha_creacion,
-                    'campania_id' => $nuevo_id,
-                    'telefono' => $c->telefono,
-                    'nit' => $c->nit,
-                    'fecha_envio' => null
+                    "fecha_creacion" => $fecha_creacion,
+                    "campania_id" => $nuevo_id,
+                    "telefono" => $contacto->telefono,
+                    "nit" => $contacto->nit,
+                    "fecha_envio" => null 
                 ];
             }
 
-            $this->marketing_model->insertar_batch('marketing_campanias_contactos', $batch);
+            $this->marketing_model->insertar_batch("marketing_campanias_contactos", $batch);
         }
 
         echo json_encode([
-            'exito' => true,
-            'mensaje' => 'Campaña duplicada correctamente'
+            "exito" => true,
+            "mensaje" => "Campaña duplicada correctamente"
         ]);
     }
 
