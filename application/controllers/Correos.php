@@ -59,7 +59,6 @@ class Correos extends MY_Controller {
         try {
             // 1. Obtener token de acceso
             $token = $this->correos_model->obtener_token_microsoft();
-            
             if(!$token) {
                 echo json_encode([
                     'error' => true,
@@ -81,7 +80,6 @@ class Correos extends MY_Controller {
 
             // 3. Obtener mensajes con adjuntos de esa carpeta
             $mensajes = $this->correos_model->obtener_mensajes_con_adjuntos($token, $carpeta_id);
-            
             if(empty($mensajes)) {
                 echo json_encode([
                     'error' => false,

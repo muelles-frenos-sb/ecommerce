@@ -30,9 +30,9 @@ class Correos_model extends CI_Model {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         
         $response = curl_exec($ch);
+        
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
         if($http_code == 200) {
             $resultado = json_decode($response, true);
             return $resultado['access_token'] ?? null;
@@ -67,7 +67,6 @@ class Correos_model extends CI_Model {
         
         if($http_code == 200) {
             $resultado = json_decode($response, true);
-            
             // Buscar la carpeta por nombre
             foreach($resultado['value'] as $carpeta) {
                 if(strtolower($carpeta['displayName']) == strtolower($nombre_carpeta)) {
@@ -84,8 +83,8 @@ class Correos_model extends CI_Model {
      */
     function obtener_mensajes_con_adjuntos($token, $carpeta_id) {
         $url = "https://graph.microsoft.com/v1.0/users/{$this->email_usuario}/mailFolders/{$carpeta_id}/messages";
-        $url .= "?\$filter=hasAttachments eq true&\$select=id,subject,hasAttachments";
-        
+        $url .= "?\$filter=hasAttachments%20eq%20true&\$select=id,subject,hasAttachments";        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -98,7 +97,6 @@ class Correos_model extends CI_Model {
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
         if($http_code == 200) {
             $resultado = json_decode($response, true);
             return $resultado['value'] ?? [];
@@ -112,8 +110,7 @@ class Correos_model extends CI_Model {
      */
     function descargar_adjuntos_mensaje($token, $mensaje_id, $carpeta_destino) {
         // Obtener los adjuntos del mensaje
-        $url = "https://graph.microsoft.com/v1.0/users/{$this->email_usuario}/messages/{$mensaje_id}/attachments";
-        
+        $url = "https://graph.microsoft.com/v1.0/users/{$this->email_usuario}/messages/{$mensaje_id}/attachments";        
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -126,7 +123,6 @@ class Correos_model extends CI_Model {
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
-        
         if($http_code != 200) {
             return ['exito' => false, 'error' => 'No se pudieron obtener los adjuntos', 'cantidad' => 0];
         }
@@ -157,14 +153,14 @@ class Correos_model extends CI_Model {
                     $archivos_guardados++;
                     
                     // Registrar en base de datos
-                    $this->registrar_descarga([
+                    /*$this->registrar_descarga([
                         'carpeta' => $carpeta_destino,
                         'nombre_original' => $nombre_archivo,
                         'nombre_procesado' => $nombre_procesado,
                         'ruta' => $ruta_completa,
                         'mensaje_id' => $mensaje_id,
                         'fecha_descarga' => date('Y-m-d H:i:s')
-                    ]);
+                    ]);*/
                 }
             }
         }
@@ -195,7 +191,7 @@ class Correos_model extends CI_Model {
      */
     private function registrar_descarga($datos) {
         try {
-            $this->db->insert('correos_descargas', $datos);
+            //$this->db->insert('correos_descargas', $datos);
         } catch(Exception $e) {
             // Si la tabla no existe, continuar sin registrar
             // Puedes crear la tabla ejecutando el script SQL que se proporciona
@@ -207,13 +203,13 @@ class Correos_model extends CI_Model {
      */
     function listar_archivos_descargados() {
         try {
-            return $this->db
+            /*return $this->db
                 ->select('*')
                 ->from('correos_descargas')
                 ->order_by('fecha_descarga', 'DESC')
                 ->limit(50)
                 ->get()
-                ->result_array();
+                ->result_array();*/
         } catch(Exception $e) {
             return [];
         }
