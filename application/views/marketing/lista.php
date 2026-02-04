@@ -159,6 +159,45 @@
         })
     }
 
+    const duplicarCampania = (id) => {
+        Swal.fire({
+            title: '¿Duplicar campaña?',
+            text: 'Se creará una copia con los contactos pendientes.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, duplicar',
+            cancelButtonText: 'Cancelar'
+        }).then(result => {
+            if (!result.isConfirmed) return
+
+            Swal.fire({
+                title: 'Duplicando campaña...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            })
+
+            $.ajax({
+                url: `${$("#site_url").val()}marketing/duplicar_campania`,
+                method: 'POST',
+                data: { campania_id: id },
+                dataType: 'json',
+                success: (resp) => {
+                    Swal.close()
+                    if (resp.exito) {
+                        mostrarAviso('exito', resp.mensaje)
+                        tablaCampanias.ajax.reload(null, false)
+                    } else {
+                        mostrarAviso('error', resp.mensaje)
+                    }
+                },
+                error: () => {
+                    Swal.close()
+                    mostrarAviso('error', 'Error de conexión.')
+                }
+            })
+        })
+    }
+
     const ejecutarEnvioMasivo = (id) => {
         Swal.fire({
             title: 'Procesando envíos...',
@@ -248,15 +287,11 @@
                     render: (data, type, row) => {
                         return `
                             <div class="dt-buttons-gap">
-                                <a class="btn btn-sm btn-primary"
-                                   href="${$("#site_url").val()}marketing/campanias/editar/${data.id}" 
-                                   title="Editar campaña">
+                                <a class="btn btn-sm btn-primary" href="${$("#site_url").val()}marketing/campanias/editar/${data.id}" title="Editar campaña">
                                     <i class="fa fa-pencil"></i>
                                 </a>
 
-                                <button class="btn btn-sm btn-success"
-                                        title="Importar contactos (Excel/CSV)"
-                                        onclick="seleccionarCampania(${data.id})">
+                                <button class="btn btn-sm btn-success" title="Importar contactos (Excel/CSV)" onclick="seleccionarCampania(${data.id})">
                                     <i class="fa fa-upload"></i>
                                 </button>
 
@@ -270,6 +305,10 @@
                                         title="Ejecutar envío masivo"
                                         onclick="confirmarEnvioMasivo(${data.id})">
                                     <i class="fa fa-play"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-secondary" title="Duplicar campaña" onclick="duplicarCampania(${data.id})">
+                                    <i class="fa fa-copy"></i>
                                 </button>
                             </div>
                         `

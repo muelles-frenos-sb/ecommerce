@@ -62,6 +62,99 @@ class Marketing extends MY_Controller
         }
     }
 
+    /**
+     * duplicar_campania
+     * 
+     * Duplica una campaña de marketing junto con sus contactos pendientes.
+     * 
+     * Crea una nueva campaña con la misma información de la campaña original,
+     * agregando al nombre el texto "copia" y la fecha de creación.
+     * 
+     * Solo se duplican los contactos cuya fecha de envío esté vacía o sea NULL.
+     */
+    public function duplicar_campania()
+    {
+        $id_campania = $this->input->post('campania_id');
+
+        if (!$id_campania) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'ID de campaña inválido'
+            ]);
+            return;
+        }
+
+        // Se obtiene la información de la campaña
+        $campania = $this->marketing_model->obtener('marketing_campanias', ['id' => $id_campania]);
+
+        if (!$campania) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'La campaña no existe'
+            ]);
+            return;
+        }
+
+        $fecha_creacion = date('Y-m-d H:i:s');
+
+        // Crear campaña duplicada según los datos de la original
+        $nueva_campania = [
+            'fecha_creacion' => $fecha_creacion,
+            'usuario_id' => $campania->usuario_id,
+            'fecha_inicio' => $campania->fecha_inicio,
+            'fecha_finalizacion' => $campania->fecha_finalizacion,
+            'nombre' => $campania->nombre . ' - copia ' . date('Ymd_His'),
+            'descripcion' => $campania->descripcion,
+            'nombre_plantilla_whatsapp' => $campania->nombre_plantilla_whatsapp,
+            'nombre_imagen' => $campania->nombre_imagen
+        ];
+
+        $nuevo_id = $this->marketing_model->crear('marketing_campanias', $nueva_campania);
+
+        if (!$nuevo_id) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'No se pudo crear la campaña'
+            ]);
+            return;
+        }
+
+        // Obtener contactos PENDIENTES
+        $contactos = $this->marketing_model->obtener('marketing_campanias_contactos', ['campania_id' => $id_campania, 'solo_pendientes' => true]);
+
+        // Duplicar contactos
+        if (!empty($contactos)) {
+            $batch = [];
+
+            foreach ($contactos as $c) {
+                $batch[] = [
+                    'fecha_creacion' => $fecha_creacion,
+                    'campania_id' => $nuevo_id,
+                    'telefono' => $c->telefono,
+                    'nit' => $c->nit,
+                    'fecha_envio' => null
+                ];
+            }
+
+            $this->marketing_model->insertar_batch('marketing_campanias_contactos', $batch);
+        }
+
+        echo json_encode([
+            'exito' => true,
+            'mensaje' => 'Campaña duplicada correctamente'
+        ]);
+    }
+
+    /**
+     * importar_campanias_contactos
+     * 
+     * Importa los contactos de una campaña desde un archivo Excel.
+     * 
+     * Lee la hoja activa del archivo proporcionado, omite la fila de encabezados
+     * y registra los contactos asociados a la campaña indicada.
+     * 
+     * Cada fila debe contener el NIT y el número de teléfono del contacto.
+     */
     private function importar_campanias_contactos($archivo, $campania_id)
     {
         try {
@@ -109,6 +202,14 @@ class Marketing extends MY_Controller
         }
     }
 
+    /**
+     * importar_campanias
+     * 
+     * Recibe y procesa un archivo de contactos para una campaña de marketing.
+     * 
+     * Sube el archivo a una carpeta temporal, importa los contactos asociados
+     * a la campaña indicada y elimina el archivo una vez finalizado el proceso.
+     */
     function importar_campanias()
     {
         $exito = false;
@@ -239,6 +340,15 @@ class Marketing extends MY_Controller
         }
     }
 
+    /**
+     * eliminar_imagen
+     * 
+     * Elimina la imagen asociada a una campaña de marketing.
+     * 
+     * Busca y elimina los archivos de imagen (jpg, jpeg, png) ubicados en la
+     * carpeta de la campaña indicada. Si la carpeta no existe, se considera
+     * la operación como exitosa.
+     */
     public function eliminar_imagen()
     {
         if (!$this->input->is_ajax_request()) redirect('inicio');

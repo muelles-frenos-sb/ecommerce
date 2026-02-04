@@ -42,7 +42,7 @@
 
                         <!-- Blog -->
                         <li class="main-menu__item menu_blog" data-nombre="Blog">
-                            <a href="<?php echo site_url('blog'); ?>" class="main-menu__link">
+                            <a href="<?php echo $this->config->item('base_url_blog'); ?>" class="main-menu__link" target="_blank">
                                 Blog
                             </a>
                         </li><!-- Blog -->
