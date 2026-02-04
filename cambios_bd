@@ -819,7 +819,6 @@ ALTER TABLE `recibos` ADD COLUMN `tipo_cliente` varchar(5) NULL AFTER `tercero_v
 ALTER TABLE `comprobantes_contables_tareas_detalle` ADD FOREIGN KEY (`comprobante_contable_tarea_id`) REFERENCES `comprobantes_contables_tareas` (`id`) ON DELETE RESTRICT;
 ALTER TABLE `comprobantes_contables_tareas` ADD FOREIGN KEY (`comprobante_contable_tipo_id`) REFERENCES `comprobantes_contables_tipos` (`id`) ON DELETE RESTRICT;
 
-
 CREATE TABLE importaciones_bitacora (
     id INT(11) NOT NULL AUTO_INCREMENT,
     importacion_id INT(11) DEFAULT NULL,
@@ -828,3 +827,6 @@ CREATE TABLE importaciones_bitacora (
     fecha_creacion DATETIME DEFAULT NULL,
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- 20260204 Se almacena el id del módulo
+ALTER TABLE `logs_tipos` ADD COLUMN `modulo_id` int NULL AFTER `nombre`;
