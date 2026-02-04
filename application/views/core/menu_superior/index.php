@@ -288,6 +288,11 @@
                                                                                         Pagos
                                                                                     </a>
                                                                                 </li>
+                                                                                <li class="menu__item">
+                                                                                    <a href="<?php echo site_url('importaciones/bitacora'); ?>" class="menu__link">
+                                                                                        Bitácora
+                                                                                    </a>
+                                                                                </li>
                                                                                 <hr>
 
                                                                                 <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>

@@ -361,7 +361,7 @@ if($this->session->userdata('usuario_id')) {
             // $('#checkout_documento_numero').val($('#sesion_documento_numero').val())
 
             // Carga los datos del cliente
-            cargarDatosCliente()
+            // cargarDatosCliente()
         }
     })
 </script>

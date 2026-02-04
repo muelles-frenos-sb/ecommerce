@@ -3,6 +3,11 @@ date_default_timezone_set('America/Bogota');
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+ini_set('MAX_EXECUTION_TIME', '-1');
+ini_set('memory_limit', '-1');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+
 /**
  * @author: 	John Arley Cano Salinas
  * Fecha: 		4 de octubre de 2025
