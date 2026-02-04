@@ -72,7 +72,7 @@
 
         <div class="row">
             <div class="col-lg-6 col-sm-12">
-                <div class="tag-badge tag-badge--theme badge_formulario mb-1 mt-1">Facturas pendientes de pago</div>
+                <div class="tag-badge tag-badge--new badge_formulario mb-1 mt-1">Facturas pendientes de pago</div>
             </div>
 
             <?php if($datos['nit_comprobante']) { ?>
