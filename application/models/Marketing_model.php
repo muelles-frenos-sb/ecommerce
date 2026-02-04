@@ -102,6 +102,20 @@ Class Marketing_model extends CI_Model {
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
                 break;
+            
+            case 'marketing_campanias_contactos':
+                $where  = "WHERE mcc.id IS NOT NULL";
+
+                if (isset($datos['campania_id'])) $where .= " AND mcc.campania_id = {$datos['campania_id']} ";
+
+                if (isset($datos['solo_pendientes']) && $datos['solo_pendientes']) $where .= " AND (mcc.fecha_envio IS NULL OR mcc.fecha_envio = '') ";
+
+                $sql = 
+                    "SELECT mcc.*
+                        FROM marketing_campanias_contactos mcc
+                    $where";
+
+                return $this->db->query($sql)->result();
 
             case 'marketing_banners':
                 $limite = "";
