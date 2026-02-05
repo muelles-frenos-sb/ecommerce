@@ -835,3 +835,6 @@ ALTER TABLE `logs_tipos` ADD COLUMN `modulo_id` int NULL AFTER `nombre`;
 INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (11, 'sesion', 'Sesión')
 INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (12, 'contabilidad', 'Contabilidad')
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (107, 'Validación de comprobantes contables')
+
+-- Nombre de tabla cambiado
+RENAME TABLE api_cuentas_por_pagar TO erp_cuentas_por_pagar;
