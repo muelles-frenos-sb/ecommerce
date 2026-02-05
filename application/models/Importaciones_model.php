@@ -230,20 +230,21 @@ class Importaciones_model extends CI_Model
 
                 $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY psgb.fecha_creacion DESC";
 
-                $sql =
-                    "SELECT
-                    psgb.*,
-                    DATE(psgb.fecha_creacion) fecha,
-                    TIME(psgb.fecha_creacion) hora,
-                    u.nombres as nombre_usuario                
-                FROM importaciones_bitacora psgb
-                LEFT JOIN usuarios u ON psgb.usuario_id = u.id
-                WHERE psgb.id is NOT NULL
-                $filtros_where
-                $filtros_having
-                $order_by
-                $limite
-                ";
+                $sql = "SELECT
+            psgb.*,
+            DATE(psgb.fecha_creacion) fecha,
+            TIME(psgb.fecha_creacion) hora,
+            u.nombres as nombre_usuario,
+            i.razon_social as proveedor
+        FROM importaciones_bitacora psgb
+        LEFT JOIN usuarios u ON psgb.usuario_id = u.id
+        LEFT JOIN importaciones i ON psgb.importacion_id = i.id
+        WHERE psgb.id is NOT NULL
+        $filtros_where
+        $filtros_having
+        $order_by
+        $limite
+        ";
 
                 if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
