@@ -110,8 +110,24 @@
                                                         <li class="megamenu-links__item megamenu-links__item--has-submenu">
                                                             <ul class="megamenu-links">
                                                                 <?php if(isset($permisos) && in_array(['comercial' => 'comercial_ventas_ver'], $permisos)) { ?>
-                                                                    <li class="megamenu-links__item mb-1">
-                                                                        <a class="megamenu-links__item-link" href="<?php echo site_url('clientes/ventas'); ?>">Ventas</a>
+                                                                    <li class="menu__item menu__item--has-submenu mb-1">
+                                                                        <a class="megamenu-links__item-link" href="#">
+                                                                            Comercial
+                                                                            <span class="menu__arrow">
+                                                                                <svg width="6px" height="9px">
+                                                                                    <path d="M0.3,7.4l3-2.9l-3-2.9c-0.4-0.3-0.4-0.9,0-1.3l0,0c0.4-0.3,0.9-0.4,1.3,0L6,4.5L1.6,8.7c-0.4,0.4-0.9,0.4-1.3,0l0,0C-0.1,8.4-0.1,7.8,0.3,7.4z" />
+                                                                                </svg>
+                                                                            </span>
+                                                                        </a>
+                                                                        <div class="menu__submenu">
+                                                                            <ul class="menu">
+                                                                                <li class="menu__item">
+                                                                                    <a href="<?php echo site_url('clientes/ventas'); ?>" class="menu__link">
+                                                                                        Ventas
+                                                                                    </a>
+                                                                                </li>
+                                                                            </ul>
+                                                                        </div>
                                                                     </li>
                                                                 <?php } ?>
 
@@ -286,6 +302,11 @@
                                                                                 <li class="menu__item">
                                                                                     <a href="<?php echo site_url('importaciones_pagos/ver'); ?>" class="menu__link">
                                                                                         Pagos
+                                                                                    </a>
+                                                                                </li>
+                                                                                <li class="menu__item">
+                                                                                    <a href="<?php echo site_url('importaciones/bitacora'); ?>" class="menu__link">
+                                                                                        Bitácora
                                                                                     </a>
                                                                                 </li>
                                                                                 <hr>

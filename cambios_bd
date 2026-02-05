@@ -830,3 +830,6 @@ CREATE TABLE importaciones_bitacora (
 
 -- 20260204 Se almacena el id del módulo
 ALTER TABLE `logs_tipos` ADD COLUMN `modulo_id` int NULL AFTER `nombre`;
+
+-- Nuevo módulo
+INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (11, 'sesion', 'Sesión')
