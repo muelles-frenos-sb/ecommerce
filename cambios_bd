@@ -841,3 +841,6 @@ RENAME TABLE api_cuentas_por_pagar TO erp_cuentas_por_pagar;
 
 -- 20260204 Se agrega log 
 INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (108, 'Marketing - Campaña duplicada', 10);
+
+-- 20260205 Se agrega rol para el permiso ver logs
+INSERT INTO `roles`(`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'configuracion_logs_ver', 'Ver listado de logs', 2);

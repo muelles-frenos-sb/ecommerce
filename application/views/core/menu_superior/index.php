@@ -336,6 +336,14 @@
                                                                         📘 Manual de Usuario
                                                                     </a>
                                                                 </li>
+
+                                                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_logs_ver'], $permisos)) { ?>
+                                                                    <li class="megamenu-links__item menu_mas mb-1">
+                                                                        <a class="megamenu-links__item-link" href="<?php echo base_url('configuracion/logs/ver'); ?>">
+                                                                            Logs
+                                                                        </a>
+                                                                    </li>
+                                                                <?php } ?>
                                                             </ul>
                                                         </li>
                                                     </ul>
