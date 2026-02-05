@@ -102,7 +102,7 @@ class Marketing extends MY_Controller
         // Crear nueva campaña
         $nueva_campania = [
             "fecha_creacion" => $fecha_creacion,
-            "usuario_id" => $campania->usuario_id,
+            "usuario_id" => $this->session->userdata('usuario_id'),
             "fecha_inicio" => $campania->fecha_inicio,
             "fecha_finalizacion" => $campania->fecha_finalizacion,
             "nombre" => $nombre_nuevo,
