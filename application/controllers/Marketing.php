@@ -563,12 +563,6 @@ class Marketing extends MY_Controller
             return;
         }
 
-        // 3. VALIDACIÓN: Verificar vigencia de la campaña
-        $fecha_actual = date('Y-m-d');
-        if ($campania->fecha_finalizacion < $fecha_actual) {
-            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: ' . $campania->fecha_finalizacion . '). No se pueden enviar más mensajes.']);
-            return;
-        }
 
         $plantilla = $campania->nombre_plantilla_whatsapp;
         if (empty($plantilla)) {
