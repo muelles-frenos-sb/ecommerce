@@ -838,3 +838,6 @@ INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (107, 'Validación de comproban
 
 -- Nombre de tabla cambiado
 RENAME TABLE api_cuentas_por_pagar TO erp_cuentas_por_pagar;
+
+-- 20260204 Se agrega log 
+INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (108, 'Marketing - Campaña duplicada', 10);

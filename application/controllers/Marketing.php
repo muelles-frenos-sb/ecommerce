@@ -124,6 +124,28 @@ class Marketing extends MY_Controller
             return;
         }
 
+        // Se duplica la imagen según la original
+        $ruta_origen = "{$this->ruta}campanias/{$id_campania}/";
+        $ruta_destino = "{$this->ruta}campanias/{$nuevo_id}/";
+
+        // Verificar si existe carpeta de la campaña original
+        if (is_dir($ruta_origen)) {
+
+            // Crear carpeta destino si no existe
+            if (!is_dir($ruta_destino)) mkdir($ruta_destino, 0777, true);
+
+            // Buscar imagen
+            $imagenes = glob($ruta_origen . "*.{jpg,jpeg,png}", GLOB_BRACE);
+
+            if (!empty($imagenes)) {
+                $imagen_origen = $imagenes[0];
+                $nombre_imagen = basename($imagen_origen);
+
+                // Copiar imagen
+                copy($imagen_origen, "{$ruta_destino}{$nombre_imagen}");
+            }
+        }
+
         // Obtener TODOS los contactos 
         $contactos = $this->marketing_model->obtener("marketing_campanias_contactos", ["campania_id" => $id_campania]);
 
@@ -144,8 +166,10 @@ class Marketing extends MY_Controller
         }
 
         echo json_encode([
-            "exito" => true,
-            "mensaje" => "Campaña duplicada correctamente"
+            "exito"       => true,
+            "mensaje"     => "Campaña duplicada correctamente",
+            "id_original" => $id_campania,
+            "id_copia"    => $nuevo_id
         ]);
     }
 

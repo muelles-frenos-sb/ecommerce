@@ -181,13 +181,17 @@
                 method: 'POST',
                 data: { campania_id: id },
                 dataType: 'json',
-                success: (resp) => {
+                success: (respuesta) => {
                     Swal.close()
-                    if (resp.exito) {
-                        mostrarAviso('exito', resp.mensaje)
+
+                    if (respuesta.exito) {
+                        // Se agrega el log correspondiente a la campaña duplicada
+                        agregarLog( 108, `Campaña duplicada id original: ${respuesta.id_original} - id duplicado: ${respuesta.id_copia}`)
+
+                        mostrarAviso('exito', respuesta.mensaje)
                         tablaCampanias.ajax.reload(null, false)
                     } else {
-                        mostrarAviso('error', resp.mensaje)
+                        mostrarAviso('error', respuesta.mensaje)
                     }
                 },
                 error: () => {
