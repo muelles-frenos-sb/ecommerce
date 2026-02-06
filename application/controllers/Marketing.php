@@ -102,7 +102,7 @@ class Marketing extends MY_Controller
         // Crear nueva campaña
         $nueva_campania = [
             "fecha_creacion" => $fecha_creacion,
-            "usuario_id" => $campania->usuario_id,
+            "usuario_id" => $this->session->userdata('usuario_id'),
             "fecha_inicio" => $campania->fecha_inicio,
             "fecha_finalizacion" => $campania->fecha_finalizacion,
             "nombre" => $nombre_nuevo,
@@ -122,6 +122,28 @@ class Marketing extends MY_Controller
                 "mensaje" => "No se pudo crear la campaña"
             ]);
             return;
+        }
+
+        // Se duplica la imagen según la original
+        $ruta_origen = "{$this->ruta}campanias/{$id_campania}/";
+        $ruta_destino = "{$this->ruta}campanias/{$nuevo_id}/";
+
+        // Verificar si existe carpeta de la campaña original
+        if (is_dir($ruta_origen)) {
+
+            // Crear carpeta destino si no existe
+            if (!is_dir($ruta_destino)) mkdir($ruta_destino, 0777, true);
+
+            // Buscar imagen
+            $imagenes = glob($ruta_origen . "*.{jpg,jpeg,png}", GLOB_BRACE);
+
+            if (!empty($imagenes)) {
+                $imagen_origen = $imagenes[0];
+                $nombre_imagen = basename($imagen_origen);
+
+                // Copiar imagen
+                copy($imagen_origen, "{$ruta_destino}{$nombre_imagen}");
+            }
         }
 
         // Obtener TODOS los contactos 
@@ -144,8 +166,10 @@ class Marketing extends MY_Controller
         }
 
         echo json_encode([
-            "exito" => true,
-            "mensaje" => "Campaña duplicada correctamente"
+            "exito"       => true,
+            "mensaje"     => "Campaña duplicada correctamente",
+            "id_original" => $id_campania,
+            "id_copia"    => $nuevo_id
         ]);
     }
 
@@ -539,12 +563,6 @@ class Marketing extends MY_Controller
             return;
         }
 
-        // 3. VALIDACIÓN: Verificar vigencia de la campaña
-        $fecha_actual = date('Y-m-d');
-        if ($campania->fecha_finalizacion < $fecha_actual) {
-            echo json_encode(['exito' => false, 'mensaje' => 'La campaña ha finalizado (Fecha fin: ' . $campania->fecha_finalizacion . '). No se pueden enviar más mensajes.']);
-            return;
-        }
 
         $plantilla = $campania->nombre_plantilla_whatsapp;
         if (empty($plantilla)) {

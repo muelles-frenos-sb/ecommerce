@@ -835,3 +835,17 @@ ALTER TABLE `logs_tipos` ADD COLUMN `modulo_id` int NULL AFTER `nombre`;
 INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (11, 'sesion', 'Sesión')
 INSERT INTO `modulos` (`id`, `nombre`, `descripcion`) VALUES (12, 'contabilidad', 'Contabilidad')
 INSERT INTO `logs_tipos` (`id`, `nombre`) VALUES (107, 'Validación de comprobantes contables')
+
+-- Nombre de tabla cambiado
+RENAME TABLE api_cuentas_por_pagar TO erp_cuentas_por_pagar;
+
+-- Para las tablas relacionadas a importaciones, se establece cascada para eliminación
+ALTER TABLE `importaciones_bitacora` DROP FOREIGN KEY `importaciones_bitacora_ibfk_1`;
+ALTER TABLE `importaciones_bitacora` ADD CONSTRAINT `importaciones_bitacora_ibfk_1` FOREIGN KEY (`importacion_id`) REFERENCES `ecommerce`.`importaciones` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT;
+ALTER TABLE `cuentas_bancarias` ADD COLUMN `nombre_abreviado` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL AFTER `descripcion`;
+
+-- 20260204 Se agrega log 
+INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (108, 'Marketing - Campaña duplicada', 10);
+
+-- 20260205 Se agrega rol para el permiso ver logs
+INSERT INTO `roles`(`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (24, 'configuracion_logs_ver', 'Ver listado de logs', 2);

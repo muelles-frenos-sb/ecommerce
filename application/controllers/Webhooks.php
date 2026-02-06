@@ -1266,7 +1266,7 @@ class Webhooks extends MY_Controller {
             $items_almacenados = 0;
 
             // Eliminamos todos los ítems asociados al proveedor
-            $this->proveedores_model->eliminar('api_cuentas_por_pagar', ['f200_id' => $numero_documento]);
+            $this->proveedores_model->eliminar('erp_cuentas_por_pagar', ['f200_id' => $numero_documento]);
 
             // Mientras la API de Siesa retorne código 0 (Registros encontrados)
             while ($codigo == 0) {
@@ -1284,7 +1284,7 @@ class Webhooks extends MY_Controller {
                         $total_items++;
                     }
 
-                    $items_almacenados += $this->proveedores_model->insertar_batch('api_cuentas_por_pagar', $nuevas_cuentas);
+                    $items_almacenados += $this->proveedores_model->insertar_batch('erp_cuentas_por_pagar', $nuevas_cuentas);
                     
                     $pagina++;
                 } else {
