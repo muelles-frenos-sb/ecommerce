@@ -849,3 +849,7 @@ INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (108, 'Marketing - 
 
 -- 20260205 Se agrega rol para el permiso ver logs
 INSERT INTO `roles`(`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (24, 'configuracion_logs_ver', 'Ver listado de logs', 2);
+INSERT INTO `roles`(`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'configuracion_logs_ver', 'Ver listado de logs', 2);
+
+-- 20260206 SE agrega log para registro de campaña eliminada 
+INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (109, 'Marketing- Campaña eliminada', NULL);

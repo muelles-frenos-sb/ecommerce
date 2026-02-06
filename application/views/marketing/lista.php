@@ -233,6 +233,48 @@
         })
     }
 
+    const eliminarCampania = (id) => {
+        Swal.fire({
+            title: '¿Eliminar campaña?',
+            text: 'Esta acción eliminará la campaña, sus contactos y su imagen. No se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa fa-trash"></i> Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            Swal.fire({
+                title: 'Eliminando campaña...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            $.ajax({
+                url: `${$("#site_url").val()}marketing/eliminar_campania`,
+                method: 'POST',
+                data: { campania_id: id },
+                dataType: 'json',
+                success: (respuesta) => {
+                    Swal.close();
+
+                    if (respuesta.exito) {
+                        mostrarAviso('exito', respuesta.mensaje);
+                        tablaCampanias.ajax.reload(null, false);
+                    } else {
+                        mostrarAviso('error', respuesta.mensaje);
+                    }
+                },
+                error: () => {
+                    Swal.close();
+                    mostrarAviso('error', 'Error de conexión con el servidor.');
+                }
+            });
+        });
+    };
+
     // ==========================================
     // INICIALIZACIÓN Y DATATABLES
     // ==========================================
@@ -313,6 +355,10 @@
 
                                 <button class="btn btn-sm btn-secondary" title="Duplicar campaña" onclick="duplicarCampania(${data.id})">
                                     <i class="fa fa-copy"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger" title="Eliminar campaña" onclick="eliminarCampania(${data.id})">
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             </div>
                         `
