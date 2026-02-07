@@ -287,7 +287,6 @@
                     datos.filtros_personalizados = {
                         id: $('#filtro_id').val(),
                         fecha_inicio: $('#filtro_fecha_inicio').val(),
-                        fecha_finalizacion: $('#filtro_fecha_finalizacion').val(),
                         cantidad_contactos: $('#filtro_cantidad_contactos').val(),
                         cantidad_envios: $('#filtro_cantidad_envios').val(),
                         nombre: $('#filtro_nombre').val(),
@@ -312,10 +311,7 @@
                     title: `Inicio <br><input type="date" id="filtro_fecha_inicio" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'fecha_inicio'
                 },
-                { 
-                    title: `Finalización <br><input type="date" id="filtro_fecha_finalizacion" class="form-control form-control-sm border-secondary mt-1">`,
-                    data: 'fecha_finalizacion'
-                },
+               
                 { 
                     title: `Contactos <br><input type="number" id="filtro_cantidad_contactos" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'cantidad_contactos',

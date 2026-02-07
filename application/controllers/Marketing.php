@@ -104,7 +104,6 @@ class Marketing extends MY_Controller
             "fecha_creacion" => $fecha_creacion,
             "usuario_id" => $this->session->userdata('usuario_id'),
             "fecha_inicio" => $campania->fecha_inicio,
-            "fecha_finalizacion" => $campania->fecha_finalizacion,
             "nombre" => $nombre_nuevo,
             "descripcion" => $campania->descripcion,
             "nombre_plantilla_whatsapp" => $campania->nombre_plantilla_whatsapp,

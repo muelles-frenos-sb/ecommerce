@@ -853,3 +853,6 @@ INSERT INTO `roles`(`id`, `nombre`, `descripcion`, `modulo_id`) VALUES (23, 'con
 
 -- 20260206 SE agrega log para registro de campaña eliminada 
 INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (109, 'Marketing- Campaña eliminada', NULL);
+
+-- 20260206 Se agrega campo para controlar la eliminación del campo fecha de finalización en las campañas de marketing
+ALTER TABLE marketing_campanias DROP COLUMN fecha_finalizacion;
