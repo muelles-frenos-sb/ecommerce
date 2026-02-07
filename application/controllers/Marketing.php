@@ -236,7 +236,7 @@ class Marketing extends MY_Controller
             'log_tipo_id' => 109,
             'fecha_creacion' => date('Y-m-d H:i:s'),
             'observacion' => json_encode([
-                'accion' => 'Registro eliminado eliminado',
+                'accion' => 'Registro eliminado',
                 'campania_id' => $campania_id
             ]),
         ]);

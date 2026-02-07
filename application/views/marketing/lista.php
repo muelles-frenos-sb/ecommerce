@@ -337,9 +337,20 @@
                                     <i class="fa fa-pencil"></i>
                                 </a>
 
-                                <button class="btn btn-sm btn-success" title="Importar contactos (Excel/CSV)" onclick="seleccionarCampania(${data.id})">
-                                    <i class="fa fa-upload"></i>
-                                </button>
+                                ${
+                                    data.cantidad_envios > 0
+                                    ? `
+                                        <button class="btn btn-sm btn-success" disabled title="No se pueden importar contactos porque la campaña ya tiene envíos realizados">
+                                            <i class="fa fa-lock"></i>
+                                        </button>
+                                    `
+                                    : `
+                                        <button class="btn btn-sm btn-success" title="Importar contactos (Excel/CSV)"
+                                                onclick="seleccionarCampania(${data.id})">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                    `
+                                }
 
                                 <button class="btn btn-sm btn-info"
                                         title="Enviar mensaje de prueba"
