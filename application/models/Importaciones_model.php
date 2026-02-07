@@ -250,6 +250,11 @@ class Importaciones_model extends CI_Model
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
                 break;
+
+            case 'importaciones_pagos_tipos':
+                $this->db->where('activo', 1);
+                return $this->db->get('importaciones_pagos_tipos')->result();
+            break;
         }
 
         $this->db->close();
