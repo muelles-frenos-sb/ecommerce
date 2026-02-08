@@ -233,6 +233,48 @@
         })
     }
 
+    const eliminarCampania = (id) => {
+        Swal.fire({
+            title: '¿Eliminar campaña?',
+            text: 'Esta acción eliminará la campaña, sus contactos y su imagen. No se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa fa-trash"></i> Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then(result => {
+            if (!result.isConfirmed) return;
+
+            Swal.fire({
+                title: 'Eliminando campaña...',
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+
+            $.ajax({
+                url: `${$("#site_url").val()}marketing/eliminar_campania`,
+                method: 'POST',
+                data: { campania_id: id },
+                dataType: 'json',
+                success: (respuesta) => {
+                    Swal.close();
+
+                    if (respuesta.exito) {
+                        mostrarAviso('exito', respuesta.mensaje);
+                        tablaCampanias.ajax.reload(null, false);
+                    } else {
+                        mostrarAviso('error', respuesta.mensaje);
+                    }
+                },
+                error: () => {
+                    Swal.close();
+                    mostrarAviso('error', 'Error de conexión con el servidor.');
+                }
+            });
+        });
+    };
+
     // ==========================================
     // INICIALIZACIÓN Y DATATABLES
     // ==========================================
@@ -245,7 +287,6 @@
                     datos.filtros_personalizados = {
                         id: $('#filtro_id').val(),
                         fecha_inicio: $('#filtro_fecha_inicio').val(),
-                        fecha_finalizacion: $('#filtro_fecha_finalizacion').val(),
                         cantidad_contactos: $('#filtro_cantidad_contactos').val(),
                         cantidad_envios: $('#filtro_cantidad_envios').val(),
                         nombre: $('#filtro_nombre').val(),
@@ -270,10 +311,7 @@
                     title: `Inicio <br><input type="date" id="filtro_fecha_inicio" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'fecha_inicio'
                 },
-                { 
-                    title: `Finalización <br><input type="date" id="filtro_fecha_finalizacion" class="form-control form-control-sm border-secondary mt-1">`,
-                    data: 'fecha_finalizacion'
-                },
+               
                 { 
                     title: `Contactos <br><input type="number" id="filtro_cantidad_contactos" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'cantidad_contactos',
@@ -295,9 +333,20 @@
                                     <i class="fa fa-pencil"></i>
                                 </a>
 
-                                <button class="btn btn-sm btn-success" title="Importar contactos (Excel/CSV)" onclick="seleccionarCampania(${data.id})">
-                                    <i class="fa fa-upload"></i>
-                                </button>
+                                ${
+                                    data.cantidad_envios > 0
+                                    ? `
+                                        <button class="btn btn-sm btn-success" disabled title="No se pueden importar contactos porque la campaña ya tiene envíos realizados">
+                                            <i class="fa fa-lock"></i>
+                                        </button>
+                                    `
+                                    : `
+                                        <button class="btn btn-sm btn-success" title="Importar contactos (Excel/CSV)"
+                                                onclick="seleccionarCampania(${data.id})">
+                                            <i class="fa fa-upload"></i>
+                                        </button>
+                                    `
+                                }
 
                                 <button class="btn btn-sm btn-info"
                                         title="Enviar mensaje de prueba"
@@ -313,6 +362,10 @@
 
                                 <button class="btn btn-sm btn-secondary" title="Duplicar campaña" onclick="duplicarCampania(${data.id})">
                                     <i class="fa fa-copy"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger" title="Eliminar campaña" onclick="eliminarCampania(${data.id})">
+                                    <i class="fa fa-trash"></i>
                                 </button>
                             </div>
                         `

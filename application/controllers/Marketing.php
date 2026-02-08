@@ -104,7 +104,6 @@ class Marketing extends MY_Controller
             "fecha_creacion" => $fecha_creacion,
             "usuario_id" => $this->session->userdata('usuario_id'),
             "fecha_inicio" => $campania->fecha_inicio,
-            "fecha_finalizacion" => $campania->fecha_finalizacion,
             "nombre" => $nombre_nuevo,
             "descripcion" => $campania->descripcion,
             "nombre_plantilla_whatsapp" => $campania->nombre_plantilla_whatsapp,
@@ -170,6 +169,80 @@ class Marketing extends MY_Controller
             "mensaje"     => "Campaña duplicada correctamente",
             "id_original" => $id_campania,
             "id_copia"    => $nuevo_id
+        ]);
+    }
+
+    /**
+     * eliminar_campania
+     *
+     * Elimina una campaña de marketing junto con:
+     * - Imagen asociada
+     * - Contactos de la campaña
+     * - Registro de la campaña
+     */
+    public function eliminar_campania()
+    {
+        if (!$this->input->is_ajax_request()) show_404();
+
+        $campania_id = $this->input->post('campania_id');
+
+        if (!$campania_id) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'ID de campaña no recibido'
+            ]);
+            return;
+        }
+
+        // Verificar campaña
+        $campania = $this->marketing_model->obtener('marketing_campanias', ['id' => $campania_id]);
+
+        if (!$campania) {
+            echo json_encode([
+                'exito' => false,
+                'mensaje' => 'La campaña no existe'
+            ]);
+            return;
+        }
+
+        // Se elimina la imagen
+        $ruta_campania = $this->ruta . 'campanias/' . $campania_id;
+
+        if (is_dir($ruta_campania)) {
+            $archivos = scandir($ruta_campania);
+
+            foreach ($archivos as $archivo) {
+                if ($archivo !== '.' && $archivo !== '..') {
+                    $ruta_archivo = $ruta_campania . '/' . $archivo;
+
+                    if (is_file($ruta_archivo)) {
+                        unlink($ruta_archivo);
+                    }
+                }
+            }
+
+            rmdir($ruta_campania);
+        }
+
+        // Se eliminan los contactos asociados
+        $this->marketing_model->eliminar('marketing_campanias_contactos', ['campania_id' => $campania_id]);
+
+        // Se elimina registro de la campaña en base de datos
+        $this->marketing_model->eliminar('marketing_campanias', ['id' => $campania_id]);
+
+        // Se agrega el log correspondiente a la eliminación
+        $this->configuracion_model->crear('logs', [
+            'log_tipo_id' => 109,
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'observacion' => json_encode([
+                'accion' => 'Registro eliminado',
+                'campania_id' => $campania_id
+            ]),
+        ]);
+
+        echo json_encode([
+            'exito' => true,
+            'mensaje' => 'Campaña eliminada correctamente'
         ]);
     }
 
