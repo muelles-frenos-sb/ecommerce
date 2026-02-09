@@ -249,34 +249,44 @@ class Marketing extends MY_Controller
     /**
      * importar_campanias_contactos
      *
-     * Importa los contactos de una campaña desde un archivo Excel.
+     * Importa y reemplaza los contactos de una campaña desde un archivo Excel.
      *
      * Lee la hoja activa del archivo, omite la fila de encabezados y registra
      * los contactos asociados a la campaña indicada.
      *
-     * Antes de insertar, valida que el número de teléfono no exista previamente
-     * en la campaña para evitar contactos duplicados.
+     * Si la campaña no tiene envíos realizados, se eliminan previamente
+     * todos los contactos existentes y se cargan únicamente los contactos
+     * del archivo importado.
+     *
+     * Durante la importación se validan los teléfonos para evitar duplicados
+     * dentro del mismo archivo.
      *
      * Cada fila del archivo debe contener el NIT y el número de teléfono.
      */
     private function importar_campanias_contactos($archivo, $campania_id)
     {
         try {
+            // Validar campaña sin envíos
+            $campania = $this->marketing_model->obtener('marketing_campanias', ['id' => $campania_id]);
+
+            if (!$campania || $campania->cantidad_envios > 0) {
+                return [
+                    'exito' => false,
+                    'mensaje' => 'La campaña ya tiene envíos realizados. No se pueden reemplazar los contactos.'
+                ];
+            }
+
+            // Eliminar contactos existentes
+            $this->marketing_model->eliminar('marketing_campanias_contactos', ['campania_id' => $campania_id]);
+
+            // Leer Excel
             $excel  = PhpOffice\PhpSpreadsheet\IOFactory::load($archivo);
             $hoja   = $excel->getActiveSheet();
             $filas  = $hoja->toArray();
 
-            unset($filas[0]); // encabezados
+            unset($filas[0]); // Se salta el encabezado
 
-            //  Se consultan los contactos de la campaña
-            $contactos = $this->marketing_model->obtener('marketing_campanias_contactos', ['campania_id' => $campania_id]);
-
-            // Guardar teléfonos existentes
-            $telefonos_existentes = [];
-            foreach ($contactos as $c) {
-                $telefonos_existentes[] = trim($c->telefono);
-            }
-
+            $telefonos_excel = [];
             $detalle = [];
 
             foreach ($filas as $fila) {
@@ -285,11 +295,10 @@ class Marketing extends MY_Controller
 
                 if ($nit === '' || $telefono === '') continue;
 
-                // Si el teléfono ya existe, se omite
-                if (in_array($telefono, $telefonos_existentes)) continue;
+                // Evitar duplicados dentro del mismo archivo
+                if (in_array($telefono, $telefonos_excel)) continue;
 
-                // Se agrega y se marca como existente para evitar duplicados del mismo Excel
-                $telefonos_existentes[] = $telefono;
+                $telefonos_excel[] = $telefono;
 
                 $detalle[] = [
                     'fecha_creacion' => date('Y-m-d H:i:s'),
@@ -303,11 +312,10 @@ class Marketing extends MY_Controller
 
             return [
                 'exito' => true,
-                'mensaje' => 'Contactos importados. Los teléfonos repetidos fueron omitidos.'
+                'mensaje' => 'Contactos reemplazados correctamente.'
             ];
 
         } catch (Exception $e) {
-
             log_message('error', 'Error al importar contactos: ' . $e->getMessage());
 
             return [

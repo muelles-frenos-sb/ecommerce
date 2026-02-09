@@ -311,7 +311,6 @@
                     title: `Inicio <br><input type="date" id="filtro_fecha_inicio" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'fecha_inicio'
                 },
-               
                 { 
                     title: `Contactos <br><input type="number" id="filtro_cantidad_contactos" class="form-control form-control-sm border-secondary mt-1">`,
                     data: 'cantidad_contactos',
