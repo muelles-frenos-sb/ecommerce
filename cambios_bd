@@ -885,3 +885,6 @@ ADD COLUMN comprobante_ruta varchar(255) NULL,
 ADD COLUMN requiere_legalizacion tinyint(1) DEFAULT 0,
 ADD COLUMN fecha_legalizacion date NULL,
 ADD COLUMN usuario_solicita_id int NULL;
+
+-- 20260210 Se agrega nuevo log para el registro del reporte de los consecutivos de contabilidad
+INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (110, 'Contabilidad - Generado reporte de consecutivos', NULL);
