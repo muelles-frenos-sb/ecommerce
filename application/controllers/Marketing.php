@@ -290,8 +290,14 @@ class Marketing extends MY_Controller
             $detalle = [];
 
             foreach ($filas as $fila) {
-                $nit      = trim($fila[0] ?? '');
-                $telefono = trim($fila[1] ?? '');
+                $nit        = trim($fila[0] ?? '');
+                $telefono   = trim($fila[1] ?? '');
+                $variable_1 = trim($fila[2] ?? '');
+                $variable_2 = trim($fila[3] ?? '');
+                $variable_3 = trim($fila[4] ?? '');
+                $variable_4 = trim($fila[5] ?? '');
+                $variable_5 = trim($fila[6] ?? '');
+                $variable_6 = trim($fila[7] ?? '');
 
                 if ($nit === '' || $telefono === '') continue;
 
@@ -304,7 +310,13 @@ class Marketing extends MY_Controller
                     'fecha_creacion' => date('Y-m-d H:i:s'),
                     'campania_id'    => $campania_id,
                     'nit'            => $nit,
-                    'telefono'       => $telefono
+                    'telefono'       => $telefono,
+                    'variable_1'     => $variable_1,
+                    'variable_2'     => $variable_2,
+                    'variable_3'     => $variable_3,
+                    'variable_4'     => $variable_4,
+                    'variable_5'     => $variable_5,
+                    'variable_6'     => $variable_6
                 ];
             }
 

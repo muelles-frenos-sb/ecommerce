@@ -888,3 +888,12 @@ ADD COLUMN usuario_solicita_id int NULL;
 
 -- 20260210 Se agrega nuevo log para el registro del reporte de los consecutivos de contabilidad
 INSERT INTO `logs_tipos`(`id`, `nombre`, `modulo_id`) VALUES (110, 'Contabilidad - Generado reporte de consecutivos', NULL);
+
+--20260213 Se agregan campos correspondientes a las variables de la importación de los contactos para el módulo de marketing
+ALTER TABLE `marketing_campanias_contactos` 
+ADD COLUMN `variable_1` varchar(255) NULL AFTER `fecha_envio`,
+ADD COLUMN `variable_2` varchar(255) NULL AFTER `variable_1`,
+ADD COLUMN `variable_3` varchar(255) NULL AFTER `variable_2`,
+ADD COLUMN `variable_4` varchar(255) NULL AFTER `variable_3`,
+ADD COLUMN `variable_5` varchar(255) NULL AFTER `variable_4`,
+ADD COLUMN `variable_6` varchar(255) NULL AFTER `variable_5`;
