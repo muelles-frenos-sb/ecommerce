@@ -227,7 +227,7 @@ class Tareas extends MY_Controller {
      *
      * @return void
      */
-    function validar_comprobantes_contables() {
+    function contabilidad_validar_comprobantes() {
         $inicio = microtime(true);
 
         // Obtenemos la primera tarea pendiente
