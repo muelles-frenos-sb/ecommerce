@@ -112,20 +112,6 @@ if($this->session->userdata('usuario_id')) {
                         </div>
                         <hr>
 
-                        <div class="row mb-3">
-                            <div class="col-3">
-                                <div class="block-features__item-icon">
-                                    <img src="<?php echo base_url(); ?>images/icons/envios_gratis.svg">
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="block-features__item-info">
-                                    <div class="block-features__item-title">Envíos gratis</div>
-                                    <div class="block-features__item-subtitle">Tus órdenes gratis en todo el Valle de Aburrá</div>
-                                </div>
-                            </div>
-                        </div>
-
                         <input type="hidden" id="pedido_total_pago" value="<?php echo $this->cart->total(); ?>">
 
                         <?php if(isset($this->data['permisos']) && in_array(['pedidos' => 'pedidos_credito_gestionar'], $this->data['permisos'])) { ?>
@@ -146,6 +132,58 @@ if($this->session->userdata('usuario_id')) {
                                 </label>
                             </div>
                         <?php } ?>
+
+                        <!-- Pagar con todos los medios de pago -->
+                        <div class="form-check mb-3">
+                            <span class="input-check form-check-input">
+                                <span class="input-check__body">
+                                    <input class="input-check__input" type="radio" name="pago_todos" id="pago_todos" checked>
+                                    <span class="input-check__box"></span>
+                                    <span class="input-check__icon">
+                                        <svg width="9px" height="7px">
+                                            <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </span>
+                            <label class="form-check-label" for="pago_todos">
+                                Pagar con PSE y tarjetas de crédito
+                            </label><br>
+                            <img src="<?php echo base_url(); ?>images/formas_pago.png" alt="Todos los medios de pago" width="100%">
+                        </div>
+
+                        <!-- Compra ahora y paga después -->
+                        <div class="form-check mb-3">
+                            <span class="input-check form-check-input">
+                                <span class="input-check__body">
+                                    <input class="input-check__input" type="radio" name="pagos_sumas" id="pagos_sumas">
+                                    <span class="input-check__box"></span>
+                                    <span class="input-check__icon">
+                                        <svg width="9px" height="7px">
+                                            <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
+                                        </svg>
+                                    </span>
+                                </span>
+                            </span>
+                            <label class="form-check-label" for="pagos_sumas">
+                                Compra ahora - Paga después
+                            </label><br>
+                            <img src="<?php echo base_url(); ?>images/sumas.svg" alt="Formas de pago" height="50" width="100%">
+                        </div><hr>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <div class="block-features__item-icon">
+                                    <img src="<?php echo base_url(); ?>images/icons/envios_gratis.svg">
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="block-features__item-info">
+                                    <div class="block-features__item-title">Envíos gratis</div>
+                                    <div class="block-features__item-subtitle">Tus órdenes gratis en todo el Valle de Aburrá</div>
+                                </div>
+                            </div>
+                        </div>
 
                         <button type="submit" class="btn btn-primary btn-xl btn-block" onClick="javascript:guardarFactura()" id="btn_pagar" disabled>
                             Finalizar pedido
@@ -259,10 +297,11 @@ if($this->session->userdata('usuario_id')) {
         if (recibo.resultado) {
             // Se crean los ítems de la factura
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado, lista_precio: datosRecibo.lista_precio}, false)
+            let tipoPago = ($(`#pago_todos`).is(':checked')) ? 'gateway' : 'agregador'
 
             // Si es pedido a contado, se abre modal de Wompi
             if(!$(`#checkout_venta_credito`).is(':checked')) {
-                if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado})
+                if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado, tipo_pago: tipoPago})
             }
 
             // Si el tercero cliente no existe (sin sucursales), se va a crear
