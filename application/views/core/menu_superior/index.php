@@ -202,17 +202,23 @@
                                                                             </span>
                                                                         </a>
 
-                                                                        <?php if(isset($permisos) && in_array(['marketing' => 'marketing_campanias_ver'], $permisos)) { ?>
-                                                                            <div class="menu__submenu">
-                                                                                <ul class="menu">
+                                                                        <div class="menu__submenu">
+                                                                            <ul class="menu">
+                                                                                <?php if(isset($permisos) && in_array(['marketing' => 'marketing_campanias_ver'], $permisos)) { ?>
                                                                                     <li class="menu__item">
                                                                                         <a href="<?php echo site_url('marketing/campanias/ver'); ?>" class="menu__link">
                                                                                             Campañas
                                                                                         </a>
                                                                                     </li>
-                                                                                </ul>
-                                                                            </div>
-                                                                        <?php } ?>
+                                                                                <?php } ?>
+
+                                                                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_productos_ver'], $permisos)) { ?>
+                                                                                    <li class="menu__item">
+                                                                                        <a class="menu__link" href="<?php echo site_url('configuracion/productos/ver'); ?>">Productos</a>
+                                                                                    </li>
+                                                                                <?php } ?>
+                                                                            </ul>
+                                                                        </div>
                                                                     </li>
                                                                 <?php } ?>
 
@@ -255,12 +261,6 @@
                                                                 <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_perfiles_ver'], $permisos)) { ?>
                                                                     <li class="megamenu-links__item mb-1">
                                                                         <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/perfiles/ver'); ?>">Perfiles</a>
-                                                                    </li>
-                                                                <?php } ?>
-
-                                                                <?php if(isset($permisos) && in_array(['configuracion' => 'configuracion_productos_ver'], $permisos)) { ?>
-                                                                    <li class="megamenu-links__item mb-1">
-                                                                        <a class="megamenu-links__item-link" href="<?php echo site_url('configuracion/productos/ver'); ?>">Productos</a>
                                                                     </li>
                                                                 <?php } ?>
 

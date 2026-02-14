@@ -232,8 +232,7 @@ class Tareas extends MY_Controller {
      * 
      * @return void
      */
-    function importar_clientes_retenciones()
-    {
+    function importar_clientes_retenciones() {
         $errores = 0;
         $resultado = [];
         $inicio = microtime(true);
