@@ -1,4 +1,6 @@
 <?php
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 /**
  * @author: 	John Arley Cano Salinas
  * Fecha: 		3 de febrero de 2026

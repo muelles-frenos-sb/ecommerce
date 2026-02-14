@@ -308,7 +308,7 @@ $usuarios = $this->configuracion_model->obtener('usuarios', ['activo' => 1]);
 
             // 3. Guardar datos vía consulta
             const respuesta = await consulta(accion, datos);
-                        console.log(respuesta);
+
             if (respuesta) {
                 const idRegistro = respuesta.resultado;
                 const inputArchivo = $('#comprobante')[0];
