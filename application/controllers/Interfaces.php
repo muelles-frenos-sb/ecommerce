@@ -111,6 +111,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->proveedores_model->actualizar_batch($tipo, $datos['cotizacion_detalle'], 'id');
             break;
 
+            case 'marketing_beneficios':
+                $resultado = $this->marketing_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             default:
                 if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
 
@@ -315,6 +319,12 @@ class Interfaces extends CI_Controller {
 
             case 'recibos_cuentas_bancarias':
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
+            break;
+
+             case 'marketing_beneficios':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
+                print json_encode(['resultado' => $this->marketing_model->crear("marketing_beneficios", $datos)]);
             break;
 
             case 'recibos_detalle':

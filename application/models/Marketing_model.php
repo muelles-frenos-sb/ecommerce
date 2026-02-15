@@ -168,7 +168,7 @@ Class Marketing_model extends CI_Model {
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
                 break;
-
+                
             case 'marketing_banners_tipos':
                 unset($datos['tipo']);
                 
@@ -177,6 +177,84 @@ Class Marketing_model extends CI_Model {
                     ->result()
                 ;
                 break;
+
+             case 'marketing_beneficios':
+                $limite = "";
+                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
+                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
+
+                // Búsquedas
+                $where  = "WHERE mb.id IS NOT NULL";
+                $having = "HAVING mb.id";
+
+                if(isset($datos['id'])) $where .= " AND mb.id = {$datos['id']} ";
+
+                // Filtros personalizados
+                $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
+
+                // Filtros where
+                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') {
+                    $nombre_escaped = $this->db->escape_like_str($filtros_personalizados['nombre']);
+                    $where .= " AND mb.nombre LIKE '%{$nombre_escaped}%' ";
+                }
+                
+                // CORRECCIÓN: Se agregaron comillas simples '{}' alrededor de los valores
+                if (isset($filtros_personalizados['beneficio_tipo']) && $filtros_personalizados['beneficio_tipo'] != '') {
+                    $tipo_escaped = $this->db->escape_str($filtros_personalizados['beneficio_tipo']);
+                    $where .= " AND mb.beneficio_tipo = '{$tipo_escaped}' ";
+                }
+                
+                if (isset($filtros_personalizados['tipo_venta']) && $filtros_personalizados['tipo_venta'] != '') {
+                    $tipo_venta_escaped = $this->db->escape_str($filtros_personalizados['tipo_venta']);
+                    $where .= " AND mb.tipo_venta = '{$tipo_venta_escaped}' ";
+                }
+                
+                if (isset($filtros_personalizados['fecha_inicio']) && $filtros_personalizados['fecha_inicio'] != '') {
+                    $fecha_inicio_escaped = $this->db->escape_str($filtros_personalizados['fecha_inicio']);
+                    $where .= " AND DATE(mb.fecha_inicio) = '{$fecha_inicio_escaped}' ";
+                }
+                
+                if (isset($filtros_personalizados['fecha_final']) && $filtros_personalizados['fecha_final'] != '') {
+                    $fecha_final_escaped = $this->db->escape_str($filtros_personalizados['fecha_final']);
+                    $where .= " AND DATE(mb.fecha_final) = '{$fecha_final_escaped}' ";
+                }
+
+                // Si se realiza una búsqueda
+                if (isset($datos['busqueda']) && $datos['busqueda'] != '') {
+                    $palabras = explode(' ', trim($datos['busqueda']));
+                    $palabras_count = count($palabras);
+
+                    for ($i = 0; $i < $palabras_count; $i++) {
+                        $palabra_escaped = $this->db->escape_like_str($palabras[$i]);
+                        $having .= " AND (";
+                        $having .= " mb.id LIKE '%{$palabra_escaped}%'";
+                        $having .= " OR mb.nombre LIKE '%{$palabra_escaped}%'";
+                        $having .= " OR mb.beneficio_tipo LIKE '%{$palabra_escaped}%'";
+                        $having .= " OR mb.codigo_descuento LIKE '%{$palabra_escaped}%'";
+                        $having .= " OR mb.tipo_venta LIKE '%{$palabra_escaped}%'";
+                        $having .= ") ";
+
+                        // El loop ya maneja el AND entre palabras
+                    }
+                }
+
+                // Ordenamiento
+                $order_by = isset($datos['ordenar']) ? "ORDER BY {$datos['ordenar']}" : "ORDER BY mb.id DESC";
+
+                $sql = " SELECT
+                            mb.*
+                        FROM marketing_beneficios mb
+                        $where
+                        GROUP BY mb.id
+                        $having
+                        $order_by
+                        $limite
+                    ";
+
+                if (isset($datos['contar']) && $datos['contar'])  return $this->db->query($sql)->num_rows();
+                if (isset($datos['id'])) return $this->db->query($sql)->row();
+        return $this->db->query($sql)->result();
+                    break;
+            }
         }
-    }
 }
