@@ -532,10 +532,12 @@ class Webhooks extends MY_Controller {
             // Si es un pedido a crédito o el pago a contado fue aprobado
             if($tipo_documento[0] == 'pc' || $estado_transaccion == 'APPROVED') {
                 // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
-                // enviar_email_pedido($recibo);
+                enviar_email_pedido($recibo);
 
-                // $tipo_pedido = ($tipo_documento[0] == 'pc') ? "CPV" : "CPE" ;
-                $tipo_pedido = "CPE";
+                // Según el tipo de pedido
+                $tipo_pedido = ($tipo_documento[0] == 'pc') ? "CPV" : "CPE" ;
+                $tipo_cliente = ($tipo_documento[0] == 'pc') ? "C001" : "C005" ;
+                $forma_pago = ($tipo_documento[0] == 'pc') ? "C30" : "CNT" ;
 
                 $notas_pedido = substr("- Pedido $recibo->id eCommerce | Referencia: $token | ID de Transacción: $id_transaccion - Dirección de entrega: $recibo->direccion_envio | Tel: $recibo->telefono | $recibo->email_factura_electronica | $recibo->ubicacion_envio | $recibo->comentarios", 0, 254);
 
@@ -575,12 +577,12 @@ class Webhooks extends MY_Controller {
                             "f430_id_sucursal_fact" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a facturar
                             "f430_id_tercero_rem" => $recibo->documento_numero, // Valida en maestro , codigo del tercero del cliente a despachar
                             "f430_id_sucursal_rem" => str_pad($recibo->sucursal_id, 3, '0', STR_PAD_LEFT), // Valida en maestro el codigo de la sucursal del cliente a despachar
-                            "f430_id_tipo_cli_fact" => "C005", // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
+                            "f430_id_tipo_cli_fact" => $tipo_cliente, // Valida en maestro, tipo de clientes. Si es vacio la trae del cliente a facturar
                             "f430_id_co_fact" => "400", // Valida en maestro, código de centro de operación del documento
                             "f430_fecha_entrega" => "{$recibo->anio}{$recibo->mes}{$recibo->dia}", // El formato debe ser AAAAMMDD
                             "f430_num_dias_entrega" => 0, // Valida Nro de dias en que se estima, la entrega del pedido
                             "f430_num_docto_referencia" => $recibo->id, // Valida la orden de compra del documento
-                            "f430_id_cond_pago" => "CNT", // Valida en maestro, condiciones de pago
+                            "f430_id_cond_pago" => $forma_pago, // Valida en maestro, condiciones de pago
                             "f430_notas" => $notas_pedido, // Observaciones
                             "f430_id_tercero_vendedor" => ($recibo->tercero_vendedor_nit) ? $recibo->tercero_vendedor_nit : "22222221", // Si el cliente seleccionó vendedor, se envía en el paquete
                         ]
@@ -618,6 +620,9 @@ class Webhooks extends MY_Controller {
                     if((isset($datos['id']))) {
                         $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
                         array_push($resultado, $documento_contable);
+                    } else {
+                        // Actualización del estado del pedido a Aprobado
+                        $this->productos_model->actualizar('recibos', ['token' => $datos['reference']], [ 'recibo_estado_id' => 1 ]);
                     }
                 }
             }
