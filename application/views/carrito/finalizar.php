@@ -118,7 +118,7 @@ if($this->session->userdata('usuario_id')) {
                             <div class="form-check mb-3">
                                 <span class="input-check form-check-input">
                                     <span class="input-check__body">
-                                        <input class="input-check__input" type="checkbox" id="checkout_venta_credito">
+                                        <input class="input-check__input" type="radio" id="checkout_venta_credito" name="metodo_pago">
                                         <span class="input-check__box"></span>
                                         <span class="input-check__icon">
                                             <svg width="9px" height="7px">
@@ -128,8 +128,9 @@ if($this->session->userdata('usuario_id')) {
                                     </span>
                                 </span>
                                 <label class="form-check-label" for="checkout_venta_credito">
-                                    Venta a crédito
+                                    Compra a crédito
                                 </label>
+                                <img src="<?php echo base_url(); ?>images/pago_credito.webp" alt="Todos los medios de pago" width="100%" class="mt-3">
                             </div>
                         <?php } ?>
 
@@ -137,7 +138,7 @@ if($this->session->userdata('usuario_id')) {
                         <div class="form-check mb-3">
                             <span class="input-check form-check-input">
                                 <span class="input-check__body">
-                                    <input class="input-check__input" type="radio" name="pago_todos" id="pago_todos" checked>
+                                    <input class="input-check__input" type="radio" name="metodo_pago" id="pago_todos" checked>
                                     <span class="input-check__box"></span>
                                     <span class="input-check__icon">
                                         <svg width="9px" height="7px">
@@ -147,16 +148,16 @@ if($this->session->userdata('usuario_id')) {
                                 </span>
                             </span>
                             <label class="form-check-label" for="pago_todos">
-                                Pagar con PSE y tarjetas de crédito
+                                Pagar con PSE, Nequi y tarjetas de crédito
                             </label><br>
-                            <img src="<?php echo base_url(); ?>images/formas_pago.png" alt="Todos los medios de pago" width="100%">
+                            <img src="<?php echo base_url(); ?>images/formas_pago.webp" alt="Todos los medios de pago" width="100%" class="mt-3">
                         </div>
 
                         <!-- Compra ahora y paga después -->
                         <div class="form-check mb-3">
                             <span class="input-check form-check-input">
                                 <span class="input-check__body">
-                                    <input class="input-check__input" type="radio" name="pagos_sumas" id="pagos_sumas">
+                                    <input class="input-check__input" type="radio" name="metodo_pago" id="pagos_sumas">
                                     <span class="input-check__box"></span>
                                     <span class="input-check__icon">
                                         <svg width="9px" height="7px">
@@ -168,7 +169,7 @@ if($this->session->userdata('usuario_id')) {
                             <label class="form-check-label" for="pagos_sumas">
                                 Compra ahora - Paga después
                             </label><br>
-                            <img src="<?php echo base_url(); ?>images/sumas.svg" alt="Formas de pago" height="50" width="100%">
+                            <img src="<?php echo base_url(); ?>images/sumas.webp" alt="Formas de pago" width="100%" class="mt-3">
                         </div><hr>
 
                         <div class="row mb-3">
