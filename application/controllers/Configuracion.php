@@ -243,8 +243,8 @@ class Configuracion extends MY_Controller {
     }
 
     function logs() {
-        // if(!$this->session->userdata('usuario_id')) redirect('inicio');
-        // if(!in_array(['configuracion' => 'configuracion_logs_ver'], $this->data['permisos'])) redirect('inicio');
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!in_array(['configuracion' => 'configuracion_logs_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
             case 'ver':
