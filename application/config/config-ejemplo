@@ -78,7 +78,7 @@ $config['api_wompi_gateway'] = [
  ** Agregador - Compra ahora y paga después **
  ********************************************/
 // Sandbox
-$config['api_wompi_agregagor'] = [
+$config['api_wompi_agregador'] = [
     'url' => 'https://sandbox.wompi.co/v1',
     'llave_publica' => '',
     'llave_privada' => '',
@@ -87,7 +87,7 @@ $config['api_wompi_agregagor'] = [
 ];
 
 // Producción
-// $config['api_wompi_agregagor'] = [
+// $config['api_wompi_agregador'] = [
 //     'url' => 'https://production.wompi.co/v1',
 //     'llave_publica' => '',
 //     'llave_privada' => '',
