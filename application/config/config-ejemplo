@@ -56,7 +56,7 @@ $config['lista_precio'] = '002';
  ** Gateway - Todos los medios de pago **
  ****************************************/
 // Sandbox
-$config['api_wompi'] = [
+$config['api_wompi_gateway'] = [
     'url' => 'https://sandbox.wompi.co/v1',
     'llave_publica' => '',
     'llave_privada' => '',
@@ -65,7 +65,7 @@ $config['api_wompi'] = [
 ];
 
 // Producción
-// $config['api_wompi'] = [
+// $config['api_wompi_gateway'] = [
 //     'url' => 'https://production.wompi.co/v1',
 //     'llave_publica' => '',
 //     'llave_privada' => '',
