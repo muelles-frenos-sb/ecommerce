@@ -897,3 +897,7 @@ ADD COLUMN `variable_3` varchar(255) NULL AFTER `variable_2`,
 ADD COLUMN `variable_4` varchar(255) NULL AFTER `variable_3`,
 ADD COLUMN `variable_5` varchar(255) NULL AFTER `variable_4`,
 ADD COLUMN `variable_6` varchar(255) NULL AFTER `variable_5`;
+
+--20260214 Se agrega campo para almacenar garantía de un producto
+ALTER TABLE `productos_metadatos` 
+ADD COLUMN `garantia` varchar(255) NULL AFTER `detalles_tecnicos`;

@@ -51,11 +51,12 @@ $config['bodega_outlet'] = ''; // Esta bodega ya no está en uso
 // Listas de precio
 $config['lista_precio'] = '002';
 
-/***************************************
- ******* Pasarela de pagos Wompi *******
- ***************************************/
+/****************************************
+ ******** Pasarela de pagos Wompi *******
+ ** Gateway - Todos los medios de pago **
+ ****************************************/
 // Sandbox
-$config['api_wompi'] = [
+$config['api_wompi_gateway'] = [
     'url' => 'https://sandbox.wompi.co/v1',
     'llave_publica' => '',
     'llave_privada' => '',
@@ -64,8 +65,30 @@ $config['api_wompi'] = [
 ];
 
 // Producción
-// $config['api_wompi'] = [
-//     'url' => '',
+// $config['api_wompi_gateway'] = [
+//     'url' => 'https://production.wompi.co/v1',
+//     'llave_publica' => '',
+//     'llave_privada' => '',
+//     'secret_eventos' => '',
+//     'secret_integridad' => '',
+// ];
+
+/*********************************************
+ *********** Pasarela de pagos Wompi *********
+ ** Agregador - Compra ahora y paga después **
+ ********************************************/
+// Sandbox
+$config['api_wompi_agregador'] = [
+    'url' => 'https://sandbox.wompi.co/v1',
+    'llave_publica' => '',
+    'llave_privada' => '',
+    'secret_eventos' => '',
+    'secret_integridad' => '',
+];
+
+// Producción
+// $config['api_wompi_agregador'] = [
+//     'url' => 'https://production.wompi.co/v1',
 //     'llave_publica' => '',
 //     'llave_privada' => '',
 //     'secret_eventos' => '',
