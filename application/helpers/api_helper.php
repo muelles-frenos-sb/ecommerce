@@ -11,6 +11,9 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
 
+    $notas_movimiento_contable = "Recibo $recibo->id";
+    $id_auxiliar_movimiento_contable = (isset($metodo_pago) && $metodo_pago == 'PSE') ? '11100504' : '11200505';
+
     // Si es un recibo de Wompi
     if($recibo->wompi_datos) {
         $wompi = json_decode($recibo->wompi_datos, true);
@@ -22,7 +25,12 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         // Las observaciones se traen del recibo
         $notas_recibo = $recibo->observaciones;
     } else if ($recibo->recibo_tipo_id == 3) {
-        $notas_recibo = "PAGO DEL DIA $recibo->fecha_consignacion";
+        $notas_recibo = "PAGA FACTURAS CONSIGNACION DEL DIA $recibo->dia_consignacion/$recibo->mes_consignacion/$recibo->anio_consignacion";
+        $notas_movimiento_contable = $notas_recibo;
+        
+        // Consulta de la cuenta bancaria
+        $cuenta_bancaria = $CI->configuracion_model->obtener('cuenta_bancaria', ['id' => $recibo->cuenta_bancaria_id]);
+        $id_auxiliar_movimiento_contable = $cuenta_bancaria->codigo;
     } else {
         $notas_recibo = "Recibo cargado desde la página web por el cliente";
     }
@@ -72,7 +80,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F350_CONSEC_DOCTO" => 1,
             "F351_ID_AUXILIAR" => $factura_cliente->codigo_auxiliar,
             "F351_ID_TERCERO" => $factura_cliente->Cliente,
-            "F351_NOTAS" => "Recibo $recibo->id",
+            "F351_NOTAS" => $notas_movimiento_contable,
             "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
             "F351_VALOR_CR" => ($item->subtotal >= 0) ? number_format($item->subtotal, 0, '', '') : 0,
             "F353_ID_SUCURSAL" => str_pad($factura_cliente->sucursal_id, 3, '0', STR_PAD_LEFT),
@@ -107,25 +115,25 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         ? $datos_movimientos_contables 
         : [
             [
-            // Primer movimiento -> Bancos
-            "F_CIA" => 1,
-            "F350_ID_CO" => $centro_operativo,
-            "F350_ID_TIPO_DOCTO" => 'FRC',
-            "F350_CONSEC_DOCTO" => 1,
-            "F351_ID_AUXILIAR" => (isset($metodo_pago) && $metodo_pago == 'PSE') ? '11100504' : '11200505',
-            "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
-            "F351_ID_TERCERO" => '',
-            "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
-            "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
-            "F351_NOTAS" => "Recibo $recibo->id",
-            "F351_ID_UN" => '01',
-            "F351_ID_CCOSTO" => '',
-            "F351_ID_FE" => ($recibo->wompi_datos) ? '1102' : '1101',
-            "F351_VALOR_CR" => 0,
-            "F351_VALOR_DB_ALT" => 0,
-            "F351_VALOR_CR_ALT" => 0,
-            "F351_BASE_GRAVABLE" => 0,
-            "F351_DOCTO_BANCO" => 'CG',
+                // Primer movimiento -> Bancos
+                "F_CIA" => 1,
+                "F350_ID_CO" => $centro_operativo,
+                "F350_ID_TIPO_DOCTO" => 'FRC',
+                "F350_CONSEC_DOCTO" => 1,
+                "F351_ID_AUXILIAR" => $id_auxiliar_movimiento_contable,
+                "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
+                "F351_ID_TERCERO" => '',
+                "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
+                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
+                "F351_NOTAS" => "Recibo $recibo->id",
+                "F351_ID_UN" => '01',
+                "F351_ID_CCOSTO" => '',
+                "F351_ID_FE" => ($recibo->wompi_datos) ? '1102' : '1101',
+                "F351_VALOR_CR" => 0,
+                "F351_VALOR_DB_ALT" => 0,
+                "F351_VALOR_CR_ALT" => 0,
+                "F351_BASE_GRAVABLE" => 0,
+                "F351_DOCTO_BANCO" => 'CG',
             ]
         ];
     
@@ -159,7 +167,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
                 "F350_ID_CLASE_DOCTO" => 30,
                 "F350_IND_ESTADO" => ($recibo->recibo_tipo_id == 3 || $recibo->recibo_tipo_id == 5) ? 0 : 1, // 0: En elaboración; 1: Aprobado; 2: Anulado
                 "F350_IND_IMPRESION" => 1,
-                "F350_NOTAS" => $notas_recibo,
+                "F350_NOTAS" => "Recibo $recibo->id - $notas_recibo",
                 "F350_ID_MANDATO" => '',
             ]
         ],
@@ -209,7 +217,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $CI->configuracion_model->crear('logs', [
             'log_tipo_id' => 19,
             'fecha_creacion' => date('Y-m-d H:i:s'),
-            'observacion' => json_encode($resultado_documento_contable)
+            'observacion' => json_encode([
+                $detalle_resultado_documento_contable,
+                $paquete_documento_contable
+            ])
         ]);
     }
 
@@ -221,7 +232,10 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $CI->configuracion_model->crear('logs', [
             'log_tipo_id' => 19,
             'fecha_creacion' => date('Y-m-d H:i:s'),
-            'observacion' => $detalle_resultado_documento_contable
+            'observacion' => [
+                $detalle_resultado_documento_contable,
+                $paquete_documento_contable
+            ]
         ]);
         
         $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
@@ -462,7 +476,7 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 "F350_CONSEC_DOCTO" => 1,
                 "F351_ID_CO_MOV" => $centro_operativo,
                 "F351_NRO_DOCTO_BANCO" => "0",
-                "F351_NOTAS" => "PAGO FACTURA $recibo->fecha_consignacion",
+                "F351_NOTAS" => $notas_recibo,
                 "F351_ID_UN" => '01',
                 "F351_ID_CCOSTO" => '',
                 "F351_ID_FE" => "",
@@ -470,9 +484,9 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 "F351_VALOR_CR_ALT" => 0,
                 "F351_BASE_GRAVABLE" => 0,
                 "F351_DOCTO_BANCO" => "",
-                "F351_ID_AUXILIAR" => "28050505",
-                "F351_VALOR_DB" => $valor,
-                "F351_VALOR_CR" => 0,
+                "F351_ID_AUXILIAR" => "42958105",
+                "F351_VALOR_DB" => 0,
+                "F351_VALOR_CR" => $valor,
                 "F351_BASE_GRAVABLE" => 0,
                 "F351_ID_TERCERO" => $recibo->documento_numero,
             ]
@@ -491,7 +505,7 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 "F350_CONSEC_DOCTO" => 1,
                 "F351_ID_CO_MOV" => $centro_operativo,
                 "F351_NRO_DOCTO_BANCO" => "0",
-                "F351_NOTAS" => "PAGO FACTURA $recibo->fecha_consignacion",
+                "F351_NOTAS" => $notas_recibo,
                 "F351_ID_UN" => '01',
                 "F351_ID_CCOSTO" => '',
                 "F351_ID_FE" => "",
@@ -500,8 +514,8 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 "F351_BASE_GRAVABLE" => 0,
                 "F351_DOCTO_BANCO" => "",
                 "F351_ID_AUXILIAR" => "42300505",
-                "F351_VALOR_DB" => $valor,
-                "F351_VALOR_CR" => 0,
+                "F351_VALOR_DB" => 0,
+                "F351_VALOR_CR" => $valor,
                 "F351_BASE_GRAVABLE" => 0,
                 "F351_ID_TERCERO" => $recibo->documento_numero,
             ]
@@ -520,18 +534,18 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 'F350_CONSEC_DOCTO' => 1,
                 'F351_ID_AUXILIAR' => '28050505',
                 'F351_ID_TERCERO' => $recibo->documento_numero,
-                'F351_NOTAS' => "PAGO FACTURA $recibo->fecha_consignacion",
+                'F351_NOTAS' => $notas_recibo,
                 'F351_ID_CO_MOV' => $centro_operativo,
-                'F351_VALOR_CR' => 0,
+                'F351_VALOR_CR' => $valor,
                 'F353_ID_SUCURSAL' => '001',
-                'F353_ID_TIPO_DOCTO_CRUCE' => $factura->Tipo_Doc_cruce,
-                'F353_CONSEC_DOCTO_CRUCE' => $recibo->fecha_consignacion,
+                'F353_ID_TIPO_DOCTO_CRUCE' => 'FRC',
+                'F353_CONSEC_DOCTO_CRUCE' => "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}",
                 'F353_NRO_CUOTA_CRUCE' => 0,
-                'F353_FECHA_VCTO' => $recibo->fecha_consignacion,
-                'F353_FECHA_DSCTO_PP' => $recibo->fecha_consignacion,
+                'F353_FECHA_VCTO' => "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}",
+                'F353_FECHA_DSCTO_PP' => "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}",
                 'F351_ID_UN' => '01',
                 'F351_ID_CCOSTO' => '',
-                'F351_VALOR_DB' => $valor,
+                'F351_VALOR_DB' => 0,
                 'F351_VALOR_DB_ALT' => 0,
                 'F351_VALOR_CR_ALT' => 0,
                 'F353_VLR_DSCTO_PP' => 0,
@@ -542,7 +556,7 @@ function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
                 'F354_VALOR_RETENCION' => 0,
                 'F354_VALOR_RETENCION_ALT' => 0,
                 'F354_TERCERO_VEND' => '22222221',
-                'F354_NOTAS' => "PAGO FACTURA $recibo->fecha_consignacion",
+                'F354_NOTAS' => $notas_recibo,
             ]
         ];
     }
@@ -761,6 +775,7 @@ function obtener_movimientos_contables_api($datos) {
     if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";
     if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";
     if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";
+    if(isset($datos['notas_parciales'])) $parametros .= "and f351_notas LIKE ''{$datos['notas_parciales']}%''";
     if(isset($datos['estado'])) $parametros .= "and f350_ind_estado=''{$datos['estado']}''";
     if(isset($datos['fecha_inicial'])) $parametros .= "and f350_fecha>=''{$datos['fecha_inicial']}''";
     if(isset($datos['fecha_final'])) $parametros .= "and f350_fecha<=''{$datos['fecha_final']}''";
