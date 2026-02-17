@@ -1,6 +1,5 @@
 <?php
 use PhpOffice\PhpSpreadsheet\IOFactory;
-use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 date_default_timezone_set('America/Bogota');
 
@@ -502,7 +501,7 @@ class Webhooks extends MY_Controller {
 
         // Si se vuelve a ejecutar el wehbook, se ve mensaje
         if($recibo->actualizado_webhook == 1) array_push($resultado, ['Se volvió a ejecutar el webhook']);
-
+        
         // Si no ha sido actualizado por el webhook
         if($recibo->actualizado_webhook == 0) {
             // Tabla, condiciones, datos

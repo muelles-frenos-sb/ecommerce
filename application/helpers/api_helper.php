@@ -834,7 +834,7 @@ function obtener_terceros_api($datos = null) {
 
 function obtener_transaccion_wompi($id) {
     $CI =& get_instance();
-    $url = $CI->config->item('api_wompi')['url'];
+    $url = $CI->config->item('api_wompi_gateway')['url'];
 
     $client = new \GuzzleHttp\Client();
     try {
