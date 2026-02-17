@@ -219,19 +219,27 @@ function obtener_url_foto($ruta = '', $extensiones = ['jpg', 'jpeg', 'png', 'gif
 }
 
 function obtener_numero_recibo_caja($recibo) {
-    $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
-        'numero_documento' => $recibo->documento_numero,
-        'fecha' => "{$recibo->anio}-{$recibo->mes}-{$recibo->dia}",
-        'notas' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente',
-        'estado' => 1,
-    ]));
+    // Cuando es recibo con comprobante
+    if($recibo->recibo_tipo_id == 3) {
+        $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
+            'numero_documento' => $recibo->documento_numero,
+            'notas' => "PAGA FACTURAS CONSIGNACION DEL DIA $recibo->dia_consignacion/$recibo->mes_consignacion/$recibo->anio_consignacion",
+        ]));
+    } else {
+        $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
+            'numero_documento' => $recibo->documento_numero,
+            'fecha' => "{$recibo->anio}-{$recibo->mes}-{$recibo->dia}",
+            'notas' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente',
+            'estado' => 1,
+        ]));
+    }
 
     if($resultado_movimientos->codigo == 0) {
         $movimientos = $resultado_movimientos->detalle->Table;
         $consecutivo = str_pad($movimientos[0]->f350_consec_docto, 8, '0', STR_PAD_LEFT);
 
         // Si se encontraron movimientos asociados al recibo
-        return ($resultado_movimientos->codigo == 0) ? "{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}" : null ;
+        return ($resultado_movimientos->codigo == 0) ? "{$movimientos[0]->f350_id_co}-{$movimientos[0]->f350_id_tipo_docto}-{$consecutivo}" : null ;
     }
 
     return null;

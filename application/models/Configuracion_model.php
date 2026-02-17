@@ -329,6 +329,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'cuenta_bancaria':
+                return $this->db
+                    ->where($datos)
+                    ->get('cuentas_bancarias')
+                    ->row()
+                ;
+            break;
+
             case 'cuentas_bancarias':
                 return $this->db
                     ->order_by('nombre')
