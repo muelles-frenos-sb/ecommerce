@@ -181,12 +181,14 @@ Class Configuracion_model extends CI_Model {
             break;
             
             case 'erp_listas_precios':
+                if($datos) $this->db->where($datos);
+
                 return $this->db
                     ->select([
                         '*',
+                        "f112_id id",
                         "CONCAT_WS(' ', f112_id, f112_descripcion) nombre"
                     ])
-                    ->where($datos)
                     ->order_by('f112_id')
                     ->get($tabla)
                     ->result()

@@ -901,3 +901,6 @@ ADD COLUMN `variable_6` varchar(255) NULL AFTER `variable_5`;
 --20260214 Se agrega campo para almacenar garantía de un producto
 ALTER TABLE `productos_metadatos` 
 ADD COLUMN `garantia` varchar(255) NULL AFTER `detalles_tecnicos`;
+
+-- 20260217 Campo para almacenar la lista de precios del cliente que compra a crédito
+ALTER TABLE `usuarios` ADD COLUMN `lista_precio` varchar(5) NULL COMMENT 'Lista de precio para compra a crédito' AFTER `perfil_id`;
