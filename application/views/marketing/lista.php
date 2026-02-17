@@ -363,9 +363,19 @@
                                     <i class="fa fa-copy"></i>
                                 </button>
 
-                                <button class="btn btn-sm btn-danger" title="Eliminar campaña" onclick="eliminarCampania(${data.id})">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                ${
+                                    data.cantidad_envios > 0
+                                    ? `
+                                        <button class="btn btn-sm btn-danger" disabled title="No se puede eliminar la campaña porque ya tiene envíos realizados">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    `
+                                    : `
+                                        <button class="btn btn-sm btn-danger" title="Eliminar campaña" onclick="eliminarCampania(${data.id})">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    `
+                                }
                             </div>
                         `
                     }
