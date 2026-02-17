@@ -918,23 +918,23 @@ function obtener_ordenes_compra($datos) {
 
 function obtener_precios_api($datos) {
     $CI =& get_instance();
-    $url = $CI->config->item('base_url_produccion');
+    $url = $CI->config->item('base_url_produccion_conekta');
 
     $filtro_id = (isset($datos['id'])) ? $datos['id'] : '-1' ;
     $filtro_lista_precio = (isset($datos['lista_precio'])) ? $datos['lista_precio'] : '-1' ;
 
     $client = new \GuzzleHttp\Client();
     try {
-        $response = $client->request('GET', "$url/api/v3/ejecutarconsulta", [
+        $response = $client->request('GET', "$url/api/connekta/v3/ejecutarconsulta", [
             'headers' => [
                 'accept' => 'application/json',
-                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
-                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+                'conniKey' => $CI->config->item('api_siesa_connekta')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa_connekta')['conniToken'],
             ],
             'query' => [
-                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
-                'descripcion' => 'Precios_V2',
-                'parametros' => "IdItem='$filtro_id'|Lista_precio='$filtro_lista_precio'",
+                'idCompania' => $CI->config->item('api_siesa_connekta')['idCompania'],
+                'descripcion' => 'muellesyfrenos_Price_list',
+                'parametros' => "IdItem=$filtro_id|Lista_precio=$filtro_lista_precio",
             ]
         ]);
     } catch (GuzzleHttp\Exception\ClientException $e) {
