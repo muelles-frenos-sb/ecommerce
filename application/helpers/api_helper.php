@@ -124,7 +124,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
                 "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
                 "F351_ID_TERCERO" => '',
                 "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
-                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
+                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}",
                 "F351_NOTAS" => "Recibo $recibo->id",
                 "F351_ID_UN" => '01',
                 "F351_ID_CCOSTO" => '',
@@ -139,7 +139,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     
     // Si hay un valor pagado mayor en el recibo (una diferencia) se ejecutará el asiento de ese valor
     if($recibo->valor_pagado_mayor) {
-        $estructura_valor_pagado_mayor = procesar_valor_mayor_pagado($recibo, $factura_cliente, $centro_operativo);
+        $estructura_valor_pagado_mayor = procesar_valor_mayor_pagado($recibo, $centro_operativo, $notas_recibo);
 
         if($estructura_valor_pagado_mayor['tipo'] == 'movimiento_contable') $movimientos_contables[] = $estructura_valor_pagado_mayor['datos'];
         if($estructura_valor_pagado_mayor['tipo'] == 'movimiento_cxc') $movimientos_cxc[] = $estructura_valor_pagado_mayor['datos'];
@@ -251,7 +251,18 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
         $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
             'numero_siesa' => obtener_numero_recibo_caja($recibo),
+            'fecha_actualizacion_bot' => date('Y-m-d H:i:s')
         ]);
+
+        // Generación del comprobante
+        $CI->data['token'] = $recibo->token;
+        $CI->data['almacenar_archivo'] = true;
+        $CI->load->view('reportes/pdf/recibo', $CI->data);
+
+        // Movimiento del soporte
+        $ruta_origen = "archivos/recibos/$recibo->id";
+        $ruta_destino = obtener_ruta_documento_contable($recibo);
+        copy("$ruta_origen/$recibo->archivo_soporte", "$ruta_destino/SOPORTE $recibo->numero_siesa $recibo->archivo_soporte"); // El archivo se copia del origen al destino
     }
 
     // Si vienen datos aquí, es un comprobante y se enviará email
@@ -260,7 +271,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
     if($recibo->wompi_datos && $errores == 0) enviar_email_factura_wompi($recibo);
 
     print json_encode([
-        'exito' => $errores < 0,
+        'exito' => $errores == 0,
         'errores' => $errores,
         'mensaje' => $resultado_documento_contable,
         'datos' => $paquete_documento_contable,
@@ -461,7 +472,7 @@ function importar_tercero_cliente($datos) {
  * @param [type] $valor
  * @return void
  */
-function procesar_valor_mayor_pagado($recibo, $factura, $centro_operativo) {
+function procesar_valor_mayor_pagado($recibo, $centro_operativo, $notas_recibo) {
     $valor = $recibo->valor_pagado_mayor * -1;
 
     // Ajuste al peso -> Hasta 1.000 pesos

@@ -19,7 +19,7 @@ Class Configuracion_model extends CI_Model {
         $usuario_seleccionado = $usuarios_disponibles[0];
         
         $datos['usuario_asignado_id'] = $usuario_seleccionado->id;
-        $datos['estado'] = 'asignada';
+        $datos['estado'] = 'asignada';        
         
         // Marcar usuario como no disponible temporalmente
         $this->marcar_usuario_no_disponible($usuario_seleccionado->id);

@@ -245,6 +245,24 @@ function obtener_numero_recibo_caja($recibo) {
     return null;
 }
 
+/**
+ * Con los datos del recibo, devuelve la carpeta del archivo digital
+ * donde debe almacenarse el comprobante y sus soportes, a la hora de
+ * crear el documento contable
+ *
+ * @param object $recibo
+ * @return void
+ */
+function obtener_ruta_documento_contable($recibo) {
+    $CI =& get_instance();
+
+    $comprobante_contable = $CI->configuracion_model->obtener('comprobantes_contables_tipos', ['id' => 1]);
+    $sede = $CI->configuracion_model->obtener('centros_operacion', ['codigo' => 100]);
+    $periodo = $CI->configuracion_model->obtener('periodos', ['mes' => $recibo->mes_consignacion]);
+    
+    return "{$CI->config->item('ruta_archivo_digitalizado')}/{$comprobante_contable->ruta}/{$recibo->anio_consignacion}/{$sede->ruta}/{$periodo->nombre_comprobante_contable}";
+}
+
 function obtener_segmentos_url($url) {
     // Obtiene de la url todos los segmentos menos el principal(dominio)
     $path = parse_url($url, PHP_URL_PATH);

@@ -295,7 +295,7 @@ class Interfaces extends CI_Controller {
                 // Si trae cuentas contables, las agrega en la consulta
                 $datos_movimientos_contables = (isset($datos['movimientos_contables'])) ? $datos['movimientos_contables'] : null ;
                 
-                print crear_documento_contable($datos['id_recibo'], null, $datos_movimientos_contables);
+                echo crear_documento_contable($datos['id_recibo'], null, $datos_movimientos_contables);
             break;
 
             case 'recibos':
