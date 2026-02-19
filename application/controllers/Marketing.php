@@ -664,10 +664,15 @@ class Marketing extends MY_Controller
 
         try {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            $contacto = $this->db->get_where('marketing_campanias_contactos', [
+                'campania_id' => $campania_id,
+                'telefono' => $numero_telefonico
+            ])->row();
+            // Preparar variables dinámicas desde la base de datos
+            $parametros = $this->extraer_variables_contacto($contacto);
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen);
-
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen, $parametros);
             if ($resultado) {
                 echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
                 $this->configuracion_model->crear('logs', [
@@ -684,6 +689,24 @@ class Marketing extends MY_Controller
         } catch (Exception $e) {
             echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
         }
+    }
+
+     private function extraer_variables_contacto($contacto)
+    {
+        $parametros = [];
+        
+        if (!$contacto) {
+            return $parametros;
+        }
+        
+        for ($i = 1; $i <= 6; $i++) {
+            $campo_variable = "variable{$i}";
+            if (isset($contacto->$campo_variable) && !empty($contacto->$campo_variable)) {
+                $parametros[] = $contacto->$campo_variable;
+            }
+        }
+        
+        return $parametros;
     }
 
     public function ejecutar_envio_masivo()
@@ -730,10 +753,10 @@ class Marketing extends MY_Controller
         // 5. Bucle de envío "Uno a Uno"
         foreach ($contactos as $contacto) {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            $parametros = $this->extraer_variables_contacto($contacto);
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen);
-            $envio_exitoso = false;
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen, $parametros);            $envio_exitoso = false;
 
             if (is_array($resultado)) {
                 
