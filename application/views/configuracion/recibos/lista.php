@@ -165,8 +165,18 @@
                     data: null,
                     visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
                     render: (recibo, type, row) => {
+                        let valorPagadoMayorDescripcion = 
+                            (recibo.valor_pagado_mayor_descripcion) ?
+                            `<div class="status-badge status-badge--style--unknown status-badge--has-text">
+                                <div class="status-badge__body">
+                                    <div class="status-badge__text">
+                                        ${recibo.valor_pagado_mayor_descripcion}
+                                    </div>
+                                </div>
+                            </div>` : ''
+
                         let observaciones = recibo.observaciones || ''
-                        return `${observaciones}`
+                        return `${valorPagadoMayorDescripcion} ${observaciones}`
                     }
                 },
                 {
@@ -175,7 +185,7 @@
                         <input type="number" id="filtro_valor" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
-                    className: 'text-right',
+                    className: 'dt-right',
                     render: (recibo, type, row) => {
                         return parseFloat(recibo.valor).toLocaleString('es-CO')
                     }

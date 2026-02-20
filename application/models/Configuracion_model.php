@@ -400,6 +400,7 @@ Class Configuracion_model extends CI_Model {
                         $having .= " OR estado LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.numero_siesa LIKE '%{$palabras[$i]}%'";
                         $having .= " OR r.wompi_datos LIKE '%{$palabras[$i]}%'";
+                        $having .= " OR valor_pagado_mayor_descripcion LIKE '%{$palabras[$i]}%'";
                         $having .= ") ";
         
                         if(($i + 1) < count($palabras)) $having .= " AND ";
@@ -446,7 +447,13 @@ Class Configuracion_model extends CI_Model {
                     GREATEST(
                         ( SELECT MAX( fecha_consignacion ) FROM recibos WHERE id = r.id ),
                         ( SELECT MAX( documento_cruce_fecha ) FROM recibos_detalle WHERE recibo_id = r.id )
-                    ) fecha_recaudo
+                    ) fecha_recaudo,
+                    CASE 
+                        WHEN r.valor_pagado_mayor = 0 THEN NULL
+                        WHEN r.valor_pagado_mayor >= -1000 THEN 'Ajuste al peso'
+                        WHEN r.valor_pagado_mayor >= -10000 THEN 'Aprovechamientos'
+                        WHEN r.valor_pagado_mayor < -10000 THEN 'Saldo a favor'
+                    END valor_pagado_mayor_descripcion
                 FROM
                     recibos AS r
                     LEFT JOIN recibos_tipos AS rt ON r.recibo_tipo_id = rt.id
