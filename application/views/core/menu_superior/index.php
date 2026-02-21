@@ -217,6 +217,12 @@
                                                                                         <a class="menu__link" href="<?php echo site_url('configuracion/productos/ver'); ?>">Productos</a>
                                                                                     </li>
                                                                                 <?php } ?>
+
+                                                                                <?php // if(isset($permisos) && in_array(['configuracion' => 'configuracion_productos_ver'], $permisos)) { ?>
+                                                                                    <li class="menu__item">
+                                                                                        <a class="menu__link" href="<?php echo site_url('marketing/beneficios/ver'); ?>">Beneficios</a>
+                                                                                    </li>
+                                                                                <?php // } ?>
                                                                             </ul>
                                                                         </div>
                                                                     </li>

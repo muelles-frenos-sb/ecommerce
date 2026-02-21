@@ -175,6 +175,7 @@ class Marketing extends MY_Controller
     function beneficios()
     {
         if (!$this->session->userdata('usuario_id')) redirect('inicio');
+        
         switch ($this->uri->segment(3)) {
             case 'crear':
                 $this->data['contenido_principal'] = 'marketing/beneficios/detalle';
@@ -664,10 +665,12 @@ class Marketing extends MY_Controller
 
         try {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            
             $contacto = $this->db->get_where('marketing_campanias_contactos', [
                 'campania_id' => $campania_id,
                 'telefono' => $numero_telefonico
             ])->row();
+            
             // Preparar variables dinámicas desde la base de datos
             $parametros = $this->extraer_variables_contacto($contacto);
 
