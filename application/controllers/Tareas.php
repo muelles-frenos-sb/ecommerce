@@ -58,6 +58,51 @@ class Tareas extends MY_Controller {
     }
 
     /**
+     * Para los pagos con comprobante, el sistema enviará al ERP
+     * Uno por uno para que sean procesados
+     *
+     * @return void
+     */
+    function clientes_procesar_pagos_con_comprobante() {
+        $resultado = [];
+        $inicio = microtime(true);
+        
+        // Primero, obtenemos los recibos con comprobante (tipo 3) pendientes por procesar (estado 3)
+        $recibos_pendientes = $this->configuracion_model->obtener('recibos', ['id_tipo_recibo' => 3, 'recibo_estado_id' => 3]);
+
+        if(empty($recibos_pendientes)) {
+            print json_encode([
+                'exito' => true,
+                'resultado' => 'Ningún recibo por procesar',
+            ]);
+            return http_response_code(200);
+        }
+        
+        foreach ($recibos_pendientes as $recibo) {
+            $procesamiento = crear_documento_contable($recibo->id);
+
+            $resultado[] = $procesamiento;
+        }
+
+        $fin = microtime(true);
+
+        $this->configuracion_model->crear('logs', [
+            'fecha_creacion' => date('Y-m-d H:i:s'),
+            'log_tipo_id' => 111,
+            'observacion' => json_encode([
+                'registros_procesados' => count($resultado),
+                'tiempo_ejecucion' => round($fin - $inicio, 2) . ' segundos'
+            ]),
+        ]);
+
+        print json_encode([
+            'exito' => true,
+            'resultado' => count($resultado) . ' recibos procesados',
+        ]);
+        return http_response_code(200);
+    }
+
+    /**
      * Lee un archivo de Excel con las retenciones de los clientes
      * y crea o actualiza los registros en la base de datos.
      * También procesa los contactos adicionales (celular y email)

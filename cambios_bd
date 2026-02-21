@@ -904,3 +904,6 @@ ADD COLUMN `garantia` varchar(255) NULL AFTER `detalles_tecnicos`;
 
 -- 20260217 Campo para almacenar la lista de precios del cliente que compra a crédito
 ALTER TABLE `usuarios` ADD COLUMN `lista_precio` varchar(5) NULL COMMENT 'Lista de precio para compra a crédito' AFTER `perfil_id`;
+
+-- 20260220 Tipo de log agregado
+INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (111, 'Tareas - Procesamiento de pagos con comprobante', 8)
