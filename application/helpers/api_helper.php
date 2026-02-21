@@ -124,7 +124,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
                 "F351_ID_CO_MOV" => $factura_cliente->centro_operativo_codigo,
                 "F351_ID_TERCERO" => '',
                 "F351_VALOR_DB" =>  number_format($recibo->valor, 0, '', ''),
-                "F351_NRO_DOCTO_BANCO" => "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}",
+                "F351_NRO_DOCTO_BANCO" => ($recibo->recibo_tipo_id == 3) ? "{$recibo->anio_consignacion}{$recibo->mes_consignacion}{$recibo->dia_consignacion}" : "{$recibo->anio}{$mes_recibo}{$dia_recibo}",
                 "F351_NOTAS" => "Recibo $recibo->id",
                 "F351_ID_UN" => '01',
                 "F351_ID_CCOSTO" => '',
@@ -195,7 +195,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
             "F351_ID_TERCERO" => $recibo->documento_numero,
             "F351_VALOR_DB" => number_format($descuento, 0, '', ''),
             "F351_NRO_DOCTO_BANCO" => 0,
-            "F351_NOTAS" => "PAGO FACTURA $factura_cliente->doccruce",
+            "F351_NOTAS" => "FACTURA $factura_cliente->doccruce",
             "F351_VALOR_CR" => 0,
             "F351_VALOR_DB_ALT" => 0,
             "F351_VALOR_CR_ALT" => 0,
@@ -249,20 +249,25 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
         $respuesta['documento_contable'] = $resultado_documento_contable;
 
+        $numero_recibo = obtener_numero_recibo_caja($recibo);
         $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
-            'numero_siesa' => obtener_numero_recibo_caja($recibo),
+            'numero_siesa' => $numero_recibo,
+            'recibo_estado_id' => 1,
             'fecha_actualizacion_bot' => date('Y-m-d H:i:s')
         ]);
 
-        // Generación del comprobante
-        $CI->data['token'] = $recibo->token;
-        $CI->data['almacenar_archivo'] = true;
-        $CI->load->view('reportes/pdf/recibo', $CI->data);
+        if($recibo->recibo_tipo_id == 3) {
+            // Generación del comprobante
+            $CI->data['token'] = $recibo->token;
+            $CI->data['almacenar_archivo'] = true;
+            $CI->load->view('reportes/pdf/recibo', $CI->data);
 
-        // Movimiento del soporte
-        $ruta_origen = "archivos/recibos/$recibo->id";
-        $ruta_destino = obtener_ruta_documento_contable($recibo);
-        copy("$ruta_origen/$recibo->archivo_soporte", "$ruta_destino/SOPORTE $recibo->numero_siesa $recibo->archivo_soporte"); // El archivo se copia del origen al destino
+            // Movimiento del soporte
+            $ruta_origen = "archivos/recibos/$recibo->id";
+            $ruta_destino = obtener_ruta_documento_contable($recibo);
+
+            copy("{$ruta_origen}/{$recibo->archivo_soporte}", "{$ruta_destino}/SOPORTE {$numero_recibo} {$recibo->archivo_soporte}"); // El archivo se copia del origen al destino
+        }
     }
 
     // Si vienen datos aquí, es un comprobante y se enviará email
@@ -786,7 +791,7 @@ function obtener_movimientos_contables_api($datos) {
     if(isset($datos['documento_cruce'])) $parametros .= "and f350_consec_docto=''{$datos['documento_cruce']}''";
     if(isset($datos['fecha'])) $parametros .= "and f350_fecha=''{$datos['fecha']}T00:00:00''";
     if(isset($datos['notas'])) $parametros .= "and f351_notas=''{$datos['notas']}''";
-    if(isset($datos['notas_parciales'])) $parametros .= "and f351_notas LIKE ''{$datos['notas_parciales']}%''";
+    if(isset($datos['notas_parciales'])) $parametros .= "and f350_notas LIKE ''{$datos['notas_parciales']}%''";
     if(isset($datos['estado'])) $parametros .= "and f350_ind_estado=''{$datos['estado']}''";
     if(isset($datos['fecha_inicial'])) $parametros .= "and f350_fecha>=''{$datos['fecha_inicial']}''";
     if(isset($datos['fecha_final'])) $parametros .= "and f350_fecha<=''{$datos['fecha_final']}''";

@@ -6,33 +6,31 @@
     </div>
 </div>
 
-<div class="block">
-    <div class="container container--max--xl">
-        <div class="row mb-4">
-            <div class="input-field col s3">
-                <label for="fecha_inicial" class="active">
-                    <i class="fa fa-calendar-alt"></i> Fecha inicial
-                </label>
-                <input type="date" id="fecha_inicial">
-            </div>
-
-            <div class="input-field col s3">
-                <label for="fecha_final" class="active">
-                    <i class="fa fa-calendar-check"></i> Fecha final
-                </label>
-                <input type="date" id="fecha_final">
-            </div>
-
-            <div class="col s6 d-flex align-items-end">
-                <span class="grey-text text-darken-1" style="font-size: 0.9rem;">
-                    <i class="fa fa-info-circle"></i>
-                    Selecciona el rango de fechas para filtrar los logs
-                </span>
-            </div>
+<div class=" pl-3 pr-3">
+    <div class="row mb-4">
+        <div class="input-field col s3">
+            <label for="fecha_inicial" class="active">
+                <i class="fa fa-calendar-alt"></i> Fecha inicial
+            </label>
+            <input type="date" id="fecha_inicial">
         </div>
-        
-        <div id="contenedor_logs"></div>
+
+        <div class="input-field col s3">
+            <label for="fecha_final" class="active">
+                <i class="fa fa-calendar-check"></i> Fecha final
+            </label>
+            <input type="date" id="fecha_final">
+        </div>
+
+        <div class="col s6 d-flex align-items-end">
+            <span class="grey-text text-darken-1" style="font-size: 0.9rem;">
+                <i class="fa fa-info-circle"></i>
+                Selecciona el rango de fechas para filtrar los logs
+            </span>
+        </div>
     </div>
+    
+    <div id="contenedor_logs"></div>
 </div>
 
 <div class="block-space block-space--layout--before-footer"></div>

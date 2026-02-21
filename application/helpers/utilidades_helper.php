@@ -223,7 +223,7 @@ function obtener_numero_recibo_caja($recibo) {
     if($recibo->recibo_tipo_id == 3) {
         $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
             'numero_documento' => $recibo->documento_numero,
-            'notas' => "PAGA FACTURAS CONSIGNACION DEL DIA $recibo->dia_consignacion/$recibo->mes_consignacion/$recibo->anio_consignacion",
+            'notas_parciales' => "Recibo $recibo->id",
         ]));
     } else {
         $resultado_movimientos = json_decode(obtener_movimientos_contables_api([

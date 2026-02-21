@@ -87,7 +87,7 @@
                         Módulo
                         <select id="filtro_modulo" class="form-control form-control-sm border-secondary mt-1">
                             <option value="">Seleccione un módulo</option>
-                            <?php foreach($this->configuracion_model->obtener('modulos') as $modulo) echo "<option value='$modulo->nombre'>$modulo->nombre</option>"; ?>
+                            <?php foreach($this->configuracion_model->obtener('modulos') as $modulo) echo "<option value='$modulo->nombre'>$modulo->descripcion</option>"; ?>
                         </select>
                     `,
                     data: 'modulo',
