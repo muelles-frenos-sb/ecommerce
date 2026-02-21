@@ -905,5 +905,26 @@ ADD COLUMN `garantia` varchar(255) NULL AFTER `detalles_tecnicos`;
 -- 20260217 Campo para almacenar la lista de precios del cliente que compra a crédito
 ALTER TABLE `usuarios` ADD COLUMN `lista_precio` varchar(5) NULL COMMENT 'Lista de precio para compra a crédito' AFTER `perfil_id`;
 
+CREATE TABLE `marketing_beneficios` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `fecha_creacion` datetime NULL,
+  `usuario_id` int NULL,
+  `nombre` varchar(255) NULL,
+  `beneficio_tipo` varchar(50) NULL COMMENT 'promoción o código descuento',
+  `codigo_descuento` varchar(100) NULL,
+  `reglas` text NULL,
+  `fecha_inicio` date NULL,
+  `fecha_final` date NULL,
+  `presupuesto` decimal(15,2) NULL COMMENT 'Valor máximo del presupuesto',
+  `valor_usado` decimal(15,2) DEFAULT 0.00 COMMENT 'Valor usado del presupuesto',
+  `limite_uso` int NULL COMMENT 'Cantidad de items en promoción',
+  `tipo_venta` varchar(20) NULL COMMENT 'contado o crédito',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- 20260220 Tipo de log agregado
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (111, 'Tareas - Procesamiento de pagos con comprobante', 8)
+
+-- 20260220 Tablas eliminadas
+DROP TABLE wms_pedidos;
+DROP TABLE wms_pedidos_tracking;

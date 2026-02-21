@@ -43,14 +43,6 @@ Class Clientes_model extends CI_Model {
             case 'terceros':
                 if($this->db->delete($tipo, ['f200_nit' => $datos[0]['f200_nit']])) return $this->db->insert_batch($tipo, $datos);
             break;
-
-            case 'wms_pedidos':
-                return $this->db->insert_batch($tipo, $datos);
-            break;
-
-            case 'wms_pedidos_tracking':
-                return $this->db->insert_batch($tipo, $datos);
-            break;
         }
 
         $this->db->close;
@@ -63,14 +55,6 @@ Class Clientes_model extends CI_Model {
             break;
             
             case 'clientes_sucursales':
-                return $this->db->delete($tipo, $datos);
-            break;
-
-            case 'wms_pedidos':
-                return $this->db->delete($tipo, $datos);
-            break;
-
-            case 'wms_pedidos_tracking':
                 return $this->db->delete($tipo, $datos);
             break;
 
@@ -538,61 +522,6 @@ Class Clientes_model extends CI_Model {
                     ->get('terceros')
                     ->row()
                 ;
-            break;
-
-            case 'wms_pedidos':
-				$limite = "";
-                if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
-                if (isset($datos['cantidad']) && isset($datos['indice'])) $limite = "LIMIT {$datos['indice']}, {$datos['cantidad']}";
-
-                $filtros_where = "WHERE p.FechaDocumento IS NOT NULL ";
-                $filtros_having = "HAVING p.NIT IS NOT NULL";
-                
-                if(isset($datos['fecha_documento'])) $filtros_where .= " AND p.FechaDocumento = '{$datos['fecha_documento']}' ";
-
-                // Filtros personalizados
-                if (isset($datos['filtro_numero_pedido']) && $datos['filtro_numero_pedido']) $filtros_having .= " AND numero_documento LIKE '%{$datos['filtro_numero_pedido']}%' ";
-                if (isset($datos['filtro_nombre_consecutivo']) && $datos['filtro_nombre_consecutivo']) $filtros_where .= " AND p.NombreConsecutivo LIKE '%{$datos['filtro_nombre_consecutivo']}%' ";
-                if (isset($datos['filtro_fecha_creacion']) && $datos['filtro_fecha_creacion']) $filtros_where .= " AND p.FechaDocumento = '{$datos['filtro_fecha_creacion']}' ";
-                if (isset($datos['filtro_numero_documento']) && $datos['filtro_numero_documento']) $filtros_where .= " AND p.NIT LIKE '%{$datos['filtro_numero_documento']}%' ";
-                if (isset($datos['filtro_nombre']) && $datos['filtro_nombre']) $filtros_where .= " AND p.RazonSocial LIKE '%{$datos['filtro_nombre']}%' ";
-                if (isset($datos['filtro_estado']) && $datos['filtro_estado']) $filtros_having .= " AND ultimo_estado LIKE '%{$datos['filtro_estado']}%' ";
-
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY p.FechaDocumento DESC";
-                
-                $sql = 
-                "SELECT
-                    p.FechaDocumento fecha_documento,
-                    concat(p.IdConsecutivo, '-', p.NumeroDocumento + 0) numero_documento,
-                    p.NombreConsecutivo consecutivo_nombre,
-                    p.NIT nit,
-                    p.RazonSocial rzon_social,
-                    COUNT(p.CodProducto) cantidad_productos,
-                    (
-                        SELECT
-                            pt.Estado 
-                        FROM
-                            wms_pedidos_tracking AS pt 
-                        WHERE
-                            CAST( pt.NroDcto AS UNSIGNED ) = p.NumeroDocumento 
-                            AND CAST( pt.IdConsecutivo AS UNSIGNED ) = p.IdConsecutivo 
-                        ORDER BY
-                            pt.Fecha DESC 
-                            LIMIT 1 
-                    ) ultimo_estado 
-                FROM
-                    wms_pedidos AS p
-                $filtros_where
-                GROUP BY
-                    p.NumeroDocumento, 
-                    p.NombreConsecutivo
-                $filtros_having
-                $order_by
-                $limite";
-
-                if (isset($datos['contar']) && $datos['contar']) return $this->db->query($sql)->num_rows();
-                if (isset($datos['id'])) return $this->db->query($sql)->row();
-                return $this->db->query($sql)->result();
             break;
         }
 

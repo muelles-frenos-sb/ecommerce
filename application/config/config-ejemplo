@@ -118,23 +118,6 @@ $config['datos_email'] = [
 ];
 
 /***************************************
- ****** WMS Konecta (Por eliminar) *****
- ***************************************/
-// Pruebas
-$config['wms_url'] = '';
-$config['wms_base_datos'] = '';
-$config['wms_usuario'] = '';
-$config['wms_clave'] = '';
-$config['wms_puerto'] = 1433;
-
-// Producción
-// $config['wms_url'] = '';
-// $config['wms_base_datos'] = '';
-// $config['wms_usuario'] = '';
-// $config['wms_clave'] = '';
-// $config['wms_puerto'] = 1433;
-
-/***************************************
  ************ Envíos - TCC *************
  ***************************************/
 // Sandbox

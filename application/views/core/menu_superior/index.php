@@ -161,12 +161,6 @@
                                                                                     Certificados tributarios
                                                                                 </a>
                                                                             </li>
-
-                                                                            <li class="menu__item">
-                                                                                <a href="<?php echo site_url('clientes/pedidos/ver'); ?>" class="menu__link">
-                                                                                    Pedidos
-                                                                                </a>
-                                                                            </li>
                                                                         </ul>
                                                                     </div>
                                                                 </li>

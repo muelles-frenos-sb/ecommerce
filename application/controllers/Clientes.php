@@ -22,17 +22,6 @@ class Clientes extends MY_Controller {
         $this->consultar();
     }
 
-    function pedidos() {
-        // if(!in_array(['configuracion' => 'configuracion_recibos_ver'], $this->data['permisos'])) redirect('inicio');
-        
-        switch ($this->uri->segment(3)) {
-            case 'ver':
-                $this->data['contenido_principal'] = 'clientes/pedidos/index';
-                $this->load->view('core/body', $this->data);
-            break;
-        }
-    }
-
     function certificados_tributarios() {        
         switch ($this->uri->segment(3)) {
             case 'ver':
@@ -191,44 +180,6 @@ class Clientes extends MY_Controller {
 
                 // Se obtienen los registros
                 $resultados = $this->clientes_model->obtener("clientes_facturas", $datos);
-
-                print json_encode([
-                    "draw" => $this->input->get("draw"),
-                    "recordsTotal" => $total_resultados,
-                    "recordsFiltered" => $total_resultados,
-                    "data" => $resultados
-                ]);
-            break;
-
-            case "pedidos":
-                // Se definen los filtros
-                $datos = [
-                    "contar" => true,
-                    "busqueda" => $busqueda
-                ];
-
-                // Filtros personalizados
-                if(isset($filtro_numero_documento)) $datos['filtro_numero_documento'] = $filtro_numero_documento;
-                if(isset($filtro_id_consecutivo)) $datos['filtro_id_consecutivo'] = $filtro_id_consecutivo;
-                if(isset($filtro_nombre_consecutivo)) $datos['filtro_nombre_consecutivo'] = $filtro_nombre_consecutivo;
-                if(isset($filtro_fecha_creacion)) $datos['filtro_fecha_creacion'] = $filtro_fecha_creacion;
-                if(isset($filtro_numero_pedido)) $datos['filtro_numero_pedido'] = $filtro_numero_pedido;
-                if(isset($filtro_nombre)) $datos['filtro_nombre'] = $filtro_nombre;
-                if(isset($filtro_estado)) $datos['filtro_estado'] = $filtro_estado;
-
-                // De acuerdo a los filtros se obtienen el número de registros filtrados
-                $total_resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
-
-                // Se quita campo para solo contar los registros
-                unset($datos["contar"]);
-
-                // Se agregan campos para limitar y ordenar
-                $datos["indice"] = $indice;
-                $datos["cantidad"] = $cantidad;
-                if ($ordenar) $datos["ordenar"] = $ordenar;
-
-                // Se obtienen los registros
-                $resultados = $this->clientes_model->obtener("wms_pedidos", $datos);
 
                 print json_encode([
                     "draw" => $this->input->get("draw"),
