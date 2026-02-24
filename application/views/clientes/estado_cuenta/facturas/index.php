@@ -133,7 +133,7 @@
                 <label class="form-check-label" for="pago_todos">
                     Pagar con PSE, Nequi y tarjetas de crédito
                 </label><br>
-                <img src="<?php echo base_url(); ?>images/formas_pago.webp" alt="Todos los medios de pago" height="60" class="mt-3">
+                <img src="<?php echo base_url(); ?>images/formas_pago.webp" alt="Todos los medios de pago" class="mt-3" style="max-width:100%; max-height: 50px;">
             </div>
 
             <!-- Compra ahora y paga después -->
@@ -152,7 +152,7 @@
                 <label class="form-check-label" for="pagos_sumas">
                     Compra ahora - Paga después
                 </label><br>
-                <img src="<?php echo base_url(); ?>images/sumas.webp" alt="Formas de pago" height="60" class="mt-3">
+                <img src="<?php echo base_url(); ?>images/sumas.webp" alt="Formas de pago" class="mt-3" style="max-width:100%; max-height: 50px;">
             </div>
 
             <button class="btn btn-primary btn-lg btn-block" id="btn_pago_en_linea">Realizar pago en línea</button>
