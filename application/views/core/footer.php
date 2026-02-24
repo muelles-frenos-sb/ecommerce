@@ -17,11 +17,16 @@
                                 <dl>
                                     <dt>CEDI</dt>
                                     <dd><?php echo $this->config->item('direccion_cedi'); ?></dd>
-                                </dl><br>
+                                </dl>
 
                                 <dl>
                                     <dt>Sede Itagüí</dt>
                                     <dd><?php echo $this->config->item('direccion_itagui'); ?></dd>
+                                </dl>
+
+                                <dl>
+                                    <dt>Sede Bello</dt>
+                                    <dd><?php echo $this->config->item('direccion_bello'); ?></dd>
                                 </dl>
 
                                 <dl>

@@ -13,6 +13,10 @@ $config['direccion_itagui'] = "
     <a href='https://maps.app.goo.gl/hWhUjv2r2wx1WMcs8' target='_blank'>
         Carrera 40 # 30 - 139 | Dentro del Parqueadero Saloga, por la Avenida Pilsen
     </a>";
+$config['direccion_bello'] = "
+    <a href='https://maps.app.goo.gl/QDBLztRSQKny1atH9' target='_blank'>
+        Diagonal 52 10 # 207 Guasimalito | En la entrada de Conasfalto
+    </a>";
 $config['direccion_cedi'] = "
     <a href='https://maps.app.goo.gl/pKtYB9GU1BjvvahM6' target='_blank'>
         Calle 30 # 40 - 10 | Itagüí
