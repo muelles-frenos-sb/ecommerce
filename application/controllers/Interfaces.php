@@ -115,6 +115,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->marketing_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'facturacion_reglas':
+                $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             default:
                 if(isset($datos['clave'])) $datos['clave'] = sha1($datos['clave']);
 
@@ -415,6 +419,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->configuracion_model->crear($tipo, $datos)]);
             break;
 
+            case 'facturacion_reglas':
+                print json_encode(['resultado' => $this->logistica_model->crear($tipo, $datos)]);
+            break;
+
             case 'clientes_solicitudes_credito':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
 
@@ -450,6 +458,8 @@ class Interfaces extends CI_Controller {
 
                 print json_encode(['resultado' => $this->clientes_model->crear('clientes_solicitudes_credito_detalle', $datos['valores'])]);
             break;
+
+           
 
             case 'tercero':
                 print json_encode(['resultado' => $this->clientes_model->crear('terceros', $datos['valores'])]);
@@ -641,6 +651,10 @@ class Interfaces extends CI_Controller {
 
             case 'importaciones_maestro_anticipos':
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
+            break;
+
+             case 'facturacion_reglas':
+                print json_encode(['resultado' => $this->logistica_model->eliminar($tipo, $datos)]);
             break;
             case 'importaciones':
                 $this->db->delete('importaciones_bitacora', ['importacion_id' => $datos['id']]);
