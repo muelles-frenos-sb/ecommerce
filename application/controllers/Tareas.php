@@ -275,8 +275,8 @@ class Tareas extends MY_Controller {
         // Obtenemos los mensajes del directorio seleccionado
         $peticion_mensajes = $this->microsoft_graph->obtener_mensajes($token, $id_directorio);
 
-        if(empty($peticion_mensajes)) {
-            return json_encode([
+        if($peticion_mensajes['http_code'] !== 200) {
+            print json_encode([
                 'error' => false,
                 'mensaje' => 'No se encontraron mensajes con adjuntos en esta carpeta',
             ]);
@@ -284,34 +284,32 @@ class Tareas extends MY_Controller {
 
         // Descarga de archivos
         $mensajes = $peticion_mensajes['respuesta']['value'];
-        $archivos_descargados = 0;
-        $errores = [];
 
         foreach($mensajes as $mensaje) {
             $ruta_base = $this->config->item('ruta_archivos_retenciones');
 
-            echo $contenido_formateado = strip_tags($mensaje['body']['content']);
+            $contenido_formateado = strip_tags($mensaje['body']['content']);
             $nit = $this->extraer_texto_mensaje($contenido_formateado, '/NIT:(?:\s|&nbsp;)*(\d+)/');
             $razon_social = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/Señores:\s*(.*?)\.\s+NIT:/');
 
             // Retención en la fuente
             $rete_fuente = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETENCION EN LA FUENTE:\s*(\d+)/');
             if(intval($rete_fuente) > 0) {
-                $ruta_archivo = "{$ruta_base}/RETEFUENTE/{$nit}_{$razon_social}_{$rete_fuente}.pdf";
+                $ruta_archivo = "{$ruta_base}/RETEFUENTE/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
                 $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
             }
 
             // ReteIVA
             $rete_iva = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETEIVA:\s*(\d+)/');
             if(intval($rete_iva) > 0) {
-                $ruta_archivo = "{$ruta_base}/RETEIVA/{$nit}_{$razon_social}_{$rete_iva}.pdf";
+                $ruta_archivo = "{$ruta_base}/RETEIVA/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
                 $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
             }
 
             // ReteICA
             $rete_ica = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETEICA:\s*(\d+)/');
             if(intval($rete_ica) > 0) {
-                $ruta_archivo = "{$ruta_base}/RETEICA/{$nit}_{$razon_social}_{$rete_ica}.pdf";
+                $ruta_archivo = "{$ruta_base}/RETEICA/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
                 $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
             }
         }

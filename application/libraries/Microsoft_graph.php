@@ -99,8 +99,9 @@ class Microsoft_graph {
      */
     function obtener_mensajes($token, $carpeta_id) {
         $url = "https://graph.microsoft.com/v1.0/users/{$this->email_usuario}/mailFolders/{$carpeta_id}/messages";
-        $url .= '?$top=500 '; // Cantidad de registros
-        $url .= "?\$filter=hasAttachments%20eq%20true&\$select=id,subject,hasAttachments";        
+        $url .= '?$top=500'; // Cantidad de registros
+        // $url .= "&\$filter=hasAttachments%20eq%20true&\$select=id,subject,hasAttachments";
+        $url .= '&$filter=isRead%20eq%20false';
 
         return $this->enviar_peticion($url, null, $token);
     }
