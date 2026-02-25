@@ -677,7 +677,6 @@ class Marketing extends MY_Controller
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen, $parametros);
             if ($resultado) {
-                echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 101,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
@@ -686,10 +685,21 @@ class Marketing extends MY_Controller
                         'resultado' => $resultado
                     ]),
                 ]);
+                echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
+                
             } else {
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
                 echo json_encode(['exito' => false, 'mensaje' => 'La API de WhatsApp rechazó el envío.']);
             }
         } catch (Exception $e) {
+            
             echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
         }
     }
@@ -703,7 +713,7 @@ class Marketing extends MY_Controller
         }
         
         for ($i = 1; $i <= 6; $i++) {
-            $campo_variable = "variable{$i}";
+            $campo_variable = "variable_{$i}";
             if (isset($contacto->$campo_variable) && !empty($contacto->$campo_variable)) {
                 $parametros[] = $contacto->$campo_variable;
             }
