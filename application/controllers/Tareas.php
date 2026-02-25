@@ -16,6 +16,8 @@ class Tareas extends MY_Controller {
         header('Content-type: application/json');
 
         $this->load->model(['clientes_model', 'contabilidad_model', 'productos_model', 'proveedores_model']);
+
+        $this->config->load('microsoft_graph', TRUE);
     }
 
     /**
@@ -100,6 +102,94 @@ class Tareas extends MY_Controller {
             'resultado' => count($resultado) . ' recibos procesados',
         ]);
         return http_response_code(200);
+    }
+
+    /**
+     * A partir de un texto plano, obtiene la información consiguiente
+     *
+     * @param string $texto
+     * @param string $valor_buscado
+     * @return void
+     */
+    function extraer_texto_mensaje($texto, $valor_buscado) {
+        // Versión 1: Maneja espacios normales, &nbsp; y cualquier combinación
+        if (preg_match($valor_buscado, $texto, $matches)) return $matches[1];
+        
+        // Versión 2: Si la primera no funciona, intenta con una más permisiva
+        if (preg_match($valor_buscado, $texto, $matches)) return $matches[1];
+        
+        return null;
+    }
+
+    /**
+     * Permite descargr los archivos adjuntos de los correos electrónicos
+     * que contienen los certificados de retención de los clientes
+     *
+     * @return void
+     */
+    function clientes_descargar_certificados() {
+        $nombre_directorio = '4.CERTIFICADOS DE RETENCION';
+
+        // Obtenemos el token de acceso
+        $peticion_token = $this->microsoft_graph->obtener_token();
+        $token = $peticion_token['respuesta']['access_token'];
+        if(!$token) {
+            return json_encode([
+                'error' => true,
+                'mensaje' => 'No se pudo obtener el token de autenticación'
+            ]);
+        }
+        
+        // Buscamos la carpeta a consultar
+        $id_directorio = $this->microsoft_graph->buscar_carpeta($token, $nombre_directorio);
+        if(!$id_directorio) {
+            return json_encode([
+                'error' => true,
+                'mensaje' => 'No se encontró la carpeta especificada'
+            ]);
+        }
+
+        // Obtenemos los mensajes del directorio seleccionado
+        $peticion_mensajes = $this->microsoft_graph->obtener_mensajes($token, $id_directorio);
+
+        if($peticion_mensajes['http_code'] !== 200) {
+            print json_encode([
+                'error' => false,
+                'mensaje' => 'No se encontraron mensajes con adjuntos en esta carpeta',
+            ]);
+        }
+
+        // Descarga de archivos
+        $mensajes = $peticion_mensajes['respuesta']['value'];
+
+        foreach($mensajes as $mensaje) {
+            $ruta_base = $this->config->item('ruta_archivos_retenciones');
+
+            $contenido_formateado = strip_tags($mensaje['body']['content']);
+            $nit = $this->extraer_texto_mensaje($contenido_formateado, '/NIT:(?:\s|&nbsp;)*(\d+)/');
+            $razon_social = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/Señores:\s*(.*?)\.\s+NIT:/');
+
+            // Retención en la fuente
+            $rete_fuente = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETENCION EN LA FUENTE:\s*(\d+)/');
+            if(intval($rete_fuente) > 0) {
+                $ruta_archivo = "{$ruta_base}/RETEFUENTE/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
+                $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
+            }
+
+            // ReteIVA
+            $rete_iva = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETEIVA:\s*(\d+)/');
+            if(intval($rete_iva) > 0) {
+                $ruta_archivo = "{$ruta_base}/RETEIVA/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
+                $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
+            }
+
+            // ReteICA
+            $rete_ica = $this->extraer_texto_mensaje(str_replace('&nbsp;', ' ', $contenido_formateado), '/RETEICA:\s*(\d+)/');
+            if(intval($rete_ica) > 0) {
+                $ruta_archivo = "{$ruta_base}/RETEICA/ASIGNAR VALOR/{$nit}_{$razon_social}.pdf";
+                $this->microsoft_graph->descargar_archivos_adjuntos($token, $mensaje['id'], $ruta_archivo);
+            }
+        }
     }
 
     /**

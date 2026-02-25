@@ -19,7 +19,6 @@ class Importaciones_pagos_model extends CI_Model {
         
         // Ordenar por fecha de creación descendente
         $this->db->order_by('id', 'DESC');
-        
         return $this->db->get()->result();
     }
 
@@ -58,7 +57,6 @@ class Importaciones_pagos_model extends CI_Model {
 
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
-
                 // Filtros where
                 if (isset($filtros_personalizados['importacion']) && $filtros_personalizados['importacion'] != '') $where .= " AND i.razon_social LIKE '%{$filtros_personalizados['importacion']}%' ";
                 if (isset($filtros_personalizados['fecha']) && $filtros_personalizados['fecha'] != '') $where .= " AND ip.fecha LIKE '%{$filtros_personalizados['fecha']}%' ";
@@ -70,6 +68,7 @@ class Importaciones_pagos_model extends CI_Model {
                 if (isset($filtros_personalizados['origen_recursos']) && $filtros_personalizados['origen_recursos'] != '') $where .= " AND ipor.nombre LIKE '%{$filtros_personalizados['origen_recursos']}%' ";
                 if (isset($filtros_personalizados['cuenta_bancaria']) && $filtros_personalizados['cuenta_bancaria'] != '') $where .= " AND cb.nombre LIKE '%{$filtros_personalizados['cuenta_bancaria']}%' ";
                 if (isset($filtros_personalizados['fecha_creacion']) && $filtros_personalizados['fecha_creacion'] != '') $where .= " AND ip.fecha_creacion LIKE '%{$filtros_personalizados['fecha_creacion']}%' ";
+                if (isset($filtros_personalizados['importacion_id']) && $filtros_personalizados['importacion_id'] != '') $where .= " AND ip.importacion_id = {$filtros_personalizados['importacion_id']} ";
 
                 // Filtros having
                 if (isset($filtros_personalizados['estado']) && $filtros_personalizados['estado'] != '') $having .= " AND estado_texto LIKE '%{$filtros_personalizados['estado']}%' ";

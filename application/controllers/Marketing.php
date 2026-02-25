@@ -175,6 +175,7 @@ class Marketing extends MY_Controller
     function beneficios()
     {
         if (!$this->session->userdata('usuario_id')) redirect('inicio');
+        
         switch ($this->uri->segment(3)) {
             case 'crear':
                 $this->data['contenido_principal'] = 'marketing/beneficios/detalle';
@@ -664,12 +665,18 @@ class Marketing extends MY_Controller
 
         try {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            
+            $parametros = [];
+            for ($i = 1; $i <= 6; $i++) {
+                $valor = $this->input->post("variable_{$i}");
+                if ($valor !== null && $valor !== '') {
+                    $parametros[] = $valor;
+                }
+            }
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen);
-
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen, $parametros);
             if ($resultado) {
-                echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 101,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
@@ -678,12 +685,41 @@ class Marketing extends MY_Controller
                         'resultado' => $resultado
                     ]),
                 ]);
+                echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
+                
             } else {
+                $this->configuracion_model->crear('logs', [
+                    'log_tipo_id' => 101,
+                    'fecha_creacion' => date('Y-m-d H:i:s'),
+                    'observacion' => json_encode([
+                        'tipo' => 'Envio WhatsApp',
+                        'resultado' => $resultado
+                    ]),
+                ]);
                 echo json_encode(['exito' => false, 'mensaje' => 'La API de WhatsApp rechazó el envío.']);
             }
         } catch (Exception $e) {
+            
             echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
         }
+    }
+
+     private function extraer_variables_contacto($contacto)
+    {
+        $parametros = [];
+        
+        if (!$contacto) {
+            return $parametros;
+        }
+        
+        for ($i = 1; $i <= 6; $i++) {
+            $campo_variable = "variable_{$i}";
+            if (isset($contacto->$campo_variable) && !empty($contacto->$campo_variable)) {
+                $parametros[] = $contacto->$campo_variable;
+            }
+        }
+        
+        return $parametros;
     }
 
     public function ejecutar_envio_masivo()
@@ -730,10 +766,10 @@ class Marketing extends MY_Controller
         // 5. Bucle de envío "Uno a Uno"
         foreach ($contactos as $contacto) {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
+            $parametros = $this->extraer_variables_contacto($contacto);
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
-            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen);
-            $envio_exitoso = false;
+            $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($contacto->telefono, $plantilla, 'es_CO', $ruta_imagen, $parametros);            $envio_exitoso = false;
 
             if (is_array($resultado)) {
                 
@@ -790,4 +826,32 @@ class Marketing extends MY_Controller
             'mensaje' => "Proceso finalizado. Enviados: $enviados. Fallidos: $errores."
         ]);
     }
+
+
+    public function obtener_variables_campania()
+    {
+        if (!$this->input->is_ajax_request()) show_404();
+
+        $campania_id = $this->input->post('campania_id');
+
+        if (!$campania_id) {
+            echo json_encode(['exito' => false, 'cantidad' => 0]);
+            return;
+        }
+
+        $contacto = $this->db->get_where('marketing_campanias_contactos', ['campania_id' => $campania_id])->row();
+
+        $cantidad = 0;
+        if ($contacto) {
+            for ($i = 1; $i <= 6; $i++) {
+                $campo = "variable_{$i}";
+                if (isset($contacto->$campo) && !empty($contacto->$campo)) {
+                    $cantidad++;
+                }
+            }
+        }
+
+        echo json_encode(['exito' => true, 'cantidad' => $cantidad]);
+    }
+
 }
