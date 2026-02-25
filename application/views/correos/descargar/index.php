@@ -2,7 +2,7 @@
     <div class="container">
         <div class="block-header__body">
             <h1 class="block-header__title">Descargar Correos con Adjuntos</h1>
-            <p class="text-muted">Ingresa el nombre de la carpeta de correo para descargar los adjuntos</p>
+            <p class="text-muted">Selecciona la carpeta de correo para descargar los adjuntos</p>        
         </div>
     </div>
 </div>
@@ -20,18 +20,23 @@
 
                         <form id="form_descargar_correos">
                             <div class="form-group">
-                                <label for="nombre_carpeta">Nombre de la Carpeta *</label>
-                                <input 
-                                    type="text" 
-                                    class="form-control" 
-                                    id="nombre_carpeta" 
-                                    placeholder="Ejemplo: Inbox, Facturas, Pagos"
-                                    autofocus
-                                    required
-                                >
+                                 <label for="carpeta_id">Carpeta de Correo *</label>
+                                <select class="form-control" id="carpeta_id" required>
+                                    <option value="">-- Cargando carpetas... --</option>
+                                </select>
                                 <small class="form-text text-muted">
-                                    Ingresa el nombre exacto de la carpeta de correo
+                                    Selecciona la carpeta de correo a descargar
                                 </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fecha_inicio">Fecha Desde</label>
+                                <input type="date" class="form-control" id="fecha_inicio">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="fecha_fin">Fecha Hasta</label>
+                                <input type="date" class="form-control" id="fecha_fin">
                             </div>
 
                             <button type="submit" class="btn btn-primary btn-block" id="btn_descargar">
@@ -57,16 +62,18 @@
             <!-- Lista de archivos descargados -->
             <div class="col-lg-8 col-md-12">
                 <div class="card">
-                    <div class="card-body card-body--padding--2">
-                        <div class="tag-badge tag-badge--new badge_formulario badge_formulario_verde">
-                            ARCHIVOS DESCARGADOS RECIENTEMENTE
-                        </div>
-
-                        <div id="contenedor_lista_archivos" style="max-height: 500px; overflow-y: auto;">
-                            <!-- Aquí se cargará la lista de archivos -->
-                        </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="tag-badge tag-badge--new badge_formulario badge_formulario_verde">
+                                ARCHIVOS DESCARGADOS
+                            </div>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="listarArchivosDescargados()">
+                                <i class="fas fa-sync-alt"></i> Actualizar
+                            </button>
                     </div>
                 </div>
+
+                 <div id="contenedor_lista_archivos" style="max-height: 500px; overflow-y: auto;">
+</div>
             </div>
         </div>
     </div>
@@ -75,16 +82,42 @@
 </div>
 
 <script>
+
+    function cargarCarpetas() {
+        $('#carpeta_id').html('<option value="">-- Cargando carpetas... --</option>').prop('disabled', true);
+
+        $.ajax({
+            url: `${$('#site_url').val()}correos/obtener_carpetas`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(respuesta) {
+                if(respuesta.error || !respuesta.carpetas || respuesta.carpetas.length === 0) {
+                    $('#carpeta_id').html('<option value="">-- No se pudieron cargar las carpetas --</option>');
+                    return;
+                }
+
+                let options = '<option value="">-- Seleccionar carpeta --</option>';
+                $.each(respuesta.carpetas, function(i, carpeta) {
+                    options += `<option value="${carpeta.id}" data-nombre="${carpeta.nombre}">${carpeta.nombre} (${carpeta.total})</option>`;
+                });
+                $('#carpeta_id').html(options).prop('disabled', false);
+            },
+            error: function() {
+                $('#carpeta_id').html('<option value="">-- Error al cargar carpetas --</option>');
+            }
+        });
+    }
     /**
      * Procesa el formulario de descarga de correos
      */
     $('#form_descargar_correos').submit(function(e) {
         e.preventDefault();
         
-        const nombreCarpeta = $('#nombre_carpeta').val().trim();
-        
-        if(!nombreCarpeta) {
-            mostrarAviso('alerta', 'Debe ingresar el nombre de la carpeta', 3000);
+        const carpetaId    = $('#carpeta_id').val();
+        const carpetaNombre = $('#carpeta_id option:selected').data('nombre') || carpetaId;
+
+        if(!carpetaId) {
+            mostrarAviso('alerta', 'Debe seleccionar una carpeta', 3000);
             return;
         }
 
@@ -93,11 +126,14 @@
         $('#mensaje_resultado').html('');
 
         const datos = {
-            nombre_carpeta: nombreCarpeta
+            carpeta_id:     carpetaId,
+            nombre_carpeta: carpetaNombre,
+            fecha_inicio:   $('#fecha_inicio').val(),
+            fecha_fin:      $('#fecha_fin').val()
         };
 
         $.ajax({
-            url: `${$('#site_url').val()}/correos/procesar`,
+            url: `${$('#site_url').val()}correos/procesar`,
             type: 'POST',
             dataType: 'json',
             data: { datos: JSON.stringify(datos) },
@@ -121,8 +157,6 @@
                     // Recargar lista de archivos
                     listarArchivosDescargados();
                     
-                    // Limpiar formulario
-                    $('#nombre_carpeta').val('');
                 }
             },
             error: function(xhr, status, error) {
@@ -138,16 +172,24 @@
             }
         });
     });
+    
 
     /**
      * Carga la lista de archivos descargados
      */
     function listarArchivosDescargados() {
-        cargarInterfaz('correos/listar', 'contenedor_lista_archivos');
-    }
+    // Mostrar un pequeño spinner mientras lee el disco
+    $('#contenedor_lista_archivos').html('<div class="text-center p-4"><i class="fas fa-spinner fa-spin fa-2x"></i></div>');
+    
+    // Usamos la función cargarInterfaz que ya tienes o un $.get
+    $.get(`${$('#site_url').val()}correos/listar`, function(html) {
+        $('#contenedor_lista_archivos').html(html);
+    });
+}
 
     // Cargar lista al iniciar
     $().ready(function() {
+        cargarCarpetas();
         listarArchivosDescargados();
     });
 </script>

@@ -65,11 +65,15 @@ class Importaciones_pagos extends MY_Controller
                     "contar" => true,
                     "busqueda" => $busqueda,
                     "filtros_personalizados" => $this->input->get("filtros_personalizados"),
+                    'filtros_personalizados' => [
+                        'importacion_id' => $this->input->get("importacion_id"), // El ID que quieres filtrar
+                    ]
                 ];
+                
 
                 // De acuerdo a los filtros se obtienen el número de registros filtrados
                 $total_resultados = $this->importaciones_pagos_model->obtener_general("importaciones_pagos", $datos);
-
+                
                 // Se quita campo para solo contar los registros
                 unset($datos["contar"]);
 

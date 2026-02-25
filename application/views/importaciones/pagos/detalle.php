@@ -10,6 +10,8 @@ if ($id_pago) {
 $tipos_pago = $this->importaciones_model->obtener('importaciones_pagos_tipos');
 $importaciones = $this->importaciones_model->obtener('importaciones');
 $usuarios = $this->configuracion_model->obtener('usuarios', ['activo' => 1]);
+
+$importacion_id_preseleccionado = isset($importacion_id) ? $importacion_id : ($pago ? $pago->importacion_id : null);
 ?>
 
 <style>
@@ -19,54 +21,7 @@ $usuarios = $this->configuracion_model->obtener('usuarios', ['activo' => 1]);
         border-radius: 8px;
     }
 
-    .pdf-section-title {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: #333;
-        margin-top: 25px;
-        margin-bottom: 15px;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 8px;
-    }
-
-    .form-group label {
-        font-weight: 500;
-        color: #666;
-        font-size: 0.9rem;
-        margin-bottom: 5px;
-    }
-
-    .form-control {
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        padding: 10px;
-        height: auto;
-    }
-
-    .btn-save-pdf {
-        background-color: #28a745;
-        border: none;
-        padding: 12px 30px;
-        font-weight: 600;
-        border-radius: 6px;
-    }
-
-    .btn-cancel-pdf {
-        background: transparent;
-        color: #666;
-        border: none;
-        padding: 12px 30px;
-        font-weight: 600;
-    }
-
-    .header-pdf {
-        margin-bottom: 30px;
-    }
-
-    .header-pdf h1 {
-        font-size: 1.8rem;
-        font-weight: 700;
-    }
+   
 </style>
 
 <div class="container mt-4 mb-5">
@@ -151,7 +106,7 @@ $usuarios = $this->configuracion_model->obtener('usuarios', ['activo' => 1]);
                     <select class="form-control" id="importacion_id" name="importacion_id" required>
                         <option value="">Seleccionar importación</option>
                         <?php foreach ($importaciones as $imp): ?>
-                            <option value="<?php echo $imp->id; ?>" <?php echo ($pago && $pago->importacion_id == $imp->id) ? 'selected' : ''; ?>>
+                            <option value="<?php echo $imp->id; ?>" <?php echo ($importacion_id_preseleccionado == $imp->id) ? 'selected' : ''; ?>>
                                 <?php echo $imp->numero_orden_compra; ?> - <?php echo $imp->razon_social; ?>
                             </option>
                         <?php endforeach; ?>
