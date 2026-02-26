@@ -190,6 +190,12 @@ class Marketing extends MY_Controller
                 $this->data['contenido_principal'] = 'marketing/beneficios/index';
                 $this->load->view('core/body', $this->data);
                 break;
+
+            case 'alcance':
+                $this->data['id'] = $this->uri->segment(4);
+                $this->data['contenido_principal'] = 'marketing/beneficios/alcance';
+                $this->load->view('core/body', $this->data);
+                break;
         }
     }
     /**
