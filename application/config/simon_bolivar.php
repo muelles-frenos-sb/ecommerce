@@ -15,7 +15,7 @@ $config['direccion_itagui'] = "
     </a>";
 $config['direccion_bello'] = "
     <a href='https://maps.app.goo.gl/QDBLztRSQKny1atH9' target='_blank'>
-        Diagonal 52 10 # 207 Guasimalito | En la entrada de Conasfalto
+        Diagonal 52 # 10 - 207 Guasimalito | En la entrada de Conasfalto
     </a>";
 $config['direccion_cedi'] = "
     <a href='https://maps.app.goo.gl/pKtYB9GU1BjvvahM6' target='_blank'>
