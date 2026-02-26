@@ -922,6 +922,19 @@ CREATE TABLE `marketing_beneficios` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+ALTER TABLE `marketing_beneficios` ADD COLUMN `alcance_tipo` varchar(50) DEFAULT 'toda_la_tienda' COMMENT 'toda_la_tienda o productos_especificos' AFTER `tipo_venta`;
+
+CREATE TABLE `marketing_beneficios_productos` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `beneficio_id` int NOT NULL,
+  `producto_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `beneficio_id` (`beneficio_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+ALTER TABLE `marketing_beneficios_productos` ADD COLUMN IF NOT EXISTS `valor_tipo` varchar(20) DEFAULT 'nominal' COMMENT 'nominal o porcentaje' AFTER `producto_id`;
+ALTER TABLE `marketing_beneficios_productos` ADD COLUMN IF NOT EXISTS `valor` decimal(10,2) DEFAULT 0.00 AFTER `valor_tipo`;
+
 -- 20260220 Tipo de log agregado
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (111, 'Tareas - Procesamiento de pagos con comprobante', 8)
 

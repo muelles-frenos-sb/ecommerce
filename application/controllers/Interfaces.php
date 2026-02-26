@@ -215,6 +215,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->clientes_model->crear($tipo, $datos['valores'])]);
             break;
 
+            case 'marketing_beneficios_productos':
+                print json_encode(['resultado' => $this->marketing_model->crear("marketing_beneficios_productos", $datos)]);
+            break;
+
             case 'codigo_otp':
                 $fecha_actual = date('Y-m-d H:i:s');
                 $fecha_vencimiento = date('Y-m-d H:i:s', strtotime('+10 minutes', strtotime($fecha_actual)));
@@ -653,6 +657,10 @@ class Interfaces extends CI_Controller {
                 print json_encode(['resultado' => $this->configuracion_model->eliminar($tipo, $datos)]);
             break;
 
+            case 'marketing_beneficios_productos':
+                print json_encode(['resultado' => $this->marketing_model->eliminar('marketing_beneficios_productos', $datos)]);
+            break;
+
              case 'facturacion_reglas':
                 print json_encode(['resultado' => $this->logistica_model->eliminar($tipo, $datos)]);
             break;
@@ -700,6 +708,10 @@ class Interfaces extends CI_Controller {
             // case 'recibos':
             //     $resultado =  ['resultado' => $this->productos_model->obtener($tipo, $datos)];
             // break;
+
+            case 'marketing_beneficios_productos':
+                $resultado = ['resultado' => $this->marketing_model->obtener('marketing_beneficios_productos', $datos)];
+            break;
 
             case 'facturas_desde_pedido':
                 $resultado = json_decode(obtener_facturas_desde_pedido_api($datos));
