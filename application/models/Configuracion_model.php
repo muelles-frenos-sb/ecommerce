@@ -423,7 +423,7 @@ Class Configuracion_model extends CI_Model {
                 if (isset($datos['filtro_recibo_siesa']) && $datos['filtro_recibo_siesa']) $where .= " AND r.numero_siesa LIKE '%{$datos['filtro_recibo_siesa']}%' ";
                 if (isset($datos['filtro_estado']) && $datos['filtro_estado']) $where .= " AND re.nombre LIKE '%{$datos['filtro_estado']}%' ";
                 if (isset($datos['filtro_valor']) && $datos['filtro_valor']) $where .= " AND r.valor LIKE '%{$datos['filtro_valor']}%' ";
-                if (isset($datos['filtro_usuario_creador']) && $datos['filtro_usuario_creador']) $where .= " AND (uc.nombres LIKE '%{$datos['filtro_usuario_creador']}%') AND uc.primer_apellido LIKE '%{$datos['filtro_usuario_creador']}%' ";
+                if (isset($datos['filtro_usuario_creador']) && $datos['filtro_usuario_creador']) $where .= " AND uc.razon_social LIKE '%{$datos['filtro_usuario_creador']}%'";
                 if (isset($datos['filtro_comentarios']) && $datos['filtro_comentarios']) $where .= " AND r.comentarios LIKE '%{$datos['filtro_comentarios']}%' ";
                 if (isset($datos['filtro_observaciones']) && $datos['filtro_observaciones']) $where .= " AND r.observaciones LIKE '%{$datos['filtro_observaciones']}%' ";
                 if (isset($datos['filtro_telefono']) && $datos['filtro_telefono']) $where .= " AND r.telefono LIKE '%{$datos['filtro_telefono']}%' ";
