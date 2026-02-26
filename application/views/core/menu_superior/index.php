@@ -238,20 +238,28 @@
                                                                     <div class="menu__submenu">
                                                                         <ul class="menu">
                                                                             <li class="menu__item">
-                                                                                <a href="<?php echo site_url('logistica/envios/cotizacion'); ?>" class="menu__link">
-                                                                                    Cotizar envío con TCC
-                                                                                </a>
-                                                                            </li>
-
-                                                                            <li class="menu__item">
                                                                                 <a href="<?php echo site_url('logistica/garantias/ver'); ?>" class="menu__link">
                                                                                     Garantías
                                                                                 </a>
                                                                             </li>
+                                                                            <hr>
 
                                                                             <li class="menu__item">
                                                                                 <a href="<?php echo site_url('logistica/pedidos/ver'); ?>" class="menu__link">
-                                                                                    Pedidos
+                                                                                    Facturación - Pedidos
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <li class="menu__item">
+                                                                                <a href="<?php echo site_url('logistica/pedidos/reglas_facturacion/ver'); ?>" class="menu__link">
+                                                                                    Facturación - Reglas
+                                                                                </a>
+                                                                            </li>
+                                                                            <hr>
+
+                                                                            <li class="menu__item">
+                                                                                <a href="<?php echo site_url('logistica/envios/cotizacion'); ?>" class="menu__link">
+                                                                                    Cotizar envío con TCC
                                                                                 </a>
                                                                             </li>
                                                                         </ul>
