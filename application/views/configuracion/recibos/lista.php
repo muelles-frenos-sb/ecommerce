@@ -217,7 +217,7 @@
                         `
                         : ``
 
-                        let botonReciboCaja = (($('#recibo_id_tipo').val() == 2 && recibo.wompi_status == 'APPROVED') || $('#recibo_id_tipo').val() == 3)
+                        let botonReciboCaja = (($('#recibo_id_tipo').val() == 2 || $('#recibo_id_tipo').val() == 3) && recibo.recibo_estado_id == 1)
                         ? `
                             <a type="button" class="btn btn-sm btn-danger" href="${$('#site_url').val()}/reportes/pdf/recibo/${recibo.token}" target="_blank">
                                 <i class="fas fa-file-pdf"></i>

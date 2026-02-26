@@ -10,10 +10,18 @@ $notas = $recibo->comentarios;
 // Temporalemte, se actualiza el recibo con el número de recibo de caja de Siesa
 if(!$recibo->numero_siesa) $this->productos_model->actualizar('recibos', ['id' => $recibo->id], ['numero_siesa' => obtener_numero_recibo_caja($recibo)]);
 
-$resultado_movimientos = json_decode(obtener_movimientos_contables_api([
-    'numero_documento' => $recibo->documento_numero,
-    'notas_parciales' => "Recibo $recibo->id",
-]));
+if($recibo->recibo_tipo_id == 3) {
+    $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
+        'numero_documento' => $recibo->documento_numero,
+        'notas_parciales' => "Recibo $recibo->id",
+    ]));
+} else {
+    $resultado_movimientos = json_decode(obtener_movimientos_contables_api([
+        'numero_documento' => $recibo->documento_numero,
+        'notas_parciales' => ($recibo->id >= 280) ? "Recibo $recibo->id" : 'Recibo cargado desde la página web por el cliente',
+        'estado' => 1,
+    ]));
+}
 
 // Si se encontraron movimientos asociados al recibo
 if($resultado_movimientos->codigo == 0) {
