@@ -193,6 +193,10 @@ if(!empty($tercero)) {
     }
 
     $().ready(async() => {
+        $('#checkout_vendedor_nit').select2({
+            width: '100%'
+        })
+        
         // Si tiene sesión iniciada, la lista de precio es la de clientes
         let listaPrecioPorDefecto = '<?php echo $this->config->item('lista_precio'); ?>'
         mostrarTotales(listaPrecioPorDefecto)
