@@ -41,7 +41,8 @@
                     </td>
                     <td class="cart-table__column cart-table__column--quantity" data-title="Cantidad">
                         <div class="cart-table__quantity input-number">
-                            <input class="form-control input-number__input" type="number" min="1" value="<?php echo $item['qty']; ?>" disabled>
+                            <input class="form-control input-number__input ventas_carrito_cantidad_items" type="number" min="1" value="<?php echo $item['qty']; ?>" data-id="<?php echo $producto->id; ?>" data-row_id="<?php echo $item['rowid']; ?>">
+
                             <div class="input-number__add" onClick="javascript:modificarItem('agregar', '<?php echo $item['rowid']; ?>')"></div>
                             <div class="input-number__sub" onClick="javascript:modificarItem('remover', '<?php echo $item['rowid']; ?>')"></div>
                         </div>
@@ -70,6 +71,10 @@
             let precio = parseFloat($(this).val().replace(/\./g, ''))
             
             modificarItem('precio', $(this).attr('data-row_id'), $(this).attr('data-id'), precio)
+        })
+
+        $(`.ventas_carrito_cantidad_items`).on('blur', function() {
+            modificarItem('cantidad', $(this).data('row_id'), $(this).data('id'), '', $(this).val())
         })
 
         new DataTable('#tabla_productos_carrito', {

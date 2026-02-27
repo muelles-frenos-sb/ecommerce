@@ -58,12 +58,18 @@ class Carrito extends MY_Controller {
         $this->load->view('core/body', $this->data);
     }
 
-    function modificar_item($tipo, $row_id, $precio = '') {
+    function modificar_item() {
+        $tipo = $this->input->get('tipo');
+        $row_id = $this->input->get('row_id');
+        $precio = $this->input->get('precio');
+        $cantidad = $this->input->get('cantidad');
+        
         $item = $this->cart->get_item($row_id);
 
         // Modificación de cantidades
-        if($tipo == 'agregar') $item['qty'] += 1;
-        if($tipo == 'remover') $item['qty'] -= 1;
+        if($tipo == 'agregar') $item['qty'] += $cantidad;
+        if($tipo == 'remover') $item['qty'] -= $cantidad;
+        if($tipo == 'cantidad') $item['qty'] = $cantidad;
 
         $datos = [
             'rowid' => $row_id,
