@@ -65,7 +65,12 @@ if($this->session->userdata('usuario_id')) {
                                     ]);    
                                 ?>
                                     <tr>
-                                        <td><?php echo $producto->notas; ?> x <?php echo $item['qty']; ?></td>
+                                        <td>
+                                            <?php echo "$producto->notas x {$item['qty']}"; ?>
+                                            <div class="spec__disclaimer" style="margin: 5px">
+                                                <?php echo "Ref: $producto->referencia"; ?>
+                                            </div>
+                                        </td>
                                         <td><?php echo formato_precio($item['subtotal']); ?></td>
                                     </tr>
                                 <?php } ?>

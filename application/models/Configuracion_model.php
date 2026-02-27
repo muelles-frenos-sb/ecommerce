@@ -1028,8 +1028,14 @@ Class Configuracion_model extends CI_Model {
 
             case 'vendedores':
                 return $this->db
+                    ->select([
+                        'tv.nit',
+                        "IF(t.f200_nombres <> '', CONCAT_WS( ' ', t.f200_nombres, t.f200_apellido1, t.f200_apellido2 ), tv.nombre) nombre",
+                    ])
+                    ->from("terceros_vendedores tv")
+                    ->join("terceros t", "tv.nit = t.f200_nit")
                     ->order_by('nombre')
-                    ->get('terceros_vendedores')
+                    ->get()
                     ->result()
                 ;
             break;

@@ -38,7 +38,7 @@
                     <!-- Bodega -->
                     <td class="text-center" width="120">
                         <!-- Se cargan las bodegas donde el producto tiene disponibilidad -->
-                        <select id="<?php echo "producto_{$producto->id}_bodega"; ?>" onChange="javascript:actualizarDisponibilidad(<?php echo $producto->id; ?>)" class="form-control">
+                        <select id="<?php echo "producto_{$producto->id}_bodega"; ?>" onChange="javascript:actualizarDisponibilidad(<?php echo $producto->id; ?>)" class="form-control select_bodega">
                             <?php
                             foreach($inventario_disponible as $bodega) {
                                 echo "<option value='$bodega->codigo' data-disponibilidad='$bodega->disponible'>$bodega->codigo ($bodega->disponible)</option>";
@@ -129,10 +129,7 @@
     }
 
     $().ready(() => {
-        // // Cuando se seleccione una bodega de un producto específico
-        // $("select[id^='producto_']").on('change', function() {
-        //     console.log($(`${this} option:selected`).attr('data-id_producto').text())
-        // })
+        var bodegaPorDefecto = $('#cliente_bodega option:selected').data('codigo')
 
         $('#contenedor_mensaje_producto').html(``)
 
@@ -147,12 +144,17 @@
             },
             createdRow: function(row, data, dataIndex) {
                 let productoId = $(row).find('#producto_id').text()
-                let bodega = $(row).find(`#producto_${productoId}_bodega`).val()
+                let bodegaProducto = $(row).find(`#producto_${productoId}_bodega`).val()
+                let existeBodegaEnProducto = $(`#producto_${productoId}_bodega`).find(`option[value="${bodegaPorDefecto}"]`).val()
+
+                // SI el producto está en la bodega por defecto, selecciona la bodega
+                if(existeBodegaEnProducto) $(`#producto_${productoId}_bodega`).val(bodegaPorDefecto)
+
                 let listaPrecio = $(row).find(`#producto_${productoId}_lista_precio`).val()
                 let cantidad = $(row).find(`#producto_${productoId}_cantidad`).val()
                 let boton = $(row).find(`#producto_${productoId}_boton`)
 
-                if(!bodega || !listaPrecio) {
+                if(!bodegaProducto || !listaPrecio) {
                     boton.hide()
                     return  
                 }

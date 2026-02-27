@@ -76,8 +76,8 @@ const eliminarProducto = async(rowId) => {
     })
 }
 
-const modificarItem = async(tipo, rowId, productoId, precio = '') => {
-    obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item/${tipo}/${rowId}/${precio}`)
+const modificarItem = async(tipo, rowId, productoId, precio = '', cantidad = 1) => {
+    obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item?tipo=${tipo}&row_id=${rowId}&precio=${precio}&cantidad=${cantidad}`)
     .then(resultado => {
         mostrarNotificacion({
             tipo: 'carrito_nuevo_producto',

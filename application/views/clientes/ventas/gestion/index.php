@@ -9,7 +9,7 @@
                 <div class="card-body card-body--padding--1">
                     <div class="form-row">
                         <div class="col-12 p-2">
-                            <label for="cliente_bodega">Bodega *</label>
+                            <label for="cliente_bodega">Bodega preferida</label>
                             <select id="cliente_bodega" class="form-control"></select>
                         </div>
                     </div>
