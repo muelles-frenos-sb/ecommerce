@@ -27,7 +27,10 @@
                         </div>
                     </td>
                     <td class="cart-table__column cart-table__column--product">
-                        <a href="" class="cart-table__product-name"><?php echo $producto->notas; ?></a>
+                        <a href="#" class="cart-table__product-name"><?php echo $producto->notas; ?></a>
+                        <div class="spec__disclaimer" style="margin: 5px">
+                            <?php echo "Ref: $producto->referencia"; ?>
+                        </div>
                     </td>
                     <td class="cart-table__column cart-table__column--price" data-title="Precio">
                         <!-- Si la lista de precios es F005 (Personalizada) -->
