@@ -11,7 +11,8 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($this->cart->contents() as $item) {
+            <?php
+            foreach (array_reverse($this->cart->contents(), true) as $item) {
                 $producto = $this->productos_model->obtener('productos', [
                     'id' => $item['id'],
                     'omitir_bodega' => true,
