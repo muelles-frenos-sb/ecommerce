@@ -163,7 +163,7 @@
                 actualizarPrecioUnitario(productoId)
                 actualizarSubtotal(productoId)
             },
-            ordering: false,
+            ordering: true,
             orderCellsTop: true,
             pageLength: 100,
             paging: false,
