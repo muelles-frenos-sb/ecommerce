@@ -13,47 +13,59 @@ Class Email_model extends CI_Model {
     }
 
     function enviar($datos) {
-        $configuracion = $this->config->item('datos_email');
         if(ENVIRONMENT != 'production') $datos['destinatarios'] = 'johnarleycano@hotmail.com';
-
-        // Preparando el mensaje
-        $this->email->initialize($configuracion);
-        $this->email->from($configuracion['smtp_user'], "Tienda - Simón Bolívar");
-        $this->email->bcc(array('johnarleycano@hotmail.com'));
-        $this->email->to($datos['destinatarios']);
-        $this->email->subject($datos['asunto']);
-        $this->email->set_newline("\r\n");
 
         // Se organiza la plantilla
 	    $mensaje = file_get_contents("application/views/email/plantilla.php");
         $mensaje = str_replace('{TITULO}', $datos['cuerpo']['titulo'], $mensaje);
         $mensaje = str_replace('{SUBTITULO}', $datos['cuerpo']['subtitulo'], $mensaje);
-        
+
         if($datos['pedido_completo']) {
             $mensaje = str_replace('{DETALLE_PEDIDO}', file_get_contents(site_url("interfaces/carrito/{$datos['id']}")), $mensaje);
         } else {
             $mensaje = str_replace('{DETALLE_PEDIDO}', '', $mensaje);
         }
 
-        $this->email->message($mensaje);
+        // Para producción enviará emails a través de Microsoft Graph
+        if(ENVIRONMENT == 'production') {
+            $peticion_token = $this->microsoft_graph->obtener_token();
+            $token = $peticion_token['respuesta']['access_token'];
 
-        // Si tiene archivos adjuntos
-        if(isset($datos['adjuntos']) && $datos['adjuntos']) {
-            $directorio = "./archivos/solicitudes_credito/{$datos['id']}/";
+            $datos = [
+                'message' => [
+                    "subject" => $datos['asunto'],
+                    "body" => [
+                        "contentType" => "html",
+                        "content" => $mensaje
+                    ],
+                    "toRecipients" => [
+                        [
+                            "emailAddress" => [
+                                "address" => $datos['destinatarios']
+                            ]
+                        ]
+                    ]
+                ]
+            ];
 
-            $archivos = directory_map($directorio);
+            return $this->microsoft_graph->enviar_email($token, $datos);
+        } else {
+            // Preparando el mensaje
+            $configuracion = $this->config->item('datos_email');
+            $this->email->initialize($configuracion);
+            $this->email->from($configuracion['smtp_user'], "Tienda - Simón Bolívar");
+            $this->email->bcc(array('johnarleycano@hotmail.com'));
+            $this->email->to($datos['destinatarios']);
+            $this->email->subject($datos['asunto']);
+            $this->email->set_newline("\r\n");
 
-            // Recorrer y adjuntar los archivos al email
-            foreach ($archivos as $archivo) {
-                $ruta_completa = $directorio.$archivo;
-                $this->email->attach($ruta_completa);
-            }
+            $this->email->message($mensaje);
+
+            // Envío del mensaje
+            $this->email->send();
+
+            return $this->email->print_debugger();
         }
-       
-        // Envío del mensaje
-        $this->email->send();
-
-		return $this->email->print_debugger();
     }
 }
 /* Fin del archivo Email_model.php */

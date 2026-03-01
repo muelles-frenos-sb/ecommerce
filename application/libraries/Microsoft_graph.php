@@ -60,6 +60,18 @@ class Microsoft_graph {
         return null;
     }
 
+    /**
+     * Envía correos electrónicos
+     */
+    function enviar_email($token, $datos) {
+        $this->ci =& get_instance();
+        $this->email_usuario = $this->ci->config->item('email_usuario_tienda', 'microsoft_graph');
+
+        $url = "https://graph.microsoft.com/v1.0/users/{$this->email_usuario}/sendMail";
+
+        return $this->enviar_peticion($url, json_encode($datos), $token);
+    }
+
     function obtener_mensajes_con_adjuntos($token, $carpeta_id, $fecha_inicio = null, $fecha_fin = null) {
         $filtros = ["hasAttachments eq true"];
 
@@ -107,7 +119,7 @@ class Microsoft_graph {
          
         if(!empty($datos)) {
             curl_setopt($peticion, CURLOPT_POST, true);
-            curl_setopt($peticion, CURLOPT_POSTFIELDS, http_build_query($datos));
+            curl_setopt($peticion, CURLOPT_POSTFIELDS, $datos);
         } 
         
         curl_setopt($peticion, CURLOPT_URL, $url);

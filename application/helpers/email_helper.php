@@ -369,7 +369,7 @@ function enviar_email_solicitud_garantia($id) {
     // Se obtiene una referencia del objeto Controlador
     $instancia = get_instance();
 
-    $instancia->load->model(['email_model']);
+    $instancia->load->model(['email_model', 'logistica_model']);
 
     $solicitud = $instancia->logistica_model->obtener('productos_solicitudes_garantia', ['id' => $id]);
 

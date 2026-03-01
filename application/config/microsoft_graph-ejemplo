@@ -1,0 +1,10 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+// Configuración de Microsoft Graph API
+$config['client_id'] = '';
+$config['client_secret'] = '';
+$config['tenant_id'] = '';
+$config['scope'] = 'https://graph.microsoft.com/.default';
+$config['email_usuario'] = '';
+$config['email_usuario_tienda'] = '';
