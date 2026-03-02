@@ -49,12 +49,18 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
      * 500: En los días 1 a 5 del mes, cuando la fecha de recaudo sea de meses anteriores 
      */
     $centro_operativo = 400; // eCommerce (por defecto)
+    $fecha_documento_contable = date('Ymd'); // Fecha de hoy (por defecto)
 
     // Si es pago con importación de archivo plano o con comprobantes
     if($recibo->recibo_tipo_id == 5 || $recibo->recibo_tipo_id == 3) {
         if($recibo->mes_consignacion == date('m')) $centro_operativo = 100; // Si el mes de consignación es este mes
         if($recibo->dia_consignacion >= 6) $centro_operativo = 100; // Si el día de consignación es a partir del día 6
-        if($recibo->mes_consignacion != date('m') && $recibo->dia_consignacion <= 5) $centro_operativo = 500; // Si el mes de consignación es diferente al actual y el día está entre 1 y 5
+        
+        // Si el mes de consignación es diferente al actual y estamos en los primeros cinco días del mes
+        if($recibo->mes_consignacion != date('m') && date('d') <= 5) {
+            $centro_operativo = 500;
+            $fecha_documento_contable = date('Ymt', strtotime('last month')); // Último día del mes anterior
+        }
     }
 
     // Se recorre cada ítem
@@ -162,7 +168,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
                 "F350_ID_CO" => $centro_operativo,
                 "F350_ID_TIPO_DOCTO" => 'FRC',
                 "F350_CONSEC_DOCTO" => 1,
-                "F350_FECHA" => date('Ymd'),
+                "F350_FECHA" => $fecha_documento_contable,
                 "F350_ID_TERCERO" => $recibo->documento_numero,
                 "F350_ID_CLASE_DOCTO" => 30,
                 "F350_IND_ESTADO" => ($recibo->recibo_tipo_id == 3 || $recibo->recibo_tipo_id == 5) ? 0 : 1, // 0: En elaboración; 1: Aprobado; 2: Anulado
@@ -237,6 +243,12 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
                 $paquete_documento_contable
             ]
         ]);
+
+        // Se marca el recibo con error, para que no lo vuelva a procesar hasta que se corrija
+        $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
+            'recibo_estado_id' => 5,
+            'comentarios' => $resultado_documento_contable->detalle[0]->f_detalle
+        ]);
         
         $respuesta['documento_contable'] = $detalle_resultado_documento_contable;
     } else {
@@ -253,6 +265,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
             'numero_siesa' => $numero_recibo,
             'recibo_estado_id' => 1,
+            'comentarios' => '',
             'fecha_actualizacion_bot' => date('Y-m-d H:i:s')
         ]);
 
