@@ -23,7 +23,7 @@ function enviar_email_asignacion_credito($id) {
                 Haz <a href='$url' style='color: #ffd400; text-decoration: none;'>clic aquí</a> para ingresar a la solicitud
             ",
         ],
-        'destinatarios' => $solicitud->email_usuario_asignado,
+        'destinatarios' => [$solicitud->email_usuario_asignado],
     ];
 
     $CI->email_model->enviar($datos);
@@ -110,6 +110,7 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
     $datos = [
         'pedido_completo' => '',
         'id' => $cliente->nit,
+        'omitir_plantilla' => false,
 
         'asunto' => "Solicitud Certificado de Retención en la fuente, Reteiva y Reteica año $cliente->anio",
 
@@ -162,7 +163,8 @@ function enviar_email_masivo_notificacion_certificados($cliente) {
     ];
 
     // Envío
-    $envio = $CI->email_model->enviar($datos);
+    // $envio = $CI->email_model->enviar($datos);
+    $envio = true;
 
     if (!$envio) return ['exito' => false, 'mensaje' => 'Error al enviar el email'];
 
@@ -192,7 +194,7 @@ function enviar_email_clave_cambiada($id) {
                 Ahora puedes <a href='$url' style='color: #ffd400; text-decoration: none;'>iniciar sesión haciendo clic aquí</a>
             ",
         ],
-        'destinatarios' => $usuario->email,
+        'destinatarios' => [$usuario->email],
     ];
 
     return $CI->email_model->enviar($datos);
@@ -218,7 +220,7 @@ function enviar_email_codigo_otp($id) {
                 Hola, $codigo->nombres. Este es el código de validación que solicitaste.<br>
             ",
         ],
-        'destinatarios' => $codigo->email,
+        'destinatarios' => [$codigo->email],
     ];
 
     return $CI->email_model->enviar($datos);
@@ -243,7 +245,7 @@ function enviar_email_pedido($recibo) {
             'titulo' => $mensajes_estado_wompi['titulo'],
             'subtitulo' => $mensajes_estado_wompi['subtitulo'],
         ],
-        'destinatarios' => $recibo->email,
+        'destinatarios' => [$recibo->email],
     ];
 
     $CI->email_model->enviar($datos);
@@ -304,7 +306,7 @@ function enviar_email_factura_wompi_comprobante($recibo) {
             También te queremos recordar que puedes hacer el pago directo a través de nuestra página web <a href='$url' style='color: #ffd400; text-decoration: none;'>www.repuestossimonbolivar.com</a>.
             .",
         ],
-        'destinatarios' => $recibo->email,
+        'destinatarios' => [$recibo->email],
     ];
 
     $CI->email_model->enviar($datos);
@@ -330,7 +332,7 @@ function enviar_email_usuario_nuevo($id) {
                 Ahora puedes <a href='$url' style='color: #ffd400; text-decoration: none;'>iniciar sesión haciendo clic aquí</a>
             ",
         ],
-        'destinatarios' => $usuario->email,
+        'destinatarios' => [$usuario->email],
     ];
 
     return $CI->email_model->enviar($datos);
