@@ -151,7 +151,7 @@
                         <input type="text" id="filtro_comentarios" class="form-control form-control-sm border-secondary">
                     `, 
                     data: null,
-                    visible: ($('#recibo_id_tipo').val() == 3), // Visible si es comprobantes
+                    visible: ($('#recibo_id_tipo').val() == 3 || $('#recibo_id_tipo').val() == 2), // Visible si es comprobantes o pagos en línea
                     render: (recibo, type, row) => {
                         let comentarios = recibo.comentarios || ''
                         return `${comentarios}`
