@@ -30,6 +30,28 @@ Class Logistica_model extends CI_Model {
 	 */
 	function obtener($tabla, $datos = null) {
 		switch ($tabla) {
+            case 'pedido_detalle':
+                $filtros_where = "WHERE 1=1";
+
+                if(isset($datos['id_pedido'])) $filtros_where .= " AND p.f430_rowid = '{$datos['id_pedido']}' ";
+
+                $order_by = "ORDER BY p.f431_rowid ASC";
+                
+                $sql = 
+                "SELECT
+                    p.*,
+                    CONCAT_WS('-', p.f430_id_co_fact, p.f430_id_tipo_docto, p.f430_consec_docto) AS numero,
+                    p.f200_nit_pedido_rem           AS nit,
+                    p.f200_razon_social_pedido_rem  AS razon_social,
+                    p.f430_num_docto_referencia     AS orden_compra,
+                    p.f430_usuario_creacion         AS creador
+                FROM erp_ventas_pedidos p
+                $filtros_where
+                $order_by";
+
+                return $this->db->query($sql)->result();
+            break;
+
             case 'pedidos':
                 $limite = "";
                 if (isset($datos['cantidad'])) $limite = "LIMIT {$datos['cantidad']}";
@@ -90,7 +112,8 @@ Class Logistica_model extends CI_Model {
                     p.f430_num_docto_referencia orden_compra,
                     p.f430_usuario_creacion creador,
                     COUNT(*) AS items,
-                    SUM(p.f431_vlr_neto) AS valor
+                    SUM(p.f431_vlr_neto) AS valor,
+                    p.f430_rowid
                 FROM erp_ventas_pedidos p
                 $filtros_where
                 GROUP BY p.f430_rowid

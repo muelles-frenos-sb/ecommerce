@@ -80,6 +80,13 @@ class Logistica extends MY_Controller {
      */
     function pedidos() {
         switch ($this->uri->segment(3)) {
+            case 'detalle':
+                $id_pedido = $this->uri->segment(4);
+                $this->data['pedido_detalle'] = $this->logistica_model->obtener("pedido_detalle", ['id_pedido' => $id_pedido]);
+
+                $this->load->view('logistica/pedidos/detalle', $this->data);
+                break;
+
             case 'ver':
                 $this->data['contenido_principal'] = 'logistica/pedidos/index';
                 $this->load->view('core/body', $this->data);

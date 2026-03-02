@@ -9,6 +9,28 @@
 <!-- Inicialización de la tabla -->
 <table class="table-striped table-bordered" id="tabla_pedidos"></table>
 
+<!-- Modal vacío -->
+<div class="modal fade" id="modal_pedido_detalle" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Detalle del pedido</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal_pedido_body">
+                <div class="text-center">
+                    <i class="fa fa-spinner fa-spin"></i> Cargando...
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $().ready(async () => {
         tablaPedidos = $("#tabla_pedidos").DataTable({
@@ -87,23 +109,34 @@
                     data: 'valor',
                     className: 'text-right',
                     render: function(data, type, row) {
-
                         if (type === 'display' || type === 'filter') {
                             return parseFloat(data || 0).toLocaleString('es-CO');
                         }
-
                         return data; // para ordenar correctamente
+                    }
+                },
+                {
+                    title: 'Acciones',
+                    data: null, 
+                    orderable: false,
+                    render: (data, type, row) => {
+                        return `
+                            <div class="dt-buttons-gap">
+                                <button class="btn btn-sm btn-primary btn-ver-pedido" data-id="${data.f430_rowid}" title="Ver pedido">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
+                        `
                     }
                 }
             ],
             columnDefs: [
-                { targets: '_all', className: 'dt-head-center p-1' } // Todo el encabezado alineado al centro
+                { targets: '_all', className: 'dt-head-center p-1' }
             ],
             deferRender: true,
             fixedHeader: true,
             info: true,
             initComplete: function () {
-                // Cuando un campo de filtro personalizado cambie, se redibuja la tabla
                 $(`input[id^='filtro_'], select[id^='filtro_']`).on('keyup change', () => tablaPedidos.draw())
             },
             language: {
@@ -123,6 +156,18 @@
             searching: false,
             serverSide: true,
             stateSave: false,
+        })
+
+        // Abrir modal con detalle del pedido
+        $(document).on('click', '.btn-ver-pedido', function() {
+            const id = $(this).data('id')
+
+            $('#modal_pedido_body').html('<div class="text-center"><i class="fa fa-spinner fa-spin"></i> Cargando...</div>')
+            $('#modal_pedido_detalle').modal('show')
+
+            $.get(`${$("#site_url").val()}logistica/pedidos/detalle/${id}`, function(response) {
+                $('#modal_pedido_body').html(response)
+            })
         })
     })
 </script>
