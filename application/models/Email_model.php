@@ -13,7 +13,7 @@ Class Email_model extends CI_Model {
     }
 
     function enviar($datos) {
-        if(ENVIRONMENT != 'production') $datos['destinatarios'] = 'johnarleycano@hotmail.com';
+        if(ENVIRONMENT != 'production') $datos['destinatarios'] = ['johnarleycano@hotmail.com'];
 
         // Se organiza la plantilla
 	    $mensaje = file_get_contents("application/views/email/plantilla.php");
@@ -31,24 +31,36 @@ Class Email_model extends CI_Model {
             $peticion_token = $this->microsoft_graph->obtener_token();
             $token = $peticion_token['respuesta']['access_token'];
 
-            $datos = [
+            $lista_destinatarios = [];
+
+            // Preparación de los destinatarios
+            foreach ($datos['destinatarios'] as $correo) {
+                $lista_destinatarios[] = [
+                    "emailAddress" => [
+                        "address" => trim($correo)
+                    ]
+                ];
+            }
+
+            $datos_email = [
                 'message' => [
                     "subject" => $datos['asunto'],
                     "body" => [
                         "contentType" => "html",
                         "content" => $mensaje
                     ],
-                    "toRecipients" => [
+                    "toRecipients" => $lista_destinatarios,
+                    "bccRecipients" => [
                         [
-                            "emailAddress" => [
-                                "address" => $datos['destinatarios']
+                                "emailAddress" => [
+                                    "address" => "johnarleycano@hotmail.com"
                             ]
                         ]
-                    ]
-                ]
+                    ],
+                ],
             ];
-
-            return $this->microsoft_graph->enviar_email($token, $datos);
+            
+            return $this->microsoft_graph->enviar_email($token, $datos_email);
         } else {
             // Preparando el mensaje
             $configuracion = $this->config->item('datos_email');
