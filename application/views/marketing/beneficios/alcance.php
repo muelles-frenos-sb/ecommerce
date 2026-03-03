@@ -13,7 +13,7 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
 </div>
 
 <div class="block">
-    <div class="container container--max--xl">
+    <div class="container-fluid">
         <div class="row">
             <!-- Columna izquierda: selector de alcance y búsqueda -->
             <div class="col-lg-3">
@@ -26,7 +26,6 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
                                 <option value="productos_especificos" <?php echo ($alcance_tipo == 'productos_especificos' ? 'selected' : ''); ?>>Productos específicos</option>
                             </select>
                         </div>
-                        <button class="btn btn-success btn-block" onclick="javascript:guardarAlcanceTipo()">Guardar alcance</button>
                     </div>
                 </div>
 
@@ -126,14 +125,18 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
         })
     }
 
-    agregarProductoAlBeneficio = async (productoId, referencia, descripcion) => {
-        console.log(productoId, referencia, descripcion)
+    agregarProductoAlBeneficio = async (productoId, referencia, descripcion, btn) => {
         let beneficioId = $("#beneficio_id").val()
+        let fila = $(btn).closest('tr')
+        let valorTipo = fila.find('.valor_tipo_input').val()
+        let valor = fila.find('.valor_input').val()
 
         let respuesta = await consulta('crear', {
             tipo: 'marketing_beneficios_productos',
             beneficio_id: beneficioId,
-            producto_id: productoId
+            producto_id: productoId,
+            valor_tipo: valorTipo,
+            valor: valor
         }, false)
 
         if (respuesta && respuesta.resultado) {
@@ -147,7 +150,7 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
     $().ready(function() {
         let beneficioId = $("#beneficio_id").val()
 
-        // Mostrar/ocultar paneles al cambiar el select
+        // Mostrar/ocultar paneles al cambiar el select y guardar automáticamente
         $("#alcance_tipo").change(function() {
             if ($(this).val() === 'productos_especificos') {
                 $("#panel_buscar_productos").show()
@@ -158,6 +161,7 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
                 $("#panel_toda_tienda").show()
                 $("#panel_productos_especificos").hide()
             }
+            guardarAlcanceTipo()
         })
 
         // Si ya es productos específicos, cargar los seleccionados

@@ -319,6 +319,7 @@ if($id_importacion) {
             numero_orden_compra: $('#numero_orden_compra').val(),
             nit:                 $('#nit_proveedor_search').val(),
             razon_social:        $('#razon_social').val(), 
+            nit: $('#nit_proveedor_search').val(),
             
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     

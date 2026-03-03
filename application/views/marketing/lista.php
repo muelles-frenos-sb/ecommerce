@@ -17,36 +17,6 @@
 
 <input type="file" class="d-none" id="importar_archivo" onchange="importarCampanias()" accept=".xlsx,.xls,.csv">
 
-<div class="modal fade" id="modal_prueba_whatsapp" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title">
-                    <i class="fa fa-whatsapp"></i> Enviar prueba de WhatsApp
-                </h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="form_prueba_whatsapp" onsubmit="event.preventDefault(); ejecutarEnvioPrueba();">
-                    <input type="hidden" id="id_campania_prueba">
-                    <div class="form-group">
-                        <label for="telefono_prueba" class="font-weight-bold">Número de teléfono destino:</label>
-                        <input type="number" class="form-control form-control-lg" id="telefono_prueba" placeholder="Ej: 3206335588" value="<?php print_r($this->session->userdata('celular')); ?>" required>
-                    </div>
-                    <div id="contenedor_variables_prueba"></div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-info" onClick="ejecutarEnvioPrueba()">
-                    <i class="fa fa-paper-plane"></i> Enviar Prueba
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
     let campania_id = null
@@ -95,83 +65,47 @@
     // ==========================================
     // SECCIÓN 2: MENSAJE DE PRUEBA
     // ==========================================
-    const abrirModalPrueba = (id) => {
-        $('#id_campania_prueba').val(id)
-        $('#contenedor_variables_prueba').html('')
-
-        $.ajax({
-            url: `${$("#site_url").val()}marketing/obtener_variables_campania`,
-            method: 'POST',
-            data: { campania_id: id },
-            dataType: 'json',
-            success: function(respuesta) {
-                if (respuesta.exito && respuesta.cantidad > 0) {
-                    let html = ''
-                    for (let i = 1; i <= respuesta.cantidad; i++) {
-                        html += `
-                            <div class="form-group">
-                                <label for="variable_prueba_${i}" class="font-weight-bold">Variable ${i}:</label>
-                                <input type="text" class="form-control" id="variable_prueba_${i}" placeholder="Variable ${i}">
-                            </div>
-                        `
-                    }
-                    $('#contenedor_variables_prueba').html(html)
-                }
-                $('#modal_prueba_whatsapp').modal('show')
-                setTimeout(() => { $('#telefono_prueba').focus() }, 500)
-            },
-            error: function() {
-                $('#modal_prueba_whatsapp').modal('show')
-                setTimeout(() => { $('#telefono_prueba').focus() }, 500)
-            }
-        })
-    }
-
-    const ejecutarEnvioPrueba = () => {
-        let id = $('#id_campania_prueba').val()
-        let telefono = $('#telefono_prueba').val()
-
-        if (!telefono) {
-            mostrarAviso('alerta', 'Debes ingresar un número de teléfono.')
-            return false
-        }
-
-         let datos = { campania_id: id, telefono: telefono }
-
-        // Recoger variables dinámicas ingresadas por el usuario
-        for (let i = 1; i <= 6; i++) {
-            let input = $(`#variable_prueba_${i}`)
-            if (input.length) {
-                datos[`variable_${i}`] = input.val()
-            }
-        }
-
-        $('#modal_prueba_whatsapp').modal('hide')
-
+    const ejecutarEnvioPrueba = (id) => {
         Swal.fire({
-            title: 'Enviando prueba...',
-            text: 'Conectando con WhatsApp API',
-            didOpen: () => { Swal.showLoading() },
-            allowOutsideClick: false
-        })
-
-        $.ajax({
-            url: `${$("#site_url").val()}marketing/enviar_prueba_whatsapp`,
-            method: 'POST',
-            data: datos,
-            dataType: 'json',
-            success: function(respuesta) {
-                Swal.close()
-                if (respuesta.exito) {
-                    mostrarAviso('exito', 'Mensaje de prueba enviado correctamente.')
-                } else {
-                    mostrarAviso('error', respuesta.mensaje || 'Error al enviar.')
-                }
-            },
-            error: function() {
-                Swal.close()
-                mostrarAviso('error', 'Error de conexión con el servidor.')
+            title: 'Enviar prueba',
+            input: 'text',
+            inputLabel: 'Número de teléfono',
+            inputPlaceholder: 'Ej: 573001234567',
+            showCancelButton: true,
+            confirmButtonText: 'Enviar',
+            cancelButtonText: 'Cancelar',
+            inputValidator: (value) => {
+                if (!value) return 'Por favor ingresa un número de teléfono.'
+                if (!/^\d{7,15}$/.test(value.trim())) return 'El número debe contener solo dígitos (entre 7 y 15).'
             }
+        }).then((result) => {
+            if (!result.isConfirmed) return
+
+            Swal.fire({
+                title: 'Enviando prueba...',
+                text: 'Conectando con WhatsApp API',
+                didOpen: () => { Swal.showLoading() },
+                allowOutsideClick: false
+            })
+
+            $.ajax({
+                url: `${$("#site_url").val()}marketing/enviar_prueba_whatsapp`,
+                method: 'POST',
+                data: { campania_id: id, telefono_prueba: result.value },
+                dataType: 'json',
+                success: function(respuesta) {
+                    Swal.close()
+                    if (respuesta.exito) {
+                        mostrarAviso('exito', 'Mensaje de prueba enviado correctamente.')
+                    } else {
+                        mostrarAviso('error', respuesta.mensaje || 'Error al enviar.')
+                    }
+                },
+                error: function() {
+                    Swal.close()
+                    mostrarAviso('error', 'Error de conexión con el servidor.')
+                }
+            })
         })
     }
 
@@ -385,7 +319,7 @@
 
                                 <button class="btn btn-sm btn-info"
                                         title="Enviar mensaje de prueba"
-                                        onclick="abrirModalPrueba(${data.id})">
+                                        onclick="ejecutarEnvioPrueba(${data.id})">
                                     <i class="fa fa-paper-plane"></i>
                                 </button>
 
