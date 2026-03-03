@@ -7,7 +7,7 @@
 </div>
 
 <div class="block">
-    <div class="container container--max--xl">
+    <div class="container container-fluid">
         <div class="row mb-4">
             <div class="col-3">
                 <a class="btn btn-success" href="<?php echo site_url('logistica/pedidos/reglas_facturacion/crear'); ?>">Crear regla</a>

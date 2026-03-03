@@ -186,14 +186,13 @@ class Marketing extends MY_Controller
                 $this->data['contenido_principal'] = 'marketing/beneficios/detalle';
                 $this->load->view('core/body', $this->data);
                 break;
-            case 'ver':
-                $this->data['contenido_principal'] = 'marketing/beneficios/index';
-                $this->load->view('core/body', $this->data);
-                break;
-
             case 'alcance':
                 $this->data['id'] = $this->uri->segment(4);
                 $this->data['contenido_principal'] = 'marketing/beneficios/alcance';
+                $this->load->view('core/body', $this->data);
+                break;
+            case 'ver':
+                $this->data['contenido_principal'] = 'marketing/beneficios/index';
                 $this->load->view('core/body', $this->data);
                 break;
         }
@@ -651,7 +650,7 @@ class Marketing extends MY_Controller
         }
 
         $campania_id = $this->input->post('campania_id');
-        $numero_telefonico = $this->input->post('telefono');
+        $telefono_prueba = trim($this->input->post('telefono_prueba'));
 
         // 2. Obtener datos de la campaña (necesitamos el nombre de la plantilla)
         $campania = $this->db->get_where('marketing_campanias', ['id' => $campania_id])->row();
@@ -669,31 +668,31 @@ class Marketing extends MY_Controller
             return;
         }
 
+        if (empty($telefono_prueba) || !preg_match('/^\d{7,15}$/', $telefono_prueba)) {
+            echo json_encode(['exito' => false, 'mensaje' => 'Debe ingresar un número de teléfono válido (solo dígitos, entre 7 y 15 caracteres).']);
+            return;
+        }
+
         try {
             $ruta_imagen = (ENVIRONMENT == 'production') ? base_url() . "archivos/campanias/$campania->id/$campania->nombre_imagen" : 'https://repuestossimonbolivar.com/archivos/campanias/imagen_prueba.jpg';
-            
-            $parametros = [];
-            for ($i = 1; $i <= 6; $i++) {
-                $valor = $this->input->post("variable_{$i}");
-                if ($valor !== null && $valor !== '') {
-                    $parametros[] = $valor;
-                }
+
+            // Buscar el primer contacto de la campaña para usar sus datos de plantilla en la prueba
+            $contacto = $this->db->where('campania_id', $campania_id)->order_by('id', 'ASC')->limit(1)->get('marketing_campanias_contactos')->row();
+
+            if (!$contacto) {
+                echo json_encode(['exito' => false, 'mensaje' => 'Esta campaña no tiene contactos registrados.']);
+                return;
             }
+
+            $numero_telefonico = $telefono_prueba;
+            
+            // Preparar variables dinámicas desde la base de datos
+            $parametros = $this->extraer_variables_contacto($contacto);
 
             // $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, 'https://i0.wp.com/devimed.com.co/wp-content/uploads/2023/03/devimed.png');
             $resultado = $this->whatsapp_api->enviar_mensaje_con_imagen($numero_telefonico, $nombre_plantilla, 'es_CO', $ruta_imagen, $parametros);
             if ($resultado) {
-                $this->configuracion_model->crear('logs', [
-                    'log_tipo_id' => 101,
-                    'fecha_creacion' => date('Y-m-d H:i:s'),
-                    'observacion' => json_encode([
-                        'tipo' => 'Envio WhatsApp',
-                        'resultado' => $resultado
-                    ]),
-                ]);
                 echo json_encode(['exito' => true, 'mensaje' => 'Enviado']);
-                
-            } else {
                 $this->configuracion_model->crear('logs', [
                     'log_tipo_id' => 101,
                     'fecha_creacion' => date('Y-m-d H:i:s'),
@@ -702,10 +701,10 @@ class Marketing extends MY_Controller
                         'resultado' => $resultado
                     ]),
                 ]);
+            } else {
                 echo json_encode(['exito' => false, 'mensaje' => 'La API de WhatsApp rechazó el envío.']);
             }
         } catch (Exception $e) {
-            
             echo json_encode(['exito' => false, 'mensaje' => 'Error interno: ' . $e->getMessage()]);
         }
     }
@@ -833,31 +832,5 @@ class Marketing extends MY_Controller
         ]);
     }
 
-
-    public function obtener_variables_campania()
-    {
-        if (!$this->input->is_ajax_request()) show_404();
-
-        $campania_id = $this->input->post('campania_id');
-
-        if (!$campania_id) {
-            echo json_encode(['exito' => false, 'cantidad' => 0]);
-            return;
-        }
-
-        $contacto = $this->db->get_where('marketing_campanias_contactos', ['campania_id' => $campania_id])->row();
-
-        $cantidad = 0;
-        if ($contacto) {
-            for ($i = 1; $i <= 6; $i++) {
-                $campo = "variable_{$i}";
-                if (isset($contacto->$campo) && !empty($contacto->$campo)) {
-                    $cantidad++;
-                }
-            }
-        }
-
-        echo json_encode(['exito' => true, 'cantidad' => $cantidad]);
-    }
-
+    
 }

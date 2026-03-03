@@ -282,7 +282,7 @@ if($id_importacion) {
             // Datos básicos
             numero_orden_compra: $('#numero_orden_compra').val(),
             razon_social:        $('#razon_social').val(), 
-            // NOTA: El NIT de búsqueda NO se guarda en la tabla importaciones, solo sirvió para la lógica
+            nit: $('#nit_proveedor_search').val(),
             
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     
