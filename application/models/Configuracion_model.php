@@ -769,6 +769,16 @@ Class Configuracion_model extends CI_Model {
                 }
             break;
 
+            case 'terceros_agentes_carga':
+                if($datos) $this->db->where($datos);
+
+                return $this->db
+                    ->order_by('nombre')
+                    ->get($tabla)
+                    ->result()
+                ;
+            break;
+
             case 'usuarios':
                 // Filtro contador
 				$contador = (isset($datos['contador'])) ? "LIMIT {$datos['contador']}, {$this->config->item('cantidad_datos')}" : "" ;

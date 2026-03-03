@@ -115,10 +115,23 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
+                <label for="proforma">Proforma</label>
+                <input type="text" class="form-control" id="proforma" value="<?php echo ($importacion) ? $importacion->proforma : ''; ?>">
+            </div>
+
+            <div class="form-group col-md-3">
                 <label for="estado_id">Estado Actual</label>
                 <select id="estado_id" class="form-control">
                     <option value="">Seleccione...</option>
                     <?php foreach($this->configuracion_model->obtener('importaciones_estados') as $estado) echo "<option value='$estado->id'>$estado->nombre</option>"; ?>
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="agente_carga_nit">Agente de carga</label>
+                <select id="agente_carga_nit" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('terceros_agentes_carga') as $tercero_agente) echo "<option value='$tercero_agente->nit'>$tercero_agente->nombre</option>"; ?>
                 </select>
             </div>
 
@@ -316,7 +329,9 @@ if($id_importacion) {
             fecha_estimada_llegada: $('#fecha_estimada_llegada').val(),
             fecha_ingreso_siesa:    fechaSiesa,                  
             bl_awb:              $('#bl_awb').val(),
+            proforma:            $('#proforma').val(),
             importacion_estado_id:  $('#estado_id').val(),
+            agente_carga_nit:  $('#agente_carga_nit').val(),
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
@@ -357,7 +372,9 @@ if($id_importacion) {
                     fecha_estimada_llegada: <?php echo json_encode($importacion->fecha_estimada_llegada ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     fecha_ingreso_siesa: <?php echo json_encode($importacion->fecha_ingreso_siesa ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     bl_awb: <?php echo json_encode($importacion->bl_awb ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    proforma: <?php echo json_encode($importacion->proforma ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     importacion_estado_id: <?php echo json_encode($importacion->importacion_estado_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    agente_carga_id: <?php echo json_encode($importacion->agente_carga_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     moneda_preferida: <?php echo json_encode($importacion->moneda_preferida ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total: <?php echo json_encode($importacion->valor_total ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total_cop: <?php echo json_encode($importacion->valor_total_cop ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -379,7 +396,9 @@ if($id_importacion) {
                     fecha_estimada_llegada: 'Fecha Estimada Llegada',
                     fecha_ingreso_siesa: 'Fecha Ingreso SIESA',
                     bl_awb: 'BL / AWB',
+                    proforma: 'Proforma',
                     importacion_estado_id: 'Estado',
+                    agente_carga_nit: 'Agente de carga',
                     moneda_preferida: 'Moneda Preferida',
                     valor_total: 'Valor Total',
                     valor_total_cop: 'Valor Total COP',

@@ -951,3 +951,15 @@ INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (111, 'Tareas - Pr
 -- 20260220 Tablas eliminadas
 DROP TABLE wms_pedidos;
 DROP TABLE wms_pedidos_tracking;
+
+-- 20260302 Campos agregados
+ALTER TABLE `importaciones` ADD COLUMN `agente_carga_nit` varchar(50) NULL AFTER `requiere_anticipo`;
+ALTER TABLE `importaciones` ADD COLUMN `proforma` varchar(100) NOT NULL AFTER `notas_internas`;
+
+-- 20260302 Nueva tabla
+CREATE TABLE `terceros_agentes_carga`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `nit` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
