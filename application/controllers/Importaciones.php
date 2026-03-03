@@ -33,6 +33,8 @@ class Importaciones extends MY_Controller
 
     public function crear()
     {
+        if (!$this->session->userdata('usuario_id')) redirect('inicio');
+
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
     }
@@ -54,6 +56,8 @@ class Importaciones extends MY_Controller
     // --------------------------------------------------------------------
     public function editar($id_importacion)
     {
+        if (!$this->session->userdata('usuario_id')) redirect('inicio');
+        
         $this->data['contenido_principal'] = 'importaciones/crear_editar';
         $this->load->view('core/body', $this->data);
     }
