@@ -214,7 +214,7 @@ class Configuracion extends MY_Controller {
     }
 
     function comprobantes() {
-        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        if(!$this->session->userdata('usuario_id')) redirect('sesion?url=' . current_url()); 
         if(!in_array(['configuracion' => 'configuracion_comprobantes_ver'], $this->data['permisos'])) redirect('inicio');
 
         switch ($this->uri->segment(3)) {
