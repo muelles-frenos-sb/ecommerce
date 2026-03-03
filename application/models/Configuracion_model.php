@@ -346,8 +346,10 @@ Class Configuracion_model extends CI_Model {
             break;
 
             case 'importaciones_estados':
+                if($datos) $this->db->where($datos);
+
                 return $this->db
-                    ->where($datos)
+                    ->order_by('nombre')
                     ->get($tabla)
                     ->result()
                 ;
@@ -967,8 +969,9 @@ Class Configuracion_model extends CI_Model {
                 break;
 
             case 'paises':
+                if($datos) $this->db->where($datos);
+                
                 return $this->db
-                    ->where($datos)
                     ->order_by('nombre')
                     ->get('paises')
                     ->result()

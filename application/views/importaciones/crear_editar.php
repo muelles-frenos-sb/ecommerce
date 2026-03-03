@@ -92,8 +92,9 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="pais_origen">País de Origen *</label>
-                <select id="pais_origen" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
-                    <option value="">Cargando países...</option>
+                <select id="pais_origen" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('paises') as $pais) echo "<option value='$pais->id'>$pais->nombre</option>"; ?>
                 </select>
             </div>
 
@@ -115,8 +116,9 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="estado_id">Estado Actual</label>
-                <select id="estado_id" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->importacion_estado_id : ''; ?>">
-                    <option value="">Cargando estados...</option>
+                <select id="estado_id" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('importaciones_estados') as $estado) echo "<option value='$estado->id'>$estado->nombre</option>"; ?>
                 </select>
             </div>
 
@@ -484,13 +486,16 @@ if($id_importacion) {
             alert("Error al procesar: " + error);
         }
     }
-
-    $(document).ready(async function() {
-        try {
-            await listarDatos('pais_origen', { tipo: 'paises' }, $('#pais_origen').data('valor-actual'));
-            await listarDatos('estado_id', { tipo: 'importaciones_estados' }, $('#estado_id').data('valor-actual'));
-        } catch (e) {
-            console.warn("Error cargando países", e);
-        }
-    });
 </script>
+
+<?php if(isset($importacion)) { ?>
+    <script>
+        $().ready(async () => {
+            buscarOrdenCompra()
+
+            $("#pais_origen").val(<?php echo $importacion->pais_origen; ?>)
+            $("#estado_id").val(<?php echo $importacion->importacion_estado_id; ?>)
+            $("#agente_carga_nit").val(<?php echo $importacion->agente_carga_nit; ?>)
+        })
+    </script>
+<?php } ?>
