@@ -281,8 +281,8 @@ if($id_importacion) {
             
             // Datos básicos
             numero_orden_compra: $('#numero_orden_compra').val(),
+            nit:                 $('#nit_proveedor_search').val(),
             razon_social:        $('#razon_social').val(), 
-            // NOTA: El NIT de búsqueda NO se guarda en la tabla importaciones, solo sirvió para la lógica
             
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     
@@ -324,6 +324,7 @@ if($id_importacion) {
                 let cambios = [];
                 let valoresOriginales = {
                     numero_orden_compra: <?php echo json_encode($importacion->numero_orden_compra ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    nit: <?php echo json_encode($importacion->nit ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     razon_social: <?php echo json_encode($importacion->razon_social ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     contacto_principal: <?php echo json_encode($importacion->contacto_principal ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     email_contacto: <?php echo json_encode($importacion->email_contacto ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -344,6 +345,7 @@ if($id_importacion) {
                 };
                 
                 let nombresAmigables = {
+                    nit: 'NIT',
                     numero_orden_compra: 'Número Orden de Compra',
                     razon_social: 'Razón Social',
                     contacto_principal: 'Contacto Principal',
