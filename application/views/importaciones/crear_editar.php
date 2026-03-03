@@ -66,12 +66,12 @@ if($id_importacion) {
 
             <div class="form-group col-md-4">
                 <label for="contacto_principal">Contacto Principal</label>
-                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
+                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email_contacto">Email de Contacto</label>
-                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
+                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>">
             </div>
 
             <div class="form-group col-md-4">
@@ -213,11 +213,32 @@ if($id_importacion) {
             return false
         }
 
-        let ordenCompra = resultadoOrdenCompra.detalle.Table[0]
+        var valorTotalOrden = 0
 
-        // Ponemos los valores en los campos requeridos
-        $('#nit_proveedor_search').val(ordenCompra.f200_nit_prov)
-        $('#razon_social').val(ordenCompra.f200_razon_social_prov)
+        // Recorrido de las órdenes para sumar datos
+        $.each(resultadoOrdenCompra.detalle.Table, (index, registro) => {
+            valorTotalOrden += registro.f421_vlr_neto
+        })
+
+        let ordenCompra = resultadoOrdenCompra.detalle.Table[0] // Primer registro
+        let peticionTercero = await consulta('obtener', { tipo: 'terceros_local', 'nit': ordenCompra.f200_nit_prov })
+        let tercero = peticionTercero.resultado
+
+        // Solo cuando la importación es nueva, se cargan los datos por defecto
+        if('<?php echo $id_importacion; ?>' == '') {
+            // Datos de la orden de compra
+            $('#nit_proveedor_search').val(ordenCompra.f200_nit_prov)
+            $('#razon_social').val(ordenCompra.f200_razon_social_prov)
+            $('#moneda_preferida').val(ordenCompra.f420_id_moneda_docto)
+            $('#valor_total').val(valorTotalOrden)
+            $('#fecha_ingreso_siesa').val(ordenCompra.f421_fecha.split('T')[0])
+
+            // Datos del tercero
+            $('#contacto_principal').val(tercero.f015_contacto)
+            $('#email_contacto').val(tercero.f015_email)
+            $('#telefono_contacto').val(tercero.f015_celular)
+            $('#direccion').val(tercero.f015_direccion1)
+        }
 
         Swal.close()
     }

@@ -12,7 +12,7 @@ class Importaciones extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model(['importaciones_model', 'importaciones_pagos_model']);
+        $this->load->model(['importaciones_model', 'importaciones_pagos_model', 'clientes_model']);
     }
 
     // Carga la vista principal (el contenedor)
