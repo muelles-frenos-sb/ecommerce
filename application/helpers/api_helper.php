@@ -8,6 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimientos_contables = null) {
     $CI =& get_instance();
     $errores = 0;
+    $comentarios = '';
 
     $recibo = $CI->productos_model->obtener('recibo', ['id' => $id_recibo]);
 
@@ -75,6 +76,13 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
 
         // Si trae descuento, se va acumulando
         if($item->descuento > 0) $descuento += $item->descuento;
+
+        // Si la fecha del documento cruce de la factura es mayor a la fecha de consignación, entonces la fecha y el centro operativo del documento contable se cambian
+        if($item->documento_cruce_fecha > date('Y-m-d', strtotime($fecha_documento_contable))) {
+            $fecha_documento_contable = date('Ymd');
+            $centro_operativo = 100;
+            $comentarios = 'Recibo cargado en mes corriente por fecha de factura mayor a la fecha de consignación';
+        }
 
         $mes_vencimiento = str_pad($factura_cliente->mes_vencimiento, 2, '0', STR_PAD_LEFT);
         $dia_vencimiento = str_pad($factura_cliente->dia_vencimiento, 2, '0', STR_PAD_LEFT);
@@ -265,7 +273,7 @@ function crear_documento_contable($id_recibo, $datos_pago = null, $datos_movimie
         $CI->productos_model->actualizar('recibos', ['id' => $id_recibo], [
             'numero_siesa' => $numero_recibo,
             'recibo_estado_id' => 1,
-            'comentarios' => '',
+            'comentarios' => $comentarios,
             'fecha_actualizacion_bot' => date('Y-m-d H:i:s')
         ]);
 
