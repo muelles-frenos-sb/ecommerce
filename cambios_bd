@@ -963,3 +963,19 @@ CREATE TABLE `terceros_agentes_carga`  (
   `nit` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+CREATE TABLE `facturacion_reglas`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `cliente_nit` int NOT NULL,
+  `nombre` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `tipo_frecuencia` enum('diaria','semanal','mensual','personalizada') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `dia_semana` int NULL DEFAULT NULL COMMENT '1-7 (Lunes-Domingo)',
+  `dia_mes` int NULL DEFAULT NULL COMMENT '1-31',
+  `hora_programada` time NULL DEFAULT '00:00:00',
+  `activa` tinyint(1) NULL DEFAULT 1,
+  `requiere_orden_compra` tinyint(1) NULL DEFAULT 0 COMMENT '0: No; 1: Sí',
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp,
+  `fecha_modificacion` timestamp NOT NULL DEFAULT current_timestamp ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `cliente_nit`(`cliente_nit`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
