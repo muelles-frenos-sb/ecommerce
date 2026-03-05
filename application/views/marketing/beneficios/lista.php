@@ -1,12 +1,25 @@
 <style>
+    #tabla_beneficios {
+        width: 100% !important;
+    }
+
     #tabla_beneficios tbody td {
-        font-size: 0.9em;
+        font-size: 1em;
         padding: 8px;
         vertical-align: middle;
     }
+    .beneficios-action-buttons {
+        display: flex;
+        gap: 5px;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: nowrap;
+    }
 </style>
 <!-- Inicialización de la tabla -->
-<table class="table-striped table-bordered" id="tabla_beneficios"></table>
+<div class="table-responsive">
+    <table class="table-striped table-bordered w-100" id="tabla_beneficios"></table>
+</div>
 <script>
     let tablaBeneficios = null
     $().ready(async () => {
@@ -86,16 +99,18 @@
                     className: 'text-center',
                     render: (data) => {
                         return `
-                            <a class="btn btn-sm btn-primary"
-                               href="${$("#site_url").val()}marketing/beneficios/editar/${data.id}" 
-                               title="Editar beneficio">
-                                <i class="fa fa-pencil"></i>
-                            </a>
-                            <a class="btn btn-sm btn-warning ml-1"
-                               href="${$("#site_url").val()}marketing/beneficios/alcance/${data.id}" 
-                               title="Definir alcance del beneficio">
-                                <i class="fa fa-bullseye"></i> Alcance
-                            </a>
+                            <div class="beneficios-action-buttons">
+                                <a class="btn btn-sm btn-primary"
+                                   href="${$("#site_url").val()}marketing/beneficios/editar/${data.id}" 
+                                   title="Editar beneficio">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                                <a class="btn btn-sm btn-warning"
+                                   href="${$("#site_url").val()}marketing/beneficios/alcance/${data.id}" 
+                                   title="Definir alcance del beneficio">
+                                    <i class="fa fa-bullseye"></i> 
+                                </a>
+                            </div>
                         `
                     }
                 }
