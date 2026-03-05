@@ -777,6 +777,13 @@ CREATE TABLE `importaciones_estados`  (
 -- Los estados de las importaciones se cargan desde una tabla
 ALTER TABLE `importaciones` CHANGE COLUMN `estado` `importacion_estado_id` int NULL DEFAULT 1 AFTER `fecha_estimada_llegada`;
 
+-- 20260305 Ajuste fechas estimadas de llegada en importaciones
+ALTER TABLE `importaciones`
+CHANGE COLUMN `fecha_estimada_llegada` `fecha_estimada_llegada_puerto` DATE NULL;
+
+ALTER TABLE `importaciones`
+ADD COLUMN `fecha_estimada_llegada_cedi` DATE NULL AFTER `fecha_estimada_llegada_puerto`;
+
 -- Nuevos campos
 ALTER TABLE `importaciones_estados` 
 ADD COLUMN `orden` int NULL DEFAULT NULL COMMENT 'Orden en que se van a mostrar' AFTER `nombre`,

@@ -3,8 +3,8 @@
 
 $item = (object) $importacion;
 
-// Lógica de estado basada en la fecha
-$fecha_llegada = strtotime($item->fecha_estimada_llegada);
+// Lógica de estado basada en la fecha de llegada a puerto
+$fecha_llegada = strtotime($item->fecha_estimada_llegada_puerto);
 $hoy = time();
 $es_futuro = $fecha_llegada >= $hoy;
 $clase_estado = $es_futuro ? "success" : "failure"; // Verde si falta, Rojo si ya pasó la fecha
@@ -34,7 +34,7 @@ $texto_estado = $es_futuro ? "En tránsito" : "Fecha cumplida";
                 </svg>
             </div>
             <div class="status-badge__text"><?php echo $texto_estado; ?></div>
-            <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="Llegada: <?php echo $item->fecha_estimada_llegada; ?>"></div>
+            <div class="status-badge__tooltip" tabindex="0" data-toggle="tooltip" title="Llegada: <?php echo $item->fecha_estimada_llegada_puerto; ?>"></div>
         </div>
     </div>
 </div>

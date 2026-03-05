@@ -211,6 +211,14 @@ Class Configuracion_model extends CI_Model {
                 ;
             break;
 
+            case 'importaciones_cargas_tipos':
+                return $this->db
+                    ->order_by('id', 'ASC')
+                    ->get('importaciones_cargas_tipos')
+                    ->result()
+                ;
+            break;
+
             case 'centros_operacion':
                 if(!empty($datos)) $this->db->where($datos);
 

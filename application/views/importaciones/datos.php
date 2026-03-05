@@ -1,8 +1,8 @@
 <?php
 // Usamos el modelo para traer datos de la tabla 'importaciones'
 $importaciones = $this->importaciones_model->obtener('importaciones', $datos);
-
-
+?>
+<?php
 if (empty($importaciones)) { ?>
     <div class="text-center p-5">
         <div class="mb-3">
@@ -62,7 +62,7 @@ if (empty($importaciones)) { ?>
 
                         <td>
                             <?php
-                            $fecha = $item->fecha_estimada_llegada;
+                            $fecha = $item->fecha_estimada_llegada_puerto;
 
                             if ($fecha == null || $fecha == '0000-00-00' || empty($fecha)) {
                                 echo "-";

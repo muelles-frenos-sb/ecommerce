@@ -55,7 +55,7 @@ if(empty($importacion)) redirect(site_url('importaciones'));
                                 <p>
                                     <strong>País de Origen:</strong> <?php echo $importacion->pais_origen; ?><br>
                                     <strong>BL / AWB:</strong> <?php echo $importacion->bl_awb; ?><br>
-                                    <strong>F. Estimada Llegada:</strong> <?php echo ($importacion->fecha_estimada_llegada) ? date('d/m/Y', strtotime($importacion->fecha_estimada_llegada)) : 'Pendiente'; ?><br>
+                                    <strong>F. Estimada Llegada a Puerto:</strong> <?php echo ($importacion->fecha_estimada_llegada_puerto) ? date('d/m/Y', strtotime($importacion->fecha_estimada_llegada_puerto)) : 'Pendiente'; ?><br>
                                     <strong>F. Ingreso SIESA:</strong> <?php echo ($importacion->fecha_ingreso_siesa && $importacion->fecha_ingreso_siesa != '0000-00-00') ? date('d/m/Y', strtotime($importacion->fecha_ingreso_siesa)) : '-'; ?>
                                 </p>
                             </div>

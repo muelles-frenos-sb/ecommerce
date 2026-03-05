@@ -121,7 +121,7 @@ class Importaciones_model extends CI_Model
                     $this->db->order_by($datos['ordenar_por'], 'DESC');
                 } else {
                     // Por defecto: Las llegadas más lejanas primero (o cambio a DESC para ver lo más reciente creado)
-                    $this->db->order_by('i.fecha_estimada_llegada', 'DESC');
+                    $this->db->order_by('i.fecha_estimada_llegada_puerto', 'DESC');
                 }
 
                 // 6. Si solo queremos contar (para paginación)

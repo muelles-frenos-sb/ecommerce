@@ -98,8 +98,13 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
-                <label for="fecha_estimada_llegada">Fecha Estimada Llegada</label>
-                <input type="date" class="form-control" id="fecha_estimada_llegada" value="<?php echo ($importacion) ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada)) : ''; ?>">
+                <label for="fecha_estimada_llegada_puerto">Fecha Estimada Llegada a Puerto</label>
+                <input type="date" class="form-control" id="fecha_estimada_llegada_puerto" value="<?php echo ($importacion && $importacion->fecha_estimada_llegada_puerto) ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_puerto)) : ''; ?>">
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="fecha_estimada_llegada_cedi">Fecha Estimada Llegada CEDI</label>
+                <input type="date" class="form-control" id="fecha_estimada_llegada_cedi" value="<?php echo ($importacion && $importacion->fecha_estimada_llegada_cedi) ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_cedi)) : ''; ?>">
             </div>
 
             <div class="form-group col-md-3">
@@ -297,7 +302,8 @@ if($id_importacion) {
             direccion:           $('#direccion').val(),          
             
             pais_origen:         $('#pais_origen').val(),
-            fecha_estimada_llegada: $('#fecha_estimada_llegada').val(),
+            fecha_estimada_llegada_puerto: $('#fecha_estimada_llegada_puerto').val(),
+            fecha_estimada_llegada_cedi:   $('#fecha_estimada_llegada_cedi').val(),
             fecha_ingreso_siesa:    fechaSiesa,                  
             bl_awb:              $('#bl_awb').val(),
             importacion_estado_id:  $('#estado_id').val(),
@@ -338,7 +344,8 @@ if($id_importacion) {
                     telefono_contacto: <?php echo json_encode($importacion->telefono_contacto ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     direccion: <?php echo json_encode($importacion->direccion ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     pais_origen: <?php echo json_encode($importacion->pais_origen ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
-                    fecha_estimada_llegada: <?php echo json_encode($importacion->fecha_estimada_llegada ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    fecha_estimada_llegada_puerto: <?php echo json_encode($importacion->fecha_estimada_llegada_puerto ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_puerto)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    fecha_estimada_llegada_cedi: <?php echo json_encode($importacion->fecha_estimada_llegada_cedi ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_cedi)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     fecha_ingreso_siesa: <?php echo json_encode($importacion->fecha_ingreso_siesa ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     bl_awb: <?php echo json_encode($importacion->bl_awb ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     importacion_estado_id: <?php echo json_encode($importacion->importacion_estado_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -360,7 +367,8 @@ if($id_importacion) {
                     telefono_contacto: 'Teléfono de Contacto',
                     direccion: 'Dirección',
                     pais_origen: 'País de Origen',
-                    fecha_estimada_llegada: 'Fecha Estimada Llegada',
+                    fecha_estimada_llegada_puerto: 'Fecha Estimada Llegada a Puerto',
+                    fecha_estimada_llegada_cedi: 'Fecha Estimada Llegada CEDI',
                     fecha_ingreso_siesa: 'Fecha Ingreso SIESA',
                     bl_awb: 'BL / AWB',
                     importacion_estado_id: 'Estado',

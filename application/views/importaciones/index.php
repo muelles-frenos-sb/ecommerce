@@ -59,7 +59,7 @@ if(isset($parametros['busqueda'])) echo "<input type='hidden' id='filtro_busqued
                             <div class="view-options__select">
                                 <label for="view-option-sort">Ordenar por:</label>
                                 <select id="view-option-sort" class="form-control form-control-sm">
-                                    <option value="fecha_estimada_llegada">Fecha Llegada</option>
+                                    <option value="fecha_estimada_llegada_puerto">Fecha Llegada Puerto</option>
                                     <option value="valor_total">Valor Total</option>
                                     <option value="numero_orden_compra">Nro Orden</option>
                                 </select>
