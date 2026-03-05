@@ -49,6 +49,24 @@ class Carrito extends MY_Controller {
         ])]);
     }
 
+    function tiene_producto() {
+        $datos = json_decode($this->input->post('datos'), true);
+        $id = isset($datos['id']) ? $datos['id'] : null;
+
+        $existe = false;
+
+        if($id) {
+            foreach ($this->cart->contents() as $item) {
+                if(isset($item['id']) && $item['id'] == $id) {
+                    $existe = true;
+                    break;
+                }
+            }
+        }
+
+        print json_encode(['existe' => $existe]);
+    }
+
     function eliminar($row_id) {
         print json_encode(['resultado' => $this->cart->remove($row_id)]);
     }

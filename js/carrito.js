@@ -9,7 +9,7 @@ const agregarProducto = async datos => {
         lista_precio: lista_precio,
     }
 
-    obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, datosCarrito)
+    return obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, datosCarrito)
     .then(resultado => {
         mostrarNotificacion({
             tipo: 'carrito_nuevo_producto',
@@ -87,4 +87,26 @@ const modificarItem = async(tipo, rowId, productoId, precio = '', cantidad = 1) 
         actualizarCarrito(productoId)
         listarCarrito()
     })
+}
+
+const finalizarPedidoProducto = async datos => {
+    let {id, precio, referencia, unidad_inventario, lista_precio} = datos
+
+    try {
+        let respuesta = await obtenerPromesa(`${$('#site_url').val()}carrito/tiene_producto`, {id: id})
+
+        if(!respuesta.existe) {
+            await agregarProducto({
+                id: id,
+                precio: precio,
+                referencia: referencia,
+                unidad_inventario: unidad_inventario,
+                lista_precio: lista_precio,
+            })
+        }
+    } catch (error) {
+        // En caso de error al consultar o agregar, se continúa con el flujo normal
+    }
+
+    window.location.href = `${$('#site_url').val()}carrito/finalizar`
 }

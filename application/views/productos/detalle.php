@@ -141,7 +141,15 @@ if(empty($producto)) redirect(site_url(''));
                                     <div id="producto_detalle_<?php echo $producto->id; ?>"></div>
                                     
                                     <div class="product__actions">
-                                        <a class="btn btn-primary btn-lg btn-block" href="<?php echo site_url("carrito/finalizar"); ?>">
+                                        <a
+                                            class="btn btn-primary btn-lg btn-block"
+                                            href="javascript:void(0)"
+                                            onClick="javascript:finalizarPedidoProducto({
+                                                id: <?php echo $producto->id; ?>,
+                                                precio: <?php echo $producto->precio; ?>,
+                                                referencia: '<?php echo $producto->referencia; ?>',
+                                                unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
+                                            })">
                                             Finalizar pedido
                                         </a>
                                         
