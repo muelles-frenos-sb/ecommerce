@@ -245,7 +245,6 @@ generarReporte = (tipo, datos) => {
         case 'pdf/proveedores_certificado_retenciones':
             agregarLog(90, JSON.stringify(datos))
             url = `${$('#base_url').val()}reportes/${tipo}/${datos.documento_numero}/${datos.anio}`
-            location.assign(url)
         break;
 
         case 'pdf/proveedores_comprobante_egreso':
