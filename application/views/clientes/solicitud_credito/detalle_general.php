@@ -118,6 +118,14 @@ if($tipo ==="bitacora") $vista = "bitacora/index";
             bloqueo_cupo: 1,
         }
 
+        // Asignación de segmento
+        datosTerceroSiesa.criterio_cliente = {
+            f207_id_tercero: solicitud.documento_numero,
+            f207_id_sucursal: '001',
+            f207_id_plan_criterios: solicitud.segmento_plan,
+            f207_id_criterio_mayor: solicitud.segmento_mayor,
+        }
+
         // Se consulta en el ERP el tercero y el cliente
         var consultaTercero = await consulta('obtener', {tipo: 'terceros', numero_documento: solicitud.documento_numero}, false)
         var consultaTerceroCliente = await consulta('obtener', {tipo: 'clientes_sucursales', numero_documento: solicitud.documento_numero}, false)

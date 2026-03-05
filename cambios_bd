@@ -979,3 +979,6 @@ CREATE TABLE `facturacion_reglas`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `cliente_nit`(`cliente_nit`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- 20260304 Campo agregado
+ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `segmento_id` int NULL AFTER `cupo_asignado`;

@@ -691,6 +691,16 @@ if (isset($datos['id'])) {
                     </div>
                 </div>
 
+                <div class="form-row">
+                    <div class="form-group col-12">
+                        <label for="solicitud_segmento_id">Selecciona un segmento *</label>
+                        <select id="solicitud_segmento_id" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach($this->configuracion_model->obtener('segmentos') as $segmento) echo "<option value='$segmento->id' data-plan='$segmento->plan' data-mayor='$segmento->mayor'>$segmento->plan - $segmento->nombre</option>"; ?>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="form-row mt-2 alert alert-primary" role="alert">
                     <label class="form-check-label col-md-12 mt-2" for="solicitud_preferencia_enlace1">
                         Deseo recibir el enlace para firmar la solicitud por:
@@ -740,6 +750,20 @@ if (isset($datos['id'])) {
         </div>
     </div>
 </div>
+
+<?php if(isset($solicitud)) { ?>
+    <script>
+        $().ready(async () => {
+            $("#solicitud_persona_tipo").val(<?php echo $solicitud->persona_tipo_id; ?>).trigger("change")
+            $("#vendedor_id").val(<?php echo $solicitud->tercero_vendedor_id ?>)
+            $("#solicitud_segmento_id").val(<?php echo $solicitud->segmento_id; ?>)
+            await listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
+            $("#solicitud_departamento").val('<?php echo $solicitud->departamento_codigo; ?>')
+            await listarDatos('solicitud_municipio', {tipo: 'municipios', departamento_id: $('#solicitud_departamento').val()})
+            $("#solicitud_municipio").val('<?php echo $solicitud->municipio_codigo; ?>')
+        })
+    </script>
+<?php } ?>
 
 <script>
     agregarCamposClientesSociosAccionistas = (elemento) => {
@@ -864,6 +888,7 @@ if (isset($datos['id'])) {
             $('#solicitud_departamento'),
             $('#solicitud_fecha_expedicion'),
             $('#vendedor_id'),
+            $('#solicitud_segmento_id'),
         ]
 
         // Si es persona natural, incluir campos obligatorios
@@ -963,6 +988,7 @@ if (isset($datos['id'])) {
             tercero_vendedor_id: $('#vendedor_id').val(),
             cantidad_vehiculos: $("#solicitud_cantidad_vehiculos").val(),
             token: generarToken(),  // Token para que la solicitud sea única
+            segmento_id: $("#solicitud_segmento_id").val(),
         }
 
         $('#btn_enviar_solicitud').prop("disabled", true)
@@ -1082,6 +1108,10 @@ if (isset($datos['id'])) {
     }
 
     $().ready(async () => {
+        $('#vendedor_id, #solicitud_segmento_id').select2({
+            width: '100%'
+        })
+        
         // Cuando se seleccione el tipo de persona
         $('#solicitud_persona_tipo').change(() => {
             if(!$('#solicitud_tiene_rut1').is(':checked')) $('#solicitud_tipo_documento1, #solicitud_tipo_documento2').attr('disabled', false)
@@ -1140,16 +1170,3 @@ if (isset($datos['id'])) {
         })
     })
 </script>
-
-<?php if(isset($solicitud)) { ?>
-    <script>
-        $().ready(async () => {
-            $("#solicitud_persona_tipo").val(<?php echo $solicitud->persona_tipo_id ?>).trigger("change")
-            $("#vendedor_id").val(<?php echo $solicitud->tercero_vendedor_id ?>)
-            await listarDatos('solicitud_departamento', {tipo: 'departamentos', pais_id: 169})
-            $("#solicitud_departamento").val('<?php echo $solicitud->departamento_codigo ?>')
-            await listarDatos('solicitud_municipio', {tipo: 'municipios', departamento_id: $('#solicitud_departamento').val()})
-            $("#solicitud_municipio").val('<?php echo $solicitud->municipio_codigo ?>')
-        })
-    </script>
-<?php } ?>
