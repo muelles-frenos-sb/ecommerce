@@ -185,7 +185,7 @@ class Microsoft_graph {
         // $url .= "&\$filter=hasAttachments%20eq%20true&\$select=id,subject,hasAttachments";
         $url .= '&$filter=isRead%20eq%20false';
 
-        return $this->enviar_peticion($url, null, $token['access_token']);
+        return $this->enviar_peticion($url, null, $token);
     }
 
     function descargar_adjuntos_mensaje($token, $mensaje_id, $carpeta_destino) {
