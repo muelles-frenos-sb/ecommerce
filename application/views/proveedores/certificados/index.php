@@ -17,9 +17,14 @@
         <div class="card mb-lg-0" id="formulario_buscar_proveedor">
             <div class="card-body card-body">
                 <form class="row">
-                    <div class="form-group col-sm-12">
+                    <div class="form-group col-sm-12 col-lg-6">
                         <label for="numero_documento">Digita tu número de documento o NIT *</label>
                         <input type="number" class="form-control" id="numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if($this->input->get('nit') != '') echo $this->input->get('nit'); ?>" autofocus>
+                    </div>
+
+                    <div class="form-group col-sm-12 col-lg-6">
+                        <label for="telefono">Digita el número de celular *</label>
+                        <input type="number" class="form-control" id="telefono">
                     </div>
 
                     <div class="form-group col-sm-12 col-lg-12">
@@ -48,6 +53,7 @@
 
 <script>
     let numeroDocumento = $('#numero_documento')
+    let numeroTelefono = $('#telefono')
 
     /**
      * Va al webhook y descarga todos los movimientos contables aplicables a retenciones
@@ -67,21 +73,22 @@
             showConfirmButton: false,
             allowOutsideClick: false
         })
-
+    console.log('descargando movimientos...')
         // Ejecución del webhook que extrae los datos del ERP
         await fetch(`${$("#site_url").val()}tareas/erp/importar_movimientos_contables/${numeroDocumento.val()}`)
             .then(respuesta => respuesta.json())
             .catch(error => console.error(error))
+    console.log('listo...')
 
         Swal.close()
 
+    console.log('descargando reporte...')
         // Generación del reporte
         await generarReporte('pdf/proveedores_certificado_retenciones', {
             documento_numero: numeroDocumento.val(),
             anio: $('#certificado_anio').val(),
         });
-
-        mostrarAviso('exito', `El certificado se generó exitosamente. ¡Gracias por usar los servicios de Repuestos Simón Bolívar!`, 20000)
+    console.log('descargado')
     }
 
     validarProveedor = async (nit = null) => {
@@ -91,7 +98,7 @@
 
         // Si no trae NIT, se deben validar todos los campos
         if(!nit) {
-            // datosObligatorios.push(numeroTelefono)
+            datosObligatorios.push(numeroTelefono)
         }
 
         // Validación de campos obligatorios
@@ -100,6 +107,7 @@
         let datosContacto = {
             tipo: 'tercero_contacto',
             nit: numeroDocumento.val(),
+            numero: numeroTelefono.val(),
         }
 
         // Si no trae NIT, consulta el contacto
