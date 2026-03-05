@@ -94,7 +94,7 @@ Class Proveedores_model extends CI_Model{
                 if (isset($filtros_personalizados['valor_saldo']) && $filtros_personalizados['valor_saldo'] != '') $filtros_having .= " AND valor_saldo LIKE '%{$filtros_personalizados['valor_saldo']}%' ";
                 if (isset($filtros_personalizados['notas']) && $filtros_personalizados['notas'] != '') $filtros_having .= " AND notas LIKE '%{$filtros_personalizados['notas']}%' ";
 
-                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY valor_saldo, fecha DESC";
+                $order_by = (isset($datos['ordenar'])) ? "ORDER BY {$datos['ordenar']}": "ORDER BY fecha DESC";
 
                 $sql =
                 "SELECT

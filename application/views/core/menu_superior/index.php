@@ -327,7 +327,7 @@
 
                                                                                 <?php if(isset($permisos) && in_array(['proveedores' => 'proveedores_ver_facturas'], $permisos)) { ?>
                                                                                     <li class="menu__item">
-                                                                                        <a href="<?php echo site_url('proveedores'); ?>" class="menu__link">
+                                                                                        <a href="<?php echo site_url('proveedores/facturas'); ?>" class="menu__link">
                                                                                             Facturas
                                                                                         </a>
                                                                                     </li>

@@ -37,7 +37,7 @@
                         <input type="text" id="filtro_id" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'row_id',
-                    className: 'text-right',
+                    className: 'dt-right',
                 },
                 {
                     title: `
@@ -68,7 +68,7 @@
                     `,
                     data: 'valor_documento',
                     data: null,
-                    className: 'text-right',
+                    className: 'dt-right',
                     render: (cuenta, type, row) => {
                         return `$${parseFloat(cuenta.valor_documento).toLocaleString('es-CO')}`
                     }
@@ -79,7 +79,7 @@
                         <input type="number" id="filtro_valor_abonos" class="form-control form-control-sm border-secondary">
                     `,
                     data: null,
-                    className: 'text-right',
+                    className: 'dt-right',
                     render: (cuenta, type, row) => {
                         return `$${parseFloat(cuenta.valor_abonos).toLocaleString('es-CO')}`
                     }
@@ -90,7 +90,7 @@
                         <input type="number" id="filtro_valor_saldo" class="form-control form-control-sm border-secondary">
                     `,
                     data: null,
-                    className: 'text-right',
+                    className: 'dt-right',
                     render: (cuenta, type, row) => {
                         return `$${parseFloat(cuenta.valor_saldo).toLocaleString('es-CO')}`
                     }

@@ -4,7 +4,7 @@
 <!-- Si viene NIT en la URL y es diferente al NIT de la sesión, se redirecciona al inicio -->
 <?php if(ENVIRONMENT != 'development' && $this->input->get('nit') && $this->input->get('nit') != $this->session->userdata('documento_numero')) redirect(); ?>
 
-<div class="block-header" id="contenedor_cabecera_titulo">
+<div class="block-header">
     <div class="container">
         <div class="block-header__body">
             <h1 class="block-header__title">Consulta tus facturas</h1>
@@ -12,28 +12,26 @@
     </div>
 </div>
 
-<div class="block">
-    <div class="container">
-        <div class="card mb-lg-0" id="formulario_buscar_proveedor">
-            <div class="card-body card-body">
-                <form class="row">
-                    <div class="form-group col-sm-12 col-lg-6">
-                        <label for="numero_documento">Digita tu número de documento o NIT *</label>
-                        <input type="number" class="form-control" id="numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if($this->input->get('nit') != '') echo $this->input->get('nit'); ?>" autofocus>
-                    </div>
+<div class="container">
+    <div class="card mb-lg-0" id="formulario_buscar_proveedor">
+        <div class="card-body card-body">
+            <form class="row">
+                <div class="form-group col-sm-12 col-lg-6">
+                    <label for="numero_documento">Digita tu número de documento o NIT *</label>
+                    <input type="number" class="form-control" id="numero_documento" placeholder="Sin espacios, guiones ni dígito de verificación" value="<?php if($this->input->get('nit') != '') echo $this->input->get('nit'); ?>" autofocus>
+                </div>
 
-                    <div class="form-group col-sm-12 col-lg-6">
-                        <label for="telefono">Digita el número de celular *</label>
-                        <input type="number" class="form-control" id="telefono">
-                    </div>
+                <div class="form-group col-sm-12 col-lg-6">
+                    <label for="telefono">Digita el número de celular *</label>
+                    <input type="number" class="form-control" id="telefono">
+                </div>
 
-                    <div class="form-group col-sm-12 col-lg-12">
-                        <button type="submit" class="btn btn-primary btn-block" id="btn_cuentas_por_pagar">Consultar</button>
+                <div class="form-group col-sm-12 col-lg-12">
+                    <button type="submit" class="btn btn-primary btn-block" id="btn_cuentas_por_pagar">Consultar</button>
 
-                        <div class="mt-2" id="contenedor_mensaje_carga"></div>
-                    </div>
-                </form>
-            </div>
+                    <div class="mt-2" id="contenedor_mensaje_carga"></div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
