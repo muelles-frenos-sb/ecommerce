@@ -249,7 +249,8 @@ generarReporte = (tipo, datos) => {
 
         case 'pdf/proveedores_comprobante_egreso':
             agregarLog(84, datos.id)
-            location.assign(`${$('#site_url').val()}reportes/${tipo}/${datos.id}`)
+            url = `${$('#site_url').val()}reportes/${tipo}/${datos.id}`
+            location.assign(url)
         break;
 
         case 'pdf/solicitud_credito':
