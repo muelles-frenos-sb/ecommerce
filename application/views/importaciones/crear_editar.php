@@ -66,12 +66,12 @@ if($id_importacion) {
 
             <div class="form-group col-md-4">
                 <label for="contacto_principal">Contacto Principal</label>
-                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>" placeholder="Persona de contacto">
+                <input type="text" class="form-control" id="contacto_principal" value="<?php echo ($importacion) ? $importacion->contacto_principal : ''; ?>">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email_contacto">Email de Contacto</label>
-                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>" placeholder="correo@proveedor.com">
+                <input type="email" class="form-control" id="email_contacto" value="<?php echo ($importacion) ? $importacion->email_contacto : ''; ?>">
             </div>
 
             <div class="form-group col-md-4">
@@ -92,8 +92,9 @@ if($id_importacion) {
 
             <div class="form-group col-md-3">
                 <label for="pais_origen">País de Origen *</label>
-                <select id="pais_origen" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->pais_origen : ''; ?>">
-                    <option value="">Cargando países...</option>
+                <select id="pais_origen" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('paises') as $pais) echo "<option value='$pais->id'>$pais->nombre</option>"; ?>
                 </select>
             </div>
 
@@ -119,16 +120,23 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
+                <label for="proforma">Proforma</label>
+                <input type="text" class="form-control" id="proforma" value="<?php echo ($importacion) ? $importacion->proforma : ''; ?>">
+            </div>
+
+            <div class="form-group col-md-3">
                 <label for="estado_id">Estado Actual</label>
-                <select id="estado_id" class="form-control" data-valor-actual="<?php echo ($importacion) ? $importacion->importacion_estado_id : ''; ?>">
-                    <option value="">Cargando estados...</option>
+                <select id="estado_id" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('importaciones_estados') as $estado) echo "<option value='$estado->id'>$estado->nombre</option>"; ?>
                 </select>
             </div>
 
             <div class="form-group col-md-3">
-                <label for="carga_tipo_id">Tipo de carga</label>
-                <select id="carga_tipo_id" class="form-control" data-valor-actual="<?php echo ($importacion && $importacion->importacion_carga_tipo_id) ? $importacion->importacion_carga_tipo_id : ''; ?>">
-                    <option value="">Cargando...</option>
+                <label for="agente_carga_nit">Agente de carga</label>
+                <select id="agente_carga_nit" class="form-control">
+                    <option value="">Seleccione...</option>
+                    <?php foreach($this->configuracion_model->obtener('terceros_agentes_carga') as $tercero_agente) echo "<option value='$tercero_agente->nit'>$tercero_agente->nombre</option>"; ?>
                 </select>
             </div>
 
@@ -225,11 +233,32 @@ if($id_importacion) {
             return false
         }
 
-        let ordenCompra = resultadoOrdenCompra.detalle.Table[0]
+        var valorTotalOrden = 0
 
-        // Ponemos los valores en los campos requeridos
-        $('#nit_proveedor_search').val(ordenCompra.f200_nit_prov)
-        $('#razon_social').val(ordenCompra.f200_razon_social_prov)
+        // Recorrido de las órdenes para sumar datos
+        $.each(resultadoOrdenCompra.detalle.Table, (index, registro) => {
+            valorTotalOrden += registro.f421_vlr_neto
+        })
+
+        let ordenCompra = resultadoOrdenCompra.detalle.Table[0] // Primer registro
+        let peticionTercero = await consulta('obtener', { tipo: 'terceros_local', 'nit': ordenCompra.f200_nit_prov })
+        let tercero = peticionTercero.resultado
+
+        // Solo cuando la importación es nueva, se cargan los datos por defecto
+        if('<?php echo $id_importacion; ?>' == '') {
+            // Datos de la orden de compra
+            $('#nit_proveedor_search').val(ordenCompra.f200_nit_prov)
+            $('#razon_social').val(ordenCompra.f200_razon_social_prov)
+            $('#moneda_preferida').val(ordenCompra.f420_id_moneda_docto)
+            $('#valor_total').val(valorTotalOrden)
+            $('#fecha_ingreso_siesa').val(ordenCompra.f421_fecha.split('T')[0])
+
+            // Datos del tercero
+            $('#contacto_principal').val(tercero.f015_contacto)
+            $('#email_contacto').val(tercero.f015_email)
+            $('#telefono_contacto').val(tercero.f015_celular)
+            $('#direccion').val(tercero.f015_direccion1)
+        }
 
         Swal.close()
     }
@@ -293,8 +322,9 @@ if($id_importacion) {
             
             // Datos básicos
             numero_orden_compra: $('#numero_orden_compra').val(),
+            nit:                 $('#nit_proveedor_search').val(),
             razon_social:        $('#razon_social').val(), 
-            // NOTA: El NIT de búsqueda NO se guarda en la tabla importaciones, solo sirvió para la lógica
+            nit: $('#nit_proveedor_search').val(),
             
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     
@@ -306,8 +336,9 @@ if($id_importacion) {
             fecha_estimada_llegada_cedi:   $('#fecha_estimada_llegada_cedi').val(),
             fecha_ingreso_siesa:    fechaSiesa,                  
             bl_awb:              $('#bl_awb').val(),
+            proforma:            $('#proforma').val(),
             importacion_estado_id:  $('#estado_id').val(),
-            importacion_carga_tipo_id: $('#carga_tipo_id').val(),
+            agente_carga_nit:  $('#agente_carga_nit').val(),
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
@@ -338,6 +369,7 @@ if($id_importacion) {
                 let cambios = [];
                 let valoresOriginales = {
                     numero_orden_compra: <?php echo json_encode($importacion->numero_orden_compra ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    nit: <?php echo json_encode($importacion->nit ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     razon_social: <?php echo json_encode($importacion->razon_social ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     contacto_principal: <?php echo json_encode($importacion->contacto_principal ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     email_contacto: <?php echo json_encode($importacion->email_contacto ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -348,8 +380,9 @@ if($id_importacion) {
                     fecha_estimada_llegada_cedi: <?php echo json_encode($importacion->fecha_estimada_llegada_cedi ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_cedi)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     fecha_ingreso_siesa: <?php echo json_encode($importacion->fecha_ingreso_siesa ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     bl_awb: <?php echo json_encode($importacion->bl_awb ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    proforma: <?php echo json_encode($importacion->proforma ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     importacion_estado_id: <?php echo json_encode($importacion->importacion_estado_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
-                    importacion_carga_tipo_id: <?php echo json_encode($importacion->importacion_carga_tipo_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    agente_carga_id: <?php echo json_encode($importacion->agente_carga_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     moneda_preferida: <?php echo json_encode($importacion->moneda_preferida ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total: <?php echo json_encode($importacion->valor_total ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total_cop: <?php echo json_encode($importacion->valor_total_cop ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -360,6 +393,7 @@ if($id_importacion) {
                 };
                 
                 let nombresAmigables = {
+                    nit: 'NIT',
                     numero_orden_compra: 'Número Orden de Compra',
                     razon_social: 'Razón Social',
                     contacto_principal: 'Contacto Principal',
@@ -371,7 +405,9 @@ if($id_importacion) {
                     fecha_estimada_llegada_cedi: 'Fecha Estimada Llegada CEDI',
                     fecha_ingreso_siesa: 'Fecha Ingreso SIESA',
                     bl_awb: 'BL / AWB',
+                    proforma: 'Proforma',
                     importacion_estado_id: 'Estado',
+                    agente_carga_nit: 'Agente de carga',
                     moneda_preferida: 'Moneda Preferida',
                     valor_total: 'Valor Total',
                     valor_total_cop: 'Valor Total COP',
@@ -478,16 +514,16 @@ if($id_importacion) {
             alert("Error al procesar: " + error);
         }
     }
-
-    $(document).ready(async function() {
-        try {
-            await listarDatos('pais_origen', { tipo: 'paises' }, $('#pais_origen').data('valor-actual'));
-            await listarDatos('estado_id', { tipo: 'importaciones_estados' }, $('#estado_id').data('valor-actual'));
-            await listarDatos('carga_tipo_id', { tipo: 'importaciones_cargas_tipos' });
-            let cargaTipoActual = $('#carga_tipo_id').data('valor-actual');
-            if (cargaTipoActual) $('#carga_tipo_id').val(cargaTipoActual);
-        } catch (e) {
-            console.warn("Error cargando países", e);
-        }
-    });
 </script>
+
+<?php if(isset($importacion)) { ?>
+    <script>
+        $().ready(async () => {
+            buscarOrdenCompra()
+
+            $("#pais_origen").val(<?php echo $importacion->pais_origen; ?>)
+            $("#estado_id").val(<?php echo $importacion->importacion_estado_id; ?>)
+            $("#agente_carga_nit").val(<?php echo $importacion->agente_carga_nit; ?>)
+        })
+    </script>
+<?php } ?>
