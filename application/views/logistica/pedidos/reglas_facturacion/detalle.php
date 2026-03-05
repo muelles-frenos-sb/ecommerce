@@ -19,14 +19,16 @@ $titulo_pagina = isset($id) ? 'Editar regla de facturación' : 'Crear regla de f
         <div class="card mb-lg-0">
             <div class="card-body card-body--padding--2">
                 <div class="form-row">
-                    <div class="form-group col-lg-4">
-                        <label for="regla_cliente_nit">NIT del cliente *</label>
-                        <input type="number" class="form-control" id="regla_cliente_nit" value="<?php echo (isset($regla) ? $regla->cliente_nit : ''); ?>">
-                    </div>
-
-                    <div class="form-group col-lg-8">
-                        <label for="regla_nombre">Nombre *</label>
-                        <input type="text" class="form-control" id="regla_nombre" value="<?php echo (isset($regla) ? $regla->nombre : ''); ?>">
+                    <div class="form-group col-lg-6">
+                        <label for="regla_cliente_nit">Cliente *</label>
+                        <select id="regla_cliente_nit" class="form-control">
+                            <option value="">Seleccione...</option>
+                            <?php foreach ($this->configuracion_model->obtener("terceros", ["f200_ind_cliente" => 1]) as $tercero): ?>
+                                <option value="<?php echo $tercero->f200_nit; ?>" <?php echo (isset($regla) && $regla->cliente_nit == $tercero->f200_nit ? 'selected' : ''); ?>>
+                                    <?php echo $tercero->f200_razon_social; ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div class="form-group col-lg-4">
@@ -87,7 +89,6 @@ $titulo_pagina = isset($id) ? 'Editar regla de facturación' : 'Crear regla de f
 
         let camposObligatorios = [
             $("#regla_cliente_nit"),
-            $("#regla_nombre"),
             $("#regla_tipo_frecuencia")
         ]
 
@@ -109,7 +110,6 @@ $titulo_pagina = isset($id) ? 'Editar regla de facturación' : 'Crear regla de f
         let datos = {
             tipo: 'facturacion_reglas',
             cliente_nit: $("#regla_cliente_nit").val(),
-            nombre: $("#regla_nombre").val(),
             tipo_frecuencia: tipoFrecuencia,
             dia_semana: tipoFrecuencia === 'semanal' ? $("#regla_dia_semana").val() : null,
             dia_mes: tipoFrecuencia === 'mensual' ? $("#regla_dia_mes").val() : null,
@@ -147,5 +147,8 @@ $titulo_pagina = isset($id) ? 'Editar regla de facturación' : 'Crear regla de f
 
         // Inicializar campos condicionales según el valor actual
         actualizarCamposCondicionales()
+
+        // Select2 para búsqueda por nombre de cliente
+        $("#regla_cliente_nit").select2()
     })
 </script>

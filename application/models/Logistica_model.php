@@ -142,7 +142,7 @@ Class Logistica_model extends CI_Model {
                         $filtros_where .= " AND (";
                         $filtros_where .= " fr.id LIKE '%{$palabras[$i]}%'";
                         $filtros_where .= " OR fr.cliente_nit LIKE '%{$palabras[$i]}%'";
-                        $filtros_where .= " OR fr.nombre LIKE '%{$palabras[$i]}%'";
+                        $filtros_where .= " OR t.f200_razon_social LIKE '%{$palabras[$i]}%'";
                         $filtros_where .= " OR fr.tipo_frecuencia LIKE '%{$palabras[$i]}%'";
                         $filtros_where .= ") ";
                     }
@@ -151,7 +151,7 @@ Class Logistica_model extends CI_Model {
                 // Filtros personalizados
                 $filtros_personalizados = isset($datos['filtros_personalizados']) ? $datos['filtros_personalizados'] : [];
                 if (isset($filtros_personalizados['cliente_nit']) && $filtros_personalizados['cliente_nit'] != '') $filtros_where .= " AND fr.cliente_nit LIKE '%{$filtros_personalizados['cliente_nit']}%' ";
-                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $filtros_where .= " AND fr.nombre LIKE '%{$filtros_personalizados['nombre']}%' ";
+                if (isset($filtros_personalizados['nombre']) && $filtros_personalizados['nombre'] != '') $filtros_where .= " AND t.f200_razon_social LIKE '%{$filtros_personalizados['nombre']}%' ";
                 if (isset($filtros_personalizados['tipo_frecuencia']) && $filtros_personalizados['tipo_frecuencia'] != '') $filtros_where .= " AND fr.tipo_frecuencia = '{$filtros_personalizados['tipo_frecuencia']}' ";
                 if (isset($filtros_personalizados['activa']) && $filtros_personalizados['activa'] !== '') $filtros_where .= " AND fr.activa = {$filtros_personalizados['activa']} ";
 
@@ -164,7 +164,7 @@ Class Logistica_model extends CI_Model {
                 "SELECT
                     fr.id,
                     fr.cliente_nit,
-                    fr.nombre,
+                    t.f200_razon_social AS nombre,
                     fr.tipo_frecuencia,
                     fr.dia_semana,
                     fr.dia_mes,
@@ -174,6 +174,7 @@ Class Logistica_model extends CI_Model {
                     DATE(fr.fecha_creacion) fecha_creacion,
                     DATE(fr.fecha_modificacion) fecha_modificacion
                 FROM facturacion_reglas fr
+                LEFT JOIN terceros t ON fr.cliente_nit = t.f200_nit
                 $filtros_where
                 $order_by
                 $limite";
