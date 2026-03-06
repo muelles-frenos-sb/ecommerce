@@ -198,6 +198,14 @@
 
                                                                         <div class="menu__submenu">
                                                                             <ul class="menu">
+                                                                                <?php // if(isset($permisos) && in_array(['marketing' => 'marketing_campanias_ver'], $permisos)) { ?>
+                                                                                    <li class="menu__item">
+                                                                                        <a href="<?php echo site_url('marketing/banners/ver'); ?>" class="menu__link">
+                                                                                            Banners
+                                                                                        </a>
+                                                                                    </li>
+                                                                                <?php // } ?>
+
                                                                                 <?php if(isset($permisos) && in_array(['marketing' => 'marketing_campanias_ver'], $permisos)) { ?>
                                                                                     <li class="menu__item">
                                                                                         <a href="<?php echo site_url('marketing/campanias/ver'); ?>" class="menu__link">
@@ -240,6 +248,12 @@
                                                                             <li class="menu__item">
                                                                                 <a href="<?php echo site_url('logistica/garantias/ver'); ?>" class="menu__link">
                                                                                     Garantías
+                                                                                </a>
+                                                                            </li>
+
+                                                                            <li class="menu__item">
+                                                                                <a href="<?php echo site_url('logistica/inventarios'); ?>" class="menu__link">
+                                                                                    Inventarios
                                                                                 </a>
                                                                             </li>
                                                                             <hr>

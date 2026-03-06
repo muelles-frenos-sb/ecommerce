@@ -178,7 +178,7 @@ if(!empty($tercero)) {
 <?php } ?>
 
 <script>
-    mostrarTotales = async listaPrecio => {
+    mostrarTotales = async () => {
         // let descuento = 0
         let subtotal = parseFloat('<?php echo $this->cart->total(); ?>')
 
@@ -197,9 +197,7 @@ if(!empty($tercero)) {
             width: '100%'
         })
         
-        // Si tiene sesión iniciada, la lista de precio es la de clientes
-        let listaPrecioPorDefecto = '<?php echo $this->config->item('lista_precio'); ?>'
-        mostrarTotales(listaPrecioPorDefecto)
+        mostrarTotales()
 
         await listarDatos('checkout_departamento_id', {tipo: 'departamentos', pais_id: 169})
         await listarDatos('checkout_departamento_envio_id', {tipo: 'departamentos', pais_id: 169})

@@ -1,6 +1,5 @@
-<?php
-$marketing_banners = $this->marketing_model->obtener('marketing_banners');
-?>
+<?php $marketing_banners = $this->marketing_model->obtener('marketing_banners'); ?>
+
 <div class="block-space block-space--layout--after-header"></div>
 
 <div class="block">
