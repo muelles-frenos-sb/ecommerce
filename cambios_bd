@@ -989,3 +989,17 @@ CREATE TABLE `facturacion_reglas`  (
 
 -- 20260304 Campo agregado
 ALTER TABLE `clientes_solicitudes_credito` ADD COLUMN `segmento_id` int NULL AFTER `cupo_asignado`;
+
+-- 20260305 Campo para definir el límite de disponibilidad del stock en una bodega
+ALTER TABLE `erp_bodegas` ADD COLUMN `pocentaje_disponibilidad` double NULL DEFAULT 100 COMMENT 'Define el porcentaje de disponibilidad del stock que se reflejará en el eCommerce' AFTER `f150_ts`;
+
+-- Tabla para almacenar la disponibilidad de inventario que tendrá un producto
+CREATE TABLE `productos_inventario_disponibilidad` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `producto_id` int NULL,
+  `bodega` varchar(5) NULL,
+  `porcentaje` double NULL,
+  `fecha_creacion` datetime(0) NULL,
+  `usuario_id` int NULL,
+  PRIMARY KEY (`id`)
+);
