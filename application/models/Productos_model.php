@@ -199,7 +199,15 @@ Class Productos_model extends CI_Model{
                 }
 
                 $filtro_bodega = (isset($datos['filtro_bodega'])) ? "AND i.bodega = {$datos['filtro_bodega']}" : "AND i.bodega = {$this->config->item('bodega_principal')}";
-                $filtro_lista_precio = (isset($datos['filtro_lista_precio'])) ? "AND pp.lista_precio = {$datos['filtro_lista_precio']}" : "AND pp.lista_precio = {$this->config->item('lista_precio')}";
+
+                // Parametrización de lita de precio del producto
+                if(isset($datos['filtro_lista_precio'])) {
+                    $filtro_lista_precio = "AND pp.lista_precio = '{$datos['filtro_lista_precio']}'";
+                } elseif($this->session->userdata('lista_precio')) {
+                    $filtro_lista_precio = "AND pp.lista_precio = '{$this->session->userdata('lista_precio')}'";
+                } else {
+                    $filtro_lista_precio = "AND pp.lista_precio = '{$this->config->item('lista_precio')}'";
+                }
 
                 // Cuando no se requiere que filtre por una bodega o lista de precio especifica (ejemplo: carrito)
                 if(isset($datos['omitir_bodega'])) $filtro_bodega = "";

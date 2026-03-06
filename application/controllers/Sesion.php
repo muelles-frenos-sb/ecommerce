@@ -46,6 +46,7 @@ class Sesion extends MY_Controller {
 			'celular' => $usuario->celular,
 			'documento_numero' => $usuario->documento_numero,
             'codigo_vendedor' => (!empty($vendedor)) ? $vendedor->codigo : 0,
+			'lista_precio' => $usuario->lista_precio ?? $this->config->item('lista_precio'),    // Lista de precio del usuario o lista de precios por defecto
 		];
 
         // Se inicia la sesión
