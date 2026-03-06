@@ -133,10 +133,9 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
-                <label for="agente_carga_nit">Agente de carga</label>
-                <select id="agente_carga_nit" class="form-control">
-                    <option value="">Seleccione...</option>
-                    <?php foreach($this->configuracion_model->obtener('terceros_agentes_carga') as $tercero_agente) echo "<option value='$tercero_agente->nit'>$tercero_agente->nombre</option>"; ?>
+                <label for="carga_tipo_id">Tipo de carga</label>
+                <select id="carga_tipo_id" class="form-control" data-valor-actual="<?php echo ($importacion && $importacion->importacion_carga_tipo_id) ? $importacion->importacion_carga_tipo_id : ''; ?>">
+                    <option value="">Cargando...</option>
                 </select>
             </div>
 
@@ -338,7 +337,7 @@ if($id_importacion) {
             bl_awb:              $('#bl_awb').val(),
             proforma:            $('#proforma').val(),
             importacion_estado_id:  $('#estado_id').val(),
-            agente_carga_nit:  $('#agente_carga_nit').val(),
+            importacion_carga_tipo_id: $('#carga_tipo_id').val(),
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
@@ -379,6 +378,7 @@ if($id_importacion) {
                     fecha_estimada_llegada_puerto: <?php echo json_encode($importacion->fecha_estimada_llegada_puerto ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_puerto)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     fecha_estimada_llegada_cedi: <?php echo json_encode($importacion->fecha_estimada_llegada_cedi ? date('Y-m-d', strtotime($importacion->fecha_estimada_llegada_cedi)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     fecha_ingreso_siesa: <?php echo json_encode($importacion->fecha_ingreso_siesa ? date('Y-m-d', strtotime($importacion->fecha_ingreso_siesa)) : '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    importacion_carga_tipo_id: <?php echo json_encode($importacion->importacion_carga_tipo_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     bl_awb: <?php echo json_encode($importacion->bl_awb ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     proforma: <?php echo json_encode($importacion->proforma ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     importacion_estado_id: <?php echo json_encode($importacion->importacion_estado_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -514,6 +514,8 @@ if($id_importacion) {
             alert("Error al procesar: " + error);
         }
     }
+
+    
 </script>
 
 <?php if(isset($importacion)) { ?>
@@ -526,4 +528,12 @@ if($id_importacion) {
             $("#agente_carga_nit").val(<?php echo $importacion->agente_carga_nit; ?>)
         })
     </script>
-<?php } ?>
+<?php } else { ?>
+    <script>
+        $().ready(async () => {
+            await listarDatos('carga_tipo_id', { tipo: 'importaciones_cargas_tipos' });
+            let cargaTipoActual = $('#carga_tipo_id').data('valor-actual');
+            if (cargaTipoActual) $('#carga_tipo_id').val(cargaTipoActual);
+        })
+    </script>
+<?php }?>
