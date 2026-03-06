@@ -5,18 +5,14 @@
         </div>
     </div>
 </div>
-<div class="block">
-    <div class="container container--max--xl">
-        <div class="row mb-4">
-            <div class="col-3">
-                <a class="btn btn-success" href="<?php echo site_url('marketing/beneficios/crear'); ?>">Crear beneficio</a>
-            </div>
-        </div>
+
+<div class="pl-5 pr-5">
+    <a class="btn btn-success mb-3" href="<?php echo site_url('marketing/beneficios/crear'); ?>">Crear beneficio</a>
         
-        <div id="contenedor_beneficios"></div>
-    </div>
+    <div id="contenedor_beneficios"></div>
 </div>
 <div class="block-space block-space--layout--before-footer"></div>
+
 <script>
     listarBeneficios = () => {
         // Si no hay valor en la búsqueda, pero si en local storage, lo pone

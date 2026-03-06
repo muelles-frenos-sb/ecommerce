@@ -1,25 +1,5 @@
-<style>
-    #tabla_beneficios {
-        width: 100% !important;
-    }
+<table class="table-striped table-bordered w-100" id="tabla_beneficios"></table>
 
-    #tabla_beneficios tbody td {
-        font-size: 1em;
-        padding: 8px;
-        vertical-align: middle;
-    }
-    .beneficios-action-buttons {
-        display: flex;
-        gap: 5px;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: nowrap;
-    }
-</style>
-<!-- Inicialización de la tabla -->
-<div class="table-responsive">
-    <table class="table-striped table-bordered w-100" id="tabla_beneficios"></table>
-</div>
 <script>
     let tablaBeneficios = null
     $().ready(async () => {
