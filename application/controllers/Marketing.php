@@ -519,7 +519,6 @@ class Marketing extends MY_Controller
 
                 // Se obtienen los registros
                 $resultados = $this->marketing_model->obtener("marketing_banners", $datos);
-                break;
                 
                 print json_encode([
                     "draw" => $this->input->get("draw"),
