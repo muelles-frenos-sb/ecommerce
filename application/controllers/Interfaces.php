@@ -119,6 +119,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
             break;
 
+            case 'productos_inventario_disponibilidad':
+                $resultado = $this->logistica_model->actualizar($tipo, ['id' => $id], $datos);
+            break;
+
             case 'usuarios':
                 if(isset($datos['clave'])) {
                     $usuario_actual = $this->db->where('id', $id)->get('usuarios')->row();
@@ -647,6 +651,12 @@ class Interfaces extends CI_Controller {
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 print json_encode(['resultado' => $this->importaciones_model->crear($datos, 'importaciones_bitacora')]);
             break;
+
+            case 'productos_inventario_disponibilidad':
+                $datos['fecha_creacion'] = date('Y-m-d H:i:s');
+                $datos['usuario_id'] = $this->session->userdata('usuario_id');
+                print json_encode(['resultado' => $this->logistica_model->crear('productos_inventario_disponibilidad', $datos)]);
+            break;
         }
     }
 
@@ -701,6 +711,10 @@ class Interfaces extends CI_Controller {
 
              case 'facturacion_reglas':
                 print json_encode(['resultado' => $this->logistica_model->eliminar($tipo, $datos)]);
+            break;
+
+            case 'productos_inventario_disponibilidad':
+                print json_encode(['resultado' => $this->logistica_model->eliminar('productos_inventario_disponibilidad', $datos)]);
             break;
             case 'importaciones':
                 $this->db->delete('importaciones_bitacora', ['importacion_id' => $datos['id']]);
@@ -833,6 +847,10 @@ class Interfaces extends CI_Controller {
 
             case 'whatsapp_plantillas':
                 $resultado =  ['resultado' => $this->whatsapp_api->obtener_plantillas()];
+            break;
+
+            case 'productos_inventario_disponibilidad':
+                $resultado = ['resultado' => $this->logistica_model->obtener('productos_inventario_disponibilidad', $datos)];
             break;
         }
 

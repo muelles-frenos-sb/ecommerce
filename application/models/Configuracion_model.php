@@ -1,6 +1,12 @@
 <?php 
 Class Configuracion_model extends CI_Model {
     function actualizar($tabla, $id, $datos){
+        // Manejo genérico de actualización por campo id
+        // Para tablas especiales como erp_bodegas, se usa su clave primaria real
+        if ($tabla === 'erp_bodegas') {
+            return $this->db->where('f150_rowid', $id)->update($tabla, $datos);
+        }
+
         return $this->db->where('id', $id)->update($tabla, $datos);
     }
 

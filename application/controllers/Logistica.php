@@ -114,6 +114,23 @@ class Logistica extends MY_Controller {
         }
     }
 
+        /**
+         * Gestión de inventarios - Parametrización de disponibilidad
+         *
+         * @return void
+         */
+        function inventarios() {
+            if (!$this->session->userdata('usuario_id')) redirect('inicio');
+
+            switch ($this->uri->segment(3)) {
+                case 'disponibilidad':
+                default:
+                    $this->data['contenido_principal'] = 'logistica/inventarios/disponibilidad';
+                    $this->load->view('core/body', $this->data);
+                break;
+            }
+        }
+
     function obtener_datos_tabla() {
         if (!$this->input->is_ajax_request()) redirect('inicio');
 

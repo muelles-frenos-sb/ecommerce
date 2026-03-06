@@ -314,6 +314,27 @@ Class Logistica_model extends CI_Model {
                 if (isset($datos['id'])) return $this->db->query($sql)->row();
                 return $this->db->query($sql)->result();
             break;
+
+            case 'productos_inventario_disponibilidad':
+                $this->db
+                    ->select([
+                        'pid.*',
+                        'p.referencia',
+                        'p.notas',
+                    ])
+                    ->from('productos_inventario_disponibilidad pid')
+                    ->join('productos p', 'pid.producto_id = p.id', 'left')
+                ;
+
+                if (isset($datos['id'])) $this->db->where('pid.id', $datos['id']);
+                if (isset($datos['producto_id'])) $this->db->where('pid.producto_id', $datos['producto_id']);
+                if (isset($datos['bodega'])) $this->db->where('pid.bodega', $datos['bodega']);
+
+                $this->db->order_by('p.notas', 'ASC');
+
+                if (isset($datos['id'])) return $this->db->get()->row();
+                return $this->db->get()->result();
+            break;
         }
     }
 }
