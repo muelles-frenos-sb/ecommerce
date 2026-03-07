@@ -111,11 +111,11 @@ foreach ($registros as $registro) {
     $hoja_movimientos->setCellValue("B$fila_movimientos", 'FOC'); // Tipo de documento
     $hoja_movimientos->setCellValue("C$fila_movimientos", $consecutivo_documento); // Consecutivo de documento
     $hoja_movimientos->setCellValue("D$fila_movimientos", $consecutivo_movimiento); // Consecutivo de Excel
-    // $hoja_movimientos->setCellValue("E$fila_movimientos", ''); // Bodega
+    $hoja_movimientos->setCellValue("E$fila_movimientos", '00550'); // Bodega
     $hoja_movimientos->setCellValue("F$fila_movimientos", '500'); // Centro de operación
     $hoja_movimientos->setCellValue("G$fila_movimientos", 'UNID'); // Unidad de medida
     $hoja_movimientos->setCellValue("H$fila_movimientos", $detalle->cantidad); // Unidad de medida
-    $hoja_movimientos->setCellValue("I$fila_movimientos", date("Ymd", strtotime($solicitud->fecha_inicio))); // Fecha de entrega del documento
+    $hoja_movimientos->setCellValue("I$fila_movimientos", date('Ymd', strtotime("$solicitud->fecha_inicio +4 days"))); // Fecha de entrega (4 días después)
     $hoja_movimientos->setCellValue("J$fila_movimientos", $registro->precio_final); // Precio unitario
     $hoja_movimientos->setCellValue("K$fila_movimientos", $registro->referencia); // Referencia del producto
     
