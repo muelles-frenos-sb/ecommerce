@@ -817,6 +817,7 @@ function obtener_movimientos_contables_api($datos) {
     if(isset($datos['fecha_inicial'])) $parametros .= "and f350_fecha>=''{$datos['fecha_inicial']}''";
     if(isset($datos['fecha_final'])) $parametros .= "and f350_fecha<=''{$datos['fecha_final']}''";
     if(isset($datos['filtro_retenciones'])) $parametros .= "and f253_id LIKE ''2365%''";
+    if(isset($datos['id_estado'])) $parametros .= "and f350_ind_estado=''{$datos['id_estado']}''";
 
     $client = new \GuzzleHttp\Client();
     try {
