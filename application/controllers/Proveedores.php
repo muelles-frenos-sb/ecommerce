@@ -61,6 +61,8 @@ class Proveedores extends MY_Controller {
     }
 
     function facturas($tipo) {
+        if(!$this->session->userdata('usuario_id')) redirect('inicio');
+        
         switch ($tipo) {
             default:
                 redirect(site_url());
