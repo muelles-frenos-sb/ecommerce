@@ -941,6 +941,7 @@ class Tareas extends MY_Controller {
                     'fecha_inicial' => "$anio_anterior-01-01",
                     'fecha_final' => "$anio_anterior-12-31",
                     'filtro_retenciones' => true,
+                    'id_estado' => 1,
                 ];
 
                 try {
