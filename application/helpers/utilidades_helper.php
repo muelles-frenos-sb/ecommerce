@@ -19,51 +19,69 @@ function buscar_item_carrito($id) {
 }
 
 function convertir_numero_a_texto($numero) {
-    $unidad = [
-        '', 'uno', 'dos', 'tres', 'cuatro', 'cinco',
-        'seis', 'siete', 'ocho', 'nueve', 'diez',
-        'once', 'doce', 'trece', 'catorce', 'quince',
-        'dieciséis', 'diecisiete', 'dieciocho', 'diecinueve',
-        'veinte'
+    $unidades = [
+        '', 'UNO', 'DOS', 'TRES', 'CUATRO', 'CINCO', 'SEIS', 'SIETE',
+        'OCHO', 'NUEVE', 'DIEZ', 'ONCE', 'DOCE', 'TRECE', 'CATORCE',
+        'QUINCE', 'DIECISÉIS', 'DIECISIETE', 'DIECIOCHO', 'DIECINUEVE', 'VEINTE'
     ];
 
     $decenas = [
-        '', '', 'veinte', 'treinta', 'cuarenta', 'cincuenta',
-        'sesenta', 'setenta', 'ochenta', 'noventa'
+        21 => 'VEINTI', 30 => 'TREINTA', 40 => 'CUARENTA',
+        50 => 'CINCUENTA', 60 => 'SESENTA', 70 => 'SETENTA',
+        80 => 'OCHENTA', 90 => 'NOVENTA'
     ];
-    
+
     $centenas = [
-        '', 'cien', 'doscientos', 'trescientos', 'cuatrocientos',
-        'quinientos', 'seiscientos', 'setecientos', 'ochocientos',
-        'novecientos'
+        100 => 'CIEN', 200 => 'DOSCIENTOS', 300 => 'TRESCIENTOS',
+        400 => 'CUATROCIENTOS', 500 => 'QUINIENTOS', 600 => 'SEISCIENTOS',
+        700 => 'SETECIENTOS', 800 => 'OCHOCIENTOS', 900 => 'NOVECIENTOS'
     ];
 
-    if ($numero == 0) return 'cero';
+    if ($numero == 0) return 'CERO';
 
-    if ($numero < 21) {
-        return $unidad[$numero];
-    } elseif ($numero < 100) {
-        $d = intval($numero / 10);
-        $u = $numero % 10;
-        if ($u == 0) return $decenas[$d];
-        if ($d == 2) return 'veinti' . $unidad[$u];
-        return $decenas[$d] . ' y ' . $unidad[$u];
-    } elseif ($numero < 1000) {
-        $c = intval($numero / 100);
-        $r = $numero % 100;
-        if ($numero == 100) return 'cien';
-        return $centenas[$c] . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
-    } elseif ($numero < 1000000) {
-        $miles = intval($numero / 1000);
-        $r = $numero % 1000;
-        $txtMiles = ($miles == 1 ? 'mil' : convertir_numero_a_texto($miles) . ' mil');
-        return $txtMiles . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
-    } else {
-        $millones = intval($numero / 1000000);
-        $r = $numero % 1000000;
-        $txtMillones = ($millones == 1 ? 'un millón' : convertir_numero_a_texto($millones) . ' millones');
-        return $txtMillones . ($r > 0 ? ' ' . convertir_numero_a_texto($r) : '');
+    if ($numero <= 20) return $unidades[$numero];
+
+    if ($numero < 30) {
+        return $decenas[21] . $unidades[$numero - 20];
     }
+
+    if ($numero < 100) {
+        $d = floor($numero / 10) * 10;
+        $u = $numero % 10;
+        return $u == 0 ? $decenas[$d] : $decenas[$d] . ' Y ' . $unidades[$u];
+    }
+
+    if ($numero < 1000) {
+        if ($numero == 100) return 'CIEN';
+        $c = floor($numero / 100) * 100;
+        $resto = $numero % 100;
+
+        if ($c == 100) {
+            return 'CIENTO ' . convertir_numero_a_texto($resto);
+        }
+
+        return $resto == 0 ? $centenas[$c] : $centenas[$c] . ' ' . convertir_numero_a_texto($resto);
+    }
+
+    if ($numero < 1000000) {
+        $miles = floor($numero / 1000);
+        $resto = $numero % 1000;
+
+        $textoMiles = $miles == 1 ? 'MIL' : convertir_numero_a_texto($miles) . ' MIL';
+
+        return $resto == 0 ? $textoMiles : $textoMiles . ' ' . convertir_numero_a_texto($resto);
+    }
+
+    if ($numero < 1000000000) {
+        $millones = floor($numero / 1000000);
+        $resto = $numero % 1000000;
+
+        $textoMillones = $millones == 1 ? 'UN MILLÓN' : convertir_numero_a_texto($millones) . ' MILLONES';
+
+        return $resto == 0 ? $textoMillones : $textoMillones . ' ' . convertir_numero_a_texto($resto);
+    }
+
+    return '';
 }
 
 function cubrir_correo($email) {
