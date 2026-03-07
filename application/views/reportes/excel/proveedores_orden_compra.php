@@ -27,6 +27,8 @@ foreach ($registros as $registro) {
         // Se aumenta el consecutivo del documento
         $consecutivo_documento++;
 
+        $proveedor = $this->configuracion_model->obtener('erp_proveedores', ['f200_nit' => $registro->proveedor_nit]);
+
         // Posicionado sobre la primera hoja
         $hoja_documentos = $archivo->setActiveSheetIndexByName('Documentos');
 
@@ -37,7 +39,7 @@ foreach ($registros as $registro) {
         $hoja_documentos->setCellValue("D$fila_documentos", date("Ymd", strtotime($solicitud->fecha_inicio))); // Fecha del documento
         $hoja_documentos->setCellValue("E$fila_documentos", '32243764'); // NIT del comprador
         $hoja_documentos->setCellValue("F$fila_documentos", $registro->proveedor_nit); // NIT del proveedor
-        $hoja_documentos->setCellValue("G$fila_documentos", ''); // Condición de pago
+        $hoja_documentos->setCellValue("G$fila_documentos", $proveedor->f202_id_cond_pago); // Condición de pago
         $hoja_documentos->setCellValue("H$fila_documentos", 'COP'); // Moneda
         $hoja_documentos->setCellValue("I$fila_documentos", $registro->proveedor_nombre); // Nombre del proveedor
         

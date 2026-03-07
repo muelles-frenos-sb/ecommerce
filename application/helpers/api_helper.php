@@ -840,6 +840,33 @@ function obtener_movimientos_contables_api($datos) {
     return $response->getBody()->getContents();
 }
 
+function obtener_proveedores_api($datos = null) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('base_url_produccion');
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_Proveedores',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 function obtener_terceros_api($datos = null) {
     $nit_tercero = (isset($datos['numero_documento'])) ? "f200_nit=''{$datos['numero_documento']}''" : '' ;
     $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;

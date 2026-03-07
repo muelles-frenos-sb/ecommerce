@@ -58,6 +58,10 @@ Class Configuracion_model extends CI_Model {
                 return $this->db->insert_batch('erp_compras_ordenes', $datos);
             break;
 
+            case 'erp_proveedores_batch':
+                return $this->db->insert_batch('erp_proveedores', $datos);
+            break;
+
             case 'erp_ventas_pedidos_batch':
                 return $this->db->insert_batch('erp_ventas_pedidos', $datos);
             break;
@@ -198,6 +202,14 @@ Class Configuracion_model extends CI_Model {
                     ->order_by('f112_id')
                     ->get($tabla)
                     ->result()
+                ;
+            break;
+
+            case 'erp_proveedores':
+                return $this->db
+                    ->where($datos)
+                    ->get($tabla)
+                    ->row()
                 ;
             break;
             

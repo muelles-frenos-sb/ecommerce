@@ -1021,3 +1021,7 @@ INSERT INTO `importaciones_cargas_tipos` (`id`, `nombre`) VALUES
 
 ALTER TABLE `importaciones` ADD COLUMN `importacion_carga_tipo_id` int(11) NULL AFTER `importacion_estado_id`;
 ALTER TABLE `importaciones` ADD CONSTRAINT `importaciones_ibfk_carga_tipo` FOREIGN KEY (`importacion_carga_tipo_id`) REFERENCES `importaciones_cargas_tipos` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+
+-- 20260306 Logs
+INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (112, 'Proveedores - Ejecución de script exitoso', 2);
+INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (113, 'Proveedores - Ejecución de script erróneo', 2);

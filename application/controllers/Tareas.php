@@ -1310,6 +1310,67 @@ class Tareas extends MY_Controller {
             break;
 
             /**
+             * Descarga todos los terceros proveedores del ERP Siesa,
+             * recorriendo cada página e insertando en
+             * la base de datos el resultado por cada página
+             */
+            case 'importar_proveedores':
+                $tiempo_inicial = microtime(true);
+                $codigo = 0;
+                $pagina = 1;
+                $total_items = 0;
+
+                try {
+                    // Primero, eliminamos todos los ítems
+                    $this->configuracion_model->eliminar('erp_proveedores', ['id']);
+
+                    // Mientras obtenga resultados la consulta
+                    while ($codigo == 0) {
+                        $resultado = json_decode(obtener_proveedores_api(['pagina' => $pagina]));
+                        $codigo = $resultado->codigo;
+
+                        // Si el resultado es exitoso
+                        if($codigo == 0) {
+                            $proveedores = $resultado->detalle->Table;
+
+                            $total_items += count($proveedores);
+
+                            // Recorrido de todos los registros de la página
+                            $this->configuracion_model->crear('erp_proveedores_batch', $proveedores);
+                            
+                            $pagina++;
+                        } else {
+                            $codigo = '-1';
+                            break;
+                        }
+                    }
+
+                    $tiempo_final = microtime(true);
+
+                    $respuesta = [
+                        'log_tipo_id' => 112,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$total_items registros actualizados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                    ];
+
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
+
+                    print json_encode($respuesta);
+                    return http_response_code(201);
+                } catch (\Throwable $th) {
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', [
+                        'log_tipo_id' => 113,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                    ]);
+
+                    return http_response_code(400);
+                }
+            break;
+
+            /**
              * Descarga todos los terceros de Siesa,
              * recorriendo cada página e insertando en
              * la base de datos el resultado por cada página
