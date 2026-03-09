@@ -123,6 +123,7 @@
             unidad_inventario: datos.unidad_inventario,
             unidad_inventario: datos.unidad_inventario,
             lista_precio: listaPrecioSeleccionada,
+            bodega: bodegaSeleccionada,
         })
 
         cargarInterfaz('clientes/ventas/gestion/carrito', 'contenedor_resultado_carrito')

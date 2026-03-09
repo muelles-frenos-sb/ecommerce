@@ -1,5 +1,5 @@
 const agregarProducto = async datos => {
-    let {id, precio, referencia, unidad_inventario, lista_precio} = datos
+    let {id, precio, referencia, unidad_inventario, lista_precio, bodega} = datos
 
     let datosCarrito = {
         id: id,
@@ -7,6 +7,7 @@ const agregarProducto = async datos => {
         nombre: referencia,
         unidad_inventario: unidad_inventario,
         lista_precio: lista_precio,
+        bodega: bodega,
     }
 
     return obtenerPromesa(`${$('#site_url').val()}carrito/agregar`, datosCarrito)

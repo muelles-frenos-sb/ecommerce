@@ -35,7 +35,8 @@ class Carrito extends MY_Controller {
         $precio = $datos['precio'];
         $nombre = $datos['nombre'];
         $unidad_inventario = $datos['unidad_inventario'];
-        $lista_precio = (isset($datos['lista_precio'])) ? $datos['lista_precio']: '' ;
+        $lista_precio = (isset($datos['lista_precio'])) ? $datos['lista_precio'] : '' ;
+        $bodega = (isset($datos['bodega'])) ? $datos['bodega'] : null ;
 
         print json_encode(['resultado' => $this->cart->insert([
             'id'      => $id,
@@ -45,6 +46,7 @@ class Carrito extends MY_Controller {
             'options' => [
                 'unidad_inventario' => $unidad_inventario,
                 'lista_precio' => $lista_precio,
+                'bodega' => $bodega,
             ]
         ])]);
     }

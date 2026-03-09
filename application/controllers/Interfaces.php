@@ -380,6 +380,7 @@ class Interfaces extends CI_Controller {
                         'precio' => $item['price'],
                         'subtotal' => $item['subtotal'],
                         'lista_precio' => $item['options']['lista_precio'],
+                        'bodega' => $item['options']['bodega'],
                     ];
                     
                     array_push($items_recibo, $datos_item);

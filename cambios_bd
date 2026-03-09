@@ -1025,3 +1025,6 @@ ALTER TABLE `importaciones` ADD CONSTRAINT `importaciones_ibfk_carga_tipo` FOREI
 -- 20260306 Logs
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (112, 'Proveedores - Ejecución de script exitoso', 2);
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (113, 'Proveedores - Ejecución de script erróneo', 2);
+
+-- Campo para almacenar la bodega del ítem
+ALTER TABLE `recibos_detalle` ADD COLUMN `bodega` varchar(5) NULL COMMENT 'Bodega para ventas externas' AFTER `lista_precio`;
