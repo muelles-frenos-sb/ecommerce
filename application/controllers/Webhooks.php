@@ -531,7 +531,7 @@ class Webhooks extends MY_Controller {
             // Si es un pedido a crédito o el pago a contado fue aprobado o es una venta externa
             if($tipo_documento[0] == 'pc' || $estado_transaccion == 'APPROVED' || $recibo->recibo_tipo_id == 6) {
                 // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
-                enviar_email_pedido($recibo);
+                // enviar_email_pedido($recibo);
 
                 // Según el tipo de pedido
                 $tipo_pedido = ($tipo_documento[0] == 'pc') ? "CPV" : "CPE" ;
@@ -615,7 +615,7 @@ class Webhooks extends MY_Controller {
                         'observacion' => json_encode($datos_pedido)
                     ]);
 
-                    // Si es un pedido a contado, se crea el documento contable
+                    // Si es un pedido a contado pagado con Wompi, se crea el documento contable
                     if((isset($datos['id']))) {
                         $documento_contable = crear_documento_contable_pedido($recibo->id, $datos);
                         array_push($resultado, $documento_contable);

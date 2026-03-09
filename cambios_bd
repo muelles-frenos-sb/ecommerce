@@ -1030,6 +1030,53 @@ INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (113, 'Proveedores
 INSERT INTO `recibos_tipos` (`id`, `nombre`) VALUES (6, 'Ventas exterrnas');
 UPDATE `recibos_tipos` SET `nombre` = 'Ventas en línea' WHERE `id` = 1;
 
+-- Tabla nueva
+CREATE TABLE `erp_proveedores`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `f200_rowid` int NULL DEFAULT NULL,
+  `f200_id_cia` tinyint(1) NULL DEFAULT NULL,
+  `f200_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f200_nit` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_id_sucursal` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_descripcion_sucursal` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_ind_estado` tinyint(1) NULL DEFAULT NULL,
+  `f202_id_moneda` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_id_clase_proveedor` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_id_cond_pago` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_dias_gracia` int NULL DEFAULT NULL,
+  `f202_cupo_credito` double NULL DEFAULT NULL,
+  `f202_id_tipo_prov` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f202_id_cpto_imp_iva` tinyint(1) NULL DEFAULT NULL,
+  `f202_id_cpto_imp_rf` tinyint(1) NULL DEFAULT NULL,
+  `f202_id_cpto_imp_ica` tinyint(1) NULL DEFAULT NULL,
+  `f202_notas` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `f202_fecha_ingreso` datetime NULL DEFAULT NULL,
+  `f202_porcentaje_exceso_compra` double NULL DEFAULT NULL,
+  `f202_monto_anual_compra` double NULL DEFAULT NULL,
+  `f202_ts` datetime NULL DEFAULT NULL,
+  `f202_porcentaje_fijo_rete` double NULL DEFAULT NULL,
+  `f202_vlr_prom_salud_ant_ano` double NULL DEFAULT NULL,
+  `f202_vlr_salud_prepagada` double NULL DEFAULT NULL,
+  `f202_vlr_int_vivienda` tinyint(1) NULL DEFAULT NULL,
+  `f202_vlr_dependientes` tinyint(1) NULL DEFAULT NULL,
+  `f202_id_llave_ret_indep` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_contacto` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_direccion1` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_direccion2` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_direccion3` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_id_pais` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_id_depto` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_id_ciudad` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_id_barrio` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_telefono` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_fax` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_cod_postal` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_email` varchar(150) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `f015_celular` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `fecha_creacion` timestamp NULL DEFAULT current_timestamp,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
 -- Campo para almacenar la bodega del ítem
 ALTER TABLE `recibos_detalle` ADD COLUMN `bodega` varchar(5) NULL COMMENT 'Bodega para ventas externas' AFTER `lista_precio`;
 
