@@ -24,7 +24,7 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary btn-block" id="btn_buscar_producto">Buscar</button>
-                        <a type="button" href="<?php echo site_url("carrito/finalizar?tipo=credito"); ?>" class="btn btn-success btn-block" id="btn_finalizar_pedido">Finalizar pedido</a>
+                        <a type="button" href="<?php echo site_url("carrito/finalizar?tipo=venta_externa"); ?>" class="btn btn-success btn-block" id="btn_finalizar_pedido">Finalizar pedido</a>
                     </form>
 
                     <div class="mt-2" id="contenedor_mensaje_producto"></div>

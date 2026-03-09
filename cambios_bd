@@ -1026,5 +1026,12 @@ ALTER TABLE `importaciones` ADD CONSTRAINT `importaciones_ibfk_carga_tipo` FOREI
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (112, 'Proveedores - Ejecución de script exitoso', 2);
 INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (113, 'Proveedores - Ejecución de script erróneo', 2);
 
+-- 20260309 Nuevo tipo de recibo
+INSERT INTO `recibos_tipos` (`id`, `nombre`) VALUES (6, 'Ventas exterrnas');
+UPDATE `recibos_tipos` SET `nombre` = 'Ventas en línea' WHERE `id` = 1;
+
 -- Campo para almacenar la bodega del ítem
 ALTER TABLE `recibos_detalle` ADD COLUMN `bodega` varchar(5) NULL COMMENT 'Bodega para ventas externas' AFTER `lista_precio`;
+
+-- Comentario de campo modificado
+ALTER TABLE `recibos_detalle` MODIFY COLUMN `lista_precio` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Lista de precio para ventas externas' AFTER `valor_factura`;

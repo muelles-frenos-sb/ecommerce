@@ -123,6 +123,23 @@ if($this->session->userdata('usuario_id')) {
                             <div class="form-check mb-3">
                                 <span class="input-check form-check-input">
                                     <span class="input-check__body">
+                                        <input class="input-check__input" type="radio" id="checkout_venta_contado_sin_recibo" name="metodo_pago">
+                                        <span class="input-check__box"></span>
+                                        <span class="input-check__icon">
+                                            <svg width="9px" height="7px">
+                                                <path d="M9,1.395L3.46,7L0,3.5L1.383,2.095L3.46,4.2L7.617,0L9,1.395Z" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </span>
+                                <label class="form-check-label" for="checkout_venta_contado_sin_recibo">
+                                    Compra a contado (sin recibo de caja)
+                                </label>
+                            </div>
+
+                            <div class="form-check mb-3">
+                                <span class="input-check form-check-input">
+                                    <span class="input-check__body">
                                         <input class="input-check__input" type="radio" id="checkout_venta_credito" name="metodo_pago">
                                         <span class="input-check__box"></span>
                                         <span class="input-check__icon">
@@ -206,6 +223,7 @@ if($this->session->userdata('usuario_id')) {
 
 <script>
     let esVendedor = ($('#codigo_vendedor').val() == 0) ? false : true
+    let idTipoRecibo = ('<?php echo $this->input->get('tipo'); ?>' == 'venta_externa') ? 6 : 1
     
     cargarDatosCliente = async() => {
         if (!validarCamposObligatorios([
@@ -220,6 +238,7 @@ if($this->session->userdata('usuario_id')) {
 
     guardarFactura = async() => {        
         let total = parseFloat($('#pedido_total_pago').val())
+        let abreviatura = 'pe'
         
         // Alerta cuando no hay ítems en el carrito
         if(<?php echo $this->cart->total(); ?> == 0) {
@@ -263,14 +282,16 @@ if($this->session->userdata('usuario_id')) {
 
         if (!validarCamposObligatorios(camposObligatorios)) return false
 
+         if($(`#checkout_venta_credito`).is(':checked')) abreviatura = 'pc'
+
         let datosRecibo = {
             tipo: 'recibos',
             documento_numero: $('#checkout_documento_numero').val(),
-            abreviatura: ($(`#checkout_venta_credito`).is(':checked')) ? 'pc' : 'pe',
+            abreviatura: abreviatura,
             nombres: $('#checkout_nombres').val(),
             primer_apellido: $('#checkout_primer_apellido').val(),
             segundo_apellido: $('#checkout_segundo_apellido').val(),
-            razon_social: $('#checkout_razon_social').val(),
+            razon_social: $('#checkout_razon_social').val().toUpperCase(),
             direccion: $('#checkout_direccion').val(),
             direccion_envio: $('#checkout_direccion_envio').val(),
             municipio_envio_codigo: $('#checkout_municipio_envio_id').val(),
@@ -279,7 +300,7 @@ if($this->session->userdata('usuario_id')) {
             telefono: $('#checkout_telefono').val(),
             comentarios: $('#checkout_comentarios').val(),
             valor: $('#total_pedido').val(),
-            recibo_tipo_id: 1,
+            recibo_tipo_id: idTipoRecibo,
             email_factura_electronica: $('#checkout_email_factura_electronica').val(),
             lista_precio: '<?php echo $this->config->item('lista_precio'); ?>',
         }
@@ -305,8 +326,8 @@ if($this->session->userdata('usuario_id')) {
             let reciboItems = await consulta('crear', {tipo: 'recibos_detalle', 'recibo_id': recibo.resultado, lista_precio: datosRecibo.lista_precio}, false)
             let tipoPago = ($(`#pago_todos`).is(':checked')) ? 'gateway' : 'agregador'
 
-            // Si es pedido a contado, se abre modal de Wompi
-            if(!$(`#checkout_venta_credito`).is(':checked')) {
+            // Si no es pedido a crédito ni pedido de contado sin recibo, se abre modal de Wompi
+            if(!$(`#checkout_venta_credito`).is(':checked') && !$(`#checkout_venta_contado_sin_recibo`).is(':checked')) {
                 if (reciboItems.resultado) cargarInterfaz('carrito/pago', 'contenedor_pago', {id: recibo.resultado, tipo_pago: tipoPago})
             }
 
@@ -357,13 +378,12 @@ if($this->session->userdata('usuario_id')) {
 
                 await crearTerceroCliente(datosTerceroSiesa)
                 .then(resultado => {
-                    console.log(resultado)
-
                     agregarLog(52, JSON.stringify(resultado))
                 })
             }
 
-            if($(`#checkout_venta_credito`).is(':checked')) {
+            // Si es venta a crédito o es venta a contado sin recibo
+            if($(`#checkout_venta_credito`).is(':checked') || $(`#checkout_venta_contado_sin_recibo`).is(':checked')) {
                 Swal.fire({
                     title: 'Estamos creando el pedido en el ERP...',
                     text: 'Por favor, espera.',
@@ -387,7 +407,10 @@ if($this->session->userdata('usuario_id')) {
                         mostrarAviso('error', `Ocurrió un error al crear el pedido: ${JSON.parse(resultadoPedido.resultado)}`, 30000)
                         return 
                     }
+                    
                     mostrarAviso('exito', `¡El pedido se creó correctamente en el ERP!`, 20000)
+
+                    if(resultadoPedido.exito) vaciarCarrito()
                 })
                 .catch(error => {
                     mostrarAviso('error', `Ocurrió un error al crear el pedido`, 30000)

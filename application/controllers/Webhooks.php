@@ -528,8 +528,8 @@ class Webhooks extends MY_Controller {
                 $errores++;
             }
 
-            // Si es un pedido a crédito o el pago a contado fue aprobado
-            if($tipo_documento[0] == 'pc' || $estado_transaccion == 'APPROVED') {
+            // Si es un pedido a crédito o el pago a contado fue aprobado o es una venta externa
+            if($tipo_documento[0] == 'pc' || $estado_transaccion == 'APPROVED' || $recibo->recibo_tipo_id == 6) {
                 // Se envía el correo electrónico con la confirmación del pedido (Error o éxito)
                 enviar_email_pedido($recibo);
 
@@ -550,7 +550,7 @@ class Webhooks extends MY_Controller {
                         "f431_consec_docto" => 1, // Numero de documento del pedido
                         "f431_nro_registro" => $item->id, // Numero de registro del movimiento
                         "f431_id_item" => $item->producto_id, // Codigo, es obligatorio si no va referencia ni codigo de barras
-                        "f431_id_bodega" => "00555", // Valida en maestro, código de bodega
+                        "f431_id_bodega" => $item->bodega ?? $this->config->item('bodega_principal'), // Valida en maestro, código de bodega
                         "f431_id_motivo" => "01",  // Valida en maestro, código de motivo
                         "f431_id_co_movto" => "400", // Valida en maestro, código de centro de operación del movimiento
                         "f431_id_un_movto" => "", // Valida en maestro, código de unidad de negocio del movimiento. Si es vacio el sistema la calcula
