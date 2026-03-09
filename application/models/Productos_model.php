@@ -198,7 +198,7 @@ Class Productos_model extends CI_Model{
                     }
                 }
 
-                $filtro_bodega = (isset($datos['filtro_bodega'])) ? "AND i.bodega = {$datos['filtro_bodega']}" : "AND i.bodega = {$this->config->item('bodega_principal')}";
+                $filtro_bodega = (isset($datos['filtro_bodega'])) ? "AND i.bodega = {$datos['filtro_bodega']}" : "AND i.bodega = '{$this->config->item('bodega_principal')}'";
 
                 // Parametrización de lita de precio del producto
                 if(isset($datos['filtro_lista_precio'])) {
@@ -231,7 +231,8 @@ Class Productos_model extends CI_Model{
                     pm.descripcion descripcion,
                     pm.garantia,
                     i.existencia,
-                    IF(MIN(i.disponible) = 0, MAX(i.disponible), MIN(i.disponible)) disponible,
+                    ( SELECT pid.porcentaje FROM productos_inventario_disponibilidad AS pid WHERE pid.producto_id = p.id ) porcentaje_disponibilidad,
+	                IF((SELECT porcentaje_disponibilidad), CEIL(i.disponible * ((SELECT porcentaje_disponibilidad) / 100)), i.disponible) disponible,
                     i.bodega,
                     pp.precio, 
                     pp.precio_minimo, 
