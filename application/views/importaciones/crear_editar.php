@@ -125,6 +125,11 @@ if($id_importacion) {
             </div>
 
             <div class="form-group col-md-3">
+                <label for="agente_carga_nit">Agente de carga (NIT)</label>
+                <input type="text" class="form-control" id="agente_carga_nit" value="<?php echo ($importacion) ? $importacion->agente_carga_nit : ''; ?>" placeholder="NIT del agente de carga">
+            </div>
+
+            <div class="form-group col-md-3">
                 <label for="estado_id">Estado Actual</label>
                 <select id="estado_id" class="form-control">
                     <option value="">Seleccione...</option>
@@ -323,7 +328,6 @@ if($id_importacion) {
             numero_orden_compra: $('#numero_orden_compra').val(),
             nit:                 $('#nit_proveedor_search').val(),
             razon_social:        $('#razon_social').val(), 
-            nit: $('#nit_proveedor_search').val(),
             
             contacto_principal:  $('#contacto_principal').val(), 
             email_contacto:      $('#email_contacto').val(),     
@@ -338,6 +342,7 @@ if($id_importacion) {
             proforma:            $('#proforma').val(),
             importacion_estado_id:  $('#estado_id').val(),
             importacion_carga_tipo_id: $('#carga_tipo_id').val(),
+            agente_carga_nit:    $('#agente_carga_nit').val(),
             
             moneda_preferida:    $('#moneda_preferida').val(),
             valor_total:         valorTotal,
@@ -382,7 +387,7 @@ if($id_importacion) {
                     bl_awb: <?php echo json_encode($importacion->bl_awb ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     proforma: <?php echo json_encode($importacion->proforma ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     importacion_estado_id: <?php echo json_encode($importacion->importacion_estado_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
-                    agente_carga_id: <?php echo json_encode($importacion->agente_carga_id ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
+                    agente_carga_nit: <?php echo json_encode($importacion->agente_carga_nit ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     moneda_preferida: <?php echo json_encode($importacion->moneda_preferida ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total: <?php echo json_encode($importacion->valor_total ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
                     valor_total_cop: <?php echo json_encode($importacion->valor_total_cop ?? '', JSON_HEX_APOS | JSON_HEX_QUOT); ?>,
@@ -523,9 +528,13 @@ if($id_importacion) {
         $().ready(async () => {
             buscarOrdenCompra()
 
-            $("#pais_origen").val(<?php echo $importacion->pais_origen; ?>)
-            $("#estado_id").val(<?php echo $importacion->importacion_estado_id; ?>)
-            $("#agente_carga_nit").val(<?php echo $importacion->agente_carga_nit; ?>)
+            $("#pais_origen").val(<?php echo json_encode($importacion->pais_origen); ?>)
+            $("#estado_id").val(<?php echo json_encode($importacion->importacion_estado_id); ?>)
+            $("#agente_carga_nit").val(<?php echo json_encode($importacion->agente_carga_nit); ?>)
+
+            await listarDatos('carga_tipo_id', { tipo: 'importaciones_cargas_tipos' });
+            let cargaTipoActual = $('#carga_tipo_id').data('valor-actual');
+            if (cargaTipoActual) $('#carga_tipo_id').val(cargaTipoActual);
         })
     </script>
 <?php } else { ?>

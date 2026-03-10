@@ -14,7 +14,9 @@ class Importaciones_model extends CI_Model
     public function crear($datos, $tabla = 'importaciones')
     {
         // Limpiamos el array de datos por si viene basura del JS
-        $this->db->insert($tabla, $datos);
+        $datos_limpios = $this->limpiar_datos($datos);
+
+        $this->db->insert($tabla, $datos_limpios);
 
 
         $resultado = $this->db->affected_rows() > 0;
