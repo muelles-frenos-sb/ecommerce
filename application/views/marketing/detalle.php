@@ -181,6 +181,8 @@ if (isset($id)) {
     }
 
     $().ready(() => {
+        $('#plantilla_whatsapp').select2()
+
         actualizarMensajePlantilla = () => $('#mensaje_campania').text($("#plantilla_whatsapp option:selected").attr('data-mensaje'))
 
         listarPlantillasWhatsapp()
