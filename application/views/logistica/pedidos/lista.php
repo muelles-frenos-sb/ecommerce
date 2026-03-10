@@ -1,7 +1,7 @@
 <style>
     #tabla_pedidos tbody td {
-        font-size: 0.9em;
-        padding: 8px;
+        font-size: 0.7em;
+        padding: 5px;
         vertical-align: middle;
     }
 </style>
@@ -62,7 +62,7 @@
                 { 
                     title: `
                         Numero
-                        <input type="number" id="filtro_numero" class="form-control form-control-sm border-secondary">
+                        <input type="text" id="filtro_numero" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'numero'
                 },
@@ -99,7 +99,8 @@
                         Ítems
                         <input type="number" id="filtro_items" class="form-control form-control-sm border-secondary">
                     `,
-                    data: 'items'
+                    data: 'items',
+                    className: 'text-right'
                 },
                 {
                     title: `
