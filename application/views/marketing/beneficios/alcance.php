@@ -52,6 +52,9 @@ if (!empty($productos_beneficio)) {
                             <label for="beneficio_valor">Valor *</label>
                             <input type="number" class="form-control" id="beneficio_valor" value="<?php echo htmlspecialchars($beneficio_valor, ENT_QUOTES, 'UTF-8'); ?>" min="0" step="0.01">
                         </div>
+                        <button type="button" class="btn btn-success btn-block mt-2" onclick="javascript:agregarTodosLosProductos()">
+                            Agregar todos
+                        </button>
                     </div>
                 </div>
 
@@ -151,18 +154,19 @@ if (!empty($productos_beneficio)) {
         })
     }
 
-    agregarProductoAlBeneficio = async (productoId, referencia, descripcion) => {
+    agregarProductoAlBeneficio = async (productoId, referencia, descripcion, opciones = {}) => {
+        const silencioso = opciones.silencioso === true
         let beneficioId = $("#beneficio_id").val()
         let valorTipo = $("#beneficio_valor_tipo").val()
         let valor = $("#beneficio_valor").val()
 
         if (!valorTipo) {
-            mostrarAviso('alerta', 'Debe seleccionar el tipo de valor del beneficio')
+            if (!silencioso) mostrarAviso('alerta', 'Debe seleccionar el tipo de valor del beneficio')
             return false
         }
 
         if (valor === '' || valor === null) {
-            mostrarAviso('alerta', 'Debe ingresar el valor del beneficio')
+            if (!silencioso) mostrarAviso('alerta', 'Debe ingresar el valor del beneficio')
             return false
         }
 
@@ -175,10 +179,51 @@ if (!empty($productos_beneficio)) {
         }, false)
 
         if (respuesta && respuesta.resultado) {
-            mostrarAviso('exito', `Producto "${referencia}" agregado al beneficio`)
-            listarProductosSeleccionados()
+            if (!silencioso) {
+                mostrarAviso('exito', `Producto "${referencia}" agregado al beneficio`)
+                listarProductosSeleccionados()
+            }
+            return true
         } else {
-            mostrarAviso('error', `No se pudo agregar el producto "${referencia}"`)
+            if (!silencioso) mostrarAviso('error', `No se pudo agregar el producto "${referencia}"`)
+            return false
+        }
+    }
+
+    agregarTodosLosProductos = async () => {
+        const tabla = $('#tabla_alcance_productos')
+
+        if (!tabla.length) {
+            mostrarAviso('alerta', 'No hay productos en la tabla de búsqueda para agregar')
+            return
+        }
+
+        const filas = tabla.find('tbody tr')
+        if (!filas.length) {
+            mostrarAviso('alerta', 'No hay productos en la tabla de búsqueda para agregar')
+            return
+        }
+
+        let agregados = 0
+
+        for (let i = 0; i < filas.length; i++) {
+            const fila = $(filas[i])
+            const btn = fila.find('.btn-agregar-producto')
+            if (!btn.length) continue
+
+            const id = btn.data('id')
+            const ref = btn.data('referencia')
+            const notas = btn.data('notas')
+
+            const exito = await agregarProductoAlBeneficio(id, ref, notas, { silencioso: true })
+            if (exito) agregados++
+        }
+
+        if (agregados > 0) {
+            listarProductosSeleccionados()
+            mostrarAviso('exito', `Se agregaron ${agregados} producto(s) al beneficio`)
+        } else {
+            mostrarAviso('alerta', 'No se pudo agregar ningún producto al beneficio')
         }
     }
 
