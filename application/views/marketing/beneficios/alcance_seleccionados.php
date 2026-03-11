@@ -20,7 +20,7 @@
                     <th class="text-center">#</th>
                     <th class="text-center">Referencia</th>
                     <th class="text-center">Descripción</th>
-                     <th class="text-center">Tipo valor</th>
+                    <th class="text-center">Tipo valor</th>
                     <th class="text-center">Valor</th>
                     <th class="text-center">Eliminar</th>
                 </tr>
@@ -31,14 +31,11 @@
                         <td class="text-center"><?php echo $item->producto_id; ?></td>
                         <td class="text-left"><?php echo $item->referencia; ?></td>
                         <td class="text-left"><?php echo $item->notas; ?></td>
-                         <td class="text-center">
-                            <select class="form-control form-control-sm" onchange="javascript:actualizarValorProducto(<?php echo $item->id; ?>, this)">
-                                <option value="nominal" <?php echo ($item->valor_tipo == 'nominal' ? 'selected' : ''); ?>>Nominal</option>
-                                <option value="porcentaje" <?php echo ($item->valor_tipo == 'porcentaje' ? 'selected' : ''); ?>>Porcentaje</option>
-                            </select>
+                        <td class="text-center">
+                            <?php echo ($item->valor_tipo == 'porcentaje' ? 'Porcentaje' : 'Nominal'); ?>
                         </td>
                         <td class="text-center">
-                            <input type="number" class="form-control form-control-sm" style="min-width:80px;" value="<?php echo $item->valor; ?>" min="0" step="0.01" onchange="javascript:actualizarValorProducto(<?php echo $item->id; ?>, this)">
+                            <?php echo number_format($item->valor, 2, ',', '.'); ?>
                         </td>
                         <td class="text-center">
                             <button
@@ -69,16 +66,4 @@
         listarProductosSeleccionados()
     }
 
-    actualizarValorProducto = async (itemId, campo) => {
-        let fila = $(campo).closest('tr')
-        let valorTipo = fila.find('select').val()
-        let valor = fila.find('input[type=number]').val()
-
-        await consulta('actualizar', {
-            tipo: 'marketing_beneficios_productos',
-            id: itemId,
-            valor_tipo: valorTipo,
-            valor: valor
-        }, false)
-    }
 </script>

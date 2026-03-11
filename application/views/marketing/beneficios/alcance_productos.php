@@ -15,8 +15,6 @@
                 <th class="text-center">Referencia</th>
                 <th class="text-center">Descripción</th>
                 <th class="text-center">Marca</th>
-                <th class="text-center">Tipo valor</th>
-                <th class="text-center">Valor</th>
                 <th class="text-center">Acción</th>
             </tr>
         </thead>
@@ -27,15 +25,6 @@
                     <td class="text-left"><?php echo $producto->referencia; ?></td>
                     <td class="text-left"><?php echo $producto->notas; ?></td>
                     <td class="text-center"><?php echo $producto->marca; ?></td>
-                    <td class="text-center">
-                        <select class="form-control form-control-sm valor_tipo_input" style="min-width:110px;">
-                            <option value="nominal">Nominal</option>
-                            <option value="porcentaje">Porcentaje</option>
-                        </select>
-                    </td>
-                    <td class="text-center">
-                        <input type="number" class="form-control form-control-sm valor_input" style="min-width:80px;" value="0" min="0" step="0.01">
-                    </td>
                     <td class="text-center">
                         <button
                             type="button"
@@ -90,26 +79,4 @@
             agregarProductoAlBeneficio(id, ref, notas);
         });
     });
-
-    agregarProductoAlBeneficio = async (productoId, referencia, descripcion, btn) => {
-        let beneficioId = $("#beneficio_id").val()
-
-        let fila = $(btn).closest('tr')
-        let valorTipo = fila.find('.valor_tipo_input').val()
-        let valor = fila.find('.valor_input').val()
-        let respuesta = await consulta('crear', {
-            tipo: 'marketing_beneficios_productos',
-            beneficio_id: beneficioId,
-            producto_id: productoId,
-            valor_tipo: valorTipo,
-            valor: valor
-        }, false)
-
-        if (respuesta && respuesta.resultado) {
-            mostrarAviso('exito', `Producto "${referencia}" agregado al beneficio`)
-            listarProductosSeleccionados()
-        } else {
-            mostrarAviso('error', `No se pudo agregar el producto "${referencia}"`)
-        }
-    }
 </script>

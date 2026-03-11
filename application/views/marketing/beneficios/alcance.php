@@ -1,6 +1,21 @@
 <?php
 $beneficio = $this->marketing_model->obtener('marketing_beneficios', ['id' => $id]);
 $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'toda_la_tienda';
+
+// Valores globales de tipo de valor y valor del beneficio (se toman del primer producto asociado, si existe)
+$beneficio_valor_tipo = 'nominal';
+$beneficio_valor = 0;
+
+$productos_beneficio = $this->marketing_model->obtener('marketing_beneficios_productos', ['beneficio_id' => $beneficio->id]);
+if (!empty($productos_beneficio)) {
+    $primer_producto = $productos_beneficio[0];
+    if (isset($primer_producto->valor_tipo) && $primer_producto->valor_tipo != '') {
+        $beneficio_valor_tipo = $primer_producto->valor_tipo;
+    }
+    if (isset($primer_producto->valor)) {
+        $beneficio_valor = $primer_producto->valor;
+    }
+}
 ?>
 <input type="hidden" id="beneficio_id" value="<?php echo $beneficio->id; ?>">
 
@@ -25,6 +40,17 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
                                 <option value="toda_la_tienda" <?php echo ($alcance_tipo == 'toda_la_tienda' ? 'selected' : ''); ?>>Toda la tienda</option>
                                 <option value="productos_especificos" <?php echo ($alcance_tipo == 'productos_especificos' ? 'selected' : ''); ?>>Productos específicos</option>
                             </select>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="beneficio_valor_tipo">Tipo de valor *</label>
+                            <select id="beneficio_valor_tipo" class="form-control">
+                                <option value="nominal" <?php echo ($beneficio_valor_tipo == 'nominal' ? 'selected' : ''); ?>>Nominal</option>
+                                <option value="porcentaje" <?php echo ($beneficio_valor_tipo == 'porcentaje' ? 'selected' : ''); ?>>Porcentaje</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="beneficio_valor">Valor *</label>
+                            <input type="number" class="form-control" id="beneficio_valor" value="<?php echo htmlspecialchars($beneficio_valor, ENT_QUOTES, 'UTF-8'); ?>" min="0" step="0.01">
                         </div>
                     </div>
                 </div>
@@ -125,11 +151,20 @@ $alcance_tipo = isset($beneficio->alcance_tipo) ? $beneficio->alcance_tipo : 'to
         })
     }
 
-    agregarProductoAlBeneficio = async (productoId, referencia, descripcion, btn) => {
+    agregarProductoAlBeneficio = async (productoId, referencia, descripcion) => {
         let beneficioId = $("#beneficio_id").val()
-        let fila = $(btn).closest('tr')
-        let valorTipo = fila.find('.valor_tipo_input').val()
-        let valor = fila.find('.valor_input').val()
+        let valorTipo = $("#beneficio_valor_tipo").val()
+        let valor = $("#beneficio_valor").val()
+
+        if (!valorTipo) {
+            mostrarAviso('alerta', 'Debe seleccionar el tipo de valor del beneficio')
+            return false
+        }
+
+        if (valor === '' || valor === null) {
+            mostrarAviso('alerta', 'Debe ingresar el valor del beneficio')
+            return false
+        }
 
         let respuesta = await consulta('crear', {
             tipo: 'marketing_beneficios_productos',
