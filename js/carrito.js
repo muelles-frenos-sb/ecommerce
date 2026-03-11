@@ -96,7 +96,7 @@ const finalizarPedidoProducto = async datos => {
     try {
         let respuesta = await obtenerPromesa(`${$('#site_url').val()}carrito/tiene_producto`, {id: id})
 
-        if(!respuesta.existe) {
+        if(respuesta.carrito_vacio && !respuesta.existe) {
             await agregarProducto({
                 id: id,
                 precio: precio,

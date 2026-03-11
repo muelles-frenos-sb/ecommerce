@@ -66,7 +66,12 @@ class Carrito extends MY_Controller {
             }
         }
 
-        print json_encode(['existe' => $existe]);
+        $carrito_vacio = ($this->cart->total_items() == 0);
+
+        print json_encode([
+            'existe' => $existe,
+            'carrito_vacio' => $carrito_vacio,
+        ]);
     }
 
     function eliminar($row_id) {

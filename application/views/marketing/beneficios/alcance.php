@@ -67,6 +67,8 @@ if (!empty($productos_beneficio)) {
                                 <input type="text" class="form-control" id="buscar_producto" autofocus>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block" id="btn_buscar_producto">Buscar</button>
+                            <button class="btn btn-info btn-block" onClick="javascript:history.back()">Volver</button>
+
                         </form>
                         <div class="mt-2" id="contenedor_mensaje_producto"></div>
                     </div>
@@ -111,10 +113,7 @@ if (!empty($productos_beneficio)) {
             </div>
         </div>
 
-        <div class="mt-3">
-            <button class="btn btn-info" onClick="javascript:history.back()">Volver</button>
-            <button class="btn btn-success" onclick="javascript:guardarAlcanceTipo(true)">Guardar</button>
-        </div>
+       
     </div>
 </div>
 <div class="block-space block-space--layout--before-footer"></div>

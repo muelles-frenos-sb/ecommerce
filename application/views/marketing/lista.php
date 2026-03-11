@@ -17,10 +17,26 @@
 
 <input type="file" class="d-none" id="importar_archivo" onchange="importarCampanias()" accept=".xlsx,.xls,.csv">
 
+<?php
+    $telefono_prueba_usuario = '';
+
+    if ($this->session->userdata('usuario_id')) {
+        $usuario = $this->configuracion_model->obtener('usuarios', ['id' => $this->session->userdata('usuario_id')]);
+
+        if (!empty($usuario)) {
+            if (!empty($usuario->celular)) {
+                $telefono_prueba_usuario = preg_replace('/\D+/', '', $usuario->celular);
+            } elseif (!empty($usuario->telefono)) {
+                $telefono_prueba_usuario = preg_replace('/\D+/', '', $usuario->telefono);
+            }
+        }
+    }
+?>
 
 <script>
     let campania_id = null
     let tablaCampanias = null
+    const telefonoPruebaPorDefecto = '<?php echo $telefono_prueba_usuario; ?>'
 
     // ==========================================
     // SECCIÓN 1: IMPORTACIÓN DE CONTACTOS
@@ -71,6 +87,7 @@
             input: 'text',
             inputLabel: 'Número de teléfono',
             inputPlaceholder: 'Ej: 573001234567',
+            inputValue: telefonoPruebaPorDefecto,
             showCancelButton: true,
             confirmButtonText: 'Enviar',
             cancelButtonText: 'Cancelar',
