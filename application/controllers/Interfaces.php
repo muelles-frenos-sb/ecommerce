@@ -660,8 +660,16 @@ class Interfaces extends CI_Controller {
             case 'productos_inventario_disponibilidad':
                 $datos['fecha_creacion'] = date('Y-m-d H:i:s');
                 $datos['usuario_id'] = $this->session->userdata('usuario_id');
-                print json_encode(['resultado' => $this->logistica_model->crear('productos_inventario_disponibilidad', $datos)]);
-            break;
+
+                if (isset($datos['producto_id']) && isset($datos['bodega'])) {
+                    $this->logistica_model->eliminar('productos_inventario_disponibilidad', [
+                        'producto_id' => $datos['producto_id'],
+                        'bodega'      => $datos['bodega'],
+                    ]);
+                }
+
+				print json_encode(['resultado' => $this->logistica_model->crear('productos_inventario_disponibilidad', $datos)]);
+			break;
         }
     }
 
