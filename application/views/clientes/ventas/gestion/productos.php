@@ -91,21 +91,23 @@
 
 <script>
     actualizarDisponibilidad = productoId => {
-        let disponibilidad = $(`#producto_${productoId}_bodega option:selected`).attr('data-disponibilidad')
+        let disponibilidad = $(`#producto_${productoId}_bodega option:selected`).data('disponibilidad')
+
         $(`#producto_${productoId}_disponibilidad`).text(disponibilidad)
     }
 
     actualizarPrecioUnitario = productoId => {
-        let precio = $(`#producto_${productoId}_lista_precio option:selected`).attr('data-precio')
+        let precio = $(`#producto_${productoId}_lista_precio option:selected`).data('precio')
+        
         $(`#producto_${productoId}_precio`).text(`$${formatearNumero(precio)}`)
-        $(`#producto_${productoId}_precio`).attr('data-precio_unitario', precio)
+        $(`#producto_${productoId}_precio`).data('precio_unitario', precio)
     }
 
     actualizarSubtotal = productoId => {
         let subtotal = $(`#producto_${productoId}_subtotal option:selected`).attr('data-subtotal')
         
         $(`#producto_${productoId}_subtotal`).text(`$${formatearNumero(subtotal)}`)
-        $(`#producto_${productoId}_subtotal`).attr('data-subtotal', subtotal)
+        $(`#producto_${productoId}_subtotal`).data('subtotal', subtotal)
     }
     
     seleccionarItem = datos => {
@@ -114,7 +116,7 @@
 
         if(!bodegaSeleccionada || !listaPrecioSeleccionada) return
 
-        let precio = $(`#producto_${datos.producto_id}_precio`).attr('data-precio_unitario')
+        let precio = $(`#producto_${datos.producto_id}_precio`).data('precio_unitario')
 
         agregarProducto({
             id: datos.producto_id,

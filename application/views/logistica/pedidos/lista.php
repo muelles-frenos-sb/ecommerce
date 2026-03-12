@@ -100,7 +100,7 @@
                         <input type="number" id="filtro_items" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'items',
-                    className: 'text-right'
+                    className: 'dt-right'
                 },
                 {
                     title: `
@@ -108,7 +108,7 @@
                         <input type="number" id="filtro_valor" class="form-control form-control-sm border-secondary">
                     `,
                     data: 'valor',
-                    className: 'text-right',
+                    className: 'dt-right',
                     render: function(data, type, row) {
                         if (type === 'display' || type === 'filter') {
                             return parseFloat(data || 0).toLocaleString('es-CO');

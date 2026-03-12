@@ -61,7 +61,7 @@
                 <!-- Productos con disponibilidad parametrizada -->
                 <div class="card">
                     <div class="card-body card-body--padding--1">
-                        <div class="tag-badge tag-badge--new badge_formulario badge_formulario_azul">
+                        <div class="tag-badge tag-badge--new badge_formulario badge_formulario_azul mb-2">
                             Productos con disponibilidad parametrizada en la bodega seleccionada
                         </div>
                         <div id="contenedor_productos_disponibilidad_seleccionados" style="height: 30vh; overflow-y: auto;"></div>

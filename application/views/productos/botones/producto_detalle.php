@@ -14,8 +14,8 @@ $item = buscar_item_carrito($producto->id);
         <button
             class="btn btn-primary btn-lg btn-block"
             onClick="javascript:agregarProducto({
-                id: <?php echo $producto->id; ?>,
-                precio: <?php echo $producto->precio; ?>,
+                    id: <?php echo $producto->id; ?>,
+                    precio: <?php echo $producto->precio; ?>,
                     referencia: '<?php echo $producto->referencia; ?>',
                     unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
                 })">
