@@ -749,6 +749,10 @@ class Interfaces extends CI_Controller {
                 $resultado = $this->configuracion_model->obtener($tipo, $datos);
             break;
 
+            case 'carrito_item':
+                $resultado = buscar_item_carrito($datos['id_producto']);
+            break;
+
             case 'estado_cuenta_cliente':
                 $resultado = json_decode(obtener_estado_cuenta_cliente_api($datos));
             break;

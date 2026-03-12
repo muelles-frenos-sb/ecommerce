@@ -78,6 +78,17 @@ const eliminarProducto = async(rowId) => {
 }
 
 const modificarItem = async(tipo, rowId, productoId, precio = '', cantidad = 1) => {
+    if(productoId) {
+        let producto = await consulta('obtener', { tipo: 'producto', id: productoId }, false)
+        let itemCarrito = await consulta('obtener', { tipo: 'carrito_item', id_producto: productoId }, false)
+
+        // Si se va a agregar un ítem pero supera la cantida disponible en inventario
+        if(tipo == 'agregar' && ((itemCarrito.qty + cantidad) > parseInt(producto.resultado.disponible))) {
+            mostrarAviso('alerta', `¡En este momento solamente disponemos de ${producto.resultado.disponible} ítems de este producto!`, false)
+            return
+        }
+    }
+
     obtenerPromesa(`${$('#site_url').val()}carrito/modificar_item?tipo=${tipo}&row_id=${rowId}&precio=${precio}&cantidad=${cantidad}`)
     .then(resultado => {
         mostrarNotificacion({
