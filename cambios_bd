@@ -1082,3 +1082,8 @@ ALTER TABLE `recibos_detalle` ADD COLUMN `bodega` varchar(5) NULL COMMENT 'Bodeg
 
 -- Comentario de campo modificado
 ALTER TABLE `recibos_detalle` MODIFY COLUMN `lista_precio` varchar(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT 'Lista de precio para ventas externas' AFTER `valor_factura`;
+
+-- Se almacena el costo de un producto
+ALTER TABLE `productos_inventario` 
+  ADD COLUMN `costo_promedio_unitario` double NULL AFTER `disponible`,
+  ADD COLUMN `costo_promedio_total` double NULL AFTER `costo_promedio_unitario`;

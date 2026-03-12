@@ -1096,6 +1096,8 @@ class Tareas extends MY_Controller {
                                 'descripcion_corta' => $item->Descripcion_Corta,
                                 'unidad_inventario' => $item->Unidad_Inventario,
                                 'disponible' => $item->Disponible,
+                                'costo_promedio_unitario' => $item->costo_prom_unit,
+                                'costo_promedio_total' => $item->costo_prom_total,
                                 'fecha_actualizacion' => $fecha_actualizacion,
                             ];
 
