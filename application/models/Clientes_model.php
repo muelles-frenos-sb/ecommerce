@@ -378,7 +378,6 @@ Class Clientes_model extends CI_Model {
                     d.nombre departamento,
                     d.codigo departamento_codigo,
                     m.nombre municipio,
-                    tv.nombre vendedor_nombre,
                     csce.nombre estado,
                     csce.clase estado_clase,
                     IF(ua.razon_social is not null, ua.razon_social, '-') nombre_usuario_asignado,
@@ -401,7 +400,6 @@ Class Clientes_model extends CI_Model {
                 FROM clientes_solicitudes_credito csc
                 LEFT JOIN municipios m ON csc.ciudad_id = m.codigo AND csc.departamento_id = m.departamento_id
                 LEFT JOIN departamentos d ON csc.departamento_id = d.id
-                LEFT JOIN terceros_vendedores tv ON csc.tercero_vendedor_id = tv.id
                 LEFT JOIN clientes_solicitudes_credito_estados AS csce ON csc.solicitud_credito_estado_id = csce.id
                 LEFT JOIN usuarios AS ua ON csc.usuario_asignado_id = ua.id
                 LEFT JOIN motivos_rechazo AS mr ON csc.motivo_rechazo_id = mr.id
