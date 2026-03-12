@@ -16,6 +16,8 @@
                 <th class="text-center">Notas</th>
                 <th class="text-center">Bodega</th>
                 <th class="text-center">Stock</th>
+                <th class="text-center d-none">Costo</th>
+                <th class="text-center">Margen</th>
                 <th class="text-center">Lista</th>
                 <th class="text-center">Precio unitario</th>
                 <th class="text-center"></th>
@@ -38,10 +40,10 @@
                     <!-- Bodega -->
                     <td class="text-center" width="120">
                         <!-- Se cargan las bodegas donde el producto tiene disponibilidad -->
-                        <select id="<?php echo "producto_{$producto->id}_bodega"; ?>" onChange="javascript:actualizarDisponibilidad(<?php echo $producto->id; ?>)" class="form-control select_bodega">
+                        <select id="<?php echo "producto_{$producto->id}_bodega"; ?>" data-id="<?php echo $producto->id; ?>" onChange="javascript:actualizarDisponibilidad(<?php echo $producto->id; ?>)" class="form-control">
                             <?php
                             foreach($inventario_disponible as $bodega) {
-                                echo "<option value='$bodega->codigo' data-disponibilidad='$bodega->disponible'>$bodega->codigo ($bodega->disponible)</option>";
+                                echo "<option value='$bodega->codigo' data-disponibilidad='$bodega->disponible' data-costo='$bodega->costo_promedio_unitario'>$bodega->codigo ($bodega->disponible)</option>";
                             }
                             ?>
                         </select>
@@ -49,11 +51,17 @@
 
                     <!-- Stock -->
                     <td class="text-center" id="<?php echo "producto_{$producto->id}_disponibilidad"; ?>">-</td>
+
+                    <!-- Costo -->
+                    <td class="text-center d-none" id="<?php echo "producto_{$producto->id}_costo"; ?>">-</td>
+
+                    <!-- Margen -->
+                    <td class="text-center" id="<?php echo "producto_{$producto->id}_margen"; ?>">-</td>
                     
                     <!-- Lista de precio -->
                     <td class="text-center" width="120">
                         <!-- Se cargan las listas donde el producto tiene disponibilidad -->
-                        <select id="<?php echo "producto_{$producto->id}_lista_precio"; ?>" onChange="javascript:actualizarPrecioUnitario(<?php echo $producto->id; ?>)" class="form-control">
+                        <select id="<?php echo "producto_{$producto->id}_lista_precio"; ?>" data-id="<?php echo $producto->id; ?>" onChange="javascript:actualizarPrecioUnitario(<?php echo $producto->id; ?>)" class="form-control lista_precio">
                             <?php
                             foreach($precios_disponibles as $lista) {
                                 echo "<option value='$lista->lista_precio' data-precio='$lista->precio'>$lista->lista_precio (".formato_precio($lista->precio).")</option>";
@@ -109,7 +117,23 @@
         $(`#producto_${productoId}_subtotal`).text(`$${formatearNumero(subtotal)}`)
         $(`#producto_${productoId}_subtotal`).data('subtotal', subtotal)
     }
-    
+
+    calcularMargenProducto = productoId => {
+        let costo = $(`#producto_${productoId}_bodega option:selected`).data('costo')
+        let precio = $(`#producto_${productoId}_lista_precio option:selected`).data('precio')
+        var margen = '-'
+
+        if(costo != '' && precio != '') {
+            // Margen = ( precio - costo ) / precio  * 100
+            margen = (( precio - costo ) / precio * 100 ).toFixed(1) + '%'
+        }
+
+        costo = (costo != '') ? `$${formatearNumero(parseInt(costo))}` : '-'
+
+        $(`#producto_${productoId}_costo`).text(costo)
+        $(`#producto_${productoId}_margen`).text(margen)
+    }
+
     seleccionarItem = datos => {
         let bodegaSeleccionada = $(`#producto_${datos.producto_id}_bodega option:selected`).val()
         let listaPrecioSeleccionada = $(`#producto_${datos.producto_id}_lista_precio option:selected`).val()
@@ -133,6 +157,13 @@
 
     $().ready(() => {
         var bodegaPorDefecto = $('#cliente_bodega option:selected').data('codigo')
+
+        // Si se cambia la bodega o la lista de precios
+        $(`select[id^='producto_']`).on('change', function() {
+            let productoId = $(this).data('id')
+            
+            calcularMargenProducto(productoId)
+        })
 
         $('#contenedor_mensaje_producto').html(``)
 
@@ -165,6 +196,7 @@
                 actualizarDisponibilidad(productoId)
                 actualizarPrecioUnitario(productoId)
                 actualizarSubtotal(productoId)
+                calcularMargenProducto(productoId)
             },
             ordering: true,
             orderCellsTop: true,

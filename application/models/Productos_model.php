@@ -132,6 +132,7 @@ Class Productos_model extends CI_Model{
                     ->select([
                         'bodega codigo',
                         'disponible',
+                        'costo_promedio_unitario',
                     ])
                     ->where($datos)
                     ->where('disponible >', 0)
