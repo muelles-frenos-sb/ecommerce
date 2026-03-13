@@ -2,6 +2,8 @@
 $datos = ['id' => $id];
 $producto = $this->productos_model->obtener('productos', $datos);
 if(empty($producto)) redirect(site_url(''));
+
+$beneficio_precio = calcular_precio_beneficio_producto($producto);
 ?>
 
 <div class="block-header block-header--has-breadcrumb">
@@ -106,9 +108,18 @@ if(empty($producto)) redirect(site_url(''));
                                     <div class="product__prices-stock">
                                         <?php if ($producto->disponible > 0) { ?>
                                             <div class="product__prices">
-                                                <div class="product__price product__price--current">
-                                                    <?php echo formato_precio($producto->precio); ?>
-                                                </div>
+                                                <?php if ($beneficio_precio['tiene_beneficio']) { ?>
+                                                    <div class="product__price product__price--new">
+                                                        <?php echo formato_precio($beneficio_precio['precio_final']); ?>
+                                                    </div>
+                                                    <div class="product__price product__price--old">
+                                                        <?php echo formato_precio($beneficio_precio['precio_base']); ?> Precio original -<?php echo $beneficio_precio['porcentaje_descuento']; ?>%
+                                                    </div>
+                                                <?php } else { ?>
+                                                    <div class="product__price product__price--current">
+                                                        <?php echo formato_precio($producto->precio); ?>
+                                                    </div>
+                                                <?php } ?>
                                             </div>
                                         <?php } ?>
                                         
@@ -146,7 +157,7 @@ if(empty($producto)) redirect(site_url(''));
                                             href="javascript:void(0)"
                                             onClick="javascript:finalizarPedidoProducto({
                                                 id: <?php echo $producto->id; ?>,
-                                                precio: <?php echo $producto->precio; ?>,
+                                                precio: <?php echo $beneficio_precio['precio_final']; ?>,
                                                 referencia: '<?php echo $producto->referencia; ?>',
                                                 unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
                                             })">

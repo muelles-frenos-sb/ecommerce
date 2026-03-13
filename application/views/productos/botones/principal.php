@@ -1,6 +1,9 @@
 <?php
 $producto = $this->productos_model->obtener('productos', ['id' => $datos['id']]);
 $item = buscar_item_carrito($producto->id);
+
+$beneficio_precio = calcular_precio_beneficio_producto($producto);
+$precio_carrito = $beneficio_precio['precio_final'];
 ?>
 
 <?php if(!empty($item)) { ?>
@@ -16,7 +19,7 @@ $item = buscar_item_carrito($producto->id);
         aria-label="Agregar al carrito"
         onClick="javascript:agregarProducto({
             id: <?php echo $producto->id; ?>,
-            precio: <?php echo $producto->precio; ?>,
+            precio: <?php echo $precio_carrito; ?>,
             referencia: '<?php echo $producto->referencia; ?>',
             unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
         })">
@@ -32,7 +35,7 @@ $item = buscar_item_carrito($producto->id);
         type="button"
         onClick="javascript:agregarProducto({
             id: <?php echo $producto->id; ?>,
-            precio: <?php echo $producto->precio; ?>,
+            precio: <?php echo $precio_carrito; ?>,
             referencia: '<?php echo $producto->referencia; ?>',
             unidad_inventario: '<?php echo $producto->unidad_inventario; ?>',
         })">

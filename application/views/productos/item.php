@@ -1,3 +1,5 @@
+<?php $beneficio_precio = calcular_precio_beneficio_producto($producto); ?>
+
 <div class="product-card__image">
     <div class="image image--type--product">
         <a href="<?php echo site_url("productos/ver/$producto->slug"); ?>" class="image__body">
@@ -48,9 +50,18 @@
 <div class="product-card__footer">
     <?php if ($producto->disponible > 0) { ?>
         <div class="product-card__prices">
-            <div class="product-card__price product-card__price--current">
-                <?php echo formato_precio($producto->precio); ?>
-            </div>
+            <?php if ($beneficio_precio['tiene_beneficio']) { ?>
+                <div class="product-card__price product-card__price--new">
+                    <?php echo formato_precio($beneficio_precio['precio_final']); ?>
+                </div>
+                <div class="product-card__price product-card__price--old">
+                    <?php echo formato_precio($beneficio_precio['precio_base']); ?> Precio original -<?php echo $beneficio_precio['porcentaje_descuento']; ?>%
+                </div>
+            <?php } else { ?>
+                <div class="product-card__price product-card__price--current">
+                    <?php echo formato_precio($producto->precio); ?>
+                </div>
+            <?php } ?>
         </div>
 
         <div id="<?php echo "principal_{$producto->id}"; ?>"></div>

@@ -125,6 +125,88 @@ function formato_precio($valor) {
     return "$".number_format($valor, 0, ',', '.');
 }
 
+/**
+ * Calcula el precio final de un producto aplicando, si existe,
+ * un beneficio de tipo "promoción" activo para venta a contado.
+ *
+ * Retorna un arreglo con:
+ *  - tiene_beneficio (bool)
+ *  - precio_base (float)
+ *  - precio_final (float)
+ *  - porcentaje_descuento (int)
+ */
+function calcular_precio_beneficio_producto($producto) {
+    $resultado = [
+        'tiene_beneficio' => false,
+        'precio_base' => 0,
+        'precio_final' => 0,
+        'porcentaje_descuento' => 0,
+    ];
+
+    if (empty($producto) || !isset($producto->id)) return $resultado;
+
+    $precio_base = isset($producto->precio) ? (float) $producto->precio : 0;
+
+    $resultado['precio_base'] = $precio_base;
+    $resultado['precio_final'] = $precio_base;
+
+    if ($precio_base <= 0) return $resultado;
+
+    $CI =& get_instance();
+    $CI->load->database();
+
+    $hoy = date('Y-m-d');
+
+    $CI->db
+        ->select('mbp.valor, mbp.valor_tipo, mb.id AS beneficio_id, mb.nombre, mb.fecha_inicio, mb.fecha_final, mb.beneficio_tipo, mb.tipo_venta')
+        ->from('marketing_beneficios_productos mbp')
+        ->join('marketing_beneficios mb', 'mb.id = mbp.beneficio_id', 'inner')
+        ->where('mbp.producto_id', (int) $producto->id)
+        ->where('mb.beneficio_tipo', 'promoción')
+        ->where('mb.tipo_venta', 'contado')
+        ->where("DATE(mb.fecha_inicio) <=", $hoy)
+        ->where("DATE(mb.fecha_final) >=", $hoy);
+
+    $beneficios = $CI->db->get()->result();
+
+    if (empty($beneficios)) return $resultado;
+
+    $mejor_precio = $precio_base;
+    $mejor_porcentaje = 0;
+
+    foreach ($beneficios as $beneficio) {
+        $valor = isset($beneficio->valor) ? (float) $beneficio->valor : 0;
+        if ($valor <= 0) continue;
+
+        if (isset($beneficio->valor_tipo) && $beneficio->valor_tipo === 'porcentaje') {
+            $precio_descuento = $precio_base - ($precio_base * $valor / 100);
+        } else {
+            // Nominal: se resta el valor al precio base
+            $precio_descuento = $precio_base - $valor;
+        }
+
+        if ($precio_descuento < 0) $precio_descuento = 0;
+
+        $porcentaje = ($precio_base > 0)
+            ? round((($precio_base - $precio_descuento) / $precio_base) * 100)
+            : 0;
+
+        // Se conserva el beneficio que deja el menor precio final
+        if ($precio_descuento < $mejor_precio && $porcentaje > 0) {
+            $mejor_precio = $precio_descuento;
+            $mejor_porcentaje = $porcentaje;
+        }
+    }
+
+    if ($mejor_precio < $precio_base && $mejor_porcentaje > 0) {
+        $resultado['tiene_beneficio'] = true;
+        $resultado['precio_final'] = $mejor_precio;
+        $resultado['porcentaje_descuento'] = $mejor_porcentaje;
+    }
+
+    return $resultado;
+}
+
 function generar_codigo_OTP($longitud = 6) {
     // Definir los caracteres que pueden aparecer en el código OTP
     $caracteres = '1234567890'; // Solo números para un OTP de dígitos
