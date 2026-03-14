@@ -1087,3 +1087,39 @@ ALTER TABLE `recibos_detalle` MODIFY COLUMN `lista_precio` varchar(5) CHARACTER 
 ALTER TABLE `productos_inventario` 
   ADD COLUMN `costo_promedio_unitario` double NULL AFTER `disponible`,
   ADD COLUMN `costo_promedio_total` double NULL AFTER `costo_promedio_unitario`;
+
+-- 20260314 Tabla creada
+CREATE TABLE erp_empleados (
+    id int NOT NULL AUTO_INCREMENT,
+    f200_rowid INT NOT NULL,
+    f200_id VARCHAR(50) NULL,
+    f200_nit VARCHAR(50) NULL,
+    c0540_id_sucursal_cli VARCHAR(5) NULL,
+    c0540_id_sucursal_prov VARCHAR(5) NULL,
+    c0540_id_cia tinyint(1) NULL,
+    c0540_fecha_ingreso DATE NULL,
+    c0540_fecha_nacimiento DATE NULL,
+    c0540_id_pais_nacimiento VARCHAR(5) NULL,
+    c0540_id_depto_nacimiento VARCHAR(5) NULL,
+    c0540_id_ciudad_nacimiento VARCHAR(5) NULL,
+    c0540_fecha_exp_identif DATE NULL,
+    c0540_id_pais_exp_identif VARCHAR(5) NULL,
+    c0540_id_depto_exp_identif VARCHAR(5) NULL,
+    c0540_id_ciudad_exp_identif VARCHAR(5) NULL,
+    c0540_id_nivel_educativo INT NULL,
+    c0540_ind_sexo tinyint(1) NULL,
+    c0540_ind_estado_civil tinyint(1) NULL,
+    c0540_ind_extranjero tinyint(1) NULL,
+    c0540_notas varchar(150) NULL,
+    c0540_fecha_creacion DATE NULL,
+    c0540_usuario_creacion VARCHAR(100) NULL,
+    c0540_fecha_actualizacion DATETIME(3) NULL,
+    c0540_usuario_actualizacion VARCHAR(50) NULL,
+    c0540_ind_empleado TINYINT(1) NULL,
+    c0540_ind_declarante TINYINT (1)NULL,
+    fecha_actualizacion DATETIME(0) NULL,
+    PRIMARY KEY (id) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (114, 'Empelados - Ejecución de script exitoso', 2);
+INSERT INTO `logs_tipos` (`id`, `nombre`, `modulo_id`) VALUES (115, 'Empelados - Ejecución de script erróneo', 2);

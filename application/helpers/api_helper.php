@@ -715,6 +715,35 @@ function obtener_cuentas_por_pagar_api($datos) {
     return $response->getBody()->getContents();
 }
 
+function obtener_empleados_api($datos = null) {
+    $filtro_pagina = (isset($datos['pagina'])) ? $datos['pagina'] : 1 ;
+
+    $CI =& get_instance();
+    $url = $CI->config->item('api_siesa')['base_url'];
+    $parametros = "f200_id IS NOT NULL";
+
+    $client = new \GuzzleHttp\Client();
+    try {
+        $response = $client->request('GET', "$url/api/v3/ejecutarconsultaestandar", [
+            'headers' => [
+                'accept' => 'application/json',
+                'conniKey' => $CI->config->item('api_siesa')['conniKey'],
+                'conniToken' => $CI->config->item('api_siesa')['conniToken'],
+            ],
+            'query' => [
+                'idCompania' => $CI->config->item('api_siesa')['idCompania'],
+                'descripcion' => 'API_v2_EmpleadosNomina',
+                'paginacion' => "numPag=$filtro_pagina|tamPag=100",
+                'parametros' => $parametros,
+            ]
+        ]);
+    } catch (GuzzleHttp\Exception\ClientException $e) {
+        $response = $e->getResponse();
+    }
+    
+    return $response->getBody()->getContents();
+}
+
 /**
  * Obtiene el estado de cuenta de un cliente en Siesa
  */

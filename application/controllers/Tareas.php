@@ -857,6 +857,68 @@ class Tareas extends MY_Controller {
                 }
             break;
 
+            /**
+             * Descarga todos los empleados de Siesa,
+             * recorriendo cada página e insertando en
+             * la base de datos el resultado por cada página
+             */
+            case 'importar_empleados':
+                $tiempo_inicial = microtime(true);
+
+                $codigo = 0;
+                $pagina = 1;
+                $total_items = 0;
+
+                try {
+                    // Primero, eliminamos todos los ítems
+                    $this->configuracion_model->eliminar('erp_empleados', ['id']);
+
+                    // Mientras obtenga resultados la consulta
+                    while ($codigo == 0) {
+                        $resultado = json_decode(obtener_empleados_api(['pagina' => $pagina]));
+                        $codigo = $resultado->codigo;
+
+                        // Si el resultado es exitoso
+                        if($codigo == 0) {
+                            $empleados = $resultado->detalle->Table;
+
+                            $total_items += count($empleados);
+
+                            // Recorrido de todos los registros de la página
+                            $this->configuracion_model->crear('erp_empleados_batch', $empleados);
+                            
+                            $pagina++;
+                        } else {
+                            $codigo = '-1';
+                            break;
+                        }
+                    }
+
+                    $tiempo_final = microtime(true);
+
+                    $respuesta = [
+                        'log_tipo_id' => 114,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                        'observacion' => "$total_items registros actualizados",
+                        'tiempo' => round($tiempo_final - $tiempo_inicial, 2)." segundos",
+                    ];
+
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', $respuesta);
+
+                    print json_encode($respuesta);
+                    return http_response_code(200);
+                } catch (\Throwable $th) {
+                    // Se agrega el registro en los logs
+                    $this->configuracion_model->crear('logs', [
+                        'log_tipo_id' => 115,
+                        'fecha_creacion' => date('Y-m-d H:i:s'),
+                    ]);
+
+                    return http_response_code(400);
+                }
+            break;
+
             // Desde la API estándar API_v2_ListasDePrecios importa las listas de precios existentes
             case 'importar_listas_precios':
                 $tiempo_inicial = microtime(true);
